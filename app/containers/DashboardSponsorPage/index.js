@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
-import { fetchSponsors, addSponsor, editSponsor, deleteSponsor, setActiveSort } from './actions';
+import { fetchSponsors, addSponsor, editSponsor, deleteSponsor, setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardSponsors, selectDashboardEditSponsorProcess, selectDashboardSponsorSearchFormValues, selectPaginationOptions } from './selectors';
 
 import DashboardSponsorSearch from './DashboardSponsorSearch/index';
@@ -26,23 +26,35 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
     sponsorSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchSponsors();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchSponsors } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchSponsors(limit, offset);
+    fetchSponsors(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchSponsors, sponsors } = this.props;
+    if (!sponsors.fetching) {
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchSponsors(limit, offset);
+    }
   }
 
 
@@ -56,6 +68,7 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
           sponsors={this.props.sponsors}
           addSponsor={this.props.addSponsor}
           editSponsorProcess={this.props.editSponsorProcess}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardSponsorTable
           editSponsorProcess={this.props.editSponsorProcess}
@@ -79,11 +92,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSponsors: (limit, offset) => dispatch(fetchSponsors(limit, offset)),
+    fetchSponsors: (query, limit, offset) => dispatch(fetchSponsors(query, limit, offset)),
     addSponsor: (payload) => dispatch(addSponsor(payload)),
     editSponsor: (payload) => dispatch(editSponsor(payload)),
     deleteSponsor: (payload) => dispatch(deleteSponsor(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 
