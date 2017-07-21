@@ -87,7 +87,7 @@ export class TrialsArticle extends Component {
               <i className="icomoon-map-marker" /> {(addr !== null) ? addr : 'N/A'}
             </address>
             <p className="distance">
-              <i className="icomoon-car" /> {trial.distance ? `${trial.distance} Miles` : 'N/A'}
+              <i className="icomoon-car" /> {typeof trial.distance !== 'undefined' && trial.distance !== null ? `${trial.distance} Miles` : 'N/A'}
             </p>
             <span className="tel">
               <i className="icomoon-phone" /> {(phoneNumber !== null) ? formatPhone(phoneNumber) : 'N/A'}
