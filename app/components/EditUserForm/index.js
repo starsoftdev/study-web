@@ -125,7 +125,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 name="email"
                 component={Input}
                 type="text"
-                isDisabled={savedUser.saving || deleting || editSelf}
+                isDisabled={savedUser.saving || deleting}
               />
             </div>
           </div>

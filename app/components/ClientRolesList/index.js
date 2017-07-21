@@ -146,17 +146,22 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   updateUser(userData) {
-    const { currentUserClientId, selectedUser, saveUser } = this.props;
+    const { currentUserClientId, selectedUser, currentUser, saveUser } = this.props;
     const userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
+      editSelf: false,
     };
     userInput.clientRole = {
       siteId: parseInt(userData.site, 10),
       canPurchase: userData.purchase || false,
       canRedeemRewards: userData.reward || false,
     };
+
+    if (selectedUser.details && selectedUser.details.id === currentUser.id && currentUser.email !== userData.email) {
+      userInput.editSelf = true;
+    }
     saveUser(currentUserClientId, selectedUser.details.id, userInput);
   }
 
