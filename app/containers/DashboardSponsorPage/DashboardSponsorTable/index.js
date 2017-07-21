@@ -52,11 +52,6 @@ export class DashboardSponsorTable extends React.Component { // eslint-disable-l
     }
 
     let sponsors = this.props.sponsors.details;
-
-    if (this.props.sponsorSearchFormValues.sponsor) {
-      sponsors = _.filter(sponsors, (item) => (item.id === this.props.sponsorSearchFormValues.sponsor));
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       sponsors = _.orderBy(sponsors, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
