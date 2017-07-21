@@ -44,9 +44,12 @@ export const selectCurrentPatientCategory = () => createSelector(
   selectStudyPageDomain(),
   (subState) => {
     if (subState.patientCategories) {
-      const filteredPatientCategory = subState.patientCategories.filter(patientCategory => (
+      const filteredPatientCategory = Object.assign({}, subState.patientCategories.filter(patientCategory => (
         patientCategory.id === subState.currentPatientCategoryId
-      ))[0];
+      ))[0]);
+      if (filteredPatientCategory) {
+        delete filteredPatientCategory.patients;
+      }
       return filteredPatientCategory;
     }
     return null;
