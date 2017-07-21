@@ -770,7 +770,12 @@ export function* saveUserWatcher() {
       const response = yield call(request, requestURL, options);
 
       yield put(toastrActions.success(messageHeader, message));
-      yield put(userSaved(data.clientRole.siteId, response, messageHeader));
+      if (data.editSelf) {
+        yield put(logout());
+        yield call(() => { location.href = '/login'; });
+      } else {
+        yield put(userSaved(data.clientRole.siteId, response, messageHeader));
+      }
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
