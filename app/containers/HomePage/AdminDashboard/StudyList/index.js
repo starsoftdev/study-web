@@ -716,7 +716,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         data-class="btn-deactivate"
                         onClick={() => this.showEditInformationModal(true)}
-                      > Edit </Button>
+                      > Info </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
