@@ -42,24 +42,22 @@ export function* fetchSponsorsWatcher() {
 
 export function* fetchSponsorsWorker(action) {
   try {
-    const requestURL = `${API_URL}/sponsors`;
+    const query = action.query;
     const limit = action.limit || 10;
     const offset = action.offset || 0;
+    let requestURL = `${API_URL}/sponsors/fetchAllSponsors?limit=${limit}&offset=${offset}`;
 
+    if (query) {
+      requestURL += `&query=${query}`;
+    }
 
-    const filter = {
-      limit,
-      skip: offset,
+    const params = {
+      method: 'GET',
     };
-
-    const queryParams = {
-      filter: JSON.stringify(filter),
-    };
-
-    const response = yield call(request, requestURL, { query: queryParams });
-
+    const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
     const page = (offset / 10) + 1;
+
     if (response.length < 10) {
       hasMoreItems = false;
     }

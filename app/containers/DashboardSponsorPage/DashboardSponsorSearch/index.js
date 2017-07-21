@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import Button from 'react-bootstrap/lib/Button';
+import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddSponsorForm } from './AddSponsorForm';
 import TableActions from '../../../components/TableActions/index';
@@ -20,6 +21,7 @@ export class DashboardSponsorSearch extends React.Component {
     sponsors: PropTypes.object,
     addSponsor: PropTypes.func,
     editSponsorProcess: PropTypes.object,
+    onSubmitQuery: PropTypes.func,
   }
 
   constructor(props) {
@@ -27,17 +29,29 @@ export class DashboardSponsorSearch extends React.Component {
 
     this.state = {
       addSponsorModalOpen: false,
+      query: null,
     };
 
     this.closeAddSponsorModal = this.closeAddSponsorModal.bind(this);
     this.openAddSponsorModal = this.openAddSponsorModal.bind(this);
     this.addSponsor = this.addSponsor.bind(this);
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.editSponsorProcess.saving && this.props.editSponsorProcess.saving) {
       this.closeAddSponsorModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
   }
 
   closeAddSponsorModal() {
@@ -61,17 +75,27 @@ export class DashboardSponsorSearch extends React.Component {
     });
 
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddSponsorModal}
           buttonText="+ Add Sponsor"
           filters={
             <div className="has-feedback ">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="sponsor"
-                component={ReactSelect}
-                placeholder="Select Sponsor"
-                options={options}
+                component={Input}
+                type="text"
+                placeholder="Search"
+                className="keyword-search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }
