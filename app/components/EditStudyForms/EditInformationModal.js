@@ -351,7 +351,7 @@ export class EditInformationModal extends React.Component {
           <div className="form-area">
             <div className="head">
               <div className="inner-head">
-                <strong className="title">EDIT INFORMATION</strong>
+                <strong className="title">INFO</strong>
                 <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
