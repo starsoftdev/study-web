@@ -31,6 +31,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
     isEdit: PropTypes.bool,
     EditPurchase: PropTypes.bool,
     EditRedeem: PropTypes.bool,
+    editSelf: PropTypes.bool,
   };
 
   constructor(props) {
@@ -51,7 +52,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, EditPurchase, EditRedeem } = this.props;
+    const { savedUser, siteOptions, site, handleSubmit, onDelete, deleting, isEdit, EditPurchase, EditRedeem, editSelf } = this.props;
     let clientRolePanelContent = null;
 
     if (!site || site === '0') {
@@ -65,7 +66,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               <Field
                 name="purchase"
                 component={Toggle}
-                disabled={savedUser.saving || deleting || !EditPurchase}
+                disabled={savedUser.saving || deleting || !EditPurchase || editSelf}
               />
             </div>
           </div>
@@ -77,7 +78,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
               <Field
                 name="reward"
                 component={Toggle}
-                disabled={savedUser.saving || deleting || !EditRedeem}
+                disabled={savedUser.saving || deleting || !EditRedeem || editSelf}
               />
             </div>
           </div>
@@ -124,7 +125,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 name="email"
                 component={Input}
                 type="text"
-                disabled={savedUser.saving || deleting}
+                isDisabled={savedUser.saving || deleting || editSelf}
               />
             </div>
           </div>
@@ -138,7 +139,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                 component={ReactSelect}
                 placeholder="Select Site Location"
                 options={siteOptions}
-                disabled={savedUser.saving || deleting}
+                disabled={savedUser.saving || deleting || editSelf}
                 onChange={this.handleSelect}
               />
             </div>
