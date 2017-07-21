@@ -101,7 +101,7 @@ export class CampaignPageModal extends React.Component {
     const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
 
-    const campaignOptions = studyCampaigns.details.map(c => {
+    const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
