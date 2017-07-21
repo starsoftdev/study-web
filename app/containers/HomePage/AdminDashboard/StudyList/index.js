@@ -518,6 +518,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   campaignChanged(e) {
     const { change } = this.props;
     change('dashboardFilters', 'campaign', e);
+    this.toggleAllstudies(false);
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
