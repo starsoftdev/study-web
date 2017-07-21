@@ -60,6 +60,7 @@ class OtherSection extends React.Component {
     };
     this.onReset = this.onReset.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.addIndication = this.addIndication.bind(this);
     this.deleteIndication = this.deleteIndication.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.renderGender = this.renderGender.bind(this);
@@ -93,14 +94,19 @@ class OtherSection extends React.Component {
         const date = moment().year(formValues.dobYear).month(formValues.dobMonth - 1).date(formValues.dobDay).startOf('day');
         data.dob = date.toISOString();
       }
-      submitPatientUpdate(initialValues.id, data);
+      submitPatientUpdate(initialValues.id, initialValues.patientCategoryId, data);
       reset(formName);
     }
   }
 
+  addIndication(studyId, indication) {
+    const { initialValues, addPatientIndication } = this.props;
+    addPatientIndication(initialValues.id, initialValues.patientCategoryId, indication);
+  }
+
   deleteIndication(indication) {
     const { initialValues, removePatientIndication } = this.props;
-    removePatientIndication(initialValues.id, indication.id);
+    removePatientIndication(initialValues.id, initialValues.patientCategoryId, indication.id);
   }
 
   toggleIndicationPopover() {
@@ -179,7 +185,7 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting, addPatientIndication } = this.props;
+    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting } = this.props;
 
     if (initialValues) {
       const overlayValues = { ...initialValues };
@@ -231,7 +237,7 @@ class OtherSection extends React.Component {
                     rootClose
                     onHide={() => { this.toggleIndicationPopover(); }}
                   >
-                    <IndicationOverlay indications={indications} selectIndication={addPatientIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
+                    <IndicationOverlay indications={indications} selectIndication={this.addIndication} patient={overlayValues} onClose={this.toggleIndicationPopover} />
                   </Overlay>
                 </div>
               </div>
@@ -319,9 +325,9 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   fetchIndications: () => dispatch(fetchIndications()),
   reset: () => dispatch(reset(formName)),
-  addPatientIndication: (patientId, indication) => dispatch(addPatientIndication(patientId, indication)),
-  removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
-  submitPatientUpdate: (patientId, fields) => dispatch(submitPatientUpdate(patientId, fields)),
+  addPatientIndication: (patientId, patientCategoryId, indication) => dispatch(addPatientIndication(patientId, patientCategoryId, indication)),
+  removePatientIndication: (patientId, patientCategoryId, indicationId) => dispatch(removePatientIndication(patientId, patientCategoryId, indicationId)),
+  submitPatientUpdate: (patientId, patientCategoryId, fields) => dispatch(submitPatientUpdate(patientId, patientCategoryId, fields)),
   deletePatient: (id) => dispatch(deletePatient(id)),
 });
 

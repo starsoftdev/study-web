@@ -41,6 +41,7 @@ import {
   markAsReadPatientMessages,
   updateSitePatients,
   fetchClientCredits,
+  addMessagesCountStat,
 } from '../../containers/App/actions';
 import {
   selectSocket,
@@ -49,7 +50,7 @@ import {
 import {
   sendStudyPatientMessages,
 } from '../../containers/GlobalNotifications/actions';
-import { incrementStudyUnreadMessages } from '../../containers/HomePage/actions';
+import { incrementStudyUnreadMessages, subtractStudyUnreadMessages } from '../../containers/HomePage/actions';
 
 import alertSound from './sounds/message_received.wav';
 
@@ -81,6 +82,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     globalPMSPaginationOptions: React.PropTypes.object,
     incrementStudyUnreadMessages: React.PropTypes.func,
     readStudyPatientMessages: React.PropTypes.func,
+    addMessagesCountStat: React.PropTypes.func,
+    subtractStudyUnreadMessages: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -119,13 +122,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           }
           if (socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
+            this.props.addMessagesCountStat(1);
           }
           this.props.updateSitePatients(socketMessage);
           this.props.incrementStudyUnreadMessages(socketMessage.study_id);
         }
         if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === socketMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id);
-          console.log(1);
           this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
         }
       });
@@ -134,7 +137,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (!this.props.showModal && newProps.showModal) {
       if (this.state.selectedPatient) {
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
-        console.log(2);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
       this.props.fetchSitePatients(currentUser.id);
@@ -163,10 +165,9 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ selectedPatient: item });
       // TODO remove this later
       this.props.fetchPatientMessages(item.id);
-      console.log(3);
       this.props.markAsReadPatientMessages(item.id);
       this.props.readStudyPatientMessages(item.id);
-
+      this.props.subtractStudyUnreadMessages(item.study_id, item.count_unread);
       if (!initialSelect) {
         this.props.setChatTextValue('');
       }
@@ -213,8 +214,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       }
     });
     const sitePatientsListContents = sitePatients.details.map((item, index) => {
-      const firstname = item.first_name.toUpperCase();
-      const lastname = item.last_name.toUpperCase();
+      const firstname = item.first_name ? item.first_name.toUpperCase() : '';
+      const lastname = item.last_name ? item.last_name.toUpperCase() : '';
       if (!this.state.searchBy || firstname.includes(this.state.searchBy.toUpperCase()) || lastname.includes(this.state.searchBy.toUpperCase())) {
         return (<PatientItem
           patientData={item}
@@ -361,6 +362,8 @@ function mapDispatchToProps(dispatch) {
     fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
     change: (field, value) => dispatch(change('globalPMS', field, value)),
     incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
+    addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
+    subtractStudyUnreadMessages: (studyId, count) => dispatch(subtractStudyUnreadMessages(studyId, count)),
   };
 }
 

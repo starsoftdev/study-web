@@ -37,6 +37,7 @@ import {
   FETCH_UPGRADE_STUDY_PRICE,
   NEW_MESSAGE_FOR_PROTOCOL,
   INCREMENT_STUDY_UNREAD_MESSAGES,
+  SUBTRACT_STUDY_UNREAD_MESSAGES,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -316,5 +317,13 @@ export function incrementStudyUnreadMessages(studyId) {
   return {
     type: INCREMENT_STUDY_UNREAD_MESSAGES,
     studyId,
+  };
+}
+
+export function subtractStudyUnreadMessages(studyId, count) {
+  return {
+    type: SUBTRACT_STUDY_UNREAD_MESSAGES,
+    studyId,
+    count,
   };
 }
