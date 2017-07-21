@@ -83,11 +83,13 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   }
 
   loadMore() {
-    const { fetchClientAdmins } = this.props;
-    const query = this.props.paginationOptions.query;
-    const offset = this.props.paginationOptions.page * 10;
-    const limit = 10;
-    fetchClientAdmins(query, limit, offset);
+    const { fetchClientAdmins, clientAdmins } = this.props;
+    if (!clientAdmins.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchClientAdmins(query, limit, offset);
+    }
   }
 
   render() {

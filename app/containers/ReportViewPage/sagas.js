@@ -11,7 +11,6 @@ import {
   GET_REPORTS_LIST,
   CHANGE_PROTOCOL_STATUS,
   EXPORT_STUDIES,
-  DOWNLOAD_REPORT,
   GET_REPORTS_TOTALS,
   GET_CATEGORY_NOTES,
 } from './constants';
@@ -34,7 +33,6 @@ export function* reportViewPageSaga() {
   const watcherC = yield fork(exportStudiesWatcher);
   const watcherD = yield fork(fetchReportsTotalsWatcher);
   const watcherE = yield fork(getCategoryNotesWatcher);
-  const watcherF = yield fork(downloadReportWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -43,7 +41,6 @@ export function* reportViewPageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
-  yield cancel(watcherF);
 }
 
 export function* fetchReportsWatcher() {
@@ -124,33 +121,6 @@ export function* exportStudiesWorker(action) {
       removeItem('auth_token');
     }
     const errorMessage = get(e, 'message', 'Something went wrong while exporting studies. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-export function* downloadReportWatcher() {
-  yield* takeLatest(DOWNLOAD_REPORT, downloadReportWorker);
-}
-
-export function* downloadReportWorker(action) {
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
-
-  try {
-    const queryString = composeQueryString(action.payload);
-    const requestURL = `${API_URL}/downloadSponsorReport?access_token=${authToken}&${queryString}`;
-    location.replace(`${requestURL}`);
-  } catch (e) {
-    // if returns forbidden we remove the token from local storage
-    if (e.status === 401) {
-      removeItem('auth_token');
-    }
-    const errorMessage = get(e, 'message', 'Something went wrong while while downloading report. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
