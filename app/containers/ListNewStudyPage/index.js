@@ -188,7 +188,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       });
     }
 
-    if (formValues.patientQualificationSuite) {
+    if (months && formValues.patientQualificationSuite) {
       addOns.push({
         title: 'Patient Qualification Suite',
         price: QUALIFICATION_SUITE_PRICE,
