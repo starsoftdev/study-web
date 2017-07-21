@@ -95,7 +95,8 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   schedules: selectSchedules(),
   sponsorSchedules: selectSponsorSchedules(),
-  protocols: selectSponsorProtocols(),
+  sponsorProtocols: selectSponsorProtocols(),
+  protocols: selectProtocols(),
   sponsorSites: selectSponsorSites(),
   patientsByStudy: selectPatientsByStudy(),
   paginationOptions: selectPaginationOptions(),
@@ -126,6 +127,7 @@ export default class CalendarPage extends React.Component {
     patientsByStudy: PropTypes.object.isRequired,
     schedules: PropTypes.object.isRequired,
     sponsorSchedules: PropTypes.object.isRequired,
+    sponsorProtocols: PropTypes.object.isRequired,
     protocols: PropTypes.object.isRequired,
     fetchClientSites: PropTypes.func.isRequired,
     fetchIndications: PropTypes.func.isRequired,
@@ -370,7 +372,7 @@ export default class CalendarPage extends React.Component {
   }
 
   render() {
-    const { currentUser, sites, sponsorSites, indications, patientsByStudy, userRoleType, protocols } = this.props;
+    const { currentUser, sites, sponsorSites, indications, patientsByStudy, userRoleType, protocols, sponsorProtocols } = this.props;
     const { showAll, localSchedules, localSponsorSchedules } = this.state;
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
@@ -488,7 +490,7 @@ export default class CalendarPage extends React.Component {
                 <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
                 <SponsorFilterBar
                   sites={sponsorSites}
-                  protocols={protocols.details}
+                  protocols={sponsorProtocols.details}
                   sponsorSchedules={localSponsorSchedules}
                   filter={this.state.filter}
                   updateFilter={this.updateFilter}
