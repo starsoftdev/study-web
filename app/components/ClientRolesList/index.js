@@ -146,17 +146,22 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   updateUser(userData) {
-    const { currentUserClientId, selectedUser, saveUser } = this.props;
+    const { currentUserClientId, selectedUser, currentUser, saveUser } = this.props;
     const userInput = {
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
+      editSelf: false,
     };
     userInput.clientRole = {
       siteId: parseInt(userData.site, 10),
       canPurchase: userData.purchase || false,
       canRedeemRewards: userData.reward || false,
     };
+
+    if (selectedUser.details && selectedUser.details.id === currentUser.id && currentUser.email !== userData.email) {
+      userInput.editSelf = true;
+    }
     saveUser(currentUserClientId, selectedUser.details.id, userInput);
   }
 
@@ -183,6 +188,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     let cRedeemable = false;
     let cEditPurchasable = false;
     let cEditRedeemable = false;
+    let editSelf = false;
     if (selectedUser && selectedUser.details && selectedUser.details.roleForClient) {
       if (selectedUser.details.roleForClient.canPurchase || selectedUser.details.roleForClient.canRedeemRewards || selectedUser.details.roleForClient.name === 'Super Admin' || selectedUser.details.roleForClient.name === 'Admin') {
         siteLocation = 0;
@@ -201,6 +207,10 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
     }
 
     const editUserModalShown = this.editUserModalShouldBeShown();
+
+    if (selectedUser.details && selectedUser.details.id === currentUser.id) {
+      editSelf = true;
+    }
 
     return (
       <div className="client-roles">
@@ -251,6 +261,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
                   <div className="form-lightbox">
                     <EditUserForm
                       initialValues={selectedUserDetailsForForm}
+                      editSelf={editSelf}
                       siteOptions={siteOptions}
                       deleting={deletedClientRole.deleting}
                       onDelete={this.deleteClientRole}
