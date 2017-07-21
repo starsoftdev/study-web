@@ -52,3 +52,5 @@ export const FETCH_UPGRADE_STUDY_PRICE                   = 'HomePage/Viewport/FE
 
 export const NEW_MESSAGE_FOR_PROTOCOL                    = 'HomePage/Viewport/NEW_MESSAGE_FOR_PROTOCOL';
 export const INCREMENT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/INCREMENT_STUDY_UNREAD_MESSAGES';
+
+export const SUBTRACT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/SUBTRACT_STUDY_UNREAD_MESSAGES';
