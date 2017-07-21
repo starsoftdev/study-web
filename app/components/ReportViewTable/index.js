@@ -124,10 +124,7 @@ export class ReportViewTable extends React.Component {
 
     const leftPartTable = reportsList.details.map((item, index) => {
       const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
-      let piName = 'N/A';
-      if (item.principalinvestigatorfirstname && item.principalinvestigatorlastname) {
-        piName = `${item.principalinvestigatorfirstname} ${item.principalinvestigatorlastname}`;
-      }
+      const piName = (item.principalinvestigatorname) ? item.principalinvestigatorname : 'N/A';
 
       return (
         <tr
