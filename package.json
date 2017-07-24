@@ -136,6 +136,7 @@
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "lodash": "4.15.0",
+    "mixpanel-browser": "^2.11.1",
     "mocha": "3.0.2",
     "moment": "^2.15.1",
     "moment-timezone": "^0.5.11",
