@@ -25,9 +25,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
-    this.state = {
-      countryCode: 'US',
-    };
   }
 
   componentWillMount() {}
@@ -61,49 +58,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       { id: 250, name: '250 Miles' },
     ];
 
-    const countries = [
-      {
-        name: 'Brazil',
-        id: 'BR',
-      },
-      {
-        name: 'Canada',
-        id: 'CA',
-      },
-      {
-        name: 'Czech Republic',
-        id: 'CZ',
-      },
-      {
-        name: 'France',
-        id: 'FR',
-      },
-      {
-        name: 'Germany',
-        id: 'DE',
-      },
-      {
-        name: 'Italy',
-        id: 'IT',
-      },
-      {
-        name: 'Japan',
-        id: 'JP',
-      },
-      {
-        name: 'Poland',
-        id: 'PL',
-      },
-      {
-        name: 'United Kingdom',
-        id: 'GB',
-      },
-      {
-        name: 'United States',
-        id: 'US',
-      },
-    ];
-
     if (indications.length > 0 && indications[0].id !== -1) {
       indications.unshift({ id: -1, name: 'All' });
     }
@@ -116,36 +70,15 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         data-view="fadeInUp"
         onSubmit={handleSubmit}
       >
-        <div className="field-row">
-          <div className="row">
-            <div className="col-xs-6">
-              <Field
-                name="countryCode"
-                component={ReactSelect}
-                placeholder="Select Country"
-                options={countries}
-                className="field-lg"
-                selectedValue={this.state.countryCode}
-                onChange={countryCode => {
-                  this.setState({
-                    countryCode,
-                  });
-                }}
-              />
-            </div>
-            <div className="col-xs-6">
-              <Field
-                name="postalCode"
-                type="text"
-                maxLength="5"
-                component={Input}
-                placeholder="Postal Code"
-                className="field-row"
-                bsClass="form-control input-lg"
-              />
-            </div>
-          </div>
-        </div>
+        <Field
+          name="postalCode"
+          type="text"
+          maxLength="5"
+          component={Input}
+          placeholder="Postal Code"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
         <div className="field-row">
           <Field
             name="distance"

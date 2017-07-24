@@ -933,11 +933,10 @@ function* postFindOutPatients(action) {
 
 function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
   try {
-    const { postalCode, countryCode, distance, indicationId, from } = action.params;
+    const { postalCode, distance, indicationId, from } = action.params;
     const queryParams = {};
     if (postalCode) {
       queryParams.postalCode = postalCode;
-      queryParams.countryCode = countryCode ? countryCode.toLowerCase() : 'us';
     }
     if (distance) {
       queryParams.distance = distance;
