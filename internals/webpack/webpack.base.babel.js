@@ -108,7 +108,7 @@ module.exports = (options) => ({
       SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
       MIXPANEL_TOKEN: JSON.stringify(process.env.MIXPANEL_TOKEN || false),
     }),
-    new webpack.IgnorePlugin(/^\.\/locale$/, [/moment$/]),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),
   resolve: {
     alias: {
