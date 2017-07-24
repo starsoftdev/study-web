@@ -101,7 +101,7 @@ export class CampaignPageModal extends React.Component {
     const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
 
-    const campaignOptions = studyCampaigns.details.map(c => {
+    const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
@@ -130,7 +130,7 @@ export class CampaignPageModal extends React.Component {
           <div className="slider-area">
             <div className="head">
               <div className="inner-head">
-                <strong className="title">Campaigns</strong>
+                <strong className="title">Campaign</strong>
                 <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>

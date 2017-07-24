@@ -75,12 +75,14 @@ export class EditInformationModal extends React.Component {
     super(props);
     this.state = {
       showIndicationPopover: false,
+      initial: true,
     };
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -150,6 +152,33 @@ export class EditInformationModal extends React.Component {
       newFormValues.indicationTags = customFields;
       this.props.setEditStudyFormValues(newFormValues);
     }
+
+    if (newProps.formValues.study_id !== this.props.formValues.study_id) {
+      this.setState({ initial: true });
+    }
+
+    if (newProps.formValues.piName) {
+      const piNameParts = newProps.formValues.piName.split(' ');
+      const piFirstName = piNameParts[0] || null;
+      const piLastName = piNameParts[1] || null;
+
+      const newFormValues = {};
+
+      if (this.state.initial) {
+        this.setState({ initial: false }, () => {
+          newFormValues.piFirstName = piFirstName;
+          newFormValues.piLastName = piLastName;
+          this.props.setEditStudyFormValues(newFormValues);
+        });
+      }
+    } else if (this.state.initial) {
+      this.setState({ initial: false }, () => {
+        this.props.setEditStudyFormValues({
+          piFirstName: null,
+          piLastName: null,
+        });
+      });
+    }
   }
 
   onSuggestSelect(e) {
@@ -214,6 +243,13 @@ export class EditInformationModal extends React.Component {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     blur(event.target.name, formattedPhoneNumber);
+  }
+
+  onClose() {
+    const { onClose } = this.props;
+    this.setState({ initial: true }, () => {
+      onClose();
+    });
   }
 
   siteLocationChanged(e) {
@@ -315,7 +351,7 @@ export class EditInformationModal extends React.Component {
           <div className="form-area">
             <div className="head">
               <div className="inner-head">
-                <strong className="title">EDIT INFORMATION</strong>
+                <strong className="title">INFO</strong>
                 <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>

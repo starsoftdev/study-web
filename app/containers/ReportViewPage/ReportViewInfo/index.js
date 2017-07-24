@@ -16,9 +16,9 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     const totals = {
       active: this.props.totals.details.total_active ? parseInt(this.props.totals.details.total_active) : 0,
       inActive: this.props.totals.details.total_inactive ? parseInt(this.props.totals.details.total_inactive) : 0,
-      textSent: 0,
-      textReceived: 0,
-      unreadText: 0,
+      textSent: this.props.totals.details.outbound_text ? parseInt(this.props.totals.details.outbound_text) : 0,
+      textReceived: this.props.totals.details.inbound_text ? parseInt(this.props.totals.details.inbound_text) : 0,
+      unreadText: this.props.totals.details.unread_text ? parseInt(this.props.totals.details.unread_text) : 0,
       emailSent: 0,
     };
 
