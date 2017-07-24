@@ -192,9 +192,9 @@ export class ReportViewTable extends React.Component {
           <td className="consented"><span className="text">{item.consented || 0}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
           <td className="screen_failed"><span className="text">{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
           <td className="randomized"><span className="text">{item.randomized || 0}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
-          <td className="outbound_text">{item.outbound_text}</td>
-          <td className="inbound_text">{item.inbound_text}</td>
-          <td className="unread_text">{item.unread_text}</td>
+          <td className="outbound_text">{item.outbound_text || 0}</td>
+          <td className="inbound_text">{item.inbound_text || 0}</td>
+          <td className="unread_text">{item.unread_text || 0}</td>
           <td className="outbound_emails">{item.outbound_emails}</td>
         </tr>
       );
