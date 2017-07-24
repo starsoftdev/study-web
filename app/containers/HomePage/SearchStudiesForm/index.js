@@ -37,6 +37,14 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     dispatch: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      name: null,
+    };
+  }
   componentDidMount() {
     const { currentUser } = this.props;
     let bDisabled = true;
@@ -64,8 +72,13 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     }
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    this.performSearch(this.state.name, 'name');
+  }
+
   render() {
-    const { clientSites, studies, hasError, handleSubmit, currentUser } = this.props;
+    const { clientSites, studies, hasError, currentUser } = this.props;
     let bDisabled = true;
     if (currentUser && currentUser.roleForClient) {
       bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin');
@@ -79,7 +92,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                            { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
 
     return (
-      <Form className="form-search form-search-studies pull-left" onSubmit={handleSubmit}>
+      <Form className="form-search form-search-studies pull-left" onSubmit={this.handleSubmit}>
         <div className="fields-holder clearfix">
           <div className="search-area pull-left no-left-padding">
             <div className="field">
@@ -89,7 +102,9 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
               <Field
                 name="name"
                 component={Input}
-                onChange={(e) => this.performSearch(e, 'name')}
+                onChange={(e) => this.setState({
+                  name: e.target.value,
+                })}
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
