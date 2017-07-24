@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import inViewport from 'in-viewport';
+import classNames from 'classnames';
+import { browserHistory } from 'react-router';
 
 import ClinicalTrialsSearchFormValidator from './validator';
-
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
 
@@ -18,6 +19,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     handleSubmit: PropTypes.func.isRequired,
     indications: PropTypes.array,
     individual: PropTypes.bool,
+    countryCode: PropTypes.string,
   };
 
   constructor(props) {
@@ -26,7 +28,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
     this.setVisible = this.setVisible.bind(this);
     this.state = {
-      countryCode: 'US',
+      countryCode: props.countryCode ? props.countryCode : 'US',
     };
   }
 
@@ -64,50 +66,50 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const countries = [
       {
         name: 'Brazil',
-        id: 'BR',
+        id: 'br',
       },
       {
         name: 'Canada',
-        id: 'CA',
+        id: 'ca',
       },
       {
         name: 'Czech Republic',
-        id: 'CZ',
+        id: 'cz',
       },
       {
         name: 'France',
-        id: 'FR',
+        id: 'fr',
       },
       {
         name: 'Germany',
-        id: 'DE',
+        id: 'de',
       },
       {
         name: 'Italy',
-        id: 'IT',
+        id: 'it',
       },
       {
         name: 'Japan',
-        id: 'JP',
+        id: 'jp',
       },
       {
         name: 'Poland',
-        id: 'PL',
+        id: 'pl',
       },
       {
         name: 'United Kingdom',
-        id: 'GB',
+        id: 'gb',
       },
       {
         name: 'United States',
-        id: 'US',
+        id: 'us',
       },
     ];
 
     if (indications.length > 0 && indications[0].id !== -1) {
       indications.unshift({ id: -1, name: 'All' });
     }
-
+    const isUS = this.props.countryCode === 'us';
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
@@ -117,23 +119,30 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         onSubmit={handleSubmit}
       >
         <div className="field-row">
-          <div className="row">
-            <div className="col-xs-6">
-              <Field
-                name="countryCode"
-                component={ReactSelect}
-                placeholder="Select Country"
-                options={countries}
-                className="field-lg"
-                selectedValue={this.state.countryCode}
-                onChange={countryCode => {
-                  this.setState({
-                    countryCode,
-                  });
-                }}
-              />
-            </div>
-            <div className="col-xs-6">
+          <div className={classNames({ row: !isUS })}>
+            {
+              !isUS &&
+              <div className="col-xs-6">
+                <Field
+                  name="countryCode"
+                  component={ReactSelect}
+                  placeholder="Select Country"
+                  options={countries}
+                  className="field-lg"
+                  selectedValue={this.state.countryCode}
+                  onChange={countryCode => {
+                    this.setState({ countryCode }, () => {
+                      if (countryCode === 'us') {
+                        browserHistory.push('');
+                      } else {
+                        browserHistory.push(`/${countryCode}`);
+                      }
+                    });
+                  }}
+                />
+              </div>
+            }
+            <div className={classNames({ 'col-xs-6': !isUS })}>
               <Field
                 name="postalCode"
                 type="text"
