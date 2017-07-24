@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients } from '../../containers/App/selectors';
+import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
@@ -48,6 +48,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     sitePatients: React.PropTypes.object,
     fetchStudyTextNewStats: React.PropTypes.func,
     fetchingPatientsError: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   static defaultProps = {
@@ -73,7 +74,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories } = this.props;
+    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories, currentUser } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyMessage', (message) => {
@@ -115,7 +116,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (params.id && data.url && parseInt(params.id) === data.studyId) {
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.userId) {
             // this.props.downloadReport(data.reportName);
             location.replace(data.url);
           }
@@ -223,6 +224,7 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
