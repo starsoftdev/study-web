@@ -39,7 +39,7 @@ class FilterBar extends Component {
     if (!sites.fetching && sites.details.length) {
       const siteLocationOptions = [{ label: 'All', value: 'all' }].concat(sites.details.map(site => ({
         label: (site.principalInvestigator) ? `${site.principalInvestigator} (${site.site_name})` : site.site_name,
-        value: site.site_id,
+        value: site.principalInvestigator,
       })));
 
       this.setState({
