@@ -1,3 +1,4 @@
+import mixpanel from 'mixpanel-browser';
 import {
   FETCH_ME_FROM_TOKEN,
   SET_AUTH_STATE,
@@ -220,6 +221,15 @@ export function setAuthState(newAuthState) {
 }
 
 export function setUserData(userData) {
+  if (userData && userData.id && mixpanel.__loaded) { // eslint-disable-line
+    try {
+      mixpanel.identify(userData.id);
+      mixpanel.people.set({ $email: userData.email });
+      mixpanel.people.set({ $name: `${userData.firstName} ${userData.lastName}` });
+    } catch (e) {
+      console.log('mixpanel error: ', e);
+    }
+  }
   return {
     type: SET_USER_DATA,
     payload: {
