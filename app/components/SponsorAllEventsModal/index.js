@@ -13,7 +13,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, pagin
 
     sorted = _.orderBy(events, [(o) => {
       if (paginationOptions.activeSort === 'patientName') {
-        return `${o.data.patient.firstName} ${o.data.patient.lastName}`;
+        return o.numberName;
       } else if (paginationOptions.activeSort === 'time') {
         return o.data.time;
       }
@@ -22,7 +22,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, pagin
   }
 
   return (
-    <Modal dialogComponentClass={CenteredModal} show={visible} onHide={handleCloseModal} id="all-patients-modal">
+    <Modal dialogComponentClass={CenteredModal} show={visible} onHide={handleCloseModal} id="all-sponsor-patients-modal">
       <Modal.Header>
         <Modal.Title>{moment(date).format('dddd, MMMM DD, YYYY')}</Modal.Title>
         <a className="lightbox-close close" onClick={handleCloseModal}>
@@ -32,10 +32,27 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, pagin
       <Modal.Body>
         <div className="scroll-holder jcf--scrollable">
           <div className="list-head clearfix">
-            <div onClick={sortBy} data-sort="patientName" className={(paginationOptions.activeSort === 'patientName') ? `${paginationOptions.activeDirection} col patient-name` : 'col patient-name'}>Patient <i className="caret-arrow" /></div>
-            <div className="col site-location hidden">Site Location <i className="caret-arrow" /></div>
-            <div className="col protocol hidden">Protocol <i className="caret-arrow" /></div>
-            <div onClick={sortBy} data-sort="time" className={(paginationOptions.activeSort === 'time') ? `${paginationOptions.activeDirection} col time` : 'col time'}>Time <i className="caret-arrow" /></div>
+            <div
+              onClick={sortBy}
+              data-sort="principalInvestigator"
+              className={(paginationOptions.activeSort === 'principalInvestigator') ? `${paginationOptions.activeDirection} col principal-investigator` : 'col principal-investigator'}
+            >
+              Principal Investigator <i className="caret-arrow" />
+            </div>
+            <div
+              onClick={sortBy}
+              data-sort="patientName"
+              className={(paginationOptions.activeSort === 'patientName') ? `${paginationOptions.activeDirection} col patient-name` : 'col patient-name'}
+            >
+              Patient <i className="caret-arrow" />
+            </div>
+            <div
+              onClick={sortBy}
+              data-sort="time"
+              className={(paginationOptions.activeSort === 'time') ? `${paginationOptions.activeDirection} col time` : 'col time'}
+            >
+              Time <i className="caret-arrow" />
+            </div>
           </div>
           <div className="patient-list">
             <div className="list-holder">
@@ -44,7 +61,8 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, pagin
                   sorted.map((event, index) => (
                     <li key={index}>
                       <a className="btn btn-gray-outline lightbox-opener">
-                        <span className="patient-name">{`Patient #${index + 1}`}</span>
+                        <span className="principal-investigator">{event.data.principalInvestigator || 'N/A'}</span>
+                        <span className="patient-name">{event.numberName}</span>
                         <span className="time">{moment(event.data.time).format('h:mm A')}</span>
                       </a>
                     </li>
