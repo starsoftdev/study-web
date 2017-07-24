@@ -143,12 +143,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       fixedScrollWidth: false,
       fixedScrollContainerWidth: 2891,
 
-      openedPages: [],
-      landingPageOnTop: false,
-      thankYouPageOnTop: false,
-      patientThankYouEmailPageOnTop: false,
-      editStudyPageOnTop: false,
-      campaignPageOnTop: false,
       stickyLeftOffset: false,
 
       showNoteModal: false,
@@ -332,7 +326,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   historyStudies() {
-
   }
 
   loadItems() {
@@ -385,132 +378,81 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   showLandingPageModal(visible) {
-    const pages = this.state.openedPages;
     if (visible) {
-      pages.push('landingPageOnTop');
       this.setState({
-        showLandingPageModal: visible,
-        landingPageOnTop: visible,
-        thankYouPageOnTop: false,
-        patientThankYouEmailPageOnTop: false,
-        editStudyPageOnTop: false,
-        campaignPageOnTop: false,
-
-        openedPages: pages,
+        showEditInformationModal: false,
+        showLandingPageModal: true,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: false,
       });
     } else {
-      pages.pop();
       this.setState({
-        showLandingPageModal: visible,
-        landingPageOnTop: visible,
-        [pages[(pages.length - 1)]]: true,
-
-        openedPages: pages,
+        showLandingPageModal: false,
       });
     }
   }
 
   showThankYouPageModal(visible) {
-    const pages = this.state.openedPages;
     if (visible) {
-      pages.push('thankYouPageOnTop');
       this.setState({
-        showThankYouPageModal: visible,
-        landingPageOnTop: false,
-        thankYouPageOnTop: visible,
-        patientThankYouEmailPageOnTop: false,
-        editStudyPageOnTop: false,
-        campaignPageOnTop: false,
-
-        openedPages: pages,
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: true,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: false,
       });
     } else {
-      pages.pop();
       this.setState({
-        showThankYouPageModal: visible,
-        thankYouPageOnTop: visible,
-        [pages[(pages.length - 1)]]: true,
-
-        openedPages: pages,
+        showThankYouPageModal: false,
       });
     }
   }
 
   showPatientThankYouPageModal(visible) {
-    const pages = this.state.openedPages;
     if (visible) {
-      pages.push('patientThankYouEmailPageOnTop');
       this.setState({
-        showPatientThankYouPageModal: visible,
-        landingPageOnTop: false,
-        thankYouPageOnTop: false,
-        patientThankYouEmailPageOnTop: visible,
-        editStudyPageOnTop: false,
-        campaignPageOnTop: false,
-
-        openedPages: pages,
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: true,
+        showCampaignPageModal: false,
       });
     } else {
-      pages.pop();
       this.setState({
-        showPatientThankYouPageModal: visible,
-        patientThankYouEmailPageOnTop: visible,
-        [pages[(pages.length - 1)]]: true,
-
-        openedPages: pages,
+        showPatientThankYouPageModal: false,
       });
     }
   }
 
   showEditInformationModal(visible) {
-    const pages = this.state.openedPages;
     if (visible) {
-      pages.push('editStudyPageOnTop');
       this.setState({
-        showEditInformationModal: visible,
-        landingPageOnTop: false,
-        thankYouPageOnTop: false,
-        patientThankYouEmailPageOnTop: false,
-        editStudyPageOnTop: visible,
-        campaignPageOnTop: false,
-
-        openedPages: pages,
+        showEditInformationModal: true,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: false,
       });
     } else {
-      pages.pop();
       this.setState({
-        showEditInformationModal: visible,
-        editStudyPageOnTop: visible,
-        [pages[(pages.length - 1)]]: true,
-
-        openedPages: pages,
+        showEditInformationModal: false,
       });
     }
-    // change('dashboardEditStudyForm', 'messagingNumber', this.props.editStudyValues.text_number_id);
   }
 
   showCampaignPageModal(visible) {
-    const pages = this.state.openedPages;
     if (visible) {
-      pages.push('campaignPageOnTop');
       this.setState({
-        showCampaignPageModal: visible,
-        landingPageOnTop: false,
-        thankYouPageOnTop: false,
-        patientThankYouEmailPageOnTop: false,
-        editStudyPageOnTop: false,
-        campaignPageOnTop: visible,
-
-        openedPages: pages,
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: true,
       });
     } else {
-      pages.pop();
       this.setState({
-        showCampaignPageModal: visible,
-        campaignPageOnTop: visible,
-        [pages[(pages.length - 1)]]: true,
-
-        openedPages: pages,
+        showCampaignPageModal: false,
       });
     }
   }
@@ -716,7 +658,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         className="pull-left"
                         data-class="btn-deactivate"
                         onClick={() => this.showEditInformationModal(true)}
-                      > Edit </Button>
+                      > Info </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
