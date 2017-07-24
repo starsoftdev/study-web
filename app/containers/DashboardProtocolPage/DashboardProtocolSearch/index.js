@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import Button from 'react-bootstrap/lib/Button';
+import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddProtocolForm } from './AddProtocolForm';
 import TableActions from '../../../components/TableActions/index';
@@ -16,6 +17,7 @@ export class DashboardProtocolSearch extends React.Component {
     protocol: PropTypes.object,
     addProtocol: PropTypes.func,
     editProtocolProcess: PropTypes.object,
+    onSubmitQuery: PropTypes.func,
   }
 
   constructor(props) {
@@ -23,17 +25,29 @@ export class DashboardProtocolSearch extends React.Component {
 
     this.state = {
       addProtocolModalOpen: false,
+      query: null,
     };
 
     this.closeAddProtocolModal = this.closeAddProtocolModal.bind(this);
     this.openAddProtocolModal = this.openAddProtocolModal.bind(this);
     this.addProtocol = this.addProtocol.bind(this);
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.editProtocolProcess.saving && this.props.editProtocolProcess.saving) {
       this.closeAddProtocolModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
   }
 
   closeAddProtocolModal() {
@@ -57,17 +71,27 @@ export class DashboardProtocolSearch extends React.Component {
     });
 
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddProtocolModal}
           buttonText="Add Protocol"
           filters={
-            <div className="has-feedback">
+            <div className="has-feedback ">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="protocol"
-                component={ReactSelect}
-                placeholder="Select Protocol"
-                options={options}
+                component={Input}
+                type="text"
+                placeholder="Search"
+                className="keyword-search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }
