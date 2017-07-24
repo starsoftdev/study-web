@@ -2,8 +2,9 @@ import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-import ClinicalTrialsSearchFormValidator from './validator';
+import { browserHistory } from 'react-router';
 
+import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
 
@@ -130,8 +131,12 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                   className="field-lg"
                   selectedValue={this.state.countryCode}
                   onChange={countryCode => {
-                    this.setState({
-                      countryCode,
+                    this.setState({ countryCode }, () => {
+                      if (countryCode === 'us') {
+                        browserHistory.push('');
+                      } else {
+                        browserHistory.push(`/${countryCode}`);
+                      }
                     });
                   }}
                 />
