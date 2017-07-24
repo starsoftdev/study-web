@@ -15,6 +15,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
+import mixpanel from 'mixpanel-browser';
 
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
@@ -52,6 +53,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   componentWillMount() {
     // Always load user details from the localStorage Token
     this.props.fetchMeFromToken();
+  }
+
+  componentDidMount() {
+    mixpanel.init('b289dfb4784c32bc6e96db8b8a1e0d8c');
   }
 
   componentWillReceiveProps(nextProps) {
