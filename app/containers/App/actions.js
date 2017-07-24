@@ -222,8 +222,8 @@ export function setAuthState(newAuthState) {
 
 export function setUserData(userData) {
   mixpanel.identify(userData.id);
-  mixpanel.people.set({ '$email': userData.email });
-  mixpanel.people.set({ '$name': `${userData.firstName} ${userData.lastName}` });
+  mixpanel.people.set({ $email: userData.email });
+  mixpanel.people.set({ $name: `${userData.firstName} ${userData.lastName}` });
   return {
     type: SET_USER_DATA,
     payload: {
