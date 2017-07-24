@@ -20,3 +20,5 @@ export const DELETE_PROTOCOL_SUCCESS = 'app/DashboardProtocolPage/DELETE_PROTOCO
 export const DELETE_PROTOCOL_ERROR = 'app/DashboardProtocolPage/DELETE_PROTOCOL_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardProtocolPage/SET_ACTIVE_SORT';
+
+export const SET_SEARCH_QUERY = 'app/DashboardProtocolPage/SET_SEARCH_QUERY';
