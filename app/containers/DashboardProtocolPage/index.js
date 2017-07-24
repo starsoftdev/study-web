@@ -11,7 +11,7 @@ import Helmet from 'react-helmet';
 import DashboardProtocolSearch from './DashboardProtocolSearch/index';
 import DashboardProtocolTable from './DashboardProtocolTable';
 
-import { fetchProtocol, addProtocol, editProtocol, deleteProtocol, setActiveSort } from './actions';
+import { fetchProtocol, addProtocol, editProtocol, deleteProtocol, setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardProtocol, selectDashboardEditProtocolProcess, selectDashboardProtocolSearchFormValues, selectPaginationOptions } from './selectors';
 
 export class DashboardProtocolPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -26,23 +26,36 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
     protocolSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchProtocols();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchProtocols } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchProtocols(limit, offset);
+    fetchProtocols(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchProtocols, protocol } = this.props;
+    if (!protocol.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchProtocols(query, limit, offset);
+    }
   }
 
   render() {
@@ -55,6 +68,7 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
           protocol={this.props.protocol}
           addProtocol={this.props.addProtocol}
           editProtocolProcess={this.props.editProtocolProcess}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardProtocolTable
           editProtocolProcess={this.props.editProtocolProcess}
@@ -78,11 +92,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProtocols: (limit, offset) => dispatch(fetchProtocol(limit, offset)),
+    fetchProtocols: (query, limit, offset) => dispatch(fetchProtocol(query, limit, offset)),
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     editProtocol: (payload) => dispatch(editProtocol(payload)),
     deleteProtocol: (payload) => dispatch(deleteProtocol(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 

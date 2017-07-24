@@ -18,11 +18,13 @@ import {
   DELETE_PROTOCOL_SUCCESS,
   DELETE_PROTOCOL_ERROR,
   SET_ACTIVE_SORT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
-export function fetchProtocol(limit, offset) {
+export function fetchProtocol(query, limit, offset) {
   return {
     type: FETCH_PROTOCOL,
+    query,
     limit,
     offset,
   };
@@ -112,5 +114,12 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function setSearchQuery(query) {
+  return {
+    type: SET_SEARCH_QUERY,
+    query,
   };
 }
