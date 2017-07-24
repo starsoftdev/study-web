@@ -937,7 +937,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     const queryParams = {};
     if (postalCode) {
       queryParams.postalCode = postalCode;
-      queryParams.countryCode = countryCode ? countryCode.toLowerCase() : 'us';
+    }
+    if (countryCode) {
+      queryParams.countryCode = countryCode;
     }
     if (distance) {
       queryParams.distance = distance;
