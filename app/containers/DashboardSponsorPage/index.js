@@ -51,9 +51,10 @@ export class DashboardSponsorPage extends React.Component { // eslint-disable-li
   loadMore() {
     const { fetchSponsors, sponsors } = this.props;
     if (!sponsors.fetching) {
+      const query = this.props.paginationOptions.query;
       const offset = this.props.paginationOptions.page * 10;
       const limit = 10;
-      fetchSponsors(limit, offset);
+      fetchSponsors(query, limit, offset);
     }
   }
 
