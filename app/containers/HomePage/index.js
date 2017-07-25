@@ -87,7 +87,12 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const params = queryParams;
     params.name = searchParams.name;
     params.site = searchParams.site;
-    params.status = searchParams.status || ACTIVE_STATUS_VALUE;
+    if (params.name) {
+      params.status = searchParams.status;
+    } else {
+      params.status = searchParams.status || ACTIVE_STATUS_VALUE;
+    }
+
     params.filter = false;
 
     if (searchParams.filter) {
