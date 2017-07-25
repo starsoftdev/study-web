@@ -27,9 +27,10 @@ import {
   SET_SEARCH_QUERY,
 } from './constants';
 
-export function fetchSponsors(limit, offset) {
+export function fetchSponsors(query, limit, offset) {
   return {
     type: FETCH_SPONSORS,
+    query,
     limit,
     offset,
   };
