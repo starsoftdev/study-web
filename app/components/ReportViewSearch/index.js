@@ -210,7 +210,7 @@ export class ReportViewSearch extends React.Component {
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
           </div>
         </div>
-        <div className="fields-holder full-width">
+        <div className={(selectedTime.startDate && selectedTime.endDate) ? 'date-selected fields-holder full-width' : 'fields-holder full-width'}>
           <div className="search-area pull-left">
             <div className="has-feedback">
               <Button className="btn-enter">
