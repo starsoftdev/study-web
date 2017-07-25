@@ -98,7 +98,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       },
       {
         name: 'United Kingdom',
-        id: 'gb',
+        id: 'uk',
       },
       {
         name: 'United States',
