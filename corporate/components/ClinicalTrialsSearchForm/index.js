@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import inViewport from 'in-viewport';
+import classNames from 'classnames';
+import { browserHistory } from 'react-router';
 
 import ClinicalTrialsSearchFormValidator from './validator';
-
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
 
@@ -18,6 +19,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     handleSubmit: PropTypes.func.isRequired,
     indications: PropTypes.array,
     individual: PropTypes.bool,
+    countryCode: PropTypes.string,
   };
 
   constructor(props) {
@@ -25,10 +27,11 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
+    this.state = {
+      countryCode: props.countryCode ? props.countryCode : 'US',
+    };
   }
-
-  componentWillMount() {}
-
+  
   componentDidMount() {
     this.watcher = inViewport(this.animatedForm, this.setVisible);
   }
@@ -58,10 +61,53 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       { id: 250, name: '250 Miles' },
     ];
 
+    const countries = [
+      {
+        name: 'Brazil',
+        id: 'br',
+      },
+      {
+        name: 'Canada',
+        id: 'ca',
+      },
+      {
+        name: 'Czech Republic',
+        id: 'cz',
+      },
+      {
+        name: 'France',
+        id: 'fr',
+      },
+      {
+        name: 'Germany',
+        id: 'de',
+      },
+      {
+        name: 'Italy',
+        id: 'it',
+      },
+      {
+        name: 'Japan',
+        id: 'jp',
+      },
+      {
+        name: 'Poland',
+        id: 'pl',
+      },
+      {
+        name: 'United Kingdom',
+        id: 'uk',
+      },
+      {
+        name: 'United States',
+        id: 'us',
+      },
+    ];
+
     if (indications.length > 0 && indications[0].id !== -1) {
       indications.unshift({ id: -1, name: 'All' });
     }
-
+    const isUS = this.props.countryCode === 'us';
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
@@ -70,15 +116,45 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         data-view="fadeInUp"
         onSubmit={handleSubmit}
       >
-        <Field
-          name="postalCode"
-          type="text"
-          maxLength="5"
-          component={Input}
-          placeholder="Postal Code"
-          className="field-row"
-          bsClass="form-control input-lg"
-        />
+        <div className="field-row">
+          <div className={classNames({ row: !isUS })}>
+            {
+              !isUS &&
+              <div className="col-xs-6">
+                <Field
+                  name="countryCode"
+                  component={ReactSelect}
+                  placeholder="Select Country"
+                  options={countries}
+                  className="field-lg"
+                  selectedValue={this.state.countryCode}
+                  onChange={countryCode => {
+                    if (countryCode) {
+                      this.setState({ countryCode }, () => {
+                        if (countryCode === 'us') {
+                          browserHistory.push('');
+                        } else {
+                          browserHistory.push(`/${countryCode}`);
+                        }
+                      });
+                    }
+                  }}
+                />
+              </div>
+            }
+            <div className={classNames({ 'col-xs-6': !isUS })}>
+              <Field
+                name="postalCode"
+                type="text"
+                maxLength="5"
+                component={Input}
+                placeholder="Postal Code"
+                className="field-row"
+                bsClass="form-control input-lg"
+              />
+            </div>
+          </div>
+        </div>
         <div className="field-row">
           <Field
             name="distance"
