@@ -157,7 +157,7 @@ export class EditInformationModal extends React.Component {
       this.setState({ initial: true });
     }
 
-    if (newProps.formValues.piName) {
+    /* if (newProps.formValues.piName) {
       const piNameParts = newProps.formValues.piName.split(' ');
       const piFirstName = piNameParts[0] || null;
       const piLastName = piNameParts[1] || null;
@@ -178,7 +178,7 @@ export class EditInformationModal extends React.Component {
           piLastName: null,
         });
       });
-    }
+    }*/
   }
 
   onSuggestSelect(e) {
@@ -557,24 +557,12 @@ export class EditInformationModal extends React.Component {
                     <label>PRINCIPAL INVESTIGATOR</label>
                   </strong>
                   <div className="field">
-                    <div className="row">
-                      <div className="col pull-left dashboard-edit-study-pi">
-                        <Field
-                          name="piFirstName"
-                          component={Input}
-                          type="text"
-                          placeholder="First Name"
-                        />
-                      </div>
-                      <div className="col pull-left dashboard-edit-study-pi">
-                        <Field
-                          name="piLastName"
-                          component={Input}
-                          type="text"
-                          placeholder="Last Name"
-                        />
-                      </div>
-                    </div>
+                    <Field
+                      type="text"
+                      name="piName"
+                      component={Input}
+                      placeholder="Principal Investigator"
+                    />
                   </div>
                 </div>
                 <div className="field-row">
