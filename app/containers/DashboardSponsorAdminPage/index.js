@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import DashboardSponsorAdminSearch from './DashboardSponsorAdminSearch/index';
 import DashboardSponsorAdminTable from './DashboardSponsorAdminTable';
-import { fetchSponsors, fetchSponsorsWithoutAdmin, fetchUsersByRoles, addSponsorAdmin, editSponsorAdmin, deleteSponsorAdmin, setActiveSort } from './actions';
+import { fetchSponsors, fetchSponsorsWithoutAdmin, fetchUsersByRoles, addSponsorAdmin, editSponsorAdmin, deleteSponsorAdmin, setActiveSort, setSearchQuery } from './actions';
 import {
   selectDashboardSponsorAdminsSponsors,
   selectDashboardSponsorAdminsSponsorsWithoutAdmin,
@@ -116,6 +116,7 @@ function mapDispatchToProps(dispatch) {
     editSponsorAdmin: (payload) => dispatch(editSponsorAdmin(payload)),
     deleteSponsorAdmin: (payload) => dispatch(deleteSponsorAdmin(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 
