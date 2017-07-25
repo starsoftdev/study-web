@@ -53,10 +53,6 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
 
     const { indications, levels } = this.props;
     let indication = indications.details;
-    if (this.props.indicationSearchFormValues.indication) {
-      indication = _.filter(indication, (item) => (item.id === this.props.indicationSearchFormValues.indication));
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       if (this.props.paginationOptions.activeSort === 'tier') {
