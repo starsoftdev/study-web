@@ -26,6 +26,33 @@ const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
 });
 
+const toShortCode = country => {
+  switch (country) {
+    case 'United States':
+      return 'us';
+    case 'United Kingdom':
+      return 'uk';
+    case 'Brazil':
+      return 'br';
+    case 'France':
+      return 'fr';
+    case 'Germany':
+      return 'de';
+    case 'Italy':
+      return 'it';
+    case 'Czech Republic':
+      return 'cz';
+    case 'Japan':
+      return 'jp';
+    case 'Poland':
+      return 'pl';
+    case 'Canada':
+      return 'ca';
+    default:
+      return 'us';
+  }
+};
+
 @reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, mapDispatchToProps)
 
@@ -94,7 +121,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
   componentWillReceiveProps(newProps) {
     if (newProps.formValues.selectedRegion !== this.props.formValues.selectedRegion) {
-      console.log('region', newProps.formValues.selectedRegion);
       this.props.change('selectedTimezone', '');
     }
   }
@@ -109,6 +135,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     const { change } = this.props;
     let city = '';
     let state = '';
+    let countryCode = '';
     let postalCode = '';
     let streetNmber = '';
     let route = '';
@@ -128,6 +155,12 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
             change('state', val.short_name);
+          }
+        }
+        if (!countryCode) {
+          countryCode = _.find(val.types, (o) => (o === 'country'));
+          if (state) {
+            change('countryCode', val.short_name);
           }
         }
         if (!postalCode) {
@@ -155,6 +188,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       }
       if (addressArr[2]) {
         change('state', addressArr[2]);
+      }
+      if (addressArr[3]) {
+        change('countryCode', toShortCode(addressArr[3]));
       }
       this.geoSuggest.update(`${addressArr[0]}`);
       change('address', `${addressArr[0]}`);
@@ -245,6 +281,19 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             <div className="field">
               <Field
                 name="state"
+                component={Input}
+                type="text"
+                isDisabled
+              />
+            </div>
+          </div>
+          <div className="field-row">
+            <strong className="label required">
+              <label>COUNTRY</label>
+            </strong>
+            <div className="field">
+              <Field
+                name="countryCode"
                 component={Input}
                 type="text"
                 isDisabled
