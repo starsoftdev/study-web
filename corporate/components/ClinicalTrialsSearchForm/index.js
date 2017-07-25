@@ -31,12 +31,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       countryCode: props.countryCode ? props.countryCode : 'US',
     };
   }
-  
+
   componentDidMount() {
     this.watcher = inViewport(this.animatedForm, this.setVisible);
-  }
-
-  componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
