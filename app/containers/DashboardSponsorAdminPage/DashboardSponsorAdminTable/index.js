@@ -58,18 +58,6 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
 
     let sponsors = this.props.sponsors.details;
 
-    if (this.props.sponsorAdminSearchFormValues.name) {
-      sponsors = _.filter(sponsors, (item) => {
-        if (
-          (`${item.first_name} ${item.last_name}`.toLowerCase().indexOf(this.props.sponsorAdminSearchFormValues.name.toLowerCase()) !== -1) ||
-          (`${item.name}`.toLowerCase().indexOf(this.props.sponsorAdminSearchFormValues.name.toLowerCase()) !== -1)
-        ) {
-          return true;
-        }
-        return false;
-      });
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       sponsors = _.orderBy(sponsors, [(o) => {
