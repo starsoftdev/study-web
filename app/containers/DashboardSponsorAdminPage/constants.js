@@ -29,3 +29,5 @@ export const DELETE_SPONSOR_ADMIN_SUCCESS = 'app/DashboardSponsorAdminPage/DELET
 export const DELETE_SPONSOR_ADMIN_ERROR = 'app/DashboardSponsorAdminPage/DELETE_SPONSOR_ADMIN_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardManageUsers/SET_ACTIVE_SORT';
+
+export const SET_SEARCH_QUERY = 'app/DashboardProtocolPage/SET_SEARCH_QUERY';
