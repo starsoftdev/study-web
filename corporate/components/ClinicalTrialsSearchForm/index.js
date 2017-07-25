@@ -32,13 +32,8 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     };
   }
 
-  componentWillMount() {}
-
   componentDidMount() {
     this.watcher = inViewport(this.animatedForm, this.setVisible);
-  }
-
-  componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
