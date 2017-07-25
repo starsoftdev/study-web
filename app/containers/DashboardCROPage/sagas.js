@@ -42,21 +42,20 @@ export function* fetchCroWatcher() {
 
 export function* fetchCroWorker(action) {
   try {
-    const requestURL = `${API_URL}/cros`;
+    const query = action.query;
     const limit = action.limit || 10;
     const offset = action.offset || 0;
 
-    const filter = {
-      limit,
-      skip: offset,
+    let requestURL = `${API_URL}/cros/crosForDashboard?limit=${limit}&offset=${offset}`;
+
+    if (query) {
+      requestURL += `&query=${query}`;
+    }
+
+    const params = {
+      method: 'GET',
     };
-
-    const queryParams = {
-      filter: JSON.stringify(filter),
-    };
-
-    const response = yield call(request, requestURL, { query: queryParams });
-
+    const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
     const page = (offset / 10) + 1;
     if (response.length < 10) {
