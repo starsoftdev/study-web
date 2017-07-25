@@ -70,7 +70,10 @@ export class DashboardSponsorAdminSearch extends React.Component {
           buttonText="Add Sponsor Admin"
           filters={
             <div className="field">
-              <Button className="btn-enter">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
