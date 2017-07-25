@@ -21,3 +21,4 @@ export const DELETE_DASHBOARD_USER_SUCCESS = 'app/DashboardManageUsers/DELETE_DA
 export const DELETE_DASHBOARD_USER_ERROR = 'app/DashboardManageUsers/DELETE_DASHBOARD_USER_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardManageUsers/SET_ACTIVE_SORT';
+export const SET_SEARCH_QUERY = 'app/DashboardManageUsers/SET_SEARCH_QUERY';
