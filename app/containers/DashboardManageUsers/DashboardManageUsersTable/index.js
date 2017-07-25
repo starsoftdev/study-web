@@ -127,10 +127,6 @@ export default class DashboardManageUsersTable extends React.Component { // esli
 
     let admins = this.props.admins.details;
 
-    if (this.props.searchFormValues.name) {
-      admins = _.filter(admins, (item) => (`${item.first_name} ${item.last_name}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1));
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       admins = _.orderBy(admins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
