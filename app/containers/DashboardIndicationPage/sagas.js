@@ -55,32 +55,19 @@ export function* fetchIndicationsWatcher() {
 
 export function* fetchIndicationsWorker(action) {
   try {
+    const query = action.query;
     const limit = action.limit || 10;
     const offset = action.offset || 0;
-    const requestURL = `${API_URL}/indications`;
+    let requestURL = `${API_URL}/indications/indicationsForDashboard?limit=${limit}&offset=${offset}`;
 
-    const filter = {
-      limit,
-      skip: offset,
-      include: [{
-        relation: 'patientIndicationGoals',
-      }],
-      where: {
-        and: [],
-      },
-      order: 'name',
+    if (query) {
+      requestURL += `&query=${query}`;
+    }
+
+    const params = {
+      method: 'GET',
     };
-
-    filter.where.and.push({
-      isArchived: false,
-    });
-
-    const queryParams = {
-      filter: JSON.stringify(filter),
-    };
-
-    const response = yield call(request, requestURL, { query: queryParams });
-
+    const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
     const page = (offset / 10) + 1;
     if (response.length < 10) {
