@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 import DashboardIndicationSearch from './DashboardIndicationSearch/index';
 import DashboardIndicationTable from './DashboardIndicationTable';
-import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication, setActiveSort } from './actions';
+import { fetchIndications, fetchLevels, addLevel, addIndication, deleteIndication, editIndication, setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardIndicationSearchFormValues, selectIndications, selectLevels, selectDashboardAddLevelProcess, selectDashboardAddIndicationProcess, selectPaginationOptions } from './selectors';
 
 export class DashboardIndicationPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -28,12 +28,14 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     indicationSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
@@ -41,11 +43,22 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     this.props.fetchLevels();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchIndications } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchIndications(limit, offset);
+    fetchIndications(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchIndications, indications } = this.props;
+    if (!indications.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchIndications(query, limit, offset);
+    }
   }
 
   render() {
@@ -62,6 +75,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
           addIndicationProcess={addIndicationProcess}
           levels={levels}
           indications={indications}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardIndicationTable
           levels={levels}
@@ -88,13 +102,14 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchIndications: (limit, offset) => dispatch(fetchIndications(limit, offset)),
+    fetchIndications: (query, limit, offset) => dispatch(fetchIndications(query, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     addLevel: (payload) => dispatch(addLevel(payload)),
     addIndication: (payload) => dispatch(addIndication(payload)),
     editIndication: (payload) => dispatch(editIndication(payload)),
     deleteIndication: (payload) => dispatch(deleteIndication(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 

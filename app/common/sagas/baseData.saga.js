@@ -462,8 +462,6 @@ export function* fetchClientSitesWatcher() {
           scope: {
             include: ['studyNotificationEmails'],
           },
-        }, {
-          relation: 'principalInvestigators',
         }],
       };
 
@@ -616,17 +614,7 @@ export function* fetchSiteWatcher() {
     const { id } = yield take(FETCH_SITE);
 
     try {
-      const filterObj = {
-        include: [{
-          relation: 'principalInvestigators',
-        }],
-      };
-
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
-      };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/sites/${id}?${queryString}`;
+      const requestURL = `${API_URL}/sites/${id}`;
       const response = yield call(request, requestURL);
 
       yield put(siteFetched(response));
@@ -937,6 +925,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     const queryParams = {};
     if (postalCode) {
       queryParams.postalCode = postalCode;
+    }
+    if (countryCode) {
+      queryParams.countryCode = countryCode;
     }
     if (distance) {
       queryParams.distance = distance;

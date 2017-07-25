@@ -21,3 +21,4 @@ export const DELETE_CRO_SUCCESS = 'app/DashboardCROPage/DELETE_CRO_SUCCESS';
 export const DELETE_CRO_ERROR = 'app/DashboardCROPage/DELETE_CRO_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardCROPage/SET_ACTIVE_SORT';
+export const SET_SEARCH_QUERY = 'app/DashboardCROPage/SET_SEARCH_QUERY';
