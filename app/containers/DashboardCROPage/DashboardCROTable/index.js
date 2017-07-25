@@ -55,10 +55,6 @@ export class DashboardCROTable extends React.Component { // eslint-disable-line 
 
     let cro = this.props.cros.details;
 
-    if (this.props.croSearchFormValues.cro) {
-      cro = _.filter(cro, (item) => (item.id === this.props.croSearchFormValues.cro));
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       cro = _.orderBy(cro, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
