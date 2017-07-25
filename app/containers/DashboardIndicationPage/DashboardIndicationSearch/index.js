@@ -4,8 +4,8 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-
-import ReactSelect from '../../../components/Input/ReactSelect';
+import Button from 'react-bootstrap/lib/Button';
+import Input from '../../../components/Input';
 import CenteredModal from '../../../components/CenteredModal/index';
 import { AddIndicationForm } from './AddIndicationForm';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
@@ -21,6 +21,7 @@ export class DashboardIndicationSearch extends React.Component {
     addIndicationProcess: PropTypes.object,
     levels: PropTypes.object,
     indications: PropTypes.object,
+    onSubmitQuery: PropTypes.func,
   }
 
   constructor(props) {
@@ -29,6 +30,7 @@ export class DashboardIndicationSearch extends React.Component {
     this.state = {
       addIndicationModalOpen: false,
       addExposureLevelModalOpen: false,
+      query: null,
     };
 
     this.closeAddIndicationModal = this.closeAddIndicationModal.bind(this);
@@ -37,6 +39,8 @@ export class DashboardIndicationSearch extends React.Component {
     this.openAddExposureLevelModal = this.openAddExposureLevelModal.bind(this);
     this.addLevel = this.addLevel.bind(this);
     this.addIndication = this.addIndication.bind(this);
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -46,6 +50,15 @@ export class DashboardIndicationSearch extends React.Component {
     if (!newProps.addIndicationProcess.saving && this.props.addIndicationProcess.saving) {
       this.closeAddIndicationModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
   }
 
   closeAddIndicationModal() {
@@ -104,17 +117,27 @@ export class DashboardIndicationSearch extends React.Component {
     });
 
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddIndicationModal}
           buttonText="Add Indication"
           filters={
-            <div className="has-feedback">
+            <div className="has-feedback ">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
+                <i className="icomoon-icon_search2" />
+              </Button>
               <Field
                 name="indication"
-                component={ReactSelect}
-                placeholder="Select Indication"
-                options={options}
+                component={Input}
+                type="text"
+                placeholder="Search"
+                className="keyword-search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }
