@@ -131,13 +131,15 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                   className="field-lg"
                   selectedValue={this.state.countryCode}
                   onChange={countryCode => {
-                    this.setState({ countryCode }, () => {
-                      if (countryCode === 'us') {
-                        browserHistory.push('');
-                      } else {
-                        browserHistory.push(`/${countryCode}`);
-                      }
-                    });
+                    if (countryCode) {
+                      this.setState({ countryCode }, () => {
+                        if (countryCode === 'us') {
+                          browserHistory.push('');
+                        } else {
+                          browserHistory.push(`/${countryCode}`);
+                        }
+                      });
+                    }
                   }}
                 />
               </div>
