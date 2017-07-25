@@ -23,3 +23,4 @@ export const FETCH_LEVELS_ERROR = 'app/DashboardIndicationPage/FETCH_LEVELS_ERRO
 export const ADD_LEVEL = 'app/DashboardIndicationPage/ADD_LEVEL';
 export const ADD_LEVEL_SUCCESS = 'app/DashboardIndicationPage/ADD_LEVEL_SUCCESS';
 export const ADD_LEVEL_ERROR = 'app/DashboardIndicationPage/ADD_LEVEL_ERROR';
+export const SET_SEARCH_QUERY = 'app/DashboardIndicationPage/SET_SEARCH_QUERY';
