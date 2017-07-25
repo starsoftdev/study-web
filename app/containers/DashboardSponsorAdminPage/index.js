@@ -36,12 +36,14 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
     paginationOptions: PropTypes.object,
     sponsorAdminSearchFormValues: PropTypes.object,
     setActiveSort: PropTypes.func,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
@@ -50,11 +52,22 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
     this.props.fetchUsersByRoles();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchSponsors } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchSponsors(limit, offset);
+    fetchSponsors(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchSponsors, sponsors } = this.props;
+    if (!sponsors.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchSponsors(query, limit, offset);
+    }
   }
 
   render() {
@@ -68,6 +81,7 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
           usersByRoles={this.props.usersByRoles}
           addSponsorAdmin={this.props.addSponsorAdmin}
           editUserProcess={this.props.editUserProcess}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardSponsorAdminTable
           loadMore={this.loadMore}
@@ -95,7 +109,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSponsors: (limit, offset) => dispatch(fetchSponsors(limit, offset)),
+    fetchSponsors: (query, limit, offset) => dispatch(fetchSponsors(query, limit, offset)),
     fetchSponsorsWithoutAdmin: () => dispatch(fetchSponsorsWithoutAdmin()),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
     addSponsorAdmin: (payload) => dispatch(addSponsorAdmin(payload)),
