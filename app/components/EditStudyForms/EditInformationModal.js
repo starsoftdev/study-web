@@ -561,7 +561,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="piName"
                       component={Input}
-                      placeholder="Principal Investigator"
+                      placeholder="Full Name"
                     />
                   </div>
                 </div>
