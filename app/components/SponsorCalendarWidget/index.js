@@ -68,7 +68,15 @@ class CalendarWidget extends React.Component {
       }
 
       result.title = `Patient #${counter} ${moment(s.time).format('h:mm A')}`;
+      result.tooltipTitle = result.title;
+      result.numberName = `Patient #${counter}`;
+      if (s.principalInvestigator) {
+        result.tooltipTitle = (<div>
+          {s.principalInvestigator}<br />Patient #{counter} {moment(s.time).format('h:mm A')}
+        </div>);
+      }
       currDate = moment(s.time).startOf('date').date();
+
       return result;
     });
 
@@ -107,7 +115,7 @@ class CalendarWidget extends React.Component {
                   id={'ms-tooltip'}
                   className="calendar-tooltip"
                 >
-                  {ev.title}
+                  {ev.event.tooltipTitle}
                 </Tooltip>
               );
 
