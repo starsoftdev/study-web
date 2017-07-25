@@ -921,22 +921,22 @@ function* postFindOutPatients(action) {
 
 function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
   try {
-    const { postalCode, distance, indicationId, from } = action.params;
+    const { countryCode, distance, from, indicationId, postalCode } = action.params;
     const queryParams = {};
-    if (postalCode) {
-      queryParams.postalCode = postalCode;
-    }
     if (countryCode) {
       queryParams.countryCode = countryCode;
     }
     if (distance) {
       queryParams.distance = distance;
     }
+    if (from !== false || from !== null) {
+      queryParams.from = from;
+    }
     if (indicationId) {
       queryParams.indicationId = indicationId;
     }
-    if (from !== false || from !== null) {
-      queryParams.from = from;
+    if (postalCode) {
+      queryParams.postalCode = postalCode;
     }
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/getNearbyStudies?${queryString}`;
