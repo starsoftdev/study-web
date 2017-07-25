@@ -79,6 +79,9 @@ export class DashboardSponsorAdminSearch extends React.Component {
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }
