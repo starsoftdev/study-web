@@ -24,7 +24,6 @@ import {
   FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
-  FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_TEXTS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
@@ -151,11 +150,11 @@ export function fetchPatients(studyId, text, campaignId, sourceId) {
   };
 }
 
-export function exportPatients(studyId, userId, text, campaignId, sourceId) {
+export function exportPatients(studyId, clientRoleId, text, campaignId, sourceId) {
   return {
     type: EXPORT_PATIENTS,
     studyId,
-    userId,
+    clientRoleId,
     text,
     campaignId,
     sourceId,
@@ -286,13 +285,6 @@ export function readStudyPatientMessagesSuccess(payload) {
 export function readStudyPatientMessagesError(payload) {
   return {
     type: READ_STUDY_PATIENT_MESSAGES_ERROR,
-    payload,
-  };
-}
-
-export function patientReferralStatFetched(payload) {
-  return {
-    type: FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
     payload,
   };
 }

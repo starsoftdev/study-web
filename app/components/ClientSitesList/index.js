@@ -67,18 +67,6 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const sortBy = this.state.sortBy;
     if (sortBy === 'name') {
       return item.name;
-    } else if (sortBy === 'principalInvestigator') {
-      if (item.piFirstName) {
-        return item.piFirstName;
-      }
-      if (item.principalInvestigators) {
-        for (const pi of item.principalInvestigators) {
-          if (pi.active) {
-            return pi.firstName;
-          }
-        }
-      }
-      return null;
     } else if (sortBy === 'phoneNumber') {
       return item.phoneNumber;
     } else if (sortBy === 'address') {
@@ -207,12 +195,6 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     if (selectedSiteDetailsForForm) {
-      for (const pi of selectedSiteDetailsForForm.principalInvestigators) {
-        if (pi.active) {
-          selectedSiteDetailsForForm.piFirstName = pi.firstName;
-          selectedSiteDetailsForForm.piLastName = pi.lastName;
-        }
-      }
       let selectedRegion = selectedSiteDetailsForForm.timezone.substr(0, selectedSiteDetailsForForm.timezone.indexOf('/'));
       const selectedTimezone = selectedSiteDetailsForForm.timezone.substr(selectedSiteDetailsForForm.timezone.indexOf('/') + 1);
 

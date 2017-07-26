@@ -551,8 +551,7 @@ export function* renewStudyWatcher() {
 
 export function* renewStudyWorker(action) {
   try {
-    const { studyId, cartValues, formValues } = action;
-    const requestURL = `${API_URL}/studies/${studyId}/renewStudy`;
+    const { studyId, cartValues, formValues, onClose } = action;
 
     const params = {
       method: 'POST',
@@ -562,20 +561,20 @@ export function* renewStudyWorker(action) {
         startDate: formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null,
       }),
     };
+    const requestURL = `${API_URL}/studies/${studyId}/renewStudy`;
     const response = yield call(request, requestURL, params);
 
-    yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyRenewed(response));
+    yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
     yield put(updateStudy({
       studyId,
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
     }));
-    yield put(reset('renewStudy'));
-    yield put(reset('shoppingCart'));
+    onClose();
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));

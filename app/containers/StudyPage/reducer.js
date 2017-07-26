@@ -20,7 +20,6 @@ import {
   FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
-  FETCH_STUDY_PATIENT_REFERRALS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_TEXTS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
@@ -77,6 +76,8 @@ const initialState = {
 };
 
 function studyPageReducer(state = initialState, action) {
+  let totalReferrals = 0;
+
   switch (action.type) {
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
@@ -93,6 +94,10 @@ function studyPageReducer(state = initialState, action) {
         fetchingStudy: true,
       };
     case FETCH_PATIENTS_SUCCESS:
+      for (const category of action.payload) {
+        totalReferrals += category.patients.length;
+      }
+
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
@@ -114,6 +119,10 @@ function studyPageReducer(state = initialState, action) {
           };
         }),
         fetchingPatients: false,
+        stats: {
+          ...state.stats,
+          referrals: totalReferrals,
+        },
       };
     case FETCH_PATIENTS_ERROR:
       return {
@@ -241,14 +250,6 @@ function studyPageReducer(state = initialState, action) {
         stats: {
           ...state.stats,
           views: action.payload,
-        },
-      };
-    case FETCH_STUDY_PATIENT_REFERRALS_SUCCESS:
-      return {
-        ...state,
-        stats: {
-          ...state.stats,
-          referrals: action.payload,
         },
       };
     case FETCH_STUDY_CALLS_SUCCESS:
