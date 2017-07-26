@@ -114,9 +114,11 @@ export class CampaignPageModal extends React.Component {
     let maxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
+      // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
       if (campaignIndex > 0) {
         maxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom);
       }
+      // if campaign is not the last, then it has a next campaign, we set the min date accordingly
       if (campaignIndex < studyCampaigns.details.length - 1) {
         minDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo);
       }
