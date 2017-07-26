@@ -61,7 +61,7 @@ const getFilteredSchedules = (schedules, filter) =>
   );
 
 const getFilteredSponsorSchedules = (sponsorSchedules, filter) => sponsorSchedules.filter(s =>
-    (!filter.siteLocation || filter.siteLocation === 'all' || s.principalInvestigator === filter.siteLocation) &&
+    (!filter.siteLocation || filter.siteLocation === 'all' || s.principalInvestigator === filter.siteLocation || s.siteLocation === filter.siteLocation) &&
     (!filter.protocol || filter.protocol === 'all' || s.protocolNumber === filter.protocol)
   );
 
