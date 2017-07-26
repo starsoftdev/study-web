@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
 import _, { find } from 'lodash';
-import { touch } from 'redux-form';
+import { touch, reset } from 'redux-form';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
@@ -44,6 +44,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     renewStudyFormValues: PropTypes.object,
     renewedStudy: PropTypes.object,
     renewStudy: PropTypes.func,
+    reset: PropTypes.func.isRequired,
     selectedIndicationLevelPrice: PropTypes.object,
     setActiveSort: PropTypes.func,
     shoppingCartFormError: PropTypes.bool,
@@ -132,7 +133,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const queryParams = this.props.queryParams;
 
     if (!newRenewedStudy.submitting && oldRenewedStudy.submitting) {
-      this.closeRenewModal();
       let allowFetch = false;
 
       if (queryParams.status === 'Active') {
@@ -238,6 +238,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
         indicationName: null,
         locationName: null,
       });
+      const { reset } = this.props;
+      reset('renewStudy');
+      reset('shoppingCart');
     }
   }
 
@@ -380,7 +383,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       exposureLevelName: studyLevel.label,
       client_id: this.props.currentUser.roleForClient.client_id,
       studyNotificationEmails: emailNotificationArray,
-    });
+    }, this.closeRenewModal);
   }
 
   handleUpgradeStudyFormSubmit() {
@@ -765,10 +768,11 @@ function mapDispatchToProps(dispatch) {
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
     fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
     editStudy: (studyId, formValues) => dispatch(editStudy(studyId, formValues)),
-    renewStudy: (studyId, cartValues, formValues) => dispatch(renewStudy(studyId, cartValues, formValues)),
+    renewStudy: (studyId, cartValues, formValues, onClose) => dispatch(renewStudy(studyId, cartValues, formValues, onClose)),
     saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
+    reset: (formName) => dispatch(reset(formName)),
     touchEditStudy: () => dispatch(touch('editStudy', ...editStudyFields)),
     touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
     touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
