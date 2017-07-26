@@ -151,11 +151,11 @@ export function fetchPatients(studyId, text, campaignId, sourceId) {
   };
 }
 
-export function exportPatients(studyId, userId, text, campaignId, sourceId) {
+export function exportPatients(studyId, clientRoleId, text, campaignId, sourceId) {
   return {
     type: EXPORT_PATIENTS,
     studyId,
-    userId,
+    clientRoleId,
     text,
     campaignId,
     sourceId,
