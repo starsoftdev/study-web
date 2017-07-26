@@ -58,10 +58,14 @@ export function* fetchSponsorsWatcher() {
 
 export function* fetchSponsorsWorker(action) {
   try {
+    const query = action.query;
     const limit = action.limit || 10;
     const offset = action.offset || 0;
-    const requestURL = `${API_URL}/sponsors/fetchAllSponsorsAdmins?limit=${limit}&offset=${offset}`;
+    let requestURL = `${API_URL}/sponsors/fetchAllSponsorsAdmins?limit=${limit}&offset=${offset}`;
 
+    if (query) {
+      requestURL += `&query=${query}`;
+    }
     const params = {
       method: 'GET',
     };
