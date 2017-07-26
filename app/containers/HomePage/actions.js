@@ -215,12 +215,13 @@ export function clearIndicationLevelPrice() {
   };
 }
 
-export function renewStudy(studyId, cartValues, formValues) {
+export function renewStudy(studyId, cartValues, formValues, onClose) {
   return {
     type: RENEW_STUDY,
     studyId,
     cartValues,
     formValues,
+    onClose,
   };
 }
 
