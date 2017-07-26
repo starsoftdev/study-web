@@ -278,34 +278,33 @@ function* fetchPatientCategories() {
 
 export function* exportPatients() {
   while (true) {
-    // listen for the FETCH_PATIENTS action
-    const { studyId, userId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    // listen for the EXPORT_PATIENTS action
+    const { studyId, clientRoleId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
     }
 
     try {
-      let requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
-      if (authToken) {
-        requestURL += `?access_token=${authToken}`;
-      }
+      const requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
+      const options = {
+        method: 'GET',
+        query: {},
+      };
       if (campaignId) {
-        requestURL += `&campaignId=${campaignId}`;
+        options.query.campaignId = campaignId;
       }
-      if (userId) {
-        requestURL += `&userId=${userId}`;
+      if (clientRoleId) {
+        options.query.clientRoleId = clientRoleId;
       }
       if (sourceId) {
-        requestURL += `&sourceId=${sourceId}`;
+        options.query.sourceId = sourceId;
       }
       if (text) {
-        requestURL += `&text=${encodeURIComponent(text)}`;
+        options.query.text = encodeURIComponent(text);
       }
 
-      yield call(request, requestURL, {
-        method: 'GET',
-      });
+      yield call(request, requestURL, options);
       yield put(patientsExported());
     } catch (e) {
       // if returns forbidden we remove the token from local storage
