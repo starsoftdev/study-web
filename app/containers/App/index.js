@@ -56,7 +56,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentDidMount() {
-    mixpanel.init('b289dfb4784c32bc6e96db8b8a1e0d8c');
+    if (MIXPANEL_TOKEN) {
+      mixpanel.init(MIXPANEL_TOKEN);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

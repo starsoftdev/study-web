@@ -15,6 +15,7 @@ const schema = {
   address: { presence: true },
   city: { presence: true },
   state: { presence: true },
+  countryCode: { presence: false },
   zip: { presence: true },
   selectedRegion: { presence: true },
   selectedTimezone: { presence: true },
