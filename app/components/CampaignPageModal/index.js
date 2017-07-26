@@ -67,7 +67,7 @@ export class CampaignPageModal extends React.Component {
 
   campaignChanged(e, studyCampaigns = this.props.studyCampaigns.details) {
     const campaignIndex = studyCampaigns.findIndex(item => (item.id === e));
-    if (campaignIndex !== undefined) {
+    if (campaignIndex !== undefined && campaignIndex >= 0) {
       const foundCampaign = studyCampaigns[campaignIndex];
       this.setState({ selectedCampaign : campaignIndex });
       const { change } = this.props;
@@ -110,12 +110,17 @@ export class CampaignPageModal extends React.Component {
 
     const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : null;
     const dateTo = formValues.dateto ? moment(formValues.dateto) : null;
-    const minDate = (studyCampaigns.details.length > 1) ? moment(studyCampaigns.details[1].dateTo).add(1, 'days') : null;
-    let isLatest = false;
-    if (formValues.campaign_id && studyCampaigns.details.length > 0) {
-      const latestCampaign = studyCampaigns.details.filter(c => c.id === formValues.campaign_id)[0];
-      if (latestCampaign) {
-        isLatest = latestCampaign.orderNumber === studyCampaigns.details.length;
+    let minDate = null;
+    let maxDate = null;
+    const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
+    if (campaignIndex !== undefined && campaignIndex >= 0) {
+      // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
+      if (campaignIndex > 0) {
+        maxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom);
+      }
+      // if campaign is not the last, then it has a next campaign, we set the min date accordingly
+      if (campaignIndex < studyCampaigns.details.length - 1) {
+        minDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo);
       }
     }
 
@@ -182,10 +187,10 @@ export class CampaignPageModal extends React.Component {
                       id="start-date"
                       name="datefrom"
                       component={DatePicker}
-                      className={`form-control datepicker-input ${isLatest ? '' : 'disabled'}`}
+                      className={'form-control datepicker-input'}
                       initialDate={dateFrom}
-                      isDisabled={!isLatest}
                       minDate={minDate}
+                      maxDate={moment(moment(formValues.dateto).subtract(1, 'days') || maxDate)}
                     />
                   </div>
                 </div>
@@ -198,10 +203,10 @@ export class CampaignPageModal extends React.Component {
                       id="end-date"
                       name="dateto"
                       component={DatePicker}
-                      className={`form-control datepicker-input ${isLatest ? '' : 'disabled'}`}
+                      className={'form-control datepicker-input'}
                       initialDate={dateTo}
-                      isDisabled={!isLatest}
                       minDate={moment(formValues.datefrom).add(1, 'days')}
+                      maxDate={maxDate}
                     />
                   </div>
                 </div>
