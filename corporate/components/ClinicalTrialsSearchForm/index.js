@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
 import { browserHistory } from 'react-router';
@@ -20,6 +20,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     indications: PropTypes.array,
     individual: PropTypes.bool,
     countryCode: PropTypes.string,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -28,8 +29,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
     this.setVisible = this.setVisible.bind(this);
     this.state = {
-      countryCode: props.countryCode ? props.countryCode : 'US',
+      countryCode: props.initialValues.countryCode ? props.initialValues.countryCode : 'us',
     };
+    change('find-studies', 'countryCode', this.props.countryCode);
   }
 
   componentDidMount() {
@@ -104,7 +106,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     if (indications.length > 0 && indications[0].id !== -1) {
       indications.unshift({ id: -1, name: 'All' });
     }
-    const isUS = this.props.countryCode === 'us';
+    const isUS = this.state.countryCode === 'us';
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
