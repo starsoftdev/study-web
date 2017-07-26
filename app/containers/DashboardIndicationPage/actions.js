@@ -24,11 +24,13 @@ import {
   ADD_LEVEL,
   ADD_LEVEL_SUCCESS,
   ADD_LEVEL_ERROR,
+  SET_SEARCH_QUERY,
 } from './constants';
 
-export function fetchIndications(limit, offset) {
+export function fetchIndications(query, limit, offset) {
   return {
     type: FETCH_INDICATIONS,
+    query,
     limit,
     offset,
   };
@@ -159,5 +161,12 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function setSearchQuery(query) {
+  return {
+    type: SET_SEARCH_QUERY,
+    query,
   };
 }

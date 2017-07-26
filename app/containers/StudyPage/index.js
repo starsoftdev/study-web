@@ -102,11 +102,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           });
 
           // fetch the new text stats
-          // TODO instead of fetching, why not update the stats directly in the reducer instead? improves latency too
           // TODO needs to take into account the stats are filtered based on campaign and source selected
           fetchStudyTextNewStats(params.id);
-          console.log(socketMessage.twilioTextMessage.direction);
-          console.log(unreadMessageCount);
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
               unreadMessageCount: (unreadMessageCount + 1),
@@ -116,7 +113,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.userId) {
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId) {
+            // this.props.downloadReport(data.reportName);
             location.replace(data.url);
           }
         });

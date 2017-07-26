@@ -16,7 +16,6 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     phoneNumber: PropTypes.string,
     address: PropTypes.string,
     roles: PropTypes.object,
-    principalInvestigators: PropTypes.array,
     selectedSite: PropTypes.object,
     selectedUser: PropTypes.object,
     fetchSite: PropTypes.func,
