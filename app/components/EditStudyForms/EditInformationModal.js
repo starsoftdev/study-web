@@ -186,6 +186,7 @@ export class EditInformationModal extends React.Component {
     let state = '';
     let postalCode = '';
     let streetNmber = '';
+    let countryCode = '';
     let route = '';
     const { change } = this.props;
     if (e.gmaps && e.gmaps.address_components) {
@@ -204,9 +205,9 @@ export class EditInformationModal extends React.Component {
             change('site_state', val.short_name);
           }
         }
-        if (!state) {
-          state = _.find(val.types, (o) => (o === 'country'));
-          if (state) {
+        if (!countryCode) {
+          countryCode = _.find(val.types, (o) => (o === 'country'));
+          if (countryCode) {
             change('site_country_code', val.short_name);
           }
         }
