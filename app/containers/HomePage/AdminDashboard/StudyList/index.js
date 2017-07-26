@@ -161,6 +161,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillReceiveProps(newProps) {
+    // if filters have changed, we toggle off all selected studies
+    if (newProps.filtersFormValues && newProps.filtersFormValues !== this.props.filtersFormValues) {
+      this.toggleAllstudies(false);
+    }
     if (this.props.studies.details !== newProps.studies.details) {
       this.setState({
         studies: bindSelection(newProps.studies),
