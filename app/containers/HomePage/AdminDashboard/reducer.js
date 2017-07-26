@@ -952,7 +952,7 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: {
-          details: action.payload.reverse(),
+          details: action.payload,
           fetching: false,
           error: null,
         },
