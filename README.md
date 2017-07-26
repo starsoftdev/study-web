@@ -28,6 +28,10 @@ If you want to use staging to test the web repo, change your config to:
 API_URL=http://api-staging.studykik.com/api/v1
 ```
 
+If you want to test with Mixpanel, add the studykik testing app token from mixpanel:
+```
+MIXPANEL_TOKEN=token
+
 ### Install packages
 ```
 npm install

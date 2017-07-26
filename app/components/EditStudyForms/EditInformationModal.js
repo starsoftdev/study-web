@@ -157,7 +157,7 @@ export class EditInformationModal extends React.Component {
       this.setState({ initial: true });
     }
 
-    if (newProps.formValues.piName) {
+    /* if (newProps.formValues.piName) {
       const piNameParts = newProps.formValues.piName.split(' ');
       const piFirstName = piNameParts[0] || null;
       const piLastName = piNameParts[1] || null;
@@ -178,7 +178,7 @@ export class EditInformationModal extends React.Component {
           piLastName: null,
         });
       });
-    }
+    }*/
   }
 
   onSuggestSelect(e) {
@@ -202,6 +202,12 @@ export class EditInformationModal extends React.Component {
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
             change('site_state', val.short_name);
+          }
+        }
+        if (!state) {
+          state = _.find(val.types, (o) => (o === 'country'));
+          if (state) {
+            change('site_country_code', val.short_name);
           }
         }
         if (!postalCode) {
@@ -233,6 +239,9 @@ export class EditInformationModal extends React.Component {
       if (addressArr[2]) {
         change('site_state', addressArr[2]);
       }
+      if (addressArr[3]) {
+        change('site_country_code', addressArr[3]);
+      }
       this.geoSuggest.update(`${addressArr[0]}`);
       change('site_address', `${addressArr[0]}`);
     }
@@ -262,6 +271,7 @@ export class EditInformationModal extends React.Component {
       change('site_address', foundSiteLocation.address);
       change('site_city', foundSiteLocation.city);
       change('site_state', foundSiteLocation.state);
+      change('site_country_code', foundSiteLocation.country_code);
       change('site_zip', foundSiteLocation.zip);
       change('client_id', foundSiteLocation.client_id);
     }
@@ -527,6 +537,19 @@ export class EditInformationModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
+                    <label htmlFor="new-patient-phone">COUNTRY</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="site_country_code"
+                      component={Input}
+                      isDisabled
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">POSTAL CODE</label>
                   </strong>
                   <div className="field">
@@ -557,24 +580,12 @@ export class EditInformationModal extends React.Component {
                     <label>PRINCIPAL INVESTIGATOR</label>
                   </strong>
                   <div className="field">
-                    <div className="row">
-                      <div className="col pull-left dashboard-edit-study-pi">
-                        <Field
-                          name="piFirstName"
-                          component={Input}
-                          type="text"
-                          placeholder="First Name"
-                        />
-                      </div>
-                      <div className="col pull-left dashboard-edit-study-pi">
-                        <Field
-                          name="piLastName"
-                          component={Input}
-                          type="text"
-                          placeholder="Last Name"
-                        />
-                      </div>
-                    </div>
+                    <Field
+                      type="text"
+                      name="piName"
+                      component={Input}
+                      placeholder="Full Name"
+                    />
                   </div>
                 </div>
                 <div className="field-row">

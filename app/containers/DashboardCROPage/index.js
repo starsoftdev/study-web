@@ -11,7 +11,7 @@ import Helmet from 'react-helmet';
 import DashboardCROSearch from './DashboardCROSearch/index';
 import DashboardCROTable from './DashboardCROTable';
 
-import { fetchCro, addCro, editCro, deleteCro, setActiveSort } from './actions';
+import { fetchCro, addCro, editCro, deleteCro, setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardCro, selectDashboardEditCroProcess, selectDashboardCroSearchFormValues, selectPaginationOptions } from './selectors';
 
 export class DashboardCROPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -26,23 +26,36 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
     editCroProcess: PropTypes.object,
     croSearchFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchCro();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchCro } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchCro(limit, offset);
+    fetchCro(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchCro, cro } = this.props;
+    if (!cro.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchCro(query, limit, offset);
+    }
   }
 
   render() {
@@ -55,6 +68,7 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
           cro={this.props.cro}
           addCro={this.props.addCro}
           editCroProcess={this.props.editCroProcess}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardCROTable
           editCroProcess={this.props.editCroProcess}
@@ -78,11 +92,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchCro: (limit, offset) => dispatch(fetchCro(limit, offset)),
+    fetchCro: (query, limit, offset) => dispatch(fetchCro(query, limit, offset)),
     addCro: (payload) => dispatch(addCro(payload)),
     editCro: (payload) => dispatch(editCro(payload)),
     deleteCro: (payload) => dispatch(deleteCro(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 
