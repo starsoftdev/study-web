@@ -165,7 +165,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
           <ClinicalTrialsSearchForm
             indications={indications}
             onSubmit={this.onSubmitForm}
-            countryCode={countryCode}
+            initialValues={{
+              countryCode,
+            }}
           />
           <div className="articles-holder relative">
             <Element name="scrollTarget"><h3 className="text-center text-uppercase">{this.h3Text}</h3></Element>
