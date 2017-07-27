@@ -57,10 +57,6 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
     }
     let protocol = this.props.protocol.details;
 
-    if (this.props.protocolSearchFormValues.protocol) {
-      protocol = _.filter(protocol, (item) => (item.id === this.props.protocolSearchFormValues.protocol));
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       protocol = _.orderBy(protocol, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);

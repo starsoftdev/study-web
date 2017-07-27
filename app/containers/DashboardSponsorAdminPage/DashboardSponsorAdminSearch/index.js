@@ -17,6 +17,7 @@ export class DashboardSponsorAdminSearch extends React.Component {
     usersByRoles: PropTypes.object,
     addSponsorAdmin: PropTypes.func,
     editUserProcess: PropTypes.object,
+    onSubmitQuery: PropTypes.func,
   }
 
   constructor(props) {
@@ -24,17 +25,29 @@ export class DashboardSponsorAdminSearch extends React.Component {
 
     this.state = {
       addSponsorAdminModalOpen: false,
+      query: null,
     };
 
     this.closeAddSponsorAdminModal = this.closeAddSponsorAdminModal.bind(this);
     this.openAddSponsorAdminModal = this.openAddSponsorAdminModal.bind(this);
     this.addSponsor = this.addSponsor.bind(this);
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (!newProps.editUserProcess.saving && this.props.editUserProcess.saving) {
       this.closeAddSponsorAdminModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
   }
 
   closeAddSponsorAdminModal() {
@@ -51,13 +64,16 @@ export class DashboardSponsorAdminSearch extends React.Component {
 
   render() {
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddSponsorAdminModal}
           buttonText="Add Sponsor Admin"
           filters={
             <div className="field">
-              <Button className="btn-enter">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
@@ -66,6 +82,9 @@ export class DashboardSponsorAdminSearch extends React.Component {
                 type="text"
                 className="keyword-search"
                 placeholder="Search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }

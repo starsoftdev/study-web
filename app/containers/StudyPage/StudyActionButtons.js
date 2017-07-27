@@ -103,7 +103,9 @@ class StudyActionButtons extends Component {
 
   download() {
     const { exportPatients, studyId, campaign, source, search, currentUser } = this.props;
-    exportPatients(studyId, currentUser.id, search, campaign, source);
+    if (currentUser && currentUser.roleForClient) {
+      exportPatients(studyId, currentUser.roleForClient.id, search, campaign, source);
+    }
   }
 
   render() {
@@ -168,7 +170,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    exportPatients: (studyId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, text, campaignId, sourceId)),
+    exportPatients: (studyId, clientRoleId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, clientRoleId, text, campaignId, sourceId)),
   };
 }
 

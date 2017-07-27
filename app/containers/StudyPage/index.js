@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients } from '../../containers/App/selectors';
+import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
@@ -18,7 +18,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport } from './actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -27,6 +27,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     campaigns: PropTypes.array,
     fetchPatients: PropTypes.func.isRequired,
+    downloadReport: PropTypes.func,
     fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
@@ -47,6 +48,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     sitePatients: React.PropTypes.object,
     fetchStudyTextNewStats: React.PropTypes.func,
     fetchingPatientsError: PropTypes.object,
+    currentUser: PropTypes.object,
   };
 
   static defaultProps = {
@@ -72,45 +74,57 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories } = this.props;
+    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories, currentUser, fetchStudy } = this.props;
     if (socket && this.state.socketBinded === false) {
-      socket.on('notifyMessage', (message) => {
-        let curCategoryId = null;
-        let unreadMessageCount = 0;
-        const socketMessage = message;
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifyMessage', (message) => {
+          let curCategoryId = null;
+          let unreadMessageCount = 0;
+          const socketMessage = message;
 
-        if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
-          socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
-        }
-        if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
-          socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
-        }
-        if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
-          socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
-        }
+          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
+          }
+          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
+          }
+          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
+            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
+          }
 
-        _.forEach(this.props.patientCategories, (item) => {
-          _.forEach(item.patients, (patient) => {
-            if (patient.id === socketMessage.patient_id) {
-              curCategoryId = item.id;
-              unreadMessageCount = patient.unreadMessageCount || 0;
-            }
+          _.forEach(this.props.patientCategories, (item) => {
+            _.forEach(item.patients, (patient) => {
+              if (patient.id === socketMessage.patient_id) {
+                curCategoryId = item.id;
+                unreadMessageCount = patient.unreadMessageCount || 0;
+              }
+            });
           });
+
+          // fetch the new text stats
+          // TODO needs to take into account the stats are filtered based on campaign and source selected
+          fetchStudyTextNewStats(params.id);
+          if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
+            this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
+              unreadMessageCount: (unreadMessageCount + 1),
+              lastTextMessage: socketMessage.twilioTextMessage,
+            });
+          }
         });
 
-        this.props.fetchStudyTextNewStats(params.id);
-        console.log(socketMessage.twilioTextMessage.direction);
-        console.log(unreadMessageCount);
-        if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
-          this.props.updatePatientSuccess({
-            patientId: socketMessage.patient_id,
-            patientCategoryId: curCategoryId,
-            unreadMessageCount: (unreadMessageCount + 1),
-            lastTextMessage: socketMessage.twilioTextMessage,
-          });
-        }
+        socket.on('notifyClientReportReady', (data) => {
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId) {
+            // this.props.downloadReport(data.reportName);
+            location.replace(data.url);
+          }
+        });
+
+        socket.on('notifyLandingPageViewChanged', (data) => {
+          if (data.studyId === parseInt(params.id)) {
+            fetchStudy(params.id);
+          }
+        });
       });
-      this.setState({ socketBinded: true });
     }
 
     if (params.id !== newProps.params.id) {
@@ -213,11 +227,13 @@ const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
+  currentUser: selectCurrentUser(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
+    downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
