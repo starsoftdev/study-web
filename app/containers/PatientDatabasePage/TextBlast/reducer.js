@@ -89,7 +89,7 @@ export default function TextBlastModal(state = initialState, action) {
       });
       _.forEach(patients, (patient) => {
         if (!patient.unsubscribed) {
-          checkedPatients[`patient-${patient.id}`] = true;
+          checkedPatients[`patient-${patient.id}`] = state.values.selectAll && true;
         }
       });
 
