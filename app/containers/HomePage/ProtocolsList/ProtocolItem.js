@@ -12,7 +12,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     croName: PropTypes.string,
     activeCount: PropTypes.string,
     inactiveCount: PropTypes.string,
-    patientMessagingSuite: PropTypes.number,
+    patientMessagingSuite: PropTypes.bool,
     unreadMessageCount: PropTypes.number,
     push: PropTypes.func,
   };

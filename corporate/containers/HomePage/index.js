@@ -25,6 +25,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
     fetchIndications: PropTypes.func,
+    location: PropTypes.object,
   };
 
   constructor(props) {
@@ -125,7 +126,8 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { indications, trials } = this.props;
+    const { indications, trials, location: { pathname } } = this.props;
+    const countryCode = pathname.slice(1).toLowerCase() || 'us';
     let studiesList = [];
 
     if (trials.details) {
@@ -163,6 +165,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
           <ClinicalTrialsSearchForm
             indications={indications}
             onSubmit={this.onSubmitForm}
+            initialValues={{
+              countryCode,
+            }}
           />
           <div className="articles-holder relative">
             <Element name="scrollTarget"><h3 className="text-center text-uppercase">{this.h3Text}</h3></Element>
