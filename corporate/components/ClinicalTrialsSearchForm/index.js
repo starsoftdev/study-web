@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-import { browserHistory } from 'react-router';
 
 import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
@@ -138,7 +137,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                         if (individual) {
                           path += `/indication/${this.props.indication}`;
                         }
-                        
                         window.location.href = path;
                       });
                     }
