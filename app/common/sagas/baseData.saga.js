@@ -462,8 +462,6 @@ export function* fetchClientSitesWatcher() {
           scope: {
             include: ['studyNotificationEmails'],
           },
-        }, {
-          relation: 'principalInvestigators',
         }],
       };
 
