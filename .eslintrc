@@ -21,6 +21,7 @@
   "globals": {
     "API_URL": true,
     "SOCKET_URL": true,
+    "MIXPANEL_TOKEN": true,
     "ga": true
   },
   "rules": {

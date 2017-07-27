@@ -38,8 +38,8 @@ class FilterBar extends Component {
 
     if (!sites.fetching && sites.details.length) {
       const siteLocationOptions = [{ label: 'All', value: 'all' }].concat(sites.details.map(site => ({
-        label: site.site_name,
-        value: site.site_id,
+        label: (site.principalInvestigator) ? `${site.principalInvestigator} (${site.site_name})` : `N/A (${site.site_name})`,
+        value: (site.principalInvestigator) ? site.principalInvestigator : site.site_id,
       })));
 
       this.setState({
@@ -114,7 +114,7 @@ class FilterBar extends Component {
               disabled={this.state.protocol === null}
               options={siteLocationOptions}
               value={filter.siteLocation}
-              placeholder={this.state.protocol ? 'Select Site Location' : 'N/A'}
+              placeholder={this.state.protocol ? 'Select Principal Investigator' : 'N/A'}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
           </div>

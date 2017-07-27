@@ -18,11 +18,13 @@ import {
   DELETE_CRO_SUCCESS,
   DELETE_CRO_ERROR,
   SET_ACTIVE_SORT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
-export function fetchCro(limit, offset) {
+export function fetchCro(query, limit, offset) {
   return {
     type: FETCH_CRO,
+    query,
     limit,
     offset,
   };
@@ -112,5 +114,12 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function setSearchQuery(query) {
+  return {
+    type: SET_SEARCH_QUERY,
+    query,
   };
 }
