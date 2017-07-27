@@ -92,7 +92,7 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {patientMessagesCount.total}</span>
+              <span className="counter">TOTAL {patientMessagesCount.overallTotal}</span>
             </div>
           </div>
           <div className="box">
