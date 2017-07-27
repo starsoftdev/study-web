@@ -20,6 +20,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     indications: PropTypes.array,
     individual: PropTypes.bool,
     countryCode: PropTypes.string,
+    indication: PropTypes.string,
     initialValues: PropTypes.object,
   };
 
@@ -130,11 +131,15 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                   onChange={countryCode => {
                     if (countryCode) {
                       this.setState({ countryCode }, () => {
-                        if (countryCode === 'us') {
-                          browserHistory.push('');
-                        } else {
-                          browserHistory.push(`/${countryCode}`);
+                        let path = '';
+                        if (countryCode !== 'us') {
+                          path += `/${countryCode}`;
                         }
+                        if (individual) {
+                          path += `/indication/${this.props.indication}`;
+                        }
+                        
+                        window.location.href = path;
                       });
                     }
                   }}
