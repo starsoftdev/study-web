@@ -42,6 +42,10 @@ export class ReportViewSearch extends React.Component {
         startDate: moment().clone().subtract(30, 'days'),
         endDate: moment(),
       },
+      selectedTime : {
+        startDate: null,
+        endDate: null,
+      },
     };
 
     this.initSearch = this.initSearch.bind(this);
@@ -108,12 +112,21 @@ export class ReportViewSearch extends React.Component {
 
     const startDate = range.startDate.utc().format('YYYY-MM-DD HH:mm:ss');
     const endDate = range.endDate.utc().format('YYYY-MM-DD HH:mm:ss');
+    const uiStartDate = range.startDate.utc().format('MM/DD/YY');
+    const uiEndDate = range.endDate.utc().format('MM/DD/YY');
 
     this.props.dispatch(change('searchReports', 'startDate', startDate));
     this.props.dispatch(change('searchReports', 'endDate', endDate));
 
-    this.props.searchReports({ endDate, startDate });
-    this.hidePopup();
+    this.setState({
+      selectedTime: {
+        startDate: uiStartDate,
+        endDate: uiEndDate,
+      },
+    }, () => {
+      this.props.searchReports({ endDate, startDate });
+      this.hidePopup();
+    });
   }
 
   download(ev) {
@@ -151,6 +164,7 @@ export class ReportViewSearch extends React.Component {
   }
 
   render() {
+    const { selectedTime } = this.state;
     const testOptions = [
       {
         label: 'test1',
@@ -177,6 +191,8 @@ export class ReportViewSearch extends React.Component {
       },
     ];
 
+    const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : 'Date Range';
+
     return (
       <div className="search-controls form-search clearfix">
         <div className="btns-area pull-right full-width">
@@ -191,10 +207,10 @@ export class ReportViewSearch extends React.Component {
             <a disabled className="btn btn-primary lightbox-opener">+ add site</a>
           </div>
           <div className="col pull-right">
-            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> Date Range</a>
+            <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
           </div>
         </div>
-        <div className="fields-holder full-width">
+        <div className={(selectedTime.startDate && selectedTime.endDate) ? 'date-selected fields-holder full-width' : 'fields-holder full-width'}>
           <div className="search-area pull-left">
             <div className="has-feedback">
               <Button className="btn-enter">

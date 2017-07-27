@@ -20,6 +20,7 @@ import {
   DELETE_SPONSOR_SUCCESS,
   DELETE_SPONSOR_ERROR,
   SET_ACTIVE_SORT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
 const initialState = {
@@ -36,6 +37,9 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+    hasMoreItems: false,
+    page: 1,
+    query: null,
   },
 };
 
@@ -196,6 +200,17 @@ function dashboardSponsorPageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+        },
+      };
+    case SET_SEARCH_QUERY:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: null,
+          activeDirection: null,
+          hasMoreItems: false,
+          page: 1,
+          query: action.query,
         },
       };
     default:

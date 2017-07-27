@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
+import classNames from 'classnames';
+import { browserHistory } from 'react-router';
 
 import ClinicalTrialsSearchFormValidator from './validator';
-
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
 
@@ -18,6 +19,8 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     handleSubmit: PropTypes.func.isRequired,
     indications: PropTypes.array,
     individual: PropTypes.bool,
+    countryCode: PropTypes.string,
+    initialValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -26,17 +29,13 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
     this.setVisible = this.setVisible.bind(this);
     this.state = {
-      countryCode: 'US',
+      countryCode: props.initialValues.countryCode ? props.initialValues.countryCode : 'us',
     };
+    change('find-studies', 'countryCode', this.props.countryCode);
   }
-
-  componentWillMount() {}
 
   componentDidMount() {
     this.watcher = inViewport(this.animatedForm, this.setVisible);
-  }
-
-  componentWillReceiveProps() {
   }
 
   componentWillUnmount() {
@@ -64,50 +63,50 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const countries = [
       {
         name: 'Brazil',
-        id: 'BR',
+        id: 'br',
       },
       {
         name: 'Canada',
-        id: 'CA',
+        id: 'ca',
       },
       {
         name: 'Czech Republic',
-        id: 'CZ',
+        id: 'cz',
       },
       {
         name: 'France',
-        id: 'FR',
+        id: 'fr',
       },
       {
         name: 'Germany',
-        id: 'DE',
+        id: 'de',
       },
       {
         name: 'Italy',
-        id: 'IT',
+        id: 'it',
       },
       {
         name: 'Japan',
-        id: 'JP',
+        id: 'jp',
       },
       {
         name: 'Poland',
-        id: 'PL',
+        id: 'pl',
       },
       {
         name: 'United Kingdom',
-        id: 'GB',
+        id: 'uk',
       },
       {
         name: 'United States',
-        id: 'US',
+        id: 'us',
       },
     ];
 
     if (indications.length > 0 && indications[0].id !== -1) {
       indications.unshift({ id: -1, name: 'All' });
     }
-
+    const isUS = this.state.countryCode === 'us';
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
@@ -117,23 +116,32 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         onSubmit={handleSubmit}
       >
         <div className="field-row">
-          <div className="row">
-            <div className="col-xs-6">
-              <Field
-                name="countryCode"
-                component={ReactSelect}
-                placeholder="Select Country"
-                options={countries}
-                className="field-lg"
-                selectedValue={this.state.countryCode}
-                onChange={countryCode => {
-                  this.setState({
-                    countryCode,
-                  });
-                }}
-              />
-            </div>
-            <div className="col-xs-6">
+          <div className={classNames({ row: !isUS })}>
+            {
+              !isUS &&
+              <div className="col-xs-6">
+                <Field
+                  name="countryCode"
+                  component={ReactSelect}
+                  placeholder="Select Country"
+                  options={countries}
+                  className="field-lg"
+                  selectedValue={this.state.countryCode}
+                  onChange={countryCode => {
+                    if (countryCode) {
+                      this.setState({ countryCode }, () => {
+                        if (countryCode === 'us') {
+                          browserHistory.push('');
+                        } else {
+                          browserHistory.push(`/${countryCode}`);
+                        }
+                      });
+                    }
+                  }}
+                />
+              </div>
+            }
+            <div className={classNames({ 'col-xs-6': !isUS })}>
               <Field
                 name="postalCode"
                 type="text"

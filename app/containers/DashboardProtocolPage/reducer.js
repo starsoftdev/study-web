@@ -19,6 +19,7 @@ import {
   DELETE_PROTOCOL_SUCCESS,
   DELETE_PROTOCOL_ERROR,
   SET_ACTIVE_SORT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
 const initialState = {
@@ -35,6 +36,9 @@ const initialState = {
   paginationOptions: {
     activeSort: null,
     activeDirection: null,
+    hasMoreItems: false,
+    page: 1,
+    query: null,
   },
 };
 
@@ -67,6 +71,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
           error: null,
         },
         paginationOptions: {
+          query: state.paginationOptions.query,
           activeSort: state.paginationOptions.activeSort,
           activeDirection: state.paginationOptions.activeDirection,
           hasMoreItems: action.hasMoreItems,
@@ -195,6 +200,17 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: action.sort,
           activeDirection: action.direction,
+        },
+      };
+    case SET_SEARCH_QUERY:
+      return {
+        ...state,
+        paginationOptions: {
+          activeSort: null,
+          activeDirection: null,
+          hasMoreItems: false,
+          page: 1,
+          query: action.query,
         },
       };
     default:
