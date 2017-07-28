@@ -57,7 +57,7 @@ export function* submitFormWatcher() {
 
       // Clear the form values
       yield put(reset('listNewStudy'));
-      yield put(reset('shoppingCartForm'));
+      yield put(reset('shoppingCart'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       yield put(toastrActions.error('', errorMessage));
