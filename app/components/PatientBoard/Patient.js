@@ -83,7 +83,7 @@ class Patient extends React.Component {
   renderPatientTextMessageSummary() {
     const { category, onPatientTextClick, patient, unreadMessageCount } = this.props;
 
-    if (unreadMessageCount > 0) {
+    if (patient.lastTextMessage.dateCreated || unreadMessageCount > 0) {
       return (
         <a
           className="bottom"
