@@ -21,6 +21,7 @@ export default class DatePicker extends Component {
     minDate: PropTypes.any,
     maxDate: PropTypes.any,
     isDisabled: PropTypes.bool,
+    useUTC: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -107,14 +108,19 @@ export default class DatePicker extends Component {
   }
 
   render() {
-    const { name, className, dateStyle, minDate, maxDate, isDisabled, ...rest } = this.props;
+    const { name, className, dateStyle, minDate, maxDate, isDisabled, useUTC, ...rest } = this.props;
     const { date, modalVisible } = this.state;
 
     const currentDate = moment();
     delete rest.input;
     delete rest.meta;
     delete rest.initialDate;
-    const inputValue = (date === null) ? 'To Be Determined' : moment(date).format(dateStyle);
+    let calendarDate = date;
+    if (useUTC) {
+      calendarDate = (!date || !date.isValid()) ? moment() : moment(date).utc();
+    }
+    const inputValue = (!date) ? 'To Be Determined' : calendarDate.format(dateStyle);
+
     const inputComponent = (
       <input
         type="text"
@@ -144,8 +150,8 @@ export default class DatePicker extends Component {
         </Modal.Header>
         <Modal.Body>
           <Calendar
-            date={date}
-            shownDate={date}
+            date={calendarDate}
+            shownDate={calendarDate}
             onChange={this.handleSelect}
             className="calendar custom-calendar"
             ref={(calendar) => { this.calendar = calendar; }}
