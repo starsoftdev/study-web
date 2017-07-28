@@ -107,20 +107,19 @@ export class CampaignPageModal extends React.Component {
       }
       return { label: c.orderNumber, value: c.id };
     });
-
     const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : undefined;
     const dateTo = formValues.dateto ? moment(formValues.dateto) : undefined;
-    let minDate = null;
-    let maxDate = null;
+    let fromMinDate = null;
+    let toMaxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
       if (campaignIndex > 0) {
-        maxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom);
+        toMaxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom).utc();
       }
       // if campaign is not the last, then it has a next campaign, we set the min date accordingly
       if (campaignIndex < studyCampaigns.details.length - 1) {
-        minDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo);
+        fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
       }
     }
 
@@ -191,9 +190,9 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateFrom}
-                      minDate={minDate}
-                      maxDate={moment(moment(formValues.dateto).subtract(1, 'days') || maxDate)}
-                      useUTC={true}
+                      minDate={fromMinDate}
+                      maxDate={moment(formValues.dateto).subtract(1, 'days').utc()}
+                      useUTC
                     />
                   </div>
                 </div>
@@ -208,9 +207,9 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateTo}
-                      minDate={moment(formValues.datefrom).add(1, 'days')}
-                      maxDate={maxDate}
-                      useUTC={true}
+                      minDate={moment(formValues.datefrom).add(1, 'days').utc()}
+                      maxDate={toMaxDate}
+                      useUTC
                     />
                   </div>
                 </div>
