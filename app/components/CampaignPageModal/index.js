@@ -108,8 +108,8 @@ export class CampaignPageModal extends React.Component {
       return { label: c.orderNumber, value: c.id };
     });
 
-    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : null;
-    const dateTo = formValues.dateto ? moment(formValues.dateto) : null;
+    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : undefined;
+    const dateTo = formValues.dateto ? moment(formValues.dateto) : undefined;
     let minDate = null;
     let maxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
@@ -159,6 +159,7 @@ export class CampaignPageModal extends React.Component {
                       options={campaignOptions}
                       onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>
@@ -175,6 +176,7 @@ export class CampaignPageModal extends React.Component {
                       searchable
                       options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>
@@ -191,6 +193,7 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateFrom}
                       minDate={minDate}
                       maxDate={moment(moment(formValues.dateto).subtract(1, 'days') || maxDate)}
+                      useUTC={true}
                     />
                   </div>
                 </div>
@@ -207,6 +210,7 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateTo}
                       minDate={moment(formValues.datefrom).add(1, 'days')}
                       maxDate={maxDate}
+                      useUTC={true}
                     />
                   </div>
                 </div>
