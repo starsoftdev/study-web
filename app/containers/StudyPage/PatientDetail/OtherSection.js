@@ -18,7 +18,9 @@ import Input from '../../../components/Input/index';
 import { fetchIndications } from '../../App/actions';
 import { selectIndications } from '../../App/selectors';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
-import { addPatientIndication, removePatientIndication, submitPatientUpdate, deletePatient } from '../actions';
+import { addPatientIndication, removePatientIndication, submitPatientUpdate, deletePatient, generateReferral, downloadReferral } from '../actions'; import {
+  selectSocket,
+} from '../../../containers/GlobalNotifications/selectors';
 import { selectStudy, selectDeletePatientProcess } from '../selectors';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './otherValidator';
@@ -33,6 +35,7 @@ const formName = 'PatientDetailModal.Other';
 })
 class OtherSection extends React.Component {
   static propTypes = {
+    params: React.PropTypes.object,
     active: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
@@ -50,13 +53,17 @@ class OtherSection extends React.Component {
     submitPatientUpdate: React.PropTypes.func.isRequired,
     currentStudy: React.PropTypes.object,
     deletePatient: React.PropTypes.func,
+    generateReferral: React.PropTypes.func,
+    downloadReferral: React.PropTypes.func,
     deletePatientProcess: React.PropTypes.object,
+    socket: React.PropTypes.any,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       showIndicationPopover: false,
+      socketBinded: false,
     };
     this.onReset = this.onReset.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -65,10 +72,24 @@ class OtherSection extends React.Component {
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.renderGender = this.renderGender.bind(this);
     this.renderIndications = this.renderIndications.bind(this);
+    this.downloadReferral = this.downloadReferral.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchIndications();
+  }
+
+  componentWillReceiveProps() {
+    const { params, socket, downloadReferral } = this.props;
+    if (socket && this.state.socketBinded === false) {
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifyPatientReferralReady', (data) => {
+          if (data.studyId && parseInt(params.id) === data.studyId) {
+            downloadReferral(data.reportName, data.studyId);
+          }
+        });
+      });
+    }
   }
 
   onReset() {
@@ -113,6 +134,11 @@ class OtherSection extends React.Component {
     this.setState({
       showIndicationPopover: !this.state.showIndicationPopover,
     });
+  }
+
+  downloadReferral() {
+    const { formValues, params } = this.props;
+    this.props.generateReferral(formValues.id, parseInt(params.id));
   }
 
   renderGender() {
@@ -281,7 +307,11 @@ class OtherSection extends React.Component {
                   <strong className="label">
                     <label htmlFor="patient-source5">PATIENT REFERRAL</label>
                   </strong>
-                  <button type="button" className="btn btn-primary btn-default-padding" disabled>
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-default-padding"
+                    onClick={this.downloadReferral}
+                  >
                     <i className="icomoon-icon_download" />
                     &nbsp;Download
                   </button>
@@ -320,6 +350,7 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   currentStudy: selectStudy(),
   deletePatientProcess: selectDeletePatientProcess(),
+  socket: selectSocket(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -329,6 +360,8 @@ const mapDispatchToProps = (dispatch) => ({
   removePatientIndication: (patientId, patientCategoryId, indicationId) => dispatch(removePatientIndication(patientId, patientCategoryId, indicationId)),
   submitPatientUpdate: (patientId, patientCategoryId, fields) => dispatch(submitPatientUpdate(patientId, patientCategoryId, fields)),
   deletePatient: (id) => dispatch(deletePatient(id)),
+  generateReferral: (patientId, studyId) => dispatch(generateReferral(patientId, studyId)),
+  downloadReferral: (reportName, studyId) => dispatch(downloadReferral(reportName, studyId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(OtherSection);
