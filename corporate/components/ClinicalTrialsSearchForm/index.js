@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
-import { browserHistory } from 'react-router';
 
 import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
@@ -20,6 +19,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     indications: PropTypes.array,
     individual: PropTypes.bool,
     countryCode: PropTypes.string,
+    indication: PropTypes.string,
     initialValues: PropTypes.object,
   };
 
@@ -130,11 +130,14 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                   onChange={countryCode => {
                     if (countryCode) {
                       this.setState({ countryCode }, () => {
-                        if (countryCode === 'us') {
-                          browserHistory.push('');
-                        } else {
-                          browserHistory.push(`/${countryCode}`);
+                        let path = '';
+                        if (countryCode !== 'us') {
+                          path += `/${countryCode}`;
                         }
+                        if (individual) {
+                          path += `/indication/${this.props.indication}`;
+                        }
+                        window.location.href = path;
                       });
                     }
                   }}

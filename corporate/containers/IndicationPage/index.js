@@ -25,6 +25,7 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
     clearTrialsList: React.PropTypes.func,
     posts: PropTypes.array,
     fetchIndications: PropTypes.func,
+    location: PropTypes.object,
   };
 
   constructor(props) {
@@ -61,9 +62,13 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
         const findIndication = indication.name.toLowerCase().replace(/( - )|( – )/ig, '-').replace(/(\()|(\))/ig, '').replace(/( {2})|( )/ig, '-');
         if (findIndication === params.indication) {
           this.currentIndication = indication;
+          const { location: { pathname } } = this.props;
+          const parts = pathname.split('/');
+          const countryCode = parts.length === 4 ? parts[1] : 'us';
           onSubmitForm({
             from: 0,
             indicationId: indication.id,
+            countryCode,
           });
         }
       }
@@ -129,9 +134,13 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   }
 
   render() {
-    const { indications, trials } = this.props;
+    const { indications, trials, location: { pathname } } = this.props;
+    const parts = pathname.split('/');
+    const countryCode = parts.length === 4 ? parts[1] : 'us';
+    const indication = parts[parts.length - 1];
     let headerText = '';
     let studiesList = [];
+
 
     if (trials.details) {
       studiesList = trials.details.map((item, index) => {
@@ -181,6 +190,10 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
             indications={indications}
             individual
             onSubmit={this.onSubmitForm}
+            indication={indication}
+            initialValues={{
+              countryCode,
+            }}
           />
           <div className="articles-holder relative">
             <h3 className="text-center text-uppercase">{this.h3Text}</h3>
