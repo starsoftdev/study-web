@@ -127,7 +127,6 @@ import {
 
 import {
   fetchPatientSignUpsSucceeded,
-  fetchPatientMessagesSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
   studiesFetchingError,
@@ -380,7 +379,7 @@ export function* fetchPatientMessagesWorker(action) { // eslint-disable-line no-
   //
   //   yield put(fetchPatientMessagesSucceeded(response));
   // TODO re-enable patient message stat fetching
-  yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
+  // yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
   // } catch (err) {
   //   const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
   //   yield put(toastrActions.error('', errorMessage));

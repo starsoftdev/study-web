@@ -72,6 +72,7 @@ const initialState = {
     unreadTexts: 0,
     unreadEmails: 0,
     total: 0,
+    overallTotal: 0,
   },
   studies: {
     details: [],
@@ -176,6 +177,7 @@ export default function homePageReducer(state = initialState, action) {
           unreadTexts: payload.unreadTexts,
           unreadEmails: payload.unreadEmails,
           total: payload.total,
+          overallTotal: payload.overallTotal,
         },
       };
     case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
@@ -195,6 +197,7 @@ export default function homePageReducer(state = initialState, action) {
           unreadTexts: newState.patientMessagesCount.unreadTexts,
           unreadEmails: newState.patientMessagesCount.unreadEmails,
           total: newState.patientMessagesCount.total + 1,
+          overallTotal: newState.patientMessagesCount.overallTotal + 1,
         },
       };
     case RECEIVE_NOTIFICATION:
@@ -216,6 +219,7 @@ export default function homePageReducer(state = initialState, action) {
               unreadTexts: newState.patientMessagesCount.unreadTexts + 1,
               unreadEmails: newState.patientMessagesCount.unreadEmails,
               total: newState.patientMessagesCount.total + 1,
+              overallTotal: newState.patientMessagesCount.overallTotal + 1,
             },
           };
           break;
@@ -698,6 +702,7 @@ export default function homePageReducer(state = initialState, action) {
             unreadTexts: state.patientMessagesCount.unreadTexts + 1,
             unreadEmails: state.patientMessagesCount.unreadEmails,
             total: state.patientMessagesCount.total + 1,
+            overallTotal: state.patientMessagesCount.overallTotal + 1,
           },
         };
       }
