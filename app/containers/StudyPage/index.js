@@ -139,7 +139,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -205,6 +205,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <PatientBoard
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
+            params={params}
             ePMS={ePMS}
           />
         </section>
