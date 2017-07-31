@@ -11,6 +11,7 @@ import { push } from 'react-router-redux';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
+import { fetchPatientMessagesSucceeded } from '../../containers/HomePage/actions';
 import { setItem } from '../../utils/localStorage';
 
 import {
@@ -569,6 +570,7 @@ export function* fetchPatientMessageUnreadCountWatcher() {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
       const response = yield call(request, requestURL);
       yield put(patientMessageUnreadCountFetched(response));
+      yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
       console.trace(err);
     }

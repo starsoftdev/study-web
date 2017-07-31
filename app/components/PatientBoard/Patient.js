@@ -72,7 +72,7 @@ class Patient extends React.Component {
 
   renderTextCreatedDate() {
     const { currentUser, patient: { lastTextMessage } } = this.props;
-    if (lastTextMessage) {
+    if (lastTextMessage.dateCreated) {
       return (
         <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
       );
@@ -83,7 +83,7 @@ class Patient extends React.Component {
   renderPatientTextMessageSummary() {
     const { category, onPatientTextClick, patient, unreadMessageCount } = this.props;
 
-    if (patient.lastTextMessage || unreadMessageCount > 0) {
+    if (patient.lastTextMessage.dateCreated || unreadMessageCount > 0) {
       return (
         <a
           className="bottom"
