@@ -93,6 +93,8 @@ export class CampaignPageModal extends React.Component {
     };
     if (formValues.custom_patient_goal) {
       submitValues.customPatientGoal = +formValues.custom_patient_goal;
+    } else {
+      submitValues.customPatientGoal = null;
     }
     submitForm(submitValues);
   }
