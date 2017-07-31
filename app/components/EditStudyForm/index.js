@@ -11,9 +11,9 @@ import AddEmailNotificationForm from '../../components/AddEmailNotificationForm'
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { addEmailNotificationUser, fetchClientAdmins } from '../../containers/App/actions';
-import { selectCurrentUser, selectClientSites } from '../../containers/App/selectors';
+import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../containers/App/selectors';
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
-import { selectEditedStudy, selectAddNotificationProcess, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
+import { selectEditedStudy, selectAddNotificationProcess, selectHomePageClientAdmins, selectStudies } from '../../containers/HomePage/selectors';
 import StudyAddForm from '../../components/StudyAddForm';
 import {
   changeStudyAdd,
@@ -67,6 +67,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     changeStudyAddProcess: PropTypes.any,
     updatedStudyAd: PropTypes.any,
     resetChangeAddState: PropTypes.func.isRequired,
+    studyLevels: PropTypes.array,
+    studies: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -106,8 +108,8 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, clientSites, change, resetChangeAddState } = this.props;
-    if (newProps.selectedStudyId && newProps.selectedStudyId !== this.props.selectedStudyId) {
+    const { clientAdmins, clientSites, change, resetChangeAddState, selectedStudyId, studyLevels, studies } = this.props;
+    if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
       const fields = [];
       let currentStudy = null;
       let isAllChecked = true;
@@ -116,6 +118,12 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           _.forEach(site.studies, (study) => {
             if (study.id === newProps.selectedStudyId) {
               currentStudy = study;
+              if (studies && studies.details) {
+                const studyDetails = studies.details.find(s => s.studyId === newProps.selectedStudyId);
+                if (studyDetails) {
+                  currentStudy = { ...currentStudy, ...studyDetails };
+                }
+              }
               this.setState({ currentStudy });
             }
           });
@@ -152,6 +160,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
           });
         }
       });
+      const foundExposureLevel = studyLevels.find(l => l.id === currentStudy.level_id);
+      if (foundExposureLevel) {
+        change('exposureLevel', foundExposureLevel.name);
+      }
       change('recruitmentPhone', normalizePhoneDisplay(currentStudy.recruitmentPhone));
       change('emailNotifications', fields);
       change('checkAllInput', isAllChecked);
@@ -361,6 +373,19 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
                   <form className="form-edit-study" onSubmit={this.handleFormSubmit}>
                     <div className="edit-study form-fields">
                       <div className="field-row">
+                        <strong className="label">
+                          <label>EXPOSURE LEVEL</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="exposureLevel"
+                            component={Input}
+                            type="text"
+                            isDisabled
+                          />
+                        </div>
+                      </div>
+                      <div className="field-row">
                         <strong className="label required">
                           <label>RECRUITMENT PHONE</label>
                         </strong>
@@ -495,6 +520,8 @@ const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
   updatedStudyAd: selectUpdatedStudyAd(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
+  studyLevels: selectStudyLevels(),
+  studies: selectStudies(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyForm);
