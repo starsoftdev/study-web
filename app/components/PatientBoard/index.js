@@ -43,6 +43,7 @@ const scroll = Scroll.animateScroll;
 @DragDropContext(HTML5Backend)
 class PatientBoard extends React.Component {
   static propTypes = {
+    params: React.PropTypes.object,
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
     currentPatient: React.PropTypes.object,
@@ -256,7 +257,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -270,6 +271,7 @@ class PatientBoard extends React.Component {
           </nav>
           <PatientDetailModal
             onClose={this.closePatientModal}
+            params={params}
             ePMS={ePMS}
           />
           <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
