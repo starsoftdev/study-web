@@ -180,8 +180,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           })
         }
         </div>);
-    } else {
-      notes = <div className="text-center btn-default-padding">No Notes.</div>;
+    } else if (!this.props.categoryNotes.fetching) {
+      notes = <div className="text-center btn-default-padding">No notes.</div>;
     }
 
 
