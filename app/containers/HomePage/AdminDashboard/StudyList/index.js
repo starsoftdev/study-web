@@ -7,7 +7,7 @@ import moment from 'moment-timezone';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import { defaultRanges, DateRange } from 'react-date-range';
-import { Field, change } from 'redux-form';
+import { Field, change, reduxForm, reset } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
@@ -39,6 +39,7 @@ import {
   removeCustomEmailNotification,
 } from '../../../../containers/App/actions';
 
+@reduxForm({ form: 'campaignFilter' })
 class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
@@ -80,6 +81,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
     studyIndicationTags: PropTypes.object,
+    clearCampaignFilter: PropTypes.func,
   };
 
   constructor(props) {
@@ -161,9 +163,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   componentWillReceiveProps(newProps) {
-    // if filters have changed, we toggle off all selected studies
+    // if filters have changed, we toggle off all selected studies and also clear campaign filter
     if (newProps.filtersFormValues && newProps.filtersFormValues !== this.props.filtersFormValues) {
       this.toggleAllstudies(false);
+      this.props.clearCampaignFilter();
     }
     if (this.props.studies.details !== newProps.studies.details) {
       this.setState({
@@ -689,35 +692,37 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   <div className="head">
                     <h2 className="pull-left">{this.props.totals.details.total_studies || 0} STUDIES</h2>
                     <div className="btns pull-right">
-                      <div className="select pull-left">
-                        <Field
-                          name="data-search"
-                          className="data-search"
-                          component={ReactSelect}
-                          placeholder="Select Campaign"
-                          searchPlaceholder="Search"
-                          searchable
-                          options={campaignOptions}
-                          customSearchIconClass="icomoon-icon_search2"
-                          onChange={this.campaignChanged}
-                        />
-                      </div>
-                      <Button
-                        bsStyle="primary"
-                        className="pull-left"
-                        onClick={() => { this.showDateRangeModal(); }}
-                      >
-                        <i className="icomoon-icon_calendar" />
-                        &nbsp;Date Range
-                      </Button>
-                      <Button
-                        bsStyle="primary"
-                        className="pull-left"
-                        onClick={() => {}}
-                      >
-                        <i className="icomoon-icon_download" />
-                        &nbsp;Download
-                      </Button>
+                      <form className="campaign-filter">
+                        <div className="select pull-left">
+                          <Field
+                            name="data-search"
+                            className="data-search"
+                            component={ReactSelect}
+                            placeholder="Select Campaign"
+                            searchPlaceholder="Search"
+                            searchable
+                            options={campaignOptions}
+                            customSearchIconClass="icomoon-icon_search2"
+                            onChange={this.campaignChanged}
+                          />
+                        </div>
+                        <Button
+                          bsStyle="primary"
+                          className="pull-left"
+                          onClick={() => { this.showDateRangeModal(); }}
+                        >
+                          <i className="icomoon-icon_calendar" />
+                          &nbsp;Date Range
+                        </Button>
+                        <Button
+                          bsStyle="primary"
+                          className="pull-left"
+                          onClick={() => {}}
+                        >
+                          <i className="icomoon-icon_download" />
+                          &nbsp;Download
+                        </Button>
+                      </form>
                     </div>
                     <Modal
                       id="date-range"
@@ -1082,6 +1087,7 @@ const mapDispatchToProps = (dispatch) => ({
   editNote: (payload) => dispatch(editNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
+  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

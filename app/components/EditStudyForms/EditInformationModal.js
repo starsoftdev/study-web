@@ -470,6 +470,7 @@ export class EditInformationModal extends React.Component {
                       options={siteLocationsOptions}
                       onChange={(e) => { this.siteLocationChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>

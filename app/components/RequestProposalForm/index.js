@@ -271,7 +271,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           }
 
           <div className="field-row">
-            <strong className="label required"><label>Start Date</label></strong>
+            <strong className="label"><label>Start Date</label></strong>
             <Field
               id="start-date"
               name="startDate"
