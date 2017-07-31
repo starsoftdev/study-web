@@ -30,7 +30,6 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     orderNumber: PropTypes.number,
     siteId: PropTypes.number,
     url: PropTypes.string,
-    siteTimezone: PropTypes.string,
   };
 
   constructor(props) {
@@ -77,16 +76,19 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     this.setState({ buttonsShown: false });
   }
 
-  parseDate(date, timezone) {
+  parseDate(date, timezone = null) {
     if (!date) {
       return '';
+    }
+    if (!timezone) {
+      return moment(date).utc().format('MM/DD/YYYY');
     }
     return moment(date).tz(timezone).format('MM/DD/YYYY');
   }
 
   render() {
     const { currentUser, indication, location, siteName, sponsor, protocol, patientQualificationSuite, status,
-      startDate, endDate, unreadMessageCount, orderNumber, studyId, url, siteTimezone } = this.props;
+      startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let purchasable = true;
     if (currentUser.roleForClient) {
@@ -129,10 +131,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{status}</span>
         </td>
         <td className="start-date">
-          <span>{startDate ? this.parseDate(startDate, siteTimezone) : 'TBD'}</span>
+          <span>{startDate ? this.parseDate(startDate) : 'TBD'}</span>
         </td>
         <td className="end-date">
-          <span>{endDate ? this.parseDate(endDate, siteTimezone) : 'TBD'}</span>
+          <span>{endDate ? this.parseDate(endDate) : 'TBD'}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
