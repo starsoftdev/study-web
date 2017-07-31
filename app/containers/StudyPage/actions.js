@@ -74,6 +74,8 @@ import {
   DELETE_PATIENT_SUCCESS,
   DELETE_PATIENT_ERROR,
   DOWNLOAD_CLIENT_REPORT,
+  GENERATE_PATIENT_REFERRAL,
+  DOWNLOAD_PATIENT_REFERRAL,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -608,6 +610,22 @@ export function deletePatientError(payload) {
   return {
     type: DELETE_PATIENT_ERROR,
     payload,
+  };
+}
+
+export function generateReferral(patientId, studyId) {
+  return {
+    type: GENERATE_PATIENT_REFERRAL,
+    patientId,
+    studyId,
+  };
+}
+
+export function downloadReferral(reportName, studyId) {
+  return {
+    type: DOWNLOAD_PATIENT_REFERRAL,
+    reportName,
+    studyId,
   };
 }
 
