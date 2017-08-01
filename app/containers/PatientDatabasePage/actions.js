@@ -41,6 +41,9 @@ import {
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
   UPDATE_SELECT_ALL,
+  GET_TOTAL_PATIENTS_COUNT,
+  GET_TOTAL_PATIENTS_COUNT_SUCCESS,
+  GET_TOTAL_PATIENTS_COUNT_ERROR,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -105,6 +108,27 @@ export function patientsFetchingError(payload) {
     payload,
   };
 }
+
+export function getTotalPatientsCount() {
+  return {
+    type: GET_TOTAL_PATIENTS_COUNT,
+  };
+}
+
+export function getTotalPatientsCountSuccess(payload) {
+  return {
+    type: GET_TOTAL_PATIENTS_COUNT_SUCCESS,
+    total: payload.count,
+  };
+}
+
+export function getTotalPatientsCountError(payload) {
+  return {
+    type: GET_TOTAL_PATIENTS_COUNT_ERROR,
+    payload,
+  };
+}
+
 
 export function fetchFilteredProtcols(clientId, siteId) {
   return {

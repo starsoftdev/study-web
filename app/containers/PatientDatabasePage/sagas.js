@@ -13,6 +13,7 @@ import {
   REMOVE_PATIENT_INDICATION,
   UPDATE_PATIENT_INDICATION,
   FETCH_PATIENTS,
+  GET_TOTAL_PATIENTS_COUNT,
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
   FETCH_FILTERED_PROTOCOLS,
@@ -25,6 +26,8 @@ import {
 import {
   filteredProtcolsFetched,
   filteredProtcolsFetchingError,
+  getTotalPatientsCountSuccess,
+  getTotalPatientsCountError,
   patientsFetched,
   patientsFetchingError,
   patientCategoriesFetched,
@@ -51,6 +54,7 @@ export function* patientDatabasePageSaga() {
   const watcherI = yield fork(submitTextBlast);
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
+  const watcherL = yield fork(getTotalPatientsCountWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -67,6 +71,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherI);
   yield cancel(watcherJ);
   yield cancel(watcherK);
+  yield cancel(watcherL);
 }
 
 // Bootstrap sagas
@@ -208,6 +213,21 @@ export function* fetchPatientsWatcher() {
       }
     } catch (err) {
       yield put(patientsFetchingError(err));
+    }
+  }
+}
+
+export function* getTotalPatientsCountWatcher() {
+  while (true) {
+    yield take(GET_TOTAL_PATIENTS_COUNT);
+
+    try {
+      const requestURL = `${API_URL}/patients/count`;
+      const response = yield call(request, requestURL);
+      console.log('***111***', requestURL);
+      yield put(getTotalPatientsCountSuccess(response));
+    } catch (err) {
+      yield put(getTotalPatientsCountError(err));
     }
   }
 }

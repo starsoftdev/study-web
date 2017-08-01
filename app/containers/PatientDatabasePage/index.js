@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../components/PatientsList/index';
 import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
-import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast } from './actions';
+import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast, getTotalPatientsCount } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import { selectCurrentUser } from '../App/selectors';
 
@@ -23,6 +23,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     paginationOptions: PropTypes.object,
     patients: PropTypes.object,
     clearPatientsList: PropTypes.func,
+    getTotalPatientsCount: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
   };
 
@@ -33,12 +34,13 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
   }
 
   componentWillMount() {
-    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser } = this.props;
+    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser, getTotalPatientsCount } = this.props;
     fetchIndications();
     fetchSources();
     fetchPatientCategories();
     fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
+    getTotalPatientsCount();
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -110,6 +112,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
+    getTotalPatientsCount: () => dispatch(getTotalPatientsCount()),
     resetTextBlast: () => dispatch(resetTextBlast()),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),
