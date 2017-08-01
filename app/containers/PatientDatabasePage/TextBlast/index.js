@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -39,7 +39,6 @@ class TextBlastModal extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
     removePatients: React.PropTypes.func.isRequired,
-    reset: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     style: React.PropTypes.object,
@@ -59,9 +58,8 @@ class TextBlastModal extends React.Component {
   }
 
   onHide() {
-    const { onHide, reset } = this.props;
+    const { onHide } = this.props;
     onHide();
-    reset();
   }
 
   submitTextBlast(event) {
@@ -161,7 +159,6 @@ class TextBlastModal extends React.Component {
                   </div>
                 </div>
               </div>
-              <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
             </div>
           </Form>
         </Modal.Body>
@@ -182,7 +179,6 @@ function mapDispatchToProps(dispatch) {
   return {
     displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
-    reset: () => dispatch(reset(formName)),
     submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
   };
 }
