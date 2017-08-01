@@ -15,6 +15,7 @@ import EditPatientForm from '../../containers/PatientDatabasePage/EditPatientFor
 import ChatForm from '../../components/ChatForm';
 import PatientItem from './PatientItem';
 import { selectPatients,
+  selectTotalPatients,
   selectSelectedPatient,
   selectSelectedPatientDetailsForForm,
   selectSavedPatient,
@@ -65,6 +66,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     currentUser: PropTypes.object,
     formValues: PropTypes.object,
     updateSelectAll: PropTypes.func,
+    totalPatients: PropTypes.number,
   };
 
   constructor(props) {
@@ -219,7 +221,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { patients, selectedPatientDetailsForForm } = this.props;
+    const { patients, selectedPatientDetailsForForm, totalPatients } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
@@ -247,7 +249,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">
-              <h2>TOTAL PATIENT COUNT: {patients.total}</h2>
+              <h2>TOTAL PATIENT COUNT: {patients.total || totalPatients}</h2>
             </header>
             <div className="fixed-table-thead">
               <div className="table">
@@ -326,6 +328,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
 }
 
 const mapStateToProps = createStructuredSelector({
+  totalPatients: selectTotalPatients(),
   patients: selectPatients(),
   selectedPatient: selectSelectedPatient(),
   selectedPatientDetailsForForm: selectSelectedPatientDetailsForForm(),
