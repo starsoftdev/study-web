@@ -44,9 +44,14 @@ export function* fetchAdminsWatcher() {
 
 export function* fetchAdminsWorker(action) {
   try {
+    const query = action.query;
     const limit = action.limit || 10;
     const skip = action.skip || 0;
-    const requestURL = `${API_URL}/users/fetchAllDashboardAdmins?limit=${limit}&offset=${skip}`;
+    let requestURL = `${API_URL}/users/fetchAllDashboardAdmins?limit=${limit}&offset=${skip}`;
+
+    if (query) {
+      requestURL += `&query=${query}`;
+    }
 
     const params = {
       method: 'GET',
