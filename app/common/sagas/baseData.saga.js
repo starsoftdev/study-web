@@ -1148,8 +1148,8 @@ export function* submitToClientPortalWorker(action) {
 
     yield call(setItem, 'user_id', response.id);
     yield put(setUserData(response));
-    window.location.reload(false);
     yield put(push('/app'));
+    window.location.reload(false);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
