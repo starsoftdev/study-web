@@ -282,7 +282,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
           ...selectedStudy,
           site_location_form: selectedStudy.site_id,
         },
-      } });*/
+      } }); */
     }
 
     this.setState({
