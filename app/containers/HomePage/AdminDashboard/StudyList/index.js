@@ -914,6 +914,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                                     </th>
                                     <th>
                                       <div>
+                                        <span>SCREEN FAILED</span>
+                                        <span className="counter">{this.props.totals.details.screen_failed_campaign_total || 0}</span>
+                                        <span className="counter">{this.props.totals.details.screen_failed_total || 0}</span>
+                                      </div>
+                                    </th>
+                                    <th>
+                                      <div>
                                         <span>RANDOMIZED</span>
                                         <span className="counter">{this.props.totals.details.randomized_campaign_total || 0}</span>
                                         <span className="counter">{this.props.totals.details.randomized_total || 0}</span>

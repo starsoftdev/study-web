@@ -158,6 +158,12 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td>
           <ul className="list-unstyled">
+            <li>{item.screen_failed_campaign || 0}</li>
+            <li>{item.screen_failed || 0}</li>
+          </ul>
+        </td>
+        <td>
+          <ul className="list-unstyled">
             <li>{item.randomized_campaign || 0}</li>
             <li>{item.randomized || 0}</li>
           </ul>
