@@ -224,7 +224,6 @@ export function* getTotalPatientsCountWatcher() {
     try {
       const requestURL = `${API_URL}/patients/count`;
       const response = yield call(request, requestURL);
-      console.log('***111***', requestURL);
       yield put(getTotalPatientsCountSuccess(response));
     } catch (err) {
       yield put(getTotalPatientsCountError(err));

@@ -1185,8 +1185,6 @@ export function* submitCnsWorker(action) {
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, options);
-    console.log('response', response);
-
     yield put(submitCnsSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');
