@@ -109,7 +109,6 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
   };
 
   initSearch(value, key) {
-    console.log('initSearch - updated filter', value, key);
     this.props.fetchStudiesAccordingToFilters(value, key);
   }
 

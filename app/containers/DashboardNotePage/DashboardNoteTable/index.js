@@ -33,7 +33,6 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
       noteData: params.noteData,
       site_id: this.props.noteSearchFormValues.site,
     };
-    console.log('---param---', nParam);
     this.props.editNote(nParam);
   }
 
