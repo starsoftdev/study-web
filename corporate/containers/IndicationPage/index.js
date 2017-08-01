@@ -64,7 +64,12 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
           this.currentIndication = indication;
           const { location: { pathname } } = this.props;
           const parts = pathname.split('/');
-          const countryCode = parts.length === 4 ? parts[1] : 'us';
+          let countryCode;
+          if (parts[1] === 'indication') {
+            countryCode = 'us';
+          } else {
+            countryCode = parts[1];
+          }
           onSubmitForm({
             from: 0,
             indicationId: indication.id,
@@ -136,7 +141,12 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   render() {
     const { indications, trials, location: { pathname } } = this.props;
     const parts = pathname.split('/');
-    const countryCode = parts.length === 4 ? parts[1] : 'us';
+    let countryCode;
+    if (parts[1] === 'indication') {
+      countryCode = 'us';
+    } else {
+      countryCode = parts[1];
+    }
     const indication = parts[parts.length - 1];
     let headerText = '';
     let studiesList = [];
