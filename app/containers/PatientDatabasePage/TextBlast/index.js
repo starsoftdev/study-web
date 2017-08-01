@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
+import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -30,6 +30,7 @@ class TextBlastModal extends React.Component {
   static propTypes = {
     bsClass: React.PropTypes.string,
     className: React.PropTypes.any,
+    change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     dialogClassName: React.PropTypes.string,
     displayToastrError: React.PropTypes.func.isRequired,
@@ -52,6 +53,7 @@ class TextBlastModal extends React.Component {
     this.renderPatientCount = this.renderPatientCount.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
     this.onHide = this.onHide.bind(this);
+    this.onClose = this.onClose.bind(this);
     this.state = {
       enteredCharactersLength: 0,
     };
@@ -62,11 +64,18 @@ class TextBlastModal extends React.Component {
     onHide();
   }
 
+  onClose() {
+    const { change, onClose } = this.props;
+    // clear message value after the form is submitted and is successful
+    onClose();
+    change('message', '');
+  }
+
   submitTextBlast(event) {
     event.preventDefault();
-    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose, currentUser } = this.props;
+    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues, currentUser.roleForClient.id, onClose);
+      submitTextBlast(formValues, currentUser.roleForClient.id, this.onClose);
     } else if (formSyncErrors.message) {
       displayToastrError('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
@@ -177,6 +186,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    change: (field, value) => dispatch(change(formName, field, value)),
     displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
