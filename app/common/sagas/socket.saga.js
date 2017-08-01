@@ -144,7 +144,6 @@ export function* fetchStudyPatientMessages() {
 export function* sendStudyPatientMessages() {
   while (true) {
     const { payload, cb } = yield take(SEND_STUDY_PATIENT_MESSAGES);
-    console.log('saga SEND_STUDY_PATIENT_MESSAGES', payload);
     try {
       yield put(setProcessingStatus({ status: true }));
       socket.emit('saveTwilioTextMessages', payload, (err, data) => {

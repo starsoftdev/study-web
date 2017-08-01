@@ -91,8 +91,6 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
               inputContainer.childNodes[0].childNodes[0].value = '';
             });
           }
-        } else {
-          // console.log(err);
         }
         this.props.setProcessingStatus({ status: false });
       },
