@@ -22,6 +22,11 @@ export const selectPatients = () => createSelector(
   (substate) => substate.patients
 );
 
+export const selectTotalPatients = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.totalPatients
+);
+
 export const selectPatientCategories = () => createSelector(
   selectPatientDatabasePageDomain(),
   (substate) => substate.patientCategories

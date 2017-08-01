@@ -31,9 +31,14 @@ import {
 
   CLEAR_PATIENTS_LIST,
   CLEAR_IMPORT_FORM,
+
+  GET_TOTAL_PATIENTS_COUNT,
+  GET_TOTAL_PATIENTS_COUNT_ERROR,
+  GET_TOTAL_PATIENTS_COUNT_SUCCESS,
 } from './constants';
 
 const initialState = {
+  totalPatients: 0,
   patients: {
     details: [],
     total: 0,
@@ -179,6 +184,21 @@ export default function patientDatabasePageReducer(state = initialState, action)
           fetching: false,
           error: payload,
         },
+      };
+    case GET_TOTAL_PATIENTS_COUNT:
+      return {
+        ...state,
+        totalPatients: 0,
+      };
+    case GET_TOTAL_PATIENTS_COUNT_SUCCESS:
+      return {
+        ...state,
+        totalPatients: total,
+      };
+    case GET_TOTAL_PATIENTS_COUNT_ERROR:
+      return {
+        ...state,
+        totalPatients: 0,
       };
     case CLEAR_PATIENTS_LIST:
       return {
