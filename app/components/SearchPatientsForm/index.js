@@ -92,6 +92,7 @@ export default class SearchPatientsForm extends Component {
         params[name] = e;
       }
 
+      console.log('search param', params);
       this.props.onSubmit(params, true);
     }
   }
