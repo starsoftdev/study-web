@@ -126,7 +126,7 @@ export class PatientThankYouEmailModal extends React.Component {
       'Hi Oliver Queen, Thanks for signing up for this research study! ' +
       'Please call (226) 646-2764 to schedule your appointment today and tell them Studykik sent you! ' +
       'Healthcare will be changed globally by your participation.  ' +
-      'Thank you, StudyKIK';*/
+      'Thank you, StudyKIK'; */
 
     const { openModal, onClose } = this.props;
     return (

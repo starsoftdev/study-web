@@ -103,7 +103,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td>
           <ul className="list-unstyled">
-            {/* <li><span>{item.campaign_name}</span></li>*/}
+            {/* <li><span>{item.campaign_name}</span></li> */}
             <li><span>{campaignName}</span></li>
             <li>Start Date: <span>{startDate}</span></li>
             <li>End Date: <span>{endDate}</span></li>

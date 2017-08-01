@@ -50,7 +50,7 @@ export class DashboardManageUsersSearch extends React.Component {
 
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) /* ||
-      (!newProps.deleteUserProcess.deleting && this.props.deleteUserProcess.deleting)*/) {
+      (!newProps.deleteUserProcess.deleting && this.props.deleteUserProcess.deleting) */) {
       this.closeAddUserModal();
     }
   }
