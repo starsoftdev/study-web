@@ -26,4 +26,3 @@ export const SET_ACTIVE_SORT = 'app/DashboardMessagingNumbersPage/SET_ACTIVE_SOR
 
 export const SET_SEARCH_QUERY = 'app/DashboardManageUsers/SET_SEARCH_QUERY';
 
-
