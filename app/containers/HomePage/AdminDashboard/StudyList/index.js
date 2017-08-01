@@ -216,7 +216,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     this.props.fetchCustomNotificationEmails(study.study_id);
     this.props.fetchStudyIndicationTag(study.study_id);
-    console.log('***fetching indication tag***');
     this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
     this.props.fetchStudyCampaignsDashboard(study.study_id);
   }
