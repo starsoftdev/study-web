@@ -95,8 +95,8 @@ function reportViewPageReducer(state = initialState, action) {
 
         if (item.current_level) {
           level = item.current_level;
-          levelDateFrom = moment(item.currrent_date_from).tz(item.timezone).format('MM/DD/YY');
-          levelDateTo = moment(item.currrent_date_to).tz(item.timezone).format('MM/DD/YY');
+          levelDateFrom = item.currrent_date_from ? moment(item.currrent_date_from).tz(item.timezone).format('MM/DD/YY') : '';
+          levelDateTo = item.currrent_date_to ? moment(item.currrent_date_to).tz(item.timezone).format('MM/DD/YY') : '';
         } else {
           level = null;
           levelDateFrom = null;
