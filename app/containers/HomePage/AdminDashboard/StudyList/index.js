@@ -143,7 +143,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
-      fixedScrollContainerWidth: 2891,
+      fixedScrollContainerWidth: 3015,
 
       stickyLeftOffset: false,
 
@@ -167,6 +167,9 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     if (newProps.filtersFormValues && newProps.filtersFormValues !== this.props.filtersFormValues) {
       this.toggleAllstudies(false);
       this.props.clearCampaignFilter();
+    }
+    if (this.tableRight) {
+      this.setState({ fixedScrollContainerWidth: (3015 + this.tableRight.clientWidth) });
     }
     if (this.props.studies.details !== newProps.studies.details) {
       this.setState({
@@ -234,7 +237,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
           this.setState({ isFixedBottomScroll: false });
         }
       } else if (!this.state.isFixedBottomScroll || this.state.fixedScrollWidth !== this.tableRight.clientWidth) {
-        this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: (2891 + this.tableRight.clientWidth) });
+        this.setState({ isFixedBottomScroll: true, fixedScrollWidth: this.tableRight.clientWidth, fixedScrollContainerWidth: (3015 + this.tableRight.clientWidth) });
       }
     }
   }
