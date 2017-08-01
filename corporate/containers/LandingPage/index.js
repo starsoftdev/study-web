@@ -135,7 +135,7 @@ export class LandingPage extends React.Component {
       };
 
       this.props.patientSubscriptionError(err);
-    }*/
+    } */
   }
 
   render() {
