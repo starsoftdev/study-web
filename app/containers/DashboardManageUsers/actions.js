@@ -18,11 +18,13 @@ import {
   DELETE_DASHBOARD_USER_SUCCESS,
   DELETE_DASHBOARD_USER_ERROR,
   SET_ACTIVE_SORT,
+  SET_SEARCH_QUERY,
 } from './constants';
 
-export function fetchAdmins(limit, skip) {
+export function fetchAdmins(query, limit, skip) {
   return {
     type: FETCH_ADMINS,
+    query,
     limit,
     skip,
   };
@@ -111,5 +113,12 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
+  };
+}
+
+export function setSearchQuery(query) {
+  return {
+    type: SET_SEARCH_QUERY,
+    query,
   };
 }
