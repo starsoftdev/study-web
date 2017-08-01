@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import DashboardManageUsersSearch from './DashboardManageUsersSearch';
 import DashboardManageUsersTable from './DashboardManageUsersTable';
 import { selectDashboardAdmins, selectDashboardRoles, selectPaginationOptions } from './selectors';
-import { fetchAdmins, fetchAdminRoles } from './actions';
+import { fetchAdmins, fetchAdminRoles, setSearchQuery } from './actions';
 
 export class DashboardManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -22,12 +22,14 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
     admins: PropTypes.object,
     roles: PropTypes.object,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
 
@@ -36,13 +38,23 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
     this.props.fetchAdminRoles();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchAdmins } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchAdmins(limit, offset);
+    fetchAdmins(query, limit, offset);
   }
 
+  loadMore() {
+    const { fetchAdmins, admins } = this.props;
+    if (!admins.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchAdmins(query, limit, offset);
+    }
+  }
 
   render() {
     return (
@@ -52,6 +64,7 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
 
         <DashboardManageUsersSearch
           roles={this.props.roles}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardManageUsersTable
           roles={this.props.roles}
@@ -72,8 +85,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchAdmins: (limit, skip) => dispatch(fetchAdmins(limit, skip)),
+    fetchAdmins: (query, limit, skip) => dispatch(fetchAdmins(query, limit, skip)),
     fetchAdminRoles: () => dispatch(fetchAdminRoles()),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 
