@@ -93,7 +93,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchMessagingNumbers: (limit, offset) => dispatch(fetchMessagingNumbers(limit, offset)),
+    fetchMessagingNumbers: (query, limit, offset) => dispatch(fetchMessagingNumbers(query, limit, offset)),
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     deleteMessagingNumber: (payload) => dispatch(archiveMessagingNumber(payload)),

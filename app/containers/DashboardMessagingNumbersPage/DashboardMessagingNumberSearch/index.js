@@ -17,6 +17,25 @@ export class DashboardMessagingNumberSearch extends React.Component { // eslint-
     onSubmitQuery: React.PropTypes.func,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      query: null,
+    };
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
+  }
+
   render() {
     return (
       <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
