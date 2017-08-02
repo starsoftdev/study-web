@@ -23,7 +23,6 @@ export class DashboardMessagingNumberSearch extends React.Component { // eslint-
     this.state = {
       query: null,
     };
-
     this.setQueryParam = this.setQueryParam.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
