@@ -45,7 +45,7 @@ export class SponsorManageUsersAdminsTable extends React.Component {
     let adminsList = this.props.manageSponsorUsersData.adminsList;
 
     if (this.props.searchFormValues.name) {
-      adminsList = _.filter(adminsList, (item) => (`${item.first_name} ${item.last_name}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1));
+      adminsList = _.filter(adminsList, (item) => (`${item.first_name} ${item.last_name}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1) || (`${item.email}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1));
     }
 
     if (this.props.paginationOptionsAdmin.activeDirection && this.props.paginationOptionsAdmin.activeSort) {
