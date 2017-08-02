@@ -18,6 +18,8 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
     editProtocol: PropTypes.func,
     protocols: PropTypes.array,
     currentUser: React.PropTypes.object,
+    filterMethod: PropTypes.func,
+    userFilterQuery: PropTypes.string,
   };
 
   constructor(props) {
@@ -45,9 +47,9 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
   render() {
     let studiesList = this.props.manageSponsorUsersData.studiesList;
 
-    if (this.props.searchFormValues.protocol && this.props.searchFormValues.protocol !== 'all') {
-      studiesList = _.filter(studiesList, (item) => (item.protocolId === this.props.searchFormValues.protocol));
-    }
+    // if (this.props.searchFormValues.protocol && this.props.searchFormValues.protocol !== 'all') {
+    studiesList = _.filter(studiesList, this.props.filterMethod);
+    // }
 
     if (this.props.paginationOptionsProtocols.activeDirection && this.props.paginationOptionsProtocols.activeSort) {
       const dir = ((this.props.paginationOptionsProtocols.activeDirection === 'down') ? 'desc' : 'asc');
@@ -83,7 +85,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
             <tbody>
               {
                 studiesList.map((item, index) => (
-                  <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} searchFormValues={this.props.searchFormValues} protocols={this.props.protocols} currentUser={this.props.currentUser} />
+                  <RowItem key={index} item={item} editProtocol={this.props.editProtocol} editUser={this.props.editUser} deleteUser={this.props.deleteUser} userFilter={this.props.userFilterQuery} protocols={this.props.protocols} currentUser={this.props.currentUser} />
                 ))
               }
             </tbody>
