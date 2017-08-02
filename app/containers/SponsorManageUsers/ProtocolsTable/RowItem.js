@@ -15,7 +15,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editUser: PropTypes.func,
     protocols: PropTypes.array,
     deleteUser: PropTypes.func,
-    searchFormValues: React.PropTypes.object,
+    userFilter: React.PropTypes.string,
     editProtocol: PropTypes.func,
     currentUser: React.PropTypes.object,
     editProtocolProcess: PropTypes.object,
@@ -73,7 +73,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     let shouldBeOpened = false;
 
     const assignedUsersContent = this.props.item.sponsorUsers.map((item, index) => {
-      if (this.props.searchFormValues.name && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1) {
+      if (this.props.userFilter && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(this.props.userFilter.toLowerCase()) !== -1) {
         shouldBeOpened = true;
       }
 

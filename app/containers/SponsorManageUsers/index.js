@@ -23,7 +23,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
     fetchManageSponsorUsersData: React.PropTypes.func,
     manageSponsorUsersData: React.PropTypes.object,
     formValues: React.PropTypes.object,
-    protocols: React.PropTypes.object,
+    protocols: React.PropTypes.array,
     editSponsorUser: React.PropTypes.func,
     deleteSponsorUser: React.PropTypes.func,
     editProtocolFormValues: React.PropTypes.object,
@@ -34,10 +34,18 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   constructor(props) {
     super(props);
 
+    this.state = {
+      adminFilterMethod: () => true,
+      protocolFilterMethod: () => true,
+      adminName: '',
+    };
+
     this.updateData = this.updateData.bind(this);
     this.editUser = this.editUser.bind(this);
     this.deleteUser = this.deleteUser.bind(this);
     this.editSponsorProtocol = this.editSponsorProtocol.bind(this);
+    this.filterAdmins = this.filterAdmins.bind(this);
+    this.filterProtocols = this.filterProtocols.bind(this);
   }
 
   componentWillMount() {
@@ -93,9 +101,38 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
     this.props.editProtocol(params);
   }
 
+  filterAdmins(searchQuery) {
+    if (searchQuery !== '') {
+      this.setState({
+        adminFilterMethod: (admin) => {
+          const fullName = `${admin.firstName} ${admin.lastName}`;
+          return fullName.toUpperCase().includes(searchQuery.toUpperCase()) || admin.email.toUpperCase().includes(searchQuery.toUpperCase());
+        },
+        adminName: searchQuery,
+      });
+    } else {
+      this.setState({
+        adminFilterMethod: () => true,
+        adminName: '',
+      });
+    }
+  }
+
+  filterProtocols(searchQuery) {
+    if (searchQuery !== '' && searchQuery) {
+      this.setState({
+        protocolFilterMethod: (protocol) => protocol.protocolNumber.toUpperCase().includes(searchQuery.toUpperCase())
+        ,
+      });
+    } else {
+      this.setState({
+        protocolFilterMethod: () => true,
+      });
+    }
+  }
+
   render() {
     const protocols = this.props.protocols;
-
     return (
       <div className="container-fluid sponsor-portal">
         <Helmet title="Manage Users - StudyKIK" />
@@ -107,6 +144,8 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             updateData={this.updateData}
             protocols={protocols}
             currentUser={this.props.currentUser}
+            filterAdmins={(searchQuery) => { this.filterAdmins(searchQuery); }}
+            filterProtocols={(searchQuery) => { this.filterProtocols(searchQuery); }}
           />
           <SponsorManageUsersAdminsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
@@ -114,6 +153,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             deleteUser={this.deleteUser}
             protocols={protocols}
             currentUser={this.props.currentUser}
+            filterMethod={this.state.adminFilterMethod}
           />
           <SponsorManageUsersProtocolsTable
             manageSponsorUsersData={this.props.manageSponsorUsersData}
@@ -122,6 +162,8 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
             editProtocol={this.editSponsorProtocol}
             protocols={protocols}
             currentUser={this.props.currentUser}
+            filterMethod={this.state.protocolFilterMethod}
+            userFilterQuery={this.state.adminName}
           />
         </section>
       </div>
