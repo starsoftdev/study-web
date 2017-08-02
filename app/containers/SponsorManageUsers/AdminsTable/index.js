@@ -17,6 +17,7 @@ export class SponsorManageUsersAdminsTable extends React.Component {
     searchFormValues: React.PropTypes.object,
     protocols: PropTypes.array,
     currentUser: React.PropTypes.object,
+    filterMethod: PropTypes.func,
   };
 
   constructor(props) {
@@ -43,10 +44,9 @@ export class SponsorManageUsersAdminsTable extends React.Component {
 
   render() {
     let adminsList = this.props.manageSponsorUsersData.adminsList;
+    const { filterMethod } = this.props;
 
-    if (this.props.searchFormValues.name) {
-      adminsList = _.filter(adminsList, (item) => (`${item.first_name} ${item.last_name}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1) || (`${item.email}`.toLowerCase().indexOf(this.props.searchFormValues.name.toLowerCase()) !== -1));
-    }
+    adminsList = _.filter(adminsList, filterMethod);
 
     if (this.props.paginationOptionsAdmin.activeDirection && this.props.paginationOptionsAdmin.activeSort) {
       const dir = ((this.props.paginationOptionsAdmin.activeDirection === 'down') ? 'desc' : 'asc');
