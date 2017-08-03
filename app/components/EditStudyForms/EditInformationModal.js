@@ -178,7 +178,7 @@ export class EditInformationModal extends React.Component {
           piLastName: null,
         });
       });
-    }*/
+    } */
   }
 
   onSuggestSelect(e) {
@@ -470,6 +470,7 @@ export class EditInformationModal extends React.Component {
                       options={siteLocationsOptions}
                       onChange={(e) => { this.siteLocationChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>
@@ -653,7 +654,7 @@ export class EditInformationModal extends React.Component {
                 {/* <div className="field-row add-messaging-number-row">
                   <strong className="label"> </strong>
                   <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
-                </div>*/}
+                </div> */}
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">PROTOCOL</label>

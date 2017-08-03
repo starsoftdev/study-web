@@ -67,6 +67,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     change: PropTypes.func.isRequired,
     blur: React.PropTypes.func.isRequired,
     clientAdmins: PropTypes.object,
+    fileInputRef: PropTypes.func.isRequired,
     hideSiteLocationModal: PropTypes.func.isRequired,
     showSiteLocationModal: PropTypes.func.isRequired,
     hideAddEmailModal: PropTypes.func.isRequired,
@@ -91,11 +92,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.addSite = this.addSite.bind(this);
-    this.handleFileChange = this.handleFileChange.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.state = {
-      fileName: '',
-    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -145,10 +142,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     hideSiteLocationModal();
   }
 
-  handleFileChange(e) {
-    this.setState({ fileName: e.target.files[0].name });
-  }
-
   handleSiteLocationChoose(e) {
     const { change, clientAdmins, fullSiteLocations, showSiteLocationModal } = this.props;
     if (e === 'add-new-location') {
@@ -195,8 +188,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { addEmailNotificationUser, callTracking, change, currentUserClientId, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels } = this.props;
-    const { fileName } = this.state;
+    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels } = this.props;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
       id: row.id,
@@ -274,11 +266,11 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               <Field
                 id="study_file"
                 name="file"
+                inputRef={fileInputRef}
                 component={Input}
-                onChange={this.handleFileChange}
                 type="file"
               />
-              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{fileName}</label></strong>
+              <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{formValues.file && formValues.file.length > 0 ? formValues.file[0].name : ''}</label></strong>
             </div>
           </div>
 

@@ -55,10 +55,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
       to: selectedPatient.phone,
     };
 
-    sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        console.log('data', data);
-      }
+    sendStudyPatientMessages(options, (err, data) => { // eslint-disable-line
     });
     reset();
   }

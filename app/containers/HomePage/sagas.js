@@ -49,6 +49,7 @@ import {
   FETCH_STUDY_INDICATION_TAG,
   FETCH_CAMPAIGNS_BY_STUDY,
   EDIT_CAMPAIGN,
+  DELETE_CAMPAIGN,
 } from './AdminDashboard/constants';
 
 import {
@@ -105,6 +106,9 @@ import {
   fetchCampaignsByStudyError,
   editCampaignSuccess,
   editCampaignError,
+  deleteCampaignSuccess,
+  deleteCampaignError,
+  fetchCampaignsByStudy,
 
 } from './AdminDashboard/actions';
 
@@ -127,7 +131,6 @@ import {
 
 import {
   fetchPatientSignUpsSucceeded,
-  fetchPatientMessagesSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
   studiesFetchingError,
@@ -380,7 +383,7 @@ export function* fetchPatientMessagesWorker(action) { // eslint-disable-line no-
   //
   //   yield put(fetchPatientMessagesSucceeded(response));
   // TODO re-enable patient message stat fetching
-  yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
+  // yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
   // } catch (err) {
   //   const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
   //   yield put(toastrActions.error('', errorMessage));
@@ -1108,8 +1111,19 @@ export function* fetchCampaignsByStudyWorker(action) {
   try {
     const requestURL = `${API_URL}/studies/${action.payload}/campaigns`;
 
+    const filterObj = {
+      include: [{
+        relation: 'patients',
+      }],
+    };
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
     const params = {
       method: 'GET',
+      query: queryParams,
     };
     const response = yield call(request, requestURL, params);
 
@@ -1146,6 +1160,34 @@ export function* editCampaignWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     yield put(toastrActions.error('', errorMessage));
     yield put(editCampaignError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* deleteCampaignWatcher() {
+  yield* takeLatest(DELETE_CAMPAIGN, deleteCampaignWorker);
+}
+
+export function* deleteCampaignWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
+    const params = {
+      method: 'DELETE',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(fetchCampaignsByStudy(action.payload.studyId));
+      yield put(deleteCampaignSuccess(action.payload));
+    } else {
+      yield put(deleteCampaignError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(deleteCampaignError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1190,6 +1232,7 @@ export function* homePageSaga() {
   const updateTwilioNumbersWatcher1 = yield fork(updateTwilioNumbersWatcher);
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
+  const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1236,6 +1279,7 @@ export function* homePageSaga() {
     yield cancel(updateTwilioNumbersWatcher1);
     yield cancel(fetchCampaignsByStudyWatcher1);
     yield cancel(editCampaignWatcher1);
+    yield cancel(deleteCampaignWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);

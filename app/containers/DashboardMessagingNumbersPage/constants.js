@@ -23,3 +23,6 @@ export const ARCHIVE_MESSAGING_NUMBER_SUCCESS = 'app/DashboardMessagingNumbersPa
 export const ARCHIVE_MESSAGING_NUMBER_ERROR   = 'app/DashboardMessagingNumbersPage/ARCHIVE_MESSAGING_NUMBER_ERROR';
 
 export const SET_ACTIVE_SORT = 'app/DashboardMessagingNumbersPage/SET_ACTIVE_SORT';
+
+export const SET_SEARCH_QUERY = 'app/DashboardManageUsers/SET_SEARCH_QUERY';
+

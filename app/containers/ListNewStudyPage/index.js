@@ -157,6 +157,8 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     };
     params.recruitmentPhone = normalizePhoneForServer(params.recruitmentPhone);
     this.props.submitForm(shoppingCartFormValues, params);
+    // clear the upload study ad input element value after the form submission
+    this.uploadStudyAdInput.value = '';
   }
 
   goToStudyPage() {
@@ -226,6 +228,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                     saveSite={this.props.saveSite}
                     availPhoneNumbers={this.props.availPhoneNumbers}
                     clientAdmins={this.props.clientAdmins}
+                    fileInputRef={(ref) => {
+                      this.uploadStudyAdInput = ref;
+                    }}
                   />
                 </div>
 

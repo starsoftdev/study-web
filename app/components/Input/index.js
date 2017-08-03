@@ -19,6 +19,7 @@ function Input({
   name,
   type,
   id,
+  inputRef,
   placeholder,
   componentClass,
   bsClass,
@@ -50,8 +51,9 @@ function Input({
     <FormControl
       {...input}
       type={type}
-      id={id}
       disabled={isDisabled}
+      id={id}
+      inputRef={inputRef}
       placeholder={placeholder}
       required={required}
       maxLength={maxLength}
@@ -110,6 +112,7 @@ Input.propTypes = {
   isDisabled: PropTypes.bool,
   id: PropTypes.string,
   input: PropTypes.object.isRequired,
+  inputRef: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   onChange: PropTypes.func,

@@ -67,7 +67,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     const sorted = _.orderBy(this.props.protocols.details, [function (o) {
       return o[(sort || defaultSort)];
     }], [dir]);
-    this.props.sortSuccess(sorted);*/
+    this.props.sortSuccess(sorted); */
     this.props.loadProtocols(true, sort, direction);
   }
 
@@ -92,7 +92,9 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           {
             (protocols.fetching &&
               <tr>
-                <LoadingSpinner showOnlyIcon={false} noMessage />
+                <td colSpan="8">
+                  <LoadingSpinner showOnlyIcon={false} noMessage />
+                </td>
               </tr>
             )
           }
