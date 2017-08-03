@@ -35,6 +35,7 @@ import {
 
 export class PatientDetailModal extends React.Component {
   static propTypes = {
+    params: React.PropTypes.object,
     carousel: React.PropTypes.object,
     currentPatientNotes: React.PropTypes.array,
     currentPatientCategory: React.PropTypes.object,
@@ -120,7 +121,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { carousel, currentPatient, currentPatientCategory, currentUser } = this.props;
+    const { carousel, currentPatient, currentPatientCategory, currentUser, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -131,7 +132,7 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} />
+        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} params={params} />
       );
     }
     return null;

@@ -6,15 +6,22 @@
 
 import React from 'react';
 
-import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
+import { Field, reduxForm, change } from 'redux-form'; // eslint-disable-line
+import { connect } from 'react-redux';
 
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import helpAndSupportFormValidator from './validator';
 
-@reduxForm({ form: 'helpAndSupport', validate: helpAndSupportFormValidator })
+const formName = 'helpAndSupport';
+const mapDispatchToProps = (dispatch) => ({
+  change: (name, value) => dispatch(change(formName, name, value)),
+});
+@reduxForm({ form: formName, validate: helpAndSupportFormValidator })
+@connect(null, mapDispatchToProps)
 class HelpAndSupportForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    change: React.PropTypes.func.isRequired,
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     siteLocations: React.PropTypes.array,
@@ -23,9 +30,18 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
     currentUser: React.PropTypes.object,
   };
 
-  render() {
-    const { error, handleSubmit, reset, submitting } = this.props; // eslint-disable-line
-    const { siteLocations, currentUser } = this.props;
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      bDisabled: true,
+      defaultValue: undefined,
+    };
+  }
+
+
+  componentWillMount() {
+    const { currentUser, change } = this.props;
 
     const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
     let bDisabled = true;
@@ -39,6 +55,16 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
         defaultValue = currentUser.roleForClient.site_id;
       }
     }
+    change('siteLocation', defaultValue);
+    this.setState({
+      bDisabled,
+      defaultValue,
+    });
+  }
+
+  render() {
+    const { handleSubmit, submitting, siteLocations } = this.props;
+    const { bDisabled, defaultValue } = this.state;
 
     return (
       <form onSubmit={handleSubmit}>

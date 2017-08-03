@@ -115,3 +115,7 @@ export const FETCH_CAMPAIGNS_BY_STUDY_ERROR              = 'DashboardPage/FETCH_
 export const EDIT_CAMPAIGN                               = 'DashboardPage/EDIT_CAMPAIGN';
 export const EDIT_CAMPAIGN_SUCCESS                       = 'DashboardPage/EDIT_CAMPAIGN_SUCCESS';
 export const EDIT_CAMPAIGN_ERROR                         = 'DashboardPage/EDIT_CAMPAIGN_ERROR';
+
+export const DELETE_CAMPAIGN                             = 'DashboardPage/DELETE_CAMPAIGN';
+export const DELETE_CAMPAIGN_SUCCESS                     = 'DashboardPage/DELETE_CAMPAIGN_SUCCESS';
+export const DELETE_CAMPAIGN_ERROR                       = 'DashboardPage/DELETE_CAMPAIGN_ERROR';
