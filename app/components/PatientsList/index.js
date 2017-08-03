@@ -67,6 +67,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     formValues: PropTypes.object,
     updateSelectAll: PropTypes.func,
     totalPatients: PropTypes.number,
+    textBlastFormValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -221,7 +222,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { patients, selectedPatientDetailsForForm, totalPatients } = this.props;
+    const { patients, selectedPatientDetailsForForm, totalPatients, textBlastFormValues } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
@@ -244,12 +245,18 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         delete selectedPatient.source_id;
       }
     }
+    let total = patients.total || totalPatients;
+    if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {
+      total = textBlastFormValues.patients.length;
+    }
     return (
       <div className="patient-database-fixed-table-wrapper">
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">
-              <h2>TOTAL PATIENT COUNT: {patients.total || totalPatients}</h2>
+              <h2>TOTAL PATIENT COUNT:
+                <span className="patient-count"> {total}</span>
+              </h2>
             </header>
             <div className="fixed-table-thead">
               <div className="table">
@@ -337,6 +344,7 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
   currentUser: selectCurrentUser(),
   formValues: selectValues(formName),
+  textBlastFormValues: selectValues('PatientDatabase.TextBlastModal'),
 });
 
 function mapDispatchToProps(dispatch) {
