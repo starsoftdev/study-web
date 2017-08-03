@@ -50,6 +50,7 @@ export class CampaignPageModal extends React.Component {
 
     this.state = {
       selectedCampaign: 0,
+      isCampaignHasPatients: false,
     };
 
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -60,7 +61,7 @@ export class CampaignPageModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchCampaignsByStudy(this.props.study.study_id);
-      this.setState({ selectedCampaign : 0 });
+      this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
@@ -72,7 +73,7 @@ export class CampaignPageModal extends React.Component {
     const campaignIndex = studyCampaigns.findIndex(item => (item.id === e));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       const foundCampaign = studyCampaigns[campaignIndex];
-      this.setState({ selectedCampaign : campaignIndex });
+      this.setState({ selectedCampaign : campaignIndex, isCampaignHasPatients: (!!((foundCampaign.patients && foundCampaign.patients.length > 0))) });
       const { change } = this.props;
       change('campaign_id', foundCampaign.id);
       change('datefrom', foundCampaign.dateFrom);
@@ -253,12 +254,12 @@ export class CampaignPageModal extends React.Component {
                 </div>
 
                 <div className="field-row text-right">
-                  <a className="btn btn-gray upload-btn" onClick={this.deleteCampaignClick}>
+                  <div className={classNames('btn btn-gray upload-btn', { disabled: this.state.isCampaignHasPatients })} onClick={() => (!this.state.isCampaignHasPatients ? this.deleteCampaignClick() : null)}>
                     {deleteCampaignProcess.deleting
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                       : <span>Delete</span>
                     }
-                  </a>
+                  </div>
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {updateCampaignProcess.saving
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
