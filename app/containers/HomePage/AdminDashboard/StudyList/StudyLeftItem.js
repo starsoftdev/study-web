@@ -97,7 +97,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li><span>{item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A'}</span></li>
             <li><span>{item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A'}</span></li>
 
-            {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li>*/}
+            {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li> */}
             <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : ''}`}</span></li>
           </ul>
         </td>

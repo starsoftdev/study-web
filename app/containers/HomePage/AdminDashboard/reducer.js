@@ -82,6 +82,10 @@ import {
   EDIT_CAMPAIGN_SUCCESS,
   EDIT_CAMPAIGN_ERROR,
 
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
+
 } from './constants';
 
 import {
@@ -191,6 +195,10 @@ const initialState = {
   },
   editCampaignProcess: {
     saving: false,
+    error: false,
+  },
+  deleteCampaignProcess: {
+    deleting: false,
     error: false,
   },
   updatedStudyAd: null,
@@ -1005,6 +1013,34 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         editCampaignProcess: {
           saving: false,
+          error: action.payload,
+        },
+      };
+
+    case DELETE_CAMPAIGN:
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: true,
+          error: null,
+        },
+      };
+
+    case DELETE_CAMPAIGN_SUCCESS: {
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
+          error: null,
+        },
+      };
+    }
+
+    case DELETE_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
           error: action.payload,
         },
       };

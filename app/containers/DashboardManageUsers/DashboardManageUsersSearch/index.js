@@ -30,6 +30,7 @@ export class DashboardManageUsersSearch extends React.Component {
     editDashboardUser: React.PropTypes.func,
     editUserProcess: React.PropTypes.object,
     roles: React.PropTypes.object,
+    onSubmitQuery: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -37,19 +38,30 @@ export class DashboardManageUsersSearch extends React.Component {
 
     this.state = {
       addUserModalOpen: false,
+      query: null,
     };
 
     this.closeAddUserModal = this.closeAddUserModal.bind(this);
     this.openAddUserModal = this.openAddUserModal.bind(this);
-
     this.addUser = this.addUser.bind(this);
+    this.setQueryParam = this.setQueryParam.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if ((!newProps.editUserProcess.saving && this.props.editUserProcess.saving) /* ||
-      (!newProps.deleteUserProcess.deleting && this.props.deleteUserProcess.deleting)*/) {
+      (!newProps.deleteUserProcess.deleting && this.props.deleteUserProcess.deleting) */) {
       this.closeAddUserModal();
     }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    this.setQueryParam();
+  }
+
+  setQueryParam() {
+    this.props.onSubmitQuery(this.state.query);
   }
 
   closeAddUserModal() {
@@ -68,13 +80,16 @@ export class DashboardManageUsersSearch extends React.Component {
 
   render() {
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.onSubmit}>
         <TableActions
           buttonClickAction={this.openAddUserModal}
           buttonText="+ Add User"
           filters={
             <div className="has-feedback ">
-              <Button className="btn-enter">
+              <Button
+                className="btn-enter"
+                onClick={this.setQueryParam}
+              >
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
@@ -83,6 +98,9 @@ export class DashboardManageUsersSearch extends React.Component {
                 type="text"
                 placeholder="Search"
                 className="keyword-search"
+                onChange={(e) => (this.setState({
+                  query: e.target.value,
+                }))}
               />
             </div>
           }

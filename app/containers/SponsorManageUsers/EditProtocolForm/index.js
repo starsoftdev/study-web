@@ -126,7 +126,7 @@ class EditProtocolForm extends Component { // eslint-disable-line react/prefer-s
             />
             <strong className="label lfilename"><label className="filename" htmlFor="irb_filename">{this.state.fileName}</label></strong>
           </div>
-        </div>*/}
+        </div> */}
 
         <div className="btn-block btns text-right">
           <button type="submit" className="btn btn-default" disabled={this.props.editProtocolProcess.saving}>

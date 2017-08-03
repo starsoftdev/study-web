@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 
 import { fetchMessagingNumbers, addMessagingNumber, editMessagingNumber, archiveMessagingNumber,
-  setActiveSort } from './actions';
+  setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardMessagingNumber, selectDashboardEditMessagingNumberProcess,
   selectDashboardMessagingNumberSearchFormValues, selectPaginationOptions } from './selectors';
 import DashboardMessagingNumberSearch from './DashboardMessagingNumberSearch/index';
@@ -29,23 +29,36 @@ export class DashboardMessagingNumbersPage extends React.Component {
     editMessagingNumberProcess: PropTypes.object,
     messagingNumberSearchFormValues: PropTypes.object,
     paginationOptions: PropTypes.object,
+    setSearchQuery: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
 
     this.loadMore = this.loadMore.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchMessagingNumbers();
   }
 
-  loadMore() {
+  onSubmitQuery(query) {
     const { fetchMessagingNumbers } = this.props;
-    const offset = this.props.paginationOptions.page * 10;
+    this.props.setSearchQuery(query);
+    const offset = 0;
     const limit = 10;
-    fetchMessagingNumbers(limit, offset);
+    fetchMessagingNumbers(query, limit, offset);
+  }
+
+  loadMore() {
+    const { fetchMessagingNumbers, messagingNumber } = this.props;
+    if (!messagingNumber.fetching) {
+      const query = this.props.paginationOptions.query;
+      const offset = this.props.paginationOptions.page * 10;
+      const limit = 10;
+      fetchMessagingNumbers(query, limit, offset);
+    }
   }
 
   render() {
@@ -56,6 +69,7 @@ export class DashboardMessagingNumbersPage extends React.Component {
         <DashboardMessagingNumberSearch
           messagingNumber={this.props.messagingNumber}
           messagingNumberSearchFormValues={this.props.messagingNumberSearchFormValues}
+          onSubmitQuery={this.onSubmitQuery}
         />
         <DashboardMessagingNumbersTable
           editMessagingNumberProcess={this.props.editMessagingNumberProcess}
@@ -79,11 +93,12 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchMessagingNumbers: (limit, offset) => dispatch(fetchMessagingNumbers(limit, offset)),
+    fetchMessagingNumbers: (query, limit, offset) => dispatch(fetchMessagingNumbers(query, limit, offset)),
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     deleteMessagingNumber: (payload) => dispatch(archiveMessagingNumber(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
+    setSearchQuery: (query) => dispatch(setSearchQuery(query)),
   };
 }
 

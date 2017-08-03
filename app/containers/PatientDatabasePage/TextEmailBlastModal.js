@@ -17,10 +17,11 @@ class TextEmailBlastModal extends React.Component {
   }
 
   render() {
-    const { toggleTextBlast, ...props } = this.props; // eslint-disable-line
+    const { toggleTextBlast, onHide, ...props } = this.props;
     return (
       <Modal
         {...props}
+        onHide={onHide}
         id="text-email-blast"
         dialogComponentClass={CenteredModal}
         backdrop
@@ -30,17 +31,16 @@ class TextEmailBlastModal extends React.Component {
           <Modal.Title>
             <strong>Text / Email Blast</strong>
           </Modal.Title>
-          <a className="close" onClick={props.onHide}>
+          <a className="close" onClick={onHide}>
             <i className="icomoon-icon_close" />
           </a>
         </Modal.Header>
         <Modal.Body>
-          <span className="modal-opener coming-soon-wrapper">
+          <span className="modal-opener" onClick={toggleTextBlast}>
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-icon_comment_alt" />
-                <span className="text coming-soon-old">Text Blast</span>
-                <span className="text coming-soon-new" />
+                <span className="text">Text Blast</span>
               </div>
             </div>
           </span>

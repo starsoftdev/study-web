@@ -54,10 +54,6 @@ export class DashboardMessagingNumbersTable extends React.Component { // eslint-
 
     let messagingNumbers = this.props.messagingNumber.details;
 
-    if (this.props.messagingNumberSearchFormValues && this.props.messagingNumberSearchFormValues.messagingNumber) {
-      messagingNumbers = messagingNumbers.filter(item => item.id === this.props.messagingNumberSearchFormValues.messagingNumber);
-    }
-
     if (this.props.paginationOptions.activeDirection && this.props.paginationOptions.activeSort) {
       const dir = ((this.props.paginationOptions.activeDirection === 'down') ? 'desc' : 'asc');
       messagingNumbers = _.orderBy(messagingNumbers, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
