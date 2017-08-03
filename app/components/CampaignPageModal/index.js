@@ -18,8 +18,8 @@ import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
-import { selectDashboardCampaigns, selectDashboardEditCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
-import { fetchCampaignsByStudy, editCampaign } from '../../containers/HomePage/AdminDashboard/actions';
+import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
+import { fetchCampaignsByStudy, editCampaign, deleteCampaign } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'campaignPageForm';
 
@@ -33,8 +33,10 @@ export class CampaignPageModal extends React.Component {
     study: PropTypes.object,
     studyCampaigns: PropTypes.object,
     updateCampaignProcess: PropTypes.object,
+    deleteCampaignProcess: PropTypes.object,
     fetchCampaignsByStudy: PropTypes.func,
     submitForm: PropTypes.func,
+    deleteCampaign: PropTypes.func,
     formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
@@ -52,6 +54,7 @@ export class CampaignPageModal extends React.Component {
 
     this.campaignChanged = this.campaignChanged.bind(this);
     this.submitCampaignForm = this.submitCampaignForm.bind(this);
+    this.deleteCampaignClick = this.deleteCampaignClick.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -99,8 +102,16 @@ export class CampaignPageModal extends React.Component {
     submitForm(submitValues);
   }
 
+  deleteCampaignClick() {
+    const { formValues, study } = this.props;
+    this.props.deleteCampaign({
+      studyId: study.study_id,
+      campaignId: formValues.campaign_id,
+    });
+  }
+
   render() {
-    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess } = this.props;
+    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
 
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
@@ -242,6 +253,12 @@ export class CampaignPageModal extends React.Component {
                 </div>
 
                 <div className="field-row text-right">
+                  <a className="btn btn-gray upload-btn" onClick={this.deleteCampaignClick}>
+                    {deleteCampaignProcess.deleting
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>Delete</span>
+                    }
+                  </a>
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {updateCampaignProcess.saving
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
@@ -261,6 +278,7 @@ export class CampaignPageModal extends React.Component {
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectDashboardCampaigns(),
   updateCampaignProcess: selectDashboardEditCampaignProcess(),
+  deleteCampaignProcess: selectDashboardDeleteCampaignProcess(),
   formValues: selectValues(formName),
 });
 function mapDispatchToProps(dispatch) {
@@ -268,6 +286,7 @@ function mapDispatchToProps(dispatch) {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
     submitForm: (values) => dispatch(editCampaign(values)),
+    deleteCampaign: (values) => dispatch(deleteCampaign(values)),
   };
 }
 

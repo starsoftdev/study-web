@@ -85,7 +85,9 @@ import {
   EDIT_CAMPAIGN,
   EDIT_CAMPAIGN_SUCCESS,
   EDIT_CAMPAIGN_ERROR,
-
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -656,6 +658,27 @@ export function editCampaignSuccess(payload) {
 export function editCampaignError(payload) {
   return {
     type: EDIT_CAMPAIGN_ERROR,
+    payload,
+  };
+}
+
+export function deleteCampaign(payload) {
+  return {
+    type: DELETE_CAMPAIGN,
+    payload,
+  };
+}
+
+export function deleteCampaignSuccess(payload) {
+  return {
+    type: DELETE_CAMPAIGN_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteCampaignError(payload) {
+  return {
+    type: DELETE_CAMPAIGN_ERROR,
     payload,
   };
 }
