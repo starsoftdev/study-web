@@ -39,13 +39,28 @@ class FilterStudyPatientsForm extends Component {
   constructor(props) {
     super(props);
     this.searchPatient = this.searchPatient.bind(this);
-
+    this.onSubmit = this.onSubmit.bind(this);
     this.state = {
       campaign: null,
     };
   }
 
   componentWillMount() {
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
+    let newCampaign = campaign;
+    let newSource = source;
+    if (campaign === -1) {
+      newCampaign = null;
+    }
+    if (source === -1) {
+      newSource = null;
+    }
+    fetchPatients(studyId, search, newCampaign, newSource);
+    fetchStudyTextNewStats(studyId, newCampaign, newSource);
   }
 
   searchPatient(event, type) {
@@ -88,7 +103,6 @@ class FilterStudyPatientsForm extends Component {
     const {
       campaignOptions,
       sourceOptions,
-      handleSubmit,
       submitting,
       loading,
       studyId,
@@ -100,7 +114,7 @@ class FilterStudyPatientsForm extends Component {
     } = this.props;
     /* changing the source for display purposes only */
     return (
-      <form className="form-search clearfix" onSubmit={handleSubmit}>
+      <form className="form-search clearfix" onSubmit={this.onSubmit}>
         <StudyActionButtons
           studyId={studyId}
           search={search}
@@ -112,7 +126,11 @@ class FilterStudyPatientsForm extends Component {
         <div className="fields-holder">
           <div className="search-area pull-left no-left-padding">
             <div className="field">
-              <Button className="btn-enter">
+              <Button
+                className="btn-enter"
+                onClick={this.onSubmit}
+                type="submit"
+              >
                 <i className="icomoon-icon_search2" />
               </Button>
               <Debounce time="200" handler="onChange">
@@ -123,7 +141,6 @@ class FilterStudyPatientsForm extends Component {
                   id="search"
                   className="keyword-search"
                   placeholder="Search"
-                  onChange={(event) => this.searchPatient(event, 'search')}
                 />
               </Debounce>
             </div>
