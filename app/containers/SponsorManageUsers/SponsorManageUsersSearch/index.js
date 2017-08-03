@@ -24,6 +24,8 @@ export class SponsorManageUsersSearch extends React.Component {
     updateData: PropTypes.func,
     protocols: PropTypes.array,
     currentUser: React.PropTypes.object,
+    filterAdmins: PropTypes.func,
+    filterProtocols: PropTypes.func,
   };
 
   constructor(props) {
@@ -32,11 +34,16 @@ export class SponsorManageUsersSearch extends React.Component {
     this.state = {
       addUserModalOpen: false,
       searchTimer: null,
+      protocolName: '',
+      adminName: '',
     };
 
     this.closeAddUserModal = this.closeAddUserModal.bind(this);
     this.openAddUserModal = this.openAddUserModal.bind(this);
     this.addNewUser = this.addNewUser.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAdminQueryChange = this.handleAdminQueryChange.bind(this);
+    this.handleProtocolQueryChange = this.handleProtocolQueryChange.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -46,6 +53,33 @@ export class SponsorManageUsersSearch extends React.Component {
       this.props.updateData();
       this.closeAddUserModal();
     }
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // this.props.filterProtocols(this.state.protocolName);
+    this.props.filterAdmins(this.state.adminName);
+  }
+
+  handleProtocolQueryChange(index) {
+    const sel = parseInt(index !== null ? index : 0);
+    let sName = _.find(this.props.protocols, { id: parseInt(index) });
+    sName = (sName && sName.number) ? sName.number : null;
+    if (sel === 0) {
+      this.setState({
+        protocolName: '',
+      }, () => { this.props.filterProtocols(sName); });
+    } else {
+      this.setState({
+        protocolName: (this.props.protocols[sel - 1] && this.props.protocols[sel - 1].number) ? this.props.protocols[sel - 1].number : null,
+      }, () => { this.props.filterProtocols(sName); });
+    }
+  }
+
+  handleAdminQueryChange(event) {
+    this.setState({
+      adminName: event.target.value,
+    });
   }
 
   closeAddUserModal() {
@@ -75,7 +109,7 @@ export class SponsorManageUsersSearch extends React.Component {
     const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
 
     return (
-      <form action="#" className="form-search clearfix">
+      <form action="#" className="form-search clearfix" onSubmit={this.handleSubmit}>
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <a disabled={!isAllowToEdit} className="btn btn-primary" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
@@ -87,7 +121,7 @@ export class SponsorManageUsersSearch extends React.Component {
         <div className="fields-holder">
           <div className="search-area pull-left">
             <div className="has-feedback ">
-              <Button className="btn-enter">
+              <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
@@ -96,6 +130,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 type="text"
                 placeholder="Search"
                 className="keyword-search"
+                onChange={this.handleAdminQueryChange}
               />
             </div>
           </div>
@@ -106,6 +141,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 component={ReactSelect}
                 placeholder="Select Protocol"
                 options={[{ label: 'All', value: 'all' }].concat(options)}
+                onChange={this.handleProtocolQueryChange}
               />
             </div>
           </div>

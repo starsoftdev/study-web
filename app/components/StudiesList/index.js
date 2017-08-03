@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
 import _, { find } from 'lodash';
 import { touch, reset } from 'redux-form';
+import ReactTooltip from 'react-tooltip';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
@@ -24,6 +25,7 @@ import { upgradeStudyFields } from '../../components/UpgradeStudyForm/validator'
 import { renewStudyFields } from '../../components/RenewStudyForm/validator';
 import { editStudyFields } from '../../components/EditStudyForm/validator';
 import StudyItem from './StudyItem';
+import pqsImage from '../../assets/images/pqs.png';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -695,7 +697,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                     <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>LOCATION<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
-                    <th className="default-cursor"><span className="icomoon-credit" data-original-title="Patient Messaging Suite" /></th>
+                    <th className="default-cursor">
+                      <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip="Patient Qualification Suite" />
+                      <ReactTooltip id="pqs-logo" type="info" class="tooltipClass wide" effect="solid" />
+                    </th>
                     <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>STATUS<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>START DATE<i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="endDate" className={(this.props.paginationOptions.activeSort === 'endDate') ? this.props.paginationOptions.activeDirection : ''}>END DATE<i className="caret-arrow" /></th>

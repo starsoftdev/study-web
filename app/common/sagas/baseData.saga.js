@@ -11,6 +11,7 @@ import { push } from 'react-router-redux';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
+import { fetchPatientMessagesSucceeded } from '../../containers/HomePage/actions';
 import { setItem } from '../../utils/localStorage';
 
 import {
@@ -25,7 +26,6 @@ import {
   SAVE_CARD,
   DELETE_CARD,
   ADD_CREDITS,
-
   FETCH_CLIENT_SITES,
   FETCH_SITE_PATIENTS,
   FETCH_CLIENT_CREDITS,
@@ -68,6 +68,7 @@ import { readStudyPatientMessagesSuccess, readStudyPatientMessagesError } from '
 
 import {
   SUBMIT_TO_CLIENT_PORTAL,
+  SUBMIT_TO_SPONSOR_PORTAL,
 } from '../../containers/DashboardPortalsPage/constants';
 
 import {
@@ -147,7 +148,6 @@ import {
   fetchCroError,
   fetchUsersByRoleSuccess,
   fetchUsersByRoleError,
-  setUserData,
   getCnsInfoSuccess,
   getCnsInfoError,
   submitCnsSuccess,
@@ -199,6 +199,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
   yield fork(submitToClientPortalWatcher);
+  yield fork(submitToSponsorPortalWatcher);
   yield fork(getCnsInfoWatcher);
   yield fork(submitCnsWatcher);
   yield fork(readStudyPatientMessages);
@@ -569,6 +570,7 @@ export function* fetchPatientMessageUnreadCountWatcher() {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
       const response = yield call(request, requestURL);
       yield put(patientMessageUnreadCountFetched(response));
+      yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
       console.trace(err);
     }
@@ -1141,12 +1143,24 @@ export function* submitToClientPortalWatcher() {
 
 export function* submitToClientPortalWorker(action) {
   try {
-    const requestURL = `${API_URL}/users/${action.userId}/get-full-user-info`;
-    const response = yield call(request, requestURL);
-
-    yield call(setItem, 'user_id', response.id);
-    yield put(setUserData(response));
+    yield call(setItem, 'user_id', action.userId);
     yield put(push('/app'));
+    window.location.reload(false);
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong');
+    yield put(toastrActions.error('', errorMessage));
+  }
+}
+
+export function* submitToSponsorPortalWatcher() {
+  yield* takeLatest(SUBMIT_TO_SPONSOR_PORTAL, submitToSponsorPortalWorker);
+}
+
+export function* submitToSponsorPortalWorker(action) {
+  try {
+    yield call(setItem, 'user_id', action.userId);
+    yield put(push('/app'));
+    window.location.reload(false);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
     yield put(toastrActions.error('', errorMessage));
@@ -1182,8 +1196,6 @@ export function* submitCnsWorker(action) {
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, options);
-    console.log('response', response);
-
     yield put(submitCnsSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');

@@ -31,6 +31,8 @@ SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
 SUBMIT_SCHEDULE,
 DELETE_PATIENT,
 DOWNLOAD_CLIENT_REPORT,
+GENERATE_PATIENT_REFERRAL,
+DOWNLOAD_PATIENT_REFERRAL,
 } from './constants';
 
 import {
@@ -131,30 +133,32 @@ function* fetchStudyDetails() {
 }
 
 function* fetchStudyViewsStat(action) { // eslint-disable-line
-  const authToken = getItem('auth_token');
-  if (!authToken) {
-    return;
-  }
+  // const authToken = getItem('auth_token');
+  // if (!authToken) {
+  //   return;
+  // }
 
   // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
+  // const { studyId, campaignId } = action;
 
-  try {
-    let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
-    if (campaignId) {
-      requestURL += `?campaignId=${campaignId}`;
-    }
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(studyViewsStatFetched(response));
-  } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
-    if (e.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
+  // try {
+    // TODO fix landing page views endpoint to have better performance
+    // let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    // if (campaignId) {
+    //   requestURL += `?campaignId=${campaignId}`;
+    // }
+    // const response = yield call(request, requestURL, {
+    //   method: 'GET',
+    // });
+    // yield put(studyViewsStatFetched(response));
+  yield put(studyViewsStatFetched(0));
+  // } catch (e) {
+  //   const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+  //   yield put(toastrActions.error('', errorMessage));
+  //   if (e.status === 401) {
+  //     yield call(() => { location.href = '/login'; });
+  //   }
+  // }
 }
 
 // TODO re-enable when optimized for high traffic
@@ -307,6 +311,60 @@ export function* downloadReport() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while downloading report. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* generateReferral() {
+  while (true) {
+    // listen for the GENERATE_PATIENT_REFERRAL action
+    const { patientId, studyId } = yield take(GENERATE_PATIENT_REFERRAL);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/generatePatientReferral?access_token=${authToken}&patientId=${patientId}&studyId=${studyId}`;
+      yield call(request, requestURL, {
+        method: 'GET',
+      });
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', 'Something went wrong while generating patient referral. Please try again later.');
+      yield put(toastrActions.error('', errorMessage));
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* downloadReferral() {
+  while (true) {
+    // listen for the DOWNLOAD_PATIENT_REFERRAL action
+    const { reportName, studyId } = yield take(DOWNLOAD_PATIENT_REFERRAL);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/getReferralPDF?access_token=${authToken}&reportName=${reportName}&studyId=${studyId}`;
+      location.replace(requestURL);
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', 'Something went wrong while downloading patient referral. Please try again later.');
       yield put(toastrActions.error('', errorMessage));
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -859,6 +917,8 @@ export function* fetchStudySaga() {
     const watcherT = yield fork(submitDeleteNote);
     const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
+    const watcherX = yield fork(downloadReferral);
+    const watcherY = yield fork(generateReferral);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -883,6 +943,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherT);
     yield cancel(watcherV);
     yield cancel(watcherW);
+    yield cancel(watcherX);
+    yield cancel(watcherY);
     yield cancel(deletePatientWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage

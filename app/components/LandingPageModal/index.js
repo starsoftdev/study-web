@@ -167,7 +167,7 @@ export class LandingPageModal extends React.Component {
         fetchLanding(this.state.selected.study_id);
         resetChangeAddState();
         this.closeStudyAddModal();
-      });*/
+      }); */
     }
   }
 
@@ -260,7 +260,7 @@ export class LandingPageModal extends React.Component {
                     { label: 'Japan', value: 'Japan', id: 16 },
                     { label: 'Luxembourg', value: 'Luxembourg', id: 17 },
                     { label: 'Malaysia', value: 'Malaysia', id: 18 },
-    ];*/
+    ]; */
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('landing-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
@@ -358,7 +358,7 @@ export class LandingPageModal extends React.Component {
                       customSearchIconClass="icomoon-icon_search2"
                     />
                   </div>
-                </div>*/}
+                </div> */}
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Sign up Now Button</label>
@@ -423,7 +423,7 @@ export class LandingPageModal extends React.Component {
                         </a>
                       </div>
                     }
-                    {/* <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>*/}
+                    {/* <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label> */}
                     <a
                       className="btn btn-gray upload-btn"
                       onClick={this.openStudyAddModal}
@@ -437,7 +437,7 @@ export class LandingPageModal extends React.Component {
                       type="file"
                       className="hidden"
                       onChange={this.handleFileChange}
-                    />*/}
+                    /> */}
                     {/* TODO need to put an error message up so that people know to upload a file. */}
                     {/* formError
                     ? <div className="has-error">{formErrors.studyAd}</div>

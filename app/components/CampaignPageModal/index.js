@@ -18,8 +18,8 @@ import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
-import { selectDashboardCampaigns, selectDashboardEditCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
-import { fetchCampaignsByStudy, editCampaign } from '../../containers/HomePage/AdminDashboard/actions';
+import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
+import { fetchCampaignsByStudy, editCampaign, deleteCampaign } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'campaignPageForm';
 
@@ -33,8 +33,10 @@ export class CampaignPageModal extends React.Component {
     study: PropTypes.object,
     studyCampaigns: PropTypes.object,
     updateCampaignProcess: PropTypes.object,
+    deleteCampaignProcess: PropTypes.object,
     fetchCampaignsByStudy: PropTypes.func,
     submitForm: PropTypes.func,
+    deleteCampaign: PropTypes.func,
     formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
@@ -48,16 +50,18 @@ export class CampaignPageModal extends React.Component {
 
     this.state = {
       selectedCampaign: 0,
+      isCampaignHasPatients: false,
     };
 
     this.campaignChanged = this.campaignChanged.bind(this);
     this.submitCampaignForm = this.submitCampaignForm.bind(this);
+    this.deleteCampaignClick = this.deleteCampaignClick.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchCampaignsByStudy(this.props.study.study_id);
-      this.setState({ selectedCampaign : 0 });
+      this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
@@ -69,7 +73,7 @@ export class CampaignPageModal extends React.Component {
     const campaignIndex = studyCampaigns.findIndex(item => (item.id === e));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       const foundCampaign = studyCampaigns[campaignIndex];
-      this.setState({ selectedCampaign : campaignIndex });
+      this.setState({ selectedCampaign : campaignIndex, isCampaignHasPatients: (!!((foundCampaign.patients && foundCampaign.patients.length > 0))) });
       const { change } = this.props;
       change('campaign_id', foundCampaign.id);
       change('datefrom', foundCampaign.dateFrom);
@@ -93,12 +97,22 @@ export class CampaignPageModal extends React.Component {
     };
     if (formValues.custom_patient_goal) {
       submitValues.customPatientGoal = +formValues.custom_patient_goal;
+    } else {
+      submitValues.customPatientGoal = null;
     }
     submitForm(submitValues);
   }
 
+  deleteCampaignClick() {
+    const { formValues, study } = this.props;
+    this.props.deleteCampaign({
+      studyId: study.study_id,
+      campaignId: formValues.campaign_id,
+    });
+  }
+
   render() {
-    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess } = this.props;
+    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
 
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
@@ -107,20 +121,19 @@ export class CampaignPageModal extends React.Component {
       }
       return { label: c.orderNumber, value: c.id };
     });
-
-    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : null;
-    const dateTo = formValues.dateto ? moment(formValues.dateto) : null;
-    let minDate = null;
-    let maxDate = null;
+    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : undefined;
+    const dateTo = formValues.dateto ? moment(formValues.dateto) : undefined;
+    let fromMinDate = null;
+    let toMaxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
       if (campaignIndex > 0) {
-        maxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom);
+        toMaxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom).utc();
       }
       // if campaign is not the last, then it has a next campaign, we set the min date accordingly
       if (campaignIndex < studyCampaigns.details.length - 1) {
-        minDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo);
+        fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
       }
     }
 
@@ -159,6 +172,7 @@ export class CampaignPageModal extends React.Component {
                       options={campaignOptions}
                       onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>
@@ -175,6 +189,7 @@ export class CampaignPageModal extends React.Component {
                       searchable
                       options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
+                      clearable={false}
                     />
                   </div>
                 </div>
@@ -189,8 +204,9 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateFrom}
-                      minDate={minDate}
-                      maxDate={moment(moment(formValues.dateto).subtract(1, 'days') || maxDate)}
+                      minDate={fromMinDate}
+                      maxDate={moment(formValues.dateto).subtract(1, 'days').utc()}
+                      useUTC
                     />
                   </div>
                 </div>
@@ -205,8 +221,9 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateTo}
-                      minDate={moment(formValues.datefrom).add(1, 'days')}
-                      maxDate={maxDate}
+                      minDate={moment(formValues.datefrom).add(1, 'days').utc()}
+                      maxDate={toMaxDate}
+                      useUTC
                     />
                   </div>
                 </div>
@@ -237,6 +254,12 @@ export class CampaignPageModal extends React.Component {
                 </div>
 
                 <div className="field-row text-right">
+                  <div className={classNames('btn btn-gray upload-btn', { disabled: this.state.isCampaignHasPatients })} onClick={() => (!this.state.isCampaignHasPatients ? this.deleteCampaignClick() : null)}>
+                    {deleteCampaignProcess.deleting
+                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                      : <span>Delete</span>
+                    }
+                  </div>
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                     {updateCampaignProcess.saving
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
@@ -256,6 +279,7 @@ export class CampaignPageModal extends React.Component {
 const mapStateToProps = createStructuredSelector({
   studyCampaigns: selectDashboardCampaigns(),
   updateCampaignProcess: selectDashboardEditCampaignProcess(),
+  deleteCampaignProcess: selectDashboardDeleteCampaignProcess(),
   formValues: selectValues(formName),
 });
 function mapDispatchToProps(dispatch) {
@@ -263,6 +287,7 @@ function mapDispatchToProps(dispatch) {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
     submitForm: (values) => dispatch(editCampaign(values)),
+    deleteCampaign: (values) => dispatch(deleteCampaign(values)),
   };
 }
 
