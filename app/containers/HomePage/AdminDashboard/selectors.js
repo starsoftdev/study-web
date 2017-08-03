@@ -164,6 +164,11 @@ const selectDashboardEditCampaignProcess = () => createSelector(
   (substate) => substate.editCampaignProcess
 );
 
+const selectDashboardDeleteCampaignProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.deleteCampaignProcess
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -197,4 +202,5 @@ export {
   selectStudyIndicationTags,
   selectDashboardCampaigns,
   selectDashboardEditCampaignProcess,
+  selectDashboardDeleteCampaignProcess,
 };
