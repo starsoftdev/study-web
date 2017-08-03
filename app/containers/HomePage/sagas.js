@@ -1111,8 +1111,19 @@ export function* fetchCampaignsByStudyWorker(action) {
   try {
     const requestURL = `${API_URL}/studies/${action.payload}/campaigns`;
 
+    const filterObj = {
+      include: [{
+        relation: 'patients',
+      }],
+    };
+
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+    };
+
     const params = {
       method: 'GET',
+      query: queryParams,
     };
     const response = yield call(request, requestURL, params);
 
