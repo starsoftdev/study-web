@@ -219,12 +219,27 @@ export function* fetchPatientsWatcher() {
 
 export function* getTotalPatientsCountWatcher() {
   while (true) {
-    yield take(GET_TOTAL_PATIENTS_COUNT);
+    const { clientId } = yield take(GET_TOTAL_PATIENTS_COUNT);
+    const filterObj = {
+      include: [
+        'indications',
+        'source',
+        { campaigns: 'site' },
+        { studyPatientCategory: ['patientCategory'] },
+      ],
+      where: {
+        and: [],
+      },
+    };
 
+    const queryParams = {
+      filter: JSON.stringify(filterObj),
+      clientId,
+    };
+    const queryString = composeQueryString(queryParams);
     try {
-      const requestURL = `${API_URL}/patients/count`;
+      const requestURL = `${API_URL}/patients/getTotalPatient?${queryString}`;
       const response = yield call(request, requestURL);
-      console.log('***111***', requestURL);
       yield put(getTotalPatientsCountSuccess(response));
     } catch (err) {
       yield put(getTotalPatientsCountError(err));

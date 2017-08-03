@@ -40,7 +40,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchPatientCategories();
     fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
-    getTotalPatientsCount();
+    getTotalPatientsCount(currentUser.roleForClient.client_id);
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -112,7 +112,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
-    getTotalPatientsCount: () => dispatch(getTotalPatientsCount()),
+    getTotalPatientsCount: (clientId) => dispatch(getTotalPatientsCount(clientId)),
     resetTextBlast: () => dispatch(resetTextBlast()),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),
