@@ -72,8 +72,12 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     let shouldBeOpened = false;
 
-    const assignedUsersContent = this.props.item.sponsorUsers.map((item, index) => {
-      if (this.props.userFilter && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(this.props.userFilter.toLowerCase()) !== -1) {
+    const { userFilter } = this.props;
+
+    const filtredAssignedUsers = this.props.item.sponsorUsers.filter(item => (!userFilter || `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1));
+
+    const assignedUsersContent = filtredAssignedUsers.map((item, index) => {
+      if (userFilter && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1) {
         shouldBeOpened = true;
       }
 
@@ -125,7 +129,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td className="col6">
 
-          <span>ASSIGNED USERS ({assignedUsersContent.length ? assignedUsersContent.length : 0})</span>
+          <span>ASSIGNED USERS ({this.props.item.sponsorUsers.length ? this.props.item.sponsorUsers.length : 0})</span>
           {(this.state.assignedUsersCollapsed && !shouldBeOpened)
             ? <a className="btn add-more-trs" onClick={this.toggleAssignedUsers}></a>
             : <a className="btn add-more-trs active " onClick={this.toggleAssignedUsers}></a>
