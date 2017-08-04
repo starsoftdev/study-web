@@ -143,8 +143,12 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
 
   handleSubmit(event) {
     event.preventDefault();
-    this.filterClientSites(this.state.siteName);
-    this.filterClientRoles(this.state.userName);
+    // this.filterClientSites(this.state.siteName);
+    this.setState({
+      userName: this.userName,
+    }, () => {
+      this.filterClientRoles(this.state.userName);
+    });
   }
 
   handleSiteQueryChange(index) {
@@ -163,9 +167,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   }
 
   handleUserQueryChange(event) {
-    this.setState({
-      userName: event.target.value,
-    }, () => this.filterClientRoles(this.state.userName));
+    this.userName = event.target.value;
   }
 
   addSite(siteData) {
@@ -231,14 +233,14 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
           <Helmet title="Manage Sites / Users - StudyKIK" />
           <h2 className="main-heading">MANAGE SITES / USERS</h2>
           <div className="search-sites-users-panel form-group">
-            <form className="form-search clearfix" onSubmit={this.handleSubmit}>
+            <form action="#" className="form-search clearfix" onSubmit={this.handleSubmit}>
               <div className="fields-holder pull-left">
                 <div className="search-area pull-left no-left-padding">
                   <div className="field">
                     <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
                     </Button>
-                    <input onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search" />
+                    <input name="query" onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search" />
                   </div>
                 </div>
                 <div className="search-area pull-left">
