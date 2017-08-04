@@ -193,7 +193,7 @@ export class ReportViewSearch extends React.Component {
 
     const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : 'Date Range';
     let startDate = (predefined.startDate) ? predefined.startDate : moment();
-    let endDate= (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
+    let endDate = (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
     if (selectedTime.startDate && selectedTime.endDate) {
       startDate = moment().clone().subtract(30, 'days');
       endDate = moment();
