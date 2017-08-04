@@ -105,7 +105,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
     if (searchQuery !== '') {
       this.setState({
         adminFilterMethod: (admin) => {
-          const fullName = `${admin.firstName} ${admin.lastName}`;
+          const fullName = `${admin.first_name} ${admin.last_name}`;
           return fullName.toUpperCase().includes(searchQuery.toUpperCase()) || admin.email.toUpperCase().includes(searchQuery.toUpperCase());
         },
         adminName: searchQuery,
