@@ -27,9 +27,16 @@ export default function TextBlastModal(state = initialState, action) {
   const checkedPatients = {};
   let patients = {};
   let allPatients = false;
+  let uncheckedPatients = [];
   switch (action.type) {
     case ADD_PATIENTS_TO_TEXT_BLAST:
       patientsIdsToAdd = _.map(action.patients, patient => (patient.id));
+      uncheckedPatients = _.filter(state.values.uncheckedPatients, (id) => {
+        if (_.indexOf(patientsIdsToAdd, id) === -1) {
+          return true;
+        }
+        return false;
+      });
       return {
         ...state,
         values: {
@@ -37,12 +44,8 @@ export default function TextBlastModal(state = initialState, action) {
           patients: _.unionWith(state.values.patients, action.patients, (patient, patientToAdd) => (
             patient.id === patientToAdd.id
           )),
-          uncheckedPatients:_.filter(state.values.uncheckedPatients, (id) => {
-            if (_.indexOf(patientsIdsToAdd, id) === -1) {
-              return true;
-            }
-            return false;
-          }),
+          uncheckedPatients,
+          selectAll: uncheckedPatients.length === 0,
         },
       };
     case REMOVE_PATIENT_FROM_TEXT_BLAST:
@@ -54,6 +57,7 @@ export default function TextBlastModal(state = initialState, action) {
             patient.id !== action.patient[0].id
           )),
           uncheckedPatients: [...state.values.uncheckedPatients, action.patient[0].id],
+          selectAll: false,
         },
       };
     case REMOVE_PATIENTS_FROM_TEXT_BLAST:
@@ -65,6 +69,7 @@ export default function TextBlastModal(state = initialState, action) {
           patients: [],
           uncheckedPatients: patientsIdsToRemove,
           'all-patients': false,
+          selectAll: false,
         },
       };
     case RESET_TEXT_BLAST:
@@ -75,21 +80,37 @@ export default function TextBlastModal(state = initialState, action) {
           patients: [],
           uncheckedPatients: [],
           'all-patients': false,
+          selectAll: true,
         },
       };
     case FETCH_PATIENTS_SUCCESS:
-      patients = _.filter(action.payload, (patients) => {
-        if (_.indexOf(state.values.uncheckedPatients, patients.id) === -1) {
-          return { id: patients.id };
+      console.log('patients', action.payload);
+      patients = _.filter(action.payload, (patient) => {
+        if (_.find(state.values.patients, p => p.id === patient.id)) {
+          return true;
         }
-        if (!patients.unsubscribed) {
+        if (patient.unsubscribed || !state.values.selectAll) {
           return false;
         }
-        return { id: patients.id, unsubscribed: true };
+        if (_.indexOf(state.values.uncheckedPatients, patient.id) === -1) {
+          return true;
+        }
+        return false;
       });
+
+      console.log('filtered patients', patients);
       _.forEach(patients, (patient) => {
         if (!patient.unsubscribed) {
-          checkedPatients[`patient-${patient.id}`] = state.values.selectAll && true;
+          // if (state.values[`patient-${patient.id}`] === true) {
+          //   checkedPatients[`patient-${patient.id}`] = true;
+          // } else if (state.values[`patient-${patient.id}`] === false) {
+          //   checkedPatients[`patient-${patient.id}`] = false;
+          // } else {
+          //   checkedPatients[`patient-${patient.id}`] = (state.values['all-patients'] === true) && true;
+          // }
+          if (state.values.selectAll === true) {
+            checkedPatients[`patient-${patient.id}`] = true;
+          }
         }
       });
 
