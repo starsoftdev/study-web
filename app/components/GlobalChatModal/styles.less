@@ -1,22 +1,60 @@
 .global-chat-modal {
-  .modal-dialog{
-    width: auto;
+  bottom: 10px;
+  left: 0;
+  width: 450px;
+  height: 0;
+  margin: 10px;
+  position: absolute;
+  background: #fff;
+  outline: 2px solid #f78e1e;
+  transition: height 0.25s linear;
 
-    .modal-content {
-      max-width: 700px;
+  &.in {
+    z-index: 1001;
+    width: 450px;
+    height: 571px;
+    transition: height 0.25s linear;
+  }
+  .form-area {
+    width: 450px;
+    border: solid 2px #f78e1e;
+  }
+  .btn-close {
+    top: 50%;
+    right: 15px;
+    .size(20px);
+    color: #00afef;
+    margin: -10px 0 0;
+    background: #fff;
+    .font(11px, 16px);
+    position: absolute;
+    text-align: center;
+    border: solid 2px #00afef;
+    &:hover {
+      color: #76daff;
+      border-color: #76daff;
+      cursor: pointer;
+    }
+  }
 
-      .modal-header {
-        .modal-title {
-          text-transform: none;
-        }
-      }
-
-      .modal-body{
-        margin-top: -1px;
-        overflow: hidden;
-        .holder{
-          /*max-height: 64vh;*/
-        }
+  .form-head {
+    padding: 15px;
+    position: relative;
+    background: #f78e1e;
+    > .title {
+      .align;
+      color: #fff;
+      font-size: 21px;
+      min-width: 194px;
+      text-transform: uppercase;
+    }
+    .modal-opener {
+      .align;
+      color: #101010;
+      margin: 2px 0 0;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
       }
     }
   }
@@ -35,8 +73,8 @@
       cursor: pointer;
     }
     .scroll-holder {
-      max-height: 64vh;
-      height: 64vh;
+      max-height: 45vh;
+      height: 45vh;
       padding: 0;
     }
 
@@ -130,6 +168,34 @@
         }
       }
     }
+
+    .chat-area {
+      footer {
+        height: 90px;
+      }
+    }
+    
+  }
+
+  .prepareroom {
+    margin: 60px 30px 30px 30px;
+
+    .center {
+      text-align: center;
+    }
+
+    textarea {
+      height: 200px;
+    }
+
+    .field-row {
+      margin-top: 30px;
+    }
+
+    .field-row + .field-row {
+      margin-top: 150px;
+    }
+    
   }
 }
 .chart-popup{
