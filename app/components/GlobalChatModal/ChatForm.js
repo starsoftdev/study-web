@@ -13,18 +13,7 @@ import Button from 'react-bootstrap/lib/Button';
 import ChatText from '../../components/Input/ChatText';
 
 import formValidator from './validator';
-
-import { setProcessingStatus } from '../../containers/GlobalNotifications/actions';
-
-import {
-  selectProcessingStatus,
-} from '../../containers/GlobalNotifications/selectors';
-
-import {
-  selectCurrentUser,
-} from '../../containers/App/selectors';
-
-const formName = 'chatPatient';
+const formName = 'globalChatForm';
 
 @reduxForm({ form: formName, validate: formValidator })
 
@@ -34,8 +23,6 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
     isSaving: PropTypes.any,
     setProcessingStatus: PropTypes.func,
     handleSubmit: PropTypes.func,
-    selectedPatient: PropTypes.object,
-    sendStudyPatientMessages: PropTypes.func,
     reset: PropTypes.func,
   };
 
@@ -70,7 +57,7 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             component={ChatText}
             className="form-control"
             placeholder="Type a message..."
-            maxLength="160"
+            noLimit
           />
           <Button type="submit">
             Send
@@ -82,13 +69,10 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-  isSaving: selectProcessingStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
     reset: () => dispatch(reset(formName)),
   };
 }
