@@ -22,6 +22,12 @@ export class SocialArea extends React.Component { // eslint-disable-line react/p
     ev.preventDefault();
     const { landing } = this.props;
     window.open(`http://www.facebook.com/sharer.php?u=${location.href}`, landing.studyName, 'width=600, height=530');
+    /*
+      console.log('location', location.href);
+      const appId = '1754948814742578';
+      const url = `https://www.facebook.com/dialog/share?app_id=${appId}&display=page&href=${location.href}&redirect_uri=${location.href}`;
+      window.open(url, landing.studyName, 'width=600, height=530');
+    */
   }
 
   shareTwitter(ev) {
