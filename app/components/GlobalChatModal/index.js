@@ -5,296 +5,149 @@
 */
 
 import React from 'react';
-import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { Link } from 'react-router';
-import Modal from 'react-bootstrap/lib/Modal';
-
+import Collapse from 'react-bootstrap/lib/Collapse';
+import Button from 'react-bootstrap/lib/Button';
 import formValidator from './validator';
-import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
-import CenteredModal from '../../components/CenteredModal/index';
-import {
-  selectCurrentUser,
-  selectSitePatients,
-  selectPatientMessages,
-  selectClientCredits,
-  selectGlobalPMSPaginationOptions,
-} from '../../containers/App/selectors';
-import { readStudyPatientMessages } from '../../containers/StudyPage/actions';
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
-
 import ChatForm from './ChatForm';
-
-import {
-  fetchSitePatients,
-  searchSitePatients,
-  fetchPatientMessages,
-  markAsReadPatientMessages,
-  updateSitePatients,
-  fetchClientCredits,
-  addMessagesCountStat,
-} from '../../containers/App/actions';
-import {
-  selectSocket,
-} from '../../containers/GlobalNotifications/selectors';
-
-import {
-  sendStudyPatientMessages,
-} from '../../containers/GlobalNotifications/actions';
-import { incrementStudyUnreadMessages, subtractStudyUnreadMessages } from '../../containers/HomePage/actions';
 
 @reduxForm({ form: 'globalChat', validate: formValidator })
 @connect(mapStateToProps, null)
-
 class GlobalChatModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     helpName: React.PropTypes.string,
     currentUser: React.PropTypes.object,
-    sitePatients: React.PropTypes.object,
-    patientMessages: React.PropTypes.object,
     showModal: React.PropTypes.bool,
     closeModal: React.PropTypes.func,
-    socket: React.PropTypes.any,
-    fetchSitePatients: React.PropTypes.func,
-    searchSitePatients: React.PropTypes.func,
-    updateSitePatients: React.PropTypes.func,
-    fetchPatientMessages: React.PropTypes.func,
-    sendStudyPatientMessages: React.PropTypes.func,
-    markAsReadPatientMessages: React.PropTypes.func,
-    setChatTextValue: React.PropTypes.func,
-    clientCredits: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
     handleSubmit: React.PropTypes.func,
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     change: React.PropTypes.func,
-    globalPMSPaginationOptions: React.PropTypes.object,
-    incrementStudyUnreadMessages: React.PropTypes.func,
-    readStudyPatientMessages: React.PropTypes.func,
-    addMessagesCountStat: React.PropTypes.func,
-    subtractStudyUnreadMessages: React.PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
-    this.onSoundFinished = this.onSoundFinished.bind(this);
-    this.startSound = this.startSound.bind(this);
-    this.selectPatient = this.selectPatient.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.loadItems = this.loadItems.bind(this);
+    this.handleStartChatting = this.handleStartChatting.bind(this);
+
     this.state = {
-      selectedPatient: { id: 0 },
-      socketBinded: false,
-      playSound: Sound.status.STOPPED,
-      searchBy: null,
-      searchTimer: null,
+      openModal: false,
+      readyForChat: false,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser } = newProps;
-    if (this.props.socket && this.state.socketBinded === false) {
-      this.props.socket.on('notifyMessage', (newMessage) => {
-        const socketMessage = newMessage;
-        if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
-          this.props.fetchClientCredits(currentUser.id);
-          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.twilioTextMessage.direction === 'inbound') {
-            this.startSound();
-            this.props.addMessagesCountStat(1);
-          }
-          this.props.updateSitePatients(socketMessage);
-          this.props.incrementStudyUnreadMessages(socketMessage.study_id);
-        }
-        if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === socketMessage.patient_id) {
-          this.props.fetchPatientMessages(this.state.selectedPatient.id);
-          this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
-        }
-      });
-      this.setState({ socketBinded: true });
-    }
-    if (!this.props.showModal && newProps.showModal) {
-      if (this.state.selectedPatient) {
-        this.props.fetchPatientMessages(this.state.selectedPatient.id);
-        this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
-      }
-      this.props.fetchSitePatients(currentUser.id);
-    }
-  }
-
-  componentDidUpdate() {
-    const scrollable = this.scrollable;
-    if (this.props.patientMessages && scrollable) {
-      setTimeout(() => {
-        scrollable.scrollTop = scrollable.scrollHeight;
-      }, 0);
-    }
-  }
-
-  onSoundFinished() {
-    this.setState({ playSound: Sound.status.STOPPED });
-  }
-
-  startSound() {
-    this.setState({ playSound: Sound.status.PLAYING });
-  }
-
-  selectPatient(item, initialSelect = false) {
-    if (item.id !== this.state.selectedPatient.id) {
-      this.setState({ selectedPatient: item });
-      // TODO remove this later
-      this.props.fetchPatientMessages(item.id);
-      this.props.markAsReadPatientMessages(item.id);
-      this.props.readStudyPatientMessages(item.id);
-      this.props.subtractStudyUnreadMessages(item.study_id, item.count_unread);
-      if (!initialSelect) {
-        this.props.setChatTextValue('');
-      }
-      this.props.change('name', '');
-      // this.handleKeyPress('');
-    }
-  }
-
-  handleKeyPress(e) {
-    let value;
-    if (e && e.target) {
-      value = e.target.value;
-    } else {
-      value = e;
-    }
-
-    if (this.state.searchTimer) {
-      clearTimeout(this.state.searchTimer);
-      this.setState({ searchTimer: null });
-    }
-    const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10, value);
-    }, 500);
-    this.setState({ searchTimer: timerH });
+    this.setState({
+      openModal: newProps.showModal,
+    });
   }
 
   handleClose() {
     this.props.closeModal();
+    this.setState({
+      readyForChat: false,
+    });
+  }
+
+  handleStartChatting() {
+    this.setState({
+      readyForChat: true,
+    });
   }
 
   loadItems() {
-    const limit = 10;
-    const offset = this.props.globalPMSPaginationOptions.page * 10;
-    this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
+    // const limit = 10;
+    // const offset = this.props.globalPMSPaginationOptions.page * 10;
+    // this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
+  }
+
+  renderChatRoom() {
+    return (
+      <div className="chatroom">
+        <section className="chat-area" id="chat-room1">
+          <div
+            className="scroll-holder"
+            ref={(scrollable) => {
+              this.scrollable = scrollable;
+            }}
+          >
+            <article className="post-msg">
+              {}
+            </article>
+          </div>
+          <footer>
+            <ChatForm
+              selectedPatient={this.state.selectedPatient}
+              sendStudyPatientMessages={[]}
+            />
+          </footer>
+        </section>
+      </div>
+    );
+  }
+
+  renderPrepareRoom() {
+    return (
+      <div className="prepareroom">
+        <div className="field-row">
+          <textarea
+            className="form-control test"
+            placeholder="Type a message..."
+            onChange={this.textAreaChange}
+            ref={(textarea) => {
+              this.textarea = textarea;
+            }}
+          />
+        </div>
+        <div className="field-row center">
+          <Button onClick={this.handleStartChatting}>
+            Start Chatting
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   render() {
-    const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
-    const clientCredits = this.props.clientCredits;
-    const sitePatientArray = [];
-    sitePatients.details.forEach((item) => {
-      if (item.show === undefined || (item.show && item.show === true)) {
-        sitePatientArray.push(item);
-      }
-    });
-    const patientMessageListContents = patientMessages.details.map((item, index) => {
-      if (item.text_message_id) {
-        return (<MessageItem
-          messageData={item}
-          key={index}
-        />);
-      }
-      return (<CallItem
-        messageData={item}
-        key={index}
-      />);
-    });
-
-    let protocolNumber = '';
-    if (this.state.selectedPatient.protocol_number) {
-      protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
-    }
+    const { readyForChat, openModal } = this.state;
+    const title = readyForChat ? `Chatting with ${this.props.helpName}` : 'Live Chat';
     return (
-      <Modal
+      <Collapse
+        dimension="height"
+        in={openModal}
+        timeout={250}
         className="global-chat-modal"
-        id="chart-popup"
-        dialogComponentClass={CenteredModal}
-        show={this.props.showModal}
-        onHide={this.handleClose}
-        backdrop
-        keyboard
       >
-        <Modal.Header>
-          <Modal.Title>Chatting with {this.props.helpName}</Modal.Title>
-          <a className="lightbox-close close" onClick={this.handleClose}>
-            <i className="icomoon-icon_close" />
-          </a>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="holder clearfix">
-            <div className="chatroom">
-              <section className="chat-area" id="chat-room1">
-                <div
-                  className="scroll-holder"
-                  ref={(scrollable) => {
-                    this.scrollable = scrollable;
-                  }}
-                >
-                  <article className="post-msg">
-                    {patientMessageListContents}
-                  </article>
-                </div>
-                <footer>
-                  <ChatForm
-                    clientCredits={clientCredits}
-                    selectedPatient={this.state.selectedPatient}
-                    sendStudyPatientMessages={sendStudyPatientMessages}
-                  />
-                </footer>
-              </section>
-            </div>
+        <div className="form-area">
+          <div className="form-head">
+            <strong className="title">{title}</strong>
+            <a className="btn-close" onClick={this.handleClose}>
+              <i className="glyphicon glyphicon-menu-down" />
+            </a>
           </div>
-        </Modal.Body>
-      </Modal>
+          {
+            readyForChat ? this.renderChatRoom() : this.renderPrepareRoom()
+          }
+        </div>
+      </Collapse>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-  sitePatients: selectSitePatients(),
-  patientMessages: selectPatientMessages(),
-  clientCredits: selectClientCredits(),
-  socket: selectSocket(),
-  hasError: selectGlobalPMSFormError(),
-  formValues: selectGlobalPMSFormValues(),
-  globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
+
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (userId, offset, limit, search) => dispatch(fetchSitePatients(userId, offset, limit, search)),
-    searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
-    updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
-    fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),
-    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
-    readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
-    sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
-    setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
-    change: (field, value) => dispatch(change('globalPMS', field, value)),
-    incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
-    addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
-    subtractStudyUnreadMessages: (studyId, count) => dispatch(subtractStudyUnreadMessages(studyId, count)),
+    change: (field, value) => dispatch(change('globalChat', field, value)),
   };
 }
 
