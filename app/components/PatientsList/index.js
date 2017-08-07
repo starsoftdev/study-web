@@ -249,8 +249,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       }
     }
     let total = patients.total || totalPatients;
-    if (!textBlastFormValues.selectAllUncheckedManually && textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) {
-      total -= textBlastFormValues.uncheckedPatients.length;
+    if (!textBlastFormValues.selectAllUncheckedManually) {
+      total -= ((textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) ? textBlastFormValues.uncheckedPatients.length : 0);
     } else if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {
       total = textBlastFormValues.patients.length;
     }
