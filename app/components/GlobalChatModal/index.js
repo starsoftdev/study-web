@@ -11,8 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 import formValidator from './validator';
-import MessageItem from './MessageItem';
-import CallItem from './CallItem';
 import ChatForm from './ChatForm';
 
 @reduxForm({ form: 'globalChat', validate: formValidator })
