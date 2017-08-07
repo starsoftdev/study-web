@@ -8,12 +8,14 @@ import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
-
+import InfiniteScroll from 'react-infinite-scroller';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 import {
   selectNotifications,
+  selectPaginationOptions,
 } from '../../containers/GlobalNotifications/selectors';
 import {
   fetchNotifications,
@@ -86,13 +88,18 @@ export class NotificationsPage extends React.Component {
     currentUser: PropTypes.any,
     notifications: PropTypes.array,
     fetchNotifications: PropTypes.func,
+    paginationOptions: PropTypes.object,
     push: PropTypes.func,
   }
 
   constructor(props) {
     super(props);
 
+    console.log('props', props.notifications);
     const initialNotifications = sanitize(props.notifications);
+    this.loadMore = this.loadMore.bind(this);
+    this.handleClickItem = this.handleClickItem.bind(this);
+
     this.state = {
       notifications: initialNotifications,
       sortDescription: 0,     // 0: none, 1: asc, 2: desc
@@ -153,6 +160,15 @@ export class NotificationsPage extends React.Component {
     });
   }
 
+  loadMore() {
+    const { fetchNotifications, notifications, paginationOptions, currentUser } = this.props;
+    if (!paginationOptions.fetching) {
+      const offset = paginationOptions.page * 10;
+      const limit = 10;
+      fetchNotifications(currentUser.id, limit, offset);
+    }
+  }
+
   render() {
     const { sortDescription, sortDate, sortTime } = this.state;
     return (
@@ -165,25 +181,41 @@ export class NotificationsPage extends React.Component {
             <header>
               <h2>HISTORY</h2>
             </header>
-            <table className="table notifications">
-              <colgroup>
-                <col style={{ width: 'auto' }} />
-                <col style={{ width: '11%' }} />
-                <col style={{ width: '11%' }} />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow" /></th>
-                  <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow" /></th>
-                  <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow" /></th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} onClick={() => { this.handleClickItem(n); }} />)
-                }
-              </tbody>
-            </table>
+            <InfiniteScroll
+              className="test-test"
+              pageStart={0}
+              loadMore={this.loadMore}
+              initialLoad={false}
+              hasMore={this.props.paginationOptions.hasMoreItems}
+              loader={null}
+            >
+              <table className="table notifications">
+                <colgroup>
+                  <col style={{ width: 'auto' }} />
+                  <col style={{ width: '11%' }} />
+                  <col style={{ width: '11%' }} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow" /></th>
+                    <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow" /></th>
+                    <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow" /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} onClick={() => { this.handleClickItem(n); }} />)
+                  }
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colSpan="3">
+                      {this.props.paginationOptions.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </InfiniteScroll>
           </section>
         </section>
       </div>
@@ -194,12 +226,14 @@ export class NotificationsPage extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   notifications: selectNotifications,
+  paginationOptions: selectPaginationOptions,
 });
 
-const mapDispatchToProps = {
-  fetchNotifications,
-  push,
-};
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchNotifications: (userId, limit, offset) => dispatch(fetchNotifications(userId, limit, offset)),
+  };
+}
 
 export default connect(
   mapStateToProps,

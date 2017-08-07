@@ -35,6 +35,11 @@ const selectNotifications = createSelector(
   (substate) => substate.notifications,
 );
 
+const selectPaginationOptions = createSelector(
+  selectGlobalNotificationsDomain(),
+  (substate) => substate.paginationOptions,
+);
+
 const selectProcessingStatus = () => createSelector(
   selectGlobalNotificationsDomain(),
   (substate) => substate.processing,
@@ -48,4 +53,5 @@ export {
   selectProcessingStatus,
   selectUnreadNotificationsCount,
   selectNotifications,
+  selectPaginationOptions,
 };
