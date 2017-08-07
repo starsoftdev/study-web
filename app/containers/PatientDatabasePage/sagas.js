@@ -219,7 +219,7 @@ export function* fetchPatientsWatcher() {
 
 export function* getTotalPatientsCountWatcher() {
   while (true) {
-    const { clientId } = yield take(GET_TOTAL_PATIENTS_COUNT);
+    const { clientId, siteId } = yield take(GET_TOTAL_PATIENTS_COUNT);
     const filterObj = {
       include: [
         'indications',
@@ -231,6 +231,10 @@ export function* getTotalPatientsCountWatcher() {
         and: [],
       },
     };
+
+    if (siteId) {
+      filterObj.where.and.push({ site: siteId });
+    }
 
     const queryParams = {
       filter: JSON.stringify(filterObj),
