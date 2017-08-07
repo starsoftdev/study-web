@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
+import classNames from 'classnames';
 
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -182,6 +183,7 @@ class PatientActionButtons extends React.Component {
   }
 
   render() {
+    const isPatientSelected = (this.props.formValues.patients && this.props.formValues.patients.length > 0);
     return (
       <div>
         <div className="col pull-right no-right-padding">
@@ -194,7 +196,7 @@ class PatientActionButtons extends React.Component {
           <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
         </div>
         <div className="col pull-right">
-          <a className="btn btn-primary email lightbox-opener" onClick={this.toggleTextEmailBlastModal}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</a>
+          <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</div>
         </div>
         <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
         <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} name="patient" />
