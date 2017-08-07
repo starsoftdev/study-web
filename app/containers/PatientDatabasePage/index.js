@@ -83,6 +83,10 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.sort = paginationOptions.activeSort;
       queryParams.direction = paginationOptions.activeDirection;
     }
+    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+    if (!userIsAdmin && !queryParams.site) {
+      queryParams.site = _.find(this.props.sites, { id: currentUser.roleForClient.site_id }).id;
+    }
 
     if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
       || queryParams.includeIndication || queryParams.name || queryParams.site
