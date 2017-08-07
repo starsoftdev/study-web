@@ -8,6 +8,7 @@ import _ from 'lodash';
 import {
   SET_SOCKET_CONNECTION,
   SOCKET_CONNECTION_ESTABLISHED,
+  FETCH_NOTIFICATIONS,
   FETCH_NOTIFICATIONS_SUCCESS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS,
   RECEIVE_NOTIFICATION,
@@ -20,6 +21,14 @@ const initialState = {
   unreadNotificationsCount: 0,
   processing: false,
   socket: null,
+  paginationOptions: {
+    activeSort: null,
+    activeDirection: null,
+    hasMoreItems: false,
+    page: 1,
+    query: null,
+    fetching: false,
+  },
 };
 
 function globalNotificationsReducer(state = initialState, action) {
@@ -34,6 +43,15 @@ function globalNotificationsReducer(state = initialState, action) {
         ...state,
         socket: action.payload,
       };
+    case FETCH_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: state.notifications,
+        paginationOptions: {
+          ...state.paginationOptions,
+          fetching: true,
+        },
+      };
     case FETCH_NOTIFICATIONS_SUCCESS:
       newNotifications = _
         .chain(state.notifications)
@@ -45,6 +63,12 @@ function globalNotificationsReducer(state = initialState, action) {
       return {
         ...state,
         notifications: newNotifications,
+        paginationOptions: {
+          ...state.paginationOptions,
+          fetching: false,
+          page: action.page,
+          hasMoreItems: action.hasMoreItems,
+        },
       };
     case FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS:
       return {
