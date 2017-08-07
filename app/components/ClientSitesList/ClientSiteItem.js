@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { find } from 'lodash';
 import { selectClientRoles, selectSelectedSite, selectSelectedUser } from '../../containers/App/selectors';
 import { fetchSite, fetchUser } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -40,27 +39,6 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     this.renderSiteUsers = this.renderSiteUsers.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
-    const { roles, userFilter } = newProps;
-
-    if (newProps.userFilter !== this.props.userFilter) {
-      const filteredUser = find(roles.details, (item) => {
-        if (userFilter.trim() === '') {
-          return false;
-        }
-
-        const fullName = item.user ? `${item.user.firstName} ${item.user.lastName}` : '';
-
-        return fullName.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1;
-      });
-      if (filteredUser) {
-        this.setState({ assignedUsersCollapsed: false });
-      } else {
-        this.setState({ assignedUsersCollapsed: true });
-      }
-    }
-  }
-
   toggleAssignedUsers() {
     const collapsed = !this.state.assignedUsersCollapsed;
     this.setState({ assignedUsersCollapsed: collapsed });
@@ -91,18 +69,26 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     let assignedUsersContent;
     const allAssignedUsers = roles.details.filter(item => (item.user && !item.user.isArchived && !item.isAdmin && item.site_id === id));
     const filtredAssignedUsers = allAssignedUsers.filter(item => (!userFilter || `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1));
+
+    let shouldBeOpened = false;
+
     if (roles.details) {
-      assignedUsersContent = filtredAssignedUsers.map(item => ((
-        <div className="assigned-user" key={item.id}>
-          <span>{item.user.firstName} {item.user.lastName}</span>
-          <span className="edit-assigned-user">
-            {(this.assignedUserIsBeingFetched(item))
-              ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
-              : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
-            }
-          </span>
-        </div>
-      )));
+      assignedUsersContent = filtredAssignedUsers.map(item => {
+        if (userFilter && `${item.user.firstName} ${item.user.lastName}`.toLowerCase().indexOf(userFilter.toLowerCase()) !== -1) {
+          shouldBeOpened = true;
+        }
+        return (
+          <div className="assigned-user" key={item.id}>
+            <span>{item.user.firstName} {item.user.lastName}</span>
+            <span className="edit-assigned-user">
+              {(this.assignedUserIsBeingFetched(item))
+                ? <span><LoadingSpinner showOnlyIcon size={20} className="fetching-assigned-user" /></span>
+                : <a disabled={this.props.bDisabled} className="btn toggle edit-icon" onClick={() => (this.props.bDisabled ? null : this.editAssignedUser(item))}><i className="pencil-square" /></a>
+              }
+            </span>
+          </div>
+        );
+      });
     } else {
       assignedUsersContent = [];
     }
@@ -111,12 +97,12 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
       <td className="assigned-users">
         <div className="toggle-assigned-users">
           <span>ASSIGNED USERS ({allAssignedUsers.length ? allAssignedUsers.length : 0})</span>
-          {(this.state.assignedUsersCollapsed)
+          {(this.state.assignedUsersCollapsed && !shouldBeOpened)
             ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers} />
             : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers} />
           }
         </div>
-        {(!this.state.assignedUsersCollapsed) &&
+        {(!this.state.assignedUsersCollapsed || shouldBeOpened) &&
         <div className="assigned-users-list">{assignedUsersContent}</div>
         }
       </td>
