@@ -225,7 +225,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { patients, selectedPatientDetailsForForm, textBlastFormValues } = this.props;
+    const { patients, selectedPatientDetailsForForm, totalPatients, textBlastFormValues } = this.props;
     const chat = this.props.chat.active ? this.props.chat.details : null;
     const editPatientModalShown = this.editPatientModalShouldBeShown();
     const chatModalShown = this.chatModalShouldBeShown();
@@ -250,6 +250,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     }
 
     let total = patients.total;
+    if (!textBlastFormValues.queryParams.filter || textBlastFormValues.queryParams.filter.where.and.length === 0) {
+      total = totalPatients;
+    }
     if (!textBlastFormValues.selectAllUncheckedManually && textBlastFormValues.patients && textBlastFormValues.patients.length > 0) {
       total -= ((textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) ? textBlastFormValues.uncheckedPatients.length : 0);
     } else if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {

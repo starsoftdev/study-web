@@ -86,6 +86,7 @@ export default function TextBlastModal(state = initialState, action) {
           uncheckedPatients: [],
           'all-patients': false,
           selectAll: true,
+          queryParams: {},
         },
       };
     case FETCH_PATIENTS_SUCCESS:
