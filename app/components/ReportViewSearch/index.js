@@ -164,7 +164,7 @@ export class ReportViewSearch extends React.Component {
   }
 
   render() {
-    const { selectedTime } = this.state;
+    const { selectedTime, predefined } = this.state;
     const testOptions = [
       {
         label: 'test1',
@@ -192,6 +192,12 @@ export class ReportViewSearch extends React.Component {
     ];
 
     const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : 'Date Range';
+    let startDate = (predefined.startDate) ? predefined.startDate : moment();
+    let endDate = (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
+    if (selectedTime.startDate && selectedTime.endDate) {
+      startDate = moment().clone().subtract(30, 'days');
+      endDate = moment();
+    }
 
     return (
       <div className="search-controls form-search clearfix">
@@ -264,8 +270,8 @@ export class ReportViewSearch extends React.Component {
             <DateRange
               linkedCalendars
               ranges={defaultRanges}
-              startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
-              endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
+              startDate={startDate}
+              endDate={endDate}
               onInit={this.handleChange}
               onChange={this.handleChange}
             />
