@@ -70,11 +70,11 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
           } else {
             countryCode = parts[1];
           }
-          onSubmitForm({
-            from: 0,
-            indicationId: indication.id,
-            countryCode,
-          });
+          // onSubmitForm({
+          //   from: 0,
+          //   indicationId: indication.id,
+          //   countryCode,
+          // });
         }
       }
     }
