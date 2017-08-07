@@ -140,6 +140,8 @@ export class LandingPage extends React.Component {
 
   render() {
     const { subscriptionError, landingIsFetching, location, landing } = this.props;
+
+    console.log('landing', landing);
     if (landingIsFetching || landing === null) {
       return (
         <div id="main">
@@ -157,6 +159,10 @@ export class LandingPage extends React.Component {
             {
               name: 'og:description',
               content: landing.studyName,
+            },
+            {
+              name: 'og:image',
+              content: landing.imgSrc ? landing.imgSrc : '',
             },
             {
               name: 'twitter:description',
