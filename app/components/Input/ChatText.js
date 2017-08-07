@@ -12,7 +12,7 @@ class ChatText extends React.Component {
   }
 
   render() {
-    const { input, name, className, placeholder, maxLength, disabled } = this.props;
+    const { input, name, className, placeholder, maxLength, disabled, noLimit } = this.props;
     return (
       <div className="chat-text">
         <textarea
@@ -22,11 +22,15 @@ class ChatText extends React.Component {
           placeholder={placeholder}
           value={input.value}
           maxLength={maxLength}
+
           disabled={disabled}
         />
-        <span className="remaining-counter">
-          {parseInt(maxLength) - input.value.length}
-        </span>
+        {
+          !noLimit &&
+          <span className="remaining-counter">
+            {parseInt(maxLength) - input.value.length}
+          </span>
+        }
       </div>
     );
   }
@@ -37,6 +41,7 @@ ChatText.propTypes = {
   name: PropTypes.string.isRequired,
   className: PropTypes.string,
   placeholder: PropTypes.string,
+  noLimit: PropTypes.bool,
   maxLength: PropTypes.string,
   disabled: PropTypes.bool,
 };
