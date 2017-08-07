@@ -109,10 +109,11 @@ export function patientsFetchingError(payload) {
   };
 }
 
-export function getTotalPatientsCount(clientId) {
+export function getTotalPatientsCount(clientId, siteId) {
   return {
     type: GET_TOTAL_PATIENTS_COUNT,
     clientId,
+    siteId,
   };
 }
 
