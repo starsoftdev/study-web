@@ -64,7 +64,7 @@ export class CampaignPageModal extends React.Component {
       this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
-      this.props.studyCampaigns.details !== newProps.studyCampaigns.details) {
+      this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
       this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
     }
   }
