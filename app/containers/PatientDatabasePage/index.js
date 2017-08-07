@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { map, omit, omitBy, isUndefined } from 'lodash';
+import _, { map, omit, omitBy, isUndefined } from 'lodash';
 import { createStructuredSelector } from 'reselect';
 
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
@@ -9,7 +9,7 @@ import PatientsList from '../../components/PatientsList/index';
 import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from '../../containers/App/actions';
 import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast, getTotalPatientsCount } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
-import { selectCurrentUser } from '../App/selectors';
+import { selectCurrentUser, selectSiteLocations } from '../App/selectors';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -25,6 +25,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     clearPatientsList: PropTypes.func,
     getTotalPatientsCount: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
+    sites: PropTypes.array,
   };
 
   constructor(props) {
@@ -40,7 +41,21 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     fetchPatientCategories();
     fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
-    getTotalPatientsCount(currentUser.roleForClient.client_id);
+    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+    if (userIsAdmin) {
+      getTotalPatientsCount(currentUser.roleForClient.client_id, null);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { currentUser, getTotalPatientsCount } = this.props;
+    if (newProps.sites && newProps.sites.length > 0 && this.props.sites.length === 0) {
+      let defaultSiteLocation = null;
+      if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
+        defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
+      }
+      getTotalPatientsCount(currentUser.roleForClient.client_id, defaultSiteLocation);
+    }
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
@@ -67,6 +82,10 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     } else if (paginationOptions.activeSort && paginationOptions.activeDirection) {
       queryParams.sort = paginationOptions.activeSort;
       queryParams.direction = paginationOptions.activeDirection;
+    }
+    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+    if (!userIsAdmin && !queryParams.site) {
+      queryParams.site = _.find(this.props.sites, { id: currentUser.roleForClient.site_id }).id;
     }
 
     if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
@@ -103,6 +122,7 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectPaginationOptions(),
   patients: selectPatients(),
   currentUser: selectCurrentUser(),
+  sites: selectSiteLocations(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -112,7 +132,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchPatientCategories: searchParams => dispatch(fetchPatientCategories(searchParams)),
     fetchPatients: (clientId, searchParams, patients, searchFilter, isExport) => dispatch(fetchPatients(clientId, searchParams, patients, searchFilter, isExport)),
-    getTotalPatientsCount: (clientId) => dispatch(getTotalPatientsCount(clientId)),
+    getTotalPatientsCount: (clientId, siteId) => dispatch(getTotalPatientsCount(clientId, siteId)),
     resetTextBlast: () => dispatch(resetTextBlast()),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),

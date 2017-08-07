@@ -21,13 +21,19 @@ class FilterBar extends Component {
     currentUser: PropTypes.object,
   }
 
-  state = {
-    siteLocation: null,
-    indication: null,
-    protocol: null,
-    siteLocationOptions: [],
-    indicationOptions: [],
-    protocolOptions: [],
+  constructor(props) {
+    super(props);
+    const siteLocationOptions = addAllOption(props.siteLocationOptions);
+
+    this.state = {
+      siteLocation: null,
+      indication: null,
+      protocol: null,
+      siteLocationOptions,
+      indicationOptions: [],
+      protocolOptions: [],
+      patientName: '',
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,6 +56,11 @@ class FilterBar extends Component {
         }
       }
     }
+  }
+
+  handleSubmit = (ev) => {
+    ev.preventDefault();
+    this.handleFilterChange('patientName', this.state.patientName);
   }
 
   handleFilterChange = (field, option) => {
@@ -216,15 +227,25 @@ class FilterBar extends Component {
     }
 
     return (
-      <form action="#" className="form-search clearfix alt">
+      <form action="#" className="form-search clearfix alt" onSubmit={this.handleSubmit}>
         <div className="fields-holder">
           <div className="search-area pull-left no-left-padding">
             <div className="field">
-              <Button className="btn-enter">
+              <Button
+                className="btn-enter"
+                type="submit"
+                onClick={() => {
+                  this.handleFilterChange('patientName', this.state.patientName);
+                }}
+              >
                 <i className="icomoon-icon_search2" />
               </Button>
               <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
-                onChange={(ev) => this.handleFilterChange('patientName', ev.target)}
+                onChange={(ev) => {
+                  this.setState({
+                    patientName: ev.target,
+                  });
+                }}
               />
             </div>
           </div>
