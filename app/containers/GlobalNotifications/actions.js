@@ -102,18 +102,21 @@ export function connectionError(payload) {
   };
 }
 
-export function fetchNotifications(userId, searchParams) {
+export function fetchNotifications(userId, limit, offset) {
   return {
     type: FETCH_NOTIFICATIONS,
     userId,
-    searchParams,
+    limit,
+    offset,
   };
 }
 
-export function fetchNotificationsSucceeded(payload) {
+export function fetchNotificationsSucceeded(payload, hasMoreItems, page) {
   return {
     type: FETCH_NOTIFICATIONS_SUCCESS,
     payload,
+    hasMoreItems,
+    page,
   };
 }
 
