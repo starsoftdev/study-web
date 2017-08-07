@@ -54,7 +54,7 @@ function ReactSelect({
       multi={multi}
       simpleValue={!objectValue}
       autosize={false}
-      clearValueText={clearValueText || ''}
+      clearValueText={clearValueText || 'Clear Selection'}
       {...rest}
     />
   );
