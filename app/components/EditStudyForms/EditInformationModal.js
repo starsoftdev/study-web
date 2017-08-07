@@ -799,7 +799,7 @@ export class EditInformationModal extends React.Component {
                       type="text"
                       name="suvoda_protocol_id"
                       component={Input}
-                      placeholder="Suvoda Protocol ID"
+                      placeholder=""
                     />
                   </div>
                 </div>
