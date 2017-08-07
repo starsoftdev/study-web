@@ -8,7 +8,6 @@ import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import { actions as toastrActions } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -54,9 +53,22 @@ class TextBlastModal extends React.Component {
     this.textAreaChange = this.textAreaChange.bind(this);
     this.onHide = this.onHide.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       enteredCharactersLength: 0,
+      total: 0,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { formValues, patients } = newProps;
+    let total = patients.total;
+    if (!formValues.selectAllUncheckedManually) {
+      total -= ((formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) ? formValues.uncheckedPatients.length : 0);
+    } else if ((formValues.patients && formValues.patients.length > 0) || (formValues.patients && formValues.patients.length === 0 && formValues.uncheckedPatients.length > 0)) {
+      total = formValues.patients.length;
+    }
+    this.setState({ total });
   }
 
   onHide() {
@@ -92,14 +104,18 @@ class TextBlastModal extends React.Component {
     }, 0);
   }
 
+  checkForCredits() {
+    if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
+      this.props.displayToastrError('Error!', 'You do not have enough messaging credits. Please add more credits.');
+    }
+  }
+
   renderPatientCount() {
-    const { formValues, patients } = this.props;
+    const { formValues } = this.props;
     if (formValues.patients && formValues.patients.length > 0) {
-      const remainingPatients = formValues.selectAll ? (patients.total - (formValues.queryParams.filter.skip + formValues.queryParams.filter.limit)) : 0;
-      const count = formValues.patients.length + (remainingPatients > 0 ? remainingPatients : 0);
       return (
         <span className="emails-counter">
-          <span className="counter">{count}</span>
+          <span className="counter">{this.state.total}</span>
           <span className="text"> Patients</span>
         </span>
       );
@@ -112,6 +128,8 @@ class TextBlastModal extends React.Component {
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
+    const notEnoughCredits = (this.state.total > clientCredits);
+
     return (
       <Modal
         show={show}
@@ -153,18 +171,17 @@ class TextBlastModal extends React.Component {
                     }}
                     isDisabled={disabled}
                   />
-                  <div className="footer">
+                  <div className="footer" onClick={this.checkForCredits}>
                     <span className="characters-counter">
                       {`${160 - enteredCharactersLength}`}
                     </span>
-                    <Button
-                      type="submit"
-                      className="pull-right"
-                      onClick={this.submitTextBlast}
-                      disabled={disabled || enteredCharactersLength === 0}
+                    <div
+                      className="btn btn-default lightbox-opener pull-right"
+                      onClick={(e) => ((notEnoughCredits || disabled || enteredCharactersLength === 0) ? null : this.submitTextBlast(e))}
+                      disabled={notEnoughCredits || disabled || enteredCharactersLength === 0}
                     >
                       Send
-                    </Button>
+                    </div>
                   </div>
                 </div>
               </div>

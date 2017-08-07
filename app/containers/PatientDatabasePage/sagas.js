@@ -219,7 +219,7 @@ export function* fetchPatientsWatcher() {
 
 export function* getTotalPatientsCountWatcher() {
   while (true) {
-    const { clientId } = yield take(GET_TOTAL_PATIENTS_COUNT);
+    const { clientId, siteId } = yield take(GET_TOTAL_PATIENTS_COUNT);
     const filterObj = {
       include: [
         'indications',
@@ -231,6 +231,10 @@ export function* getTotalPatientsCountWatcher() {
         and: [],
       },
     };
+
+    if (siteId) {
+      filterObj.where.and.push({ site: siteId });
+    }
 
     const queryParams = {
       filter: JSON.stringify(filterObj),
@@ -441,13 +445,34 @@ function* submitTextBlast() {
     }
     try {
       const requestURL = `${API_URL}/twilioTextMessages/scheduleTextBlast`;
-      yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
+
+      let reqParams = {};
+      if (!formValues.selectAllUncheckedManually) {
+        reqParams = {
+          selectAll: true,
+          message: formValues.message,
+          clientRoleId,
+          patientsIDs: [],
+          queryParams: {
+            ...formValues.queryParams,
+            filter: {
+              ...formValues.queryParams.filter,
+              limit: null,
+              offset: null,
+            },
+          },
+          excludePatients: formValues.uncheckedPatients,
+        };
+      } else {
+        reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
           message: formValues.message,
           clientRoleId,
-        }),
+        };
+      }
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify(reqParams),
       });
       onClose();
       yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
