@@ -18,15 +18,18 @@ const initialState = {
     queryParams: {},
     selectAll: true,
     uncheckedPatients: [],
+    selectAllUncheckedManually: false,
   },
 };
 
 export default function TextBlastModal(state = initialState, action) {
   let patientsIdsToAdd = [];
   let patientsIdsToRemove = [];
+  let patientToRemove = null;
   const checkedPatients = {};
   let patients = {};
   let allPatients = false;
+  let selectAllUncheckedManually = false;
   let uncheckedPatients = [];
   switch (action.type) {
     case ADD_PATIENTS_TO_TEXT_BLAST:
@@ -49,6 +52,7 @@ export default function TextBlastModal(state = initialState, action) {
         },
       };
     case REMOVE_PATIENT_FROM_TEXT_BLAST:
+      patientToRemove = _.find(state.values.patients, p => (p.id === action.patient[0].id));
       return {
         ...state,
         values: {
@@ -56,8 +60,8 @@ export default function TextBlastModal(state = initialState, action) {
           patients: state.values.patients.filter(patient => (
             patient.id !== action.patient[0].id
           )),
-          uncheckedPatients: [...state.values.uncheckedPatients, action.patient[0].id],
-          selectAll: false,
+          uncheckedPatients: _.uniq([...state.values.uncheckedPatients, action.patient[0].id]),
+          selectAll: !patientToRemove,
         },
       };
     case REMOVE_PATIENTS_FROM_TEXT_BLAST:
@@ -70,6 +74,7 @@ export default function TextBlastModal(state = initialState, action) {
           uncheckedPatients: patientsIdsToRemove,
           'all-patients': false,
           selectAll: false,
+          selectAllUncheckedManually: true,
         },
       };
     case RESET_TEXT_BLAST:
@@ -84,21 +89,25 @@ export default function TextBlastModal(state = initialState, action) {
         },
       };
     case FETCH_PATIENTS_SUCCESS:
-      console.log('patients', action.payload);
+      allPatients = state.values['all-patients'];
+      selectAllUncheckedManually = state.values.selectAllUncheckedManually;
+      if (action.queryParams.filter.skip === 0) {
+        allPatients = true;
+        selectAllUncheckedManually = false;
+      }
       patients = _.filter(action.payload, (patient) => {
-        if (_.find(state.values.patients, p => p.id === patient.id)) {
+        /* if (_.find(state.values.patients, p => p.id === patient.id)) {
           return true;
-        }
-        if (patient.unsubscribed || !state.values.selectAll) {
+        }*/
+        if (patient.unsubscribed || (action.queryParams.filter.skip !== 0 && _.indexOf(state.values.uncheckedPatients, patient.id) !== -1)) {
           return false;
         }
-        if (_.indexOf(state.values.uncheckedPatients, patient.id) === -1) {
+        /* if (_.indexOf(state.values.uncheckedPatients, patient.id) === -1) {
           return true;
-        }
-        return false;
+        }*/
+        return true;
       });
 
-      console.log('filtered patients', patients);
       _.forEach(patients, (patient) => {
         if (!patient.unsubscribed) {
           // if (state.values[`patient-${patient.id}`] === true) {
@@ -108,15 +117,14 @@ export default function TextBlastModal(state = initialState, action) {
           // } else {
           //   checkedPatients[`patient-${patient.id}`] = (state.values['all-patients'] === true) && true;
           // }
-          if (state.values.selectAll === true) {
-            checkedPatients[`patient-${patient.id}`] = true;
-          }
+          checkedPatients[`patient-${patient.id}`] = true;
         }
       });
 
-      if (patients.length === action.payload.length) {
+      /* if (patients.length === action.payload.length) {
         allPatients = true;
-      }
+      }*/
+
 
       return {
         ...state,
@@ -126,6 +134,8 @@ export default function TextBlastModal(state = initialState, action) {
           ...checkedPatients,
           'all-patients': allPatients,
           queryParams: action.queryParams,
+          selectAllUncheckedManually,
+          uncheckedPatients: (action.queryParams.filter.skip === 0 ? [] : state.values.uncheckedPatients),
         },
       };
     case UPDATE_SELECT_ALL:
