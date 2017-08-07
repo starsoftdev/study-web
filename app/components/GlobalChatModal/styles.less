@@ -1,14 +1,17 @@
 .global-chat-modal {
-  bottom: 10px;
+  bottom: 2px;
   left: 0;
   width: 450px;
-  height: 0;
-  margin: 10px;
+  margin: 0 2px 0 12px;
   position: absolute;
   background: #fff;
   outline: 2px solid #f78e1e;
   transition: height 0.25s linear;
 
+  &.collapse {
+    height: 52px;
+    display: block;
+  }
   &.in {
     z-index: 1001;
     width: 450px;
