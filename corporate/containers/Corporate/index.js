@@ -38,6 +38,12 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
             {
               name: 'description',
               content: 'StudyKIK',
+            }, {
+              name: 'og:title',
+              content: 'Find Clinical Trials - Advertise &amp; Promote Your Medical Study',
+            }, {
+              name: 'og:description',
+              content: 'Looking for a clinical trial near you? Clinical trials are easy to find on StudyKIK.com. Join the millions of people searching for studies every year!',
             },
           ]}
         />
