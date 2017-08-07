@@ -21,6 +21,7 @@ function ReactSelect({
   multi,
   tooltipEnabled,
   meta: { touched, error, active },
+  clearValueText,
   ...rest
 }) {
   const hasError = touched && error && !active;
@@ -53,6 +54,7 @@ function ReactSelect({
       multi={multi}
       simpleValue={!objectValue}
       autosize={false}
+      clearValueText={clearValueText || ''}
       {...rest}
     />
   );
@@ -87,12 +89,13 @@ ReactSelect.propTypes = {
   selectedValue: PropTypes.any,
   objectValue: PropTypes.bool,
   tooltipEnabled: PropTypes.bool,
+  clearValueText: PropTypes.string,
 };
 
 export default ReactSelect;
 
 export const addAllOption = (options, allOption) => {
-  if (Array.isArray(options) && options.length > 0) {
+  if (Array.isArray(options)) {
     return [allOption || { label: 'All', value: 'All' }, ...options];
   }
   return options;
