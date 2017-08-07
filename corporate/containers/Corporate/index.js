@@ -36,9 +36,6 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
         <Helmet
           meta={[
             {
-              name: 'description',
-              content: 'StudyKIK',
-            }, {
               name: 'og:title',
               content: 'Find Clinical Trials - Advertise &amp; Promote Your Medical Study',
             }, {
