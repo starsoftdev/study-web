@@ -158,14 +158,24 @@ export function* sendStudyPatientMessages() {
 
 export function* fetchNotifications(action) {
   try {
-    const requestURL = `${API_URL}/users/${action.userId}/notifications`;
+    const userId = action.userId;
+    const limit = action.limit || 10;
+    const offset = action.offset || 0;
+    const requestURL = `${API_URL}/users/${userId}/notifications`;
     const params = {
       method: 'GET',
-      query: action.searchParams,
+      query: {
+        limit,
+        offset,
+      },
     };
     const response = yield call(request, requestURL, params);
-
-    yield put(fetchNotificationsSucceeded(response));
+    let hasMore = true;
+    const page = (offset / 10) + 1;
+    if (response.length < 10) {
+      hasMore = false;
+    }
+    yield put(fetchNotificationsSucceeded(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
     yield put(toastrActions.error('', errorMessage));
