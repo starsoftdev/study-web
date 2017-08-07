@@ -131,6 +131,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast, updateSelectAll } = this.props;
     if (checked) {
       addPatientsToTextBlast(patients.details);
+      change('selectAllUncheckedManually', false);
     } else {
       removePatientsFromTextBlast(patients.details);
     }
@@ -146,7 +147,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   loadItems() {
-    this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
+    if (this.props.paginationOptions.hasMoreItems) {
+      this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
+    }
   }
 
   sortBy(ev) {
@@ -246,7 +249,9 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       }
     }
     let total = patients.total || totalPatients;
-    if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {
+    if (!textBlastFormValues.selectAllUncheckedManually && textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) {
+      total -= textBlastFormValues.uncheckedPatients.length;
+    } else if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {
       total = textBlastFormValues.patients.length;
     }
     return (
