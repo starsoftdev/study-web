@@ -48,10 +48,22 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
+    const { params } = this.props;
     if (newProps.trials === null) {
       this.show = 0;
       this.h3Text = '';
       this.loaded = 0;
+    }
+
+    if (params && params.indication && newProps.indications.length && !this.initalFetched) {
+      this.initalFetched = true;
+      this.currentIndication = false;
+      for (const indication of newProps.indications) {
+        const findIndication = indication.name.toLowerCase().replace(/( - )|( – )/ig, '-').replace(/(\()|(\))/ig, '').replace(/( {2})|( )/ig, '-');
+        if (findIndication === params.indication) {
+          this.currentIndication = indication;
+        }
+      }
     }
 
     if (newProps.trials !== this.props.trials) {
