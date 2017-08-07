@@ -99,6 +99,9 @@ export default function TextBlastModal(state = initialState, action) {
         /* if (_.find(state.values.patients, p => p.id === patient.id)) {
           return true;
         }*/
+        if (patient.unsubscribed) {
+          uncheckedPatients.push(patient.id);
+        }
         if (patient.unsubscribed || (action.queryParams.filter.skip !== 0 && _.indexOf(state.values.uncheckedPatients, patient.id) !== -1)) {
           return false;
         }
@@ -135,7 +138,7 @@ export default function TextBlastModal(state = initialState, action) {
           'all-patients': allPatients,
           queryParams: action.queryParams,
           selectAllUncheckedManually,
-          uncheckedPatients: (action.queryParams.filter.skip === 0 ? [] : state.values.uncheckedPatients),
+          uncheckedPatients,
         },
       };
     case UPDATE_SELECT_ALL:

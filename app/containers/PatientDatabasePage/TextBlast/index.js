@@ -56,7 +56,19 @@ class TextBlastModal extends React.Component {
     this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       enteredCharactersLength: 0,
+      total: 0,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { formValues, patients } = newProps;
+    let total = patients.total;
+    if (!formValues.selectAllUncheckedManually) {
+      total -= ((formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) ? formValues.uncheckedPatients.length : 0);
+    } else if ((formValues.patients && formValues.patients.length > 0) || (formValues.patients && formValues.patients.length === 0 && formValues.uncheckedPatients.length > 0)) {
+      total = formValues.patients.length;
+    }
+    this.setState({ total });
   }
 
   onHide() {
@@ -93,29 +105,17 @@ class TextBlastModal extends React.Component {
   }
 
   checkForCredits() {
-    if ((this.props.formValues.patients && this.props.formValues.patients.length > this.props.clientCredits.details.customerCredits)) {
+    if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
       this.props.displayToastrError('Error!', 'You do not have enough messaging credits. Please add more credits.');
     }
   }
 
   renderPatientCount() {
-    const { formValues, patients } = this.props;
+    const { formValues } = this.props;
     if (formValues.patients && formValues.patients.length > 0) {
-      // const remainingPatients = formValues.selectAll ? (patients.total - (formValues.queryParams.filter.skip + formValues.queryParams.filter.limit)) : 0;
-
-      // const count = formValues.patients.length + (remainingPatients > 0 ? remainingPatients : 0);
-
-
-      let total = patients.total;
-      if (!formValues.selectAllUncheckedManually && formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) {
-        total -= formValues.uncheckedPatients.length;
-      } else if ((formValues.patients && formValues.patients.length > 0) || (formValues.patients && formValues.patients.length === 0 && formValues.uncheckedPatients.length > 0)) {
-        total = formValues.patients.length;
-      }
-
       return (
         <span className="emails-counter">
-          <span className="counter">{total}</span>
+          <span className="counter">{this.state.total}</span>
           <span className="text"> Patients</span>
         </span>
       );
@@ -128,7 +128,8 @@ class TextBlastModal extends React.Component {
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const disabled = (clientCredits === 0 || clientCredits === null);
-    const notEnoughCredits = (this.props.formValues.patients && this.props.formValues.patients.length > clientCredits);
+    const notEnoughCredits = (this.state.total > clientCredits);
+
     return (
       <Modal
         show={show}
