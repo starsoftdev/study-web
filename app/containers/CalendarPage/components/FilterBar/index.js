@@ -24,7 +24,6 @@ class FilterBar extends Component {
   constructor(props) {
     super(props);
     const siteLocationOptions = addAllOption(props.siteLocationOptions);
-    console.log('add all ', siteLocationOptions);
 
     this.state = {
       siteLocation: null,
@@ -40,7 +39,6 @@ class FilterBar extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.siteLocationOptions !== nextProps.siteLocationOptions) {
       const siteLocationOptions = addAllOption(nextProps.siteLocationOptions);
-      console.log('component will recieve', siteLocationOptions);
       this.setState({
         siteLocationOptions,
       });
