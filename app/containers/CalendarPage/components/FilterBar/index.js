@@ -21,14 +21,19 @@ class FilterBar extends Component {
     currentUser: PropTypes.object,
   }
 
-  state = {
-    siteLocation: null,
-    indication: null,
-    protocol: null,
-    siteLocationOptions: [],
-    indicationOptions: [],
-    protocolOptions: [],
-    patientName: '',
+  constructor(props) {
+    super(props);
+    const siteLocationOptions = addAllOption(props.siteLocationOptions);
+
+    this.state = {
+      siteLocation: null,
+      indication: null,
+      protocol: null,
+      siteLocationOptions,
+      indicationOptions: [],
+      protocolOptions: [],
+      patientName: '',
+    };
   }
 
   componentWillReceiveProps(nextProps) {
