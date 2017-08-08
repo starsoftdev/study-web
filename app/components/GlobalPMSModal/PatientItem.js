@@ -38,7 +38,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             <img src={patientData.gender === 'Female' ? defaultUserImageGirl : defaultUserImage} alt="" />
           </div>
           <strong className="name">{patientData.first_name} {patientData.last_name}</strong>
-          <p>{patientData.last_message_body ? patientData.last_message_body : 'No message yet'}</p>
+          <p>{(patientData.last_message_body !== null && patientData.last_message_body !== undefined) ? patientData.last_message_body : 'No message yet'}</p>
           <time>
             {lastDateFormatted}
             {patientData.count_unread > 0
