@@ -11,7 +11,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import { createStructuredSelector } from 'reselect';
 
-import IndicationOverlay from './IndicationOverlay';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -21,29 +21,34 @@ import RenderCustomEmailsList from './RenderCustomEmailsList';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import {
   selectLevels,
-  selectSiteNames,
   selectIndications,
   selectSponsors,
   selectProtocols,
   selectCro,
-  selectStudiesTotals,
   selectAllClientUsers,
-  selectAllCustomNotificationEmails,
   selectMessagingNumbers,
-  selectPaginationOptions,
   selectSiteLocations,
   selectStudyIndicationTags,
   selectUsersByRoles,
 } from '../../containers/HomePage/AdminDashboard/selectors';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
-import { addStudyIndicationTag, removeStudyIndicationTag } from '../../containers/HomePage/AdminDashboard/actions';
+import {
+  addStudyIndicationTag,
+  fetchMessagingNumbersDashboard,
+  fetchStudyIndicationTag,
+  removeStudyIndicationTag,
+  updateDashboardStudy,
+} from '../../containers/HomePage/AdminDashboard/actions';
+import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
 
 const formName = 'dashboardEditStudyForm';
 
 const mapStateToProps = createStructuredSelector({
+  allClientUsers: selectAllClientUsers(),
   cro: selectCro(),
   indications: selectIndications(),
+  levels: selectLevels(),
+  messagingNumbers: selectMessagingNumbers(),
   protocols: selectProtocols(),
   siteLocations: selectSiteLocations(),
   sponsors: selectSponsors(),
@@ -53,11 +58,14 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
+  addStudyIndicationTag: (studyId, indicationId) => dispatch(addStudyIndicationTag(studyId, indicationId)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
-  addStudyIndicationTag: (studyId, indicationId) => dispatch(addStudyIndicationTag(studyId, indicationId)),
+  fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
+  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
+  updateDashboardStudy: (params) => dispatch(updateDashboardStudy(params)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -72,17 +80,20 @@ export default class EditInformationForm extends React.Component {
     change: PropTypes.func.isRequired,
     cro: PropTypes.array.isRequired,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
+    fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
+    fetchStudyIndicationTag: PropTypes.func.isRequired,
     formValues: PropTypes.object,
     removeCustomEmailNotification: PropTypes.func.isRequired,
+    initialValues: PropTypes.object.isRequired,
     indications: PropTypes.array.isRequired,
     isOnTop: React.PropTypes.bool,
     onClose: PropTypes.func.isRequired,
     onHide: PropTypes.func,
     openModal: PropTypes.bool.isRequired,
     onShow: PropTypes.func,
-    levels: PropTypes.array.isRequired,
+    levels: PropTypes.object.isRequired,
     allCustomNotificationEmails: PropTypes.object,
-    messagingNumbers: PropTypes.object,
+    messagingNumbers: PropTypes.object.isRequired,
     protocols: PropTypes.array.isRequired,
     siteLocations: PropTypes.array.isRequired,
     sponsors: PropTypes.array.isRequired,
@@ -91,7 +102,7 @@ export default class EditInformationForm extends React.Component {
     setEditStudyFormValues: PropTypes.func,
     addStudyIndicationTag: PropTypes.func,
     removeStudyIndicationTag: PropTypes.func,
-    studyIndicationTags: PropTypes.array.isRequired,
+    studyIndicationTags: PropTypes.object.isRequired,
     submitting: PropTypes.bool.isRequired,
   };
 
@@ -115,8 +126,9 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentDidMount() {
-    // const { fetchStudyIndicationTag, formValues } = this.props;
-    // fetchStudyIndicationTag(initialValues.id);
+    const { fetchMessagingNumbersDashboard, fetchStudyIndicationTag, initialValues } = this.props;
+    fetchStudyIndicationTag(initialValues.id);
+    fetchMessagingNumbersDashboard();
   }
 
 
@@ -196,7 +208,7 @@ export default class EditInformationForm extends React.Component {
   onSubmit(params) {
     const newParam = Object.assign({}, params);
     newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
-    this.props.updateDashboardStudy(newParam);
+    updateDashboardStudy(newParam);
   }
 
   onSuggestSelect(e) {

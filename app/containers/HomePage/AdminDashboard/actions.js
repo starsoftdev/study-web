@@ -568,10 +568,10 @@ export function removeStudyIndicationTagError(payload) {
   };
 }
 
-export function fetchStudyIndicationTag(params) {
+export function fetchStudyIndicationTag(studyId) {
   return {
     type: FETCH_STUDY_INDICATION_TAG,
-    params,
+    studyId,
   };
 }
 
