@@ -101,7 +101,7 @@ export default function TextBlastModal(state = initialState, action) {
           return true;
         }*/
         if (patient.unsubscribed) {
-          uncheckedPatients.push(patient.id);
+          // uncheckedPatients.push(patient.id);
         }
         if (patient.unsubscribed || (action.queryParams.filter.skip !== 0 && _.indexOf(state.values.uncheckedPatients, patient.id) !== -1)) {
           return false;
