@@ -13,6 +13,7 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(null, mapDispatchToProps)
 export default class EditInformationModal extends React.Component {
   static propTypes = {
+    addEmailNotificationClick: PropTypes.func.isRequired,
     initialValues: PropTypes.object,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
@@ -22,7 +23,7 @@ export default class EditInformationModal extends React.Component {
   }
 
   render() {
-    const { initialValues, openModal, onClose } = this.props;
+    const { addEmailNotificationClick, initialValues, openModal, onClose } = this.props;
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className="form-lightbox form-edit-information">
         <div>
@@ -33,7 +34,11 @@ export default class EditInformationModal extends React.Component {
                 <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
-            {/*<EditInformationForm initialValues={initialValues} onClose={onClose} />*/}
+            <EditInformationForm
+              addEmailNotificationClick={addEmailNotificationClick}
+              initialValues={initialValues}
+              onClose={onClose}
+            />
           </div>
         </div>
       </Collapse>

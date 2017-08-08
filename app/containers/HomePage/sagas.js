@@ -210,7 +210,7 @@ export function* fetchStudyIndicationTagsWorker(action) {
     const params = {
       method: 'GET',
       query: {
-        id: action.params,
+        id: action.studyId,
       },
     };
     const response = yield call(request, requestURL, params);
