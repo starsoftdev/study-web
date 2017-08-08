@@ -19,11 +19,6 @@ const selectFilterFormValues = () => createSelector(
   substate => get(substate, 'dashboardFilters.values', {})
 );
 
-const selectEditStudyValues = () => createSelector(
-  selectFormDomain(),
-  substate => get(substate, 'dashboardEditStudyForm.values', {})
-);
-
 const selectStudies = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.studies
@@ -79,11 +74,6 @@ const selectStudiesTotals = () => createSelector(
   substate => substate.totals
 );
 
-const selectStudyUpdateProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.updateStudyProcess
-);
-
 const selectAllClientUsers = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.allClientUsers
@@ -97,11 +87,6 @@ const selectAllCustomNotificationEmails = () => createSelector(
 const selectAddNotificationProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.addNotificationProcess
-);
-
-const selectStudyCampaigns = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.studyCampaigns
 );
 
 const selectLandingPageUpdateProcess = () => createSelector(
@@ -186,12 +171,9 @@ export {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
-  selectStudyUpdateProcess,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectEditStudyValues,
   selectAddNotificationProcess,
-  selectStudyCampaigns,
   selectThankYouPageUpdateProcess,
   selectUpdatePatientThankYouEmailProcess,
   selectLandingPageUpdateProcess,

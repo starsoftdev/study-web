@@ -26,9 +26,6 @@ import {
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   FETCH_SITE_LOCATIONS_ERROR,
-  FETCH_SITE_NAMES,
-  FETCH_SITE_NAMES_SUCCESS,
-  FETCH_SITE_NAMES_ERROR,
   UPDATE_DASHBOARD_STUDY,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
@@ -66,7 +63,6 @@ import {
   UPDATE_TWILIO_NUMBERS_SUCCESS,
   UPDATE_TWILIO_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
-  SET_EDIT_STUDY_FORM_VALUES,
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
@@ -161,26 +157,6 @@ export function fetchSiteLocationsSuccess(payload) {
 export function fetchSiteLocationsError(payload) {
   return {
     type: FETCH_SITE_LOCATIONS_ERROR,
-    payload,
-  };
-}
-
-export function fetchSiteNames() {
-  return {
-    type: FETCH_SITE_NAMES,
-  };
-}
-
-export function fetchSiteNamesSuccess(payload) {
-  return {
-    type: FETCH_SITE_NAMES_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchSiteNamesError(payload) {
-  return {
-    type: FETCH_SITE_NAMES_ERROR,
     payload,
   };
 }
@@ -541,13 +517,6 @@ export function setHoverRowIndex(index) {
   return {
     type: SET_HOVER_ROW_INDEX,
     index,
-  };
-}
-
-export function setEditStudyFormValues(values) {
-  return {
-    type: SET_EDIT_STUDY_FORM_VALUES,
-    values,
   };
 }
 

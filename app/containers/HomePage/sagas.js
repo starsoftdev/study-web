@@ -32,7 +32,6 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
-  FETCH_SITE_NAMES,
   UPDATE_DASHBOARD_STUDY,
   FETCH_ALL_CLIENT_USERS,
   FETCH_STUDY_CAMPAIGNS,
@@ -814,25 +813,6 @@ export function* fetchSiteLocationsWorker() {
   }
 }
 
-export function* fetchSiteNamesWatcher() {
-  yield* takeLatest(FETCH_SITE_NAMES, fetchSiteNamesWorker);
-}
-
-export function* fetchSiteNamesWorker() {
-  try {
-    const requestURL = `${API_URL}/sites/getSiteNames`;
-    const options = {
-      method: 'GET',
-    };
-
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchSiteNamesSuccess(response));
-  } catch (err) {
-    yield put(fetchSiteNamesError(err));
-  }
-}
-
 export function* updateDashboardStudyWatcher() {
   yield* takeLatest(UPDATE_DASHBOARD_STUDY, updateDashboardStudyWorker);
 }
@@ -849,7 +829,6 @@ export function* updateDashboardStudyWorker(action) {
 
     const response = yield call(request, requestURL, options);
 
-    yield put(fetchMessagingNumbersDashboard());
     yield put(updateDashboardStudySuccess(response));
   } catch (err) {
     yield put(updateDashboardStudyError(err));
@@ -1219,7 +1198,6 @@ export function* homePageSaga() {
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
   const fetchTotalsDashboardWatcher1 = yield fork(fetchTotalsDashboardWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
-  const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
   const fetchAllClientUsersWatcher1 = yield fork(fetchAllClientUsersWatcher);
   const fetchStudyCampaignsWatcher1 = yield fork(fetchStudyCampaignsWatcher);
@@ -1266,7 +1244,6 @@ export function* homePageSaga() {
     yield cancel(fetchStudiesDashboardWatcher1);
     yield cancel(fetchTotalsDashboardWatcher1);
     yield cancel(fetchSiteLocationsWatcher1);
-    yield cancel(fetchSiteNamesWatcher1);
     yield cancel(updateDashboardStudyWatcher1);
     yield cancel(fetchAllClientUsersWatcher1);
     yield cancel(fetchStudyCampaignsWatcher1);

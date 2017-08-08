@@ -14,6 +14,8 @@ import LoadingSpinner from '../../../../components/LoadingSpinner';
 import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
 import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
+import { selectValues } from '../../../../common/selectors/form.selector';
+import { normalizePhoneDisplay } from '../../../../common/helper/functions';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -28,19 +30,41 @@ import {
   selectAddNotificationProcess,
   selectDashboardEditNoteProcess,
   selectDashboardNote,
-  selectStudyIndicationTags,
 } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
-import { setHoverRowIndex, setEditStudyFormValues, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag } from '../actions';
+import { setHoverRowIndex, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 import {
   removeCustomEmailNotification,
 } from '../../../../containers/App/actions';
 
+
+const mapStateToProps = createStructuredSelector({
+  addNotificationProcess: selectAddNotificationProcess(),
+  editStudyValues: selectValues('dashboardEditStudyForm'),
+  editNoteProcess: selectDashboardEditNoteProcess(),
+  note: selectDashboardNote(),
+  paginationOptions: selectPaginationOptions(),
+  studies: selectStudies(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  change: (formName, name, value) => dispatch(change(formName, name, value)),
+  setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
+  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
+  fetchNote: () => dispatch(fetchNote()),
+  addNote: (payload) => dispatch(addNote(payload)),
+  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
+  editNote: (payload) => dispatch(editNote(payload)),
+  deleteNote: (payload) => dispatch(deleteNote(payload)),
+  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
+  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
+});
+
 @reduxForm({ form: 'campaignFilter' })
-class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
+@connect(mapStateToProps, mapDispatchToProps)
+export default class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     allClientUsers: PropTypes.object,
     addNotificationProcess: PropTypes.object,
@@ -48,7 +72,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     addCustomEmailNotification: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
-    cro: PropTypes.array,
     editStudyValues: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
@@ -56,22 +79,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     fetchStudyIndicationTag: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
     removeCustomEmailNotification: PropTypes.func.isRequired,
-    indications: PropTypes.array,
     allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,
     messagingNumbers: PropTypes.object,
     paginationOptions: PropTypes.object,
-    protocols: PropTypes.array,
-    sponsors: PropTypes.array,
-    siteLocations: PropTypes.array,
     studies: PropTypes.object,
-    studyUpdateProcess: PropTypes.object,
     toggleStudy: PropTypes.func,
     totals: PropTypes.object,
     updateDashboardStudy: PropTypes.func.isRequired,
-    usersByRoles: PropTypes.object,
     setHoverRowIndex: PropTypes.func,
-    setEditStudyFormValues: PropTypes.func,
     filtersFormValues: PropTypes.object,
     submitToClientPortal: PropTypes.func,
     fetchNote: PropTypes.func,
@@ -80,7 +96,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     editNote: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
-    studyIndicationTags: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
   };
 
@@ -98,6 +113,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
+    this.getEditStudyInitialValues = this.getEditStudyInitialValues.bind(this);
     this.showEditInformationModal = this.showEditInformationModal.bind(this);
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
@@ -106,12 +122,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
-    this.updateStudy = this.updateStudy.bind(this);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
-    this.setEditStudyFormValues = this.setEditStudyFormValues.bind(this);
 
     this.handleScroll = this.handleScroll.bind(this);
     this.handleBodyScroll = this.handleBodyScroll.bind(this);
@@ -139,7 +153,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       studies: bindSelection(props.studies),
       selectedAllStudies: false,
       selectedStudyCount: 0,
-      editStudyInitValues: {},
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
@@ -176,10 +189,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
         studies: bindSelection(newProps.studies),
       });
     }
-    if (this.props.studyUpdateProcess.saving && !newProps.studyUpdateProcess.saving) {
-      this.showEditInformationModal(false);
-      this.setEditStudyFormValues(newProps.studyUpdateProcess.study);
-    }
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
       let addFields = this.props.editStudyValues.emailNotifications;
       const values = {
@@ -206,18 +215,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.setState({ hideNoteModal: hidden });
   }
 
-  setEditStudyFormValues(study) {
+  getEditStudyInitialValues(study) {
     const formValues = _.cloneDeep(study);
     formValues.recruitment_phone = normalizePhoneDisplay(formValues.recruitment_phone);
     formValues.site_location_form = study.site_id;
     formValues.messagingNumber = study.text_number_id;
 
-    this.props.setEditStudyFormValues(formValues);
-
-    this.props.fetchCustomNotificationEmails(study.study_id);
-    this.props.fetchStudyIndicationTag(study.study_id);
-    this.props.fetchAllClientUsersDashboard({ clientId: study.client_id, siteId: study.site_id });
-    this.props.fetchStudyCampaignsDashboard(study.study_id);
+    return formValues;
   }
 
   handleScroll(event) {
@@ -260,29 +264,17 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
-    let selectedStudy = null;
     const studies = map(this.state.studies, (study) => {
       const c = study.study_id === studyId ? checked : study.selected;
       selectedAllStudies = selectedAllStudies && c;
       if (c === true) {
         selectedStudyCount++;
-        selectedStudy = study;
       }
       return {
         ...study,
         selected: c,
       };
     });
-
-    if (selectedStudyCount === 1) {
-      this.setEditStudyFormValues(selectedStudy);
-      /* this.setState({ editStudyInitValues: {
-        initialValues: {
-          ...selectedStudy,
-          site_location_form: selectedStudy.site_id,
-        },
-      } }); */
-    }
 
     this.setState({
       selectedAllStudies,
@@ -473,12 +465,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
-  updateStudy(params) {
-    const newParam = Object.assign({}, params);
-    newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
-    this.props.updateDashboardStudy(newParam);
-  }
-
   addEmailNotificationClick(custom = false) {
     this.setState({ addEmailModalShow: true, customAddEmailModal: custom });
   }
@@ -602,6 +588,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
       <div>
         {(() => {
           if (this.props.studies.details.length > 0) {
+            let selectedStudyInitialValues;
+            if (selectedStudies && selectedStudies[0]) {
+              selectedStudyInitialValues = this.getEditStudyInitialValues(selectedStudies[0]);
+            } else {
+              selectedStudyInitialValues = {};
+            }
             return (
               <div className={classNames({ 'btns-active' : selectedStudyCount > 0 })}>
                 { selectedStudyCount > 0 &&
@@ -955,28 +947,10 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   </InfiniteScroll>
                 </div>
                 <EditInformationModal
-                  {...this.state.editStudyInitValues}
-                  onSubmit={this.updateStudy}
+                  initialValues={selectedStudyInitialValues}
+                  addEmailNotificationClick={this.addEmailNotificationClick}
                   openModal={this.state.showEditInformationModal}
                   onClose={() => { this.showEditInformationModal(false); }}
-                  usersByRoles={this.props.usersByRoles}
-                  siteLocations={this.props.siteLocations}
-                  study={this.state.studies[0]}
-                  sponsors={this.props.sponsors}
-                  protocols={this.props.protocols}
-                  cro={this.props.cro}
-                  indications={this.props.indications}
-                  fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
-                  allClientUsers={this.props.allClientUsers}
-                  allCustomNotificationEmails={this.props.allCustomNotificationEmails}
-                  removeCustomEmailNotification={this.props.removeCustomEmailNotification}
-                  formValues={this.props.editStudyValues}
-                  addEmailNotificationClick={this.addEmailNotificationClick}
-                  messagingNumbers={this.props.messagingNumbers}
-                  isOnTop={this.state.editStudyPageOnTop}
-                  setEditStudyFormValues={this.props.setEditStudyFormValues}
-                  studyUpdateProcess={this.props.studyUpdateProcess}
-                  studyIndicationTags={this.props.studyIndicationTags}
                 />
                 <LandingPageModal
                   openModal={this.state.showLandingPageModal}
@@ -1075,28 +1049,3 @@ const bindSelection = (studies) =>
     ...study,
     selected: study.selected || false,
   }));
-
-const mapStateToProps = createStructuredSelector({
-  studies: selectStudies(),
-  paginationOptions: selectPaginationOptions(),
-  addNotificationProcess: selectAddNotificationProcess(),
-  note: selectDashboardNote(),
-  editNoteProcess: selectDashboardEditNoteProcess(),
-  studyIndicationTags: selectStudyIndicationTags(),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
-  setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
-  setEditStudyFormValues: (values) => dispatch(setEditStudyFormValues(values)),
-  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
-  fetchNote: () => dispatch(fetchNote()),
-  addNote: (payload) => dispatch(addNote(payload)),
-  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
-  editNote: (payload) => dispatch(editNote(payload)),
-  deleteNote: (payload) => dispatch(deleteNote(payload)),
-  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
-  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

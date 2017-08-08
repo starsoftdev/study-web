@@ -71,7 +71,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
     });
   });
 
-  // TODO remove after loader.io is verified
+  // for loader.io verification
   app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
     res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
   });
@@ -108,7 +108,7 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
-  // TODO remove after loader.io is verified
+  // for loader.io verification
   app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
     res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
   });
