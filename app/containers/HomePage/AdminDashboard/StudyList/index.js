@@ -66,14 +66,12 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    allClientUsers: PropTypes.object,
     addNotificationProcess: PropTypes.object,
     addEmailNotificationUser: PropTypes.func.isRequired,
     addCustomEmailNotification: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     editStudyValues: PropTypes.object,
-    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
     fetchStudyIndicationTag: PropTypes.func.isRequired,
@@ -81,7 +79,6 @@ export default class StudyList extends Component { // eslint-disable-line react/
     removeCustomEmailNotification: PropTypes.func.isRequired,
     allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,
-    messagingNumbers: PropTypes.object,
     paginationOptions: PropTypes.object,
     studies: PropTypes.object,
     toggleStudy: PropTypes.func,
@@ -947,8 +944,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                   </InfiniteScroll>
                 </div>
                 <EditInformationModal
-                  initialValues={selectedStudyInitialValues}
                   addEmailNotificationClick={this.addEmailNotificationClick}
+                  initialValues={selectedStudyInitialValues}
                   openModal={this.state.showEditInformationModal}
                   onClose={() => { this.showEditInformationModal(false); }}
                 />
