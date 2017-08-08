@@ -19,7 +19,6 @@ import {
   FETCH_TOTALS_DASHBOARD,
   FETCH_TOTALS_DASHBOARD_SUCCESS,
   FETCH_TOTALS_DASHBOARD_ERROR,
-  FETCH_SITE_NAMES_SUCCESS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
   UPDATE_DASHBOARD_STUDY,
@@ -214,10 +213,6 @@ const initialState = {
 };
 
 export default function dashboardPageReducer(state = initialState, action) {
-  const newNote = _.cloneDeep(state.note.details);
-  const studiesCopy = _.cloneDeep(state.studies.details);
-  let savedStudy = null;
-  let foundKey = null;
   let totalActive = 0;
   let totalInactive = 0;
   let newStudiesList = [];
@@ -341,12 +336,15 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case ADD_NOTE_SUCCESS:
-      newNote.push(action.payload);
+    case ADD_NOTE_SUCCESS: {
+      const newNotes = [
+        ...state.note.details,
+      ];
+      newNotes.push(action.payload);
       return {
         ...state,
         note: {
-          details: newNote,
+          details: newNotes,
           fetching: false,
           error: action.payload,
         },
@@ -356,6 +354,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case ADD_NOTE_ERROR:
       return {
         ...state,
@@ -374,15 +373,18 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case EDIT_NOTE_SUCCESS:
-      foundUserIndex = _.findIndex(newNote, item => (item.id === action.payload.id));
+    case EDIT_NOTE_SUCCESS: {
+      const newNotes = [
+        ...state.note.details,
+      ];
+      foundUserIndex = _.findIndex(newNotes, item => (item.id === action.payload.id));
       if (foundUserIndex !== -1) {
-        newNote.splice(foundUserIndex, 1, action.payload);
+        newNotes.splice(foundUserIndex, 1, action.payload);
       }
       return {
         ...state,
         note: {
-          details: newNote,
+          details: newNotes,
           fetching: false,
           error: action.payload,
         },
@@ -392,6 +394,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case EDIT_NOTE_ERROR:
       return {
         ...state,
@@ -410,15 +413,18 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case DELETE_NOTE_SUCCESS:
-      foundUserIndex = _.findIndex(newNote, item => (item.id === action.payload.id));
+    case DELETE_NOTE_SUCCESS: {
+      const newNotes = [
+        ...state.note.details,
+      ];
+      foundUserIndex = _.findIndex(newNotes, item => (item.id === action.payload.id));
       if (foundUserIndex !== -1) {
-        newNote.splice(foundUserIndex, 1);
+        newNotes.splice(foundUserIndex, 1);
       }
       return {
         ...state,
         note: {
-          details: newNote,
+          details: newNotes,
           fetching: false,
           error: action.payload,
         },
@@ -428,6 +434,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case DELETE_NOTE_ERROR:
       return {
         ...state,
@@ -454,6 +461,9 @@ export default function dashboardPageReducer(state = initialState, action) {
       if (action.page === 1) {
         newStudiesList = action.payload.studies;
       } else {
+        const studiesCopy = [
+          ...state.studies.details,
+        ];
         newStudiesList = studiesCopy.concat(action.payload.studies);
       }
       return {
@@ -509,11 +519,6 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         levels: action.payload,
       };
-    case FETCH_SITE_NAMES_SUCCESS:
-      return {
-        ...state,
-        siteNames: action.payload,
-      };
     case FETCH_SITE_LOCATIONS_SUCCESS:
       return {
         ...state,
@@ -567,12 +572,15 @@ export default function dashboardPageReducer(state = initialState, action) {
           study: null,
         },
       };
-    case UPDATE_DASHBOARD_STUDY_SUCCESS:
-      savedStudy = action.payload.studies[0];
-      foundKey = _.findKey(studiesCopy, (item) => (item.study_id === savedStudy.study_id));
-      if (foundKey) {
+    case UPDATE_DASHBOARD_STUDY_SUCCESS: {
+      const savedStudy = action.payload.study;
+      const studiesCopy = [
+        ...state.studies.details,
+      ];
+      const studyIndex = _.findIndex(studiesCopy, (item) => (item.study_id === savedStudy.study_id));
+      if (studyIndex) {
         savedStudy.selected = true;
-        studiesCopy[foundKey] = savedStudy;
+        studiesCopy[studyIndex] = savedStudy;
       }
       _.forEach(studiesCopy, (study, key) => {
         if (studiesCopy[key].is_active) {
@@ -603,6 +611,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           study: savedStudy,
         },
       };
+    }
     case UPDATE_DASHBOARD_STUDY_ERROR:
       return {
         ...state,
@@ -720,11 +729,15 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-    case CHANGE_STUDY_STATUS_SUCCESS:
-
+    case CHANGE_STUDY_STATUS_SUCCESS: {
+      const studiesCopy = [
+        ...state.studies.details,
+      ];
+      // iterate through every study
       _.forEach(studiesCopy, (study, key) => {
-        foundKey = _.findKey(action.payload.studies, (item) => (item === study.study_id));
-        if (foundKey) {
+        // then iterate through the response of studies and re-calculate the stats
+        const studyIndex = _.findIndex(action.payload.studies, (item) => (item === study.study_id));
+        if (studyIndex) {
           studiesCopy[key].is_active = action.payload.status === 'active';
         }
         if (studiesCopy[key].is_active) {
@@ -751,11 +764,14 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-
-    case TOGGLE_STUDY:
-      foundKey = _.findKey(studiesCopy, (item) => (action.id === item.study_id));
-      if (foundKey) {
-        studiesCopy[foundKey].selected = action.status;
+    }
+    case TOGGLE_STUDY: {
+      const studiesCopy = [
+        ...state.studies.details,
+      ];
+      const studyIndex = _.findIndex(studiesCopy, (item) => (action.id === item.study_id));
+      if (studyIndex) {
+        studiesCopy[studyIndex].selected = action.status;
       }
 
       return {
@@ -766,6 +782,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
+    }
     case UPDATE_LANDING_PAGE:
       return {
         ...state,
