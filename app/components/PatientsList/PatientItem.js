@@ -53,17 +53,17 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   componentDidMount() {
-    const { unsubscribed, change, id, removePatientFromTextBlast } = this.props;
+    const { unsubscribed, change, id } = this.props;
     if (unsubscribed) {
-      removePatientFromTextBlast([{ id }]);
+      // removePatientFromTextBlast([{ id }]);
       change(`patient-${id}`, false);
     }
   }
 
   componentWillReceiveProps(newProps) {
-    const { unsubscribed, change, id, removePatientFromTextBlast } = newProps;
+    const { unsubscribed, change, id } = newProps;
     if (unsubscribed && this.props.unsubscribed !== unsubscribed) {
-      removePatientFromTextBlast([{ id }]);
+      // removePatientFromTextBlast([{ id }]);
       change(`patient-${id}`, false);
     }
   }
