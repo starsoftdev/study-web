@@ -16,10 +16,6 @@ export const FETCH_TOTALS_DASHBOARD                     = 'DashboardPage/FETCH_T
 export const FETCH_TOTALS_DASHBOARD_SUCCESS             = 'DashboardPage/FETCH_TOTALS_DASHBOARD_SUCCESS';
 export const FETCH_TOTALS_DASHBOARD_ERROR               = 'DashboardPage/FETCH_TOTALS_DASHBOARD_ERROR';
 
-export const FETCH_SITE_NAMES                            = 'DashboardPage/FETCH_SITE_NAMES';
-export const FETCH_SITE_NAMES_SUCCESS                    = 'DashboardPage/FETCH_SITE_NAMES_SUCCESS';
-export const FETCH_SITE_NAMES_ERROR                      = 'DashboardPage/FETCH_SITE_NAMES_ERROR';
-
 export const FETCH_SITE_LOCATIONS                        = 'DashboardPage/FETCH_SITE_LOCATIONS';
 export const FETCH_SITE_LOCATIONS_SUCCESS                = 'DashboardPage/FETCH_SITE_LOCATIONS_SUCCESS';
 export const FETCH_SITE_LOCATIONS_ERROR                  = 'DashboardPage/FETCH_SITE_LOCATIONS_ERROR';
@@ -105,8 +101,6 @@ export const FETCH_STUDY_INDICATION_TAG_SUCCESS          = 'DashboardPage/FETCH_
 export const FETCH_STUDY_INDICATION_TAG_ERROR            = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_ERROR';
 
 export const SET_HOVER_ROW_INDEX                         = 'DashboardPage/SET_HOVER_ROW_INDEX';
-
-export const SET_EDIT_STUDY_FORM_VALUES                  = 'DashboardPage/SET_EDIT_STUDY_FORM_VALUES';
 
 export const FETCH_CAMPAIGNS_BY_STUDY                    = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY';
 export const FETCH_CAMPAIGNS_BY_STUDY_SUCCESS            = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY_SUCCESS';

@@ -28,17 +28,14 @@ import {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
-  selectStudyUpdateProcess,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectEditStudyValues,
   selectMessagingNumbers,
   selectPaginationOptions,
 } from './selectors';
 import {
   fetchStudiesDashboard,
   fetchTotalsDashboard,
-  fetchSiteNames,
   fetchSiteLocations,
   updateDashboardStudy,
   clearFilters,
@@ -76,7 +73,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchLevels: PropTypes.func,
     levels: PropTypes.array,
     fetchSiteLocations: PropTypes.func,
-    fetchSiteNames: PropTypes.func,
     siteNames: PropTypes.array,
     siteLocations: PropTypes.array,
     fetchIndications: PropTypes.func,
@@ -92,10 +88,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     totals: PropTypes.object,
     updateDashboardStudy: PropTypes.func,
     clearFilters: PropTypes.func,
-    studyUpdateProcess: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func,
     allClientUsers: PropTypes.object,
-    editStudyValues: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
     addCustomEmailNotification: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
@@ -358,23 +352,16 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     if (isEmpty) {
       this.props.clearFilters();
-      this.props.fetchTotalsDashboard({}, 10, 0);
-      // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
-    } else {
-      if (!_.isEqual(this.state.prevTotalsFilters, filters)) {
-        this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
-        this.props.fetchTotalsDashboard(filters, 10, 0);
-
-        if (this.state.prevOffset === offset) {
-          this.props.fetchStudiesDashboard(filters, limit, offset);
-          this.setState({ prevOffset: offset });
-        }
-      }
-
+    } else if (_.isEqual(this.state.prevTotalsFilters, filters)) {
       if (this.state.prevOffset !== offset) {
         this.props.fetchStudiesDashboard(filters, limit, offset);
         this.setState({ prevOffset: offset });
       }
+    } else {
+      this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
+      this.props.fetchTotalsDashboard(filters, 10, 0);
+      this.props.fetchStudiesDashboard(filters, limit, offset);
+      this.setState({ prevOffset: offset });
     }
   }
 
@@ -723,18 +710,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           <StudyList
             totals={this.props.totals}
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
-            usersByRoles={this.props.usersByRoles}
             updateDashboardStudy={this.props.updateDashboardStudy}
-            siteLocations={this.props.siteLocations}
-            sponsors={this.props.sponsors}
-            protocols={this.props.protocols}
-            cro={this.props.cro}
             levels={this.props.levels}
-            indications={this.props.indications}
-            studyUpdateProcess={this.props.studyUpdateProcess}
             fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
             allClientUsers={this.props.allClientUsers}
-            editStudyValues={this.props.editStudyValues}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
             addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
@@ -763,10 +742,8 @@ const mapStateToProps = createStructuredSelector({
   cro: selectCro(),
   usersByRoles: selectUsersByRoles(),
   totals: selectStudiesTotals(),
-  studyUpdateProcess: selectStudyUpdateProcess(),
   allClientUsers: selectAllClientUsers(),
   allCustomNotificationEmails: selectAllCustomNotificationEmails(),
-  editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
 });
@@ -777,7 +754,6 @@ function mapDispatchToProps(dispatch) {
     fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
     fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
-    fetchSiteNames: () => dispatch(fetchSiteNames()),
     fetchSiteLocations: () => dispatch(fetchSiteLocations()),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSponsors: () => dispatch(fetchSponsors()),
