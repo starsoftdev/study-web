@@ -28,23 +28,19 @@ import {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
-  selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectMessagingNumbers,
   selectPaginationOptions,
 } from './selectors';
 import {
   fetchStudiesDashboard,
   fetchTotalsDashboard,
   fetchSiteLocations,
-  updateDashboardStudy,
   clearFilters,
   fetchAllClientUsersDashboard,
   fetchStudyCampaignsDashboard,
   fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
   toggleStudy,
-  fetchMessagingNumbersDashboard,
   updateTwilioNumbers,
 } from './actions';
 import {
@@ -86,10 +82,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     fetchUsersByRole: PropTypes.func,
     usersByRoles: PropTypes.object,
     totals: PropTypes.object,
-    updateDashboardStudy: PropTypes.func,
     clearFilters: PropTypes.func,
     fetchAllClientUsersDashboard: PropTypes.func,
-    allClientUsers: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
     addCustomEmailNotification: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
@@ -98,7 +92,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     changeStudyStatusDashboard: PropTypes.func,
     toggleStudy: PropTypes.func,
     fetchMessagingNumbersDashboard: PropTypes.func,
-    messagingNumbers: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
     paginationOptions: PropTypes.object,
   };
@@ -148,7 +141,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
-    this.props.fetchMessagingNumbersDashboard();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
@@ -710,10 +702,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           <StudyList
             totals={this.props.totals}
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
-            updateDashboardStudy={this.props.updateDashboardStudy}
             levels={this.props.levels}
             fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
-            allClientUsers={this.props.allClientUsers}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
             addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
@@ -721,7 +711,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             allCustomNotificationEmails={this.props.allCustomNotificationEmails}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
-            messagingNumbers={this.props.messagingNumbers}
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={this.props.filtersFormValues}
           />
@@ -742,9 +731,7 @@ const mapStateToProps = createStructuredSelector({
   cro: selectCro(),
   usersByRoles: selectUsersByRoles(),
   totals: selectStudiesTotals(),
-  allClientUsers: selectAllClientUsers(),
   allCustomNotificationEmails: selectAllCustomNotificationEmails(),
-  messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
 });
 
@@ -760,7 +747,6 @@ function mapDispatchToProps(dispatch) {
     fetchProtocols: () => dispatch(fetchProtocols()),
     fetchCro: () => dispatch(fetchCro()),
     fetchUsersByRole: () => dispatch(fetchUsersByRole()),
-    updateDashboardStudy: (params) => dispatch(updateDashboardStudy(params)),
     clearFilters: () => dispatch(clearFilters()),
     fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
     addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
@@ -769,7 +755,6 @@ function mapDispatchToProps(dispatch) {
     fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
     changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
-    fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
     updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
   };
 }
