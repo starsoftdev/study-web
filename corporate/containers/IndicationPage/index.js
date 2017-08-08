@@ -48,7 +48,7 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, onSubmitForm } = this.props;
+    const { params } = this.props;
     if (newProps.trials === null) {
       this.show = 0;
       this.h3Text = '';
@@ -62,19 +62,6 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
         const findIndication = indication.name.toLowerCase().replace(/( - )|( – )/ig, '-').replace(/(\()|(\))/ig, '').replace(/( {2})|( )/ig, '-');
         if (findIndication === params.indication) {
           this.currentIndication = indication;
-          const { location: { pathname } } = this.props;
-          const parts = pathname.split('/');
-          let countryCode;
-          if (parts[1] === 'indication') {
-            countryCode = 'us';
-          } else {
-            countryCode = parts[1];
-          }
-          onSubmitForm({
-            from: 0,
-            indicationId: indication.id,
-            countryCode,
-          });
         }
       }
     }
