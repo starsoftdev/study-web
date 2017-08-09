@@ -24,7 +24,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
     let senderImage = defaultUserImage;
     // todo remove and put back Anonymous behavior
     // let senderName = 'Anonymous';
-    let senderName = `${currentUser.firstName} ${currentUser.lastName}`;
+    let senderName = `${currentUser.firstName} ${currentUser.lastName || ''}`;
 
     if (messageData.twilioTextMessage.direction === 'outbound-api') {
       containerClassName = 'post-holder even';
@@ -33,14 +33,14 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
         senderImage = this.props.currentUser.profileImageURL;
       }
       if (messageData.user) {
-        senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName));
+        senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName || ''));
       }
     } else {
       if (messageData.patient.gender === 'Female') {
         senderImage = defaultUserImageGirl;
       }
       if (messageData.patient) {
-        senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName));
+        senderName = messageData.patient.firstName.concat(' '.concat(messageData.patient.lastName || ''));
       }
     }
 
