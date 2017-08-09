@@ -17,7 +17,7 @@ import Input from '../../../components/Input/index';
 import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
-import { selectPatients } from '../selectors';
+import { selectPatients, selectTotalPatients } from '../selectors';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -44,6 +44,7 @@ class TextBlastModal extends React.Component {
     style: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
     patients: React.PropTypes.object,
+    totalPatients: React.PropTypes.number,
   };
 
   constructor(props) {
@@ -61,13 +62,17 @@ class TextBlastModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { formValues, patients } = newProps;
-    let total = patients.total;
-    if (!formValues.selectAllUncheckedManually) {
-      total -= ((formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) ? formValues.uncheckedPatients.length : 0);
+    const { formValues, patients, totalPatients } = newProps;
+
+    let total = 0;
+    if (patients.total === null) {
+      total = totalPatients;
+    } else if (!formValues.selectAllUncheckedManually && formValues.patients && formValues.patients.length > 0) {
+      total = patients.total - ((formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) ? formValues.uncheckedPatients.length : 0);
     } else if ((formValues.patients && formValues.patients.length > 0) || (formValues.patients && formValues.patients.length === 0 && formValues.uncheckedPatients.length > 0)) {
       total = formValues.patients.length;
     }
+
     this.setState({ total });
   }
 
@@ -199,6 +204,7 @@ const mapStateToProps = createStructuredSelector({
   clientCredits: selectClientCredits(),
   formSyncErrors: selectSyncErrors(formName),
   currentUser: selectCurrentUser(),
+  totalPatients: selectTotalPatients(),
 });
 
 function mapDispatchToProps(dispatch) {

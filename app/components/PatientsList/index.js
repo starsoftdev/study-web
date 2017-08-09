@@ -128,7 +128,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   toggleAllPatientSelection(checked) {
-    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, removePatientFromTextBlast, updateSelectAll } = this.props;
+    const { addPatientsToTextBlast, change, patients, removePatientsFromTextBlast, updateSelectAll } = this.props;
     if (checked) {
       addPatientsToTextBlast(patients.details);
       change('selectAllUncheckedManually', false);
@@ -138,8 +138,8 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     updateSelectAll(checked);
     for (const patient of patients.details) {
       if (patient.unsubscribed && checked) {
-        const { id } = patient;
-        removePatientFromTextBlast([{ id }]);
+        // const { id } = patient;
+        // removePatientFromTextBlast([{ id }]);
       } else {
         change(`patient-${patient.id}`, checked);
       }
@@ -248,9 +248,12 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         delete selectedPatient.source_id;
       }
     }
-    let total = patients.total || totalPatients;
-    if (!textBlastFormValues.selectAllUncheckedManually) {
-      total -= ((textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) ? textBlastFormValues.uncheckedPatients.length : 0);
+
+    let total = 0;
+    if (patients.total === null) {
+      total = totalPatients;
+    } else if (!textBlastFormValues.selectAllUncheckedManually && textBlastFormValues.patients && textBlastFormValues.patients.length > 0) {
+      total = patients.total - ((textBlastFormValues.uncheckedPatients && textBlastFormValues.uncheckedPatients.length > 0) ? textBlastFormValues.uncheckedPatients.length : 0);
     } else if ((textBlastFormValues.patients && textBlastFormValues.patients.length > 0) || (textBlastFormValues.patients && textBlastFormValues.patients.length === 0 && textBlastFormValues.uncheckedPatients.length > 0)) {
       total = textBlastFormValues.patients.length;
     }
