@@ -52,12 +52,13 @@ class PatientText extends React.Component {
   renderTextMessageOriginUser() {
     const { currentPatient, textMessage, currentUser } = this.props;
     if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
+      const user = (textMessage.user || currentUser);
       return (
-        <strong className="name">{currentUser.firstName} {currentUser.lastName}</strong>
+        <strong className="name">{user.firstName} {user.lastName || ''}</strong>
       );
     }
     return (
-      <strong className="name">{currentPatient.firstName} {currentPatient.lastName}</strong>
+      <strong className="name">{currentPatient.firstName} {currentPatient.lastName || ''}</strong>
     );
   }
 
