@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OfflinePlugin = require('offline-plugin');
+const AssetsPlugin = require('assets-webpack-plugin')
 
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
@@ -127,5 +128,7 @@ module.exports = require('./webpack.base.babel')({
 
       AppCache: false,
     }),
+    // add webpack assets plugin so that cloudflare clear cache script can know what to clear
+    new AssetsPlugin(),
   ]
 });
