@@ -8,7 +8,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { change, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
 import formValidator from './validator';
