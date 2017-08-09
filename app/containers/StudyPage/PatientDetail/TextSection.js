@@ -175,7 +175,7 @@ class TextSection extends React.Component {
                 key={index}
                 currentPatient={currentPatient}
                 currentUser={currentUser}
-                textMessage={twilioMessage.twilioTextMessage}
+                textMessage={{ ...twilioMessage.twilioTextMessage, user: twilioMessage.user || null }}
               />);
             }
             return (<CallItem

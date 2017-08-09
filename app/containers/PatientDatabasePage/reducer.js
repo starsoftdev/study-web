@@ -41,7 +41,7 @@ const initialState = {
   totalPatients: 0,
   patients: {
     details: [],
-    total: 0,
+    total: null,
     fetching: false,
     error: null,
   },
@@ -180,7 +180,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: [],
-          total: 0,
+          total: null,
           fetching: false,
           error: payload,
         },
@@ -205,7 +205,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         ...state,
         patients: {
           details: [],
-          total: 0,
+          total: null,
           fetching: false,
           error: null,
         },

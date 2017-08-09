@@ -53,17 +53,17 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   componentDidMount() {
-    const { unsubscribed, change, id, removePatientFromTextBlast } = this.props;
+    const { unsubscribed, change, id } = this.props;
     if (unsubscribed) {
-      removePatientFromTextBlast([{ id }]);
+      // removePatientFromTextBlast([{ id }]);
       change(`patient-${id}`, false);
     }
   }
 
   componentWillReceiveProps(newProps) {
-    const { unsubscribed, change, id, removePatientFromTextBlast } = newProps;
+    const { unsubscribed, change, id } = newProps;
     if (unsubscribed && this.props.unsubscribed !== unsubscribed) {
-      removePatientFromTextBlast([{ id }]);
+      // removePatientFromTextBlast([{ id }]);
       change(`patient-${id}`, false);
     }
   }
@@ -99,28 +99,14 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   togglePatientForTextBlast(checked) {
-    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast, patients, formValues } = this.props;
-    let totalCount = patients.details.length;
-    let newCount = formValues.patients.length || 0;
-    let allPatients = false;
+    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast, formValues } = this.props;
     if (checked) {
       addPatientsToTextBlast([{ id }]);
-      newCount++;
+      change('all-patients', (formValues.uncheckedPatients.length === 0 || (formValues.uncheckedPatients.length === 1 && formValues.uncheckedPatients[0] === id)));
     } else {
       removePatientFromTextBlast([{ id }]);
-      newCount--;
+      change('all-patients', false);
     }
-
-    for (const detail of patients.details) {
-      if (detail.unsubscribed) {
-        totalCount--;
-      }
-    }
-
-    if (newCount === totalCount) {
-      allPatients = true;
-    }
-    change('all-patients', allPatients);
   }
 
   render() {
