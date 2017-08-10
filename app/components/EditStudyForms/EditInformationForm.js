@@ -11,7 +11,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import { createStructuredSelector } from 'reselect';
 
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
+import { normalizePhoneDisplay } from '../../common/helper/functions';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -20,7 +20,9 @@ import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import {
-  selectLevels,
+  removeCustomEmailNotification,
+} from '../../containers/App/actions';
+import {
   selectIndications,
   selectSponsors,
   selectProtocols,
@@ -33,10 +35,10 @@ import {
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
   addStudyIndicationTag,
+  fetchAllClientUsersDashboard,
   fetchMessagingNumbersDashboard,
   fetchStudyIndicationTag,
   removeStudyIndicationTag,
-  updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
@@ -47,7 +49,6 @@ const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
   cro: selectCro(),
   indications: selectIndications(),
-  levels: selectLevels(),
   messagingNumbers: selectMessagingNumbers(),
   protocols: selectProtocols(),
   siteLocations: selectSiteLocations(),
@@ -62,10 +63,11 @@ const mapDispatchToProps = (dispatch) => ({
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
+  fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
   fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
+  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
-  updateDashboardStudy: (params) => dispatch(updateDashboardStudy(params)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -83,21 +85,19 @@ export default class EditInformationForm extends React.Component {
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
     fetchStudyIndicationTag: PropTypes.func.isRequired,
     formValues: PropTypes.object,
-    removeCustomEmailNotification: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     indications: PropTypes.array.isRequired,
     isOnTop: React.PropTypes.bool,
+    removeCustomEmailNotification: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onHide: PropTypes.func,
-    openModal: PropTypes.bool.isRequired,
     onShow: PropTypes.func,
-    levels: PropTypes.object.isRequired,
     allCustomNotificationEmails: PropTypes.object,
     messagingNumbers: PropTypes.object.isRequired,
     protocols: PropTypes.array.isRequired,
     siteLocations: PropTypes.array.isRequired,
     sponsors: PropTypes.array.isRequired,
-    study: PropTypes.object,
     usersByRoles: PropTypes.object.isRequired,
     setEditStudyFormValues: PropTypes.func,
     addStudyIndicationTag: PropTypes.func,
@@ -114,9 +114,7 @@ export default class EditInformationForm extends React.Component {
     super(props);
     this.state = {
       showIndicationPopover: false,
-      initial: true,
     };
-    this.onSubmit = this.onSubmit.bind(this);
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
@@ -125,90 +123,80 @@ export default class EditInformationForm extends React.Component {
     this.onClose = this.onClose.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { fetchMessagingNumbersDashboard, fetchStudyIndicationTag, initialValues } = this.props;
-    fetchStudyIndicationTag(initialValues.id);
-    fetchMessagingNumbersDashboard();
+    // fetchStudyIndicationTag(initialValues.id);
+    // fetchMessagingNumbersDashboard();
   }
 
 
   componentWillReceiveProps(newProps) {
-    const { allClientUsers, formValues } = this.props;
-    if (allClientUsers.fetching && !newProps.allClientUsers.fetching) {
-      const fields = [];
-      let isAllChecked = true;
-
-      let studyEmailUsers = formValues.study_notification_users;
-
-      if (studyEmailUsers) { // notification emails
-        studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
-        studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
-        studyEmailUsers = studyEmailUsers.split(',');
-
-        newProps.allClientUsers.details.forEach(item => {
-          const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
-          if (!isChecked) {
-            isAllChecked = false;
-          }
-          fields.push({
-            email: item.email,
-            userId: item.user_id,
-            isChecked,
-          });
-        });
-
-        const newFormValues = {};
-        newFormValues.emailNotifications = fields;
-        newFormValues.checkAllInput = isAllChecked;
-        this.props.setEditStudyFormValues(newFormValues);
-      }
-    }
-
-    if (!newProps.allCustomNotificationEmails.fetching && newProps.allCustomNotificationEmails.details) {
-      const customFields = [];
-      let isAllCustomChecked = (newProps.allCustomNotificationEmails.details.length);
-      const customEmailNotifications = newProps.formValues.customEmailNotifications;
-
-      newProps.allCustomNotificationEmails.details.forEach(item => {
-        const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
-        let isChecked = (item.type === 'active');
-        if (local) {
-          isChecked = local.isChecked;
-          if (!isChecked) {
-            isAllCustomChecked = false;
-          }
-        }
-
-        customFields.push({
-          id: item.id,
-          email: item.email,
-          isChecked,
-        });
-      });
-
-      const newFormValues = {};
-      newFormValues.customEmailNotifications = customFields;
-      newFormValues.checkAllCustomInput = isAllCustomChecked;
-      this.props.setEditStudyFormValues(newFormValues);
-    }
-
-    if (!newProps.studyIndicationTags.fetching && newProps.studyIndicationTags.details) {
-      const customFields = newProps.studyIndicationTags.details.map(item => ({ value: item.indication_id, label: item.name }));
-
-      const newFormValues = {};
-      newFormValues.indicationTags = customFields;
-      this.props.setEditStudyFormValues(newFormValues);
-    }
-
-    if (newProps.formValues.study_id !== formValues.study_id) {
-      this.setState({ initial: true });
-    }
-  }
-
-  onSubmit(params) {
-    const newParam = Object.assign({}, params);
-    newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
-    updateDashboardStudy(newParam);
+    // const { allClientUsers, formValues } = this.props;
+    // if (allClientUsers.fetching && !newProps.allClientUsers.fetching) {
+    //   const fields = [];
+    //   let isAllChecked = true;
+    //
+    //   let studyEmailUsers = formValues.study_notification_users;
+    //
+    //   if (studyEmailUsers) { // notification emails
+    //     studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
+    //     studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
+    //     studyEmailUsers = studyEmailUsers.split(',');
+    //
+    //     newProps.allClientUsers.details.forEach(item => {
+    //       const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
+    //       if (!isChecked) {
+    //         isAllChecked = false;
+    //       }
+    //       fields.push({
+    //         email: item.email,
+    //         userId: item.user_id,
+    //         isChecked,
+    //       });
+    //     });
+    //
+    //     const newFormValues = {};
+    //     newFormValues.emailNotifications = fields;
+    //     newFormValues.checkAllInput = isAllChecked;
+    //     this.props.setEditStudyFormValues(newFormValues);
+    //   }
+    // }
+    //
+    // if (!newProps.allCustomNotificationEmails.fetching && newProps.allCustomNotificationEmails.details) {
+    //   const customFields = [];
+    //   let isAllCustomChecked = (newProps.allCustomNotificationEmails.details.length);
+    //   const customEmailNotifications = newProps.formValues.customEmailNotifications;
+    //
+    //   newProps.allCustomNotificationEmails.details.forEach(item => {
+    //     const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
+    //     let isChecked = (item.type === 'active');
+    //     if (local) {
+    //       isChecked = local.isChecked;
+    //       if (!isChecked) {
+    //         isAllCustomChecked = false;
+    //       }
+    //     }
+    //
+    //     customFields.push({
+    //       id: item.id,
+    //       email: item.email,
+    //       isChecked,
+    //     });
+    //   });
+    //
+    //   const newFormValues = {};
+    //   newFormValues.customEmailNotifications = customFields;
+    //   newFormValues.checkAllCustomInput = isAllCustomChecked;
+    //   this.props.setEditStudyFormValues(newFormValues);
+    // }
+    //
+    // if (!newProps.studyIndicationTags.fetching && newProps.studyIndicationTags.details) {
+    //   const customFields = newProps.studyIndicationTags.details.map(item => ({ value: item.indication_id, label: item.name }));
+    //
+    //   const newFormValues = {};
+    //   newFormValues.indicationTags = customFields;
+    //   this.props.setEditStudyFormValues(newFormValues);
+    // }
   }
 
   onSuggestSelect(e) {
@@ -331,7 +319,7 @@ export default class EditInformationForm extends React.Component {
   }
 
   renderIndications() {
-    const { formValues } = this.props;
+    const { formValues, initialValues } = this.props;
     if (formValues.indicationTags) {
       return (
         <div className="category-list">
@@ -342,7 +330,7 @@ export default class EditInformationForm extends React.Component {
                 <span
                   className="icomoon-icon_trash"
                   onClick={() => {
-                    this.deleteIndication(formValues.study_id, indication);
+                    this.deleteIndication(initialValues.study_id, indication);
                   }}
                 />
               </span>
@@ -355,8 +343,9 @@ export default class EditInformationForm extends React.Component {
   }
 
   render() {
-    const { change, usersByRoles, siteLocations, sponsors, protocols, cro, indications, formValues,
-      messagingNumbers, submitting } = this.props;
+    const { change, cro, formValues, indications, initialValues, handleSubmit, messagingNumbers, protocols,
+      removeCustomEmailNotification, siteLocations, sponsors, submitting, usersByRoles } = this.props;
+    console.log(this.props);
     const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
     const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
@@ -374,7 +363,7 @@ export default class EditInformationForm extends React.Component {
     const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
 
     const studyValues = {
-      id: formValues.study_id ? formValues.study_id : null,
+      id: initialValues.study_id ? initialValues.study_id : null,
       indicationTags: [],
     };
 
@@ -387,7 +376,11 @@ export default class EditInformationForm extends React.Component {
     }
 
     return (
-      <Form className="form-holder" onSubmit={this.props.handleSubmit}>
+      <div></div>
+    );
+
+    return (
+      <Form className="form-holder" onSubmit={handleSubmit}>
         <div className="frame">
           <div className="field-row">
             <strong className="label">
@@ -637,7 +630,7 @@ export default class EditInformationForm extends React.Component {
                   change={change}
                   addEmailNotification={this.props.addEmailNotificationClick}
                   closeEmailNotification={this.closeAddEmailModal}
-                  removeCustomEmailNotification={this.props.removeCustomEmailNotification}
+                  removeCustomEmailNotification={removeCustomEmailNotification}
                 />}
               </div>
             </div>
