@@ -792,19 +792,6 @@ export class EditInformationModal extends React.Component {
                 }
                 <div className="field-row">
                   <strong className="label">
-                    <label>SUVODA CODE</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      type="text"
-                      name="suvoda_protocol_id"
-                      component={Input}
-                      placeholder=""
-                    />
-                  </div>
-                </div>
-                <div className="field-row">
-                  <strong className="label">
                     <label htmlFor="new-patient-phone">DELETE PATIENT</label>
                   </strong>
                   <div className="field">
