@@ -46,7 +46,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
                   sorted.map((event, index) => (
                     <li key={index}>
                       <a className="btn btn-gray-outline lightbox-opener">
-                        <span className="patient-name">{`${event.data.patient.firstName} ${event.data.patient.lastName}`}</span>
+                        <span className="patient-name">{`${event.data.patient.firstName ? event.data.patient.firstName : ''} ${event.data.patient.lastName ? event.data.patient.lastName : ''}`}</span>
                         <span className="time">{moment(event.data.time).format('h:mm A')}</span>
                         <span
                           className="btn btn-primary"

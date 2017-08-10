@@ -8,8 +8,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { change, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
+import classNames from 'classnames';
 import formValidator from './validator';
 import ChatForm from './ChatForm';
 
@@ -31,7 +31,7 @@ class GlobalChatModal extends React.Component { // eslint-disable-line react/pre
   constructor(props) {
     super(props);
 
-    this.handleClose = this.handleClose.bind(this);
+    this.handleOpenAndClose = this.handleOpenAndClose.bind(this);
     this.loadItems = this.loadItems.bind(this);
     this.handleStartChatting = this.handleStartChatting.bind(this);
 
@@ -41,15 +41,16 @@ class GlobalChatModal extends React.Component { // eslint-disable-line react/pre
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      openModal: newProps.showModal,
-    });
-  }
+  // componentWillReceiveProps(newProps) {
+  //   this.setState({
+  //     openModal: newProps.showModal,
+  //   });
+  // }
 
-  handleClose() {
-    this.props.closeModal();
+  handleOpenAndClose() {
+    // this.props.closeModal();
     this.setState({
+      openModal: !this.state.openModal,
       readyForChat: false,
     });
   }
@@ -94,47 +95,55 @@ class GlobalChatModal extends React.Component { // eslint-disable-line react/pre
   renderPrepareRoom() {
     return (
       <div className="prepareroom">
-        <div className="field-row">
-          <textarea
-            className="form-control test"
-            placeholder="Type a message..."
-            onChange={this.textAreaChange}
-            ref={(textarea) => {
-              this.textarea = textarea;
+
+        <section className="chat-area">
+          <div
+            className="scroll-holder"
+            ref={(scrollable) => {
+              this.scrollable = scrollable;
             }}
-          />
-        </div>
-        <div className="field-row center">
-          <Button onClick={this.handleStartChatting}>
-            Start Chatting
-          </Button>
-        </div>
+          >
+            <textarea
+              className="form-control test"
+              placeholder="Type a message..."
+              onChange={this.textAreaChange}
+              ref={(textarea) => {
+                this.textarea = textarea;
+              }}
+            />
+          </div>
+          <footer className="center">
+            <Button onClick={this.handleStartChatting}>
+              Start Chatting
+            </Button>
+          </footer>
+        </section>
       </div>
     );
   }
 
   render() {
     const { readyForChat, openModal } = this.state;
-    const title = readyForChat ? `Chatting with ${this.props.helpName}` : 'Live Chat';
+    const title = readyForChat ? 'Live Chat' : 'Questions about StudyKIK?';
     return (
-      <Collapse
-        dimension="height"
-        in={openModal}
-        timeout={250}
-        className="global-chat-modal"
+      <div
+        className={classNames('global-chat-modal', {
+          collapse: !openModal,
+          in: openModal,
+        })}
       >
         <div className="form-area">
           <div className="form-head">
             <strong className="title">{title}</strong>
-            <a className="btn-close" onClick={this.handleClose}>
-              <i className="glyphicon glyphicon-menu-down" />
+            <a className="btn-close" onClick={this.handleOpenAndClose}>
+              <i className={classNames('glyphicon', { 'glyphicon-menu-down' : openModal }, { 'glyphicon-menu-up' : !openModal })} />
             </a>
           </div>
           {
             readyForChat ? this.renderChatRoom() : this.renderPrepareRoom()
           }
         </div>
-      </Collapse>
+      </div>
     );
   }
 }
