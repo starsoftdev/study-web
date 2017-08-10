@@ -133,32 +133,41 @@ function* fetchStudyDetails() {
 }
 
 function* fetchStudyViewsStat(action) { // eslint-disable-line
-  // const authToken = getItem('auth_token');
-  // if (!authToken) {
-  //   return;
-  // }
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
   // listen for the latest FETCH_STUDY action
-  // const { studyId, campaignId } = action;
+  const { studyId, text, campaignId, sourceId } = action;
 
-  // try {
+  try {
     // TODO fix landing page views endpoint to have better performance
-    // let requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
-    // if (campaignId) {
-    //   requestURL += `?campaignId=${campaignId}`;
-    // }
-    // const response = yield call(request, requestURL, {
-    //   method: 'GET',
-    // });
-    // yield put(studyViewsStatFetched(response));
-  yield put(studyViewsStatFetched(0));
-  // } catch (e) {
-  //   const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-  //   yield put(toastrActions.error('', errorMessage));
-  //   if (e.status === 401) {
-  //     yield call(() => { location.href = '/login'; });
-  //   }
-  // }
+    const queryParams = {};
+
+    if (campaignId) {
+      queryParams.campaignId = campaignId;
+    }
+    if (sourceId) {
+      queryParams.sourceId = sourceId;
+    }
+    if (text) {
+      queryParams.text = text;
+    }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?${queryString}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(studyViewsStatFetched(response));
+    // yield put(studyViewsStatFetched(0));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+    yield put(toastrActions.error('', errorMessage));
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
 }
 
 // TODO re-enable when optimized for high traffic
@@ -896,7 +905,7 @@ export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
-    // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
     // watch for socket.io or filtering actions that will refresh the text message stats
@@ -924,7 +933,7 @@ export function* fetchStudySaga() {
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
     yield cancel(watcherB);
-    // yield cancel(watcherD);
+    yield cancel(watcherD);
     yield cancel(watcherE);
     yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
