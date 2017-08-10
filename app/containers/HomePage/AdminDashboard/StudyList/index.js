@@ -772,7 +772,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                   <div className="table-left" data-table="">
                     <Sticky
                       className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}
-                      topOffset={-352}
+                      topOffset={-268}
                     >
                       <table className="table table-study">
                         <thead>
@@ -832,7 +832,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                       >
                         <Sticky
                           className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}
-                          topOffset={-352}
+                          topOffset={-268}
                           ref={(rightDivHeader) => {
                             this.rightDivHeader = rightDivHeader;
                           }}
