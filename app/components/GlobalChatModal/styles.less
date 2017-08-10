@@ -1,7 +1,8 @@
 .global-chat-modal {
+  z-index: 1001;
   bottom: 2px;
   left: 0;
-  width: 450px;
+  width: 350px;
   margin: 0 2px 0 12px;
   position: absolute;
   background: #fff;
@@ -13,13 +14,12 @@
     display: block;
   }
   &.in {
-    z-index: 1001;
-    width: 450px;
-    height: 571px;
+    width: 350px;
+    height: 471px;
     transition: height 0.25s linear;
   }
   .form-area {
-    width: 450px;
+    width: 350px;
   }
   .btn-close {
     top: 50%;
@@ -45,10 +45,12 @@
     background: #f78e1e;
     > .title {
       .align;
+      .font(17px);
+      font-weight: 600;
+      margin: 0 0 13px 9px;
+      letter-spacing: -0.05rem;
       color: #fff;
-      font-size: 21px;
       min-width: 194px;
-      text-transform: uppercase;
     }
     .modal-opener {
       .align;
@@ -75,8 +77,8 @@
       cursor: pointer;
     }
     .scroll-holder {
-      max-height: 45vh;
-      height: 45vh;
+      max-height: 33vh;
+      height: 33vh;
       padding: 0;
     }
 
@@ -182,13 +184,13 @@
   .prepareroom {
     position: relative;
     margin: 0;
-    height: 520px;
+    height: 420px;
 
     .chat-area {
       padding: 30px;
       .scroll-holder {
-        max-height: 373px;
-        height: 373px;
+        max-height: 273px;
+        height: 273px;
 
         textarea {
           height: 100%;
