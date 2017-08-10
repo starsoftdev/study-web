@@ -41,19 +41,6 @@ export default class AddNewCardForm extends Component { // eslint-disable-line r
         <div className="add-new-card scroll-holder jcf--scrollable">
           <div className="row form-group">
             <strong className="required col-sm-4">
-              <label>COMPANY</label>
-            </strong>
-            <div className="field col-sm-8">
-              <Field
-                name="company"
-                component={Input}
-                type="text"
-                disabled={savedCard.saving}
-              />
-            </div>
-          </div>
-          <div className="row form-group">
-            <strong className="required col-sm-4">
               <label>NAME ON CARD</label>
             </strong>
             <div className="field col-sm-8">
