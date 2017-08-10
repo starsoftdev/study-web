@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { browserHistory } from 'react-router';
 import { reset } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
@@ -14,12 +13,9 @@ import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } fro
 import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
 import { selectValues } from '../../../app/common/selectors/form.selector';
 
-const countrycodes = ['br', 'ca', 'de', 'fr', 'jp', 'it', 'pl', 'uk', 'us', 'cz'];
-
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    params: PropTypes.object,
     onSubmitForm: React.PropTypes.func,
     indications: PropTypes.array,
     trials: PropTypes.any,
@@ -96,18 +92,6 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
   }
 
   onSubmitForm(values) {
-    if (values.countryCode === 'us') {
-      if (values.postalCode) {
-        browserHistory.replace(`/${values.postalCode}`);
-      } else {
-        browserHistory.replace('');
-      }
-    } else if (values.postalCode) {
-      browserHistory.replace(`/${values.countryCode}/${values.postalCode}`);
-    } else {
-      browserHistory.replace(`/${values.countryCode}`);
-    }
-
     const { onSubmitForm, clearTrialsList } = this.props;
     const newValues = Object.assign({
       from: 0,
@@ -143,26 +127,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
 
   render() {
     const { indications, trials, location: { pathname } } = this.props;
-    const parts = pathname.split('/');
-    let countryCode = 'us';
-    let postalCode = '';
-
-    switch (parts.length) {
-      case 2:
-        if (parts[1].length === 2 && countrycodes.findIndex(c => c === parts[1]) > -1) {
-          countryCode = parts[1];
-        } else {
-          postalCode = parts[1];
-        }
-        break;
-      case 3:
-        countryCode = parts[1];
-        postalCode = parts[2];
-        break;
-      default:
-        break;
-    }
-
+    const countryCode = pathname.slice(1).toLowerCase() || 'us';
     let studiesList = [];
 
     if (trials.details) {
@@ -202,7 +167,6 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             onSubmit={this.onSubmitForm}
             initialValues={{
               countryCode,
-              postalCode,
             }}
           />
           <div className="articles-holder relative">
