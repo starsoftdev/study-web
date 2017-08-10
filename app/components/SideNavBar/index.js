@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-import GlobalChatModal from '../../components/GlobalChatModal';
+
 import {
   selectCurrentUserClientId,
   selectUserRoleType,
@@ -18,26 +18,7 @@ class SideNavBar extends React.Component {
     location: React.PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.showGlobalChatModal = this.showGlobalChatModal.bind(this);
-    this.closeGlobalChatModal = this.closeGlobalChatModal.bind(this);
-
-    this.state = {
-      showGlobalChatModal: false,
-    };
-  }
-
   componentDidMount() {
-  }
-
-  showGlobalChatModal() {
-    this.setState({ showGlobalChatModal: true });
-  }
-
-  closeGlobalChatModal() {
-    this.setState({ showGlobalChatModal: false });
   }
 
   render() {
@@ -131,7 +112,6 @@ class SideNavBar extends React.Component {
               </div>
             </div>
           }
-          <GlobalChatModal />
         </div>
       </aside>
     );
