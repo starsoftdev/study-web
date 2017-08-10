@@ -2,20 +2,20 @@ import classNames from 'classnames';
 import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import moment from 'moment-timezone';
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux';
+import { defaultRanges, DateRange } from 'react-date-range';
+import { change, reset } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
+import { StickyContainer } from 'react-sticky';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import rd3 from 'react-d3';
-import { defaultRanges, DateRange } from 'react-date-range';
-import { connect } from 'react-redux';
-import { StickyContainer } from 'react-sticky';
-import { Field, reduxForm, reset, change } from 'redux-form';
-import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
-import Filter from '../../../components/Filter';
+import FilterQueryForm from '../../../components/Filter/FilterQueryForm';
 
 import {
   selectFilterFormValues,
@@ -57,43 +57,80 @@ import {
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
 
-@reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
-export class AdminDashboard extends Component { // eslint-disable-line react/prefer-stateless-function
+const mapStateToProps = createStructuredSelector({
+  allCustomNotificationEmails: selectAllCustomNotificationEmails(),
+  cro: selectCro(),
+  filtersFormValues: selectFilterFormValues(),
+  indications: selectIndications(),
+  protocols: selectProtocols(),
+  levels: selectLevels(),
+  siteNames: selectSiteNames(),
+  siteLocations: selectSiteLocations(),
+  sponsors: selectSponsors(),
+  totals: selectStudiesTotals(),
+  usersByRoles: selectUsersByRoles(),
+  paginationOptions: selectPaginationOptions(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  clearFilters: () => dispatch(clearFilters()),
+  change: (formName, name, value) => dispatch(change(formName, name, value)),
+  addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+  changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
+  addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
+  fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
+  fetchCro: () => dispatch(fetchCro()),
+  fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
+  fetchLevels: () => dispatch(fetchLevels()),
+  fetchIndications: () => dispatch(fetchIndications()),
+  fetchProtocols: () => dispatch(fetchProtocols()),
+  fetchSiteLocations: () => dispatch(fetchSiteLocations()),
+  fetchSponsors: () => dispatch(fetchSponsors()),
+  fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
+  fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
+  fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
+  fetchUsersByRole: () => dispatch(fetchUsersByRole()),
+  resetForm: () => dispatch(reset('dashboardFilters')),
+  toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
+  updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class AdminDashboard extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    dispatch: PropTypes.func,
-    filtersFormValues: PropTypes.object,
-    studies: PropTypes.array,
-    resetForm: PropTypes.func,
-    fetchStudiesDashboard: PropTypes.func,
-    fetchTotalsDashboard: PropTypes.func,
-    fetchLevels: PropTypes.func,
-    levels: PropTypes.array,
-    fetchSiteLocations: PropTypes.func,
-    siteNames: PropTypes.array,
-    siteLocations: PropTypes.array,
-    fetchIndications: PropTypes.func,
-    indications: PropTypes.array,
-    fetchSponsors: PropTypes.func,
-    fetchProtocols: PropTypes.func,
-    fetchCro: PropTypes.func,
-    sponsors: PropTypes.array,
-    protocols: PropTypes.array,
-    cro: PropTypes.array,
-    fetchUsersByRole: PropTypes.func,
-    usersByRoles: PropTypes.object,
-    totals: PropTypes.object,
-    clearFilters: PropTypes.func,
-    fetchAllClientUsersDashboard: PropTypes.func,
     addEmailNotificationUser: PropTypes.func,
     addCustomEmailNotification: PropTypes.func,
-    fetchStudyCampaignsDashboard: PropTypes.func,
-    fetchCustomNotificationEmails: PropTypes.func,
     allCustomNotificationEmails: PropTypes.object,
     changeStudyStatusDashboard: PropTypes.func,
-    toggleStudy: PropTypes.func,
+    clearFilters: PropTypes.func.isRequired,
+    cro: PropTypes.array,
+    fetchAllClientUsersDashboard: PropTypes.func,
+    fetchCro: PropTypes.func,
+    fetchCustomNotificationEmails: PropTypes.func,
+    fetchIndications: PropTypes.func,
+    fetchLevels: PropTypes.func,
+    fetchProtocols: PropTypes.func,
+    fetchSiteLocations: PropTypes.func,
+    fetchSponsors: PropTypes.func,
     fetchMessagingNumbersDashboard: PropTypes.func,
-    updateTwilioNumbers: PropTypes.func,
+    fetchStudyCampaignsDashboard: PropTypes.func,
+    fetchStudiesDashboard: PropTypes.func,
+    fetchTotalsDashboard: PropTypes.func,
+    fetchUsersByRole: PropTypes.func,
+    filtersFormValues: PropTypes.object.isRequired,
+    levels: PropTypes.array,
+    indications: PropTypes.array,
     paginationOptions: PropTypes.object,
+    protocols: PropTypes.array,
+    resetForm: PropTypes.func.isRequired,
+    siteNames: PropTypes.array,
+    studies: PropTypes.array,
+    siteLocations: PropTypes.array,
+    sponsors: PropTypes.array,
+    toggleStudy: PropTypes.func,
+    totals: PropTypes.object,
+    updateTwilioNumbers: PropTypes.func,
+    usersByRoles: PropTypes.object,
   };
 
   constructor(props) {
@@ -101,7 +138,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     this.state = {
       customFilters: [],
-      modalFilters: props.filtersFormValues ? props.filtersFormValues : [],
       showDateRangeModal: false,
       rangePicker : {},
       datePicker : null,
@@ -115,6 +151,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     };
 
     this.addFilter = this.addFilter.bind(this);
+    this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
@@ -147,12 +184,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     // this.props.fetchTotalsDashboard({}, 10, 0);
   }
 
-  componentWillReceiveProps(newProps) {
-    this.setState({
-      modalFilters: newProps.filtersFormValues,
-    });
-  }
-
   addFilter(options) {
     const { customFilters } = this.state;
     if (customFilters.length === 0) {
@@ -167,36 +198,43 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     }
   }
 
+  clearFilters() {
+    const { clearFilters, resetForm } = this.props;
+    clearFilters();
+    this.setState({
+      customFilters: [],
+      prevTotalsFilters: {},
+      prevOffset: null,
+    });
+    resetForm();
+  }
+
   removeFilter(filter) {
-    const { customFilters, modalFilters } = this.state;
+    const { customFilters } = this.state;
+    const { change, filtersFormValues } = this.props;
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
 
-      pullAt(modalFilters, 'search');
-      this.setState({ modalFilters });
+      change('dashboardFilters', 'search', []);
     }
 
     if (filter.name === 'percentage') {
-      pullAt(modalFilters, 'percentage');
-      this.setState({ modalFilters });
+      change('dashboardFilters', 'percentage', []);
     }
 
     if (filter.name === 'nearbyStudies') {
-      pullAt(modalFilters, 'nearbyStudies');
-      this.setState({ modalFilters });
+      change('dashboardFilters', 'nearbyStudies', []);
     }
 
     if (filter.name === 'address') {
-      pullAt(modalFilters, 'address');
-      this.setState({ modalFilters });
+      change('dashboardFilters', 'address', []);
     }
 
-    if (modalFilters[filter.name]) {
-      pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', filter.value]));
-      pullAt(modalFilters[filter.name], findIndex(modalFilters[filter.name], ['label', 'All']));
-      this.setState({ modalFilters });
+    if (filtersFormValues[filter.name]) {
+      pullAt(filtersFormValues[filter.name], findIndex(filtersFormValues[filter.name], ['label', filter.value]));
+      pullAt(filtersFormValues[filter.name], findIndex(filtersFormValues[filter.name], ['label', 'All']));
     }
 
     this.fetchStudiesAccordingToFilters();
@@ -204,18 +242,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
   saveFilters() {
 
-  }
-
-  clearFilters() {
-    this.props.clearFilters();
-    this.setState({ customFilters: [],
-      modalFilters: [] });
-    this.props.resetForm();
-
-    this.setState({ prevTotalsFilters: {} });
-    this.setState({ prevOffset: null });
-    // this.props.fetchTotalsDashboard({}, 10, 0);
-    // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
   }
 
   openFiltersModal() {
@@ -358,45 +384,31 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   percentageFilterChange(e) {
-    this.props.dispatch(change('dashboardFilters', 'percentage', e));
+    change('dashboardFilters', 'percentage', e);
   }
 
   percentageFilterSubmit(e) {
-    this.props.dispatch(change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e }));
+    change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e });
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
   }
 
   nearbyFilterChange(e) {
-    this.props.dispatch(change('dashboardFilters', 'nearbyStudies', e));
+    change('dashboardFilters', 'nearbyStudies', e);
   }
 
   nearbyFilterSubmit(e) {
-    this.props.dispatch(change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e }));
+    change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e });
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.nearbyStudies, arg: e }, 'nearbyStudies');
   }
 
   searchFilterSubmit(e) {
-    this.props.dispatch(change('dashboardFilters', 'search', { value: e }));
+    change('dashboardFilters', 'search', { value: e });
     this.fetchStudiesAccordingToFilters({ value: e }, 'search');
   }
 
   addressFilterSubmit(e) {
-    this.props.dispatch(change('dashboardFilters', 'address', { value: e }));
+    change('dashboardFilters', 'address', { value: e });
     this.fetchStudiesAccordingToFilters({ value: e }, 'address');
-  }
-
-  formatFilterName(filter) {
-    let name = filter.name;
-    if (name === 'siteLocation') {
-      name = 'Site Location';
-    }
-    if (name === 'exposureLevel') {
-      name = 'Exposure Level';
-    }
-    if (name === 'siteNumber') {
-      name = 'Site Number';
-    }
-    return { ...filter, name };
   }
 
   renderDateFooter() {
@@ -418,9 +430,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { customFilters, modalFilters } = this.state;
+    const { customFilters } = this.state;
+    const { resetForm, filtersFormValues } = this.props;
 
-    const filters = concat(this.mapFilterValues(modalFilters), customFilters);
+    const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     const details = this.props.totals.details || {};
 
     const redCount = parseInt(details.total_red) || 0;
@@ -501,7 +514,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
                   <div className="form-lightbox">
                     <FiltersForm
                       handleSubmit={this.addUser}
-                      initialValues={this.props.filtersFormValues}
+                      initialValues={filtersFormValues}
                       fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
                       levels={this.props.levels}
                       siteNames={this.props.siteNames}
@@ -519,50 +532,13 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
           </div>
         </div>
         <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
-          {(filters.length > 0) && (
-          <div className="filters-bar">
-            <div className="filters-holder search-filters">
-              <strong className="title">FILTERS</strong>
-              <div className="btns pull-right">
-                <Button className="gray-outline" onClick={() => this.clearFilters()}>
-                  Clear
-                </Button>
-              </div>
-              <div className="holder">
-                {filters.map((filter, index) =>
-                  <Field
-                    name={filter.name}
-                    key={index}
-                    options={this.formatFilterName(filter)}
-                    component={Filter}
-                    onClose={() => this.removeFilter(filter)}
-                    onChange={(e) => {
-                      if (filter.onChange) {
-                        filter.onChange(e);
-                      }
-                    }}
-                    onSubmit={(e) => {
-                      if (filter.onSubmit) {
-                        filter.onSubmit(e);
-                      }
-                    }
-
-                    }
-                  />
-                )}
-                <Button
-                  bsStyle="primary"
-                  className="add-new-filters btn btn-primary"
-                  onClick={() => this.addFilter({
-                    name: 'search',
-                    type: 'search',
-                    value: '',
-                  })}
-                ><i className="glyphicon glyphicon-plus" /></Button>
-              </div>
-            </div>
-          </div>
-          )}
+          <FilterQueryForm
+            addFilter={this.addFilter}
+            clearFilters={this.clearFilters}
+            filters={filters}
+            removeFilter={this.removeFilter}
+            resetForm={resetForm}
+          />
 
           <div className="d-stats clearfix">
             <ul className="list-unstyled info-list  pull-left">
@@ -712,51 +688,10 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             toggleStudy={this.props.toggleStudy}
             paginationOptions={this.props.paginationOptions}
-            filtersFormValues={this.props.filtersFormValues}
+            filtersFormValues={filtersFormValues}
           />
         </StickyContainer>
       </div>
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  filtersFormValues: selectFilterFormValues(),
-  levels: selectLevels(),
-  siteNames: selectSiteNames(),
-  siteLocations: selectSiteLocations(),
-  indications: selectIndications(),
-  sponsors: selectSponsors(),
-  protocols: selectProtocols(),
-  cro: selectCro(),
-  usersByRoles: selectUsersByRoles(),
-  totals: selectStudiesTotals(),
-  allCustomNotificationEmails: selectAllCustomNotificationEmails(),
-  paginationOptions: selectPaginationOptions(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    resetForm: () => dispatch(reset('dashboardFilters')),
-    fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
-    fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
-    fetchLevels: () => dispatch(fetchLevels()),
-    fetchSiteLocations: () => dispatch(fetchSiteLocations()),
-    fetchIndications: () => dispatch(fetchIndications()),
-    fetchSponsors: () => dispatch(fetchSponsors()),
-    fetchProtocols: () => dispatch(fetchProtocols()),
-    fetchCro: () => dispatch(fetchCro()),
-    fetchUsersByRole: () => dispatch(fetchUsersByRole()),
-    clearFilters: () => dispatch(clearFilters()),
-    fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
-    addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
-    addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
-    fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
-    fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
-    changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
-    toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
-    updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(AdminDashboard);

@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import Select from 'react-select';
 import _ from 'lodash';
 
-class Filter extends React.Component {
+export default class Filter extends React.Component {
   static propTypes = {
     options: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
@@ -164,5 +164,3 @@ class Filter extends React.Component {
     }
   }
 }
-
-export default Filter;
