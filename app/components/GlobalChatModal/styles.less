@@ -1,14 +1,17 @@
 .global-chat-modal {
-  bottom: 10px;
+  bottom: 2px;
   left: 0;
   width: 450px;
-  height: 0;
-  margin: 10px;
+  margin: 0 2px 0 12px;
   position: absolute;
   background: #fff;
   outline: 2px solid #f78e1e;
   transition: height 0.25s linear;
 
+  &.collapse {
+    height: 52px;
+    display: block;
+  }
   &.in {
     z-index: 1001;
     width: 450px;
@@ -17,7 +20,6 @@
   }
   .form-area {
     width: 450px;
-    border: solid 2px #f78e1e;
   }
   .btn-close {
     top: 50%;
@@ -178,23 +180,36 @@
   }
 
   .prepareroom {
-    margin: 60px 30px 30px 30px;
+    position: relative;
+    margin: 0;
+    height: 520px;
+
+    .chat-area {
+      padding: 30px;
+      .scroll-holder {
+        max-height: 373px;
+        height: 373px;
+
+        textarea {
+          height: 100%;
+        }
+      }
+
+      footer {
+        .btn-default {
+          top: 50%;
+          left: 50%;
+          min-height: 40px;
+          margin: -20px 0 0 -79px;
+          position: absolute;
+        }
+      }
+    }
 
     .center {
       text-align: center;
     }
 
-    textarea {
-      height: 200px;
-    }
-
-    .field-row {
-      margin-top: 30px;
-    }
-
-    .field-row + .field-row {
-      margin-top: 150px;
-    }
     
   }
 }
