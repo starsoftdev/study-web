@@ -132,13 +132,9 @@ class SideNavBar extends React.Component {
               <a className="bgn-chat" data-text="CHAT NOW!" data-hovertext="COMING SOON" onClick={this.showGlobalChatModal}>
                 <i className="icomoon-bg" />
               </a>
-              <GlobalChatModal
-                showModal={this.state.showGlobalChatModal}
-                closeModal={this.closeGlobalChatModal}
-                helpName={helpName}
-              />
             </div>
           }
+          <GlobalChatModal />
         </div>
       </aside>
     );
