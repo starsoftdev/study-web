@@ -99,28 +99,14 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   togglePatientForTextBlast(checked) {
-    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast, patients, formValues } = this.props;
-    let totalCount = patients.details.length;
-    let newCount = formValues.patients.length || 0;
-    let allPatients = false;
+    const { addPatientsToTextBlast, change, id, removePatientFromTextBlast, formValues } = this.props;
     if (checked) {
       addPatientsToTextBlast([{ id }]);
-      newCount++;
+      change('all-patients', (formValues.uncheckedPatients.length === 0 || (formValues.uncheckedPatients.length === 1 && formValues.uncheckedPatients[0] === id)));
     } else {
       removePatientFromTextBlast([{ id }]);
-      newCount--;
+      change('all-patients', false);
     }
-
-    for (const detail of patients.details) {
-      if (detail.unsubscribed) {
-        totalCount--;
-      }
-    }
-
-    if (newCount === totalCount) {
-      allPatients = true;
-    }
-    change('all-patients', allPatients);
   }
 
   render() {
