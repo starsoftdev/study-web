@@ -35,7 +35,7 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('HelpAndSupport', 'The request has been submitted successfully'));
+      yield put(toastrActions.success('Thank you for submitting your request.'));
       yield put(formSubmitted(response));
 
       // Clear the form values
