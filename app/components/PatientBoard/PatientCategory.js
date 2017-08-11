@@ -65,10 +65,12 @@ const patientTarget = {
       }
     }
 
-    if (!props.study.suvodaProtocolId || props.study.suvodaProtocolId === '') {
-      patientDragSwitcher(props.category, item, patientId);
-    } else if (props.category.id !== 6 && props.category.id !== 7 && props.category.id !== 8 && item.patientCategoryId !== 6 && item.patientCategoryId !== 7 && item.patientCategoryId !== 8) {
-      patientDragSwitcher(props.category, item, patientId);
+    if (props.category.name === 'Scheduled') {
+      // store the scheduled patient information temporarily since the user could cancel out of their category movement
+      // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
+      props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, props.category.id);
+    } else {
+      props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id, patientId);
     }
   },
 };
