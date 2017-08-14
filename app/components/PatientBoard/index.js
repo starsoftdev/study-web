@@ -44,6 +44,7 @@ const scroll = Scroll.animateScroll;
 class PatientBoard extends React.Component {
   static propTypes = {
     params: React.PropTypes.object,
+    study: React.PropTypes.object,
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
     currentPatient: React.PropTypes.object,
@@ -257,7 +258,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, study } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -265,7 +266,7 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+                <PatientCategory key={patientCategory.id} study={study} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
               ))}
             </ul>
           </nav>
