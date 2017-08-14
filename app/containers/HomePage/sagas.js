@@ -630,7 +630,7 @@ export function* editStudyWorker(action) {
   try {
     const { studyId } = action;
 
-    const requestURL = `${API_URL}/sponsorRoles/editProtocol`;
+    const requestURL = `${API_URL}/clientRoles/editStudy`;
 
     const data = new FormData();
     _.forEach(action.formValues, (value, index) => {

@@ -30,7 +30,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     this.setVisible = this.setVisible.bind(this);
     this.state = {
       countryCode: props.initialValues.countryCode ? props.initialValues.countryCode : 'us',
-      postalCode: props.initialValues.postalCode,
     };
     change('find-studies', 'countryCode', this.props.countryCode);
   }
@@ -154,10 +153,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                 placeholder="Postal Code"
                 className="field-row"
                 bsClass="form-control input-lg"
-                value={this.state.postalCode}
-                onChange={(e) => {
-                  this.setState({ postalCode: e.target.value });
-                }}
               />
             </div>
           </div>
