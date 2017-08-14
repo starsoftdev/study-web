@@ -31,6 +31,16 @@ const patientTarget = {
       return;
     }
 
+    const patientDragSwitcher = (category, item, patientId) => {
+      if (category.name === 'Scheduled') {
+        // store the scheduled patient information temporarily since the user could cancel out of their category movement
+        // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
+        props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, category.id);
+      } else {
+        props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, category.id, item.id, patientId);
+      }
+    };
+
     // access the coordinates
     const clientOffset = monitor.getClientOffset();
     const el = document.elementFromPoint(clientOffset.x, clientOffset.y);
