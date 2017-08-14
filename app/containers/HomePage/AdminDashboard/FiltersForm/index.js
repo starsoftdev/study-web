@@ -173,6 +173,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
       });
     });
     protocolsOptions = _.orderBy(protocolsOptions, 'label');
+    protocolsOptions = [{ id: (protocolsOptions.length + 1), label: 'None', value: 'none' }].concat(protocolsOptions);
 
     let croOptions = [];
     _.forEach(this.props.cro, (item, key) => {
