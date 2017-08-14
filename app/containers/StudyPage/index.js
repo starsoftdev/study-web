@@ -208,6 +208,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             fetchingPatients={fetchingPatients}
             params={params}
             ePMS={ePMS}
+            study={study}
           />
         </section>
       </div>
