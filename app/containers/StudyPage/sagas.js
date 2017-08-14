@@ -160,7 +160,6 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
       method: 'GET',
     });
     yield put(studyViewsStatFetched(response));
-    // yield put(studyViewsStatFetched(0));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
     yield put(toastrActions.error('', errorMessage));
