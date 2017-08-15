@@ -4,8 +4,6 @@ import { Link } from 'react-router';
 const menuItems = [
   { text: 'Privacy Policy', link: '/privacy-policy' },
   { text: 'Terms & Conditions', link: '/terms-and-conditions' },
-  { text: 'Sitemap', link: '/sitemap' },
-  { text: 'RSS Feeds', link: '/rss' },
 ];
 
 function FooterNavBar() {
