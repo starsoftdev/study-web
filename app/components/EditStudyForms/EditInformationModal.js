@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default class EditInformationModal extends React.Component {
   static propTypes = {
     addEmailNotificationClick: PropTypes.func.isRequired,
-    initialValues: PropTypes.object,
+    initialValues: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
   };
@@ -39,7 +39,7 @@ export default class EditInformationModal extends React.Component {
   render() {
     const { addEmailNotificationClick, initialValues, openModal, onClose } = this.props;
 
-    console.log(this.props);
+    console.log(initialValues);
 
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className="form-lightbox form-edit-information">
