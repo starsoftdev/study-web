@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
 /**
- * Direct selector to the patientDatabasePage state domain
+ * Direct selector to the Dashboard Page state domain
  */
 const selectDashboardPageDomain = () => state => state.dashboardPage;
 const selectFormDomain = () => state => state.form;
 /**
- * Default selector used by PatientDatabasePage
+ * Default selector used by Dashboard Page
  */
 
 const selectDashboardPage = () => createSelector(
