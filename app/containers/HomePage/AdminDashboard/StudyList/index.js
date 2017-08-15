@@ -33,7 +33,7 @@ import {
 } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
-import { setHoverRowIndex, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag } from '../actions';
+import { setHoverRowIndex, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag, toggleStudy } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 
@@ -53,9 +53,10 @@ const mapDispatchToProps = (dispatch) => ({
   fetchNote: () => dispatch(fetchNote()),
   addNote: (payload) => dispatch(addNote(payload)),
   editNote: (payload) => dispatch(editNote(payload)),
+  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
-  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
+  toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
 });
 
 @reduxForm({ form: 'campaignFilter' })
@@ -250,28 +251,9 @@ export default class StudyList extends Component { // eslint-disable-line react/
   }
 
   toggleStudy(studyId, checked) {
-    this.props.toggleStudy(studyId, checked);
+    const { toggleStudy } = this.props;
+    toggleStudy(studyId, checked);
     this.showEditInformationModal(false);
-
-    let selectedAllStudies = true;
-    let selectedStudyCount = 0;
-    const studies = map(this.state.studies, (study) => {
-      const c = study.study_id === studyId ? checked : study.selected;
-      selectedAllStudies = selectedAllStudies && c;
-      if (c === true) {
-        selectedStudyCount++;
-      }
-      return {
-        ...study,
-        selected: c,
-      };
-    });
-
-    this.setState({
-      selectedAllStudies,
-      studies,
-      selectedStudyCount,
-    });
   }
 
   changeStudyStatus(studyIds, status) {
@@ -534,9 +516,10 @@ export default class StudyList extends Component { // eslint-disable-line react/
   }
 
   render() {
-    const { studies, selectedStudyCount, selectedAllStudies } = this.state;
+    const { selectedStudyCount, selectedAllStudies } = this.state;
+    const { studies } = this.props;
 
-    const studyListLeftContents = studies.map((item, index) =>
+    const studyListLeftContents = studies.details.map((item, index) =>
       <StudyLeftItem
         item={item}
         key={index}
@@ -549,7 +532,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
         submitToClientPortal={this.props.submitToClientPortal}
       />
     );
-    const studyListRightContents = studies.map((item, index) =>
+    const studyListRightContents = studies.details.map((item, index) =>
       <StudyRightItem
         item={item}
         key={index}
@@ -573,10 +556,11 @@ export default class StudyList extends Component { // eslint-disable-line react/
 
     campaignOptions = campaignOptions.reverse();
 
-    const selectedStudies = studies.filter(s => s.selected);
+    const selectedStudies = studies.details.filter(s => s.selected);
 
-    if (this.props.studies.details.length > 0) {
+    if (studies.details.length > 0) {
       let selectedStudyInitialValues;
+      console.log(studies.details)
       if (selectedStudies && selectedStudies[0]) {
         selectedStudyInitialValues = this.getEditStudyInitialValues(selectedStudies[0]);
       } else {
