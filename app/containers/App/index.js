@@ -79,6 +79,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.pageview(nextProps.location.pathname);
       }
     }
+
+    if (nextProps.location.pathname.indexOf('dashboard') > -1 || (nextProps.currentUserRoleType !== 'client' && nextProps.currentUserRoleType !== 'sponsor')) {
+      this.hidePureChat();
+    } else {
+      this.showPureChat();
+    }
   }
 
   handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function
@@ -87,6 +93,20 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     params.changeTempPassword = true;
 
     this.props.changePassword(params);
+  }
+
+  hidePureChat() {
+    const purechat = document.getElementById('PureChatWidget');
+    if (purechat) {
+      purechat.classList.add('hidden');
+    }
+  }
+
+  showPureChat() {
+    const purechat = document.getElementById('PureChatWidget');
+    if (purechat) {
+      purechat.classList.remove('hidden');
+    }
   }
 
   render() {
