@@ -40,7 +40,6 @@ import {
   fetchStudyCampaignsDashboard,
   fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
-  toggleStudy,
   updateTwilioNumbers,
 } from './actions';
 import {
@@ -91,7 +90,6 @@ const mapDispatchToProps = (dispatch) => ({
   fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
   fetchUsersByRole: () => dispatch(fetchUsersByRole()),
   resetForm: () => dispatch(reset('dashboardFilters')),
-  toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
   updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
 });
 
@@ -127,7 +125,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     studies: PropTypes.array,
     siteLocations: PropTypes.array,
     sponsors: PropTypes.array,
-    toggleStudy: PropTypes.func,
     totals: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
     usersByRoles: PropTypes.object,
@@ -697,7 +694,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             fetchCustomNotificationEmails={this.props.fetchCustomNotificationEmails}
             allCustomNotificationEmails={this.props.allCustomNotificationEmails}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
-            toggleStudy={this.props.toggleStudy}
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
           />
