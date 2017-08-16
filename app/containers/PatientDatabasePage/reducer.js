@@ -201,6 +201,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
       return {
         ...state,
         totalPatients: total,
+        patients: {
+          ...state.patients,
+          totalUnsubscribed: action.totalUnsubscribed,
+        },
       };
     case GET_TOTAL_PATIENTS_COUNT_ERROR:
       return {
