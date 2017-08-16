@@ -11,7 +11,7 @@ import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import { createStructuredSelector } from 'reselect';
 
-import { normalizePhoneDisplay } from '../../common/helper/functions';
+import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -39,7 +39,9 @@ import {
   fetchMessagingNumbersDashboard,
   fetchStudyIndicationTag,
   removeStudyIndicationTag,
+  updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
+import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector'
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
 
@@ -48,6 +50,8 @@ const formName = 'dashboardEditStudyForm';
 const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
   cro: selectCro(),
+  formError: selectSyncErrorBool(formName),
+  formValues: selectValues(formName),
   indications: selectIndications(),
   messagingNumbers: selectMessagingNumbers(),
   protocols: selectProtocols(),
@@ -68,9 +72,10 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
+  updateDashboardStudy: (id, params) => dispatch(updateDashboardStudy(id, params)),
 });
 
-@reduxForm({ form: formName, validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator, enableReinitialize: true })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class EditInformationForm extends React.Component {
   static propTypes = {
@@ -84,8 +89,8 @@ export default class EditInformationForm extends React.Component {
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
     fetchStudyIndicationTag: PropTypes.func.isRequired,
+    formError: PropTypes.bool.isRequired,
     formValues: PropTypes.object,
-    handleSubmit: PropTypes.func.isRequired,
     initialValues: PropTypes.object.isRequired,
     indications: PropTypes.array.isRequired,
     isOnTop: React.PropTypes.bool,
@@ -104,9 +109,11 @@ export default class EditInformationForm extends React.Component {
     removeStudyIndicationTag: PropTypes.func,
     studyIndicationTags: PropTypes.object.isRequired,
     submitting: PropTypes.bool.isRequired,
+    updateDashboardStudy: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    formError: false,
     submitting: false,
   };
 
@@ -121,6 +128,7 @@ export default class EditInformationForm extends React.Component {
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.updateDashboardStudy = this.updateDashboardStudy.bind(this);
   }
 
   componentWillMount() {
@@ -318,6 +326,16 @@ export default class EditInformationForm extends React.Component {
     });
   }
 
+  updateDashboardStudy(event) {
+    event.preventDefault();
+    const { formError, formValues, initialValues, updateDashboardStudy } = this.props;
+    if (!formError) {
+      const newParam = Object.assign({}, formValues);
+      newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
+      updateDashboardStudy(initialValues.study_id, newParam);
+    }
+  }
+
   renderIndications() {
     const { formValues, initialValues } = this.props;
     if (formValues.indicationTags) {
@@ -343,490 +361,508 @@ export default class EditInformationForm extends React.Component {
   }
 
   render() {
-    const { change, cro, formValues, indications, initialValues, handleSubmit, messagingNumbers, protocols,
+    const { addEmailNotificationClick, change, cro, formValues, indications, initialValues, messagingNumbers, protocols,
       removeCustomEmailNotification, siteLocations, sponsors, submitting, usersByRoles } = this.props;
-    console.log(this.props);
-    const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
+    if (formValues) {
+      const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const aeOptions = usersByRoles.ae.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
+      const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const siteLocationsOptions = siteLocations.map(item => ({ value: item.id, label: item.location }));
+      const aeOptions = usersByRoles.ae.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-    const sponsorsOptions = sponsors.map(item => ({ value: item.id, label: item.name }));
+      const siteLocationsOptions = siteLocations.map(item => ({ value: item.id, label: item.location }));
 
-    const protocolsOptions = protocols.map(item => ({ value: item.id, label: item.number }));
+      const sponsorsOptions = sponsors.map(item => ({ value: item.id, label: item.name }));
 
-    const croOptions = cro.map(item => ({ value: item.id, label: item.name }));
+      const protocolsOptions = protocols.map(item => ({ value: item.id, label: item.number }));
 
-    const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
+      const croOptions = cro.map(item => ({ value: item.id, label: item.name }));
 
-    const studyValues = {
-      id: initialValues.study_id ? initialValues.study_id : null,
-      indicationTags: [],
-    };
+      const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
 
-    const messagingNumbersOptions = messagingNumbers.details.map(item => ({ value: item.id, label: item.phone_number }));
-    if (formValues.text_number_id) {
-      messagingNumbersOptions.unshift({
-        value: formValues.text_number_id,
-        label: formValues.phone_number,
-      });
-    }
+      const studyValues = {
+        id: initialValues.study_id ? initialValues.study_id : null,
+        indicationTags: [],
+      };
 
-    return (
-      <div></div>
-    );
+      const messagingNumbersOptions = messagingNumbers.details.map(item => ({
+        value: item.id,
+        label: item.phone_number,
+      }));
+      if (formValues.text_number_id) {
+        messagingNumbersOptions.unshift({
+          value: formValues.text_number_id,
+          label: formValues.phone_number,
+        });
+      }
 
-    return (
-      <Form className="form-holder" onSubmit={handleSubmit}>
-        <div className="frame">
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-first-name">STATUS</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="is_active"
-                component={Toggle}
-                className="field"
-                onChange={(e) => { change('is_public', e.toString()); }}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-first-name">STUDY URL</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                id="edit-information-page-name"
-                name="landing_page_url"
-                component={Input}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-first-name">STUDY NUMBER</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                id="edit-information-page-name"
-                name="study_id"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">SM</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="sm_user_id"
-                component={ReactSelect}
-                placeholder="Select SM"
-                searchPlaceholder="Search"
-                searchable
-                options={smOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">BD</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="bd_user_id"
-                component={ReactSelect}
-                placeholder="Select BD"
-                searchPlaceholder="Search"
-                searchable
-                options={bdOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">AE</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="ae_user_id"
-                component={ReactSelect}
-                placeholder="Select AE"
-                searchPlaceholder="Search"
-                searchable
-                options={aeOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">SITE LOCATION</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="site_location_form"
-                component={ReactSelect}
-                placeholder="Select Site Location"
-                searchPlaceholder="Search"
-                searchable
-                options={siteLocationsOptions}
-                onChange={(e) => { this.siteLocationChanged(e); }}
-                customSearchIconClass="icomoon-icon_search2"
-                clearable={false}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-email">SITE NUMBER</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="site_id"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">SITE ADDRESS</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="site_address"
-                component={FormGeosuggest}
-                refObj={(el) => { this.geoSuggest = el; }}
-                onSuggestSelect={this.onSuggestSelect}
-                initialValue={this.props.formValues.site_address}
-                placeholder=""
-                onFocus={() => {
-                  this.valid = false;
-                }}
-                onBlur={() => {
-                  if (this.valid === false) {
-                    this.geoSuggest.update('');
-                    this.props.change('site_address', '');
-                  }
-                }}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">CITY</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="site_city"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">STATE / PROVINCE</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="site_state"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">COUNTRY</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="site_country_code"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">POSTAL CODE</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                id="editInfo-postalCode"
-                name="site_zip"
-                component={Input}
-                isDisabled
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">RECRUITMENT PHONE</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="recruitment_phone"
-                component={Input}
-                onBlur={this.onPhoneBlur}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label>PRINCIPAL INVESTIGATOR</label>
-            </strong>
-            <div className="field">
-              <Field
-                type="text"
-                name="piName"
-                component={Input}
-                placeholder="Full Name"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
-            <div className="field">
-              <div className="emails-list-holder">
-                {<FieldArray
-                  name="emailNotifications"
-                  component={RenderEmailsList}
-                  formValues={this.props.formValues}
-                  change={change}
-                  addEmailNotification={this.props.addEmailNotificationClick}
-                  closeEmailNotification={this.closeAddEmailModal}
-                />}
+      return (
+        <Form className="form-holder" onSubmit={this.updateDashboardStudy}>
+          <div className="frame">
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-first-name">STATUS</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="is_active"
+                  component={Toggle}
+                  className="field"
+                  onChange={(e) => {
+                    change('is_public', e.toString());
+                  }}
+                />
               </div>
             </div>
-          </div>
-          <div className="field-row">
-            <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
-            <div className="field">
-              <div className="emails-list-holder">
-                {<FieldArray
-                  name="customEmailNotifications"
-                  component={RenderCustomEmailsList}
-                  formValues={this.props.formValues}
-                  change={change}
-                  addEmailNotification={this.props.addEmailNotificationClick}
-                  closeEmailNotification={this.closeAddEmailModal}
-                  removeCustomEmailNotification={removeCustomEmailNotification}
-                />}
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-first-name">STUDY URL</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  id="edit-information-page-name"
+                  name="landing_page_url"
+                  component={Input}
+                />
               </div>
             </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-first-name">PMS</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="patient_messaging_suite"
-                component={Toggle}
-                className="field"
-                onChange={(e) => { change('patientMessagingSuite', e.toString()); }}
-              />
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-first-name">STUDY NUMBER</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  id="edit-information-page-name"
+                  name="study_id"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
             </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">MESSAGING NUMBER</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="messagingNumber"
-                component={ReactSelect}
-                placeholder="Select Messaging Number"
-                searchPlaceholder="Search"
-                searchable
-                options={messagingNumbersOptions}
-                customSearchIconClass="icomoon-icon_search2"
-                onChange={(e) => { change('messaging_number', e.toString()); }}
-              />
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">SM</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="sm_user_id"
+                  component={ReactSelect}
+                  placeholder="Select SM"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={smOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
             </div>
-          </div>
-          {/* <div className="field-row add-messaging-number-row">
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">BD</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="bd_user_id"
+                  component={ReactSelect}
+                  placeholder="Select BD"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={bdOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">AE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="ae_user_id"
+                  component={ReactSelect}
+                  placeholder="Select AE"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={aeOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">SITE LOCATION</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="site_location_form"
+                  component={ReactSelect}
+                  placeholder="Select Site Location"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={siteLocationsOptions}
+                  onChange={(e) => {
+                    this.siteLocationChanged(e);
+                  }}
+                  customSearchIconClass="icomoon-icon_search2"
+                  clearable={false}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-email">SITE NUMBER</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="site_id"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">SITE ADDRESS</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="site_address"
+                  component={FormGeosuggest}
+                  refObj={(el) => {
+                    this.geoSuggest = el;
+                  }}
+                  onSuggestSelect={this.onSuggestSelect}
+                  placeholder=""
+                  onFocus={() => {
+                    this.valid = false;
+                  }}
+                  onBlur={() => {
+                    if (this.valid === false) {
+                      this.geoSuggest.update('');
+                      this.props.change('site_address', '');
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">CITY</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="site_city"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">STATE / PROVINCE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="site_state"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">COUNTRY</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="site_country_code"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">POSTAL CODE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  id="editInfo-postalCode"
+                  name="site_zip"
+                  component={Input}
+                  isDisabled
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">RECRUITMENT PHONE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="recruitment_phone"
+                  component={Input}
+                  onBlur={this.onPhoneBlur}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label>PRINCIPAL INVESTIGATOR</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="piName"
+                  component={Input}
+                  placeholder="Full Name"
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
+              <div className="field">
+                <div className="emails-list-holder">
+                  {/*{<FieldArray*/}
+                    {/*name="emailNotifications"*/}
+                    {/*component={RenderEmailsList}*/}
+                    {/*change={change}*/}
+                    {/*addEmailNotification={addEmailNotificationClick}*/}
+                    {/*closeEmailNotification={this.closeAddEmailModal}*/}
+                  {/*/>}*/}
+                </div>
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
+              <div className="field">
+                <div className="emails-list-holder">
+                  {/*{<FieldArray*/}
+                    {/*name="customEmailNotifications"*/}
+                    {/*component={RenderCustomEmailsList}*/}
+                    {/*change={change}*/}
+                    {/*addEmailNotification={addEmailNotificationClick}*/}
+                    {/*closeEmailNotification={this.closeAddEmailModal}*/}
+                    {/*removeCustomEmailNotification={removeCustomEmailNotification}*/}
+                  {/*/>}*/}
+                </div>
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-first-name">PMS</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="patient_messaging_suite"
+                  component={Toggle}
+                  className="field"
+                  onChange={(e) => {
+                    change('patientMessagingSuite', e.toString());
+                  }}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">MESSAGING NUMBER</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="messagingNumber"
+                  component={ReactSelect}
+                  placeholder="Select Messaging Number"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={messagingNumbersOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                  onChange={(e) => {
+                    change('messaging_number', e.toString());
+                  }}
+                />
+              </div>
+            </div>
+            {/* <div className="field-row add-messaging-number-row">
             <strong className="label"> </strong>
             <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
           </div> */}
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">PROTOCOL</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="protocol_id"
-                component={ReactSelect}
-                placeholder="Select Protocol"
-                searchPlaceholder="Search"
-                searchable
-                options={protocolsOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">SPONSOR</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="sponsor_id"
-                component={ReactSelect}
-                placeholder="Select Sponsor"
-                searchPlaceholder="Search"
-                searchable
-                options={sponsorsOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-first-name">SPONSOR PORTAL</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="should_show_in_sponsor_portal"
-                component={Toggle}
-                className="field"
-                onChange={(e) => { change('shouldShowInSponsorPortal', e.toString()); }}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">CRO</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="cro_id"
-                component={ReactSelect}
-                placeholder="Select CRO"
-                searchPlaceholder="Search"
-                searchable
-                options={croOptions}
-                customSearchIconClass="icomoon-icon_search2"
-                onChange={(e) => { change('croId', e ? e.toString() : null); }}
-              />
-            </div>
-          </div>
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">INDICATION</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="indication_id"
-                component={ReactSelect}
-                placeholder="Select Indication"
-                searchPlaceholder="Search"
-                searchable
-                options={indicationsOptions}
-                customSearchIconClass="icomoon-icon_search2"
-              />
-            </div>
-          </div>
-          <div className="field-row study-indication-hidden">
-            <strong className="label">
-              <label htmlFor="new-patient-phone"> </label>
-            </strong>
-            <div className="field">
-              <Field
-                name="indicationTags"
-                component={ReactSelect}
-                placeholder="Select Indication"
-                options={indicationsOptions}
-                multi
-                joinValues
-                objectValue
-                clearable={false}
-                disabled={submitting}
-                className="multiSelectWrap field"
-              />
-            </div>
-          </div>
-          <div className="field-row small-spacing">
-            <strong className="label"> </strong>
-            <div
-              className="field add-indications"
-              ref={(parent) => (
-                this.parent = parent
-              )}
-            >
-              <Button
-                bsStyle="primary"
-                ref={(target) => (
-                  this.target = target
-                )}
-                onClick={this.toggleIndicationPopover}
-              >
-                + Add Indication
-              </Button>
-              <Overlay
-                show={this.state.showIndicationPopover}
-                placement="bottom"
-                container={this.parent}
-                target={() => this.target}
-                rootClose
-                onHide={() => { this.toggleIndicationPopover(); }}
-              >
-                <IndicationOverlay indications={this.props.indications} selectIndication={this.selectIndication} study={studyValues} onClose={this.toggleIndicationPopover} />
-              </Overlay>
-            </div>
-          </div>
-          {
-            this.props.formValues.indicationTags && this.props.formValues.indicationTags.length > 0 &&
-            <div className="field-row remove-indication small-spacing">
-              <span className="label" />
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">PROTOCOL</label>
+              </strong>
               <div className="field">
-                {this.renderIndications()}
+                <Field
+                  name="protocol_id"
+                  component={ReactSelect}
+                  placeholder="Select Protocol"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={protocolsOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
               </div>
             </div>
-          }
-          <div className="field-row">
-            <strong className="label">
-              <label htmlFor="new-patient-phone">DELETE PATIENT</label>
-            </strong>
-            <div className="field">
-              <Field
-                name="canDeletePatient"
-                component={Toggle}
-                className="field"
-                onChange={(e) => { if (e === false) change('canDeletePatient', e.toString()); }}
-              />
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">SPONSOR</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="sponsor_id"
+                  component={ReactSelect}
+                  placeholder="Select Sponsor"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={sponsorsOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-first-name">SPONSOR PORTAL</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="should_show_in_sponsor_portal"
+                  component={Toggle}
+                  className="field"
+                  onChange={(e) => {
+                    change('shouldShowInSponsorPortal', e.toString());
+                  }}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">CRO</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="cro_id"
+                  component={ReactSelect}
+                  placeholder="Select CRO"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={croOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                  onChange={(e) => {
+                    change('croId', e ? e.toString() : null);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">INDICATION</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="indication_id"
+                  component={ReactSelect}
+                  placeholder="Select Indication"
+                  searchPlaceholder="Search"
+                  searchable
+                  options={indicationsOptions}
+                  customSearchIconClass="icomoon-icon_search2"
+                />
+              </div>
+            </div>
+            <div className="field-row study-indication-hidden">
+              <strong className="label">
+                <label htmlFor="new-patient-phone"> </label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="indicationTags"
+                  component={ReactSelect}
+                  placeholder="Select Indication"
+                  options={indicationsOptions}
+                  multi
+                  joinValues
+                  objectValue
+                  clearable={false}
+                  disabled={submitting}
+                  className="multiSelectWrap field"
+                />
+              </div>
+            </div>
+            <div className="field-row small-spacing">
+              <strong className="label"> </strong>
+              <div
+                className="field add-indications"
+                ref={(parent) => (
+                  this.parent = parent
+                )}
+              >
+                <Button
+                  bsStyle="primary"
+                  ref={(target) => (
+                    this.target = target
+                  )}
+                  onClick={this.toggleIndicationPopover}
+                >
+                  + Add Indication
+                </Button>
+                <Overlay
+                  show={this.state.showIndicationPopover}
+                  placement="bottom"
+                  container={this.parent}
+                  target={() => this.target}
+                  rootClose
+                  onHide={() => {
+                    this.toggleIndicationPopover();
+                  }}
+                >
+                  <IndicationOverlay indications={indications} selectIndication={this.selectIndication}
+                                     study={studyValues} onClose={this.toggleIndicationPopover}/>
+                </Overlay>
+              </div>
+            </div>
+            {
+              formValues.indicationTags && formValues.indicationTags.length > 0 &&
+              <div className="field-row remove-indication small-spacing">
+                <span className="label"/>
+                <div className="field">
+                  {this.renderIndications()}
+                </div>
+              </div>
+            }
+            <div className="field-row">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">DELETE PATIENT</label>
+              </strong>
+              <div className="field">
+                <Field
+                  name="canDeletePatient"
+                  component={Toggle}
+                  className="field"
+                  onChange={(e) => {
+                    if (e === false) change('canDeletePatient', e.toString());
+                  }}
+                />
+              </div>
+            </div>
+            <div className="field-row text-right">
+              <Button type="submit" bsStyle="primary" className="fixed-small-btn" disabled={submitting}>
+                {submitting
+                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                  : <span>UPDATE</span>
+                }
+              </Button>
             </div>
           </div>
-          <div className="field-row text-right">
-            <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-              {submitting
-                ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                : <span>UPDATE</span>
-              }
-            </Button>
-          </div>
-        </div>
-      </Form>
-    );
+        </Form>
+      );
+    }
+    return null;
   }
 }

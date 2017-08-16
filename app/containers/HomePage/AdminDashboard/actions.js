@@ -40,6 +40,7 @@ import {
   CHANGE_STUDY_STATUS_SUCCESS,
   CHANGE_STUDY_STATUS_ERROR,
   TOGGLE_STUDY,
+  TOGGLE_ALL_STUDIES,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
@@ -161,9 +162,10 @@ export function fetchSiteLocationsError(payload) {
   };
 }
 
-export function updateDashboardStudy(params) {
+export function updateDashboardStudy(id, params) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
+    id,
     params,
   };
 }
@@ -386,6 +388,13 @@ export function toggleStudy(id, status) {
   return {
     type: TOGGLE_STUDY,
     id,
+    status,
+  };
+}
+
+export function toggleAllStudies(status) {
+  return {
+    type: TOGGLE_ALL_STUDIES,
     status,
   };
 }

@@ -1,6 +1,5 @@
 import classNames from 'classnames';
-import _, { map, indexOf } from 'lodash';
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
@@ -33,7 +32,16 @@ import {
 } from '../selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
-import { setHoverRowIndex, fetchNote, addNote, editNote, deleteNote, fetchStudyIndicationTag, toggleStudy } from '../actions';
+import {
+  setHoverRowIndex,
+  fetchNote,
+  addNote,
+  editNote,
+  deleteNote,
+  fetchStudyIndicationTag,
+  toggleStudy,
+  toggleAllStudies,
+} from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 
@@ -57,11 +65,12 @@ const mapDispatchToProps = (dispatch) => ({
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
+  toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
 
 @reduxForm({ form: 'campaignFilter' })
 @connect(mapStateToProps, mapDispatchToProps)
-export default class StudyList extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class StudyList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addNotificationProcess: PropTypes.object,
     addEmailNotificationUser: PropTypes.func.isRequired,
@@ -86,6 +95,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
     note: PropTypes.object,
     addNote: PropTypes.func,
     editNote: PropTypes.func,
+    toggleAllStudies: PropTypes.func.isRequired,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
@@ -96,7 +106,6 @@ export default class StudyList extends Component { // eslint-disable-line react/
 
     this.toggleAllStudies = this.toggleAllStudies.bind(this);
     this.toggleStudy = this.toggleStudy.bind(this);
-    this.changeStudyStatus = this.changeStudyStatus.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
     this.deactivateStudies = this.deactivateStudies.bind(this);
     this.adSetStudies = this.adSetStudies.bind(this);
@@ -142,9 +151,6 @@ export default class StudyList extends Component { // eslint-disable-line react/
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
       showCampaignPageModal: false,
-      studies: bindSelection(props.studies),
-      selectedAllStudies: false,
-      selectedStudyCount: 0,
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
@@ -176,27 +182,22 @@ export default class StudyList extends Component { // eslint-disable-line react/
     if (this.tableRight) {
       this.setState({ fixedScrollContainerWidth: (3015 + this.tableRight.clientWidth) });
     }
-    if (this.props.studies.details !== newProps.studies.details) {
-      this.setState({
-        studies: bindSelection(newProps.studies),
-      });
-    }
-    if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
-      let addFields = this.props.editStudyValues.emailNotifications;
-      const values = {
-        firstName: newProps.addNotificationProcess.savedUser.firstName,
-        lastName: newProps.addNotificationProcess.savedUser.lastName,
-        userId: newProps.addNotificationProcess.savedUser.id,
-        isChecked: true,
-      };
-      if (!addFields) {
-        addFields = [values];
-      } else {
-        addFields.push(values);
-      }
-      const { change } = this.props;
-      change('dashboardEditStudyForm', 'emailNotifications', addFields);
-    }
+    // if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
+    //   let addFields = this.props.editStudyValues.emailNotifications;
+    //   const values = {
+    //     firstName: newProps.addNotificationProcess.savedUser.firstName,
+    //     lastName: newProps.addNotificationProcess.savedUser.lastName,
+    //     userId: newProps.addNotificationProcess.savedUser.id,
+    //     isChecked: true,
+    //   };
+    //   if (!addFields) {
+    //     addFields = [values];
+    //   } else {
+    //     addFields.push(values);
+    //   }
+    //   const { change } = this.props;
+    //   change('dashboardEditStudyForm', 'emailNotifications', addFields);
+    // }
   }
 
   componentWillUnmount() {
@@ -208,12 +209,12 @@ export default class StudyList extends Component { // eslint-disable-line react/
   }
 
   getEditStudyInitialValues(study) {
-    const formValues = Object.assign({}, study);
-    formValues.recruitment_phone = normalizePhoneDisplay(formValues.recruitment_phone);
-    formValues.site_location_form = study.site_id;
-    formValues.messagingNumber = study.text_number_id;
+    const initialValues = Object.assign({}, study);
+    initialValues.recruitment_phone = normalizePhoneDisplay(initialValues.recruitment_phone);
+    initialValues.site_location_form = study.site_id;
+    initialValues.messagingNumber = study.text_number_id;
 
-    return formValues;
+    return initialValues;
   }
 
   handleScroll(event) {
@@ -238,16 +239,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
   }
 
   toggleAllStudies(checked) {
-    const studies = map(this.state.studies, (study) => ({
-      ...study,
-      selected: checked,
-    }));
-
-    this.setState({
-      selectedAllStudies: checked,
-      studies,
-      selectedStudyCount: checked === true ? studies.length : 0,
-    });
+    const { toggleAllStudies } = this.props;
+    toggleAllStudies(checked);
   }
 
   toggleStudy(studyId, checked) {
@@ -256,44 +249,18 @@ export default class StudyList extends Component { // eslint-disable-line react/
     this.showEditInformationModal(false);
   }
 
-  changeStudyStatus(studyIds, status) {
-    const studies = map(this.state.studies, (study) => {
-      const studyId = study.studyInfo.id;
-      const hasStudy = indexOf(studyIds, studyId) > -1;
-      if (hasStudy) {
-        return {
-          ...study,
-          status: status ? 'active' : 'deactive',
-        };
-      }
-      return study;
-    });
-
-    this.setState({
-      studies,
-    });
-  }
-
   activateStudies() {
-    const selectedStudies = [];
-    _.forEach(this.state.studies, (study) => {
-      if (study.selected) {
-        selectedStudies.push(study.study_id);
-      }
-    });
+    const { changeStudyStatusDashboard, studies } = this.props;
+    const selectedStudies = studies.details.filter(s => s.selected).map(s => s.study_id);
 
-    this.props.changeStudyStatusDashboard(selectedStudies, 'active', true);
+    changeStudyStatusDashboard(selectedStudies, 'active', true);
   }
 
   deactivateStudies() {
-    const selectedStudies = [];
-    _.forEach(this.state.studies, (study) => {
-      if (study.selected) {
-        selectedStudies.push(study.study_id);
-      }
-    });
+    const { changeStudyStatusDashboard, studies } = this.props;
+    const selectedStudies = studies.details.filter(s => s.selected).map(s => s.study_id);
 
-    this.props.changeStudyStatusDashboard(selectedStudies, 'inactive', true);
+    changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
   adSetStudies() {
@@ -525,42 +492,42 @@ export default class StudyList extends Component { // eslint-disable-line react/
             data-class="btn-deactivate"
             onClick={() => this.showLandingPageModal(true)}
           > Landing Page </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={() => this.showThankYouPageModal(true)}
-        > Thank You Page </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={() => this.showPatientThankYouPageModal(true)}
-        > Patient Thank You Email </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={() => this.showCampaignPageModal(true)}
-        > Campaign </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={() => this.showEditInformationModal(true)}
-        > Info </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={this.adSetStudies}
-        > Ad Set </Button>
-        <Button
-          bsStyle="primary"
-          className="pull-left"
-          data-class="btn-deactivate"
-          onClick={this.historyStudies}
-        > History </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showThankYouPageModal(true)}
+          > Thank You Page </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showPatientThankYouPageModal(true)}
+          > Patient Thank You Email </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showCampaignPageModal(true)}
+          > Campaign </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showEditInformationModal(true)}
+          > Info </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={this.adSetStudies}
+          > Ad Set </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={this.historyStudies}
+          > History </Button>
         </span>
       );
     }
@@ -568,8 +535,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
   }
 
   render() {
-    const { selectedStudyCount, selectedAllStudies } = this.state;
-    const { studies } = this.props;
+    const { studies, totals } = this.props;
 
     const studyListLeftContents = studies.details.map((item, index) =>
       <StudyLeftItem
@@ -577,7 +543,6 @@ export default class StudyList extends Component { // eslint-disable-line react/
         key={index}
         id={index}
         onSelectStudy={this.toggleStudy}
-        onStatusChange={this.changeStudyStatus}
         showNoteModal={this.showNoteModal}
         changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
         setHoverRowIndex={this.props.setHoverRowIndex}
@@ -594,7 +559,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
     );
 
 
-    const maxCampaignCount = this.props.totals.details ? parseInt(this.props.totals.details.max_campaign_count) : 0;
+    const maxCampaignCount = totals.details ? parseInt(totals.details.max_campaign_count) : 0;
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
@@ -648,7 +613,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
             }
             <div className="study-tables fixed-top">
               <div className="head">
-                <h2 className="pull-left">{this.props.totals.details.total_studies || 0} STUDIES</h2>
+                <h2 className="pull-left">{totals.details.total_studies || 0} STUDIES</h2>
                 <div className="btns pull-right">
                   <form className="campaign-filter">
                     <div className="select pull-left">
@@ -744,7 +709,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                 <StickyContainer className="table-area">
                   <div className="table-left" data-table="">
                     <Sticky
-                      className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}
+                      className={classNames('table-top', (selectedStudies.length > 0 ? 'sticky-selected' : 'sticky-unselected'))}
                       topOffset={-268}
                     >
                       <table className="table table-study">
@@ -763,8 +728,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                             <th>
                               <div>
                                 <span className="text-uppercase">Status</span>
-                                <span className="counter">Active: {this.props.totals.details.total_active || 0}</span>
-                                <span className="counter">Inactive: {this.props.totals.details.total_inactive || 0}</span>
+                                <span className="counter">Active: {totals.details.total_active || 0}</span>
+                                <span className="counter">Inactive: {totals.details.total_inactive || 0}</span>
                               </div>
                             </th>
                             <th>
@@ -804,7 +769,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                         }}
                       >
                         <Sticky
-                          className={classNames('table-top', (selectedStudyCount > 0 ? 'sticky-selected' : 'sticky-unselected'))}
+                          className={classNames('table-top', (selectedStudies.length > 0 ? 'sticky-selected' : 'sticky-unselected'))}
                           topOffset={-268}
                           ref={(rightDivHeader) => {
                             this.rightDivHeader = rightDivHeader;
@@ -853,10 +818,10 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>NEW PATIENT</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.count_not_contacted_campaign_total || 0}</span>
+                                    >{totals.details.count_not_contacted_campaign_total || 0}</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.count_not_contacted_total || 0}</span>
+                                    >{totals.details.count_not_contacted_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -864,15 +829,15 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>CALL ATTEMPTED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.call_attempted_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.call_attempted_total || 0}</span>
+                                    >{totals.details.call_attempted_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.call_attempted_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
                                   <div>
                                     <span>NOT QUALIFIED</span>
-                                    <span className="counter">{this.props.totals.details.dnq_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.dnq_total || 0}</span>
+                                    <span className="counter">{totals.details.dnq_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.dnq_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -880,8 +845,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>ACTION NEEDED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.action_needed_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.action_needed_total || 0}</span>
+                                    >{totals.details.action_needed_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.action_needed_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -889,8 +854,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>SCHEDULED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.scheduled_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.scheduled_total || 0}</span>
+                                    >{totals.details.scheduled_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.scheduled_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -898,8 +863,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>CONSENTED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.consented_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.consented_total || 0}</span>
+                                    >{totals.details.consented_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.consented_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -907,8 +872,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>SCREEN FAILED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.screen_failed_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.screen_failed_total || 0}</span>
+                                    >{totals.details.screen_failed_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.screen_failed_total || 0}</span>
                                   </div>
                                 </th>
                                 <th>
@@ -916,8 +881,8 @@ export default class StudyList extends Component { // eslint-disable-line react/
                                     <span>RANDOMIZED</span>
                                     <span
                                       className="counter"
-                                    >{this.props.totals.details.randomized_campaign_total || 0}</span>
-                                    <span className="counter">{this.props.totals.details.randomized_total || 0}</span>
+                                    >{totals.details.randomized_campaign_total || 0}</span>
+                                    <span className="counter">{totals.details.randomized_total || 0}</span>
                                   </div>
                                 </th>
                               </tr>
@@ -946,7 +911,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                     </div>
                   </div>
                 </StickyContainer>
-                {this.props.studies.fetching &&
+                {studies.fetching &&
                 <div className="dashboard-studies-spinner"><LoadingSpinner showOnlyIcon /></div>}
               </InfiniteScroll>
             </div>
@@ -960,7 +925,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
             />
             <LandingPageModal
               openModal={this.state.showLandingPageModal}
-              studies={this.state.studies}
+              studies={studies.details}
               onClose={() => {
                 this.showLandingPageModal(false);
               }}
@@ -968,7 +933,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
             />
             <ThankYouPageModal
               openModal={this.state.showThankYouPageModal}
-              studies={this.state.studies}
+              studies={studies.details}
               onClose={() => {
                 this.showThankYouPageModal(false);
               }}
@@ -976,7 +941,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
             />
             <PatientThankYouEmailModal
               openModal={this.state.showPatientThankYouPageModal}
-              studies={this.state.studies}
+              studies={studies.details}
               onClose={() => {
                 this.showPatientThankYouPageModal(false);
               }}
@@ -1058,9 +1023,3 @@ export default class StudyList extends Component { // eslint-disable-line react/
     );
   }
 }
-
-const bindSelection = (studies) =>
-  map(studies.details, (study) => ({
-    ...study,
-    selected: study.selected || false,
-  }));
