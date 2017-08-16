@@ -262,8 +262,14 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">
-              <h2>TOTAL PATIENT COUNT:
+              <h2 className="pull-left">SUBSCRIBED
                 <span className="patient-count"> {total}</span>
+              </h2>
+              <h2 className="pull-left">UNSUBSCRIBED
+                <span className="patient-count"> {patients.totalUnsubscribed || 0}</span>
+              </h2>
+              <h2 className="pull-left">TOTAL
+                <span className="patient-count"> {(total + patients.totalUnsubscribed)}</span>
               </h2>
             </header>
             <div className="fixed-table-thead">
