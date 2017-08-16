@@ -99,6 +99,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     addEmailNotificationUser: PropTypes.func,
     addCustomEmailNotification: PropTypes.func,
     allCustomNotificationEmails: PropTypes.object,
+    change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func,
     clearFilters: PropTypes.func.isRequired,
     cro: PropTypes.array,
@@ -175,21 +176,12 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
-
-    this.hidePureChat();
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({
       modalFilters: newProps.filtersFormValues,
     });
-  }
-
-  hidePureChat() {
-    const purechat = document.getElementById('PureChatWidget');
-    if (purechat) {
-      purechat.classList.add('hidden');
-    }
   }
 
   addFilter(options) {
