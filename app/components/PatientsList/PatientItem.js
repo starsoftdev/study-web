@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Field, change } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import Checkbox from '../../components/Input/Checkbox';
 import { selectSelectedPatient, selectPatients } from '../../containers/PatientDatabasePage/selectors';
@@ -112,13 +114,29 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   render() {
     const { id, index, firstName, lastName, email, phone, age, gender, bmi, indications, source, studyPatientCategory, unsubscribed } = this.props;
     let checkClassName = 'pull-left';
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="calendar-tooltip pd-page-unsubscibed-tooltip"
+      >
+        Unsubscibed
+      </Tooltip>
+    );
     if (unsubscribed) {
       checkClassName += ' none-event';
     }
-    const indicationNames = indications.map(indicationIterator => indicationIterator.name).join(', ');
-    return (
-      <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
-        <div className="td">
+    let checkboxComponent = (<Field
+      className={checkClassName}
+      name={`patient-${id}`}
+      type="checkbox"
+      disabled={unsubscribed}
+      checked={!unsubscribed}
+      component={Checkbox}
+      onChange={this.togglePatientForTextBlast}
+    />);
+    if (unsubscribed) {
+      checkboxComponent = (<OverlayTrigger placement="top" overlay={tooltip}>
+        <div className="pd-test">
           <Field
             className={checkClassName}
             name={`patient-${id}`}
@@ -128,6 +146,14 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             component={Checkbox}
             onChange={this.togglePatientForTextBlast}
           />
+        </div>
+      </OverlayTrigger>);
+    }
+    const indicationNames = indications.map(indicationIterator => indicationIterator.name).join(', ');
+    return (
+      <div className={classNames('tr', 'patient-container', { 'tr-active': this.state.hover })} onMouseEnter={this.showHover} onMouseLeave={this.hideHover}>
+        <div className="td">
+          {checkboxComponent}
           <span>
             {index + 1}
           </span>
