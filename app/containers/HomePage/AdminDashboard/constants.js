@@ -59,6 +59,7 @@ export const CHANGE_STUDY_STATUS_SUCCESS                 = 'DashboardPage/CHANGE
 export const CHANGE_STUDY_STATUS_ERROR                   = 'DashboardPage/CHANGE_STUDY_STATUS_ERROR';
 
 export const TOGGLE_STUDY                                = 'DashboardPage/TOGGLE_STUDY';
+export const TOGGLE_ALL_STUDIES                          = 'DashboardPage/TOGGLE_ALL_STUDIES';
 
 export const FETCH_MESSAGING_NUMBERS                     = 'DashboardPage/FETCH_MESSAGING_NUMBERS';
 export const FETCH_MESSAGING_NUMBERS_SUCCESS             = 'DashboardPage/FETCH_MESSAGING_NUMBERS_SUCCESS';

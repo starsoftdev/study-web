@@ -32,6 +32,7 @@ import {
   FETCH_STUDY_CAMPAIGNS_SUCCESS,
   CHANGE_STUDY_STATUS_SUCCESS,
   TOGGLE_STUDY,
+  TOGGLE_ALL_STUDIES,
 
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
@@ -783,6 +784,18 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     }
+    case TOGGLE_ALL_STUDIES:
+      return {
+        ...state,
+        studies: {
+          details: state.studies.details.map(study => ({
+            ...study,
+            selected: action.status,
+          })),
+          fetching: false,
+          error: null,
+        },
+      };
     case UPDATE_LANDING_PAGE:
       return {
         ...state,
