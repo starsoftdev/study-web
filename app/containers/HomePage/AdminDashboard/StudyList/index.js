@@ -94,7 +94,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
   constructor(props) {
     super(props);
 
-    this.toggleAllstudies = this.toggleAllstudies.bind(this);
+    this.toggleAllStudies = this.toggleAllStudies.bind(this);
     this.toggleStudy = this.toggleStudy.bind(this);
     this.changeStudyStatus = this.changeStudyStatus.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
@@ -170,7 +170,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
   componentWillReceiveProps(newProps) {
     // if filters have changed, we toggle off all selected studies and also clear campaign filter
     if (newProps.filtersFormValues && newProps.filtersFormValues !== this.props.filtersFormValues) {
-      this.toggleAllstudies(false);
+      this.toggleAllStudies(false);
       this.props.clearCampaignFilter();
     }
     if (this.tableRight) {
@@ -237,7 +237,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
     }
   }
 
-  toggleAllstudies(checked) {
+  toggleAllStudies(checked) {
     const studies = map(this.state.studies, (study) => ({
       ...study,
       selected: checked,
@@ -434,7 +434,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
   campaignChanged(e) {
     const { change } = this.props;
     change('dashboardFilters', 'campaign', e);
-    this.toggleAllstudies(false);
+    this.toggleAllStudies(false);
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
@@ -515,6 +515,58 @@ export default class StudyList extends Component { // eslint-disable-line react/
     return null;
   }
 
+  renderEditStudyActionButtons(selectedStudies) {
+    if (selectedStudies.length === 1) {
+      return (
+        <span>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showLandingPageModal(true)}
+          > Landing Page </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={() => this.showThankYouPageModal(true)}
+        > Thank You Page </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={() => this.showPatientThankYouPageModal(true)}
+        > Patient Thank You Email </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={() => this.showCampaignPageModal(true)}
+        > Campaign </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={() => this.showEditInformationModal(true)}
+        > Info </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={this.adSetStudies}
+        > Ad Set </Button>
+        <Button
+          bsStyle="primary"
+          className="pull-left"
+          data-class="btn-deactivate"
+          onClick={this.historyStudies}
+        > History </Button>
+        </span>
+      );
+    }
+    return null;
+  }
+
   render() {
     const { selectedStudyCount, selectedAllStudies } = this.state;
     const { studies } = this.props;
@@ -560,7 +612,6 @@ export default class StudyList extends Component { // eslint-disable-line react/
 
     if (studies.details.length > 0) {
       let selectedStudyInitialValues;
-      console.log(studies.details)
       if (selectedStudies && selectedStudies[0]) {
         selectedStudyInitialValues = this.getEditStudyInitialValues(selectedStudies[0]);
       } else {
@@ -568,10 +619,10 @@ export default class StudyList extends Component { // eslint-disable-line react/
       }
       return (
         <div>
-          <div className={classNames({ 'btns-active': selectedStudyCount > 0 })}>
-            {selectedStudyCount > 0 &&
+          <div className={classNames({ 'btns-active': selectedStudies.length > 0 })}>
+            {selectedStudies.length > 0 &&
             <Sticky className={classNames('clearfix', 'top-head', 'top-head-fixed', 'active')} topOffset={-268}>
-              <strong className="title"><span className="studies-counter"> {selectedStudyCount}</span> <span
+              <strong className="title"><span className="studies-counter"> {selectedStudies.length}</span> <span
                 className="text" data-one="STUDY" data-two="STUDIES"
               > SELECTED</span></strong>
               <div className="btns-area">
@@ -591,69 +642,7 @@ export default class StudyList extends Component { // eslint-disable-line react/
                 >
                   Deactivate
                 </Button>
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={() => this.showLandingPageModal(true)}
-                  > Landing Page </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={() => this.showThankYouPageModal(true)}
-                  > Thank You Page </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={() => this.showPatientThankYouPageModal(true)}
-                  > Patient Thank You Email </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={() => this.showCampaignPageModal(true)}
-                  > Campaign </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={() => this.showEditInformationModal(true)}
-                  > Info </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={this.adSetStudies}
-                  > Ad Set </Button>
-                }
-                {
-                  selectedStudyCount === 1 &&
-                  <Button
-                    bsStyle="primary"
-                    className="pull-left"
-                    data-class="btn-deactivate"
-                    onClick={this.historyStudies}
-                  > History </Button>
-                }
+                {this.renderEditStudyActionButtons(selectedStudies)}
               </div>
             </Sticky>
             }
@@ -762,10 +751,10 @@ export default class StudyList extends Component { // eslint-disable-line react/
                         <thead>
                           <tr className="default-cursor">
                             <th>
-                              <span className={selectedAllStudies ? 'sm-container checked' : 'sm-container'}>
+                              <span className={selectedStudies.length === studies.details.length ? 'sm-container checked' : 'sm-container'}>
                                 <span
                                   className="input-style"
-                                  onClick={() => this.toggleAllstudies(!selectedAllStudies)}
+                                  onClick={() => this.toggleAllStudies(!(selectedStudies.length === studies.details.length))}
                                 >
                                   <input name="all" type="checkbox" />
                                 </span>

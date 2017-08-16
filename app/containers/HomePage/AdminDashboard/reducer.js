@@ -769,9 +769,9 @@ export default function dashboardPageReducer(state = initialState, action) {
       const studiesCopy = [
         ...state.studies.details,
       ];
-      const studyIndex = _.findIndex(studiesCopy, (item) => (action.id === item.study_id));
-      if (studyIndex) {
-        studiesCopy[studyIndex].selected = action.status;
+      const study = _.find(studiesCopy, (item) => (action.id === item.study_id));
+      if (study) {
+        study.selected = action.status;
       }
 
       return {
