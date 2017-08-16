@@ -81,8 +81,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }
 
     if (nextProps.location.pathname.indexOf('dashboard') > -1 || nextProps.currentUserRoleType === 'dashboard') {
+      console.log(1111);
       this.hidePureChat();
     } else {
+      console.log(2222);
       this.showPureChat();
     }
   }
