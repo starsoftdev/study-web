@@ -99,6 +99,7 @@ export function patientsFetched(searchParams, payload, patients, searchFilter, q
     result,
     queryParams,
     total: payload.total,
+    totalUnsubscribed: payload.totalUnsubscribed,
   };
 }
 
