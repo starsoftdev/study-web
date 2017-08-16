@@ -122,6 +122,7 @@ export function getTotalPatientsCountSuccess(payload) {
   return {
     type: GET_TOTAL_PATIENTS_COUNT_SUCCESS,
     total: payload.count,
+    totalUnsubscribed: payload.countUnsubscribed,
   };
 }
 
