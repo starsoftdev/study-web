@@ -25,7 +25,6 @@
     "cucumber": "cucumberjs",
     "extract-intl": "babel-node --presets es2015,stage-0 -- ./internals/scripts/extract-intl.js",
     "generate": "plop --plopfile internals/generators/index.js",
-    "heroku-postbuild": "npm run build:clear",
     "preinstall": "npm run npmcheckversion",
     "install": "node install.js",
     "lint": "eslint .",
