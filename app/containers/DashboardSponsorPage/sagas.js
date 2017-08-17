@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -64,7 +64,7 @@ export function* fetchSponsorsWorker(action) {
     yield put(fetchSponsorsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSponsorsError(err));
   }
 }
@@ -86,7 +86,7 @@ export function* addSponsorWorker(action) {
     yield put(addSponsorSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addSponsorError(err));
   }
 }
@@ -108,7 +108,7 @@ export function* editSponsorWorker(action) {
     yield put(editSponsorSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editSponsorError(err));
   }
 }
@@ -129,7 +129,7 @@ export function* deleteSponsorWorker(action) {
     yield put(deleteSponsorSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteSponsorError(err));
   }
 }

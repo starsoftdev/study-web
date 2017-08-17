@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -60,7 +60,7 @@ export function* fetchMessagingNumbersWorker(action) {
     yield put(fetchMessagingNumbersSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchMessagingNumbersError(err));
   }
 }
@@ -86,7 +86,7 @@ export function* addMessagingNumberWorker(action) {
     */
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addMessagingNumberError(err));
   }
 }
@@ -108,7 +108,7 @@ export function* editMessagingNumberWorker(action) {
     yield put(editMessagingNumberSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editMessagingNumberError(err));
   }
 }
@@ -130,7 +130,7 @@ export function* archiveMessagingNumberWorker(action) {
     yield put(archiveMessagingNumberSuccess({ id: response.id }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while archiving messaging number');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(archiveMessagingNumberError(err));
   }
 }
