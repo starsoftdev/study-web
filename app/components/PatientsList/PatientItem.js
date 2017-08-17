@@ -119,7 +119,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
         id={'ms-tooltip'}
         className="calendar-tooltip pd-page-unsubscibed-tooltip"
       >
-        Unsubscibed
+        UNSUBSCIBED
       </Tooltip>
     );
     if (unsubscribed) {
