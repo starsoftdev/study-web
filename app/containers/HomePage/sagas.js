@@ -30,6 +30,7 @@ import {
   EDIT_NOTE,
   DELETE_NOTE,
   FETCH_STUDIES_DASHBOARD,
+  FETCH_FIVE_9_LIST,
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_NAMES,
@@ -109,6 +110,8 @@ import {
   deleteCampaignSuccess,
   deleteCampaignError,
   fetchCampaignsByStudy,
+  fetchFive9ListSuccess,
+  fetchFive9ListError,
 
 } from './AdminDashboard/actions';
 
@@ -795,6 +798,25 @@ export function* fetchStudiesDashboardWorker(action) {
   }
 }
 
+export function* fetchFive9ListWatcher() {
+  yield* takeLatest(FETCH_FIVE_9_LIST, fetchFive9ListWorker);
+}
+
+export function* fetchFive9ListWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getFive9ListsList`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchFive9ListSuccess(response));
+  } catch (err) {
+    yield put(fetchFive9ListError(err));
+  }
+}
+
 export function* fetchSiteLocationsWatcher() {
   yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocationsWorker);
 }
@@ -1240,6 +1262,7 @@ export function* homePageSaga() {
   const watcherN = yield fork(fetchStudyIndicationTagsWatcher);
   const watcherO = yield fork(addStudyIndicationTagWatcher);
   const watcherP = yield fork(removeStudyIndicationTagWatcher);
+  const watcherR = yield fork(fetchFive9ListWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -1287,6 +1310,7 @@ export function* homePageSaga() {
     yield cancel(watcherN);
     yield cancel(watcherO);
     yield cancel(watcherP);
+    yield cancel(watcherR);
     if (options.payload.pathname !== '/app') {
       yield put(clearFilters());
       yield put(reset('dashboardFilters'));
