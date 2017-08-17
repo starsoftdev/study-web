@@ -8,7 +8,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -30,7 +30,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
-    displayToastrError: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -123,7 +122,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   handleFileChange(img, width, height) {
     if (width > 2000 || height > 2000) {
-      this.props.displayToastrError('Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
+      // TODO YOUNES: To test
+      toastr.error('', 'Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
     }
     this.setState({
       selectedImage: img,
@@ -275,9 +275,4 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createStructuredSelector({
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    displayToastrError: (error) => dispatch(toastrActions.error(error)),
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(StudyAddForm);
+export default connect(mapStateToProps, null)(StudyAddForm);

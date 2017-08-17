@@ -1,11 +1,12 @@
 /**
  * Created by mike on 9/23/16.
  */
-
+import React from 'react';
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { actions as toastrActions, toastr } from 'react-redux-toastr';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
 import request from '../../utils/request';
@@ -124,7 +125,7 @@ function* fetchStudyDetails() {
       yield call(() => { location.href = '/app/notfound'; });
     } else {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching study information. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -162,7 +163,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
     yield put(studyViewsStatFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -190,7 +191,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 //     yield put(callStatsFetched(response));
 //   } catch (e) {
 //     const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
-//     yield put(toastrActions.error('', errorMessage));
+//     toastr.error('', errorMessage);
 //     if (e.status === 401) {
 //       yield call(() => { location.href = '/login'; });
 //     }
@@ -221,7 +222,7 @@ function* fetchStudyTextStats(action) {
     yield put(textStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -250,7 +251,7 @@ function* fetchPatientCategories() {
     yield call(fetchPatients, studyId);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -285,6 +286,17 @@ export function* exportPatients() {
         options.query.text = encodeURIComponent(text);
       }
 
+      const toastrOptions = {
+        id: 'loadingToasterForExportPatients',
+        type: 'success',
+        title: 'Preparing download...',
+        message: '',
+        options: {
+          timeOut: 0,
+          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+        },
+      };
+      yield put(toastrActions.add(toastrOptions));
       yield call(request, requestURL, options);
       yield put(patientsExported());
     } catch (e) {
@@ -293,7 +305,7 @@ export function* exportPatients() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -319,7 +331,7 @@ export function* downloadReport() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while downloading report. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -347,7 +359,7 @@ export function* generateReferral() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while generating patient referral. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -373,7 +385,7 @@ export function* downloadReferral() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', 'Something went wrong while downloading patient referral. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -420,7 +432,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
     }
     yield put(patientsFetchedError(e));
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patients. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -518,7 +530,7 @@ function* fetchPatientDetails() {
       yield put(patientDetailsFetched(patientId, patientCategoryId, response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching patient information. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -556,7 +568,7 @@ function* findPatientsSaga() {
       yield put(addPatientsToTextBlast(response));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -588,7 +600,7 @@ function* addPatientIndication() {
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -620,7 +632,7 @@ function* submitMovePatientBetweenCategories() {
       yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, 1, patientId, moment().toISOString()));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(movePatientBetweenCategoriesFailed());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -654,7 +666,7 @@ function* removePatientIndication() {
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while removing the patient indication. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -686,7 +698,7 @@ function* submitPatientUpdate() {
       } else if (errorMessage.includes('phone')) {
         errorMessage = 'Error! This phone number is already on file.';
       }
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -715,7 +727,7 @@ function* submitPatientNote() {
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -743,7 +755,7 @@ function* submitDeleteNote() {
       }
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding a patient note. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -773,10 +785,10 @@ function* submitTextBlast() {
         }),
       });
       onClose();
-      yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
+      toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -804,12 +816,12 @@ function* submitPatientImport() {
         body: formData,
       });
       onClose();
-      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      toastr.success('Import Patients', 'Patients imported successfully!');
       yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
       yield put(submitAddPatientFailure());
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -833,7 +845,7 @@ function* submitAddPatient() {
         body: JSON.stringify(patient),
       });
       onClose();
-      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      toastr.success('Add Patient', 'Patient added successfully!');
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
@@ -850,7 +862,7 @@ function* submitAddPatient() {
       } else {
         errorMessages = 'Something went wrong while adding a patient. Please try again later.';
       }
-      yield put(toastrActions.error('', errorMessages));
+      toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -873,7 +885,7 @@ export function* submitSchedule() {
       yield put(submitScheduleSucceeded(response, data.patientId));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(submitScheduleFailed(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -894,7 +906,7 @@ export function* deletePatient() {
       yield put(deletePatientSuccess(id));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while deleting a patient.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(deletePatientError(err));
     }
   }
