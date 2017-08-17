@@ -11,6 +11,7 @@ import {
   FETCH_PATIENTS_SUCCESS,
   RESET_TEXT_BLAST,
   UPDATE_SELECT_ALL,
+  SAVE_PATIENT_SUCCESS,
 } from '../constants';
 
 const initialState = {
@@ -31,6 +32,7 @@ export default function TextBlastModal(state = initialState, action) {
   let allPatients = false;
   let selectAllUncheckedManually = false;
   let uncheckedPatients = [];
+  let foundIndex = null;
   switch (action.type) {
     case ADD_PATIENTS_TO_TEXT_BLAST:
       patientsIdsToAdd = _.map(action.patients, patient => (patient.id));
@@ -81,7 +83,6 @@ export default function TextBlastModal(state = initialState, action) {
       return {
         ...state,
         values: {
-          ...state.values,
           patients: [],
           uncheckedPatients: [],
           'all-patients': false,
@@ -92,9 +93,11 @@ export default function TextBlastModal(state = initialState, action) {
     case FETCH_PATIENTS_SUCCESS:
       allPatients = state.values['all-patients'];
       selectAllUncheckedManually = state.values.selectAllUncheckedManually;
+      uncheckedPatients = state.values.uncheckedPatients;
       if (action.queryParams.filter.skip === 0) {
         allPatients = true;
         selectAllUncheckedManually = false;
+        uncheckedPatients = [];
       }
       patients = _.filter(action.payload, (patient) => {
         /* if (_.find(state.values.patients, p => p.id === patient.id)) {
@@ -148,6 +151,42 @@ export default function TextBlastModal(state = initialState, action) {
         values: {
           ...state.values,
           selectAll: action.selectAll,
+        },
+      };
+
+    case SAVE_PATIENT_SUCCESS:
+      foundIndex = _.findIndex(state.values.patients, { id: action.payload.id });
+
+      patients = state.values.patients;
+      uncheckedPatients = state.values.uncheckedPatients;
+
+      if (foundIndex > -1 && action.payload.unsubscribed === true && state.values.patients[foundIndex].unsubscribed === false) {
+        patients = _.filter(state.values.patients, (patient) => !(action.payload.id === patient.id));
+      }
+
+      foundIndex = _.findIndex(uncheckedPatients, (item) => (item === action.payload.id));
+
+      if (foundIndex > -1 && action.payload.unsubscribed === true) {
+        uncheckedPatients = _.filter(uncheckedPatients, (patient) => !(action.payload.id === patient));
+      }
+
+      if (foundIndex === -1 && _.findIndex(state.values.patients, { id: action.payload.id }) === -1) {
+        uncheckedPatients.push(action.payload.id);
+      }
+
+      if (uncheckedPatients.length === 0) {
+        allPatients = true;
+      } else {
+        allPatients = false;
+      }
+
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          patients,
+          uncheckedPatients,
+          'all-patients': allPatients,
         },
       };
     default:
