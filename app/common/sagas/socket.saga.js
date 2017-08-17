@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition, consistent-return */
 import { take, put, fork, call } from 'redux-saga/effects';
 import { takeLatest } from 'redux-saga';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
@@ -77,7 +77,7 @@ export function* subscribeToPageEvent() {
       );
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -93,7 +93,7 @@ export function* subscribeToChatEvent() {
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -107,7 +107,7 @@ export function* unsubscribeFromPageEvent() {
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -121,7 +121,7 @@ export function* unsubscribeFromAllEvents() {
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -136,7 +136,7 @@ export function* fetchStudyPatientMessages() {
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -151,7 +151,7 @@ export function* sendStudyPatientMessages() {
       });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -178,7 +178,7 @@ export function* fetchNotifications(action) {
     yield put(fetchNotificationsSucceeded(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -190,7 +190,7 @@ export function* fetchUnreadNotificationsCount(action) {
     yield put(fetchUnreadNotificationsCountSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching unreadNotificationsCount');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -204,7 +204,7 @@ export function* markNotificationsReadWorker() {
       yield call(request, requestURL, params);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong marking notifications read');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
