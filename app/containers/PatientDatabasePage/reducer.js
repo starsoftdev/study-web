@@ -88,6 +88,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let foundIndex = -1;
   let totalAfterSave = 0;
   let totalUnsubscibedAfterSave = 0;
+  let totalPatients = 0;
 
   switch (action.type) {
     case CLEAR_IMPORT_FORM:
@@ -217,7 +218,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: [],
           total: null,
-          totalUnsubscribed: null,
+          totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
         },
@@ -306,15 +307,17 @@ export default function patientDatabasePageReducer(state = initialState, action)
       foundIndex = findIndex(patientsCollection, { id: payload.id });
       totalAfterSave = state.patients.total;
       totalUnsubscibedAfterSave = state.patients.totalUnsubscribed;
-
+      totalPatients = state.totalPatients;
       if (foundIndex > -1) {
         if (payload.unsubscribed === false && patientsCollection[foundIndex].unsubscribed === true) {
           totalUnsubscibedAfterSave--;
           totalAfterSave++;
+          totalPatients++;
         }
         if (payload.unsubscribed === true && patientsCollection[foundIndex].unsubscribed === false) {
           totalUnsubscibedAfterSave++;
           totalAfterSave--;
+          totalPatients--;
         }
 
         patientsCollection[foundIndex] = payload;
@@ -322,6 +325,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
 
       return {
         ...state,
+        totalPatients,
         savedPatient: {
           details: payload,
           saving: false,
