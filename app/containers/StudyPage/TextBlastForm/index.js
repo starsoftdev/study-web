@@ -7,7 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -34,7 +34,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
-  displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
   findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
   filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
@@ -54,7 +53,6 @@ class TextBlastForm extends React.Component {
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
     fetchClientCredits: React.PropTypes.func,
-    displayToastrError: React.PropTypes.func.isRequired,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -199,16 +197,16 @@ class TextBlastForm extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { currentUser, displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
         this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
-      displayToastrError('', formSyncErrors.message);
+      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
-      displayToastrError('', formSyncErrors.patients);
+      toastr.error('', formSyncErrors.patients);
     }
   }
 
