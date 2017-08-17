@@ -68,7 +68,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       queryParams.excludeIndication = map(searchFilter.excludeIndication, i => i.value).join(',');
     }
 
-    const { currentUser, paginationOptions } = this.props;
+    const { currentUser, paginationOptions, getTotalPatientsCount } = this.props;
     queryParams.limit = 15;
     if (isSearch) {
       queryParams.skip = 0;
@@ -96,6 +96,11 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     } else {
       this.props.clearPatientsList();
       this.props.resetTextBlast();
+      let defaultSiteLocation = null;
+      if (currentUser.roleForClient.site_id && this.props.sites.length > 0) {
+        defaultSiteLocation = _.find(this.props.sites, { id: currentUser.roleForClient.site_id }).id;
+      }
+      getTotalPatientsCount(currentUser.roleForClient.client_id, defaultSiteLocation);
     }
   }
 
