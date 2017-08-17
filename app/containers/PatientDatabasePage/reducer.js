@@ -42,6 +42,7 @@ const initialState = {
   patients: {
     details: [],
     total: null,
+    totalUnsubscribed: null,
     fetching: false,
     error: null,
   },
@@ -82,9 +83,12 @@ const initialState = {
 };
 
 export default function patientDatabasePageReducer(state = initialState, action) {
-  const { payload, total } = action;
+  const { payload, total, totalUnsubscribed } = action;
   const patientsCollection = map(state.patients.details, cloneDeep);
   let foundIndex = -1;
+  let totalAfterSave = 0;
+  let totalUnsubscibedAfterSave = 0;
+  let totalPatients = 0;
 
   switch (action.type) {
     case CLEAR_IMPORT_FORM:
@@ -137,6 +141,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: state.patients.details,
           total: state.patients.total,
+          totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
         },
@@ -147,6 +152,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: state.patients.details,
           total: state.patients.total,
+          totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: true,
           error: null,
         },
@@ -164,6 +170,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: payload,
           total,
+          totalUnsubscribed,
           fetching: false,
           error: null,
         },
@@ -181,6 +188,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: [],
           total: null,
+          totalUnsubscribed: null,
           fetching: false,
           error: payload,
         },
@@ -194,6 +202,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
       return {
         ...state,
         totalPatients: total,
+        patients: {
+          ...state.patients,
+          totalUnsubscribed: action.totalUnsubscribed,
+        },
       };
     case GET_TOTAL_PATIENTS_COUNT_ERROR:
       return {
@@ -206,6 +218,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: [],
           total: null,
+          totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
         },
@@ -292,12 +305,27 @@ export default function patientDatabasePageReducer(state = initialState, action)
       };
     case SAVE_PATIENT_SUCCESS:
       foundIndex = findIndex(patientsCollection, { id: payload.id });
+      totalAfterSave = state.patients.total;
+      totalUnsubscibedAfterSave = state.patients.totalUnsubscribed;
+      totalPatients = state.totalPatients;
       if (foundIndex > -1) {
+        if (payload.unsubscribed === false && patientsCollection[foundIndex].unsubscribed === true) {
+          totalUnsubscibedAfterSave--;
+          totalAfterSave++;
+          totalPatients++;
+        }
+        if (payload.unsubscribed === true && patientsCollection[foundIndex].unsubscribed === false) {
+          totalUnsubscibedAfterSave++;
+          totalAfterSave--;
+          totalPatients--;
+        }
+
         patientsCollection[foundIndex] = payload;
       }
 
       return {
         ...state,
+        totalPatients,
         savedPatient: {
           details: payload,
           saving: false,
@@ -305,7 +333,8 @@ export default function patientDatabasePageReducer(state = initialState, action)
         },
         patients: {
           details: patientsCollection,
-          total: state.patients.total,
+          total: totalAfterSave,
+          totalUnsubscribed: totalUnsubscibedAfterSave,
           fetching: false,
           error: null,
         },
@@ -364,6 +393,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: action.patients,
           total: state.patients.total,
+          totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
         },
