@@ -83,7 +83,6 @@ export default function TextBlastModal(state = initialState, action) {
       return {
         ...state,
         values: {
-          ...state.values,
           patients: [],
           uncheckedPatients: [],
           'all-patients': false,
@@ -98,6 +97,7 @@ export default function TextBlastModal(state = initialState, action) {
       if (action.queryParams.filter.skip === 0) {
         allPatients = true;
         selectAllUncheckedManually = false;
+        uncheckedPatients = [];
       }
       patients = _.filter(action.payload, (patient) => {
         /* if (_.find(state.values.patients, p => p.id === patient.id)) {
