@@ -2,7 +2,7 @@ import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import _, { get } from 'lodash';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
@@ -76,13 +76,13 @@ export function* editSponsorUserWorker(action) {
 
     yield put(editSponsorUserSuccess(response));
     if (action.params.isNew) {
-      yield put(toastrActions.success('Success!', 'User has been added.'));
+      toastr.success('Success!', 'User has been added.');
     } else {
-      yield put(toastrActions.success('Success!', 'You have updated your information.'));
+      toastr.success('Success!', 'You have updated your information.');
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing user. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editSponsorUserError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -104,10 +104,10 @@ export function* deleteSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(deleteSponsorUserSuccess(response));
-    yield put(toastrActions.success('Success!', 'User has been deleted.'));
+    toastr.success('Success!', 'User has been deleted.');
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting user. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteSponsorUserError(err));
   }
 }
@@ -139,10 +139,10 @@ export function* editProtocolWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editProtocolSuccess(response));
-    yield put(toastrActions.success('Success!', 'You have updated your information.'));
+    toastr.success('Success!', 'You have updated your information.');
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while editing the protocol. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editProtocolError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });

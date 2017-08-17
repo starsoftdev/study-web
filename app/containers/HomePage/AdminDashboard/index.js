@@ -161,7 +161,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchMessagingNumbersDashboard();
     this.props.fetchFive9List();
 
-    this.hidePureChat();
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
     // this.props.fetchTotalsDashboard({}, 10, 0);
@@ -171,13 +170,6 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.setState({
       modalFilters: newProps.filtersFormValues,
     });
-  }
-
-  hidePureChat() {
-    const purechat = document.getElementById('PureChatWidget');
-    if (purechat) {
-      purechat.classList.add('hidden');
-    }
   }
 
   addFilter(options) {

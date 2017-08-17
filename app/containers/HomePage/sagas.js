@@ -3,7 +3,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 
@@ -250,7 +250,7 @@ export function* fetchNoteWorker() {
     yield put(fetchNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchNoteError(err));
   }
 }
@@ -272,7 +272,7 @@ export function* addNoteWorker(action) {
     yield put(addNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addNoteError(err));
   }
 }
@@ -294,7 +294,7 @@ export function* editNoteWorker(action) {
     yield put(editNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editNoteError(err));
   }
 }
@@ -315,7 +315,7 @@ export function* deleteNoteWorker(action) {
     yield put(deleteNoteSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteNoteError(err));
   }
 }
@@ -344,7 +344,7 @@ export function* fetchPatientSignUpsWorker(action) {
     yield put(fetchPatientSignUpsSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -368,7 +368,7 @@ export function* fetchPrincipalInvestigatorTotalsWorker(action) {
     yield put(fetchPrincipalInvestigatorTotalsSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching principal investigators');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -389,7 +389,7 @@ export function* fetchPatientMessagesWorker(action) { // eslint-disable-line no-
   // yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
   // } catch (err) {
   //   const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
-  //   yield put(toastrActions.error('', errorMessage));
+  //   toastr.error('', errorMessage);
   //   if (err.status === 401) {
   //     yield call(() => { location.href = '/login'; });
   //   }
@@ -517,7 +517,7 @@ export function* fetchIndicationLevelPriceWorker(action) {
     yield put(indicationLevelPriceFetched(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Can not get price for Level');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(indicationLevelPriceFetchingError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -543,7 +543,7 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     yield put(indicationLevelPriceFetched(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(indicationLevelPriceFetchingError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -573,7 +573,7 @@ export function* renewStudyWorker(action) {
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyRenewed(response));
-    yield put(toastrActions.success('Renew Study', 'The request has been submitted successfully'));
+    toastr.success('Renew Study', 'The request has been submitted successfully');
     yield put(updateStudy({
       studyId,
       condenseTwoWeeks: formValues.condenseTwoWeeks,
@@ -583,7 +583,7 @@ export function* renewStudyWorker(action) {
     onClose();
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(studyRenewingError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -609,7 +609,7 @@ export function* upgradeStudyWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(toastrActions.success('Upgrade Study', 'The request has been submitted successfully'));
+    toastr.success('Upgrade Study', 'The request has been submitted successfully');
     response.newLevelId = formValues.level;
     response.studyId = studyId;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
@@ -618,7 +618,7 @@ export function* upgradeStudyWorker(action) {
     yield put(reset('upgradeStudy'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(studyUpgradingError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -658,12 +658,12 @@ export function* editStudyWorker(action) {
 
     yield put(fetchClientSites(action.formValues.clientId, {}));
 
-    yield put(toastrActions.success('Edit Study', 'The request has been submitted successfully'));
+    toastr.success('Edit Study', 'The request has been submitted successfully');
     yield put(studyEdited(response));
     yield put(reset('editStudy'));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(studyEditingError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -896,7 +896,7 @@ export function* fetchAllClientUsersWorker(action) {
   } catch (err) {
     yield put(fetchAllClientUsersDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -923,7 +923,7 @@ export function* fetchStudyCampaignsWorker(action) {
   } catch (err) {
     yield put(fetchStudyCampaignsDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -969,11 +969,11 @@ export function* changeStudyStatusWorker(action) {
     yield call(request, requestURL, options);
 
     yield put(changeStudyStatusDashboardSuccess({ studies: params, status, isChecked }));
-    yield put(toastrActions.success('Success!', `The ${params.length > 1 ? 'studies are' : 'study is'} now ${status}.`));
+    toastr.success('Success!', `The ${params.length > 1 ? 'studies are' : 'study is'} now ${status}.`);
   } catch (err) {
     yield put(changeStudyStatusDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1022,10 +1022,10 @@ export function* changeStudyAddWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Success! Study ad has been updated.'));
+    toastr.success('', 'Success! Study ad has been updated.');
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
-    yield put(toastrActions.error('Error!'));
+    toastr.error('Error!');
     yield put(changeStudyAddError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -1093,7 +1093,7 @@ export function* fetchMessagingNumbersWorker() {
   } catch (err) {
     yield put(fetchMessagingNumbersDashboardError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1114,11 +1114,11 @@ export function* updateTwilioNumbersWorker() {
     const response = yield call(request, requestURL, params);
 
     yield put(updateTwilioNumbersSuccess(response));
-    yield put(toastrActions.success('Syncing for Twilio numbers has been queued. Please wait about 5 minutes for the task to process.'));
+    toastr.success('Syncing for Twilio numbers has been queued. Please wait about 5 minutes for the task to process.');
   } catch (err) {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1153,7 +1153,7 @@ export function* fetchCampaignsByStudyWorker(action) {
   } catch (err) {
     yield put(fetchCampaignsByStudyError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1180,7 +1180,7 @@ export function* editCampaignWorker(action) {
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editCampaignError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -1208,7 +1208,7 @@ export function* deleteCampaignWorker(action) {
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteCampaignError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });

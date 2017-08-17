@@ -2,7 +2,7 @@
 
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
@@ -40,11 +40,11 @@ export function* changePassword() {
       const response = yield call(request, requestURL, params);
 
       yield put(passwordChanged(response));
-      yield put(toastrActions.success('', 'You have successfully changed your password.'));
+      toastr.success('', 'You have successfully changed your password.');
       yield put(logout());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(passwordChangingError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -69,10 +69,10 @@ export function* changeImage() {
       };
       const response = yield call(request, requestURL, params);
       yield put(imageChanged(response));
-      yield put(toastrActions.success('', 'You have successfully updated your profile image!'));
+      toastr.success('', 'You have successfully updated your profile image!');
     } catch (err) {
       yield put(imageChangingError(err));
-      yield put(toastrActions.error('Error!'));
+      toastr.error('Error!');
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -90,7 +90,7 @@ export function* fetchOtherUserWorker() {
       yield put(fetchOtherUserSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchOtherUserError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });

@@ -1,8 +1,13 @@
 {
   "extends": "stylelint-config-standard",
   "rules": {
-    "color-hex-case": "upper",
-    "string-quotes": "single",
+    "color-hex-case": "lower",
+    "comment-empty-line-before": [
+      "always",
+      {
+        "ignore": ["after-comment", "stylelint-commands"]
+      }
+    ],
     "font-family-name-quotes": "always-where-recommended",
     "declaration-empty-line-before": "never",
     "rule-empty-line-before": [
@@ -12,6 +17,8 @@
         ]
       }
     ],
+    "selector-list-comma-newline-after": "always-multi-line",
+    "selector-pseudo-element-colon-notation": "single",
     "selector-pseudo-class-no-unknown": [
       true,
       {
