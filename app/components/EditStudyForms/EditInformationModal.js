@@ -46,6 +46,7 @@ export class EditInformationModal extends React.Component {
     arrayPush: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     cro: PropTypes.array,
+    five9List: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     formValues: PropTypes.object,
     handleSubmit: PropTypes.func.isRequired,
@@ -74,6 +75,7 @@ export class EditInformationModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      five9List: [],
       showIndicationPopover: false,
       initial: true,
     };
@@ -179,6 +181,19 @@ export class EditInformationModal extends React.Component {
         });
       });
     } */
+
+    if (newProps.five9List.details.length && !this.state.five9List.length) {
+      this.setState({ five9List: newProps.five9List.details });
+    }
+
+    if (newProps.formValues.five_9_value && !newProps.formValues.five9value && this.state.five9List.length) {
+      const five9List = this.state.five9List;
+      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
+      if (index === -1) {
+        five9List.push({ name: newProps.formValues.five_9_value });
+        this.setState({ five9List });
+      }
+    }
   }
 
   onSuggestSelect(e) {
@@ -340,6 +355,8 @@ export class EditInformationModal extends React.Component {
     const protocolsOptions = protocols.map(item => ({ value: item.id, label: item.number }));
 
     const croOptions = cro.map(item => ({ value: item.id, label: item.name }));
+
+    const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
 
     const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
 
@@ -790,6 +807,23 @@ export class EditInformationModal extends React.Component {
                     </div>
                   </div>
                 }
+                <div className="field-row">
+                  <strong className="label">
+                    <label>FIVE 9 LIST</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="five_9_value"
+                      component={ReactSelect}
+                      placeholder="Select list name on Five9"
+                      searchPlaceholder=""
+                      searchable
+                      options={five9Options}
+                      customSearchIconClass="icomoon-icon_search2"
+                      onChange={(e) => { change('five9value', e ? e.toString() : null); }}
+                    />
+                  </div>
+                </div>
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">DELETE PATIENT</label>
