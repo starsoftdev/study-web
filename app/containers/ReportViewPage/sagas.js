@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { getItem, removeItem } from '../../utils/localStorage';
 import request from '../../utils/request';
@@ -93,11 +93,11 @@ export function* changeProtocolStatusWorker(action) {
 
     const response = yield call(request, requestURL);
     yield put(changeProtocolStatusSuccess(response));
-    yield put(toastrActions.success('Success!', `The study is now ${action.payload.status ? 'active' : 'inactive'}.`));
+    toastr.success('Success!', `The study is now ${action.payload.status ? 'active' : 'inactive'}.`);
   } catch (err) {
     yield put(changeProtocolStatusError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -121,7 +121,7 @@ export function* exportStudiesWorker(action) {
       removeItem('auth_token');
     }
     const errorMessage = get(e, 'message', 'Something went wrong while exporting studies. Please try again later.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
