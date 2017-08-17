@@ -5,7 +5,7 @@
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { arrayRemoveAll, arrayPush, change, Field, FieldArray, reduxForm, blur } from 'redux-form';
+import { arrayRemoveAll, arrayPush, blur, change, Field, FieldArray, reduxForm, startSubmit, stopSubmit } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
@@ -72,6 +72,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
+  startSubmit: () => dispatch(startSubmit(formName)),
+  stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
   updateDashboardStudy: (id, params) => dispatch(updateDashboardStudy(id, params)),
 });
 
@@ -107,7 +109,9 @@ export default class EditInformationForm extends React.Component {
     setEditStudyFormValues: PropTypes.func,
     addStudyIndicationTag: PropTypes.func,
     removeStudyIndicationTag: PropTypes.func,
+    startSubmit: PropTypes.func.isRequired,
     studyIndicationTags: PropTypes.object.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     updateDashboardStudy: PropTypes.func.isRequired,
   };
@@ -251,11 +255,9 @@ export default class EditInformationForm extends React.Component {
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
-          change('site_address', `${streetNmber} ${route}`);
         } else {
           const addressArr = e.label.split(',');
           this.geoSuggest.update(`${addressArr[0]}`);
-          change('site_address', `${addressArr[0]}`);
         }
       }
     } else {
@@ -270,9 +272,7 @@ export default class EditInformationForm extends React.Component {
         change('site_country_code', addressArr[3]);
       }
       this.geoSuggest.update(`${addressArr[0]}`);
-      change('site_address', `${addressArr[0]}`);
     }
-    this.valid = true;
   }
 
   onPhoneBlur(event) {
@@ -295,12 +295,12 @@ export default class EditInformationForm extends React.Component {
       fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
 
       change('site_id', foundSiteLocation.id);
-      change('site_address', foundSiteLocation.address);
       change('site_city', foundSiteLocation.city);
       change('site_state', foundSiteLocation.state);
       change('site_country_code', foundSiteLocation.country_code);
       change('site_zip', foundSiteLocation.zip);
       change('client_id', foundSiteLocation.client_id);
+      this.geoSuggest.update(foundSiteLocation.address);
     }
   }
 
@@ -328,11 +328,12 @@ export default class EditInformationForm extends React.Component {
 
   updateDashboardStudy(event) {
     event.preventDefault();
-    const { formError, formValues, initialValues, updateDashboardStudy } = this.props;
+    const { formError, formValues, initialValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
     if (!formError) {
+      startSubmit();
       const newParam = Object.assign({}, formValues);
       newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
-      updateDashboardStudy(initialValues.study_id, newParam);
+      updateDashboardStudy(initialValues.study_id, newParam, stopSubmit);
     }
   }
 
@@ -531,20 +532,12 @@ export default class EditInformationForm extends React.Component {
                 <Field
                   name="site_address"
                   component={FormGeosuggest}
+                  initialValue={initialValues.site_address}
                   refObj={(el) => {
                     this.geoSuggest = el;
                   }}
                   onSuggestSelect={this.onSuggestSelect}
                   placeholder=""
-                  onFocus={() => {
-                    this.valid = false;
-                  }}
-                  onBlur={() => {
-                    if (this.valid === false) {
-                      this.geoSuggest.update('');
-                      this.props.change('site_address', '');
-                    }
-                  }}
                 />
               </div>
             </div>
