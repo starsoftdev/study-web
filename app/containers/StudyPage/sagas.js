@@ -294,9 +294,8 @@ export function* exportPatients() {
         options: {
           timeOut: 0,
           icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
-          showCloseButton: true,
         },
-      }
+      };
       yield put(toastrActions.add(toastrOptions));
       yield call(request, requestURL, options);
       yield put(patientsExported());
@@ -786,7 +785,7 @@ function* submitTextBlast() {
         }),
       });
       onClose();
-      yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
+      toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
       toastr.error('', errorMessage);
@@ -817,7 +816,7 @@ function* submitPatientImport() {
         body: formData,
       });
       onClose();
-      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      toastr.success('Import Patients', 'Patients imported successfully!');
       yield put(submitAddPatientSuccess(response, file.name));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while importing the patient list. Please try again later or revise your patient list format.');
@@ -846,7 +845,7 @@ function* submitAddPatient() {
         body: JSON.stringify(patient),
       });
       onClose();
-      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      toastr.success('Add Patient', 'Patient added successfully!');
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
