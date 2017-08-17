@@ -818,7 +818,7 @@ export function* updateDashboardStudyWatcher() {
 }
 
 export function* updateDashboardStudyWorker(action) {
-  const { params } = action;
+  const { id, params, stopSubmit } = action;
 
   try {
     const requestURL = `${API_URL}/studies/updateDashboardStudy`;
@@ -830,8 +830,10 @@ export function* updateDashboardStudyWorker(action) {
     const response = yield call(request, requestURL, options);
 
     yield put(updateDashboardStudySuccess(response));
+    stopSubmit();
   } catch (err) {
     yield put(updateDashboardStudyError(err));
+    stopSubmit(err);
   }
 }
 
