@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
 import { take, call, put, fork } from 'redux-saga/effects';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
@@ -288,7 +288,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      yield put(toastrActions.error('', err.message));
+      toastr.error('', err.message);
     }
   }
 }
@@ -349,14 +349,14 @@ export function* redeemWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('Redeem Reward', 'The request has been submitted successfully'));
+      toastr.success('Redeem Reward', 'The request has been submitted successfully');
       yield put(redeemSuccess(response));
 
       // Clear the form values
       yield put(reset('rewardRedemptions'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(redeemError(err));
     }
   }
@@ -390,11 +390,11 @@ export function* saveCardWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Add New Card', 'Card saved successfully!'));
+      toastr.success('Add New Card', 'Card saved successfully!');
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(cardSavingError(err));
     }
   }
@@ -415,11 +415,11 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Delete Card', 'Card deleted successfully!'));
+      toastr.success('Delete Card', 'Card deleted successfully!');
       yield put(cardDeleted(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(cardDeletingError(err));
     }
   }
@@ -437,11 +437,11 @@ export function* addCreditsWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/checkout_credits`;
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Add Credits', 'Credits added successfully!'));
+      toastr.success('Add Credits', 'Credits added successfully!');
       yield put(creditsAdded(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(creditsAddingError(err));
     }
   }
@@ -657,11 +657,11 @@ export function* deleteUserWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Delete User', 'User deleted successfully!'));
+      toastr.success('Delete User', 'User deleted successfully!');
       yield put(userDeleted(id, response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(userDeletingError(err));
     }
   }
@@ -681,11 +681,11 @@ export function* deleteClientRoleWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Delete Client Role', 'Client Role deleted successfully!'));
+      toastr.success('Delete Client Role', 'Client Role deleted successfully!');
       yield put(clientRoleDeleted(id, response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(clientRoleDeletingError(err));
     }
   }
@@ -720,11 +720,11 @@ export function* saveSiteWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success(messageHeader, message));
+      toastr.success(messageHeader, message);
       yield put(siteSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(siteSavingError(err));
     }
   }
@@ -759,7 +759,7 @@ export function* saveUserWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success(messageHeader, message));
+      toastr.success(messageHeader, message);
       if (data.editSelf) {
         yield put(logout());
         yield call(() => { location.href = '/login'; });
@@ -768,7 +768,7 @@ export function* saveUserWatcher() {
       }
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(userSavingError(err));
     }
   }
@@ -804,7 +804,7 @@ export function* fetchIndicationLevelPriceWatcher() {
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchIndicationLevelPriceError(err));
     }
   }
@@ -820,12 +820,12 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify({ timezone: payload }),
       };
       const response = yield call(request, requestURL, params);
-      yield put(toastrActions.success('Time Zone', 'Your time zone has been updated successfully!'));
+      toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response.timezone));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(changeUsersTimezoneError(err));
     }
   }
@@ -847,7 +847,7 @@ export function* fetchClientAdminsWorker(action) {
     yield put(fetchClientAdminsSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchClientAdminsError(err));
   }
 }
@@ -863,11 +863,11 @@ export function* changeTemporaryPassword() {
         body: JSON.stringify(payload),
       };
       yield call(request, requestURL, params);
-      yield put(toastrActions.success('', 'You have successfully changed your password.'));
+      toastr.success('', 'You have successfully changed your password.');
       yield put(logout());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -912,11 +912,11 @@ function* postFindOutPatients(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+    toastr.success('', 'Thank you for submitting your information.');
     yield put(findOutPatientsPosted(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(findOutPatientsError(err));
   }
 }
@@ -963,14 +963,14 @@ function* listNowSite(action) {
 
     if (size === 4) {
       const response = yield call(request, requestURL, options);
-      yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+      toastr.success('', 'Thank you for submitting your information.');
       yield put(listSiteNowSuccess(response));
     } else {
-      yield put(toastrActions.error('', 'All fields required.'));
+      toastr.error('', 'All fields required.');
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -986,14 +986,14 @@ function* getProposal(action) {
 
     if (size === 6) {
       const response = yield call(request, requestURL, options);
-      yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+      toastr.success('', 'Thank you for submitting your information.');
       yield put(getProposalSuccess(response));
     } else {
-      yield put(toastrActions.error('', 'All fields required.'));
+      toastr.error('', 'All fields required.');
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1007,11 +1007,11 @@ function* learnAboutFutureTrials(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+    toastr.success('', 'Thank you for submitting your information.');
     yield put(learnAboutFutureTrialsSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1025,11 +1025,11 @@ function* newContact(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(toastrActions.success('', 'Thank you for submitting your information.'));
+    toastr.success('', 'Thank you for submitting your information.');
     yield put(newContactSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1045,7 +1045,7 @@ function* sendThankYouEmail(action) {
     yield call(request, requestURL, options);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong.');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1064,7 +1064,7 @@ export function* fetchSponsorsWatcher() {
       yield put(fetchSponsorsSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchSponsorsError(err));
     }
   }
@@ -1089,7 +1089,7 @@ export function* fetchProtocolsWatcher() {
       yield put(fetchProtocolsSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchProtocolsError(err));
     }
   }
@@ -1110,7 +1110,7 @@ export function* fetchCroWatcher() {
       yield put(fetchCroSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching cros');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchCroError(err));
     }
   }
@@ -1131,7 +1131,7 @@ export function* fetchUsersByRoleWatcher() {
       yield put(fetchUsersByRoleSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching users');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchUsersByRoleError(err));
     }
   }
@@ -1148,7 +1148,7 @@ export function* submitToClientPortalWorker(action) {
     window.location.reload(false);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1163,7 +1163,7 @@ export function* submitToSponsorPortalWorker(action) {
     window.location.reload(false);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
   }
 }
 
@@ -1179,7 +1179,7 @@ export function* getCnsInfoWorker(action) {
     yield put(getCnsInfoSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching cns info');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(getCnsInfoError(err));
   }
 }
@@ -1199,7 +1199,7 @@ export function* submitCnsWorker(action) {
     yield put(submitCnsSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting cns info');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(submitCnsError(err));
   }
 }
