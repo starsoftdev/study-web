@@ -162,11 +162,12 @@ export function fetchSiteLocationsError(payload) {
   };
 }
 
-export function updateDashboardStudy(id, params) {
+export function updateDashboardStudy(id, params, stopSubmit) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
     id,
     params,
+    stopSubmit
   };
 }
 
