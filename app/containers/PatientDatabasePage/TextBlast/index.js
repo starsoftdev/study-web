@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -32,7 +32,6 @@ class TextBlastModal extends React.Component {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     dialogClassName: React.PropTypes.string,
-    displayToastrError: React.PropTypes.func.isRequired,
     clientCredits: React.PropTypes.object,
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
@@ -90,13 +89,14 @@ class TextBlastModal extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { displayToastrError, formSyncErrors, formValues, submitTextBlast, currentUser } = this.props;
+    // TODO YOUNES: To test
+    const { formSyncErrors, formValues, submitTextBlast, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues, currentUser.roleForClient.id, this.onClose);
     } else if (formSyncErrors.message) {
-      displayToastrError('', formSyncErrors.message);
+      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
-      displayToastrError('', formSyncErrors.patients);
+      toastr.error('', formSyncErrors.patients);
     }
   }
 
@@ -110,8 +110,9 @@ class TextBlastModal extends React.Component {
   }
 
   checkForCredits() {
+    // TODO YOUNES: To test
     if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
-      this.props.displayToastrError('Error!', 'You do not have enough messaging credits. Please add more credits.');
+      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
     }
   }
 
@@ -210,7 +211,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (field, value) => dispatch(change(formName, field, value)),
-    displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
     removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitTextBlast: (formValues, clientRoleId, onClose) => dispatch(submitTextBlast(formValues, clientRoleId, onClose)),
   };
