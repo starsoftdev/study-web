@@ -14,49 +14,65 @@ import Form from 'react-bootstrap/lib/Form';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/';
-import { addMessagingNumber } from '../actions';
-import { selectDashboardEditMessagingNumberProcess } from '../selectors';
-
+import { addMessagingNumber, fetchAvailableNumber } from '../actions';
+import { selectDashboardAvailableNumber, selectDashboardAddMessagingNumberFormValues } from '../selectors';
+import formValidator from './validator';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import DashboardAvailableNumbersTable from './DashboardAvailableNumbersTable';
 const formName = 'dashboardAddMessagingNumberForm';
 
 @reduxForm({
   form: formName,
+  validate: formValidator,
 })
 export class DashboardAddMessagingNumberPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     submitForm: PropTypes.func,
     addMessagingNumber: PropTypes.func,
-    editMessagingNumberProcess: PropTypes.object,
+    availableNumber: PropTypes.object,
+    formValues: PropTypes.object,
+    handleSubmit: PropTypes.func,
+  }
+
+  constructor(props) {
+    super(props);
+
+    // this.onSubmitForm = this.props.handleSubmit(this.props.submitForm).bind(this);
+  }
+
+  onSubmitForm = (e) => {
+    e.preventDefault();
+    this.props.submitForm(this.props.formValues);
   }
 
   render() {
-    const country = [{ label: 'USA', value: 'USA', id: 0 },
-      { label: 'Canada', value: 'Canada', id: 1 },
+    const country = [{ label: 'USA', value: 'US', id: 0 },
+      { label: 'Canada', value: 'CA', id: 1 },
       { label: 'UK', value: 'UK', id: 2 },
-      { label: 'France', value: 'France', id: 3 },
-      { label: 'Italy', value: 'Italy', id: 4 },
-      { label: 'Germany', value: 'Germany', id: 5 },
-      { label: 'Brazil', value: 'Brazil', id: 6 },
-      { label: 'Chile', value: 'Chile', id: 7 },
-      { label: 'Colombia', value: 'Colombia', id: 8 },
-      { label: 'Cuba', value: 'Cuba', id: 9 },
-      { label: 'Czech Republic', value: 'Czech Republic', id: 10 },
-      { label: 'Denmark', value: 'Denmark', id: 11 },
-      { label: 'Fiji', value: 'Fiji', id: 12 },
-      { label: 'Australia', value: 'Australia', id: 13 },
-      { label: 'Hungary', value: 'Hungary', id: 14 },
-      { label: 'Iceland', value: 'Iceland', id: 15 },
-      { label: 'Japan', value: 'Japan', id: 16 },
-      { label: 'Luxembourg', value: 'Luxembourg', id: 17 },
-      { label: 'Malaysia', value: 'Malaysia', id: 18 },
+      { label: 'France', value: 'FR', id: 3 },
+      { label: 'Italy', value: 'IT', id: 4 },
+      { label: 'Germany', value: 'DE', id: 5 },
+      { label: 'Brazil', value: 'BR', id: 6 },
+      { label: 'Chile', value: 'CL', id: 7 },
+      { label: 'Colombia', value: 'CO', id: 8 },
+      { label: 'Cuba', value: 'CB', id: 9 },
+      { label: 'Czech Republic', value: 'CZ', id: 10 },
+      { label: 'Denmark', value: 'DK', id: 11 },
+      { label: 'Fiji', value: 'FJ', id: 12 },
+      { label: 'Australia', value: 'AU', id: 13 },
+      { label: 'Hungary', value: 'HU', id: 14 },
+      { label: 'Iceland', value: 'IS', id: 15 },
+      { label: 'Japan', value: 'JP', id: 16 },
+      { label: 'Luxembourg', value: 'LU', id: 17 },
+      { label: 'Malaysia', value: 'MY', id: 18 },
     ];
 
     return (
       <div className="container-fluid dashboard-portals dashboard-add-messaging-number">
         <Helmet title="Add Messaging Number - StudyKIK" />
         <h2 className="main-heading">Add Messaging Number</h2>
-        <Form className="form-search selects-form clearfix">
+        <Form className="form-search selects-form clearfix" onSubmit={this.props.handleSubmit(this.props.submitForm)}>
           <div className="fields-holder row">
             <div className="col custom-select no-left-padding">
               <Field
@@ -131,23 +147,35 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
           </div>
           <div className="fields-holder row second-row">
             <div className="pull-left col custom-select no-left-padding">
-              <a className="btn btn-default" onClick={this.props.submitForm}>Submit</a>
+              <button type="submit" className="btn btn-default">
+                {this.props.availableNumber.fetching
+                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                  : <span>Submit</span>
+                }
+              </button>
             </div>
           </div>
         </Form>
+        {
+          !this.props.availableNumber.fetching && this.props.availableNumber.details.length > 0 &&
+          <DashboardAvailableNumbersTable
+            availableNumber={this.props.availableNumber}
+          />
+        }
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
-  editMessagingNumberProcess: selectDashboardEditMessagingNumberProcess(),
+  availableNumber: selectDashboardAvailableNumber(),
+  formValues: selectDashboardAddMessagingNumberFormValues(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
-    submitForm: (values) => dispatch(addMessagingNumber(values)),
+    submitForm: (values) => dispatch(fetchAvailableNumber(values)),
   };
 }
 

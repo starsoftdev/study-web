@@ -6,6 +6,7 @@ import { get } from 'lodash';
 import request from '../../utils/request';
 import {
   FETCH_MESSAGING_NUMBERS,
+  FETCH_AVAILABLE_NUMBERS,
   ADD_MESSAGING_NUMBER,
   EDIT_MESSAGING_NUMBER,
   ARCHIVE_MESSAGING_NUMBER,
@@ -14,7 +15,10 @@ import {
 import {
   fetchMessagingNumbersSuccess,
   fetchMessagingNumbersError,
+  fetchAvailableNumberSuccess,
+  fetchAvailableNumberError,
   addMessagingNumberError,
+  addMessagingNumberSuccess,
   editMessagingNumberSuccess,
   editMessagingNumberError,
   archiveMessagingNumberSuccess,
@@ -26,6 +30,7 @@ export function* dashboardMessagingNumberSaga() {
   const watcherB = yield fork(addMessagingNumberWatcher);
   const watcherC = yield fork(editMessagingNumberWatcher);
   const watcherD = yield fork(archiveMessagingNumberWatcher);
+  const watcherF = yield fork(fetchAvailableNumberWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -33,6 +38,7 @@ export function* dashboardMessagingNumberSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherF);
 }
 
 export function* fetchMessagingNumbersWatcher() {
@@ -71,23 +77,56 @@ export function* addMessagingNumberWatcher() {
 
 export function* addMessagingNumberWorker(action) {
   try {
-    yield put(addMessagingNumberError('adding a messaging number is not implemented yet'));
+    // yield put(addMessagingNumberError('adding a messaging number is not implemented yet'));
     console.log('adding messaging number: ', action.payload);
-    /*
-    const requestURL = `${API_URL}/messaging_number`;
+    const requestURL = `${API_URL}/twilioNumbers/buyNumber`;
 
     const params = {
       method: 'POST',
-      body: JSON.stringify(action.payload),
+      body: JSON.stringify({
+        phoneNumber: action.payload,
+      }),
     };
     const response = yield call(request, requestURL, params);
 
     yield put(addMessagingNumberSuccess(response));
-    */
+    const message = 'Phone Number bought successfully';
+    yield put(toastrActions.success('', message));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
     toastr.error('', errorMessage);
     yield put(addMessagingNumberError(err));
+  }
+}
+
+export function* fetchAvailableNumberWatcher() {
+  yield* takeLatest(FETCH_AVAILABLE_NUMBERS, fetchAvailableNumberWorker);
+}
+
+export function* fetchAvailableNumberWorker(action) {
+  try {
+    const { country, areaCode, any, voice, sms, mms } = action.payload;
+    let requestURL = `${API_URL}/twilioNumbers/getAvailableNumbers?country=${country}`;
+
+    if (areaCode) {
+      requestURL += `&areaCode=${areaCode}`;
+    }
+    const capabilities = {
+      any,
+      voice,
+      sms,
+      mms,
+    };
+    requestURL += `&capabilities=${encodeURIComponent(JSON.stringify(capabilities))}`;
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+    yield put(fetchAvailableNumberSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
+    yield put(toastrActions.error('', errorMessage));
+    yield put(fetchAvailableNumberError(err));
   }
 }
 
@@ -119,11 +158,11 @@ export function* archiveMessagingNumberWatcher() {
 
 export function* archiveMessagingNumberWorker(action) {
   try {
-    const requestURL = `${API_URL}/twilioNumbers/${action.payload}`;
+    const requestURL = `${API_URL}/twilioNumbers/archiveNumber`;
 
     const params = {
-      method: 'PATCH',
-      body: JSON.stringify({ archived: true }),
+      method: 'POST',
+      body: JSON.stringify({ id: action.payload }),
     };
     const response = yield call(request, requestURL, params);
 
