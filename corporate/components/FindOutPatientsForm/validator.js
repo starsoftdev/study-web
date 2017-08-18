@@ -7,5 +7,7 @@ const schema = {
   postalCode: { presence: true },
   indication: { presence: true },
 };
+const fields = Object.keys(schema);
 
+export { fields };
 export default validatorFactory(schema);
