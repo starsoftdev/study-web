@@ -47,9 +47,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   renderCapabilities(capabilities) {
     return (
       <div style={{ display: 'flex' }}>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.voice || false}`}</span>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.SMS || false}`}</span>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.MMS || false}`}</span>
+        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.voice ? 'Yes' : 'No'}`}</span>
+        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.SMS ? 'Yes' : 'No'}`}</span>
+        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.MMS ? 'Yes' : 'No'}`}</span>
       </div>
     );
   }
@@ -93,7 +93,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
               <div className="form-lightbox dashboard-lightbox">
                 <div className="field-row">
                   <strong className="label">
-                    <label className="add-exposure-level">Phone Number</label>
+                    <label className="add-exposure-level">Number</label>
                   </strong>
                   <div className="field disabled">
                     {initialValues.number}
@@ -113,7 +113,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
                   </div>
                 </div>
                 <div className="field-row text-right no-margins">
-                  <button className="btn btn-default" onClick={this.handleAddMessagingNumber}>
+                  <button className="btn btn-primary" onClick={this.handleAddMessagingNumber}>
                     {this.props.editMessagingNumberProcess.saving
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                       : <span>Buy</span>
