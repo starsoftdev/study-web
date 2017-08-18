@@ -289,11 +289,11 @@ export function* exportPatients() {
       const toastrOptions = {
         id: 'loadingToasterForExportPatients',
         type: 'success',
-        title: 'Preparing download...',
-        message: '',
+        message: 'Loading...',
         options: {
           timeOut: 0,
           icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+          showCloseButton: true,
         },
       };
       yield put(toastrActions.add(toastrOptions));
