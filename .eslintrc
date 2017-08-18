@@ -22,6 +22,7 @@
     "API_URL": true,
     "SOCKET_URL": true,
     "MIXPANEL_TOKEN": true,
+    "SITE_KEY": true,
     "ga": true
   },
   "rules": {
