@@ -35,12 +35,6 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
     handleSubmit: PropTypes.func,
   }
 
-  constructor(props) {
-    super(props);
-
-    // this.onSubmitForm = this.props.handleSubmit(this.props.submitForm).bind(this);
-  }
-
   onSubmitForm = (e) => {
     e.preventDefault();
     this.props.submitForm(this.props.formValues);

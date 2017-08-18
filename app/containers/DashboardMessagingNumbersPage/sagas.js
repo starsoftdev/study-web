@@ -91,7 +91,7 @@ export function* addMessagingNumberWorker(action) {
 
     yield put(addMessagingNumberSuccess(response));
     const message = 'Phone Number bought successfully';
-    yield put(toastrActions.success('', message));
+    toastr.success('', message);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
     toastr.error('', errorMessage);
@@ -125,7 +125,7 @@ export function* fetchAvailableNumberWorker(action) {
     yield put(fetchAvailableNumberSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchAvailableNumberError(err));
   }
 }
