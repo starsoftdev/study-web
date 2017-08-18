@@ -8,6 +8,9 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_AVAILABLE_NUMBERS,
+  FETCH_AVAILABLE_NUMBERS_SUCCESS,
+  FETCH_AVAILABLE_NUMBERS_ERROR,
   ADD_MESSAGING_NUMBER,
   ADD_MESSAGING_NUMBER_SUCCESS,
   ADD_MESSAGING_NUMBER_ERROR,
@@ -63,6 +66,27 @@ export function addMessagingNumberSuccess(payload) {
 export function addMessagingNumberError(payload) {
   return {
     type: ADD_MESSAGING_NUMBER_ERROR,
+    payload,
+  };
+}
+
+export function fetchAvailableNumber(payload) {
+  return {
+    type: FETCH_AVAILABLE_NUMBERS,
+    payload,
+  };
+}
+
+export function fetchAvailableNumberSuccess(payload) {
+  return {
+    type: FETCH_AVAILABLE_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchAvailableNumberError(payload) {
+  return {
+    type: FETCH_AVAILABLE_NUMBERS_ERROR,
     payload,
   };
 }
