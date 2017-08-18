@@ -30,6 +30,7 @@ import {
   selectDashboardNote,
   selectStudyIndicationTags,
 } from '../selectors';
+import { selectSources } from '../../../../containers/App/selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
@@ -83,6 +84,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     editNoteProcess: PropTypes.object,
     studyIndicationTags: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
+    sources: PropTypes.array,
   };
 
   constructor(props) {
@@ -107,6 +109,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
+    this.sourceChanged = this.sourceChanged.bind(this);
     this.updateStudy = this.updateStudy.bind(this);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
@@ -474,6 +477,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
+  sourceChanged(e) {
+    const { change } = this.props;
+    change('dashboardFilters', 'source', e);
+    this.toggleAllstudies(false);
+    this.props.fetchStudiesAccordingToFilters(e, 'source');
+  }
+
   updateStudy(params) {
     const newParam = Object.assign({}, params);
     newParam.recruitment_phone = normalizePhoneForServer(params.recruitment_phone);
@@ -598,6 +608,12 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     campaignOptions = campaignOptions.reverse();
 
     const selectedStudies = studies.filter(s => s.selected);
+    console.log(322, this.props.sources);
+
+    const sourcesOptions = [];
+    _.forEach((this.props.sources), (item) => {
+      sourcesOptions.push({ label: item.type, value: item.id });
+    });
 
     return (
       <div>
@@ -696,6 +712,19 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                     <h2 className="pull-left">{this.props.totals.details.total_studies || 0} STUDIES</h2>
                     <div className="btns pull-right">
                       <form className="campaign-filter">
+                        <div className="select pull-left">
+                          <Field
+                            name="data-search"
+                            className="data-search"
+                            component={ReactSelect}
+                            placeholder="Select Source"
+                            searchPlaceholder="Search"
+                            searchable
+                            options={sourcesOptions}
+                            customSearchIconClass="icomoon-icon_search2"
+                            onChange={this.sourceChanged}
+                          />
+                        </div>
                         <div className="select pull-left">
                           <Field
                             name="data-search"
@@ -1085,6 +1114,7 @@ const mapStateToProps = createStructuredSelector({
   note: selectDashboardNote(),
   editNoteProcess: selectDashboardEditNoteProcess(),
   studyIndicationTags: selectStudyIndicationTags(),
+  sources: selectSources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
