@@ -89,7 +89,6 @@ class TextBlastModal extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    // TODO YOUNES: To test
     const { formSyncErrors, formValues, submitTextBlast, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues, currentUser.roleForClient.id, this.onClose);
@@ -110,7 +109,6 @@ class TextBlastModal extends React.Component {
   }
 
   checkForCredits() {
-    // TODO YOUNES: To test
     if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
       toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
     }
