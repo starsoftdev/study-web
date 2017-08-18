@@ -119,3 +119,7 @@ export const EDIT_CAMPAIGN_ERROR                         = 'DashboardPage/EDIT_C
 export const DELETE_CAMPAIGN                             = 'DashboardPage/DELETE_CAMPAIGN';
 export const DELETE_CAMPAIGN_SUCCESS                     = 'DashboardPage/DELETE_CAMPAIGN_SUCCESS';
 export const DELETE_CAMPAIGN_ERROR                       = 'DashboardPage/DELETE_CAMPAIGN_ERROR';
+
+export const FETCH_FIVE_9_LIST                           = 'DashboardPage/FETCH_FIVE_9_LIST';
+export const FETCH_FIVE_9_LIST_SUCCESS                   = 'DashboardPage/FETCH_FIVE_9_LIST_SUCCESS';
+export const FETCH_FIVE_9_LIST_ERROR                     = 'DashboardPage/FETCH_FIVE_9_LIST_ERROR';

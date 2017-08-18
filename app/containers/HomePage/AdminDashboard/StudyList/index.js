@@ -49,6 +49,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     cro: PropTypes.array,
+    five9List: PropTypes.object,
     editStudyValues: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
@@ -965,6 +966,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   sponsors={this.props.sponsors}
                   protocols={this.props.protocols}
                   cro={this.props.cro}
+                  five9List={this.props.five9List}
                   indications={this.props.indications}
                   fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
                   allClientUsers={this.props.allClientUsers}
