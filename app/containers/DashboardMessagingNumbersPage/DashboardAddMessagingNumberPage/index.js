@@ -43,7 +43,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
   render() {
     const country = [{ label: 'USA', value: 'US', id: 0 },
       { label: 'Canada', value: 'CA', id: 1 },
-      { label: 'UK', value: 'UK', id: 2 },
+      { label: 'UK', value: 'GB', id: 2 },
       { label: 'France', value: 'FR', id: 3 },
       { label: 'Italy', value: 'IT', id: 4 },
       { label: 'Germany', value: 'DE', id: 5 },
@@ -164,6 +164,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
 const mapStateToProps = createStructuredSelector({
   availableNumber: selectDashboardAvailableNumber(),
   formValues: selectDashboardAddMessagingNumberFormValues(),
+  initialValues: () => ({ country: 'US' }),
 });
 
 function mapDispatchToProps(dispatch) {

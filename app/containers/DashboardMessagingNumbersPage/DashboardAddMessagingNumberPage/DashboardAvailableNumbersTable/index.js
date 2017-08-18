@@ -26,9 +26,8 @@ export class DashboardAvailableNumbersTable extends React.Component { // eslint-
           </colgroup>
           <thead>
             <tr>
-              <th>Number<div>&nbsp;</div></th>
+              <th>Number</th>
               <th>
-                Capabilities
                 <div style={{ display: 'flex' }}>
                   <span style={{ flex: 1 }}>Voice</span>
                   <span style={{ flex: 1 }}>SMS</span>
