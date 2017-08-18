@@ -34,9 +34,11 @@ import {
   selectEditStudyValues,
   selectMessagingNumbers,
   selectPaginationOptions,
+  selectDashboardfive9List,
 } from './selectors';
 import {
   fetchStudiesDashboard,
+  fetchFive9List,
   fetchTotalsDashboard,
   fetchSiteNames,
   fetchSiteLocations,
@@ -72,6 +74,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    fetchFive9List: PropTypes.func,
     fetchTotalsDashboard: PropTypes.func,
     fetchLevels: PropTypes.func,
     levels: PropTypes.array,
@@ -107,6 +110,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     messagingNumbers: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
     paginationOptions: PropTypes.object,
+    five9List: PropTypes.object,
   };
 
   constructor(props) {
@@ -155,6 +159,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchCro();
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
+    this.props.fetchFive9List();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
@@ -729,6 +734,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             sponsors={this.props.sponsors}
             protocols={this.props.protocols}
             cro={this.props.cro}
+            five9List={this.props.five9List}
             levels={this.props.levels}
             indications={this.props.indications}
             studyUpdateProcess={this.props.studyUpdateProcess}
@@ -769,12 +775,14 @@ const mapStateToProps = createStructuredSelector({
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
+  five9List: selectDashboardfive9List(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
     fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
+    fetchFive9List: () => dispatch(fetchFive9List()),
     fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
