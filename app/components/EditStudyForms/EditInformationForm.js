@@ -624,13 +624,14 @@ export default class EditInformationForm extends React.Component {
               <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
               <div className="field">
                 <div className="emails-list-holder">
-                  {/*{<FieldArray*/}
-                    {/*name="emailNotifications"*/}
-                    {/*component={RenderEmailsList}*/}
-                    {/*change={change}*/}
-                    {/*addEmailNotification={addEmailNotificationClick}*/}
-                    {/*closeEmailNotification={this.closeAddEmailModal}*/}
-                  {/*/>}*/}
+                  {<FieldArray
+                    name="emailNotifications"
+                    component={RenderEmailsList}
+                    change={change}
+                    formValues={formValues}
+                    addEmailNotification={addEmailNotificationClick}
+                    closeEmailNotification={this.closeAddEmailModal}
+                  />}
                 </div>
               </div>
             </div>
@@ -638,14 +639,15 @@ export default class EditInformationForm extends React.Component {
               <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
               <div className="field">
                 <div className="emails-list-holder">
-                  {/*{<FieldArray*/}
-                    {/*name="customEmailNotifications"*/}
-                    {/*component={RenderCustomEmailsList}*/}
-                    {/*change={change}*/}
-                    {/*addEmailNotification={addEmailNotificationClick}*/}
-                    {/*closeEmailNotification={this.closeAddEmailModal}*/}
-                    {/*removeCustomEmailNotification={removeCustomEmailNotification}*/}
-                  {/*/>}*/}
+                  {<FieldArray
+                    name="customEmailNotifications"
+                    component={RenderCustomEmailsList}
+                    change={change}
+                    formValues={formValues}
+                    addEmailNotification={addEmailNotificationClick}
+                    closeEmailNotification={this.closeAddEmailModal}
+                    removeCustomEmailNotification={removeCustomEmailNotification}
+                  />}
                 </div>
               </div>
             </div>
