@@ -6,6 +6,7 @@ import { addMessagingNumber } from '../../actions';
 import { selectDashboardEditMessagingNumberProcess } from '../../selectors';
 import CenteredModal from '../../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import Checkbox from '../../../../components/Input/Checkbox';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -47,9 +48,15 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   renderCapabilities(capabilities) {
     return (
       <div style={{ display: 'flex' }}>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.voice ? 'Yes' : 'No'}`}</span>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.SMS ? 'Yes' : 'No'}`}</span>
-        <span style={{ flex: 1, textTransform: 'uppercase' }}>{`${capabilities.MMS ? 'Yes' : 'No'}`}</span>
+        <span style={{ flex: 1 }}>
+          <Checkbox name="voice" input={{ checked: capabilities.voice }} readOnly disabled />
+        </span>
+        <span style={{ flex: 1 }}>
+          <Checkbox name="sms" input={{ checked: capabilities.sms }} readOnly disabled />
+        </span>
+        <span style={{ flex: 1 }}>
+          <Checkbox name="mms" input={{ checked: capabilities.mms }} readOnly disabled />
+        </span>
       </div>
     );
   }
@@ -90,7 +97,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <div className="form-lightbox dashboard-lightbox">
+              <div className="form-lightbox dashboard-lightbox dashboard-add-messaging-number">
                 <div className="field-row">
                   <strong className="label">
                     <label className="add-exposure-level">Number</label>
