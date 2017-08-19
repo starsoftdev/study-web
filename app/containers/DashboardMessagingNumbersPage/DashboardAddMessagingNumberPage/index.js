@@ -8,7 +8,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -33,11 +33,45 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
     availableNumber: PropTypes.object,
     formValues: PropTypes.object,
     handleSubmit: PropTypes.func,
+    change: PropTypes.func,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      any: true,
+      voice: false,
+      sms: false,
+      mms: false,
+    };
   }
 
   onSubmitForm = (e) => {
     e.preventDefault();
     this.props.submitForm(this.props.formValues);
+  }
+
+  handleAny = () => {
+    this.props.change('any', true);
+    this.props.change('voice', false);
+    this.props.change('sms', false);
+    this.props.change('mms', false);
+  }
+
+  handleVoice = (e) => {
+    this.props.change('any', !(e || this.props.formValues.sms || this.props.formValues.mms));
+    this.props.change('voice', e);
+  }
+
+  handleSMS = (e) => {
+    this.props.change('any', !(e || this.props.formValues.voice || this.props.formValues.mms));
+    this.props.change('sms', e);
+  }
+
+  handleMMS = (e) => {
+    this.props.change('any', !(e || this.props.formValues.voice || this.props.formValues.sms));
+    this.props.change('mms', e);
   }
 
   render() {
@@ -96,6 +130,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
                   type="checkbox"
                   name="any"
                   component={Checkbox}
+                  onChange={this.handleAny}
                 />
               </div>
               <strong className="label">
@@ -108,6 +143,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
                   type="checkbox"
                   name="voice"
                   component={Checkbox}
+                  onChange={this.handleVoice}
                 />
               </div>
               <strong className="label">
@@ -120,6 +156,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
                   type="checkbox"
                   name="sms"
                   component={Checkbox}
+                  onChange={this.handleSMS}
                 />
               </div>
               <strong className="label">
@@ -132,6 +169,7 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
                   type="checkbox"
                   name="mms"
                   component={Checkbox}
+                  onChange={this.handleMMS}
                 />
               </div>
               <strong className="label">
@@ -164,13 +202,14 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
 const mapStateToProps = createStructuredSelector({
   availableNumber: selectDashboardAvailableNumber(),
   formValues: selectDashboardAddMessagingNumberFormValues(),
-  initialValues: () => ({ country: 'US' }),
+  initialValues: () => ({ country: 'US', any: true }),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
     submitForm: (values) => dispatch(fetchAvailableNumber(values)),
+    change: (name, value) => dispatch(change(formName, name, value)),
   };
 }
 
