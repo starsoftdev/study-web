@@ -80,12 +80,10 @@ class TextBlastForm extends React.Component {
     this.textAreaChange = this.textAreaChange.bind(this);
     this.checkCategories = this.checkCategories.bind(this);
     this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
-    this.updatePatientsCount = this.updatePatientsCount.bind(this);
     this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       enteredCharactersLength: 0,
       sourceDisable: true,
-      selectedPatientsCount: 0,
     };
   }
 
@@ -99,7 +97,7 @@ class TextBlastForm extends React.Component {
   }
 
   textAreaChange(message = '') {
-    const value = this.textarea ? this.textarea.value : message;
+    const value = (this.textarea && this.textarea.value) ? this.textarea.value : message;
     this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {});
   }
 
@@ -146,7 +144,6 @@ class TextBlastForm extends React.Component {
         removePatients();
       }
     }
-    this.updatePatientsCount();
   }
 
   selectSource(checked, sourceId) {
@@ -188,7 +185,6 @@ class TextBlastForm extends React.Component {
         removePatients();
       }
     }
-    this.updatePatientsCount();
   }
 
   filterPatients(event) {
@@ -197,7 +193,6 @@ class TextBlastForm extends React.Component {
     if (formValues.patientSearchValues) {
       filterPatients(event.target.value, formValues.patients);
     }
-    this.updatePatientsCount();
   }
 
   submitTextBlast(event) {
@@ -230,30 +225,15 @@ class TextBlastForm extends React.Component {
         change(`category-${category.id}`, false);
       }
     }
-    this.updatePatientsCount();
   }
 
   removeSelectedPatient(patient) {
     this.checkCategories(patient);
     this.props.removePatient(patient);
-    this.updatePatientsCount();
   }
 
-  updatePatientsCount() {
-    setTimeout(() => {
-      const { formValues } = this.props;
-      let newPatientsArr = [];
-      if (formValues.patients && formValues.filteredPatientSearchValues) {
-        newPatientsArr = formValues.patients.filter((v) => (
-          formValues.filteredPatientSearchValues.indexOf(v) !== -1
-        ));
-      }
-      this.setState({ selectedPatientsCount: newPatientsArr.length });
-    }, 200);
-  }
-
-  checkForCredits() {
-    if (this.state.selectedPatientsCount > this.props.clientCredits.details.customerCredits) {
+  checkForCredits(notEnoughCredits) {
+    if (notEnoughCredits) {
       toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
     }
   }
@@ -289,11 +269,17 @@ class TextBlastForm extends React.Component {
   }
 
   renderPatientCount() {
-    const { removePatients } = this.props;
-    if (this.state.selectedPatientsCount) {
+    const { formValues, removePatients } = this.props;
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
+    if (newPatientsArr && newPatientsArr.length > 0) {
       return (
         <span className="emails-counter">
-          <span className="counter">{this.state.selectedPatientsCount}</span>
+          <span className="counter">{newPatientsArr.length}</span>
           <span className="text"> Patients</span>
           <a className="btn-close">
             <i className="icomoon-icon_close" onClick={removePatients} />
@@ -305,11 +291,17 @@ class TextBlastForm extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, ePMS } = this.props;
-    const { enteredCharactersLength, selectedPatientsCount } = this.state;
+    const { patientCategories, sources, ePMS, formValues } = this.props;
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
+    const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
-    const disabled = (clientCredits === 0 || clientCredits === null || clientCredits < selectedPatientsCount || selectedPatientsCount === 0);
-    const notEnoughCredits = (selectedPatientsCount > clientCredits);
+    const notEnoughCredits = newPatientsArr.length > clientCredits;
+    const disabled = (clientCredits === 0 || clientCredits === null || clientCredits < newPatientsArr.length || newPatientsArr.length === 0);
     return (
       <Form className="text-email-blast-form">
         <div className="sidebar pull-left">
@@ -403,9 +395,8 @@ class TextBlastForm extends React.Component {
                 ref={(textarea) => {
                   this.textarea = textarea;
                 }}
-                isDisabled={disabled}
               />
-              <div className="footer" onClick={this.checkForCredits}>
+              <div className="footer" onClick={() => this.checkForCredits(notEnoughCredits)}>
                 <span className="characters-counter">
                   {`${160 - enteredCharactersLength}`}
                 </span>
