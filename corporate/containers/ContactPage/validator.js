@@ -29,6 +29,7 @@ const schema = {
       message: '^Massage cannot be blank',
     },
   },
+  reCaptcha: { presence: true },
 };
 
 const fields = Object.keys(schema);
