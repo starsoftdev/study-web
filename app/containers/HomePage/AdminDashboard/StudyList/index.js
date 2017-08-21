@@ -966,7 +966,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                   sponsors={this.props.sponsors}
                   protocols={this.props.protocols}
                   cro={this.props.cro}
-                  five9List={this.props.five9List}
                   indications={this.props.indications}
                   fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
                   allClientUsers={this.props.allClientUsers}
@@ -1000,6 +999,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 />
                 <CampaignPageModal
                   study={selectedStudies[0]}
+                  five9List={this.props.five9List}
                   openModal={this.state.showCampaignPageModal}
                   onClose={() => { this.showCampaignPageModal(false); }}
                   isOnTop={this.state.campaignPageOnTop}
