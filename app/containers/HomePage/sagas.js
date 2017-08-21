@@ -112,7 +112,6 @@ import {
   fetchCampaignsByStudy,
   fetchFive9ListSuccess,
   fetchFive9ListError,
-
 } from './AdminDashboard/actions';
 
 import {
@@ -1160,7 +1159,6 @@ export function* fetchCampaignsByStudyWorker(action) {
   }
 }
 
-
 export function* editCampaignWatcher() {
   yield* takeLatest(EDIT_CAMPAIGN, editCampaignWorker);
 }
@@ -1173,11 +1171,8 @@ export function* editCampaignWorker(action) {
       body: JSON.stringify(action.payload),
     };
     const response = yield call(request, requestURL, params);
-    if (response.success) {
-      yield put(editCampaignSuccess(action.payload));
-    } else {
-      yield put(editCampaignError(response));
-    }
+    yield put(editCampaignSuccess(action.payload));
+    yield put(updateDashboardStudySuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     toastr.error('', errorMessage);
