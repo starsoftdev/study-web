@@ -95,14 +95,6 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
 
   onChange(value) {
     this.props.change('reCaptcha', value);
-    if (value) {
-      const { newContact, submitForm } = this.props;
-      const contact = Object.assign({}, newContact);
-      /* normalizing the phone number */
-      contact.phone = normalizePhoneForServer(newContact.phone);
-      submitForm(contact);
-      this.recaptcha.reset();
-    }
   }
 
   onPhoneBlur(event) {
@@ -123,7 +115,11 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
       touchFields();
       return;
     }
-    this.recaptcha.execute();
+    const { newContact, submitForm } = this.props;
+    const contact = Object.assign({}, newContact);
+    /* normalizing the phone number */
+    contact.phone = normalizePhoneForServer(newContact.phone);
+    submitForm(contact);
   }
 
   render() {
@@ -198,18 +194,17 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                 bsClass="form-control input-lg"
                 componentClass="textarea"
               />
+              <ReCAPTCHA
+                ref={(ref) => { this.recaptcha = ref; }}
+                sitekey={SITE_KEY}
+                onChange={this.onChange}
+              />
               <Field
                 name="reCaptcha"
                 type="hidden"
                 component={Input}
                 className="field"
                 bsClass="form-control input-lg"
-              />
-              <ReCAPTCHA
-                ref={(ref) => { this.recaptcha = ref; }}
-                size="invisible"
-                sitekey={SITE_KEY}
-                onChange={this.onChange}
               />
               <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
               <div className="image left">

@@ -58,10 +58,6 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
 
   onChange(value) {
     this.props.change('reCaptcha', value);
-    if (value) {
-      this.props.handleSubmit();
-      this.recaptcha.reset();
-    }
   }
 
   setVisible(el) {
@@ -79,17 +75,34 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     const buttonValue = (resetPasswordSuccess) ? 'back to login' : 'submit';
     const submitHandler = (resetPasswordSuccess) ? this.redirect : (e) => {
       e.preventDefault();
-      this.recaptcha.execute();
+      this.props.handleSubmit();
+      this.recaptcha.reset();
     };
 
-    let formContent = (<Field
-      name="email"
-      type="text"
-      component={Input}
-      placeholder="* Email"
-      className="field-row"
-      bsClass="form-control input-lg"
-    />);
+    let formContent = (
+      <div className="field-row clearfix area">
+        <Field
+          name="email"
+          type="text"
+          component={Input}
+          placeholder="* Email"
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
+        <Field
+          name="reCaptcha"
+          type="hidden"
+          component={Input}
+          className="field-row"
+          bsClass="form-control input-lg"
+        />
+        <ReCAPTCHA
+          ref={(ref) => { this.recaptcha = ref; }}
+          sitekey={SITE_KEY}
+          onChange={this.onChange}
+        />,
+      </div>
+    );
 
     if (resetPasswordSuccess) {
       formContent =
@@ -110,21 +123,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
       >
         <h2 className="main-heading">Reset Password</h2>
         {formContent}
-        <div className="field-row clearfix area">
-          <Field
-            name="reCaptcha"
-            type="hidden"
-            component={Input}
-            className="field-row"
-            bsClass="form-control input-lg"
-          />
-          <ReCAPTCHA
-            ref={(ref) => { this.recaptcha = ref; }}
-            size="invisible"
-            sitekey={SITE_KEY}
-            onChange={this.onChange}
-          />,
-        </div>
+        
         <div className="field-row">
           <input
             type="submit"
