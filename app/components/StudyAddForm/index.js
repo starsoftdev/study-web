@@ -122,7 +122,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   handleFileChange(img, width, height) {
     if (width > 2000 || height > 2000) {
-      // TODO YOUNES: To test
       toastr.error('', 'Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
     }
     this.setState({

@@ -1,23 +1,32 @@
 import React from 'react';
 import { Link } from 'react-router';
 import inViewport from 'in-viewport';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change, touch } from 'redux-form';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import Alert from 'react-bootstrap/lib/Alert';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import Input from '../../components/Input';
-import loginFormValidator from './validator';
+import loginFormValidator, { fields } from './validator';
+import { selectSyncErrorBool } from '../../../app/common/selectors/form.selector';
+
+
+const formName = 'login';
 
 @reduxForm({
-  form: 'login',
+  form: formName,
   validate: loginFormValidator,
 })
-
 export class LoginForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     loginError: React.PropTypes.any,
     handleSubmit: React.PropTypes.func.isRequired,
     submitting: React.PropTypes.bool.isRequired,
+    change: React.PropTypes.func,
+    formError: React.PropTypes.bool.isRequired,
+    touchFields: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -26,6 +35,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
 
     this.toggleCheckbox = this.toggleCheckbox.bind(this);
     this.setVisible = this.setVisible.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +44,14 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
 
   componentWillUnmount() {
     this.watcher.dispose();
+  }
+
+  onChange(value) {
+    this.props.change('reCaptcha', value);
+    if (value) {
+      this.props.handleSubmit();
+      this.recaptcha.reset();
+    }
   }
 
   setVisible(el) {
@@ -47,7 +65,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { handleSubmit, submitting, loginError } = this.props;
+    const { submitting, loginError } = this.props;
 
     return (
       <form
@@ -57,7 +75,15 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         className="form-login"
         data-formvalidation="true"
         data-view="fadeInUp"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const { formError, touchFields } = this.props;
+          if (formError) {
+            touchFields();
+            return;
+          }
+          this.recaptcha.execute();
+        }}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
         {loginError &&
@@ -105,6 +131,21 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             Forgot Password?
           </Link>
         </div>
+        <div className="field-row clearfix area">
+          <Field
+            name="reCaptcha"
+            type="hidden"
+            component={Input}
+            className="field-row"
+            bsClass="form-control input-lg"
+          />
+          <ReCAPTCHA
+            ref={(ref) => { this.recaptcha = ref; }}
+            size="invisible"
+            sitekey={SITE_KEY}
+            onChange={this.onChange}
+          />
+        </div>
         <div className="field-row">
           <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
         </div>
@@ -113,4 +154,15 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 }
 
-export default LoginForm;
+
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+});
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (name, value) => dispatch(change(formName, name, value)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
