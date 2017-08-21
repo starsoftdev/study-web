@@ -80,6 +80,7 @@ class TextBlastForm extends React.Component {
     this.textAreaChange = this.textAreaChange.bind(this);
     this.checkCategories = this.checkCategories.bind(this);
     this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
+    this.removePatients = this.removePatients.bind(this);
     this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       enteredCharactersLength: 0,
@@ -232,6 +233,14 @@ class TextBlastForm extends React.Component {
     this.props.removePatient(patient);
   }
 
+  removePatients() {
+    this.props.removePatients();
+    this.props.patientCategories.forEach(category => {
+      this.props.change('category', false);
+      this.props.change(`category-${category.id}`, false);
+    });
+  }
+
   checkForCredits(notEnoughCredits) {
     if (notEnoughCredits) {
       toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
@@ -269,7 +278,7 @@ class TextBlastForm extends React.Component {
   }
 
   renderPatientCount() {
-    const { formValues, removePatients } = this.props;
+    const { formValues } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
@@ -282,7 +291,7 @@ class TextBlastForm extends React.Component {
           <span className="counter">{newPatientsArr.length}</span>
           <span className="text"> Patients</span>
           <a className="btn-close">
-            <i className="icomoon-icon_close" onClick={removePatients} />
+            <i className="icomoon-icon_close" onClick={this.removePatients} />
           </a>
         </span>
       );
