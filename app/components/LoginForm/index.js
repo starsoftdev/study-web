@@ -48,10 +48,6 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
 
   onChange(value) {
     this.props.change('reCaptcha', value);
-    if (value) {
-      this.props.handleSubmit();
-      this.recaptcha.reset();
-    }
   }
 
   setVisible(el) {
@@ -82,7 +78,9 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             touchFields();
             return;
           }
-          this.recaptcha.execute();
+          // this.recaptcha.execute();
+          this.props.handleSubmit();
+          this.recaptcha.reset();
         }}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
@@ -141,7 +139,6 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           />
           <ReCAPTCHA
             ref={(ref) => { this.recaptcha = ref; }}
-            size="invisible"
             sitekey={SITE_KEY}
             onChange={this.onChange}
           />
