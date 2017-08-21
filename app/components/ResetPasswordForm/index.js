@@ -7,7 +7,11 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import inViewport from 'in-viewport';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import ReCAPTCHA from 'react-google-recaptcha';
+
 import Input from '../../components/Input';
 import resetPasswordFormValidator from './validator';
 
@@ -23,6 +27,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     clearResetPasswordSuccess: React.PropTypes.func,
     resetPasswordSuccess: React.PropTypes.bool,
     submitting: React.PropTypes.bool.isRequired,
+    change: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -31,6 +36,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
 
     this.setVisible = this.setVisible.bind(this);
     this.redirect = this.redirect.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +56,14 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     clearResetPasswordSuccess();
   }
 
+  onChange(value) {
+    this.props.change('reCaptcha', value);
+    if (value) {
+      this.props.handleSubmit();
+      this.recaptcha.reset();
+    }
+  }
+
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
@@ -61,9 +75,13 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { handleSubmit, submitting, resetPasswordSuccess } = this.props;
+    const { submitting, resetPasswordSuccess } = this.props;
     const buttonValue = (resetPasswordSuccess) ? 'back to login' : 'submit';
-    const submitHandler = (resetPasswordSuccess) ? this.redirect : handleSubmit;
+    const submitHandler = (resetPasswordSuccess) ? this.redirect : (e) => {
+      e.preventDefault();
+      this.recaptcha.execute();
+    };
+
     let formContent = (<Field
       name="email"
       type="text"
@@ -92,6 +110,21 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
       >
         <h2 className="main-heading">Reset Password</h2>
         {formContent}
+        <div className="field-row clearfix area">
+          <Field
+            name="reCaptcha"
+            type="hidden"
+            component={Input}
+            className="field-row"
+            bsClass="form-control input-lg"
+          />
+          <ReCAPTCHA
+            ref={(ref) => { this.recaptcha = ref; }}
+            size="invisible"
+            sitekey={SITE_KEY}
+            onChange={this.onChange}
+          />,
+        </div>
         <div className="field-row">
           <input
             type="submit"
@@ -105,4 +138,12 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
   }
 }
 
-export default ResetPasswordForm;
+const mapStateToProps = createStructuredSelector({
+});
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (name, value) => dispatch(change('resetPassword', name, value)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordForm);

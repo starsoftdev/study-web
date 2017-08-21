@@ -14,6 +14,10 @@ export const ADD_MESSAGING_NUMBER            = 'app/DashboardMessagingNumbersPag
 export const ADD_MESSAGING_NUMBER_SUCCESS    = 'app/DashboardMessagingNumbersPage/ADD_MESSAGING_NUMBER_SUCCESS';
 export const ADD_MESSAGING_NUMBER_ERROR      = 'app/DashboardMessagingNumbersPage/ADD_MESSAGING_NUMBER_ERROR';
 
+export const FETCH_AVAILABLE_NUMBERS            = 'app/DashboardMessagingNumbersPage/FETCH_AVAILABLE_NUMBERS';
+export const FETCH_AVAILABLE_NUMBERS_SUCCESS    = 'app/DashboardMessagingNumbersPage/FETCH_AVAILABLE_NUMBERS_SUCCESS';
+export const FETCH_AVAILABLE_NUMBERS_ERROR      = 'app/DashboardMessagingNumbersPage/FETCH_AVAILABLE_NUMBERS_ERROR';
+
 export const EDIT_MESSAGING_NUMBER           = 'app/DashboardMessagingNumbersPage/EDIT_MESSAGING_NUMBER';
 export const EDIT_MESSAGING_NUMBER_SUCCESS   = 'app/DashboardMessagingNumbersPage/EDIT_MESSAGING_NUMBER_SUCCESS';
 export const EDIT_MESSAGING_NUMBER_ERROR     = 'app/DashboardMessagingNumbersPage/EDIT_MESSAGING_NUMBER_ERROR';

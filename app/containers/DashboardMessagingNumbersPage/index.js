@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
 
-import { fetchMessagingNumbers, addMessagingNumber, editMessagingNumber, archiveMessagingNumber,
+import { fetchMessagingNumbers, editMessagingNumber, archiveMessagingNumber,
   setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardMessagingNumber, selectDashboardEditMessagingNumberProcess,
   selectDashboardMessagingNumberSearchFormValues, selectPaginationOptions } from './selectors';
@@ -94,7 +94,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchMessagingNumbers: (query, limit, offset) => dispatch(fetchMessagingNumbers(query, limit, offset)),
-    addMessagingNumber: (payload) => dispatch(addMessagingNumber(payload)),
     editMessagingNumber: (payload) => dispatch(editMessagingNumber(payload)),
     deleteMessagingNumber: (payload) => dispatch(archiveMessagingNumber(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
