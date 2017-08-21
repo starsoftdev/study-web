@@ -41,10 +41,10 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
 
   onChange(value) {
     this.props.change('reCaptcha', value);
-    if (value) {
-      this.props.handleSubmit();
-      this.recaptcha.reset();
-    }
+    // if (value) {
+    //   this.props.handleSubmit();
+    //   this.recaptcha.reset();
+    // }
   }
 
   render() {
@@ -60,7 +60,8 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
             touchFields();
             return;
           }
-          this.recaptcha.execute();
+          this.props.handleSubmit();
+          this.recaptcha.reset();
         }}
       >
         <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={800}>
@@ -113,12 +114,11 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="reCaptcha"
                 type="hidden"
                 component={Input}
-                className="field-row"
+                className="field-wrapper"
                 bsClass="form-control input-lg"
               />
               <ReCAPTCHA
                 ref={(ref) => { this.recaptcha = ref; }}
-                size="invisible"
                 sitekey={SITE_KEY}
                 onChange={this.onChange}
               />
