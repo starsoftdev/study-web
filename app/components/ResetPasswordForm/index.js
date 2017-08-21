@@ -123,7 +123,6 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
       >
         <h2 className="main-heading">Reset Password</h2>
         {formContent}
-        
         <div className="field-row">
           <input
             type="submit"
