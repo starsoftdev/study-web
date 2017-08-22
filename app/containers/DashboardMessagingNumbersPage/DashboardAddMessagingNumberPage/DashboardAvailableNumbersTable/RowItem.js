@@ -47,15 +47,15 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   renderCapabilities(capabilities) {
     return (
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', pointerEvents: 'none' }}>
         <span style={{ flex: 1 }}>
           <Checkbox name="voice" input={{ checked: capabilities.voice }} readOnly disabled />
         </span>
         <span style={{ flex: 1 }}>
-          <Checkbox name="sms" input={{ checked: capabilities.sms }} readOnly disabled />
+          <Checkbox name="SMS" input={{ checked: capabilities.SMS }} readOnly disabled />
         </span>
         <span style={{ flex: 1 }}>
-          <Checkbox name="mms" input={{ checked: capabilities.mms }} readOnly disabled />
+          <Checkbox name="MMS" input={{ checked: capabilities.MMS }} readOnly disabled />
         </span>
       </div>
     );
