@@ -821,7 +821,7 @@ export function* updateDashboardStudyWorker(action) {
   const { id, params, stopSubmit } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/updateDashboardStudy`;
+    const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
