@@ -61,6 +61,7 @@ import {
   fetchUsersByRole,
   addEmailNotificationUser,
   addCustomEmailNotification,
+  fetchSources,
 } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -111,6 +112,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     updateTwilioNumbers: PropTypes.func,
     paginationOptions: PropTypes.object,
     five9List: PropTypes.object,
+    fetchSources: PropTypes.func,
   };
 
   constructor(props) {
@@ -160,6 +162,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
     this.props.fetchFive9List();
+    this.props.fetchSources();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
@@ -335,7 +338,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
-    if ((value && key) || (key === 'campaign')) {
+    if ((value && key) || (key === 'campaign') || (key === 'source')) {
       const newFilterValues = _.cloneDeep(value);
       filters = { ...filters, [key]:newFilterValues };
     }
@@ -344,7 +347,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies' && key !== 'address') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'source' && key !== 'nearbyStudies' && key !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
@@ -803,6 +806,7 @@ function mapDispatchToProps(dispatch) {
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
     updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
+    fetchSources: () => dispatch(fetchSources()),
   };
 }
 
