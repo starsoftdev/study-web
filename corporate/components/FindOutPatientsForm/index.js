@@ -121,6 +121,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 ref={(ref) => { this.recaptcha = ref; }}
                 sitekey={SITE_KEY}
                 onChange={this.onChange}
+                className="recaptcha-wrapper"
               />
               <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
               <div className="images">
