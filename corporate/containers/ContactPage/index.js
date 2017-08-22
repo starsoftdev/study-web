@@ -198,6 +198,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                 ref={(ref) => { this.recaptcha = ref; }}
                 sitekey={SITE_KEY}
                 onChange={this.onChange}
+                className="recaptcha-wrapper"
               />
               <Field
                 name="reCaptcha"
