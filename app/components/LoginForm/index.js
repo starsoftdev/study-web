@@ -141,6 +141,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             ref={(ref) => { this.recaptcha = ref; }}
             sitekey={SITE_KEY}
             onChange={this.onChange}
+            className="recaptcha-wrapper"
           />
         </div>
         <div className="field-row">
