@@ -74,7 +74,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
-  updateDashboardStudy: (id, params) => dispatch(updateDashboardStudy(id, params)),
+  updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
 });
 
 @reduxForm({ form: formName, validate: formValidator, enableReinitialize: true })
@@ -331,8 +331,13 @@ export default class EditInformationForm extends React.Component {
     const { formError, formValues, initialValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
     if (!formError) {
       startSubmit();
-      const newParam = Object.assign({}, formValues);
-      newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
+      // diff the updated form values
+      const newParam = _.pickBy(formValues, (value, key) => {
+        return initialValues[key] !== value;
+      });
+      if (newParam.recruitment_phone) {
+        newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
+      }
       updateDashboardStudy(initialValues.study_id, newParam, stopSubmit);
     }
   }
