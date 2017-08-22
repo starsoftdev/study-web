@@ -387,7 +387,12 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('age', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'ageFrom')}
+                    onChange={(e) => {
+                      console.log(e);
+                      if (e && this.props.formValues.ageTo) {
+                        this.initSearch(e, 'ageFrom');
+                      }
+                    }}
                   />
                 </div>
                 <div className="col pull-right">
@@ -398,7 +403,11 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('age', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'ageTo')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.ageFrom) {
+                        this.initSearch(e, 'ageTo');
+                      }
+                    }}
                   />
                 </div>
                 <span className="sign">-</span>
@@ -418,7 +427,11 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'bmiFrom')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.bmiTo) {
+                        this.initSearch(e, 'bmiFrom');
+                      }
+                    }}
                   />
                 </div>
                 <div className="col pull-right">
@@ -429,7 +442,11 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'bmiTo')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.bmiFrom) {
+                        this.initSearch(e, 'bmiTo');
+                      }
+                    }}
                   />
                 </div>
                 <span className="sign">-</span>
