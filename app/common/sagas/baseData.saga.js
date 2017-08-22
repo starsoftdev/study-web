@@ -211,19 +211,20 @@ export function* fetchIndicationsWatcher() {
 
     try {
       const requestURL = `${API_URL}/indications`;
-      const filterObj = {
-        order: 'name',
-      };
-      filterObj.where = {};
-      filterObj.where.and = [];
-      filterObj.where.and.push({
-        isArchived: false,
-      });
 
-      const queryParams = {
-        filter: JSON.stringify(filterObj),
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            order: 'name',
+            where: {
+              isArchived: false,
+            },
+          }),
+        },
       };
-      const response = yield call(request, requestURL, { query: queryParams });
+
+      const response = yield call(request, requestURL, options);
 
       yield put(indicationsFetched(response));
     } catch (e) {
@@ -237,10 +238,16 @@ export function* fetchSourcesWatcher() {
     yield take(FETCH_SOURCES);
 
     try {
-      const queryParams = { filter: '{"order":"orderNumber ASC"}' };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/sources?${queryString}`;
-      const response = yield call(request, requestURL);
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            order: 'orderNumber ASC',
+          }),
+        },
+      };
+      const requestURL = `${API_URL}/sources`;
+      const response = yield call(request, requestURL, options);
 
       yield put(sourcesFetched(response));
     } catch (e) {
