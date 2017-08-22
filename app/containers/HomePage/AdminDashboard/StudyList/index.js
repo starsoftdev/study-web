@@ -85,6 +85,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     studyIndicationTags: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
     sources: PropTypes.array,
+    setFilterFormValues: PropTypes.func,
   };
 
   constructor(props) {
@@ -471,15 +472,13 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   campaignChanged(e) {
-    const { change } = this.props;
-    change('dashboardFilters', 'campaign', e);
+    this.props.setFilterFormValues('campaign', e);
     this.toggleAllstudies(false);
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
   }
 
   sourceChanged(e) {
-    const { change } = this.props;
-    change('dashboardFilters', 'source', e);
+    this.props.setFilterFormValues('source', e);
     this.toggleAllstudies(false);
     this.props.fetchStudiesAccordingToFilters(e, 'source');
   }
@@ -608,12 +607,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     campaignOptions = campaignOptions.reverse();
 
     const selectedStudies = studies.filter(s => s.selected);
-    console.log(322, this.props.sources);
 
     const sourcesOptions = [];
     _.forEach((this.props.sources), (item) => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
+
+    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+    const campaignSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.campaign) ? this.props.filtersFormValues.campaign : undefined;
 
     return (
       <div>
@@ -714,13 +715,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       <form className="campaign-filter">
                         <div className="select pull-left">
                           <Field
-                            name="data-search"
-                            className="data-search"
+                            name="source-search"
+                            className="data-search source-search"
                             component={ReactSelect}
                             placeholder="Select Source"
                             searchPlaceholder="Search"
                             searchable
                             options={sourcesOptions}
+                            selectedValue={sourceSelectedValue}
                             customSearchIconClass="icomoon-icon_search2"
                             onChange={this.sourceChanged}
                           />
@@ -732,6 +734,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                             component={ReactSelect}
                             placeholder="Select Campaign"
                             searchPlaceholder="Search"
+                            selectedValue={campaignSelectedValue}
                             searchable
                             options={campaignOptions}
                             customSearchIconClass="icomoon-icon_search2"
@@ -1129,6 +1132,7 @@ const mapDispatchToProps = (dispatch) => ({
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
+  setFilterFormValues: (key, value) => dispatch(change('dashboardFilters', key, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);
