@@ -100,6 +100,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
           ref={(ref) => { this.recaptcha = ref; }}
           sitekey={SITE_KEY}
           onChange={this.onChange}
+          className="recaptcha-wrapper"
         />,
       </div>
     );
