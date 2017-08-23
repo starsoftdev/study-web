@@ -36,7 +36,6 @@ import {
   fetchTotalsDashboard,
   fetchSiteLocations,
   clearFilters,
-  fetchAllClientUsersDashboard,
   fetchStudyCampaignsDashboard,
   fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
@@ -77,7 +76,6 @@ const mapDispatchToProps = (dispatch) => ({
   addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
   changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
   addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
-  fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
   fetchCro: () => dispatch(fetchCro()),
   fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
   fetchLevels: () => dispatch(fetchLevels()),
@@ -103,7 +101,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     changeStudyStatusDashboard: PropTypes.func,
     clearFilters: PropTypes.func.isRequired,
     cro: PropTypes.array,
-    fetchAllClientUsersDashboard: PropTypes.func,
     fetchCro: PropTypes.func,
     fetchCustomNotificationEmails: PropTypes.func,
     fetchIndications: PropTypes.func,
@@ -679,7 +676,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             totals={this.props.totals}
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
             levels={this.props.levels}
-            fetchAllClientUsersDashboard={this.props.fetchAllClientUsersDashboard}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
             addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
