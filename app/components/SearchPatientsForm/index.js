@@ -388,10 +388,7 @@ export default class SearchPatientsForm extends Component {
                     options={this.generateNumber('age', 'from')}
                     disabled={patients.fetching}
                     onChange={(e) => {
-                      console.log(e);
-                      if (e && this.props.formValues.ageTo) {
-                        this.initSearch(e, 'ageFrom');
-                      }
+                      this.initSearch(e, 'ageFrom');
                     }}
                   />
                 </div>
@@ -404,9 +401,7 @@ export default class SearchPatientsForm extends Component {
                     options={this.generateNumber('age', 'to')}
                     disabled={patients.fetching}
                     onChange={(e) => {
-                      if (e && this.props.formValues.ageFrom) {
-                        this.initSearch(e, 'ageTo');
-                      }
+                      this.initSearch(e, 'ageTo');
                     }}
                   />
                 </div>
@@ -428,9 +423,7 @@ export default class SearchPatientsForm extends Component {
                     options={this.generateNumber('bmi', 'from')}
                     disabled={patients.fetching}
                     onChange={(e) => {
-                      if (e && this.props.formValues.bmiTo) {
-                        this.initSearch(e, 'bmiFrom');
-                      }
+                      this.initSearch(e, 'bmiFrom');
                     }}
                   />
                 </div>
@@ -443,9 +436,7 @@ export default class SearchPatientsForm extends Component {
                     options={this.generateNumber('bmi', 'to')}
                     disabled={patients.fetching}
                     onChange={(e) => {
-                      if (e && this.props.formValues.bmiFrom) {
-                        this.initSearch(e, 'bmiTo');
-                      }
+                      this.initSearch(e, 'bmiTo');
                     }}
                   />
                 </div>
