@@ -6,7 +6,7 @@
 
 import React from 'react';
 
-import { Field, reduxForm, change } from 'redux-form'; // eslint-disable-line
+import { Field, reduxForm, initialize } from 'redux-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 
 import Input from '../../components/Input';
@@ -15,13 +15,13 @@ import helpAndSupportFormValidator from './validator';
 
 const formName = 'helpAndSupport';
 const mapDispatchToProps = (dispatch) => ({
-  change: (name, value) => dispatch(change(formName, name, value)),
+  initialize: (data) => dispatch(initialize(formName, data)),
 });
 @reduxForm({ form: formName, validate: helpAndSupportFormValidator })
 @connect(null, mapDispatchToProps)
 class HelpAndSupportForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    change: React.PropTypes.func.isRequired,
+    initialize: React.PropTypes.func.isRequired,
     error: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     siteLocations: React.PropTypes.array,
@@ -41,7 +41,7 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
 
 
   componentWillMount() {
-    const { currentUser, change } = this.props;
+    const { currentUser } = this.props;
 
     const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
     let bDisabled = true;
@@ -55,11 +55,16 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
         defaultValue = currentUser.roleForClient.site_id;
       }
     }
-    change('siteLocation', defaultValue);
     this.setState({
       bDisabled,
       defaultValue,
     });
+  }
+
+  componentDidMount() {
+    if (this.state.defaultValue) {
+      this.props.initialize({ siteLocation: this.state.defaultValue });
+    }
   }
 
   render() {
