@@ -80,6 +80,7 @@ class FilterStudyPatientsForm extends Component {
       /* -1 means all was selected */
       if (event === -1) {
         fetchPatients(studyId, search, newCampaign, null);
+        fetchStudyTextNewStats(studyId, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
         fetchStudyTextNewStats(studyId, newCampaign, event);
