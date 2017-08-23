@@ -17,11 +17,10 @@ export default class EditInformationModal extends React.Component {
   componentDidMount() {
   }
 
-  render() {
+  renderModalContent() {
     const { addEmailNotificationClick, initialValues, openModal, onClose } = this.props;
-
-    return (
-      <Collapse dimension="width" in={openModal} timeout={250} className="form-lightbox form-edit-information">
+    if (openModal) {
+      return (
         <div>
           <div className="form-area">
             <div className="head">
@@ -37,6 +36,19 @@ export default class EditInformationModal extends React.Component {
             />
           </div>
         </div>
+      );
+    }
+    return (
+      <div />
+    );
+  }
+
+  render() {
+    const { openModal } = this.props;
+
+    return (
+      <Collapse dimension="width" in={openModal} timeout={250} className="form-lightbox form-edit-information">
+        {this.renderModalContent()}
       </Collapse>
     );
   }
