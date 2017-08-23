@@ -5,7 +5,7 @@ import Calendar from 'react-big-calendar';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import moment from 'moment-timezone';
-
+import classnames from 'classnames';
 import 'react-big-calendar/lib/less/styles.less';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -23,6 +23,10 @@ class CalendarWidget extends React.Component {
   constructor(props) {
     super(props);
     this.getTimezoneDate = this.getTimezoneDate.bind(this);
+    this.handleFiveWeeksHeight = this.handleFiveWeeksHeight.bind(this);
+    this.state = {
+      fiveWeeks: false,
+    };
   }
 
   getTimezoneDate(date) {
@@ -38,6 +42,15 @@ class CalendarWidget extends React.Component {
       selectedDate = moment(date).subtract(-offset, 'minute');
     }
     return selectedDate;
+  }
+
+  handleFiveWeeksHeight(date) {
+    const aa = moment(date);
+    const start = moment().year(aa.year()).month(aa.month()).date(1).day();
+    const end = moment().year(aa.year()).month(aa.month()).date(aa.daysInMonth()).day();
+    const visibleDays = aa.daysInMonth() + start + (6 - end);
+    const weeks = visibleDays / 7;
+    this.setState({ fiveWeeks: weeks > 5 });
   }
 
   render() {
@@ -92,7 +105,7 @@ class CalendarWidget extends React.Component {
     });
 
     return (
-      <div className="calendar-box calendar-slider">
+      <div className={classnames('calendar-box', 'calendar-slider', { 'five-weeks': this.state.fiveWeeks })}>
         <Calendar
           selectable={false}
           events={eventsList}
@@ -101,6 +114,7 @@ class CalendarWidget extends React.Component {
           timezone={currentUser.timezone}
           onNavigate={(date) => {
             this.currentDate = date;
+            this.handleFiveWeeksHeight(date);
           }}
           eventPropGetter={(event, start, end, isSelected) => ({
           })}

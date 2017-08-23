@@ -89,19 +89,10 @@ function reportViewPageReducer(state = initialState, action) {
       };
     case GET_REPORTS_LIST_SUCCESS:
       _.forEach(action.payload, (item, index) => {
-        let level = '';
-        let levelDateFrom = '';
-        let levelDateTo = '';
+        const level = item.current_level ? item.current_level : item.last_level;
+        const levelDateFrom = item.date_from ? moment(item.date_from).tz(item.timezone).format('MM/DD/YY') : '';
+        const levelDateTo = item.date_to ? moment(item.date_to).tz(item.timezone).format('MM/DD/YY') : '';
 
-        if (item.current_level) {
-          level = item.current_level;
-          levelDateFrom = item.currrent_date_from ? moment(item.currrent_date_from).tz(item.timezone).format('MM/DD/YY') : '';
-          levelDateTo = item.currrent_date_to ? moment(item.currrent_date_to).tz(item.timezone).format('MM/DD/YY') : '';
-        } else {
-          level = null;
-          levelDateFrom = null;
-          levelDateTo = null;
-        }
         reports.push({ ...item, level, levelDateFrom, levelDateTo, count_index: index });
       });
 

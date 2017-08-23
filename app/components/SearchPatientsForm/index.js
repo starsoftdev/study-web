@@ -96,6 +96,49 @@ export default class SearchPatientsForm extends Component {
     }
   }
 
+  generateNumber(type, time) {
+    let start;
+    let end;
+
+    if (type === 'age') {
+      start = 1;
+      end = 150;
+      const { ageFrom, ageTo } = this.props.formValues;
+      if (time === 'from') {
+        if (ageTo) {
+          end = ageTo;
+        }
+      } else if (time === 'to') {
+        if (ageFrom) {
+          start = ageFrom;
+        }
+      }
+    } else {
+      start = 1;
+      end = 54;
+      const { bmiFrom, bmiTo } = this.props.formValues;
+      if (time === 'from') {
+        if (bmiTo) {
+          end = bmiTo;
+        }
+      } else if (time === 'to') {
+        if (bmiFrom) {
+          start = bmiFrom;
+        }
+      }
+    }
+
+    const options = [];
+    for (let i = start; i <= end; i++) {
+      options.push({
+        label: i,
+        value: i,
+      });
+    }
+
+    return options;
+  }
+
   render() {
     const { formValues, indications, sources, patientCategories, patients, hasError, handleSubmit, sites, user } = this.props;
     const includeIndicationArr = [];
@@ -185,22 +228,36 @@ export default class SearchPatientsForm extends Component {
       <div>
         <div className="btns-popups">
           <div className="search-area pull-left">
-            <span className="title">
-            </span>
-            <div className="field">
-              <Button className="btn-enter">
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <Field
-                name="name"
-                component={Input}
-                type="text"
-                placeholder="Search"
-                className="keyword-search"
-                disabled={patients.fetching}
-                onChange={(e) => this.initSearch(e, 'name')}
-              />
-            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const name = this.props.formValues.name;
+                this.initSearch(name, 'name');
+              }}
+            >
+              <span className="title">
+              </span>
+              <div className="field">
+                <Button
+                  className="btn-enter"
+                  type="submit"
+                  onClick={() => {
+                    const name = this.props.formValues.name;
+                    this.initSearch(name, 'name');
+                  }}
+                >
+                  <i className="icomoon-icon_search2" />
+                </Button>
+                <Field
+                  name="name"
+                  component={Input}
+                  type="text"
+                  placeholder="Search"
+                  className="keyword-search"
+                  disabled={patients.fetching}
+                />
+              </div>
+            </form>
           </div>
           <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
@@ -327,10 +384,15 @@ export default class SearchPatientsForm extends Component {
                     name="ageFrom"
                     className="age-from"
                     placeholder="From"
-                    component={Input}
-                    type="text"
+                    component={ReactSelect}
+                    options={this.generateNumber('age', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'ageFrom')}
+                    onChange={(e) => {
+                      console.log(e);
+                      if (e && this.props.formValues.ageTo) {
+                        this.initSearch(e, 'ageFrom');
+                      }
+                    }}
                   />
                 </div>
                 <div className="col pull-right">
@@ -338,10 +400,14 @@ export default class SearchPatientsForm extends Component {
                     name="ageTo"
                     className="age-to"
                     placeholder="To"
-                    component={Input}
-                    type="text"
+                    component={ReactSelect}
+                    options={this.generateNumber('age', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'ageTo')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.ageFrom) {
+                        this.initSearch(e, 'ageTo');
+                      }
+                    }}
                   />
                 </div>
                 <span className="sign">-</span>
@@ -358,10 +424,14 @@ export default class SearchPatientsForm extends Component {
                     name="bmiFrom"
                     className="bmi-from"
                     placeholder="From"
-                    component={Input}
-                    type="text"
+                    component={ReactSelect}
+                    options={this.generateNumber('bmi', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'bmiFrom')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.bmiTo) {
+                        this.initSearch(e, 'bmiFrom');
+                      }
+                    }}
                   />
                 </div>
                 <div className="col pull-right">
@@ -369,10 +439,14 @@ export default class SearchPatientsForm extends Component {
                     name="bmiTo"
                     className="bmi-to"
                     placeholder="To"
-                    component={Input}
-                    type="text"
+                    component={ReactSelect}
+                    options={this.generateNumber('bmi', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e) => this.initSearch(e, 'bmiTo')}
+                    onChange={(e) => {
+                      if (e && this.props.formValues.bmiFrom) {
+                        this.initSearch(e, 'bmiTo');
+                      }
+                    }}
                   />
                 </div>
                 <span className="sign">-</span>

@@ -3,10 +3,9 @@
  */
 
 import React from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
@@ -25,7 +24,6 @@ class ImportPatientsModal extends React.Component {
     toggleAddPatient: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number,
     submitPatientImport: React.PropTypes.func.isRequired,
-    toastrActions: React.PropTypes.object.isRequired,
     uploadStart: React.PropTypes.bool,
   };
 
@@ -39,14 +37,14 @@ class ImportPatientsModal extends React.Component {
   }
 
   uploadFile(event) {
-    const { clientId, onHide, submitPatientImport, studyId, toastrActions } = this.props;
+    const { clientId, onHide, submitPatientImport, studyId } = this.props;
     // if the file is a csv
-    if (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values') {
+    if (event.target.files && (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values')) {
       const file = event.target.files[0];
       submitPatientImport(clientId, studyId, file, onHide);
     } else {
       // display error
-      toastrActions.error('Wrong file type');
+      toastr.error('Wrong file type');
     }
   }
 
@@ -67,7 +65,7 @@ class ImportPatientsModal extends React.Component {
     return (
       <div>
         <Form className="upload-patient-info">
-          <span className="modal-opener coming-soon-wrapper">
+          <a className="modal-opener " onClick={this.uploadFile}>
             <div className="table">
               <div className="table-cell">
                 <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
@@ -75,7 +73,7 @@ class ImportPatientsModal extends React.Component {
                 <span className="text coming-soon-new" />
               </div>
             </div>
-          </span>
+          </a>
         </Form>
         <span className="or">
           <span>or</span>
@@ -102,7 +100,6 @@ class ImportPatientsModal extends React.Component {
     delete sanitizedProps.clearForm;
     delete sanitizedProps.studyId;
     delete sanitizedProps.submitPatientImport;
-    delete sanitizedProps.toastrActions;
     return (
       <Modal
         {...sanitizedProps}
@@ -139,7 +136,6 @@ const mapStateToProps = (state) => (
 function mapDispatchToProps(dispatch) {
   return {
     submitPatientImport: (clientId, studyId, file, onClose) => dispatch(submitPatientImport(clientId, studyId, file, onClose)),
-    toastrActions: bindActionCreators(toastrActions, dispatch),
     clearForm: () => dispatch(clearForm()),
   };
 }
