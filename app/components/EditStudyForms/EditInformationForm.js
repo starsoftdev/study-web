@@ -1,5 +1,5 @@
 /**
- * Created by mike on 10/11/16.
+ * Created by mike on 08/22/17.
  */
 
 import _ from 'lodash';
@@ -23,29 +23,29 @@ import {
   removeCustomEmailNotification,
 } from '../../containers/App/actions';
 import {
-  selectIndications,
-  selectSponsors,
-  selectProtocols,
-  selectCro,
   selectAllClientUsers,
+  selectCro,
+  selectIndications,
   selectMessagingNumbers,
+  selectProtocols,
   selectSiteLocations,
+  selectSponsors,
   selectStudyIndicationTags,
   selectUsersByRoles,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
-  addStudyIndicationTag,
+  addIndicationTagForStudy,
   fetchAllClientUsersDashboard,
   fetchMessagingNumbersDashboard,
-  fetchStudyIndicationTag,
-  removeStudyIndicationTag,
+  fetchTaggedIndicationsForStudy,
+  removeIndicationTagForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
-import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector'
+import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
 
-const formName = 'dashboardEditStudyForm';
+const formName = 'Dashboard.EditStudyForm';
 
 const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
@@ -63,15 +63,15 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  addStudyIndicationTag: (studyId, indicationId) => dispatch(addStudyIndicationTag(studyId, indicationId)),
+  addIndicationTagForStudy: (studyId, indicationId) => dispatch(addIndicationTagForStudy(studyId, indicationId)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
-  fetchAllClientUsersDashboard: (params) => dispatch(fetchAllClientUsersDashboard(params)),
+  fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
   fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
-  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
+  fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
-  removeStudyIndicationTag: (studyId, indicationId) => dispatch(removeStudyIndicationTag(studyId, indicationId)),
+  removeIndicationTagForStudy: (studyId, indicationId) => dispatch(removeIndicationTagForStudy(studyId, indicationId)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
   updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
@@ -90,7 +90,7 @@ export default class EditInformationForm extends React.Component {
     cro: PropTypes.array.isRequired,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
-    fetchStudyIndicationTag: PropTypes.func.isRequired,
+    fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
     formError: PropTypes.bool.isRequired,
     formValues: PropTypes.object,
     initialValues: PropTypes.object.isRequired,
@@ -107,8 +107,8 @@ export default class EditInformationForm extends React.Component {
     sponsors: PropTypes.array.isRequired,
     usersByRoles: PropTypes.object.isRequired,
     setEditStudyFormValues: PropTypes.func,
-    addStudyIndicationTag: PropTypes.func,
-    removeStudyIndicationTag: PropTypes.func,
+    addIndicationTagForStudy: PropTypes.func,
+    removeIndicationTagForStudy: PropTypes.func,
     startSubmit: PropTypes.func.isRequired,
     studyIndicationTags: PropTypes.object.isRequired,
     stopSubmit: PropTypes.func.isRequired,
@@ -136,9 +136,10 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchMessagingNumbersDashboard, fetchStudyIndicationTag, initialValues } = this.props;
-    // fetchStudyIndicationTag(initialValues.id);
-    // fetchMessagingNumbersDashboard();
+    const { fetchAllClientUsersDashboard, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, initialValues } = this.props;
+    fetchAllClientUsersDashboard(initialValues.client_id, initialValues.site);
+    fetchTaggedIndicationsForStudy(initialValues.study_id);
+    fetchMessagingNumbersDashboard();
   }
 
 
@@ -292,7 +293,7 @@ export default class EditInformationForm extends React.Component {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
       const { change, fetchAllClientUsersDashboard } = this.props;
-      fetchAllClientUsersDashboard({ clientId: foundSiteLocation.client_id, siteId: foundSiteLocation.id });
+      fetchAllClientUsersDashboard(foundSiteLocation.client_id, foundSiteLocation.id);
 
       change('site_id', foundSiteLocation.id);
       change('site_city', foundSiteLocation.city);
@@ -310,14 +311,14 @@ export default class EditInformationForm extends React.Component {
       value: indication.id,
       label: indication.name,
     }]));
-    addStudyIndicationTag(studyId, indication.id);
+    addIndicationTagForStudy(studyId, indication.id);
   }
 
   deleteIndication(studyId, indication) {
-    const { change, formValues: { indicationTags }, removeStudyIndicationTag } = this.props;
+    const { change, formValues: { indicationTags }, removeIndicationTagForStudy } = this.props;
     const newArr = _.remove(indicationTags, (n) => (n.id !== indication.id));
     change('indicationTags', newArr);
-    removeStudyIndicationTag(studyId, indication.value);
+    removeIndicationTagForStudy(studyId, indication.value);
   }
 
   toggleIndicationPopover() {
@@ -332,9 +333,9 @@ export default class EditInformationForm extends React.Component {
     if (!formError) {
       startSubmit();
       // diff the updated form values
-      const newParam = _.pickBy(formValues, (value, key) => {
-        return initialValues[key] !== value;
-      });
+      const newParam = _.pickBy(formValues, (value, key) => (
+        value !== initialValues[key]
+      ));
       if (newParam.recruitment_phone) {
         newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
       }
@@ -502,7 +503,7 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="site_location_form"
+                  name="site"
                   component={ReactSelect}
                   placeholder="Select Site Location"
                   searchPlaceholder="Search"
@@ -822,8 +823,7 @@ export default class EditInformationForm extends React.Component {
                     this.toggleIndicationPopover();
                   }}
                 >
-                  <IndicationOverlay indications={indications} selectIndication={this.selectIndication}
-                                     study={studyValues} onClose={this.toggleIndicationPopover}/>
+                  <IndicationOverlay indications={indications} selectIndication={this.selectIndication} study={studyValues} onClose={this.toggleIndicationPopover}/>
                 </Overlay>
               </div>
             </div>

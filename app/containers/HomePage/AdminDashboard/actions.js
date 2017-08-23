@@ -299,10 +299,11 @@ export function clearFilters() {
   };
 }
 
-export function fetchAllClientUsersDashboard(params) {
+export function fetchAllClientUsersDashboard(clientId, siteId) {
   return {
     type: FETCH_ALL_CLIENT_USERS,
-    params,
+    clientId,
+    siteId,
   };
 }
 
@@ -530,7 +531,7 @@ export function setHoverRowIndex(index) {
   };
 }
 
-export function addStudyIndicationTag(studyId, indicationId) {
+export function addIndicationTagForStudy(studyId, indicationId) {
   return {
     type: ADD_STUDY_INDICATION_TAG,
     payload: {
@@ -540,21 +541,21 @@ export function addStudyIndicationTag(studyId, indicationId) {
   };
 }
 
-export function addStudyIndicationTagSuccess(payload) {
+export function addIndicationTagForStudySuccess(payload) {
   return {
     type: ADD_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function addStudyIndicationTagError(payload) {
+export function addIndicationTagForStudyError(payload) {
   return {
     type: ADD_STUDY_INDICATION_TAG_ERROR,
     payload,
   };
 }
 
-export function removeStudyIndicationTag(studyId, indicationId) {
+export function removeIndicationTagForStudy(studyId, indicationId) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG,
     payload: {
@@ -564,35 +565,35 @@ export function removeStudyIndicationTag(studyId, indicationId) {
   };
 }
 
-export function removeStudyIndicationTagSuccess(payload) {
+export function removeIndicationTagForStudySuccess(payload) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function removeStudyIndicationTagError(payload) {
+export function removeIndicationTagForStudyError(payload) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_ERROR,
     payload,
   };
 }
 
-export function fetchStudyIndicationTag(studyId) {
+export function fetchTaggedIndicationsForStudy(studyId) {
   return {
     type: FETCH_STUDY_INDICATION_TAG,
     studyId,
   };
 }
 
-export function fetchStudyIndicationTagSuccess(payload) {
+export function fetchTaggedIndicationsForStudySuccess(payload) {
   return {
     type: FETCH_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function fetchStudyIndicationTagError(payload) {
+export function fetchTaggedIndicationsForStudyError(payload) {
   return {
     type: FETCH_STUDY_INDICATION_TAG_ERROR,
     payload,
