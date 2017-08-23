@@ -38,7 +38,7 @@ class AvatarMenu extends React.Component {
       <div className="logged-user-area open-close pull-right">
         <a className={classNames('opener', { active: this.state.avatarMenuOpen })} onClick={this.toggleAvatarMenuHandle}>
           <div className="img-circle">
-            <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="Bruce Wayne" />
+            <img src={this.props.currentUser.profileImageURL || defaultImage} width="43" height="43" alt="" />
           </div>
           <span className="text margin-left-5px margin-right-5px">{`${this.props.currentUser.firstName} ${this.props.currentUser.lastName}`}</span>
           <i className="caret" />
