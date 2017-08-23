@@ -34,9 +34,11 @@ import {
   selectEditStudyValues,
   selectMessagingNumbers,
   selectPaginationOptions,
+  selectDashboardfive9List,
 } from './selectors';
 import {
   fetchStudiesDashboard,
+  fetchFive9List,
   fetchTotalsDashboard,
   fetchSiteNames,
   fetchSiteLocations,
@@ -59,6 +61,7 @@ import {
   fetchUsersByRole,
   addEmailNotificationUser,
   addCustomEmailNotification,
+  fetchSources,
 } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -72,6 +75,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     studies: PropTypes.array,
     resetForm: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    fetchFive9List: PropTypes.func,
     fetchTotalsDashboard: PropTypes.func,
     fetchLevels: PropTypes.func,
     levels: PropTypes.array,
@@ -107,6 +111,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     messagingNumbers: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
     paginationOptions: PropTypes.object,
+    five9List: PropTypes.object,
+    fetchSources: PropTypes.func,
   };
 
   constructor(props) {
@@ -155,6 +161,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchCro();
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
+    this.props.fetchFive9List();
+    this.props.fetchSources();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
     // TODO possibly re-enable the initial totals fetching when production is cached and more able to handle a greater traffic load
@@ -330,7 +338,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
-    if ((value && key) || (key === 'campaign')) {
+    if ((value && key) || (key === 'campaign') || (key === 'source')) {
       const newFilterValues = _.cloneDeep(value);
       filters = { ...filters, [key]:newFilterValues };
     }
@@ -339,7 +347,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies' && key !== 'address') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'source' && key !== 'nearbyStudies' && key !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }
@@ -729,6 +737,7 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
             sponsors={this.props.sponsors}
             protocols={this.props.protocols}
             cro={this.props.cro}
+            five9List={this.props.five9List}
             levels={this.props.levels}
             indications={this.props.indications}
             studyUpdateProcess={this.props.studyUpdateProcess}
@@ -769,12 +778,14 @@ const mapStateToProps = createStructuredSelector({
   editStudyValues: selectEditStudyValues(),
   messagingNumbers: selectMessagingNumbers(),
   paginationOptions: selectPaginationOptions(),
+  five9List: selectDashboardfive9List(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     resetForm: () => dispatch(reset('dashboardFilters')),
     fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
+    fetchFive9List: () => dispatch(fetchFive9List()),
     fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
     fetchLevels: () => dispatch(fetchLevels()),
     fetchSiteNames: () => dispatch(fetchSiteNames()),
@@ -795,6 +806,7 @@ function mapDispatchToProps(dispatch) {
     toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
     updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
+    fetchSources: () => dispatch(fetchSources()),
   };
 }
 

@@ -169,6 +169,11 @@ const selectDashboardDeleteCampaignProcess = () => createSelector(
   (substate) => substate.deleteCampaignProcess
 );
 
+const selectDashboardfive9List = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.five9List
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -203,4 +208,5 @@ export {
   selectDashboardCampaigns,
   selectDashboardEditCampaignProcess,
   selectDashboardDeleteCampaignProcess,
+  selectDashboardfive9List,
 };

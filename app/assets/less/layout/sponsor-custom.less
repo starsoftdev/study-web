@@ -1,50 +1,50 @@
 .sponsor-portal {
-  .relative-element{
+  .relative-element {
     position: relative;
   }
-  table{
-    td{
+  table {
+    td {
       word-wrap: break-word !important;
     }
   }
-	.search-studies-panel {
-		.btn-list-new-study {
-			margin-left: 10px;
-		}
+  .search-studies-panel {
+    .btn-list-new-study {
+      margin-left: 10px;
+    }
 
-		.form-search-protocols {
-	  	width: 100%;
-      z-index: 81;
-      .fields-holder{
+    .form-search-protocols {
+      width: 100%;
+      z-index: 1;
+      .fields-holder {
         width: calc(~'100% - 500px');
       }
 
       @media screen and (max-width: @psd) {
-        .fields-holder{
+        .fields-holder {
           width: 100%;
         }
       }
 
       @media screen and (max-width: @psd) {
-        .btns-popups{
+        .btns-popups {
           margin-bottom: 30px;
         }
       }
-		}
-	}
+    }
+  }
 
-  .search-controls{
-    .fields-holder{
+  .search-controls {
+    .fields-holder {
       width: calc(~'100% - 670px');
     }
   }
 
-  .fixed-table-head-relative{
+  .fixed-table-head-relative {
     position: relative !important;
   }
 
-  .report-view-fixed-header{
-    top: 71px!important;
+  .report-view-fixed-header {
+    top: 71px !important;
     z-index: 5;
   }
 
@@ -52,10 +52,10 @@
     border-bottom: 2px solid #ccc;
   }
 
-  .report-view-header-container{
+  .report-view-header-container {
     position: relative;
 
-    .table-left{
+    .table-left {
       width: 844px;
       background: #fff;
       .table {
@@ -66,12 +66,12 @@
       }
     }
 
-    .table-right{
+    .table-right {
       width: calc(~'100% - 844px');
       left: 844px;
       overflow: hidden;
       background: #fff;
-      .table-right-inner{
+      .table-right-inner {
         overflow-x: scroll;
         overflow-y: hidden;
         margin-bottom: -17px;
@@ -86,31 +86,28 @@
       }
     }
 
-
-
     @media screen and (max-width: @psd) {
-
-      .table-left { width: 644px; }
+      .table-left {
+        width: 644px;
+      }
 
       .table-right .table {
         width: 1875px;
       }
 
-      .table-right{
+      .table-right {
         width: calc(~'100% - 644px');
         left: 644px;
       }
     }
-
   }
 
-
-  .table-area{
-    .active-table-row{
+  .table-area {
+    .active-table-row {
       background: #f1f1f1 !important;
       font-weight: 600;
       &:hover {
-        > td{
+        > td {
           background: #f1f1f1 !important;
           font-weight: 600;
         }
@@ -118,13 +115,13 @@
     }
   }
 
-  .disabled-toggle-container{
+  .disabled-toggle-container {
     margin-left: 13px;
     opacity: 0.85;
     margin-right: 15px;
 
-    .disabled-toggle{
-      div{
+    .disabled-toggle {
+      div {
         cursor: not-allowed !important;
         &:hover {
           cursor: not-allowed !important;
@@ -133,26 +130,26 @@
     }
   }
 
-  .patient-messaging-suite{
-    .patient-messaging-suite-status{
+  .patient-messaging-suite {
+    .patient-messaging-suite-status {
       margin-right: 5px;
     }
-    &.off{
+    &.off {
       color: #f78e1e;
     }
     color: #a0cf67;
   }
 
-  .disabled-buttons-container{
-    button{
+  .disabled-buttons-container {
+    button {
       opacity: 0.65;
     }
   }
 
-  .table-manage-user{
-    tr{
+  .table-manage-user {
+    tr {
       &:hover {
-        > td{
+        > td {
           font-weight: 600;
         }
       }
@@ -160,21 +157,21 @@
   }
 
   .table-manage-user.alt {
-    tr{
-      td{
+    tr {
+      td {
         vertical-align: top;
       }
-      .col6{
-        a{
+      .col6 {
+        a {
           margin-left: 8px;
         }
       }
     }
-    .assigned-users-list{
+    .assigned-users-list {
       margin-top: 5px;
-      .assigned-user{
+      .assigned-user {
         padding: 5px 0;
-        a{
+        a {
           margin-left: 8px;
         }
       }
@@ -182,13 +179,13 @@
   }
 }
 
-.category-notes-container{
+.category-notes-container {
   margin: 25px;
-  .name{
+  .name {
     padding-left: 75px;
     margin-bottom: 10px;
   }
-  .patient-note-container{
+  .patient-note-container {
     position: relative;
   }
   .img-holder {
@@ -197,17 +194,17 @@
     border-radius: 100%;
     top: 0;
     left: 0;
-    img{
+    img {
       display: block;
       max-width: 100%;
       border-radius: 100%;
     }
   }
-  .category-notes-item{
+  .category-notes-item {
     position: relative;
     padding-left: 75px;
     .post-content {
-      &.reply{
+      &.reply {
         background: #00afef;
         border-color: #76daff;
         &:after {
@@ -238,17 +235,17 @@
         border-right-color: #a0cf67;
       }
       .stop-list-notification,
-      .blast-message-notification{
+      .blast-message-notification {
         display: inline-block;
         margin: 10px 0 0;
         font-size: 15px;
         width: 100%;
       }
-      p{
+      p {
         margin-bottom: 5px;
       }
     }
-    time{
+    time {
       color: #949ca1;
       display: block;
       font-size: 14px;
@@ -257,11 +254,11 @@
   }
 }
 
-.font-bold{
+.font-bold {
   font-weight: bold;
 }
 
-.tooltop-inner{
+.tooltop-inner {
   padding: 7px 5px;
   min-width: 132px;
   font-size: 18px;
@@ -272,11 +269,11 @@
   font-weight: 700;
 }
 
-.protocol-study-img{
+.protocol-study-img {
   width: 100%;
   margin-bottom: 5px;
 }
 
-.manage-sponsor-user .table-holder+.table-holder {
+.manage-sponsor-user .table-holder + .table-holder {
   margin: 30px 0 0;
 }

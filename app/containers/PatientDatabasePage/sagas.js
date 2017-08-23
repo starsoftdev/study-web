@@ -2,7 +2,7 @@
 
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
@@ -345,7 +345,7 @@ export function* addPatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while adding indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -370,7 +370,7 @@ export function* removePatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while removing indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -396,7 +396,7 @@ export function* updatePatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while updating indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -422,11 +422,11 @@ export function* savePatientWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Save Patient', 'Patient saved successfully!'));
+      toastr.success('Save Patient', 'Patient saved successfully!');
       yield put(patientSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(patientSavingError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -475,10 +475,10 @@ function* submitTextBlast() {
         body: JSON.stringify(reqParams),
       });
       onClose();
-      yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
+      toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -499,12 +499,12 @@ function* importPatients() {
         method: 'POST',
         body: formData,
       });
-      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      toastr.success('Import Patients', 'Patients imported successfully!');
       yield put(submitAddPatientSuccess(response, payload.name));
       onClose();
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -529,7 +529,7 @@ function* submitAddPatient() {
         body: JSON.stringify(patient),
       });
       onClose();
-      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      toastr.success('Add Patient', 'Patient added successfully!');
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
@@ -544,7 +544,7 @@ function* submitAddPatient() {
       } else {
         errorMessages = 'Something went wrong while adding a patient. Please try again later.';
       }
-      yield put(toastrActions.error('', errorMessages));
+      toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });

@@ -88,12 +88,35 @@ import {
   DELETE_CAMPAIGN,
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
   return {
     type: UPDATE_FILTERS,
     filters,
+  };
+}
+
+export function fetchFive9List() {
+  return {
+    type: FETCH_FIVE_9_LIST,
+  };
+}
+
+export function fetchFive9ListSuccess(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchFive9ListError(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_ERROR,
+    payload,
   };
 }
 
