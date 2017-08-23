@@ -104,7 +104,6 @@ export class Header extends React.Component { // eslint-disable-line react/prefe
                 <Link
                   to="/"
                   className="navbar-brand"
-                  title="Study KIK"
                   onClick={this.handleLogoClick}
                 >
                   <img src={studyKikLogo} alt="Study KIK" width="150" />
