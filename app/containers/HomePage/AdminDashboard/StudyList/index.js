@@ -38,7 +38,7 @@ import {
   addNote,
   editNote,
   deleteNote,
-  fetchStudyIndicationTag,
+  fetchTaggedIndicationsForStudy,
   toggleStudy,
   toggleAllStudies,
 } from '../actions';
@@ -47,7 +47,7 @@ import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 const mapStateToProps = createStructuredSelector({
   addNotificationProcess: selectAddNotificationProcess(),
-  editStudyValues: selectValues('dashboardEditStudyForm'),
+  editStudyValues: selectValues('Dashboard.EditStudyForm'),
   editNoteProcess: selectDashboardEditNoteProcess(),
   note: selectDashboardNote(),
   paginationOptions: selectPaginationOptions(),
@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => ({
   editNote: (payload) => dispatch(editNote(payload)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
-  fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
+  fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
   toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
   toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
@@ -80,7 +80,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     editStudyValues: PropTypes.object,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
-    fetchStudyIndicationTag: PropTypes.func.isRequired,
+    fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
     allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,
@@ -196,7 +196,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     //     addFields.push(values);
     //   }
     //   const { change } = this.props;
-    //   change('dashboardEditStudyForm', 'emailNotifications', addFields);
+    //   change('Dashboard.EditStudyForm', 'emailNotifications', addFields);
     // }
   }
 
@@ -211,8 +211,10 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   getEditStudyInitialValues(study) {
     const initialValues = Object.assign({}, study);
     initialValues.recruitment_phone = normalizePhoneDisplay(initialValues.recruitment_phone);
-    initialValues.site_location_form = study.site_id;
+    initialValues.site = study.site_id;
+    delete initialValues.site_id;
     initialValues.messagingNumber = study.text_number_id;
+    delete initialValues.text_number_id;
 
     return initialValues;
   }
