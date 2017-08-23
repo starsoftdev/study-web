@@ -30,6 +30,7 @@ import {
   selectDashboardNote,
   selectStudyIndicationTags,
 } from '../selectors';
+import { selectSources } from '../../../../containers/App/selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
@@ -49,6 +50,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     cro: PropTypes.array,
+    five9List: PropTypes.object,
     editStudyValues: PropTypes.object,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
@@ -82,6 +84,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     editNoteProcess: PropTypes.object,
     studyIndicationTags: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
+    sources: PropTypes.array,
+    setFilterFormValues: PropTypes.func,
   };
 
   constructor(props) {
@@ -106,6 +110,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
+    this.sourceChanged = this.sourceChanged.bind(this);
     this.updateStudy = this.updateStudy.bind(this);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
@@ -467,10 +472,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   campaignChanged(e) {
-    const { change } = this.props;
-    change('dashboardFilters', 'campaign', e);
+    this.props.setFilterFormValues('campaign', e);
     this.toggleAllstudies(false);
     this.props.fetchStudiesAccordingToFilters(e, 'campaign');
+  }
+
+  sourceChanged(e) {
+    this.props.setFilterFormValues('source', e);
+    this.toggleAllstudies(false);
+    this.props.fetchStudiesAccordingToFilters(e, 'source');
   }
 
   updateStudy(params) {
@@ -598,6 +608,14 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
 
     const selectedStudies = studies.filter(s => s.selected);
 
+    const sourcesOptions = [];
+    _.forEach((this.props.sources), (item) => {
+      sourcesOptions.push({ label: item.type, value: item.id });
+    });
+
+    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+    const campaignSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.campaign) ? this.props.filtersFormValues.campaign : undefined;
+
     return (
       <div>
         {(() => {
@@ -697,11 +715,26 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                       <form className="campaign-filter">
                         <div className="select pull-left">
                           <Field
+                            name="source-search"
+                            className="data-search source-search"
+                            component={ReactSelect}
+                            placeholder="Select Source"
+                            searchPlaceholder="Search"
+                            searchable
+                            options={sourcesOptions}
+                            selectedValue={sourceSelectedValue}
+                            customSearchIconClass="icomoon-icon_search2"
+                            onChange={this.sourceChanged}
+                          />
+                        </div>
+                        <div className="select pull-left">
+                          <Field
                             name="data-search"
                             className="data-search"
                             component={ReactSelect}
                             placeholder="Select Campaign"
                             searchPlaceholder="Search"
+                            selectedValue={campaignSelectedValue}
                             searchable
                             options={campaignOptions}
                             customSearchIconClass="icomoon-icon_search2"
@@ -998,6 +1031,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                 />
                 <CampaignPageModal
                   study={selectedStudies[0]}
+                  five9List={this.props.five9List}
                   openModal={this.state.showCampaignPageModal}
                   onClose={() => { this.showCampaignPageModal(false); }}
                   isOnTop={this.state.campaignPageOnTop}
@@ -1083,6 +1117,7 @@ const mapStateToProps = createStructuredSelector({
   note: selectDashboardNote(),
   editNoteProcess: selectDashboardEditNoteProcess(),
   studyIndicationTags: selectStudyIndicationTags(),
+  sources: selectSources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -1097,6 +1132,7 @@ const mapDispatchToProps = (dispatch) => ({
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchStudyIndicationTag: (studyId) => dispatch(fetchStudyIndicationTag(studyId)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
+  setFilterFormValues: (key, value) => dispatch(change('dashboardFilters', key, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyList);

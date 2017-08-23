@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -79,7 +79,7 @@ export function* fetchSponsorsWorker(action) {
     yield put(fetchSponsorsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSponsorsError(err));
   }
 }
@@ -100,7 +100,7 @@ export function* fetchSponsorsWithoutAdminWorker() {
     yield put(fetchSponsorsWithoutAdminSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sponsors');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSponsorsWithoutAdminError(err));
   }
 }
@@ -121,7 +121,7 @@ export function* fetchUsersByRolesWorker() {
     yield put(fetchUsersByRolesSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching users');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchUsersByRolesError(err));
   }
 }
@@ -146,7 +146,7 @@ export function* addSponsorAdminWorker(action) {
     yield put(addSponsorAdminSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addSponsorAdminError(err));
   }
 }
@@ -171,7 +171,7 @@ export function* editSponsorAdminWorker(action) {
     yield put(editSponsorAdminSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editSponsorAdminError(err));
   }
 }
@@ -196,7 +196,7 @@ export function* deleteSponsorAdminWorker(action) {
     yield put(deleteSponsorAdminSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteSponsorAdminError(err));
   }
 }
