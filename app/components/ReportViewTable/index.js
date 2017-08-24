@@ -221,7 +221,7 @@ export class ReportViewTable extends React.Component {
                     <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="credits" className={`th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>CREDITs <i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="credits" className={`th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>MESSAGING CREDITS <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
               </table>
