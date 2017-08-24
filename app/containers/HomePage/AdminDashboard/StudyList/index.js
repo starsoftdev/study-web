@@ -14,7 +14,6 @@ import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
 import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import { selectValues } from '../../../../common/selectors/form.selector';
-import { normalizePhoneDisplay } from '../../../../common/helper/functions';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
@@ -114,7 +113,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
-    this.getEditStudyInitialValues = this.getEditStudyInitialValues.bind(this);
     this.showEditInformationModal = this.showEditInformationModal.bind(this);
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
@@ -206,17 +204,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
   setNoteModalClass(hidden = false) {
     this.setState({ hideNoteModal: hidden });
-  }
-
-  getEditStudyInitialValues(study) {
-    const initialValues = Object.assign({}, study);
-    initialValues.recruitment_phone = normalizePhoneDisplay(initialValues.recruitment_phone);
-    initialValues.site = study.site_id;
-    delete initialValues.site_id;
-    initialValues.messagingNumber = study.text_number_id;
-    delete initialValues.text_number_id;
-
-    return initialValues;
   }
 
   handleScroll(event) {
@@ -578,12 +565,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     const selectedStudies = studies.details.filter(s => s.selected);
 
     if (studies.details.length > 0) {
-      let selectedStudyInitialValues;
-      if (selectedStudies && selectedStudies[0]) {
-        selectedStudyInitialValues = this.getEditStudyInitialValues(selectedStudies[0]);
-      } else {
-        selectedStudyInitialValues = {};
-      }
       return (
         <div>
           <div className={classNames({ 'btns-active': selectedStudies.length > 0 })}>
@@ -919,7 +900,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             </div>
             <EditInformationModal
               addEmailNotificationClick={this.addEmailNotificationClick}
-              initialValues={selectedStudyInitialValues}
+              study={selectedStudies[0]}
               openModal={this.state.showEditInformationModal}
               onClose={() => {
                 this.showEditInformationModal(false);
