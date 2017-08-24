@@ -488,7 +488,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case FETCH_FIVE_9_LIST:
       return {
         ...state,
-        studies: {
+        five9List: {
           details: state.five9List.details,
           fetching: true,
           error: null,
