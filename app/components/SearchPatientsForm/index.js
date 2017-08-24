@@ -87,7 +87,11 @@ export default class SearchPatientsForm extends Component {
       if (e === '0') {
         params[name] = 0;
       } else if (_.isUndefined(e)) {
-        params[name] = 0;
+        if (name === 'name') {
+          params[name] = '';
+        } else {
+          params[name] = 0;
+        }
       } else {
         params[name] = e;
       }
