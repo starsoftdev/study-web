@@ -137,6 +137,7 @@ export default class EditInformationForm extends React.Component {
 
   componentWillMount() {
     const { fetchAllClientUsersDashboard, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, initialValues } = this.props;
+    // fetch more information about the users, the tagged indications, and the messaging numbers
     fetchAllClientUsersDashboard(initialValues.client_id, initialValues.site);
     fetchTaggedIndicationsForStudy(initialValues.study_id);
     fetchMessagingNumbersDashboard();
