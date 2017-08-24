@@ -120,7 +120,7 @@ class StudyActionButtons extends Component {
         <div className="col pull-right">
           <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
             <i className="icomoon-icon_upload" />
-            &nbsp;Import
+            &nbsp;Upload Patients
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
           <Modal
