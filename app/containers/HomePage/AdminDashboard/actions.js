@@ -342,10 +342,10 @@ export function fetchStudyCampaignsDashboardError(payload) {
   };
 }
 
-export function fetchCustomNotificationEmails(params) {
+export function fetchCustomNotificationEmails(id) {
   return {
     type: FETCH_CUSTOM_NOTIFICATION_EMAILS,
-    params,
+    id,
   };
 }
 
