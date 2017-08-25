@@ -10,20 +10,23 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import formValidator from './validator';
 
-@reduxForm({ form: 'addEmailNotificationForm', validate: formValidator })
-class AddEmailNotificationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+@reduxForm({
+  form: 'addEmailNotificationForm',
+  validate: formValidator,
+})
+class AddEmailNotificationForm extends React.Component {
 
   static propTypes = {
-    error: React.PropTypes.object,
     custom: React.PropTypes.any,
     handleSubmit: React.PropTypes.func.isRequired,
-    reset: React.PropTypes.func.isRequired,
-    pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
   };
 
+  componentDidMount() {
+  }
+
   render() {
-    const { error, handleSubmit, pristine, reset, submitting, custom } = this.props; // eslint-disable-line
+    const { handleSubmit, submitting, custom } = this.props;
 
     const nameFields = (
       <div className="field-row">
