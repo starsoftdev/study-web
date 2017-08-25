@@ -159,12 +159,12 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  studyIndicationTags: {
+  taggedIndicationsForStudy: {
     details: [],
     fetching: false,
     error: null,
   },
-  updateStudyIndicationTagsProcess: {
+  updateTaggedIndicationsForStudyProcess: {
     success: false,
     saving: false,
     error: null,
@@ -223,7 +223,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case FETCH_STUDY_INDICATION_TAG:
       return {
         ...state,
-        studyIndicationTags: {
+        taggedIndicationsForStudy: {
           details: [],
           fetching: true,
           error: null,
@@ -232,7 +232,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case FETCH_STUDY_INDICATION_TAG_SUCCESS:
       return {
         ...state,
-        studyIndicationTags: {
+        taggedIndicationsForStudy: {
           details: action.payload,
           fetching: false,
           error: null,
@@ -241,7 +241,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case FETCH_STUDY_INDICATION_TAG_ERROR:
       return {
         ...state,
-        studyIndicationTags: {
+        taggedIndicationsForStudy: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -250,7 +250,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case ADD_STUDY_INDICATION_TAG:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: true,
           saving: true,
           error: null,
@@ -259,7 +259,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case ADD_STUDY_INDICATION_TAG_SUCCESS:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: true,
           saving: false,
           error: null,
@@ -268,7 +268,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case ADD_STUDY_INDICATION_TAG_ERROR:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: false,
           saving: false,
           error: action.payload,
@@ -277,7 +277,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case REMOVE_STUDY_INDICATION_TAG:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: true,
           saving: true,
           error: null,
@@ -286,7 +286,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case REMOVE_STUDY_INDICATION_TAG_SUCCESS:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: true,
           saving: false,
           error: null,
@@ -295,7 +295,7 @@ export default function dashboardPageReducer(state = initialState, action) {
     case REMOVE_STUDY_INDICATION_TAG_ERROR:
       return {
         ...state,
-        updateStudyIndicationTagsProcess: {
+        updateTaggedIndicationsForStudyProcess: {
           success: false,
           saving: false,
           error: action.payload,
