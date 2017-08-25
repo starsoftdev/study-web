@@ -23,7 +23,6 @@ import {
   removeCustomEmailNotification,
 } from '../../containers/App/actions';
 import {
-  selectAllClientUsers,
   selectCro,
   selectIndications,
   selectMessagingNumbers,
@@ -48,7 +47,6 @@ import formValidator from './validator';
 const formName = 'Dashboard.EditStudyForm';
 
 const mapStateToProps = createStructuredSelector({
-  allClientUsers: selectAllClientUsers(),
   cro: selectCro(),
   formError: selectSyncErrorBool(formName),
   formValues: selectValues(formName),
@@ -83,7 +81,6 @@ export default class EditInformationForm extends React.Component {
   static propTypes = {
     addEmailNotificationClick: PropTypes.func.isRequired,
     blur: React.PropTypes.func.isRequired,
-    allClientUsers: PropTypes.object,
     arrayRemoveAll: PropTypes.func.isRequired,
     arrayPush: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
@@ -136,45 +133,15 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchAllClientUsersDashboard, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, initialValues } = this.props;
-    // fetch more information about the users, the tagged indications, and the messaging numbers
-    fetchAllClientUsersDashboard(initialValues.client_id, initialValues.site);
-    fetchTaggedIndicationsForStudy(initialValues.study_id);
-    fetchMessagingNumbersDashboard();
+    const { fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, initialValues } = this.props;
+    // fetch more information about the tagged indications, and the messaging numbers
+    // fetchTaggedIndicationsForStudy(initialValues.study_id);
+    // fetchMessagingNumbersDashboard();
   }
 
 
   componentWillReceiveProps(newProps) {
     // const { allClientUsers, formValues } = this.props;
-    // if (allClientUsers.fetching && !newProps.allClientUsers.fetching) {
-    //   const fields = [];
-    //   let isAllChecked = true;
-    //
-    //   let studyEmailUsers = formValues.study_notification_users;
-    //
-    //   if (studyEmailUsers) { // notification emails
-    //     studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
-    //     studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
-    //     studyEmailUsers = studyEmailUsers.split(',');
-    //
-    //     newProps.allClientUsers.details.forEach(item => {
-    //       const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
-    //       if (!isChecked) {
-    //         isAllChecked = false;
-    //       }
-    //       fields.push({
-    //         email: item.email,
-    //         userId: item.user_id,
-    //         isChecked,
-    //       });
-    //     });
-    //
-    //     const newFormValues = {};
-    //     newFormValues.emailNotifications = fields;
-    //     newFormValues.checkAllInput = isAllChecked;
-    //     this.props.setEditStudyFormValues(newFormValues);
-    //   }
-    // }
     //
     // if (!newProps.allCustomNotificationEmails.fetching && newProps.allCustomNotificationEmails.details) {
     //   const customFields = [];
