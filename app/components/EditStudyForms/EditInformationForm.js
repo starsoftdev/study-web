@@ -133,10 +133,6 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-    const { fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, initialValues } = this.props;
-    // fetch more information about the tagged indications, and the messaging numbers
-    // fetchTaggedIndicationsForStudy(initialValues.study_id);
-    // fetchMessagingNumbersDashboard();
   }
 
 
