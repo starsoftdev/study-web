@@ -24,9 +24,9 @@ const selectStudies = () => createSelector(
   substate => substate.studies
 );
 
-const selectStudyIndicationTags = () => createSelector(
+const selectTaggedIndicationsForStudy = () => createSelector(
   selectDashboardPageDomain(),
-  substate => substate.studyIndicationTags
+  substate => substate.taggedIndicationsForStudy
 );
 
 const selectLevels = () => createSelector(
@@ -181,7 +181,7 @@ export {
   selectMessagingNumbers,
   selectUpdatedStudyAd,
   selectHoverRowIndex,
-  selectStudyIndicationTags,
+  selectTaggedIndicationsForStudy,
   selectDashboardCampaigns,
   selectDashboardEditCampaignProcess,
   selectDashboardDeleteCampaignProcess,

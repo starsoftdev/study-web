@@ -29,14 +29,12 @@ import {
   selectProtocols,
   selectSiteLocations,
   selectSponsors,
-  selectStudyIndicationTags,
+  selectTaggedIndicationsForStudy,
   selectUsersByRoles,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
   addIndicationTagForStudy,
   fetchAllClientUsersDashboard,
-  fetchMessagingNumbersDashboard,
-  fetchTaggedIndicationsForStudy,
   removeIndicationTagForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
@@ -55,7 +53,7 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
   siteLocations: selectSiteLocations(),
   sponsors: selectSponsors(),
-  studyIndicationTags: selectStudyIndicationTags(),
+  taggedIndicationsForStudy: selectTaggedIndicationsForStudy(),
   usersByRoles: selectUsersByRoles(),
 });
 
@@ -66,8 +64,6 @@ const mapDispatchToProps = (dispatch) => ({
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
-  fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
-  fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
   removeIndicationTagForStudy: (studyId, indicationId) => dispatch(removeIndicationTagForStudy(studyId, indicationId)),
   startSubmit: () => dispatch(startSubmit(formName)),
@@ -75,7 +71,11 @@ const mapDispatchToProps = (dispatch) => ({
   updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
 });
 
-@reduxForm({ form: formName, validate: formValidator, enableReinitialize: true })
+@reduxForm({
+  form: formName,
+  validate: formValidator,
+  enableReinitialize: true,
+})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class EditInformationForm extends React.Component {
   static propTypes = {
@@ -86,8 +86,6 @@ export default class EditInformationForm extends React.Component {
     change: PropTypes.func.isRequired,
     cro: PropTypes.array.isRequired,
     fetchAllClientUsersDashboard: PropTypes.func.isRequired,
-    fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
-    fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
     formError: PropTypes.bool.isRequired,
     formValues: PropTypes.object,
     initialValues: PropTypes.object.isRequired,
@@ -107,7 +105,7 @@ export default class EditInformationForm extends React.Component {
     addIndicationTagForStudy: PropTypes.func,
     removeIndicationTagForStudy: PropTypes.func,
     startSubmit: PropTypes.func.isRequired,
-    studyIndicationTags: PropTypes.object.isRequired,
+    taggedIndicationsForStudy: PropTypes.object.isRequired,
     stopSubmit: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     updateDashboardStudy: PropTypes.func.isRequired,
@@ -167,8 +165,8 @@ export default class EditInformationForm extends React.Component {
     //   this.props.setEditStudyFormValues(newFormValues);
     // }
     //
-    // if (!newProps.studyIndicationTags.fetching && newProps.studyIndicationTags.details) {
-    //   const customFields = newProps.studyIndicationTags.details.map(item => ({ value: item.indication_id, label: item.name }));
+    // if (!newProps.taggedIndicationsForStudy.fetching && newProps.taggedIndicationsForStudy.details) {
+    //   const customFields = newProps.taggedIndicationsForStudy.details.map(item => ({ value: item.indication_id, label: item.name }));
     //
     //   const newFormValues = {};
     //   newFormValues.indicationTags = customFields;
@@ -270,7 +268,7 @@ export default class EditInformationForm extends React.Component {
   }
 
   selectIndication(studyId, indication) {
-    const { change, formValues, addStudyIndicationTag } = this.props;
+    const { change, formValues, addTaggedIndicationForStudy } = this.props;
     change('indicationTags', formValues.indicationTags.concat([{
       value: indication.id,
       label: indication.name,
