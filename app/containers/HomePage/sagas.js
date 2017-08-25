@@ -58,8 +58,6 @@ import {
   fetchTotalsDashboardError,
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
-  fetchSiteNamesSuccess,
-  fetchSiteNamesError,
   updateDashboardStudySuccess,
   updateDashboardStudyError,
   fetchAllClientUsersDashboard,
@@ -890,15 +888,8 @@ export function* fetchCustomNotificationEmailsWatcher() {
 
 export function* fetchCustomNotificationEmailsWorker(action) {
   try {
-    const requestURL = `${API_URL}/studies/getCustomNotificationEmails`;
-
-    const params = {
-      method: 'GET',
-      query: {
-        id: action.params,
-      },
-    };
-    const response = yield call(request, requestURL, params);
+    const requestURL = `${API_URL}/studies/${action.id}/customNotificationEmails`;
+    const response = yield call(request, requestURL);
 
     yield put(fetchCustomNotificationEmailsSuccess(response));
   } catch (err) {

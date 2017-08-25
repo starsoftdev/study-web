@@ -37,7 +37,6 @@ import {
   addNote,
   editNote,
   deleteNote,
-  fetchTaggedIndicationsForStudy,
   toggleStudy,
   toggleAllStudies,
 } from '../actions';
@@ -62,7 +61,6 @@ const mapDispatchToProps = (dispatch) => ({
   editNote: (payload) => dispatch(editNote(payload)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
-  fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
   toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
   toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
@@ -78,8 +76,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     changeStudyStatusDashboard: PropTypes.func.isRequired,
     editStudyValues: PropTypes.object,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
-    fetchCustomNotificationEmails: PropTypes.func.isRequired,
-    fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
     allCustomNotificationEmails: PropTypes.object,
     levels: PropTypes.array,

@@ -37,7 +37,6 @@ import {
   fetchSiteLocations,
   clearFilters,
   fetchStudyCampaignsDashboard,
-  fetchCustomNotificationEmails,
   changeStudyStatusDashboard,
   updateTwilioNumbers,
 } from './actions';
@@ -77,7 +76,6 @@ const mapDispatchToProps = (dispatch) => ({
   changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
   addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
   fetchCro: () => dispatch(fetchCro()),
-  fetchCustomNotificationEmails: (params) => dispatch(fetchCustomNotificationEmails(params)),
   fetchLevels: () => dispatch(fetchLevels()),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),
@@ -102,13 +100,11 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     clearFilters: PropTypes.func.isRequired,
     cro: PropTypes.array,
     fetchCro: PropTypes.func,
-    fetchCustomNotificationEmails: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
     fetchProtocols: PropTypes.func,
     fetchSiteLocations: PropTypes.func,
     fetchSponsors: PropTypes.func,
-    fetchMessagingNumbersDashboard: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
     fetchTotalsDashboard: PropTypes.func,
@@ -679,7 +675,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             addEmailNotificationUser={this.props.addEmailNotificationUser}
             addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
-            fetchCustomNotificationEmails={this.props.fetchCustomNotificationEmails}
             allCustomNotificationEmails={this.props.allCustomNotificationEmails}
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             paginationOptions={this.props.paginationOptions}
