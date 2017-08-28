@@ -35,26 +35,27 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
   }
 
   componentWillMount() {
-    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser, getTotalPatientsCount } = this.props;
+    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser } = this.props;
     fetchIndications();
     fetchSources();
     fetchPatientCategories();
     fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
-    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
-    if (userIsAdmin) {
-      getTotalPatientsCount(currentUser.roleForClient.client_id, null);
-    }
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser, getTotalPatientsCount } = this.props;
+    const { currentUser } = this.props;
     if (newProps.sites && newProps.sites.length > 0 && this.props.sites.length === 0) {
-      let defaultSiteLocation = null;
-      if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
-        defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
+      const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+      if (userIsAdmin) {
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: 'All', limit: 15, skip: 0 }, this.props.patients.details, { site: 'All' }, false);
+      } else {
+        let defaultSiteLocation = null;
+        if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
+          defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
+        }
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: defaultSiteLocation, limit: 15, skip: 0 }, this.props.patients.details, { site: defaultSiteLocation }, false);
       }
-      getTotalPatientsCount(currentUser.roleForClient.client_id, defaultSiteLocation);
     }
   }
 
@@ -91,11 +92,12 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
       || queryParams.includeIndication || queryParams.name || queryParams.site
       || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom
-      || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
+      || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo || !isSearch) {
       this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
       this.props.clearPatientsList();
       this.props.resetTextBlast();
+      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     }
   }
 

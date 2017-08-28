@@ -10,6 +10,9 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_AVAILABLE_NUMBERS,
+  FETCH_AVAILABLE_NUMBERS_SUCCESS,
+  FETCH_AVAILABLE_NUMBERS_ERROR,
   ADD_MESSAGING_NUMBER,
   ADD_MESSAGING_NUMBER_SUCCESS,
   ADD_MESSAGING_NUMBER_ERROR,
@@ -24,6 +27,11 @@ import {
 } from './constants';
 
 const initialState = {
+  availableNumber: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
   messagingNumber: {
     details: [],
     fetching: false,
@@ -45,9 +53,9 @@ const initialState = {
 
 function dashboardMessagingNumbersPageReducer(state = initialState, action) {
   const newMessagingNumber = _.cloneDeep(state.messagingNumber.details);
+  const newAvailableNumber = _.cloneDeep(state.availableNumber.details);
   let foundIndex = null;
   let newMessagingNumberList = [];
-
 
   switch (action.type) {
     case FETCH_MESSAGING_NUMBERS:
@@ -100,12 +108,22 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
       };
     case ADD_MESSAGING_NUMBER_SUCCESS:
       newMessagingNumber.push(action.payload);
+      foundIndex = _.findIndex(newAvailableNumber, item => (item.phoneNumber === action.payload.phoneNumber));
+      if (foundIndex !== -1) {
+        newAvailableNumber.splice(foundIndex, 1);
+      }
+
       return {
         ...state,
         messagingNumber: {
           details: newMessagingNumber,
           fetching: false,
           error: action.payload,
+        },
+        availableNumber: {
+          details: newAvailableNumber,
+          fetching: false,
+          error: null,
         },
         editMessagingNumberProcess: {
           saving: false,
@@ -119,6 +137,33 @@ function dashboardMessagingNumbersPageReducer(state = initialState, action) {
         editMessagingNumberProcess: {
           saving: false,
           deleting: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_AVAILABLE_NUMBERS:
+      return {
+        ...state,
+        availableNumber: {
+          fetching: true,
+          details: [],
+          error: null,
+        },
+      };
+    case FETCH_AVAILABLE_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        availableNumber: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_AVAILABLE_NUMBERS_ERROR:
+      return {
+        ...state,
+        availableNumber: {
+          details: [],
+          fetching: false,
           error: action.payload,
         },
       };

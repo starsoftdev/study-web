@@ -151,7 +151,7 @@ class PatientCategory extends React.Component {
     if (category.patients.length > 0) {
       const getLastUpdate = (patient) => {
         const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
-        if (patient.lastTextMessage) {
+        if (patient.lastTextMessage && patient.lastTextMessage.dateCreated) {
           return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
         }
 
