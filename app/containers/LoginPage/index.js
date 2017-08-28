@@ -8,7 +8,6 @@ import { createStructuredSelector } from 'reselect';
 
 import LoginForm from '../../components/LoginForm';
 import { loginRequest } from './actions';
-import { selectLoginError } from '../../containers/App/selectors';
 import { setNewPasswordRequest } from '../SetNewPasswordPage/actions';
 
 export class LoginPage extends Component {
@@ -24,10 +23,6 @@ export class LoginPage extends Component {
     super(props);
     this.onSubmitForm = this.props.onSubmitForm.bind(this);
     this.setNewPasswordRequest = this.props.setNewPasswordRequest.bind(this);
-
-    this.state = {
-      loginError: null,
-    };
   }
 
   componentDidMount() {
@@ -36,19 +31,11 @@ export class LoginPage extends Component {
     }
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.loginError && newProps.loginError.code === 'LOGIN_FAILED') {
-      this.setState({ loginError: true });
-    }
-  }
-
   render() {
-    const { loginError } = this.state;
-
     return (
       <div className="login-page-wrapper">
         <div className="container">
-          <LoginForm onSubmit={this.onSubmitForm} loginError={loginError} />
+          <LoginForm onSubmit={this.onSubmitForm} />
         </div>
       </div>
     );
@@ -56,7 +43,6 @@ export class LoginPage extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  loginError: selectLoginError(),
 });
 
 function mapDispatchToProps(dispatch) {

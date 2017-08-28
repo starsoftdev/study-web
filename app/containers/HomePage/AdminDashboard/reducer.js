@@ -16,6 +16,9 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_STUDIES_DASHBOARD_SUCCESS,
   FETCH_STUDIES_DASHBOARD_ERROR,
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
   FETCH_TOTALS_DASHBOARD,
   FETCH_TOTALS_DASHBOARD_SUCCESS,
   FETCH_TOTALS_DASHBOARD_ERROR,
@@ -115,6 +118,11 @@ const initialState = {
     filters: [],
   },
   studies: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  five9List: {
     details: [],
     fetching: false,
     error: null,
@@ -472,6 +480,33 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         studies: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_FIVE_9_LIST:
+      return {
+        ...state,
+        five9List: {
+          details: state.five9List.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_SUCCESS:
+      return {
+        ...state,
+        five9List: {
+          details: action.payload.details,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_ERROR:
+      return {
+        ...state,
+        five9List: {
           details: [],
           fetching: false,
           error: action.payload,

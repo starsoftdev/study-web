@@ -62,7 +62,7 @@ export class loggedUserMenu extends React.Component { // eslint-disable-line rea
           onClick={this.switchUserDrop}
         >
           <div className="img-circle">
-            <img src={profileImageURL} alt={fullName} width="43" height="43" />
+            <img src={profileImageURL} alt="" width="43" height="43" />
           </div>
           <span className="text">{fullName}</span>
           <i className="caret" />

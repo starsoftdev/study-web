@@ -193,7 +193,7 @@ class PatientActionButtons extends React.Component {
           </button>
         </div>
         <div className="col pull-right">
-          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
+          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Upload Patients</label>
         </div>
         <div className="col pull-right">
           <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</div>
