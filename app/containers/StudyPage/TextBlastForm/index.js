@@ -7,8 +7,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { actions as toastrActions } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
+import { toastr } from 'react-redux-toastr';
 import Form from 'react-bootstrap/lib/Form';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import formValidator from './validator';
@@ -34,7 +33,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
-  displayToastrError: (heading, error) => dispatch(toastrActions.error(heading, error)),
   findPatients: (studyId, text, categoryIds, sourceIds, campaignId) => dispatch(findPatientsForTextBlast(studyId, text, categoryIds, sourceIds, campaignId)),
   filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
@@ -54,7 +52,6 @@ class TextBlastForm extends React.Component {
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
     fetchClientCredits: React.PropTypes.func,
-    displayToastrError: React.PropTypes.func.isRequired,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -83,6 +80,8 @@ class TextBlastForm extends React.Component {
     this.textAreaChange = this.textAreaChange.bind(this);
     this.checkCategories = this.checkCategories.bind(this);
     this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
+    this.removePatients = this.removePatients.bind(this);
+    this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       enteredCharactersLength: 0,
       sourceDisable: true,
@@ -99,7 +98,7 @@ class TextBlastForm extends React.Component {
   }
 
   textAreaChange(message = '') {
-    const value = this.textarea ? this.textarea.value : message;
+    const value = (this.textarea && this.textarea.value) ? this.textarea.value : message;
     this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {});
   }
 
@@ -199,16 +198,16 @@ class TextBlastForm extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { currentUser, displayToastrError, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
         this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
-      displayToastrError('', formSyncErrors.message);
+      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
-      displayToastrError('', formSyncErrors.patients);
+      toastr.error('', formSyncErrors.patients);
     }
   }
 
@@ -232,6 +231,20 @@ class TextBlastForm extends React.Component {
   removeSelectedPatient(patient) {
     this.checkCategories(patient);
     this.props.removePatient(patient);
+  }
+
+  removePatients() {
+    this.props.removePatients();
+    this.props.patientCategories.forEach(category => {
+      this.props.change('category', false);
+      this.props.change(`category-${category.id}`, false);
+    });
+  }
+
+  checkForCredits(notEnoughCredits) {
+    if (notEnoughCredits) {
+      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
+    }
   }
 
   renderPatients() {
@@ -265,7 +278,7 @@ class TextBlastForm extends React.Component {
   }
 
   renderPatientCount() {
-    const { formValues, removePatients } = this.props;
+    const { formValues } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
@@ -278,7 +291,7 @@ class TextBlastForm extends React.Component {
           <span className="counter">{newPatientsArr.length}</span>
           <span className="text"> Patients</span>
           <a className="btn-close">
-            <i className="icomoon-icon_close" onClick={removePatients} />
+            <i className="icomoon-icon_close" onClick={this.removePatients} />
           </a>
         </span>
       );
@@ -287,10 +300,17 @@ class TextBlastForm extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, ePMS } = this.props;
+    const { patientCategories, sources, ePMS, formValues } = this.props;
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
     const { enteredCharactersLength } = this.state;
     const clientCredits = this.props.clientCredits.details.customerCredits;
-    const disabled = (clientCredits === 0 || clientCredits === null);
+    const notEnoughCredits = newPatientsArr.length > clientCredits;
+    const disabled = (clientCredits === 0 || clientCredits === null || clientCredits < newPatientsArr.length || newPatientsArr.length === 0);
     return (
       <Form className="text-email-blast-form">
         <div className="sidebar pull-left">
@@ -384,20 +404,18 @@ class TextBlastForm extends React.Component {
                 ref={(textarea) => {
                   this.textarea = textarea;
                 }}
-                isDisabled={disabled}
               />
-              <div className="footer">
+              <div className="footer" onClick={() => this.checkForCredits(notEnoughCredits)}>
                 <span className="characters-counter">
                   {`${160 - enteredCharactersLength}`}
                 </span>
-                <Button
-                  type="submit"
-                  className="pull-right"
+                <div
+                  className="btn btn-default lightbox-opener pull-right"
+                  onClick={(e) => ((notEnoughCredits || disabled || enteredCharactersLength === 0) ? null : this.submitTextBlast(e))}
                   disabled={disabled || !ePMS}
-                  onClick={this.submitTextBlast}
                 >
                   Send
-                </Button>
+                </div>
               </div>
             </div>
           </div>
