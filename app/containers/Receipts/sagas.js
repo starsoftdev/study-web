@@ -2,7 +2,7 @@
 import _, { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 
 import {
   receiptsReceived,
@@ -91,7 +91,7 @@ export function* getReceipts() {
       yield put(receiptsReceived(resultArr, hasMore, page));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -118,7 +118,7 @@ export function* getPdf() {
       location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -142,7 +142,7 @@ export function* showPdf() {
       window.open(response.url, '_blank');
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
