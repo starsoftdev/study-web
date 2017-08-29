@@ -169,10 +169,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
   componentWillReceiveProps(newProps) {
     // if filters have changed, we toggle off all selected studies and also clear campaign filter
-    if (newProps.filtersFormValues && newProps.filtersFormValues !== this.props.filtersFormValues) {
-      this.toggleAllStudies(false);
-      this.props.clearCampaignFilter();
-    }
     if (this.tableRight) {
       this.setState({ fixedScrollContainerWidth: (3015 + this.tableRight.clientWidth) });
     }

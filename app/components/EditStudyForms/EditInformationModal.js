@@ -59,6 +59,7 @@ export default class EditInformationModal extends React.Component {
   static customEmailNotificationFields = [];
   static checkAllCustomEmailNotificationFields = false;
   static taggedIndicationsForStudy = false;
+  static messagingNumbersForStudy = [];
 
   constructor(props) {
     super(props);
@@ -69,7 +70,7 @@ export default class EditInformationModal extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { allClientUsers, customNotificationEmails, openModal, study, taggedIndicationsForStudy } = this.props;
+    const { allClientUsers, customNotificationEmails, messagingNumbers, openModal, study, taggedIndicationsForStudy } = this.props;
     if (study) {
       if (allClientUsers.fetching && !nextProps.allClientUsers.fetching) {
         let studyEmailUsers = study.study_notification_users;
@@ -97,18 +98,13 @@ export default class EditInformationModal extends React.Component {
           this.checkAllEmailNotificationFields = isAllChecked;
         }
       } else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
-        const customEmailNotifications = study.customEmailNotifications;
 
         this.customEmailNotificationFields = [];
-        let isAllCustomChecked = (nextProps.customNotificationEmails.details.length);
+        let isAllCustomChecked = true;
         nextProps.customNotificationEmails.details.forEach(item => {
-          const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
-          let isChecked = (item.type === 'active');
-          if (local) {
-            isChecked = local.isChecked;
-            if (!isChecked) {
-              isAllCustomChecked = false;
-            }
+          const isChecked = item.type === 'active';
+          if (!isChecked) {
+            isAllCustomChecked = false;
           }
           // set internal state to hold the value for the field boolean without re-rendering
           this.customEmailNotificationFields.push({
@@ -119,20 +115,31 @@ export default class EditInformationModal extends React.Component {
         });
         // set internal state to hold the value for the field boolean without re-rendering
         this.checkAllCustomEmailNotificationFields = isAllCustomChecked;
+      } else if (messagingNumbers.fetching && !nextProps.messagingNumbers.fetching) {
+        const messagingNumbersOptions = nextProps.messagingNumbers.details.map(item => ({
+          value: item.id,
+          label: item.phone_number,
+        }));
+        if (study.text_number_id) {
+          messagingNumbersOptions.unshift({
+            value: study.text_number_id,
+            label: study.phone_number,
+          });
+        }
+        this.messagingNumbersForStudy = messagingNumbersOptions;
       } else if (taggedIndicationsForStudy.fetching && !nextProps.taggedIndicationsForStudy.fetching) {
         // set the tagged indications for the study
         this.taggedIndicationsForStudy = nextProps.taggedIndicationsForStudy.details.map(item => ({
           value: item.indication_id,
-          label: item.name
+          label: item.name,
         }));
       } else if (!openModal && nextProps.openModal) {
-        const {fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy} = this.props;
-        console.log(study);
+        const { fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy } = this.props;
         // fetch more information about the users, the tagged indications, and the messaging numbers
         fetchAllClientUsersDashboard(study.client_id, study.site_id);
         fetchCustomNotificationEmails(study.study_id);
-        // fetchMessagingNumbersDashboard();
-        // fetchTaggedIndicationsForStudy(study.study_id);
+        fetchMessagingNumbersDashboard();
+        fetchTaggedIndicationsForStudy(study.study_id);
       }
     }
   }
@@ -153,6 +160,8 @@ export default class EditInformationModal extends React.Component {
       initialValues.checkAllCustomInput = this.checkAllCustomEmailNotificationFields;
       // set the tagged indications for the study
       initialValues.taggedIndicationsForStudy = this.taggedIndicationsForStudy;
+      // set the messaging numbers
+      initialValues.messagingNumbers = this.messagingNumbersForStudy;
 
       return initialValues;
     }
