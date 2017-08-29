@@ -75,6 +75,7 @@ const mapDispatchToProps = (dispatch) => ({
   form: formName,
   validate: formValidator,
   enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class EditInformationForm extends React.Component {
@@ -131,47 +132,6 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-  }
-
-
-  componentWillReceiveProps(newProps) {
-    // const { allClientUsers, formValues } = this.props;
-    //
-    // if (!newProps.allCustomNotificationEmails.fetching && newProps.allCustomNotificationEmails.details) {
-    //   const customFields = [];
-    //   let isAllCustomChecked = (newProps.allCustomNotificationEmails.details.length);
-    //   const customEmailNotifications = newProps.formValues.customEmailNotifications;
-    //
-    //   newProps.allCustomNotificationEmails.details.forEach(item => {
-    //     const local = _.find(customEmailNotifications, (o) => (o.id === item.id));
-    //     let isChecked = (item.type === 'active');
-    //     if (local) {
-    //       isChecked = local.isChecked;
-    //       if (!isChecked) {
-    //         isAllCustomChecked = false;
-    //       }
-    //     }
-    //
-    //     customFields.push({
-    //       id: item.id,
-    //       email: item.email,
-    //       isChecked,
-    //     });
-    //   });
-    //
-    //   const newFormValues = {};
-    //   newFormValues.customEmailNotifications = customFields;
-    //   newFormValues.checkAllCustomInput = isAllCustomChecked;
-    //   this.props.setEditStudyFormValues(newFormValues);
-    // }
-    //
-    // if (!newProps.taggedIndicationsForStudy.fetching && newProps.taggedIndicationsForStudy.details) {
-    //   const customFields = newProps.taggedIndicationsForStudy.details.map(item => ({ value: item.indication_id, label: item.name }));
-    //
-    //   const newFormValues = {};
-    //   newFormValues.indicationTags = customFields;
-    //   this.props.setEditStudyFormValues(newFormValues);
-    // }
   }
 
   onSuggestSelect(e) {
