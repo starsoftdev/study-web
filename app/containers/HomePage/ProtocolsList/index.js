@@ -79,7 +79,6 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
   renderProtocols() {
     const { protocols } = this.props;
-    console.log('protocols: ', protocols);
     if (protocols.details || protocols.fetching) {
       return (
         <tbody>
