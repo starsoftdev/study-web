@@ -675,8 +675,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={() => this.showCampaignPageModal(true)}
-                      > Campaign </Button>
+                        onClick={this.sourceTrackingStudies}
+                      > Source Tracking </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
@@ -684,8 +684,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={this.sourceTrackingStudies}
-                      > Source Tracking </Button>
+                        onClick={() => this.showCampaignPageModal(true)}
+                      > Campaign </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
