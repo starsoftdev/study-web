@@ -263,7 +263,7 @@ export default class SearchPatientsForm extends Component {
               </div>
             </form>
           </div>
-          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
+          <PatientActionButtons searchPatients={this.props.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
         <form className="form-search patient-db-search" onSubmit={handleSubmit}>
           <div className="fields-holder clearfix form-search">
