@@ -127,7 +127,6 @@ class PatientActionButtons extends React.Component {
         showAlertModal: true,
       });
     } else {
-      console.log(this.props.paginationOptions.prevSearchFilter);
       this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
     }
   }
