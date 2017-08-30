@@ -96,7 +96,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeStudyStatus = this.changeStudyStatus.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
     this.deactivateStudies = this.deactivateStudies.bind(this);
-    this.adSetStudies = this.adSetStudies.bind(this);
+    this.sourceTrackingStudies = this.sourceTrackingStudies.bind(this);
     this.historyStudies = this.historyStudies.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
@@ -336,7 +336,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
-  adSetStudies() {
+  sourceTrackingStudies() {
   }
 
   historyStudies() {
@@ -684,8 +684,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={() => this.showEditInformationModal(true)}
-                      > Info </Button>
+                        onClick={this.sourceTrackingStudies}
+                      > Source Tracking </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
@@ -693,8 +693,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={this.adSetStudies}
-                      > Ad Set </Button>
+                        onClick={() => this.showEditInformationModal(true)}
+                      > Info </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
