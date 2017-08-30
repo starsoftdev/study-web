@@ -352,7 +352,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     Instant SIGN-UP Notifications to Your Site
                   </strong>
                   <p>
-                    Patient contact information sent automatically via email and to your sites MyStudyKIK Portal upon sign up.
+                    Patient contact information sent automatically via email and to your site's MyStudyKIK Portal upon sign up.
                   </p>
                 </div>
               </div>
@@ -456,7 +456,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                   <p>
                     Your site will never miss a patient who is calling about your trial on
                     the weekends or after hours because StudyKIK tracks all phone calls and
-                    notifys your site about the missed call. This allows sites to call patients back &amp; answer
+                    notifies your site about the missed call. This allows sites to call patients back &amp; answer
                     questions that may have prior to screening.
                   </p>
                 </div>
