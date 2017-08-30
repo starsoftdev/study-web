@@ -60,7 +60,6 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
   }
 
   searchPatients(searchFilter, isSearch, isExport = false) {
-    console.log('searchPatients', searchFilter, isSearch, isExport);
     const queryParams = omit(omitBy(searchFilter, isUndefined), ['includeIndication', 'excludeIndication']);
 
     if (searchFilter.includeIndication) {
