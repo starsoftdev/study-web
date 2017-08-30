@@ -127,6 +127,7 @@ class PatientActionButtons extends React.Component {
         showAlertModal: true,
       });
     } else {
+      console.log(this.props.paginationOptions.prevSearchFilter);
       this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
     }
   }
@@ -187,7 +188,7 @@ class PatientActionButtons extends React.Component {
     return (
       <div>
         <div className="col pull-right no-right-padding">
-          <button type="button" className="btn btn-primary download pull-right" onClick={this.download} disabled>
+          <button type="button" className="btn btn-primary download pull-right" onClick={this.download}>
             <i className="icomoon-icon_download" />
             &nbsp;Download
           </button>
