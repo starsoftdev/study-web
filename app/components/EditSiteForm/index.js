@@ -275,7 +275,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required">
+            <strong className="label">
               <label>STATE / PROVINCE</label>
             </strong>
             <div className="field">
