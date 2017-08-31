@@ -179,7 +179,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           </div>
         </div>
 
-        <div className="field-row">
+        <div className="field-row fs-hide">
           <strong className="label"><label>Email</label></strong>
           <Field
             name="email"
