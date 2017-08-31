@@ -153,10 +153,6 @@ export class ReportViewTable extends React.Component {
               />
             </div>
           </td>
-          <td>
-            <span className="number">{item.customer_credits || 0}</span>
-            <a disabled className="btn lightbox-opener btn-plus">+</a>
-          </td>
         </tr>
       );
     }
@@ -179,6 +175,10 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
+          <td className="messaging_credit">
+            <span className="number">{item.customer_credits || 0}</span>
+            <a disabled className="btn lightbox-opener btn-plus">+</a>
+          </td>
           <td className="level_date_from">{item.levelDateFrom}</td>
           <td className="level_date_to">{item.levelDateTo}</td>
           <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
@@ -221,7 +221,6 @@ export class ReportViewTable extends React.Component {
                     <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="credits" className={`th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>MESSAGING CREDITS <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
               </table>
@@ -237,6 +236,7 @@ export class ReportViewTable extends React.Component {
                 <table className="table">
                   <thead>
                     <tr>
+                      <th onClick={this.sortBy} data-sort="credits" className={`messaging_credit th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>MESSAGING CREDITS <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
@@ -262,7 +262,7 @@ export class ReportViewTable extends React.Component {
           </div>
         </Sticky>
         <InfiniteScroll
-          className="test-test"
+          className="reports"
           pageStart={0}
           loadMore={this.loadItems}
           initialLoad={false}
