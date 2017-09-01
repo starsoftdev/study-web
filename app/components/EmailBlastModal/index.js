@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import TextBlastForm from '../EmailBlastForm/index';
+import EmailBlastForm from '../EmailBlastForm/index';
 import CenteredModal from '../CenteredModal/index';
 import sanitizeProps from '../../utils/sanitizeProps';
 
@@ -69,7 +69,11 @@ class TextBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <TextBlastForm onClose={onClose} studyName={studyName} campaign={campaign} ePMS={ePMS} />
+          <EmailBlastForm
+            onClose={onClose}
+            studyName={studyName}
+            campaign={campaign}
+          />
         </Modal.Body>
       </Modal>
     );

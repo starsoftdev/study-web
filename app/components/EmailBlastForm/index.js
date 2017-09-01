@@ -86,11 +86,11 @@ class TextBlastForm extends React.Component {
   }
 
   componentDidMount() {
-    const { studyName } = this.props;
-    const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
-    this.props.initialize({
-      message,
-    });
+    // const { studyName } = this.props;
+    // const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
+    // this.props.initialize({
+    //   message,
+    // });
   }
 
   selectCategory(checked, categoryId) {
@@ -383,12 +383,22 @@ class TextBlastForm extends React.Component {
                 {this.renderPatientCount()}
               </div>
               <Field
+                name="from"
+                component={Input}
+                className="sender-field"
+                type="text"
+                placeholder="Type email address..."
+                required
+                ref={(from) => {
+                  this.from = from;
+                }}
+              />
+              <Field
                 name="message"
                 component={Input}
                 componentClass="textarea"
-                className="message"
-                placeholder="Type a message..."
-                maxLength="160"
+                className="email-message"
+                placeholder="Type message..."
                 required
                 style={{ height: '350px' }}
                 ref={(textarea) => {
