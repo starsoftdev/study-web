@@ -304,7 +304,7 @@
   .table-area {
     .clearfix;
     position: relative;
-    padding: 0 0 0 844px;
+    padding: 0 0 0 710px;
 
     .table-scroll-wrap {
       overflow-x: scroll;
@@ -318,10 +318,6 @@
       bottom: 0px;
       z-index: 1;
       width: 300px;
-    }
-
-    .reports & {
-      padding: 0 0 0 844px;
     }
 
     .check-switcher {
@@ -356,7 +352,7 @@
     .table-left {
       top: 0;
       left: 0;
-      width: 844px;
+      width: 710px;
       position: absolute;
 
       .table .number {
@@ -388,7 +384,7 @@
           > tbody {
             > tr > th,
             > tr > td {
-              &:nth-child(5) {
+              &:nth-child(4) {
                 padding-left: 10px;
               }
             }
@@ -405,7 +401,7 @@
 
       .table-inner {
         overflow-x: scroll;
-        margin-bottom: -15px;
+        margin-bottom: -17px;
       }
 
       .scroll {
@@ -544,17 +540,17 @@
     }
 
     @media screen and (max-width: @psd) {
-      padding-left: 644px;
+      padding-left: 553px;
       .reports & {
-        padding: 0 0 0 644px;
+        padding: 0 0 0 553px;
       }
 
       .table-left {
-        width: 644px;
+        width: 553px;
       }
 
       .table-right .table {
-        width: 1666px;
+        width: 1982px;
       }
     }
   }
@@ -564,10 +560,11 @@
     tbody > tr > td:first-child::before {
       counter-increment: item;
       content: counter(item);
+      white-space: nowrap;
     }
     td, th {
       &:first-child {
-        width: 37px;
+        width: 50px;
       }
       &:nth-child(2) {
         width: 257px;
@@ -578,15 +575,12 @@
       &:nth-child(4) {
         width: 186px;
       }
-      &:nth-child(5) {
-        width: 102px;
-      }
     }
 
     @media screen and(max-width: @psd) {
       td, th {
         &:first-child {
-          width: 37px;
+          width: 50px;
         }
         &:nth-child(2) {
           width: 125px;
@@ -597,9 +591,6 @@
         &:nth-child(4) {
           width: 186px;
         }
-        &:nth-child(5) {
-          width: 102px;
-        }
       }
     }
   }
@@ -607,6 +598,9 @@
   .table-right {
     th,
     td {
+      &.messaging_credit {
+        width: 206px;
+      }
       &.level_date_from {
         width: 145px;
       }
@@ -672,6 +666,9 @@
     @media screen and(max-width: @psd) {
       th,
       td {
+        &.messaging_credit {
+          width: 102px;
+        }
         &.level_date_from {
           width: 115px;
         }
@@ -1654,11 +1651,6 @@
     }
   }
 
-  .reports {
-    .table-area .table > tbody > tr > td:nth-child(5) {
-      padding-left: 0;
-    }
-  }
 
   .rewards {
     @media screen and (max-width: @psd) {

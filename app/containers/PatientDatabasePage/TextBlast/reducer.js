@@ -102,7 +102,7 @@ export default function TextBlastModal(state = initialState, action) {
       patients = _.filter(action.payload, (patient) => {
         /* if (_.find(state.values.patients, p => p.id === patient.id)) {
           return true;
-        }*/
+        } */
         if (patient.unsubscribed) {
           // uncheckedPatients.push(patient.id);
         }
@@ -111,7 +111,7 @@ export default function TextBlastModal(state = initialState, action) {
         }
         /* if (_.indexOf(state.values.uncheckedPatients, patient.id) === -1) {
           return true;
-        }*/
+        } */
         return true;
       });
 
@@ -130,7 +130,7 @@ export default function TextBlastModal(state = initialState, action) {
 
       /* if (patients.length === action.payload.length) {
         allPatients = true;
-      }*/
+      } */
 
 
       return {

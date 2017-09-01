@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Alert from 'react-bootstrap/lib/Alert';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { toastr } from 'react-redux-toastr';
 
 import Input from '../../components/Input';
+import { selectLoginError } from '../../containers/App/selectors';
 import loginFormValidator, { fields } from './validator';
-import { selectSyncErrorBool } from '../../../app/common/selectors/form.selector';
-
+import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 const formName = 'login';
-
 @reduxForm({
   form: formName,
   validate: loginFormValidator,
@@ -27,6 +27,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     change: React.PropTypes.func,
     formError: React.PropTypes.bool.isRequired,
     touchFields: React.PropTypes.func.isRequired,
+    formValues: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -60,8 +61,35 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     this.checkbox.classList.toggle('jcf-checked');
   }
 
+  renderCaptcha() {
+    const { loginError } = this.props;
+    const failedCount = loginError ? loginError.failedCount : 0;
+    if (failedCount >= 5) {
+      return (
+        <div className="field-row clearfix area">
+          <Field
+            name="reCaptcha"
+            type="hidden"
+            component={Input}
+            className="field-row"
+            bsClass="form-control input-lg"
+          />
+          <ReCAPTCHA
+            ref={(ref) => { this.recaptcha = ref; }}
+            sitekey={SITE_KEY}
+            onChange={this.onChange}
+            className="recaptcha-wrapper"
+          />
+        </div>
+      );
+    }
+
+    return null;
+  }
+
   render() {
     const { submitting, loginError } = this.props;
+    const code = loginError ? loginError.code : null;
 
     return (
       <form
@@ -73,18 +101,24 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         data-view="fadeInUp"
         onSubmit={(e) => {
           e.preventDefault();
-          const { formError, touchFields } = this.props;
+          const { formError, touchFields, formValues, loginError } = this.props;
+          const failedCount = loginError ? loginError.failedCount : 0;
           if (formError) {
             touchFields();
+            return;
+          } else if (failedCount >= 5 && !formValues.reCaptcha) {
+            toastr.error('', 'Validate recaptcha!');
             return;
           }
           // this.recaptcha.execute();
           this.props.handleSubmit();
-          this.recaptcha.reset();
+          if (this.recaptcha) {
+            this.recaptcha.reset();
+          }
         }}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
-        {loginError &&
+        {code === 'LOGIN_FAILED' &&
           <Alert bsStyle="danger">
             <p>The email or password is incorrect!</p>
           </Alert>
@@ -129,21 +163,9 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             Forgot Password?
           </Link>
         </div>
-        <div className="field-row clearfix area">
-          <Field
-            name="reCaptcha"
-            type="hidden"
-            component={Input}
-            className="field-row"
-            bsClass="form-control input-lg"
-          />
-          <ReCAPTCHA
-            ref={(ref) => { this.recaptcha = ref; }}
-            sitekey={SITE_KEY}
-            onChange={this.onChange}
-            className="recaptcha-wrapper"
-          />
-        </div>
+        {
+          this.renderCaptcha()
+        }
         <div className="field-row">
           <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
         </div>
@@ -155,6 +177,8 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
 
 const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
+  formValues: selectValues(formName),
+  loginError: selectLoginError(),
 });
 function mapDispatchToProps(dispatch) {
   return {
