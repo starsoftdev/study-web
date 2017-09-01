@@ -189,7 +189,7 @@ class TextBlastForm extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    /*const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    /* const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
