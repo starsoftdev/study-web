@@ -37,7 +37,7 @@ import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../..
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import validator, { addCreditsFields } from './validator';
-
+import { parseTimezone } from '../../utils/time';
 
 @reduxForm({
   form: 'addCredits',
@@ -204,8 +204,10 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
   addSite(siteData) {
     const { currentUserClientId, saveSite } = this.props;
-
-    saveSite(currentUserClientId, null, siteData);
+    saveSite(currentUserClientId, null, {
+      ...siteData,
+      timezone: parseTimezone(siteData.timezone),
+    });
   }
 
   addCreditsSubmit(ev) {
