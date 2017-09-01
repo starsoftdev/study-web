@@ -87,7 +87,11 @@ export default class SearchPatientsForm extends Component {
       if (e === '0') {
         params[name] = 0;
       } else if (_.isUndefined(e)) {
-        params[name] = 0;
+        if (name === 'name') {
+          params[name] = '';
+        } else {
+          params[name] = 0;
+        }
       } else {
         params[name] = e;
       }
@@ -259,7 +263,7 @@ export default class SearchPatientsForm extends Component {
               </div>
             </form>
           </div>
-          <PatientActionButtons searchPatients={this.searchPatients} paginationOptions={this.props.paginationOptions} />
+          <PatientActionButtons searchPatients={this.props.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
         <form className="form-search patient-db-search" onSubmit={handleSubmit}>
           <div className="fields-holder clearfix form-search">

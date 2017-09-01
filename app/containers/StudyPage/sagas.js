@@ -349,7 +349,7 @@ export function* generateReferral() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/generatePatientReferral?access_token=${authToken}&patientId=${patientId}&studyId=${studyId}`;
+      const requestURL = `${API_URL}/patients/generatePatientReferral?patientId=${patientId}&studyId=${studyId}`;
       yield call(request, requestURL, {
         method: 'GET',
       });
