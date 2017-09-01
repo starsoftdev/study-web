@@ -115,7 +115,7 @@ export function* exportStudiesWorker(action) {
 
   try {
     const queryString = composeQueryString(action.payload);
-    const requestURL = `${API_URL}/studies/getStudiesForDB?access_token=${authToken}&${queryString}`;
+    const requestURL = `${API_URL}/studies/getStudiesForDB?${queryString}`;
     yield call(request, requestURL);
     const toastrOptions = {
       id: 'loadingToasterForExportStudies',

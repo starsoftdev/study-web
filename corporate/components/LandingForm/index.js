@@ -106,7 +106,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     return (
       <form
         action="#"
-        className="form-study text-center landing-form"
+        className="form-study text-center landing-form fs-hide"
         noValidate="novalidate"
         onSubmit={handleSubmit}
       >

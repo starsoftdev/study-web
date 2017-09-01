@@ -82,6 +82,11 @@ export default [
 export function* fetchPatientsWatcher() {
   while (true) {
     const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
     try {
       const filterObj = {
         include: [
@@ -203,8 +208,9 @@ export function* fetchPatientsWatcher() {
       };
 
       const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
+      let requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
+        requestURL = `${API_URL}/patients/getPatientsForDB?access_token=${authToken}&${queryString}`;
         location.replace(`${requestURL}`);
         yield put(downloadComplete());
       } else {
