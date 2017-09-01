@@ -358,7 +358,19 @@
     }
   }
   .message {
-    height: 100%;
+    height: calc(~'100% - 120px');
+  }
+  .email-message {
+    height: calc(~'100% - 160px');
+  }
+  .sender-field {
+    .form-control {
+      box-shadow: none;
+      border-radius: 0;
+      padding: 6px 25px;
+      border-color: #ccc;
+      border-width: 0 0 2px;
+    }
   }
 }
 
