@@ -16,6 +16,7 @@ import Button from 'react-bootstrap/lib/Button';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
+import Toggle from '../../components/Input/Toggle';
 import CenteredModal from '../../components/CenteredModal/index';
 import StudyAddForm from '../../components/StudyAddForm';
 import LoadingSpinner from '../LoadingSpinner';
@@ -138,6 +139,7 @@ export class LandingPageModal extends React.Component {
           change('hideClickToCall', landing.hideClickToCall);
           change('initialMessageText', landing.initialMessageText);
           change('facebookUrl', landing.facebookUrl);
+          change('isSendInitialMessageText', landing.isSendInitialMessageText);
 
           this.setState({
             initialValuesEntered: true,
@@ -200,6 +202,9 @@ export class LandingPageModal extends React.Component {
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
+    if (list.isSendInitialMessageText === undefined) {
+      list.isSendInitialMessageText = false;
+    }
     submitForm(list);
   }
 
@@ -498,6 +503,18 @@ export class LandingPageModal extends React.Component {
                       type="checkbox"
                       name="showSocialMediaButtons"
                       component={Checkbox}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">Initial text</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="isSendInitialMessageText"
+                      component={Toggle}
+                      className="field"
                     />
                   </div>
                 </div>
