@@ -11,6 +11,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import ImportPatientsModal from './ImportPatients/index';
 import TextEmailBlastModal from './TextEmailBlastModal';
 import TextBlastModal from './TextBlastModal/index';
+import EmailBlastModal from '../../components/EmailBlastModal/index';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 import { selectCurrentUser } from '../../containers/App/selectors';
 
@@ -148,13 +149,25 @@ class StudyActionButtons extends Component {
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
             <i className="icomoon-icon_chat_alt" />
             &nbsp;Text / Email Blast
-            <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
+            <TextEmailBlastModal
+              show={this.state.showTextEmailBlastModal}
+              onHide={this.toggleTextEmailBlastModal}
+              toggleEmailBlast={this.toggleEmailBlastModal}
+              toggleTextBlast={this.toggleTextBlastModal}
+            />
             <TextBlastModal
               show={this.state.showTextBlastModal}
               campaign={this.props.campaign}
               onClose={this.closeTextBlastModal}
               onHide={this.toggleTextBlastModal}
               ePMS={this.props.ePMS}
+              studyName={this.props.studyName}
+            />
+            <EmailBlastModal
+              show={this.state.showEmailBlastModal}
+              campaign={this.props.campaign}
+              onClose={this.closeEmailBlastModal}
+              onHide={this.toggleEmailBlastModal}
               studyName={this.props.studyName}
             />
           </span>
