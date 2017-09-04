@@ -22,7 +22,7 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
-
+import { parseTimezone } from '../../utils/time';
 const formName = 'manageSiteUser';
 
 @reduxForm({ form: formName })
@@ -173,7 +173,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   addSite(siteData) {
     const { currentUserClientId } = this.props;
     const params = siteData;
-    params.timezone = (siteData.selectedRegion === siteData.selectedTimezone) ? siteData.selectedRegion : `${siteData.selectedRegion}/${siteData.selectedTimezone}`;
+    params.timezone = parseTimezone(siteData.timezone);
 
     this.props.saveSite(currentUserClientId, null, params);
   }
