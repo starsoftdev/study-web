@@ -489,5 +489,4 @@ export {
   selectGlobalPMSPaginationOptions,
   selectCnsInfo,
   selectCnsSubmitProcess,
-  
 };
