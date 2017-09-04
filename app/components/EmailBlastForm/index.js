@@ -191,7 +191,6 @@ class TextBlastForm extends React.Component {
     event.preventDefault();
     const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-
       submitEmailBlast(formValues.patients, formValues.message, formValues.from, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
