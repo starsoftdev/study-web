@@ -5,6 +5,10 @@ export function getUTCTime(localTime, timezone) {
 }
 
 export function formatTimezone(timezone) {
+  if (timezone.indexOf('(UTC') > -1) {
+    return timezone;
+  }
+
   if (moment().tz(timezone).isValid) {
     const t = moment().tz(timezone).format('Z').split(':')[0];
     const region = timezone.split('/')[0];
