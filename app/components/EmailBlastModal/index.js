@@ -27,7 +27,6 @@ class EmailBlastModal extends React.Component {
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     campaign: React.PropTypes.number,
-    ePMS: React.PropTypes.bool,
     studyName: React.PropTypes.string,
   };
 
@@ -43,7 +42,7 @@ class EmailBlastModal extends React.Component {
   }
 
   render() {
-    const { campaign, ePMS, studyName, className, onClose, onHide, ...props } = this.props;
+    const { campaign, studyName, className, onClose, onHide, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
     return (
       <Modal
