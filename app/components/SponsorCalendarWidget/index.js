@@ -15,6 +15,7 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    protocols: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
@@ -54,11 +55,13 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, sponsorSchedules } = this.props;
+    const { currentUser, sponsorSchedules, protocols } = this.props;
+    const eventsList = [];
     let currDate = null;
     let counter = 0;
 
-    const eventsList = sponsorSchedules.map(s => {
+    for (const s of sponsorSchedules) {
+      let isFindProtocol = false;
       const localTime = moment(s.time);
       const browserTime = moment()
         .year(localTime.year())
@@ -80,6 +83,12 @@ class CalendarWidget extends React.Component {
         counter = 1;
       }
 
+      for (const protocol of protocols) {
+        if (s.protocolNumber === protocol.protocolNumber) {
+          isFindProtocol = true;
+        }
+      }
+
       result.title = `Patient #${counter} ${moment(s.time).format('h:mm A')}`;
       result.tooltipTitle = result.title;
       result.numberName = `Patient #${counter}`;
@@ -90,8 +99,10 @@ class CalendarWidget extends React.Component {
       }
       currDate = moment(s.time).startOf('date').date();
 
-      return result;
-    });
+      if (isFindProtocol) {
+        eventsList.push(result);
+      }
+    }
 
     this.currentDate = moment().toDate();
 
