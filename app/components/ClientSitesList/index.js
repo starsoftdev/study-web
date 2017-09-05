@@ -195,7 +195,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     if (selectedSiteDetailsForForm) {
-      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone);
+      selectedSiteDetailsForForm.timezone = selectedSiteDetailsForForm.timezone;
       selectedSiteDetailsForForm.phoneNumber = normalizePhoneDisplay(selectedSiteDetailsForForm.phoneNumber);
     }
 
