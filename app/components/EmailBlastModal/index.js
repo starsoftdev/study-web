@@ -16,7 +16,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(null, mapDispatchToProps)
-class TextBlastModal extends React.Component {
+class EmailBlastModal extends React.Component {
   static propTypes = {
     bsClass: React.PropTypes.string,
     className: React.PropTypes.any,
@@ -80,4 +80,4 @@ class TextBlastModal extends React.Component {
   }
 }
 
-export default TextBlastModal;
+export default EmailBlastModal;
