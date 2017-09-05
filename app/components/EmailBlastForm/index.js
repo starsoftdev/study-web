@@ -191,7 +191,7 @@ class TextBlastForm extends React.Component {
     event.preventDefault();
     const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitEmailBlast(formValues.patients, formValues.message, formValues.from, formValues.subject, currentUser.roleForClient.id, (err, data) => {
+      submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
     } else if (formSyncErrors.message) {
@@ -385,7 +385,7 @@ class TextBlastForm extends React.Component {
                 {this.renderPatientCount()}
               </div>
               <Field
-                name="from"
+                name="email"
                 component={Input}
                 className="sender-field"
                 type="text"
