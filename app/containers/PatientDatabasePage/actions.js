@@ -44,6 +44,7 @@ import {
   GET_TOTAL_PATIENTS_COUNT,
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
+  SUBMIT_EMAIL_BLAST,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -371,5 +372,18 @@ export function updateSelectAll(value) {
   return {
     type: UPDATE_SELECT_ALL,
     selectAll: value,
+  };
+}
+
+export function submitEmailBlast(patients, uncheckedPatients, message, from, subject, clientRoleId, onClose) {
+  return {
+    type: SUBMIT_EMAIL_BLAST,
+    patients,
+    uncheckedPatients,
+    message,
+    from,
+    subject,
+    clientRoleId,
+    onClose,
   };
 }
