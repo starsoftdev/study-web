@@ -13,6 +13,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     activeCount: PropTypes.string,
     inactiveCount: PropTypes.string,
     patientMessagingSuite: PropTypes.bool,
+    pqs: PropTypes.bool,
     unreadMessageCount: PropTypes.number,
     push: PropTypes.func,
   };
@@ -62,7 +63,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
   }
 
   render() {
-    const { protocolNumber, indication, croName, activeCount, inactiveCount, patientMessagingSuite, unreadMessageCount } = this.props;
+    const { protocolNumber, indication, croName, activeCount, inactiveCount, pqs, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
     let patientMessagingSuiteText = 'Off';
@@ -72,7 +73,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
       );
     }
 
-    if (patientMessagingSuite) {
+    if (pqs) {
       patientMessagingSuiteText = 'On';
     }
 

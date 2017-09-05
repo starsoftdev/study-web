@@ -1,8 +1,10 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
+import React from 'react';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { toastr } from 'react-redux-toastr';
+import { actions as toastrActions, toastr } from 'react-redux-toastr';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
@@ -36,7 +38,7 @@ import {
   patientFetchingError,
   patientSaved,
   patientSavingError,
-  downloadComplete,
+  // downloadComplete,
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
@@ -82,6 +84,7 @@ export default [
 export function* fetchPatientsWatcher() {
   while (true) {
     const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
+
     try {
       const filterObj = {
         include: [
@@ -205,10 +208,22 @@ export function* fetchPatientsWatcher() {
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
-        location.replace(`${requestURL}`);
-        yield put(downloadComplete());
-      } else {
-        const response = yield call(request, requestURL);
+        const toastrOptions = {
+          id: 'loadingToasterForExportDbPatients',
+          type: 'success',
+          message: 'Loading...',
+          options: {
+            timeOut: 0,
+            icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+            showCloseButton: true,
+          },
+        };
+
+        yield put(toastrActions.add(toastrOptions));
+      }
+
+      const response = yield call(request, requestURL);
+      if (!isExport) {
         yield put(patientsFetched(searchParams, response, patients, searchFilter, { filter: filterObj, clientId }));
       }
     } catch (err) {
