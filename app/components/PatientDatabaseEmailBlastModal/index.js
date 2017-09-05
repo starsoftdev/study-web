@@ -92,7 +92,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     event.preventDefault();
     const { formSyncErrors, formValues, submitEmailBlast, currentUser } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitEmailBlast([], formValues.uncheckedPatients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, this.onClose);
+      submitEmailBlast(formValues.queryParams.filter, formValues.uncheckedPatients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, this.onClose);
     } else if (formSyncErrors.message) {
       toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
