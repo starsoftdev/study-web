@@ -12,7 +12,7 @@ branches:
   only:
   - master
   - develop
-  - develop-1.2
+  - KIK-2681
 addons:
   chrome: stable
   firefox: "latest"
