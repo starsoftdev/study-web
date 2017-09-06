@@ -69,10 +69,8 @@ import {
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
   ADD_STUDY_INDICATION_TAG,
   ADD_STUDY_INDICATION_TAG_SUCCESS,
-  ADD_STUDY_INDICATION_TAG_ERROR,
   REMOVE_STUDY_INDICATION_TAG,
   REMOVE_STUDY_INDICATION_TAG_SUCCESS,
-  REMOVE_STUDY_INDICATION_TAG_ERROR,
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
@@ -531,37 +529,27 @@ export function setHoverRowIndex(index) {
   };
 }
 
-export function addTaggedIndicationForStudy(studyId, indicationId) {
+export function addTaggedIndicationForStudy(studyId, indication) {
   return {
     type: ADD_STUDY_INDICATION_TAG,
-    payload: {
-      studyId,
-      indicationId,
-    },
+    studyId,
+    indication,
   };
 }
 
-export function addTaggedIndicationForStudySuccess(payload) {
+export function addTaggedIndicationForStudySuccess(studyId, indication) {
   return {
     type: ADD_STUDY_INDICATION_TAG_SUCCESS,
-    payload,
+    studyId,
+    indication,
   };
 }
 
-export function addTaggedIndicationForStudyError(payload) {
-  return {
-    type: ADD_STUDY_INDICATION_TAG_ERROR,
-    payload,
-  };
-}
-
-export function removeTaggedIndicationForStudy(studyId, indicationId) {
+export function removeTaggedIndicationForStudy(studyId, indication) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG,
-    payload: {
-      studyId,
-      indicationId,
-    },
+    studyId,
+    indication,
   };
 }
 
@@ -571,14 +559,6 @@ export function removeTaggedIndicationForStudySuccess(payload) {
     payload,
   };
 }
-
-export function removeTaggedIndicationForStudyError(payload) {
-  return {
-    type: REMOVE_STUDY_INDICATION_TAG_ERROR,
-    payload,
-  };
-}
-
 export function fetchTaggedIndicationsForStudy(studyId) {
   return {
     type: FETCH_STUDY_INDICATION_TAG,
