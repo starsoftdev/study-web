@@ -59,13 +59,13 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  addTaggedIndicationForStudy: (studyId, indicationId) => dispatch(addTaggedIndicationForStudy(studyId, indicationId)),
+  addTaggedIndicationForStudy: (studyId, indication) => dispatch(addTaggedIndicationForStudy(studyId, indication)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
-  removeTaggedIndicationForStudy: (studyId, indicationId) => dispatch(removeTaggedIndicationForStudy(studyId, indicationId)),
+  removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
   updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
@@ -226,12 +226,6 @@ export default class EditInformationForm extends React.Component {
     }
   }
 
-  deleteIndication(studyId, indication) {
-    const { change, formValues: { taggedIndicationsForStudy }, removeTaggedIndicationForStudy } = this.props;
-    // submit the tagged indication to be added
-    removeTaggedIndicationForStudy(studyId, indication.value);
-  }
-
   toggleIndicationPopover() {
     this.setState({
       showIndicationPopover: !this.state.showIndicationPopover,
@@ -255,7 +249,7 @@ export default class EditInformationForm extends React.Component {
   }
 
   renderIndications() {
-    const { formValues, initialValues } = this.props;
+    const { formValues, initialValues, removeTaggedIndicationForStudy } = this.props;
     if (formValues.taggedIndicationsForStudy) {
       return (
         <div className="category-list">
@@ -266,7 +260,7 @@ export default class EditInformationForm extends React.Component {
                 <span
                   className="icomoon-icon_trash"
                   onClick={() => {
-                    this.deleteIndication(initialValues.study_id, indication);
+                    removeTaggedIndicationForStudy(initialValues.study_id, indication);
                   }}
                 />
               </span>
