@@ -33,9 +33,9 @@ import {
   selectUsersByRoles,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
-  addIndicationTagForStudy,
+  addTaggedIndicationForStudy,
   fetchAllClientUsersDashboard,
-  removeIndicationTagForStudy,
+  removeTaggedIndicationForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
@@ -59,13 +59,13 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  addIndicationTagForStudy: (studyId, indicationId) => dispatch(addIndicationTagForStudy(studyId, indicationId)),
+  addTaggedIndicationForStudy: (studyId, indicationId) => dispatch(addTaggedIndicationForStudy(studyId, indicationId)),
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
   removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
-  removeIndicationTagForStudy: (studyId, indicationId) => dispatch(removeIndicationTagForStudy(studyId, indicationId)),
+  removeTaggedIndicationForStudy: (studyId, indicationId) => dispatch(removeTaggedIndicationForStudy(studyId, indicationId)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
   updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
@@ -103,8 +103,8 @@ export default class EditInformationForm extends React.Component {
     sponsors: PropTypes.array.isRequired,
     usersByRoles: PropTypes.object.isRequired,
     setEditStudyFormValues: PropTypes.func,
-    addIndicationTagForStudy: PropTypes.func,
-    removeIndicationTagForStudy: PropTypes.func,
+    addTaggedIndicationForStudy: PropTypes.func,
+    removeTaggedIndicationForStudy: PropTypes.func,
     startSubmit: PropTypes.func.isRequired,
     taggedIndicationsForStudy: PropTypes.object.isRequired,
     stopSubmit: PropTypes.func.isRequired,
@@ -126,7 +126,6 @@ export default class EditInformationForm extends React.Component {
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
     this.onClose = this.onClose.bind(this);
     this.updateDashboardStudy = this.updateDashboardStudy.bind(this);
   }
@@ -227,20 +226,10 @@ export default class EditInformationForm extends React.Component {
     }
   }
 
-  selectIndication(studyId, indication) {
-    const { change, formValues, addTaggedIndicationForStudy } = this.props;
-    change('indicationTags', formValues.indicationTags.concat([{
-      value: indication.id,
-      label: indication.name,
-    }]));
-    addIndicationTagForStudy(studyId, indication.id);
-  }
-
   deleteIndication(studyId, indication) {
-    const { change, formValues: { indicationTags }, removeIndicationTagForStudy } = this.props;
-    const newArr = _.remove(indicationTags, (n) => (n.id !== indication.id));
-    change('indicationTags', newArr);
-    removeIndicationTagForStudy(studyId, indication.value);
+    const { change, formValues: { taggedIndicationsForStudy }, removeTaggedIndicationForStudy } = this.props;
+    // submit the tagged indication to be added
+    removeTaggedIndicationForStudy(studyId, indication.value);
   }
 
   toggleIndicationPopover() {
@@ -267,10 +256,10 @@ export default class EditInformationForm extends React.Component {
 
   renderIndications() {
     const { formValues, initialValues } = this.props;
-    if (formValues.indicationTags) {
+    if (formValues.taggedIndicationsForStudy) {
       return (
         <div className="category-list">
-          {formValues.indicationTags.map((indication) => (
+          {formValues.taggedIndicationsForStudy.map((indication) => (
             <div key={indication.value} className="category">
               <span className="link">
                 <span className="text">{indication.label}</span>
@@ -290,7 +279,7 @@ export default class EditInformationForm extends React.Component {
   }
 
   render() {
-    const { addEmailNotificationClick, change, cro, formValues, indications, initialValues, messagingNumbers, protocols,
+    const { addEmailNotificationClick, addTaggedIndicationForStudy, change, cro, formValues, indications, initialValues, messagingNumbers, protocols,
       removeCustomEmailNotification, siteLocations, sponsors, submitting, usersByRoles } = this.props;
 
     if (formValues) {
@@ -312,7 +301,7 @@ export default class EditInformationForm extends React.Component {
 
       const studyValues = {
         id: initialValues.study_id ? initialValues.study_id : null,
-        indicationTags: [],
+        taggedIndicationsForStudy: formValues.taggedIndicationsForStudy ? formValues.taggedIndicationsForStudy : [],
       };
 
       const messagingNumbersOptions = messagingNumbers.details.map(item => ({
@@ -705,7 +694,7 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="indicationTags"
+                  name="taggedIndicationsForStudy"
                   component={ReactSelect}
                   placeholder="Select Indication"
                   options={indicationsOptions}
@@ -745,14 +734,14 @@ export default class EditInformationForm extends React.Component {
                     this.toggleIndicationPopover();
                   }}
                 >
-                  <IndicationOverlay indications={indications} selectIndication={this.selectIndication} study={studyValues} onClose={this.toggleIndicationPopover}/>
+                  <IndicationOverlay indications={indications} selectIndication={addTaggedIndicationForStudy} study={studyValues} onClose={this.toggleIndicationPopover}/>
                 </Overlay>
               </div>
             </div>
             {
-              formValues.indicationTags && formValues.indicationTags.length > 0 &&
+              formValues.taggedIndicationsForStudy && formValues.taggedIndicationsForStudy.length > 0 &&
               <div className="field-row remove-indication small-spacing">
-                <span className="label"/>
+                <span className="label" />
                 <div className="field">
                   {this.renderIndications()}
                 </div>
