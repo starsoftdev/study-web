@@ -117,21 +117,21 @@ export default class EditInformationModal extends React.Component {
         this.checkAllCustomEmailNotificationFields = isAllCustomChecked;
       } else if (messagingNumbers.fetching && !nextProps.messagingNumbers.fetching) {
         const messagingNumbersOptions = nextProps.messagingNumbers.details.map(item => ({
-          value: item.id,
           label: item.phone_number,
+          value: item.id,
         }));
         if (study.text_number_id) {
           messagingNumbersOptions.unshift({
-            value: study.text_number_id,
             label: study.phone_number,
+            value: study.text_number_id,
           });
         }
         this.messagingNumbersForStudy = messagingNumbersOptions;
       } else if (taggedIndicationsForStudy.fetching && !nextProps.taggedIndicationsForStudy.fetching) {
         // set the tagged indications for the study
         this.taggedIndicationsForStudy = nextProps.taggedIndicationsForStudy.details.map(item => ({
-          value: item.indication_id,
           label: item.name,
+          value: item.indication_id,
         }));
       } else if (!openModal && nextProps.openModal) {
         const { fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy } = this.props;

@@ -78,7 +78,6 @@ import {
   updatePatientThankYouEmailError,
   fetchMessagingNumbersDashboardSuccess,
   fetchMessagingNumbersDashboardError,
-  fetchMessagingNumbersDashboard,
   changeStudyAddSuccess,
   changeStudyAddError,
   updateTwilioNumbersSuccess,
@@ -92,13 +91,10 @@ import {
   editNoteError,
   deleteNoteSuccess,
   deleteNoteError,
-  fetchTaggedIndicationsForStudy,
   fetchTaggedIndicationsForStudySuccess,
   fetchTaggedIndicationsForStudyError,
   addTaggedIndicationForStudySuccess,
-  addTaggedIndicationForStudyError,
   removeTaggedIndicationForStudySuccess,
-  removeTaggedIndicationForStudyError,
   fetchCampaignsByStudySuccess,
   fetchCampaignsByStudyError,
   editCampaignSuccess,
@@ -158,19 +154,25 @@ export function* addTaggedIndicationForStudyWatcher() {
 }
 
 export function* addTaggedIndicationForStudyWorker(action) {
-  const { payload } = action;
+  const { studyId, indication } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
+    console.log(indication);
     const options = {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        studyId,
+        indicationId: indication.value,
+      }),
     };
 
     yield call(request, requestURL, options);
     // add the tagged indication
-    yield put(addTaggedIndicationForStudySuccess(payload));
+    yield put(addTaggedIndicationForStudySuccess(studyId, indication));
   } catch (err) {
-    yield put(addTaggedIndicationForStudyError(err));
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', `Could not add tagged indication: ${indication.label}`);
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -179,19 +181,24 @@ export function* removeTaggedIndicationForStudyWatcher() {
 }
 
 export function* removeTaggedIndicationForStudyWorker(action) {
-  const { payload } = action;
+  const { studyId, indication } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
     const options = {
       method: 'DELETE',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        studyId,
+        indicationId: indication.value,
+      }),
     };
 
     yield call(request, requestURL, options);
     // remove the tagged indication
-    yield put(removeTaggedIndicationForStudySuccess(payload));
+    yield put(removeTaggedIndicationForStudySuccess(studyId, indication));
   } catch (err) {
-    yield put(removeTaggedIndicationForStudyError(err));
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', `Could not remove tagged indication: ${indication.label}`);
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 

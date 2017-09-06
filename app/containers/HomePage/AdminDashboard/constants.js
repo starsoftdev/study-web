@@ -91,11 +91,9 @@ export const DELETE_NOTE                                 = 'DashboardPage/DELETE
 
 export const ADD_STUDY_INDICATION_TAG                    = 'DashboardPage/ADD_STUDY_INDICATION_TAG';
 export const ADD_STUDY_INDICATION_TAG_SUCCESS            = 'DashboardPage/ADD_STUDY_INDICATION_TAG_SUCCESS';
-export const ADD_STUDY_INDICATION_TAG_ERROR              = 'DashboardPage/ADD_STUDY_INDICATION_TAG_ERROR';
 
 export const REMOVE_STUDY_INDICATION_TAG                 = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG';
 export const REMOVE_STUDY_INDICATION_TAG_SUCCESS         = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_SUCCESS';
-export const REMOVE_STUDY_INDICATION_TAG_ERROR           = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_ERROR';
 
 export const FETCH_STUDY_INDICATION_TAG                  = 'DashboardPage/FETCH_STUDY_INDICATION_TAG';
 export const FETCH_STUDY_INDICATION_TAG_SUCCESS          = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_SUCCESS';

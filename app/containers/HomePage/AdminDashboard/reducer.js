@@ -62,14 +62,6 @@ import {
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 
-  ADD_STUDY_INDICATION_TAG,
-  ADD_STUDY_INDICATION_TAG_SUCCESS,
-  ADD_STUDY_INDICATION_TAG_ERROR,
-
-  REMOVE_STUDY_INDICATION_TAG,
-  REMOVE_STUDY_INDICATION_TAG_SUCCESS,
-  REMOVE_STUDY_INDICATION_TAG_ERROR,
-
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
@@ -244,60 +236,6 @@ export default function dashboardPageReducer(state = initialState, action) {
         taggedIndicationsForStudy: {
           details: [],
           fetching: false,
-          error: action.payload,
-        },
-      };
-    case ADD_STUDY_INDICATION_TAG:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: true,
-          saving: true,
-          error: null,
-        },
-      };
-    case ADD_STUDY_INDICATION_TAG_SUCCESS:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: true,
-          saving: false,
-          error: null,
-        },
-      };
-    case ADD_STUDY_INDICATION_TAG_ERROR:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: false,
-          saving: false,
-          error: action.payload,
-        },
-      };
-    case REMOVE_STUDY_INDICATION_TAG:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: true,
-          saving: true,
-          error: null,
-        },
-      };
-    case REMOVE_STUDY_INDICATION_TAG_SUCCESS:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: true,
-          saving: false,
-          error: null,
-        },
-      };
-    case REMOVE_STUDY_INDICATION_TAG_ERROR:
-      return {
-        ...state,
-        updateTaggedIndicationsForStudyProcess: {
-          success: false,
-          saving: false,
           error: action.payload,
         },
       };
