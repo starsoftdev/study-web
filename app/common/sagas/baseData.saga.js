@@ -42,6 +42,7 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
 
   CHANGE_USERS_TIMEZONE,
+  GET_TIMEZONE,
 
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
@@ -126,6 +127,8 @@ import {
   fetchIndicationLevelPriceError,
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
+  getTimezoneSuccess,
+  getTimezoneError,
   landingFetched,
   fetchLandingError,
   patientSubscribed,
@@ -183,6 +186,7 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
+  yield fork(getTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
   yield fork(changeTemporaryPassword);
   yield fork(takeLatest, FETCH_LANDING, fetchLanding);
@@ -835,6 +839,31 @@ export function* changeUsersTimezoneWatcher() {
       toastr.error('', errorMessage);
       yield put(changeUsersTimezoneError(err));
     }
+  }
+}
+
+export function* getTimezoneWatcher() {
+  yield* takeLatest(GET_TIMEZONE, getTimezoneWorker);
+}
+
+export function* getTimezoneWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getTimezone`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        lat: action.lat,
+        lng: action.lng,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(getTimezoneSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching timezone');
+    toastr.error('', errorMessage);
+    yield put(getTimezoneError(err));
   }
 }
 
