@@ -95,10 +95,10 @@ import {
   fetchTaggedIndicationsForStudy,
   fetchTaggedIndicationsForStudySuccess,
   fetchTaggedIndicationsForStudyError,
-  addIndicationTagForStudySuccess,
-  addIndicationTagForStudyError,
-  removeIndicationTagForStudySuccess,
-  removeIndicationTagForStudyError,
+  addTaggedIndicationForStudySuccess,
+  addTaggedIndicationForStudyError,
+  removeTaggedIndicationForStudySuccess,
+  removeTaggedIndicationForStudyError,
   fetchCampaignsByStudySuccess,
   fetchCampaignsByStudyError,
   editCampaignSuccess,
@@ -153,11 +153,11 @@ export default [
   homePageSaga,
 ];
 
-export function* addIndicationTagForStudyWatcher() {
-  yield* takeLatest(ADD_STUDY_INDICATION_TAG, addIndicationTagForStudyWorker);
+export function* addTaggedIndicationForStudyWatcher() {
+  yield* takeLatest(ADD_STUDY_INDICATION_TAG, addTaggedIndicationForStudyWorker);
 }
 
-export function* addIndicationTagForStudyWorker(action) {
+export function* addTaggedIndicationForStudyWorker(action) {
   const { payload } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
@@ -166,20 +166,19 @@ export function* addIndicationTagForStudyWorker(action) {
       body: JSON.stringify(payload),
     };
 
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchTaggedIndicationsForStudy(payload.studyId));
-    yield put(addIndicationTagForStudySuccess(response));
+    yield call(request, requestURL, options);
+    // add the tagged indication
+    yield put(addTaggedIndicationForStudySuccess(payload));
   } catch (err) {
-    yield put(addIndicationTagForStudyError(err));
+    yield put(addTaggedIndicationForStudyError(err));
   }
 }
 
-export function* removeIndicationTagForStudyWatcher() {
-  yield* takeLatest(REMOVE_STUDY_INDICATION_TAG, removeIndicationTagForStudyWorker);
+export function* removeTaggedIndicationForStudyWatcher() {
+  yield* takeLatest(REMOVE_STUDY_INDICATION_TAG, removeTaggedIndicationForStudyWorker);
 }
 
-export function* removeIndicationTagForStudyWorker(action) {
+export function* removeTaggedIndicationForStudyWorker(action) {
   const { payload } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
@@ -188,12 +187,11 @@ export function* removeIndicationTagForStudyWorker(action) {
       body: JSON.stringify(payload),
     };
 
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchTaggedIndicationsForStudy(payload.studyId));
-    yield put(removeIndicationTagForStudySuccess(response));
+    yield call(request, requestURL, options);
+    // remove the tagged indication
+    yield put(removeTaggedIndicationForStudySuccess(payload));
   } catch (err) {
-    yield put(removeIndicationTagForStudyError(err));
+    yield put(removeTaggedIndicationForStudyError(err));
   }
 }
 
@@ -1204,8 +1202,8 @@ export function* homePageSaga() {
   const watcherL = yield fork(editNoteWatcher);
   const watcherM = yield fork(deleteNoteWatcher);
   const watcherN = yield fork(fetchTaggedIndicationsForStudyWatcher);
-  const watcherO = yield fork(addIndicationTagForStudyWatcher);
-  const watcherP = yield fork(removeIndicationTagForStudyWatcher);
+  const watcherO = yield fork(addTaggedIndicationForStudyWatcher);
+  const watcherP = yield fork(removeTaggedIndicationForStudyWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
