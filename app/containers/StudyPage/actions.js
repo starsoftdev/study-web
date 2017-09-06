@@ -46,6 +46,7 @@ import {
   MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
   SUBMIT_ADD_PATIENT_SUCCESS,
   SUBMIT_TEXT_BLAST,
+  SUBMIT_EMAIL_BLAST,
   SUBMIT_PATIENT_IMPORT,
   SUBMIT_ADD_PATIENT,
   ADD_PATIENT_INDICATION,
@@ -455,6 +456,18 @@ export function submitTextBlast(patients, message, clientRoleId, onClose) {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
+    clientRoleId,
+    onClose,
+  };
+}
+
+export function submitEmailBlast(patients, message, from, subject, clientRoleId, onClose) {
+  return {
+    type: SUBMIT_EMAIL_BLAST,
+    patients,
+    message,
+    from,
+    subject,
     clientRoleId,
     onClose,
   };
