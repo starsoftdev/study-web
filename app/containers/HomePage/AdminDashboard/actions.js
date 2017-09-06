@@ -531,7 +531,7 @@ export function setHoverRowIndex(index) {
   };
 }
 
-export function addIndicationTagForStudy(studyId, indicationId) {
+export function addTaggedIndicationForStudy(studyId, indicationId) {
   return {
     type: ADD_STUDY_INDICATION_TAG,
     payload: {
@@ -541,21 +541,21 @@ export function addIndicationTagForStudy(studyId, indicationId) {
   };
 }
 
-export function addIndicationTagForStudySuccess(payload) {
+export function addTaggedIndicationForStudySuccess(payload) {
   return {
     type: ADD_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function addIndicationTagForStudyError(payload) {
+export function addTaggedIndicationForStudyError(payload) {
   return {
     type: ADD_STUDY_INDICATION_TAG_ERROR,
     payload,
   };
 }
 
-export function removeIndicationTagForStudy(studyId, indicationId) {
+export function removeTaggedIndicationForStudy(studyId, indicationId) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG,
     payload: {
@@ -565,14 +565,14 @@ export function removeIndicationTagForStudy(studyId, indicationId) {
   };
 }
 
-export function removeIndicationTagForStudySuccess(payload) {
+export function removeTaggedIndicationForStudySuccess(payload) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function removeIndicationTagForStudyError(payload) {
+export function removeTaggedIndicationForStudyError(payload) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_ERROR,
     payload,
