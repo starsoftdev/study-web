@@ -90,7 +90,6 @@ const collect = (connect, monitor) => ({
 class PatientCategory extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.number.isRequired,
-    study: React.PropTypes.object.isRequired,
     category: React.PropTypes.object.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
