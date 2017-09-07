@@ -529,9 +529,9 @@ function* submitEmailBlast() {
         }),
       });
       onClose();
-      toastr.success('', 'Success! Your text blast have been sent.');
+      toastr.success('', 'Success! Your email blast have been sent.');
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });

@@ -373,6 +373,20 @@
       border-width: 0 0 2px;
     }
   }
+  .sender-field,
+  .subject-field,
+  .email-message{
+    &.has-error {
+      .form-control:not([disabled]) {
+        color: #354052;
+
+        &::-webkit-input-placeholder {color:#354052;}
+        &::-moz-placeholder          {color:#354052;}/* Firefox 19+ */
+        &:-moz-placeholder           {color:#354052;}/* Firefox 18- */
+        &:-ms-input-placeholder      {color:#354052;}
+      }
+    }
+  }
 }
 
 #email-blast .modal-content {
