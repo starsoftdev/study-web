@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import _ from 'lodash';
 import classNames from 'classnames';
 import { toastr } from 'react-redux-toastr';
 import Form from 'react-bootstrap/lib/Form';
@@ -14,13 +15,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import formValidator from './validator';
 import CenteredModal from '../CenteredModal/index';
 import Input from '../Input/index';
-import { removePatientsFromTextBlast, submitEmailBlast } from '../../containers/PatientDatabasePage/actions';
-// import { submitEmailBlast } from '../../containers/StudyPage/actions';
+import { submitEmailBlast } from '../../containers/PatientDatabasePage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { selectPatients, selectTotalPatients } from '../../containers/PatientDatabasePage/selectors';
 
-const formName = 'PatientDatabase.TextBlastModal';
+const formName = 'PatientDatabase.EmailBlastModal';
 
 @reduxForm({
   form: formName,
@@ -28,19 +28,15 @@ const formName = 'PatientDatabase.TextBlastModal';
 })
 class PatientDatabaseEmailBlastModal extends React.Component {
   static propTypes = {
-    bsClass: React.PropTypes.string,
     className: React.PropTypes.any,
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
-    dialogClassName: React.PropTypes.string,
     formValues: React.PropTypes.object,
     formSyncErrors: React.PropTypes.object,
     onClose: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired,
-    removePatients: React.PropTypes.func.isRequired,
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
-    style: React.PropTypes.object,
     submitEmailBlast: React.PropTypes.func.isRequired,
     patients: React.PropTypes.object,
     totalPatients: React.PropTypes.number,
@@ -48,20 +44,17 @@ class PatientDatabaseEmailBlastModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.submitTextBlast = this.submitTextBlast.bind(this);
+    this.submitEmailBlast = this.submitEmailBlast.bind(this);
     this.renderPatientCount = this.renderPatientCount.bind(this);
-    this.textAreaChange = this.textAreaChange.bind(this);
     this.onHide = this.onHide.bind(this);
     this.onClose = this.onClose.bind(this);
     this.state = {
-      enteredCharactersLength: 0,
       total: 0,
     };
   }
 
   componentWillReceiveProps(newProps) {
     const { formValues, patients, totalPatients } = newProps;
-
     let total = 0;
     if (patients.total === null) {
       total = totalPatients;
@@ -88,29 +81,20 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     change('message', '');
   }
 
-  submitTextBlast(event) {
+  submitEmailBlast(event) {
     event.preventDefault();
     const { formSyncErrors, formValues, submitEmailBlast, currentUser } = this.props;
-    if (!formSyncErrors.message && !formSyncErrors.patients) {
+    if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.queryParams.filter, formValues.uncheckedPatients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, this.onClose);
     } else if (formSyncErrors.message) {
       toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
-    } else if (formSyncErrors.from) {
-      toastr.error('', formSyncErrors.from);
+    } else if (formSyncErrors.email) {
+      toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
     }
-  }
-
-  textAreaChange() {
-    setTimeout(() => {
-      const textarea = this.textarea;
-      const value = textarea.value;
-      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {
-      });
-    }, 0);
   }
 
   renderPatientCount() {
@@ -128,8 +112,6 @@ class PatientDatabaseEmailBlastModal extends React.Component {
 
   render() {
     const { show, className } = this.props;
-    const { enteredCharactersLength } = this.state;
-    const disabled = enteredCharactersLength === 0;
 
     return (
       <Modal
@@ -150,7 +132,10 @@ class PatientDatabaseEmailBlastModal extends React.Component {
           </a>
         </Modal.Header>
         <Modal.Body>
-          <Form className="text-email-blast-form no-sidebar user-active">
+          <Form
+            className="text-email-blast-form no-sidebar user-active"
+            onSubmit={this.submitEmailBlast}
+          >
             <div className="form-holder">
               <div className="scroll-holder">
                 <div className="sub-holder">
@@ -163,22 +148,14 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     component={Input}
                     className="sender-field"
                     type="text"
-                    placeholder="Type email address..."
-                    required
-                    ref={(from) => {
-                      this.from = from;
-                    }}
+                    placeholder="Enter your email address"
                   />
                   <Field
                     name="subject"
                     component={Input}
                     className="subject-field"
                     type="text"
-                    placeholder="Type subject..."
-                    required
-                    ref={(subject) => {
-                      this.subject = subject;
-                    }}
+                    placeholder="Subject"
                   />
                   <Field
                     name="message"
@@ -186,21 +163,13 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     componentClass="textarea"
                     className="email-message"
                     placeholder="Type a message..."
-                    maxLength="160"
-                    required
-                    onChange={this.textAreaChange}
-                    ref={(textarea) => {
-                      this.textarea = textarea;
-                    }}
                   />
                   <div className="footer">
-                    <div
+                    <input
                       className="btn btn-default lightbox-opener pull-right"
-                      onClick={(e) => (disabled ? null : this.submitTextBlast(e))}
-                      disabled={disabled === 0}
-                    >
-                      Send
-                    </div>
+                      value="Send"
+                      type="submit"
+                    />
                   </div>
                 </div>
               </div>
@@ -223,7 +192,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (field, value) => dispatch(change(formName, field, value)),
-    removePatients: () => dispatch(removePatientsFromTextBlast()),
     submitEmailBlast: (patients, uncheckedPatients, message, from, subject, clientRoleId, onClose) => dispatch(submitEmailBlast(patients, uncheckedPatients, message, from, subject, clientRoleId, onClose)),
   };
 }
