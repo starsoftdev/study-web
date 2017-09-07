@@ -157,12 +157,11 @@ export function* addTaggedIndicationForStudyWorker(action) {
   const { studyId, indication } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
-    console.log(indication);
     const options = {
       method: 'POST',
       body: JSON.stringify({
         studyId,
-        indicationId: indication.value,
+        indicationId: indication.id,
       }),
     };
 
@@ -171,7 +170,7 @@ export function* addTaggedIndicationForStudyWorker(action) {
     yield put(addTaggedIndicationForStudySuccess(studyId, indication));
   } catch (err) {
     // give a redux toastr message in case there's an error
-    const errorMessage = get(err, 'message', `Could not add tagged indication: ${indication.label}`);
+    const errorMessage = get(err, 'message', `Could not add tagged indication: ${indication.name}`);
     yield put(toastrActions.error('', errorMessage));
   }
 }
