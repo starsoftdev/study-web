@@ -553,10 +553,11 @@ export function removeTaggedIndicationForStudy(studyId, indication) {
   };
 }
 
-export function removeTaggedIndicationForStudySuccess(payload) {
+export function removeTaggedIndicationForStudySuccess(studyId, indication) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_SUCCESS,
-    payload,
+    studyId,
+    indication,
   };
 }
 export function fetchTaggedIndicationsForStudy(studyId) {
