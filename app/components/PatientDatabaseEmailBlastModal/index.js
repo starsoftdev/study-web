@@ -139,7 +139,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
             <div className="form-holder">
               <div className="scroll-holder">
                 <div className="sub-holder">
-                  <div className="subject-field">
+                  <div className="subject-field to">
                     <FormControl type="text" className="recievers" placeholder="To" disabled />
                     {this.renderPatientCount()}
                   </div>

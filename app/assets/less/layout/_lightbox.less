@@ -889,6 +889,14 @@ input:focus {
 	    right: 124px;
 	    bottom: 26px;
   	}
+    .subject-field.to {
+      input{
+        &::-webkit-input-placeholder {font-weight: bold;}
+        &::-moz-placeholder          {font-weight: bold;}/* Firefox 19+ */
+        &:-moz-placeholder           {font-weight: bold;}/* Firefox 18- */
+        &:-ms-input-placeholder      {font-weight: bold;}
+      }
+    }
     .sender-field-holder {
       overflow: hidden;
       border-color: #ccc;
@@ -896,6 +904,7 @@ input:focus {
       border-bottom-style: solid;
 
       .sender-field-prev {
+        font-weight: bold;
         float: left;
         margin-top: 8px;
         margin-left: 25px;
