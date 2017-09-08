@@ -1057,6 +1057,10 @@ input:focus {
   }
   .form-control.recievers {
     padding-right: 180px;
+    &::-webkit-input-placeholder {font-weight: bold;}
+    &::-moz-placeholder          {font-weight: bold;}/* Firefox 19+ */
+    &:-moz-placeholder           {font-weight: bold;}/* Firefox 18- */
+    &:-ms-input-placeholder      {font-weight: bold;}
   }
   input.form-control[disabled] {
     background: #fff;
