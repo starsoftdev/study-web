@@ -112,6 +112,11 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.site_id = patientData.site;
     payload.studyId = patientData.protocol;
 
+    if (patientData.dobDay && patientData.dobMonth && patientData.dobYear) {
+      const date = moment().year(patientData.dobYear).month(patientData.dobMonth - 1).date(patientData.dobDay).startOf('day');
+      payload.dob = date.toISOString();
+    }
+
     savePatient(currentUser.roleForClient.id, selectedPatient.details.id, payload);
   }
 
