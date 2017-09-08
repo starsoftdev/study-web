@@ -143,13 +143,18 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     <FormControl type="text" className="recievers" placeholder="To" disabled />
                     {this.renderPatientCount()}
                   </div>
-                  <Field
-                    name="email"
-                    component={Input}
-                    className="sender-field"
-                    type="text"
-                    placeholder="Enter your email address"
-                  />
+                  <div className="sender-field-holder">
+                    <div className="sender-field-prev">
+                      From
+                    </div>
+                    <Field
+                      name="email"
+                      component={Input}
+                      className="sender-field"
+                      type="text"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
                   <Field
                     name="subject"
                     component={Input}
