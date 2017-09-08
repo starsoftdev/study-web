@@ -540,8 +540,7 @@ export default class EditInformationForm extends React.Component {
                     component={RenderEmailsList}
                     change={change}
                     formValues={formValues}
-                    addEmailNotification={addEmailNotificationClick}
-                    closeEmailNotification={this.closeAddEmailModal}
+                    addEmailNotificationClick={addEmailNotificationClick}
                   />}
                 </div>
               </div>
@@ -555,8 +554,7 @@ export default class EditInformationForm extends React.Component {
                     component={RenderCustomEmailsList}
                     change={change}
                     formValues={formValues}
-                    addEmailNotification={addEmailNotificationClick}
-                    closeEmailNotification={this.closeAddEmailModal}
+                    addEmailNotificationClick={addEmailNotificationClick}
                     removeCustomEmailNotification={removeCustomEmailNotification}
                   />}
                 </div>
