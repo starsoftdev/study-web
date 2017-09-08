@@ -363,6 +363,26 @@
   .email-message {
     height: calc(~'100% - 200px');
   }
+  .sender-field-holder {
+    overflow: hidden;
+    border-color: #ccc;
+    border-width: 0 0 2px;
+    border-bottom-style: solid;
+
+    .sender-field-prev {
+      float: left;
+      margin-top: 8px;
+      margin-left: 25px;
+    }
+
+    .sender-field {
+      float: left;
+
+      input {
+        border: none;
+      }
+    }
+  }
   .sender-field,
   .subject-field {
     .form-control {
