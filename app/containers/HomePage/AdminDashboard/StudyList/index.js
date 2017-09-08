@@ -395,25 +395,25 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   addEmailNotificationSubmit(values) {
-    const { addEmailNotificationUser, addCustomEmailNotification } = this.props;
+    const { addEmailNotificationUser, addCustomEmailNotification, editStudyValues } = this.props;
     const { customAddEmailModal } = this.state;
     if (!customAddEmailModal) {
       addEmailNotificationUser({
         ...values,
-        clientId: this.props.editStudyValues.client_id,
+        clientId: editStudyValues.client_id,
         addForNotification: true,
-        studyId: this.props.editStudyValues.study_id,
+        studyId: editStudyValues.study_id,
         clientRole:{
-          siteId: this.props.editStudyValues.site_id,
+          siteId: editStudyValues.site,
         },
       });
     } else {
       addCustomEmailNotification({
         ...values,
         type: 'inactive',
-        clientId: this.props.editStudyValues.client_id,
-        studyId: this.props.editStudyValues.study_id,
-        siteId: this.props.editStudyValues.site_id,
+        clientId: editStudyValues.client_id,
+        studyId: editStudyValues.study_id,
+        siteId: editStudyValues.site,
       });
     }
 
