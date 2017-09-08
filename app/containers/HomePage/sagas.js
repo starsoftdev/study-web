@@ -670,7 +670,6 @@ export function* addEmailNotificationUserWorker(action) {
   const { payload } = action;
   try {
     const clientId = payload.clientId;
-    const siteId = payload.clientRole.siteId;
     delete payload.clientId;
 
     const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
@@ -680,11 +679,10 @@ export function* addEmailNotificationUserWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-
-    yield put(fetchAllClientUsersDashboard(clientId, siteId));
     yield put(addEmailNotificationUserSuccess(response.user));
   } catch (err) {
-    yield put(addEmailNotificationUserError(err));
+    const errorMessage = get(err, 'message', 'Could not add the user.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -702,11 +700,10 @@ export function* addCustomEmailNotificationWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-
-    yield put(fetchCustomNotificationEmails(payload.studyId));
     yield put(addCustomEmailNotificationSuccess(response));
   } catch (err) {
-    yield put(addCustomEmailNotificationError(err));
+    const errorMessage = get(err, 'message', 'Could not add the custom notification email to the study.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
@@ -725,10 +722,10 @@ export function* removeCustomEmailNotificationWorker(action) {
 
     const response = yield call(request, requestURL, options);
 
-    yield put(fetchCustomNotificationEmails(payload.studyId));
     yield put(removeCustomEmailNotificationSuccess(response));
   } catch (err) {
-    yield put(removeCustomEmailNotificationError(err));
+    const errorMessage = get(err, 'message', 'Could not remove the custom notification email to the study.');
+    yield put(toastrActions.error('', errorMessage));
   }
 }
 
