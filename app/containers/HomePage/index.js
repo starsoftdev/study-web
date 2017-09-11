@@ -17,7 +17,7 @@ import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 
 import { selectUserRoleType, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchClientSites, fetchLevels } from '../../containers/App/actions';
+import { fetchClientSites, fetchLevels, fetchPatientMessageUnreadCount } from '../../containers/App/actions';
 import { fetchStudies, clearStudiesCollection, fetchProtocols, fetchProtocolNumbers, fetchIndications } from './actions';
 import { selectStudies, selectSearchProtocolsFormValues, selectQueryParams, selectPaginationOptions } from '../../containers/HomePage/selectors';
 
@@ -47,6 +47,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     queryParams: PropTypes.object,
     searchProtocolsFormValues: PropTypes.object,
     paginationOptions: React.PropTypes.object,
+    fetchPatientMessageUnreadCount: PropTypes.func,
   };
 
   constructor(props) {
@@ -71,6 +72,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.fetchStudies(currentUser, params);
+      this.props.fetchPatientMessageUnreadCount(currentUser);
     } else if (currentUser && userRoleType === 'sponsor') {
       this.props.fetchProtocols(currentUser.roleForSponsor.id);
       this.props.fetchProtocolNumbers(currentUser.roleForSponsor.id);
@@ -203,6 +205,7 @@ function mapDispatchToProps(dispatch) {
     fetchProtocols: (sponsorRoleId, searchParams, limit, offset, sort, order) => dispatch(fetchProtocols(sponsorRoleId, searchParams, limit, offset, sort, order)),
     fetchProtocolNumbers: (sponsorRoleId) => dispatch(fetchProtocolNumbers(sponsorRoleId)),
     fetchIndications: (currentUser) => dispatch(fetchIndications(currentUser)),
+    fetchPatientMessageUnreadCount: (currentUser) => dispatch(fetchPatientMessageUnreadCount(currentUser)),
   };
 }
 
