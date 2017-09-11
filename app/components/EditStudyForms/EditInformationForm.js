@@ -241,9 +241,21 @@ export default class EditInformationForm extends React.Component {
       const newParam = _.pickBy(formValues, (value, key) => (
         value !== initialValues[key]
       ));
+      // delete tagged indications from the request because we already submitted the changes for the tagged indications
+      delete newParam.taggedIndicationsForStudy;
       if (newParam.recruitment_phone) {
         newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
       }
+      if (newParam.emailNotifications) {
+        newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => (
+          (typeof value.isChecked === 'undefined' && typeof initialValues.emailNotifications[key].isChecked !== 'undefined') || (typeof value.isChecked !== 'undefined' && typeof initialValues.emailNotifications[key].isChecked === 'undefined') || value.isChecked !== initialValues.emailNotifications[key].isChecked
+        ));
+        // the diff'ed email notifications are empty, don't include in the request
+        if (newParam.emailNotifications.length === 0) {
+          delete newParam.emailNotifications;
+        }
+      }
+      console.log(newParam);
       updateDashboardStudy(initialValues.study_id, newParam, stopSubmit);
     }
   }
