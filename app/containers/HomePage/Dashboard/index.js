@@ -97,11 +97,11 @@ export class Dashboard extends React.Component {
           </div>
           <div className="box">
             <div className="col pull-left">
-              <span className="sub-title">UNREAD<br /> EMAILS</span>
+              <span className="sub-title">EMAIL<br /> SENT</span>
               <strong className="number"><i className="icomoon-envelop" /> {patientMessagesCount.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
-              <span className="sub-title">UNREAD<br /> TEXTS</span>
+              <span className="sub-title">UNREAD<br /> TEXT</span>
               <strong className="number"><i className="icomoon-icon_chat_alt" /> {patientMessagesCount.unreadTexts}</strong>
             </div>
           </div>
@@ -117,7 +117,7 @@ export class Dashboard extends React.Component {
           </div>
           <div className="box">
             <div className="col pull-left">
-              <span className="sub-title">REFER CRO/<br />SPONSORS</span>
+              <span className="sub-title">REFER CRO/<br />SPONSOR</span>
               <strong className="number">+300 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
             </div>
             <div className="col pull-right">
