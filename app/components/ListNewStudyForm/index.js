@@ -92,6 +92,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     super(props);
 
     this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
+    this.handleCallTrackingChange = this.handleCallTrackingChange.bind(this);
     this.closeAddSiteModal = this.closeAddSiteModal.bind(this);
     this.addSite = this.addSite.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
@@ -180,6 +181,12 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           change('checkAllInput', true);
         }
       }
+    }
+  }
+
+  handleCallTrackingChange(value) {
+    if (value) {
+
     }
   }
 
@@ -398,13 +405,14 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             />
           </div>
 
-          {false &&
+          {
             <div className="tracking-source">
               <div className="field-row">
                 <strong className="label"><label>CALL TRACKING: $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}
+                  onChange={this.handleCallTrackingChange}
                   className="field"
                 />
               </div>
@@ -412,7 +420,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           }
 
           {callTracking &&
-            <FieldArray name="leadSource" component={RenderLeads} availPhoneNumbers={this.props.availPhoneNumbers} />
+            <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
           }
 
           <div className="field-row">
