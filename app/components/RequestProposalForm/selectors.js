@@ -39,7 +39,7 @@ const selectCallTracking = () => createSelector(
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'requestProposal.values.leads', []);
+    const leads = get(substate, 'requestProposal.values.leadSource', []);
     return leads.length;
   }
 );
