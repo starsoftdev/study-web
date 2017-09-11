@@ -16,7 +16,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 @connect(null, mapDispatchToProps)
-class TextBlastModal extends React.Component {
+class EmailBlastModal extends React.Component {
   static propTypes = {
     bsClass: React.PropTypes.string,
     className: React.PropTypes.any,
@@ -27,7 +27,6 @@ class TextBlastModal extends React.Component {
     role: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     campaign: React.PropTypes.number,
-    ePMS: React.PropTypes.bool,
     studyName: React.PropTypes.string,
   };
 
@@ -43,7 +42,7 @@ class TextBlastModal extends React.Component {
   }
 
   render() {
-    const { campaign, ePMS, studyName, className, onClose, onHide, ...props } = this.props;
+    const { campaign, studyName, className, onClose, onHide, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
     return (
       <Modal
@@ -80,4 +79,4 @@ class TextBlastModal extends React.Component {
   }
 }
 
-export default TextBlastModal;
+export default EmailBlastModal;

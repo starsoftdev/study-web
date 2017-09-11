@@ -21,6 +21,7 @@ import {
   FETCH_FILTERED_PROTOCOLS,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
+  SUBMIT_EMAIL_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
 } from './constants';
@@ -57,6 +58,7 @@ export function* patientDatabasePageSaga() {
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
   const watcherL = yield fork(getTotalPatientsCountWatcher);
+  const watcherZ = yield fork(submitEmailBlast);
 
   yield take(LOCATION_CHANGE);
 
@@ -74,6 +76,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherJ);
   yield cancel(watcherK);
   yield cancel(watcherL);
+  yield cancel(watcherZ);
 }
 
 // Bootstrap sagas
@@ -493,6 +496,42 @@ function* submitTextBlast() {
       toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+function* submitEmailBlast() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL_BLAST action
+    const { filter, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/emails/addBlastEmails`;
+
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          filter,
+          uncheckedPatients,
+          from,
+          subject,
+          clientRoleId,
+          message,
+        }),
+      });
+      onClose();
+      toastr.success('', 'Success! Your email blast have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
