@@ -134,10 +134,6 @@ import {
 
   ADD_MESSAGES_COUNT_STAT,
   DELETE_MESSAGES_COUNT_STAT,
-
-  GET_TIMEZONE,
-  GET_TIMEZONE_SUCCESS,
-  GET_TIMEZONE_ERROR,
 } from './constants';
 
 import {
@@ -298,7 +294,6 @@ const initialState = {
       error: null,
     },
     cnsSubmitProcess: {},
-    timezone: 'America/New_York',
   },
 };
 
@@ -1480,21 +1475,6 @@ export default function appReducer(state = initialState, action) {
         changeUsersTimezoneState: {
           saving: false,
         },
-      };
-      break;
-    case GET_TIMEZONE:
-      baseDataInnerState = {
-        timezone: '',
-      };
-      break;
-    case GET_TIMEZONE_SUCCESS:
-      baseDataInnerState = {
-        timezone: payload.timezone,
-      };
-      break;
-    case GET_TIMEZONE_ERROR:
-      baseDataInnerState = {
-        timezone: '',
       };
       break;
     default:
