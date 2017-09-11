@@ -11,9 +11,8 @@ export function formatTimezone(timezone) {
 
   if (moment().tz(timezone).isValid) {
     const t = moment().tz(timezone).format('Z').split(':')[0];
-    const parts = timezone.split('/');
-    const region = parts[0];
-    const city = parts.length > 1 ? parts[1].replace('_', ' ') : '';
+    const region = timezone.split('/')[0];
+    const city = timezone.split('/')[1].replace('_', ' ');
     return `(UTC${t}) ${city}, ${region}`;
   }
 
