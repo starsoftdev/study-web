@@ -18,6 +18,7 @@ import AlertModal from '../../components/AlertModal';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
 import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index';
+import EmailBlastModal from '../../components/PatientDatabaseEmailBlastModal/index';
 import { clearForm, importPatients } from '../../containers/PatientDatabasePage/actions';
 
 class PatientActionButtons extends React.Component {
@@ -198,12 +199,22 @@ class PatientActionButtons extends React.Component {
         <div className="col pull-right">
           <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</div>
         </div>
-        <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
+        <TextEmailBlastModal
+          show={this.state.showTextEmailBlastModal}
+          onHide={this.toggleTextEmailBlastModal}
+          toggleTextBlast={this.toggleTextBlastModal}
+          toggleEmailBlast={this.toggleEmailBlastModal}
+        />
         <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} name="patient" />
         <TextBlastModal
           show={this.state.showTextBlastModal}
           onClose={this.closeTextBlastModal}
           onHide={this.toggleTextBlastModal}
+        />
+        <EmailBlastModal
+          show={this.state.showEmailBlastModal}
+          onClose={this.closeEmailBlastModal}
+          onHide={this.toggleEmailBlastModal}
         />
         <Modal
           show={this.state.showImportPatientsModal}

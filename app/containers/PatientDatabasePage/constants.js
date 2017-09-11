@@ -54,6 +54,7 @@ export const CLEAR_IMPORT_FORM                  = 'PatientDatabasePage/CLEAR_IMP
 
 export const UPDATE_SELECT_ALL                  = 'PatientDatabasePage/UPDATE_SELECT_ALL';
 
-export const GET_TOTAL_PATIENTS_COUNT = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT';
-export const GET_TOTAL_PATIENTS_COUNT_SUCCESS = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_SUCCESS';
-export const GET_TOTAL_PATIENTS_COUNT_ERROR = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_ERROR';
+export const GET_TOTAL_PATIENTS_COUNT           = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT';
+export const GET_TOTAL_PATIENTS_COUNT_SUCCESS   = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_SUCCESS';
+export const GET_TOTAL_PATIENTS_COUNT_ERROR     = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_ERROR';
+export const SUBMIT_EMAIL_BLAST                 = 'StudyPage/SUBMIT_EMAIL_BLAST';

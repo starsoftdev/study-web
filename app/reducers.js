@@ -27,6 +27,7 @@ export default function createReducer(asyncReducers) {
     form: formReducer.plugin({
       'StudyPage.TextBlastModal': textBlastModalReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
+      'PatientDatabase.EmailBlastModal': patientsListReducer,
       'PatientDatabase.EditPatientModal': editPatientReducer,
       'PatientDatabase.AddPatientModal': addPatientReducer,
       dashboardEditStudyForm: editStudyReducer,

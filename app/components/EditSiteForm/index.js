@@ -147,7 +147,10 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       for (const val of addressComponents) {
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
+          const city2 = _.find(val.types, (o) => (o === 'administrative_area_level_2'));
           if (city) {
+            change('city', val.long_name);
+          } else if (city2) {
             change('city', val.long_name);
           }
         }

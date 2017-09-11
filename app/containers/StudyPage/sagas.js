@@ -24,6 +24,7 @@ ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
 SUBMIT_TEXT_BLAST,
+SUBMIT_EMAIL_BLAST,
 SUBMIT_PATIENT_IMPORT,
 SUBMIT_ADD_PATIENT,
 SUBMIT_PATIENT_NOTE,
@@ -796,6 +797,42 @@ function* submitTextBlast() {
   }
 }
 
+function* submitEmailBlast() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL_BLAST action
+    const { patients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/emails/addBlastEmails`;
+
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientsIDs: patients.map(patient => (
+            patient.id
+          )),
+          from,
+          subject,
+          clientRoleId,
+          message,
+        }),
+      });
+      onClose();
+      toastr.success('', 'Success! Your email blast have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
 function* submitPatientImport() {
   while (true) {
     // listen for the SUBMIT_PATIENT_IMPORT action
@@ -939,6 +976,7 @@ export function* fetchStudySaga() {
     const watcherW = yield fork(downloadReport);
     const watcherX = yield fork(downloadReferral);
     const watcherY = yield fork(generateReferral);
+    const watcherZ = yield fork(submitEmailBlast);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -965,6 +1003,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherW);
     yield cancel(watcherX);
     yield cancel(watcherY);
+    yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
