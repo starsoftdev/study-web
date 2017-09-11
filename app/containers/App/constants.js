@@ -203,3 +203,7 @@ export const SUBMIT_CNS_ERROR                      = 'App/SUBMIT_CNS_ERROR';
 
 export const ADD_MESSAGES_COUNT_STAT               = 'App/ADD_MESSAGES_COUNT_STAT';
 export const DELETE_MESSAGES_COUNT_STAT            = 'App/DELETE_MESSAGES_COUNT_STAT';
+
+export const GET_TIMEZONE = 'GET_TIMEZONE';
+export const GET_TIMEZONE_SUCCESS = 'GET_TIMEZONE_SUCCESS';
+export const GET_TIMEZONE_ERROR = 'GET_TIMEZONE_ERROR';
