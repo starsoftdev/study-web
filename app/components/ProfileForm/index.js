@@ -8,27 +8,22 @@ import 'blueimp-canvas-to-blob';
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import _ from 'lodash';
-import moment from 'moment-timezone';
+
 import Input from '../../components/Input';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
-import ReactSelect from '../../components/Input/ReactSelect';
 import ProfileImageForm from '../../components/ProfileImageForm';
 import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import CenteredModal from '../../components/CenteredModal/index';
-import { formatTimezone } from '../../utils/time';
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: React.PropTypes.object,
-    userRoleType: React.PropTypes.string,
     changePassword: React.PropTypes.func,
     changeImage: React.PropTypes.func,
     changePasswordResult: React.PropTypes.object,
     me: React.PropTypes.bool,
     formValues: React.PropTypes.object,
-    changeUsersTimezone: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -38,7 +33,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.openProfileImageModal = this.openProfileImageModal.bind(this);
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
-    this.onChangeTimezone = this.onChangeTimezone.bind(this);
+
 
     this.state = {
       passwordResetModalOpen: false,
@@ -50,10 +45,6 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
     }
-  }
-
-  onChangeTimezone(value) {
-    this.props.changeUsersTimezone(this.props.currentUser.id, value);
   }
 
   openResetPasswordModal() {
@@ -80,16 +71,12 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   render() {
-    const { me, userRoleType } = this.props;
+    const { me } = this.props;
     const initialValues = {
       initialValues: {
         user_id: this.props.currentUser.id,
       },
     };
-    const timezoneOptions = _.map(_.filter(moment.tz.names(), (t => t.split('/').length === 2)), t => {
-      const timezone = formatTimezone(t);
-      return { label: timezone, value: t };
-    });
     return (
       <form>
         <div className="field-row label-top file-img active">
@@ -147,20 +134,6 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             isDisabled
           />
         </div>
-        {
-          (userRoleType === 'sponsor' || userRoleType === 'dashboard') &&
-            <div className="field-row">
-              <strong className="label"><label>Time Zone</label></strong>
-              <Field
-                name="timezone"
-                component={ReactSelect}
-                placeholder="Select Timezone"
-                options={timezoneOptions}
-                className="field"
-                onChange={this.onChangeTimezone}
-              />
-            </div>
-        }
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
           <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
