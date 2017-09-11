@@ -3,28 +3,27 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, blur } from 'redux-form';
+import moment from 'moment-timezone';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-import { selectSavedSite, selectTimezone } from '../../containers/App/selectors';
+import { selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import FormGeosuggest from '../../components/Input/Geosuggest';
+import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectEditSiteFormValues } from './selectors';
 import formValidator from './validator';
-import { getTimezone } from '../../containers/App/actions';
-import { formatTimezone } from '../../utils/time';
+
 const formName = 'editSite';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
   formValues: selectEditSiteFormValues(),
-  timezone: selectTimezone(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  getTimezone: (lat, lng) => dispatch(getTimezone(lat, lng)),
 });
 
 const toShortCode = country => {
@@ -66,8 +65,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     isEdit: PropTypes.bool,
     initialValues: PropTypes.object,
     formValues: PropTypes.object,
-    getTimezone: PropTypes.func,
-    timezone: PropTypes.string,
   };
 
   constructor(props) {
@@ -75,13 +72,56 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+
+    const timezones = moment.tz.names();
+    const regionOptions = [];
+    const regionWithTimezones = [];
+
+    for (const tz of timezones) {
+      const parsedRegion = tz.substr(0, tz.indexOf('/'));
+      const parsedTimezone = tz.substr(tz.indexOf('/') + 1);
+
+      if (!parsedRegion) {
+        regionWithTimezones[parsedTimezone] = [];
+
+        regionWithTimezones[parsedTimezone].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+      } else if (regionWithTimezones[parsedRegion]) {
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+      } else {
+        regionWithTimezones[parsedRegion] = [];
+
+        regionWithTimezones[parsedRegion].push({
+          label: parsedTimezone.replace(/_/g, ' '),
+          value: parsedTimezone,
+        });
+
+        regionOptions.push({
+          label: parsedRegion,
+          value: parsedRegion,
+        });
+      }
+    }
+
+    this.state = {
+      regionOptions,
+      regionWithTimezones,
+    };
   }
 
   componentWillReceiveProps(newProps) {
-    const { change, timezone } = this.props;
-    if (newProps.timezone && newProps.timezone !== timezone) {
-      console.log('new timzone', newProps.timezone);
-      change('timezone', formatTimezone(newProps.timezone));
+    if (newProps.formValues.selectedRegion !== this.props.formValues.selectedRegion) {
+      this.props.change('selectedTimezone', '');
     }
   }
 
@@ -92,17 +132,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   onSuggestSelect(e) {
-    const { change, getTimezone } = this.props;
+    const { change } = this.props;
     let city = '';
     let state = '';
     let countryCode = '';
     let postalCode = '';
     let streetNmber = '';
     let route = '';
-    if (e.location) {
-      console.log('location', e.location);
-      getTimezone(e.location.lat, e.location.lng);
-    }
 
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
@@ -167,6 +203,12 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
   render() {
     const { savedSite, handleSubmit, isEdit } = this.props;
+
+    let timezoneOptions = [];
+
+    if (this.props.formValues.selectedRegion) {
+      timezoneOptions = this.state.regionWithTimezones[this.props.formValues.selectedRegion];
+    }
 
     return (
       <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>
@@ -276,15 +318,25 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required"><label>Time Zone</label></strong>
-            <div className="field">
-              <Field
-                name="timezone"
-                placeholder="Timezone"
-                component={Input}
-                type="text"
-                isDisabled
-              />
-            </div>
+            <Field
+              name="selectedRegion"
+              component={ReactSelect}
+              placeholder="Select Region"
+              options={this.state.regionOptions}
+              disabled={savedSite.saving}
+              className="field"
+            />
+          </div>
+          <div className="field-row">
+            <strong className="label"><label></label></strong>
+            <Field
+              name="selectedTimezone"
+              component={ReactSelect}
+              placeholder="Select Time Zone"
+              options={timezoneOptions}
+              disabled={savedSite.saving}
+              className="field"
+            />
           </div>
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>

@@ -14,7 +14,7 @@ import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
 import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
-import { formatTimezone, parseTimezone } from '../../utils/time';
+
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
@@ -143,7 +143,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   updateSite(siteData) {
     const { currentUserClientId, selectedSite } = this.props;
     const params = siteData;
-    params.timezone = parseTimezone(siteData.timezone);
+    params.timezone = (siteData.selectedRegion === siteData.selectedTimezone) ? siteData.selectedRegion : `${siteData.selectedRegion}/${siteData.selectedTimezone}`;
     params.phoneNumber = normalizePhoneForServer(params.phoneNumber);
 
     this.props.saveSite(currentUserClientId, selectedSite.details.id, params);
@@ -195,7 +195,14 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     if (selectedSiteDetailsForForm) {
-      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone);
+      let selectedRegion = selectedSiteDetailsForForm.timezone.substr(0, selectedSiteDetailsForForm.timezone.indexOf('/'));
+      const selectedTimezone = selectedSiteDetailsForForm.timezone.substr(selectedSiteDetailsForForm.timezone.indexOf('/') + 1);
+
+      if (!selectedRegion) {
+        selectedRegion = selectedTimezone;
+      }
+      selectedSiteDetailsForForm.selectedRegion = selectedRegion;
+      selectedSiteDetailsForForm.selectedTimezone = selectedTimezone;
       selectedSiteDetailsForForm.phoneNumber = normalizePhoneDisplay(selectedSiteDetailsForForm.phoneNumber);
     }
 
