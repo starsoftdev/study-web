@@ -53,7 +53,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
   }
 
   render() {
-    const { addEmailNotificationClick, fields, formValues } = this.props;
+    const { fields, formValues } = this.props;
     const fLength = fields.length;
     let frLength;
     if (formValues.emailNotifications) {
