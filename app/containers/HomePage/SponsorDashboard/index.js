@@ -54,15 +54,15 @@ export class SponsorDashboard extends React.Component {
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">Active</span>
+                  <span className="sub-title">ACTIVE</span>
                   <strong className="number">{principalInvestigatorTotals.active}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Inactive</span>
+                  <span className="sub-title">INACTIVE</span>
                   <strong className="number">{principalInvestigatorTotals.inactive}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Total</span>
+                  <span className="sub-title">TOTAL</span>
                   <strong className="number">{principalInvestigatorTotals.total}</strong>
                 </li>
               </ul>
@@ -84,15 +84,15 @@ export class SponsorDashboard extends React.Component {
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">Today</span>
+                  <span className="sub-title">TODAY</span>
                   <strong className="number">{patientSignUps.today}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Yesterday</span>
+                  <span className="sub-title">YESTERDAY</span>
                   <strong className="number">{patientSignUps.yesterday}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Total</span>
+                  <span className="sub-title">TOTAL</span>
                   <strong className="number">{patientSignUps.total}</strong>
                 </li>
               </ul>

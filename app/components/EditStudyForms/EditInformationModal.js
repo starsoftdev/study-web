@@ -374,10 +374,10 @@ export class EditInformationModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      name="is_active"
+                      name="is_send_initial_message_text"
                       component={Toggle}
                       className="field"
-                      onChange={(e) => { change('is_public', e.toString()); }}
+                      onChange={(e) => { change('is_send_initial_message_text', e.toString()); }}
                     />
                   </div>
                 </div>
