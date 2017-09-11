@@ -94,7 +94,7 @@ function mapDispatchToProps(dispatch) {
     changePassword: (values) => dispatch(changePassword(values)),
     changeImage: (values) => dispatch(changeImage(values)),
     fetchOtherUser: (userId) => dispatch(fetchOtherUser(userId)),
-    changeUsersTimezone: (userId, timezone) => dispatch(changeUsersTimezone(userId, timezone)),   
+    changeUsersTimezone: (userId, timezone) => dispatch(changeUsersTimezone(userId, timezone)),
   };
 }
 
