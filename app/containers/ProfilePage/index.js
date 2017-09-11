@@ -11,8 +11,10 @@ import Helmet from 'react-helmet';
 
 import ProfileForm from '../../components/ProfileForm';
 import { selectChangePasswordResult, selectOtherUser, selectProfileFormValues } from '../../containers/ProfilePage/selectors';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectUserRoleType } from '../../containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
+import { changeUsersTimezone } from '../../containers/App/actions';
+
 export class ProfilePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     changePasswordResult: PropTypes.object,
@@ -23,6 +25,8 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     otherUser: PropTypes.any,
     params: PropTypes.object,
     formValues: PropTypes.object,
+    userRoleType: PropTypes.string,
+    changeUsersTimezone: React.PropTypes.func,
   }
 
   constructor(props) {
@@ -63,8 +67,10 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
                   changePassword={this.changePassword}
                   changeImage={this.changeImage}
                   currentUser={me ? this.props.currentUser : this.props.otherUser.info}
+                  userRoleType={this.props.userRoleType}
                   me={me}
                   formValues={this.props.formValues}
+                  changeUsersTimezone={this.props.changeUsersTimezone}
                 />;
               })()}
             </div>
@@ -78,6 +84,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
 const mapStateToProps = createStructuredSelector({
   changePasswordResult: selectChangePasswordResult(),
   currentUser: selectCurrentUser(),
+  userRoleType: selectUserRoleType(),
   otherUser: selectOtherUser(),
   formValues: selectProfileFormValues(),
 });
@@ -87,6 +94,7 @@ function mapDispatchToProps(dispatch) {
     changePassword: (values) => dispatch(changePassword(values)),
     changeImage: (values) => dispatch(changeImage(values)),
     fetchOtherUser: (userId) => dispatch(fetchOtherUser(userId)),
+    changeUsersTimezone: (userId, timezone) => dispatch(changeUsersTimezone(userId, timezone)),
   };
 }
 
