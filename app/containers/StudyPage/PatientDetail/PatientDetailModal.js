@@ -41,6 +41,7 @@ export class PatientDetailModal extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    site: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
@@ -121,7 +122,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { carousel, currentPatient, currentPatientCategory, currentUser, params } = this.props;
+    const { carousel, currentPatient, currentPatientCategory, site, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -132,7 +133,7 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} params={params} />
+        <OtherSection active={carousel.other} initialValues={formattedPatient} site={site} params={params} />
       );
     }
     return null;
@@ -226,6 +227,7 @@ export class PatientDetailModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
+  site: Selector.selectSite(),
   carousel: Selector.selectCarousel(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientNotes: Selector.selectCurrentPatientNotes(),
