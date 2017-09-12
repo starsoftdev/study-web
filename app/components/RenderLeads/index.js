@@ -6,9 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { Field, change } from 'redux-form';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import { Field } from 'redux-form';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
@@ -22,16 +20,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     formValues: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-
-    // if (this.props.fields.length === 0) {
-    //   this.props.fields.push({});
-    // }
-  }
-
-  componentWillReceiveProps(newProps) {
-    console.log('********* new props=', newProps);
+  componentWillMount() {
+    if (this.props.fields.length === 0) {
+      this.props.fields.push({});
+    }
   }
 
   render() {
@@ -40,9 +32,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     return (
       <div className="leads-list">
         {fields.map((lead, index) => {
-          const showName = formValues.leadSource[index].source_id !== null && typeof formValues.leadSource[index].source_id !== 'undefined';
-
-          console.log('===============lead detail', lead, index);
+          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source_id !== 'undefined' && formValues.leadSource[index].source_id;
           return (
             <div className="lead-item" key={index}>
               <div className="field-row">
@@ -72,7 +62,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
         }
         )}
         {
-          (true || showAdd) &&
+          showAdd &&
           <div className="field-row">
             <strong className="label"></strong>
             <div className="field">
@@ -89,6 +79,5 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     );
   }
 }
-
 
 export default RenderLeads;

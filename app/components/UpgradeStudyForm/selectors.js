@@ -48,7 +48,7 @@ const selectUpgradeStudyFormNotesValue = () => createSelector(
 const selectUpgradeStudyFormLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'upgradeStudy.values.leads', []);
+    const leads = get(substate, 'upgradeStudy.values.leadSource', []);
     return leads.length;
   }
 );
