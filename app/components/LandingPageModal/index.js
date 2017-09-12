@@ -159,6 +159,10 @@ export class LandingPageModal extends React.Component {
       onClose();
     }
 
+    if (!newProps.openModal && this.props.openModal) {
+      this.onHide();
+    }
+
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
       this.closeStudyAddModal();
 
