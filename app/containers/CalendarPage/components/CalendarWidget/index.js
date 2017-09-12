@@ -17,7 +17,7 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 
 class CalendarWidget extends React.Component {
   static propTypes = {
-    currentUser: PropTypes.object,
+    currentSite: PropTypes.object,
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
@@ -33,9 +33,9 @@ class CalendarWidget extends React.Component {
   }
 
   getTimezoneDate(date) {
-    const { currentUser } = this.props;
+    const { currentSite } = this.props;
     // we need to compensate for big calendar using a local date offset instead of an international one
-    const offset = moment().local().utcOffset() - moment().tz(currentUser.timezone).utcOffset();
+    const offset = moment().local().utcOffset() - moment().tz(currentSite.timezone).utcOffset();
     let selectedDate;
     if (offset > 0) {
       selectedDate = moment(date).add(offset, 'minute');
@@ -57,7 +57,7 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, schedules } = this.props;
+    const { currentSite, schedules } = this.props;
 
     const eventsList = schedules.map(s => {
       const localTime = s.time;
@@ -95,7 +95,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={currentUser.timezone}
+          timezone={currentSite.timezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
