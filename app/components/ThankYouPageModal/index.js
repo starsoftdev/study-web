@@ -103,7 +103,6 @@ export class ThankYouPageModal extends React.Component {
     }
 
     if (!newProps.thankYouPageUpdateProcess.saving && newProps.thankYouPageUpdateProcess.success) {
-      fetchLanding(this.state.selected.study_id);
       resetState();
       onClose();
     }
