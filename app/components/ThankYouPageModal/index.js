@@ -107,6 +107,10 @@ export class ThankYouPageModal extends React.Component {
       resetState();
       onClose();
     }
+
+    if (!newProps.openModal && this.props.openModal) {
+      this.onHide();
+    }
   }
 
   onHide() {
