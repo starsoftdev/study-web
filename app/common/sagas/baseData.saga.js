@@ -189,7 +189,7 @@ export default function* baseDataSaga() {
   yield fork(getTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
   yield fork(changeTemporaryPassword);
-  yield fork(takeLatest, FETCH_LANDING, fetchLanding);
+  yield fork(fetchLanding);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
@@ -908,17 +908,20 @@ export function* changeTemporaryPassword() {
   }
 }
 
-function* fetchLanding(action) {
-  const { studyId } = action;
-  // put the fetching study action in case of a navigation action
-  try {
-    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(landingFetched(response));
-  } catch (err) {
-    yield put(fetchLandingError(err));
+export function* fetchLanding() {
+  while (true) {
+    const { studyId } = yield take(FETCH_LANDING);
+
+    // put the fetching study action in case of a navigation action
+    try {
+      const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(landingFetched(response));
+    } catch (err) {
+      yield put(fetchLandingError(err));
+    }
   }
 }
 
