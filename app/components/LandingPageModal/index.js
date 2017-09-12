@@ -154,7 +154,6 @@ export class LandingPageModal extends React.Component {
     }
 
     if (!newProps.updateLandingPageProcess.saving && newProps.updateLandingPageProcess.success) {
-      fetchLanding(this.state.selected.study_id);
       resetState();
       onClose();
     }
