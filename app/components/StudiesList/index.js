@@ -659,7 +659,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies } = this.props;
+    const { studies, upgradeStudyFormValues, renewStudyFormValues } = this.props;
 
     let selectedStudy = null; studies.details.forEach((item) => {
       if (item.studyId === this.state.selectedStudyId) {
@@ -717,6 +717,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               manualDisableSubmit={this.props.renewedStudy.submitting}
               validateAndSubmit={this.handleRenewStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+              formValues={renewStudyFormValues}
             />
             <UpgradeStudyForm
               selectedStudy={selectedStudy}
@@ -726,6 +727,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               manualDisableSubmit={this.props.upgradedStudy.submitting}
               validateAndSubmit={this.handleUpgradeStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+              formValues={upgradeStudyFormValues}
             />
             <EditStudyForm
               selectedStudyId={this.state.selectedStudyId}
