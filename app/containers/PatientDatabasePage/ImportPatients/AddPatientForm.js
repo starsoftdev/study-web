@@ -216,7 +216,7 @@ export default class AddPatientForm extends React.Component {
             id="import-patient-phone"
             onBlur={this.onPhoneBlur}
           />
-        </div>c
+        </div>
         <div className="field-row form-group">
           <strong className="label required">
             <label>Site Location</label>
