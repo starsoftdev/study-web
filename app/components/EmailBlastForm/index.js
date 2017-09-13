@@ -17,13 +17,12 @@ import * as Selector from '../../containers/StudyPage/selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitEmailBlast } from '../../containers/StudyPage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
 import { fetchClientCredits } from '../../containers/App/actions';
-import { selectCurrentUser, selectClientCredits, selectSources } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  clientCredits: selectClientCredits(),
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
   patientCategories: Selector.selectPatientCategories(),
@@ -46,11 +45,10 @@ const mapDispatchToProps = (dispatch) => ({
   validate: formValidator,
 })
 @connect(mapStateToProps, mapDispatchToProps)
-class TextBlastForm extends React.Component {
+class EmailBlastForm extends React.Component {
   static propTypes = {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
-    clientCredits: React.PropTypes.object,
     fetchClientCredits: React.PropTypes.func,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
@@ -79,18 +77,9 @@ class TextBlastForm extends React.Component {
     this.checkCategories = this.checkCategories.bind(this);
     this.removeSelectedPatient = this.removeSelectedPatient.bind(this);
     this.removePatients = this.removePatients.bind(this);
-    this.checkForCredits = this.checkForCredits.bind(this);
     this.state = {
       sourceDisable: true,
     };
-  }
-
-  componentDidMount() {
-    // const { studyName } = this.props;
-    // const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
-    // this.props.initialize({
-    //   message,
-    // });
   }
 
   selectCategory(checked, categoryId) {
@@ -190,7 +179,7 @@ class TextBlastForm extends React.Component {
   submitEmailBlast(event) {
     event.preventDefault();
     const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose } = this.props;
-    if (!formSyncErrors.message && !formSyncErrors.patients) {
+    if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
@@ -198,8 +187,8 @@ class TextBlastForm extends React.Component {
       toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
-    } else if (formSyncErrors.from) {
-      toastr.error('', formSyncErrors.from);
+    } else if (formSyncErrors.email) {
+      toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
     }
@@ -233,12 +222,6 @@ class TextBlastForm extends React.Component {
       this.props.change('category', false);
       this.props.change(`category-${category.id}`, false);
     });
-  }
-
-  checkForCredits(notEnoughCredits) {
-    if (notEnoughCredits) {
-      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
-    }
   }
 
   renderPatients() {
@@ -301,11 +284,12 @@ class TextBlastForm extends React.Component {
         formValues.filteredPatientSearchValues.indexOf(v) !== -1
       ));
     }
-    const clientCredits = this.props.clientCredits.details.customerCredits;
-    const notEnoughCredits = newPatientsArr.length > clientCredits;
     const disabled = (newPatientsArr.length === 0);
     return (
-      <Form className="text-email-blast-form">
+      <Form
+        className="text-email-blast-form"
+        onSubmit={this.submitEmailBlast}
+      >
         <div className="sidebar pull-left">
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
@@ -380,31 +364,28 @@ class TextBlastForm extends React.Component {
         <div className="form-holder">
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
-              <div className="subject-field">
+              <div className="subject-field to">
                 <FormControl type="text" className="recievers" placeholder="To" disabled />
                 {this.renderPatientCount()}
               </div>
-              <Field
-                name="email"
-                component={Input}
-                className="sender-field"
-                type="text"
-                placeholder="Type email address..."
-                required
-                ref={(from) => {
-                  this.from = from;
-                }}
-              />
+              <div className="sender-field-holder">
+                <div className="sender-field-prev">
+                  From
+                </div>
+                <Field
+                  name="email"
+                  component={Input}
+                  className="sender-field"
+                  type="text"
+                  placeholder="Enter your email address"
+                />
+              </div>
               <Field
                 name="subject"
                 component={Input}
                 className="subject-field"
                 type="text"
-                placeholder="Type subject..."
-                required
-                ref={(subject) => {
-                  this.subject = subject;
-                }}
+                placeholder="Subject"
               />
               <Field
                 name="message"
@@ -412,20 +393,15 @@ class TextBlastForm extends React.Component {
                 componentClass="textarea"
                 className="email-message"
                 placeholder="Type message..."
-                required
                 style={{ height: '350px' }}
-                ref={(textarea) => {
-                  this.textarea = textarea;
-                }}
               />
-              <div className="footer" onClick={() => this.checkForCredits(notEnoughCredits)}>
-                <div
+              <div className="footer">
+                <input
                   className="btn btn-default lightbox-opener pull-right"
-                  onClick={(e) => ((notEnoughCredits || disabled) ? null : this.submitEmailBlast(e))}
+                  value="Send"
+                  type="submit"
                   disabled={disabled}
-                >
-                  Send
-                </div>
+                />
               </div>
             </div>
           </div>
@@ -436,4 +412,4 @@ class TextBlastForm extends React.Component {
   }
 }
 
-export default TextBlastForm;
+export default EmailBlastForm;
