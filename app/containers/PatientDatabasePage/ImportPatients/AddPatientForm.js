@@ -216,20 +216,7 @@ export default class AddPatientForm extends React.Component {
             id="import-patient-phone"
             onBlur={this.onPhoneBlur}
           />
-        </div>
-        <div className="field-row form-group">
-          <strong className="label required">
-            <label>Indication</label>
-          </strong>
-          <Field
-            name="indication"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Indication"
-            options={indicationOptions}
-            onChange={this.selectIndication}
-          />
-        </div>
+        </div>c
         <div className="field-row form-group">
           <strong className="label required">
             <label>Site Location</label>
@@ -255,6 +242,19 @@ export default class AddPatientForm extends React.Component {
             options={protocolOptions}
             disabled={isFetchingProtocols || !this.state.siteLocation}
             onChange={this.selectProtocol}
+          />
+        </div>
+        <div className="field-row form-group">
+          <strong className="label required">
+            <label>Indication</label>
+          </strong>
+          <Field
+            name="indication"
+            component={ReactSelect}
+            className="field"
+            placeholder="Select Indication"
+            options={indicationOptions}
+            onChange={this.selectIndication}
           />
         </div>
         <div className="field-row">
