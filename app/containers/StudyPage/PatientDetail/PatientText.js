@@ -11,6 +11,7 @@ class PatientText extends React.Component {
     currentUser: React.PropTypes.object.isRequired,
     currentPatient: React.PropTypes.object.isRequired,
     textMessage: React.PropTypes.object,
+    site: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -63,7 +64,7 @@ class PatientText extends React.Component {
   }
 
   render() {
-    const { currentUser, textMessage } = this.props;
+    const { textMessage, site } = this.props;
     if (textMessage) {
       let addon = '';
 
@@ -92,7 +93,7 @@ class PatientText extends React.Component {
           </div>
           {this.renderTextMessageOriginUser()}
           <time dateTime={textMessage.dateCreated}>
-            {moment.tz(textMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}
+            {moment.tz(textMessage.dateCreated, site.timezone).format('MM/DD/YY [at] h:mm A')}
           </time>
         </div>
       );
