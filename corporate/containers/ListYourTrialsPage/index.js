@@ -13,8 +13,8 @@ import img7 from '../../assets/images/img7.svg';
 import img8 from '../../assets/images/img8.svg';
 import img10 from '../../assets/images/img10.png';
 import img11 from '../../assets/images/img11.png';
-import img12 from '../../assets/images/img12.svg';
-import img13 from '../../assets/images/img13.svg';
+import img12 from '../../assets/images/img12.png';
+import img13 from '../../assets/images/img13.png';
 import img14 from '../../assets/images/img14.png';
 import img15 from '../../assets/images/img15.png';
 import img16 from '../../assets/images/img16.svg';
@@ -658,3 +658,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListYourTrialsPage);
+
