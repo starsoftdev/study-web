@@ -375,10 +375,10 @@ export function updateSelectAll(value) {
   };
 }
 
-export function submitEmailBlast(patients, uncheckedPatients, message, from, subject, clientRoleId, onClose) {
+export function submitEmailBlast(filter, uncheckedPatients, message, from, subject, clientRoleId, onClose) {
   return {
     type: SUBMIT_EMAIL_BLAST,
-    patients,
+    filter,
     uncheckedPatients,
     message,
     from,

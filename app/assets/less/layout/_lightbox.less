@@ -889,6 +889,35 @@ input:focus {
 	    right: 124px;
 	    bottom: 26px;
   	}
+    .subject-field.to {
+      input{
+        &::-webkit-input-placeholder {font-weight: bold;}
+        &::-moz-placeholder          {font-weight: bold;}/* Firefox 19+ */
+        &:-moz-placeholder           {font-weight: bold;}/* Firefox 18- */
+        &:-ms-input-placeholder      {font-weight: bold;}
+      }
+    }
+    .sender-field-holder {
+      overflow: hidden;
+      border-color: #ccc;
+      border-width: 0 0 2px;
+      border-bottom-style: solid;
+
+      .sender-field-prev {
+        font-weight: bold;
+        float: left;
+        margin-top: 8px;
+        margin-left: 25px;
+      }
+
+      .sender-field {
+        float: left;
+
+        input {
+          border: none;
+        }
+      }
+    }
     .sender-field,
     .subject-field {
       .form-control {
@@ -897,6 +926,20 @@ input:focus {
         padding: 6px 25px;
         border-color: #ccc;
         border-width: 0 0 2px;
+      }
+    }
+    .sender-field,
+    .subject-field,
+    .email-message{
+      &.has-error {
+        .form-control:not([disabled]) {
+          color: #354052;
+
+          &::-webkit-input-placeholder {color:#354052;}
+          &::-moz-placeholder          {color:#354052;}/* Firefox 19+ */
+          &:-moz-placeholder           {color:#354052;}/* Firefox 18- */
+          &:-ms-input-placeholder      {color:#354052;}
+        }
       }
     }
     textarea {
@@ -1014,6 +1057,10 @@ input:focus {
   }
   .form-control.recievers {
     padding-right: 180px;
+    &::-webkit-input-placeholder {font-weight: bold;}
+    &::-moz-placeholder          {font-weight: bold;}/* Firefox 19+ */
+    &:-moz-placeholder           {font-weight: bold;}/* Firefox 18- */
+    &:-ms-input-placeholder      {font-weight: bold;}
   }
   input.form-control[disabled] {
     background: #fff;
