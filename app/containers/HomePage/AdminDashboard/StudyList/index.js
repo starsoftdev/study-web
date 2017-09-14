@@ -167,29 +167,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     window.addEventListener('scroll', this.handleBodyScroll);
   }
 
-  componentWillReceiveProps(newProps) {
-    // if filters have changed, we toggle off all selected studies and also clear campaign filter
-    if (this.tableRight) {
-      this.setState({ fixedScrollContainerWidth: (3015 + this.tableRight.clientWidth) });
-    }
-    // if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
-    //   let addFields = this.props.editStudyValues.emailNotifications;
-    //   const values = {
-    //     firstName: newProps.addNotificationProcess.savedUser.firstName,
-    //     lastName: newProps.addNotificationProcess.savedUser.lastName,
-    //     userId: newProps.addNotificationProcess.savedUser.id,
-    //     isChecked: true,
-    //   };
-    //   if (!addFields) {
-    //     addFields = [values];
-    //   } else {
-    //     addFields.push(values);
-    //   }
-    //   const { change } = this.props;
-    //   change('Dashboard.EditStudyForm', 'emailNotifications', addFields);
-    // }
-  }
-
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleBodyScroll);
   }
