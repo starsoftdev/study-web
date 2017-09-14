@@ -140,14 +140,14 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory } = this.props;
+    const { currentPatient, currentPatientCategory, site } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <PatientDetailSection initialValues={formattedPatient} />
+        <PatientDetailSection initialValues={formattedPatient} site={site} />
       );
     }
     return null;
@@ -203,7 +203,7 @@ export class PatientDetailModal extends React.Component {
                 <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
                 <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
                 <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
-                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
+                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Info</li>
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection
