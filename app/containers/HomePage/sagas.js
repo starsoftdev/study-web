@@ -335,7 +335,7 @@ export function* fetchPatientSignUpsWorker(action) {
     const params = {
       method: 'GET',
       query: {
-        timezoneOffset: -new Date().getTimezoneOffset() / 60,
+        timezone: action.currentUser.timezone,
       },
     };
     const response = yield call(request, requestURL, params);
