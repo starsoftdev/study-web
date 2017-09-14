@@ -97,8 +97,6 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
     }
   }
 
-  componentDidUpdate() {}
-
   onClickCurrent(ev) {
     ev.preventDefault();
     const scope = this;
