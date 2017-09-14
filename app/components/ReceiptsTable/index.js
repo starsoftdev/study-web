@@ -77,11 +77,25 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     };
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
     if (this.state.filteredReceipts) {
       this.setState({
         filteredReceipts: null,
       });
+    }
+
+    if (newProps.receipts.length > this.props.receipts.length) {
+      if (this.state.checkAll) {
+        const selectedArr = [];
+        for (const receipt of newProps.receipts) {
+          receipt.selected = true;
+          if (receipt.invoice_pdf_id && receipt.selected) {
+            selectedArr.push(receipt);
+          }
+        }
+        this.selectedReceipts = selectedArr;
+        this.props.selectAll(this.selectedReceipts);
+      }
     }
   }
 
