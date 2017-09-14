@@ -76,24 +76,24 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       });
     }
 
+    if (nextProps.site || nextProps.searchBy || nextProps.range) {
+      this.setState({
+        filteredProposals: this.filter(nextProps.site, nextProps.searchBy, nextProps.range),
+      });
+    }
+
     if (nextProps.proposals.length > this.props.proposals.length) {
       if (this.state.checkAll) {
         const selectedArr = [];
         for (const proposal of nextProps.proposals) {
           proposal.selected = true;
-          if (proposal.selected) {
+          if (proposal.proposalpdfid && proposal.selected) {
             selectedArr.push(proposal);
           }
         }
         this.selectedProposal = selectedArr;
         this.props.selectAll(this.selectedProposal);
       }
-    }
-
-    if (nextProps.site || nextProps.searchBy || nextProps.range) {
-      this.setState({
-        filteredProposals: this.filter(nextProps.site, nextProps.searchBy, nextProps.range),
-      });
     }
   }
 
