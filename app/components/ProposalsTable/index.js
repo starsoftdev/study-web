@@ -70,7 +70,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.proposals) {
+    if (this.state.filteredProposals) {
       this.setState({
         filteredProposals: null,
       });
@@ -151,12 +151,17 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   onClickAll(ev) {
     ev.preventDefault();
     const proposals = this.props.proposals;
+    const selectedArr = [];
+    this.selectedProposal = null;
     for (const proposal of proposals) {
       proposal.selected = (!this.state.checkAll);
+      if (proposal.proposalpdfid && proposal.selected) {
+        selectedArr.push(proposal);
+        this.selectedProposal = selectedArr;
+      }
     }
 
     this.setState({ checkAll: (!this.state.checkAll), proposals }, () => {
-      this.selectedProposal = (this.state.checkAll) ? proposals : null;
       this.props.selectAll(this.selectedProposal);
     });
   }
@@ -380,17 +385,12 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   render() {
     const state = this.state;
     const { getPaginatedProposals, paginationOptions, proposalsStatus } = this.props;
-    const proposalsArr = state.filteredProposals || this.props.proposals;
     const proposals = [];
     const heads = [];
 
-    if (headers) {
-      this.mapHeaders(headers, state, heads);
-    }
-    if (proposalsArr) {
-      this.mapProposals(proposalsArr, proposals);
-    }
-
+    this.mapHeaders(headers, state, heads);
+    this.mapProposals(this.props.proposals, proposals);
+    
     return (
       <div className="table-holder">
         <table className="table">
