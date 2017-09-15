@@ -7,8 +7,8 @@ import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-import { selectSyncErrorBool/*, selectValues*/ } from '../../common/selectors/form.selector';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
+import { selectSyncErrorBool/* , selectValues*/ } from '../../common/selectors/form.selector';
+import { /* normalizePhoneForServer,*/ normalizePhoneDisplay } from '../../common/helper/functions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -54,7 +54,7 @@ export default class UploadPatientsForm extends React.Component {
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
     submitting: React.PropTypes.bool,
-    handleSubmit: React. PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
@@ -73,7 +73,7 @@ export default class UploadPatientsForm extends React.Component {
     this.selectProtocol = this.selectProtocol.bind(this);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     // console.log('componentWillReceiveProps', newProps);
   }
 
@@ -95,7 +95,7 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  /*addPatients(event) {
+  /* addPatients(event) {
     console.log(event);
     event.preventDefault();
     const { currentUser, formError, onClose, newPatients, submitAddPatient, touchFields } = this.props;
@@ -174,107 +174,105 @@ export default class UploadPatientsForm extends React.Component {
       },
     ];
 
-    // {error && <li className="error">{error}</li>}
+    // {error && <span className="error">{error}</span>}
 
-    const renderPatients = ({ fields, meta: { error } }) => {
-      return <div className="fields-holder array clearfix">
-        {fields.map((patient, index) => (
-          <div
-            className={`field-row ${(index === 0) ? 'first' : ''}`}
-            key={index}
-          >
-              <span
-                className="icomoon-icon_trash remove"
-                onClick={() => fields.remove(index)}
-              />
-            <div className="field name pull-left">
-              {(index === 0) &&
+    const renderPatients = ({ fields/* , meta: { error }*/ }) => <div className="fields-holder array clearfix">
+      {fields.map((patient, index) => (
+        <div
+          className={`field-row ${(index === 0) ? 'first' : ''}`}
+          key={index}
+        >
+          <span
+            className="icomoon-icon_trash remove"
+            onClick={() => fields.remove(index)}
+          />
+          <div className="field name pull-left">
+            {(index === 0) &&
               <span className="title">
-                    <label htmlFor="import-patient-name">Name</label>
-                  </span>
+                <label htmlFor="import-patient-name">Name</label>
+              </span>
               }
-              <Field
-                name={`${patient}.name`}
-                component={Input}
-                type="text"
-              />
-            </div>
-            <div className="field email pull-left">
-              {(index === 0) &&
-              <span className="title">
-                    <label htmlFor="import-patient-email">Email</label>
-                  </span>
-              }
-              <Field
-                name={`${patient}.email`}
-                component={Input}
-                type="text"
-              />
-            </div>
-            <div className="field phone pull-left">
-              {(index === 0) &&
-              <span className="title">
-                      <label htmlFor="import-patient-phone">Phone</label>
-                  </span>
-              }
-              <Field
-                name={`${patient}.phone`}
-                component={Input}
-                type="tel"
-                onBlur={(event) => {
-                  this.onPhoneBlur(event, `${patient}.phone`)
-                }}
-              />
-            </div>
-            <div className="field age pull-left">
-              {(index === 0) &&
-              <span className="title">
-                      <label htmlFor="import-patient-phone">Age</label>
-                  </span>
-              }
-              <Field
-                name={`${patient}.age`}
-                component={Input}
-                type="text"
-              />
-            </div>
-            <div className="field gender pull-left">
-              {(index === 0) &&
-              <span className="title">
-                      <label htmlFor="import-patient-phone">Gender</label>
-                  </span>
-              }
-              <Field
-                name={`${patient}.gender`}
-                component={ReactSelect}
-                options={genderOptions}
-              />
-            </div>
-            <div className="field bmi pull-left">
-              {(index === 0) &&
-              <span className="title">
-                      <label htmlFor="import-patient-phone">BMI</label>
-                  </span>
-              }
-              <Field
-                name={`${patient}.bmi`}
-                component={Input}
-                type="text"
-              />
-            </div>
+            <Field
+              name={`${patient}.name`}
+              component={Input}
+              type="text"
+            />
           </div>
+          <div className="field email pull-left">
+            {(index === 0) &&
+              <span className="title">
+                <label htmlFor="import-patient-email">Email</label>
+              </span>
+              }
+            <Field
+              name={`${patient}.email`}
+              component={Input}
+              type="text"
+            />
+          </div>
+          <div className="field phone pull-left">
+            {(index === 0) &&
+              <span className="title">
+                <label htmlFor="import-patient-phone">Phone</label>
+              </span>
+              }
+            <Field
+              name={`${patient}.phone`}
+              component={Input}
+              type="tel"
+              onBlur={(event) => {
+                this.onPhoneBlur(event, `${patient}.phone`);
+              }}
+            />
+          </div>
+          <div className="field age pull-left">
+            {(index === 0) &&
+              <span className="title">
+                <label htmlFor="import-patient-phone">Age</label>
+              </span>
+              }
+            <Field
+              name={`${patient}.age`}
+              component={Input}
+              type="text"
+            />
+          </div>
+          <div className="field gender pull-left">
+            {(index === 0) &&
+              <span className="title">
+                <label htmlFor="import-patient-phone">Gender</label>
+              </span>
+              }
+            <Field
+              name={`${patient}.gender`}
+              component={ReactSelect}
+              options={genderOptions}
+            />
+          </div>
+          <div className="field bmi pull-left">
+            {(index === 0) &&
+              <span className="title">
+                <label htmlFor="import-patient-phone">BMI</label>
+              </span>
+              }
+            <Field
+              name={`${patient}.bmi`}
+              component={Input}
+              type="text"
+            />
+          </div>
+        </div>
         ))}
-        <div className="text-left">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => fields.push()}
-          >
+      <div className="text-left">
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => fields.push()}
+        >
             + Add Patient
           </button>
-        </div>
       </div>
-    };
+    </div>;
 
     return (
       <Form
