@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import _, { map, omit, omitBy, isUndefined } from 'lodash';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
@@ -37,9 +36,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites(currentUser.roleForClient.client_id);
   }
 
-  componentWillReceiveProps(newProps) {
-    const { currentUser, socket } = this.props;
-
+  componentWillReceiveProps() {
     // console.log('componentWillReceiveProps', newProps);
   }
 
