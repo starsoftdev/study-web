@@ -388,7 +388,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
 
     this.mapHeaders(headers, state, heads);
     this.mapProposals(this.props.proposals, proposals);
-    
+
     return (
       <div className="table-holder">
         <table className="table">
