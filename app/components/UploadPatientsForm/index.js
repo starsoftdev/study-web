@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
+import { selectSyncErrorBool/*, selectValues*/ } from '../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
@@ -23,7 +23,7 @@ const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
   indications: selectIndications(),
   isFetchingProtocols: selectIsFetchingProtocols(formName),
-  newPatient: selectValues(formName),
+  // newPatientnewPatient: selectValues(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
   sources: selectSources(),
@@ -49,12 +49,12 @@ export default class UploadPatientsForm extends React.Component {
     formError: React.PropTypes.bool,
     indications: React.PropTypes.array,
     isFetchingProtocols: React.PropTypes.bool,
-    newPatients: React.PropTypes.object,
+    // newPatients: React.PropTypes.object,
     onClose: React.PropTypes.func,
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
     submitting: React.PropTypes.bool,
-    submitAddPatient: React.PropTypes.func,
+    handleSubmit: React. PropTypes.func.isRequired,
     touchFields: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
@@ -68,7 +68,7 @@ export default class UploadPatientsForm extends React.Component {
 
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
-    this.addPatient = this.addPatient.bind(this);
+    // this.addPatients = this.addPatients.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
   }
@@ -77,10 +77,10 @@ export default class UploadPatientsForm extends React.Component {
     // console.log('componentWillReceiveProps', newProps);
   }
 
-  onPhoneBlur(event) {
+  onPhoneBlur(event, name) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
-    blur('phone', formattedPhoneNumber);
+    blur(name, formattedPhoneNumber);
   }
 
   changeSiteLocation(siteId) {
@@ -95,7 +95,8 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  addPatient(event) {
+  /*addPatients(event) {
+    console.log(event);
     event.preventDefault();
     const { currentUser, formError, onClose, newPatients, submitAddPatient, touchFields } = this.props;
 
@@ -106,7 +107,7 @@ export default class UploadPatientsForm extends React.Component {
 
     const patient = Object.assign({}, newPatients);
     patient.client_id = currentUser.roleForClient.client_id;
-    /* normalizing the phone number */
+    /!* normalizing the phone number *!/
     patient.phone = normalizePhoneForServer(newPatients.phone);
     patient.indication_id = newPatients.indication;
     delete patient.indication;
@@ -121,7 +122,7 @@ export default class UploadPatientsForm extends React.Component {
     patient.source_id = newPatients.source;
     delete patient.source;
     submitAddPatient(patient, onClose);
-  }
+  }*/
 
   selectIndication(indicationId) {
     if (indicationId) {
@@ -145,7 +146,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   render() {
-    const { submitting, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
+    const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -163,133 +164,124 @@ export default class UploadPatientsForm extends React.Component {
       label: source.type,
       value: source.id,
     }));
+    const genderOptions = [
+      {
+        label: 'Male',
+        value: 'Male',
+      }, {
+        label: 'Female',
+        value: 'Female',
+      },
+    ];
 
-    const renderPatient = ({ input, label, type, meta: { touched, error } }) => (
-      <div className="field-row">
-        <strong className="label required">
-          <label htmlFor="import-patient-email">{label}</label>
-        </strong>
-        <Field
-          name="email"
-          component={Input}
-          type={type}
-          className="field"
-          placeholder={label}
-          id="import-patient-email"
-        />
-      </div>
-    );
+    // {error && <li className="error">{error}</li>}
 
-    const renderPatients = ({ fields, meta: { error } }) => (
-      <ul>
-        <li>
-          <button type="button" onClick={() => fields.push()}>Add Patient</button>
-        </li>
+    const renderPatients = ({ fields, meta: { error } }) => {
+      return <div className="fields-holder array clearfix">
         {fields.map((patient, index) => (
-          <li key={index}>
-            <button
-              type="button"
-              title="Remove Patient"
-              onClick={() => fields.remove(index)}
-            >
-              Remove Patient
-            </button>
-            <div className="field-row">
-              <strong className="label required">
-                <label htmlFor="import-patient-email">Email</label>
-              </strong>
+          <div
+            className={`field-row ${(index === 0) ? 'first' : ''}`}
+            key={index}
+          >
+              <span
+                className="icomoon-icon_trash remove"
+                onClick={() => fields.remove(index)}
+              />
+            <div className="field name pull-left">
+              {(index === 0) &&
+              <span className="title">
+                    <label htmlFor="import-patient-name">Name</label>
+                  </span>
+              }
+              <Field
+                name={`${patient}.name`}
+                component={Input}
+                type="text"
+              />
+            </div>
+            <div className="field email pull-left">
+              {(index === 0) &&
+              <span className="title">
+                    <label htmlFor="import-patient-email">Email</label>
+                  </span>
+              }
               <Field
                 name={`${patient}.email`}
                 component={Input}
                 type="text"
-                className="field"
-                id="import-patient-email"
               />
             </div>
-            <div className="field-row">
-              <strong className="label required">
-                <label htmlFor="import-patient-phone">Phone </label>
-              </strong>
+            <div className="field phone pull-left">
+              {(index === 0) &&
+              <span className="title">
+                      <label htmlFor="import-patient-phone">Phone</label>
+                  </span>
+              }
               <Field
                 name={`${patient}.phone`}
                 component={Input}
                 type="tel"
-                className="field"
-                id="import-patient-phone"
-                onBlur={this.onPhoneBlur}
+                onBlur={(event) => {
+                  this.onPhoneBlur(event, `${patient}.phone`)
+                }}
               />
             </div>
-            {/*<Field
-              name={`${patient}.email`}
-              type="text"
-              component={renderPatient}
-              label="email"
-            />*/}
-            {/*<Field
-              name={`${patient}.phone`}
-              type="text"
-              component={renderPatient}
-              label="phone"
-            />*/}
-          </li>
-        ))}
-        {error && <li className="error">{error}</li>}
-      </ul>
-    );
-
-    return (
-      <Form className="upload-patients-form" onSubmit={this.addPatient}>
-        {/*<div className="field-row">
-          <strong className="label required">
-            <label htmlFor="import-patient-first-name">Patient Name</label>
-          </strong>
-          <div className="field">
-            <div className="row">
+            <div className="field age pull-left">
+              {(index === 0) &&
+              <span className="title">
+                      <label htmlFor="import-patient-phone">Age</label>
+                  </span>
+              }
               <Field
-                name="firstName"
+                name={`${patient}.age`}
                 component={Input}
                 type="text"
-                placeholder="First Name"
-                className="col pull-left"
-                id="import-patient-first-name"
               />
+            </div>
+            <div className="field gender pull-left">
+              {(index === 0) &&
+              <span className="title">
+                      <label htmlFor="import-patient-phone">Gender</label>
+                  </span>
+              }
               <Field
-                name="lastName"
+                name={`${patient}.gender`}
+                component={ReactSelect}
+                options={genderOptions}
+              />
+            </div>
+            <div className="field bmi pull-left">
+              {(index === 0) &&
+              <span className="title">
+                      <label htmlFor="import-patient-phone">BMI</label>
+                  </span>
+              }
+              <Field
+                name={`${patient}.bmi`}
                 component={Input}
                 type="text"
-                placeholder="Last Name"
-                className="col pull-left"
-                id="import-patient-last-name"
               />
             </div>
           </div>
-        </div>*/}
-        {/*<div className="field-row">
-          <strong className="label required">
-            <label htmlFor="import-patient-email"> Patient Email </label>
-          </strong>
-          <Field
-            name="email"
-            component={Input}
-            type="text"
-            className="field"
-            id="import-patient-email"
-          />
-        </div>*/}
-        {/*<div className="field-row">
-          <strong className="label required">
-            <label htmlFor="import-patient-phone"> Patient Phone </label>
-          </strong>
-          <Field
-            name="phone"
-            component={Input}
-            type="tel"
-            className="field"
-            id="import-patient-phone"
-            onBlur={this.onPhoneBlur}
-          />
-        </div>*/}
-        <div className="field-row">
+        ))}
+        <div className="text-left">
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => fields.push()}
+          >
+            + Add Patient
+          </button>
+        </div>
+      </div>
+    };
+
+    return (
+      <Form
+        className="upload-patients-form"
+        onSubmit={handleSubmit}
+      >
+        <div className="field-row main">
           <strong className="label required">
             <label>Site Location</label>
           </strong>
@@ -302,7 +294,7 @@ export default class UploadPatientsForm extends React.Component {
             onChange={this.changeSiteLocation}
           />
         </div>
-        <div className="field-row">
+        <div className="field-row main">
           <strong className="label">
             <label>Protocol</label>
           </strong>
@@ -316,7 +308,7 @@ export default class UploadPatientsForm extends React.Component {
             onChange={this.selectProtocol}
           />
         </div>
-        <div className="field-row">
+        <div className="field-row main">
           <strong className="label required">
             <label>Indication</label>
           </strong>
@@ -329,7 +321,7 @@ export default class UploadPatientsForm extends React.Component {
             onChange={this.selectIndication}
           />
         </div>
-        <div className="field-row">
+        <div className="field-row main">
           <strong className="label required">
             <label>Source</label>
           </strong>
