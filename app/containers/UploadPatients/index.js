@@ -26,6 +26,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   constructor(props) {
     super(props);
+
+    this.onSubmitForm = this.onSubmitForm.bind(this);
   }
 
   componentWillMount() {
@@ -41,6 +43,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     // console.log('componentWillReceiveProps', newProps);
   }
 
+  onSubmitForm(params) {
+    console.log('onSubmitForm', params);
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -48,7 +54,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
 
-          <UploadPatientsForm />
+          <UploadPatientsForm onSubmit={this.onSubmitForm} />
         </section>
       </div>
     );
