@@ -1,9 +1,3 @@
-/*
- *
- * Patient Database page constants
- *
- */
-
 /* eslint-disable no-multi-spaces */
 
 export const FETCH_PATIENTS                     = 'PatientDatabasePage/FETCH_PATIENTS';
