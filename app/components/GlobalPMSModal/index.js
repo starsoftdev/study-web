@@ -9,13 +9,14 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import { filter } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../components/LoadingSpinner';
-
+import ReactSelect from '../../components/Input/ReactSelect';
 import Input from '../../components/Input';
 import formValidator from './validator';
 import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
@@ -26,6 +27,7 @@ import {
   selectPatientMessages,
   selectClientCredits,
   selectGlobalPMSPaginationOptions,
+  selectSiteLocations,
 } from '../../containers/App/selectors';
 import { readStudyPatientMessages } from '../../containers/StudyPage/actions';
 import MessageItem from './MessageItem';
@@ -84,6 +86,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     readStudyPatientMessages: React.PropTypes.func,
     addMessagesCountStat: React.PropTypes.func,
     subtractStudyUnreadMessages: React.PropTypes.func,
+    siteLocations: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -95,12 +98,14 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.loadItems = this.loadItems.bind(this);
+    this.siteLocationChanged = this.siteLocationChanged.bind(this);
     this.state = {
       selectedPatient: { id: 0 },
       socketBinded: false,
       playSound: Sound.status.STOPPED,
       searchBy: null,
       searchTimer: null,
+      siteLocation: null,
     };
   }
 
@@ -176,6 +181,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
+  siteLocationChanged(value) {
+    this.setState({ siteLocation: value });
+  }
+
   handleKeyPress(e) {
     let value;
     if (e && e.target) {
@@ -205,7 +214,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   render() {
-    const { sitePatients, patientMessages, sendStudyPatientMessages } = this.props;
+    const { sitePatients, patientMessages, sendStudyPatientMessages, siteLocations } = this.props;
+    const { siteLocation } = this.state;
     const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
     sitePatients.details.forEach((item) => {
@@ -213,7 +223,12 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         sitePatientArray.push(item);
       }
     });
-    const sitePatientsListContents = sitePatients.details.map((item, index) => {
+    let filteredPatients = sitePatients.details;
+    if (siteLocation) {
+      filteredPatients = filter(sitePatients.details, item => item.site_id === siteLocation);
+    }
+
+    const sitePatientsListContents = filteredPatients.map((item, index) => {
       const firstname = item.first_name ? item.first_name.toUpperCase() : '';
       const lastname = item.last_name ? item.last_name.toUpperCase() : '';
       if (!this.state.searchBy || firstname.includes(this.state.searchBy.toUpperCase()) || lastname.includes(this.state.searchBy.toUpperCase())) {
@@ -295,6 +310,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                             }}
                           />
                         </div>
+                        <div className="field">
+                          <Field
+                            name="siteLocation"
+                            component={ReactSelect}
+                            placeholder="Select Site Location"
+                            options={siteLocations}
+                            onChange={this.siteLocationChanged}
+                          />
+                        </div>
                       </div>
                       <ul className="tabset list-unstyled">
                         {sitePatientsListContents}
@@ -347,6 +371,7 @@ const mapStateToProps = createStructuredSelector({
   hasError: selectGlobalPMSFormError(),
   formValues: selectGlobalPMSFormValues(),
   globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
+  siteLocations: selectSiteLocations(),
 });
 
 function mapDispatchToProps(dispatch) {
