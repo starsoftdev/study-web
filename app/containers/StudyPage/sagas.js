@@ -211,8 +211,10 @@ function* fetchStudyTextStats(action) {
     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
     const options = {
       method: 'GET',
-      query: {},
     };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
     if (campaignId) {
       options.query.campaignId = campaignId;
     }
