@@ -481,6 +481,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <StudyAddForm
               handleSubmit={this.uploadStudyAdd}
               changeStudyAddProcess={changeStudyAddProcess}
+              closeModal={this.closeStudyAddModal}
             />
           </Modal.Body>
         </Modal>
