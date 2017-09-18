@@ -60,24 +60,24 @@ class StudyStats extends React.Component {
               <div className="box">
                 <i className="icomoon-phone" />
                 <strong className="number">{stats.calls ? stats.calls : 0}</strong>
-                <h3>CALLS PLACED</h3>
+                <h3>CALL RECEIVED</h3>
               </div>
               <div className="box">
                 <i className="icomoon-icon_clock_alt" />
                 <strong className="number">{callsDuration}</strong>
-                <h3>CALLS DURATION</h3>
+                <h3>CALL DURATION</h3>
               </div>
             </Col>
             <Col xs={4} className="orange">
               <div className="box same-height-right">
                 <i className="icomoon-chat-up" />
                 <strong className="number">{stats.textsSent ? stats.textsSent : 0}</strong>
-                <h3>TEXTS SENT</h3>
+                <h3>TEXT SENT</h3>
               </div>
               <div className="box same-height-right">
                 <i className="icomoon-chat-down" />
                 <strong className="number">{stats.textsReceived ? stats.textsReceived : 0}</strong>
-                <h3>TEXTS RECEIVED</h3>
+                <h3>TEXT RECEIVED</h3>
               </div>
             </Col>
           </Row>

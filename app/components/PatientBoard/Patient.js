@@ -44,7 +44,7 @@ class Patient extends React.Component {
   static propTypes = {
     category: React.PropTypes.object.isRequired,
     connectDragSource: React.PropTypes.func.isRequired,
-    currentUser: React.PropTypes.object.isRequired,
+    currentSite: React.PropTypes.object.isRequired,
     currentPatientId: React.PropTypes.number,
     isDragging: React.PropTypes.bool.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
@@ -71,10 +71,10 @@ class Patient extends React.Component {
   }
 
   renderTextCreatedDate() {
-    const { currentUser, patient: { lastTextMessage } } = this.props;
+    const { currentSite, patient: { lastTextMessage } } = this.props;
     if (lastTextMessage && lastTextMessage.dateCreated) {
       return (
-        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentSite.timezone).format('MM/DD/YY [at] h:mm A')}</time>
       );
     }
     return null;

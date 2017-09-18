@@ -1,7 +1,7 @@
 import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
-  patients: { presence: { message: '^Error! No patients selected.' } },
+  message: { presence: { message: '^Message is required.' } },
   email: {
     presence: {
       message: '^Email cannot be blank',
@@ -11,6 +11,7 @@ const schema = {
     },
   },
   subject: { presence: { message: '^Subject is required.' } },
+  patients: { presence: { message: '^Error! No patients selected.' } },
 };
 
 export default validatorFactory(schema);
