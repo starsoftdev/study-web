@@ -10,12 +10,13 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
     messageData: PropTypes.object,
     currentUser: PropTypes.object,
     postMsg: PropTypes.bool,
+    site: React.PropTypes.object,
   };
 
   render() {
-    const { messageData, currentUser } = this.props;
+    const { messageData, currentUser, site } = this.props;
     const cts = messageData.twilioCallRecord.created;
-    const cdate = `${moment.utc(cts).format('MM/DD/YY')} at ${moment(cts).format('h:mm A')}`;
+    const cdate = `${moment.tz(cts.dateCreated, site.timezone).format('MM/DD/YY [at] h:mm A')}`;
 
     let containerClassName = 'post-holder call';
     // todo remove and put back Anonymous behavior

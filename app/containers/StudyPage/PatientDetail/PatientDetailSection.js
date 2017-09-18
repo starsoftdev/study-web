@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reset, blur, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -33,6 +34,7 @@ class PatientDetailSection extends React.Component {
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
     formDidChange: React.PropTypes.bool,
+    site: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -89,7 +91,7 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting, initialValues } = this.props;
+    const { submitting, initialValues, site } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
@@ -151,9 +153,27 @@ class PatientDetailSection extends React.Component {
             />
           </div>
         </div>
+
         <div className="field-row">
-          <strong className="label" />
+          <strong className="label">
+            <label htmlFor="new-patient-phone">Signed Up</label>
+          </strong>
           <div className="field">
+            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, site.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label htmlFor="new-patient-phone">Updated</label>
+          </strong>
+          <div className="field">
+            <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, site.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+          </div>
+        </div>
+
+        <div className="field-row">
+          <div className="label">
             <Field
               name="unsubscribed"
               type="checkbox"
