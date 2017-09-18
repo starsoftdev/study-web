@@ -182,7 +182,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   siteLocationChanged(value) {
-    this.setState({ siteLocation: value });
+    this.setState({ siteLocation: value }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
   }
 
   handleKeyPress(e) {
@@ -289,7 +289,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                       pageStart={0}
                       loadMore={this.loadItems}
                       initialLoad={false}
-                      hasMore={this.props.globalPMSPaginationOptions.hasMoreItems}
+                      hasMore={this.props.globalPMSPaginationOptions.hasMoreItems && filteredPatients.length > 0}
                       loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
                       useWindow={false}
                     >
