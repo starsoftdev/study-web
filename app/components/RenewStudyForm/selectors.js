@@ -48,9 +48,17 @@ const selectRenewStudyFormPatientMessagingSuiteValue = () => createSelector(
   substate => get(substate, 'renewStudy.values.patientMessagingSuite', null)
 );
 
-const selectRenewStudyFormCallTrackingValue = () => createSelector(
+const selectCallTracking = () => createSelector(
   selectFormDomain(),
   substate => get(substate, 'renewStudy.values.callTracking', null)
+);
+
+const selectLeadsCount = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const leads = get(substate, 'renewStudy.values.leadSource', []);
+    return leads.length;
+  }
 );
 
 const selectRenewStudyFormStartDateValue = () => createSelector(
@@ -71,7 +79,8 @@ export {
   selectRenewStudyFormCampaignLengthValue,
   selectRenewStudyFormcondenseTwoWeeksValue,
   selectRenewStudyFormPatientMessagingSuiteValue,
-  selectRenewStudyFormCallTrackingValue,
+  selectCallTracking,
   selectRenewStudyFormStartDateValue,
   selectRenewStudyFormNotesValue,
+  selectLeadsCount,
 };
