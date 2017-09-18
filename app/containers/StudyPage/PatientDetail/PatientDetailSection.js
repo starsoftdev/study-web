@@ -173,8 +173,7 @@ class PatientDetailSection extends React.Component {
         </div>
 
         <div className="field-row">
-          <strong className="label" />
-          <div className="field">
+          <div className="label">
             <Field
               name="unsubscribed"
               type="checkbox"
