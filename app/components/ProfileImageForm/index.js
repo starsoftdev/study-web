@@ -10,7 +10,8 @@ import ReactAvatarEditor from 'react-avatar-editor';
 // import Input from '../../components/Input';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
-import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
+import defaultMaleImage from '../../assets/images/Default-User-Img-Dr-Full.png';
+import defaultFemaleImage from '../../assets/images/Default-User-Img-Dr-Girl.png';
 
 @reduxForm(
   {
@@ -43,7 +44,8 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
     this.handleScale = this.handleScale.bind(this);
     this.handleBorderRadius = this.handleBorderRadius.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
-    this.useDefaultImage = this.useDefaultImage.bind(this);
+    this.useDefaultMaleImage = this.useDefaultMaleImage.bind(this);
+    this.useDefaultFemaleImage = this.useDefaultFemaleImage.bind(this);
     this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
     this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
     this.handleLoadSuccess = this.handleLoadSuccess.bind(this);
@@ -113,8 +115,12 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
     this.setState({ selectedImage: img });
   }
 
-  useDefaultImage() {
-    this.setState({ selectedImage: defaultImage, usingDefaultImage: true });
+  useDefaultMaleImage() {
+    this.setState({ selectedImage: defaultMaleImage, usingDefaultImage: true });
+  }
+
+  useDefaultFemaleImage() {
+    this.setState({ selectedImage: defaultFemaleImage, usingDefaultImage: true });
   }
 
   logCallback(e) {
@@ -185,7 +191,10 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
             </div>
           </div>
           <div className="field-row">
-            <a className="link" onClick={this.useDefaultImage}>Use Default Image</a>
+            <a className="link" onClick={this.useDefaultMaleImage}>Use Default Male Image</a>
+          </div>
+          <div className="field-row">
+            <a className="link" onClick={this.useDefaultFemaleImage}>Use Default Female Image</a>
           </div>
           <div className="text-right">
             <input type="button" className="btn btn-default" onClick={this.handleSave} value="update" />

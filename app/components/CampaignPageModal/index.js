@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
 
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -148,17 +148,17 @@ export class CampaignPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess } = this.props;
+    const { openModal, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
-
+    const timezone = (study && study.timezone) ? study.timezone : 'utc';
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
       return { label: c.orderNumber, value: c.id };
     });
-    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : undefined;
-    const dateTo = formValues.dateto ? moment(formValues.dateto) : undefined;
+    const dateFrom = formValues.datefrom ? moment(formValues.datefrom).tz(timezone) : undefined;
+    const dateTo = formValues.dateto ? moment(formValues.dateto).tz(timezone) : undefined;
     let fromMinDate = null;
     let toMaxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
@@ -243,8 +243,7 @@ export class CampaignPageModal extends React.Component {
                       className={'form-control datepicker-input'}
                       initialDate={dateFrom}
                       minDate={fromMinDate}
-                      maxDate={moment(formValues.dateto).subtract(1, 'days').utc()}
-                      useUTC
+                      maxDate={moment(formValues.dateto).subtract(1, 'days')}
                     />
                   </div>
                 </div>
@@ -259,9 +258,8 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateTo}
-                      minDate={moment(formValues.datefrom).add(1, 'days').utc()}
+                      minDate={moment(formValues.datefrom).add(1, 'days')}
                       maxDate={toMaxDate}
-                      useUTC
                     />
                   </div>
                 </div>

@@ -479,8 +479,10 @@ function* submitTextBlast() {
               offset: null,
             },
           },
-          excludePatients: formValues.uncheckedPatients,
         };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
@@ -507,9 +509,8 @@ function* submitTextBlast() {
 function* submitEmailBlast() {
   while (true) {
     // listen for the SUBMIT_EMAIL_BLAST action
-    const { patients, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+    const { filter, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
 
-    console.log('submitEmailBlast', patients, uncheckedPatients, message, from, subject, clientRoleId);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -521,9 +522,7 @@ function* submitEmailBlast() {
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
-          patientsIDs: patients.map(patient => (
-            patient.id
-          )),
+          filter,
           uncheckedPatients,
           from,
           subject,
@@ -532,9 +531,9 @@ function* submitEmailBlast() {
         }),
       });
       onClose();
-      toastr.success('', 'Success! Your text blast have been sent.');
+      toastr.success('', 'Success! Your email blast have been sent.');
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
