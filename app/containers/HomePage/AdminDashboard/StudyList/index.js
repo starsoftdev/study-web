@@ -262,6 +262,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   toggleStudy(studyId, checked) {
     this.props.toggleStudy(studyId, checked);
     this.showEditInformationModal(false);
+    this.showThankYouPageModal(false);
+    this.showLandingPageModal(false);
 
     let selectedAllStudies = true;
     let selectedStudyCount = 0;

@@ -38,7 +38,7 @@ class OtherSection extends React.Component {
     params: React.PropTypes.object,
     active: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func.isRequired,
-    currentUser: React.PropTypes.object,
+    site: React.PropTypes.object,
     fetchIndications: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
@@ -211,7 +211,7 @@ class OtherSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting } = this.props;
+    const { active, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, loading, submitting } = this.props;
 
     if (initialValues) {
       const overlayValues = { ...initialValues };
@@ -223,19 +223,6 @@ class OtherSection extends React.Component {
       return (
         <div className={classNames('item others', { active })}>
           <div className="item-holder">
-            <div className="dates">
-              <strong className="title">Dates</strong>
-              <ul className="list-unstyled list-radios">
-                <li>
-                  <span className="title">Signed Up</span>
-                  <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
-                </li>
-                <li>
-                  <span className="title">Updated</span>
-                  <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
-                </li>
-              </ul>
-            </div>
             <Form className="sub-holder form-lightbox" onSubmit={this.onSubmit}>
               <strong className="title">TAGS</strong>
               <div className="field-row">
