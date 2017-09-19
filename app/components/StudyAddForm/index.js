@@ -30,7 +30,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
-    closeModal: React.PropTypes.func,
+    removeStudyAd: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -146,9 +146,6 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       selectedImageHeight: null,
       pdfFile: null,
       pdfPreview: null,
-    }, () => {
-      this.props.handleSubmit(this.state.pdfFile);
-      this.props.closeModal();
     });
   }
 
@@ -254,7 +251,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
             </div>
           </div>
           <div className="field-row">
-            <a className="link" onClick={this.clearPreview}>Remove Image</a>
+            <a className="link" onClick={this.props.removeStudyAd}>Remove Image</a>
           </div>
           <div className="text-right">
             <button

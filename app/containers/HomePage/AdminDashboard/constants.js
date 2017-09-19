@@ -48,6 +48,10 @@ export const CHANGE_STUDY_ADD_SUCCESS                    = 'DashboardPage/CHANGE
 export const CHANGE_STUDY_ADD_ERROR                      = 'DashboardPage/CHANGE_STUDY_ADD_ERROR';
 export const RESET_CHANGE_STUDY_ADD_STATE                = 'DashboardPage/RESET_CHANGE_STUDY_ADD_STATE';
 
+export const REMOVE_STUDY_AD                            = 'DashboardPage/REMOVE_STUDY_AD';
+export const REMOVE_STUDY_AD_SUCCESS                    = 'DashboardPage/REMOVE_STUDY_AD_SUCCESS';
+export const REMOVE_STUDY_AD_ERROR                      = 'DashboardPage/REMOVE_STUDY_AD_ERROR';
+
 export const CLEAR_FILTERS                               = 'DashboardPage/CLEAR_FILTERS';
 
 export const FETCH_ALL_CLIENT_USERS                      = 'DashboardPage/FETCH_ALL_CLIENT_USERS';
