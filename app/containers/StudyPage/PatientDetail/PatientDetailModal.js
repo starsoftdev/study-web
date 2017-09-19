@@ -41,6 +41,7 @@ export class PatientDetailModal extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    site: React.PropTypes.object,
     openPatientModal: React.PropTypes.bool.isRequired,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
@@ -121,7 +122,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { carousel, currentPatient, currentPatientCategory, currentUser, params } = this.props;
+    const { carousel, currentPatient, currentPatientCategory, site, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -132,21 +133,21 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection active={carousel.other} initialValues={formattedPatient} currentUser={currentUser} params={params} />
+        <OtherSection active={carousel.other} initialValues={formattedPatient} site={site} params={params} />
       );
     }
     return null;
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory } = this.props;
+    const { currentPatient, currentPatientCategory, site } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <PatientDetailSection initialValues={formattedPatient} />
+        <PatientDetailSection initialValues={formattedPatient} site={site} />
       );
     }
     return null;
@@ -202,7 +203,7 @@ export class PatientDetailModal extends React.Component {
                 <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
                 <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
                 <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
-                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Other</li>
+                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Info</li>
               </ol>
               <div className="carousel-inner" role="listbox">
                 <NotesSection
@@ -226,6 +227,7 @@ export class PatientDetailModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
+  site: Selector.selectSite(),
   carousel: Selector.selectCarousel(),
   currentPatient: Selector.selectCurrentPatient(),
   currentPatientNotes: Selector.selectCurrentPatientNotes(),

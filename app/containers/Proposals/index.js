@@ -100,15 +100,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.proposals) {
-      for (const proposal of nextProps.proposals) {
-        proposal.selected = false;
-      }
-      this.setState({
-        proposals: nextProps.proposals,
-      });
-    }
-
     const { currentUser, siteLocations } = nextProps;
 
     if (siteLocations.length > 0 && this.props.siteLocations.length < 1) {
