@@ -77,6 +77,8 @@ import {
   DOWNLOAD_CLIENT_REPORT,
   GENERATE_PATIENT_REFERRAL,
   DOWNLOAD_PATIENT_REFERRAL,
+  SUBMIT_EMAIL,
+  SUBMIT_EMAIL_SUCCESS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -490,6 +492,25 @@ export function submitPatientNote(studyId, patientId, patientCategoryId, current
     patientCategoryId,
     currentUser,
     note,
+  };
+}
+
+export function submitEmail(studyId, patientId, currentUser, email, message, subject) {
+  return {
+    type: SUBMIT_EMAIL,
+    studyId,
+    patientId,
+    currentUser,
+    email,
+    message,
+    subject,
+  };
+}
+
+export function submitEmailSuccess(payload) {
+  return {
+    type: SUBMIT_EMAIL_SUCCESS,
+    payload,
   };
 }
 
