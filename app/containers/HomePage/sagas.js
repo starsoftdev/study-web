@@ -40,6 +40,7 @@ import {
   CHANGE_STUDY_STATUS,
   UPDATE_LANDING_PAGE,
   CHANGE_STUDY_ADD,
+  REMOVE_STUDY_AD,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_PATIENT_THANK_YOU_EMAIL,
   FETCH_MESSAGING_NUMBERS,
@@ -112,6 +113,8 @@ import {
   fetchCampaignsByStudy,
   fetchFive9ListSuccess,
   fetchFive9ListError,
+  removeStudyAdSuccess,
+  removeStudyAdError,
 } from './AdminDashboard/actions';
 
 import {
@@ -1032,6 +1035,33 @@ export function* changeStudyAddWorker(action) {
   }
 }
 
+export function* removeStudyAdWatcher() {
+  yield* takeLatest(REMOVE_STUDY_AD, removeStudyAdWorker);
+}
+
+export function* removeStudyAdWorker(action) {
+  const { studyId } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/remove-study-add`;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ studyId }),
+    };
+
+    const response = yield call(request, requestURL, options);
+    toastr.success('', 'Success! Study ad has been removed.');
+    yield put(removeStudyAdSuccess(response));
+  } catch (err) {
+    toastr.error('Error!');
+    yield put(removeStudyAdError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* updateThankYouPageWatcher() {
   yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
 }
@@ -1258,6 +1288,7 @@ export function* homePageSaga() {
   const watcherO = yield fork(addStudyIndicationTagWatcher);
   const watcherP = yield fork(removeStudyIndicationTagWatcher);
   const watcherR = yield fork(fetchFive9ListWatcher);
+  const watcherS = yield fork(removeStudyAdWatcher);
 
   // Suspend execution until location changes
   const options = yield take(LOCATION_CHANGE);
@@ -1306,6 +1337,7 @@ export function* homePageSaga() {
     yield cancel(watcherO);
     yield cancel(watcherP);
     yield cancel(watcherR);
+    yield cancel(watcherS);
     if (options.payload.pathname !== '/app') {
       yield put(clearFilters());
       yield put(reset('dashboardFilters'));

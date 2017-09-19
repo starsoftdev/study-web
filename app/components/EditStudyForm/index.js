@@ -17,6 +17,7 @@ import { selectEditedStudy, selectAddNotificationProcess, selectHomePageClientAd
 import StudyAddForm from '../../components/StudyAddForm';
 import {
   changeStudyAdd,
+  removeStudyAd,
   resetChangeStudyAddState,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
@@ -34,6 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (name, value) => dispatch(change(formName, name, value)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
   submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+  removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
   resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   resetForm: () => dispatch(reset(formName)),
 });
@@ -64,6 +66,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     clientAdmins: PropTypes.object,
     fetchClientAdmins: PropTypes.func.isRequired,
     submitStudyAdd: PropTypes.func.isRequired,
+    removeStudyAd: PropTypes.func.isRequired,
     changeStudyAddProcess: PropTypes.any,
     updatedStudyAd: PropTypes.any,
     resetChangeAddState: PropTypes.func.isRequired,
@@ -88,6 +91,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.handleFileChange = this.handleFileChange.bind(this);
 
@@ -316,6 +320,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
   }
 
+  removeStudyAd() {
+    this.props.removeStudyAd(this.state.currentStudy.id);
+    this.closeStudyAddModal();
+  }
+
   renderEmailList() {
     const { change, formValues } = this.props;
 
@@ -481,7 +490,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <StudyAddForm
               handleSubmit={this.uploadStudyAdd}
               changeStudyAddProcess={changeStudyAddProcess}
-              closeModal={this.closeStudyAddModal}
+              removeStudyAd={this.removeStudyAd}
             />
           </Modal.Body>
         </Modal>
