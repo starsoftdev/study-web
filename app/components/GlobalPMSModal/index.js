@@ -15,7 +15,6 @@ import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import InfiniteScroll from 'react-infinite-scroller';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Input from '../../components/Input';
 import formValidator from './validator';
@@ -182,7 +181,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   siteLocationChanged(value) {
-    this.setState({ siteLocation: value }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
+    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
   }
 
   handleKeyPress(e) {
@@ -241,7 +240,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       }
       return '';
     });
-    const patientMessageListContents = patientMessages.details.map((item, index) => {
+    const pm = this.state.selectedPatient.id === 0 ? [] : patientMessages.details;
+    const patientMessageListContents = pm.map((item, index) => {
       if (item.text_message_id) {
         return (<MessageItem
           messageData={item}
@@ -290,7 +290,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                       loadMore={this.loadItems}
                       initialLoad={false}
                       hasMore={this.props.globalPMSPaginationOptions.hasMoreItems && filteredPatients.length > 0}
-                      loader={<div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
                       useWindow={false}
                     >
                       <div className="custom-select-drop">
