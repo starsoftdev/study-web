@@ -742,7 +742,6 @@ function* submitEmail() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
     const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
-    console.log('submitEmail', studyId, patientId, currentUser, email, message, subject);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
