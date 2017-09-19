@@ -288,7 +288,7 @@ const initialState = {
       saving: false,
     },
     globalPMSPaginationOptions: {
-      hasMoreItems: true,
+      hasMoreItems: false,
       page: 1,
       search: '',
     },
@@ -929,7 +929,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS:
       baseDataInnerState = {
         clientCredits: {
-          details: {},
+          details: state.baseData.clientCredits.details,
           fetching: true,
           error: null,
         },
@@ -947,7 +947,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS_ERROR:
       baseDataInnerState = {
         clientCredits: {
-          details: {},
+          details: state.baseData.clientCredits.details,
           fetching: false,
           error: payload,
         },

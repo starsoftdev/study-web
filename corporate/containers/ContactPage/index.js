@@ -120,6 +120,9 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
     /* normalizing the phone number */
     contact.phone = normalizePhoneForServer(newContact.phone);
     submitForm(contact);
+    if (this.recaptcha) {
+      this.recaptcha.reset();
+    }
   }
 
   render() {

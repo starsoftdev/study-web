@@ -479,8 +479,10 @@ function* submitTextBlast() {
               offset: null,
             },
           },
-          excludePatients: formValues.uncheckedPatients,
         };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),

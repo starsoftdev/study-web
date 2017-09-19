@@ -219,19 +219,6 @@ export default class AddPatientForm extends React.Component {
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Indication</label>
-          </strong>
-          <Field
-            name="indication"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Indication"
-            options={indicationOptions}
-            onChange={this.selectIndication}
-          />
-        </div>
-        <div className="field-row form-group">
-          <strong className="label required">
             <label>Site Location</label>
           </strong>
           <Field
@@ -255,6 +242,19 @@ export default class AddPatientForm extends React.Component {
             options={protocolOptions}
             disabled={isFetchingProtocols || !this.state.siteLocation}
             onChange={this.selectProtocol}
+          />
+        </div>
+        <div className="field-row form-group">
+          <strong className="label required">
+            <label>Indication</label>
+          </strong>
+          <Field
+            name="indication"
+            component={ReactSelect}
+            className="field"
+            placeholder="Select Indication"
+            options={indicationOptions}
+            onChange={this.selectIndication}
           />
         </div>
         <div className="field-row">
