@@ -146,23 +146,23 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
   const { studyId, text, campaignId, sourceId } = action;
 
   try {
-    // TODO fix landing page views endpoint to have better performance
-    const queryParams = {};
-
+    const options = {
+      method: 'GET',
+    };
+    if (text || campaignId || sourceId) {
+      options.query = {};
+    }
     if (campaignId) {
-      queryParams.campaignId = campaignId;
+      options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      queryParams.sourceId = sourceId;
+      options.query.sourceId = sourceId;
     }
     if (text) {
-      queryParams.text = text;
+      options.query.text = text;
     }
-    const queryString = composeQueryString(queryParams);
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?${queryString}`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    const response = yield call(request, requestURL, options);
     yield put(studyViewsStatFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
@@ -213,8 +213,10 @@ function* fetchStudyTextStats(action) {
     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
     const options = {
       method: 'GET',
-      query: {},
     };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
     if (campaignId) {
       options.query.campaignId = campaignId;
     }

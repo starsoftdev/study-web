@@ -449,7 +449,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           />
         </div>
         <div className="field-row">
-          <strong className="label" />
+          <strong className="label">
+            <label htmlFor="unsubscribed">Unsubscribe</label>
+          </strong>
           <div className="field">
             <Field
               name="unsubscribed"
@@ -457,7 +459,6 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               component={Checkbox}
               className="pull-left"
             />
-            <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
         </div>
         <div className="btn-block text-right">
