@@ -28,6 +28,7 @@ import {
   resetLandingPageState,
   changeStudyAdd,
   resetChangeStudyAddState,
+  removeStudyAd,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectLandingPageUpdateProcess,
@@ -45,6 +46,7 @@ function mapDispatchToProps(dispatch) {
     resetState: () => dispatch(resetLandingPageState()),
     resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
     submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+    removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
@@ -74,6 +76,7 @@ export class LandingPageModal extends React.Component {
     updateLandingPageProcess: React.PropTypes.any,
     changeStudyAddProcess: React.PropTypes.any,
     submitStudyAdd: React.PropTypes.func.isRequired,
+    removeStudyAd: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     isOnTop: React.PropTypes.bool,
@@ -90,6 +93,7 @@ export class LandingPageModal extends React.Component {
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.state = {
       code: null,
@@ -240,6 +244,12 @@ export class LandingPageModal extends React.Component {
       this.props.submitStudyAdd({ file: e, study_id: this.state.selected.study_id });
     }
   }
+
+  removeStudyAd() {
+    this.props.removeStudyAd(this.state.selected.study_id);
+    this.closeStudyAddModal();
+  }
+
 
   render() {
     const { openModal, onClose, changeStudyAddProcess } = this.props;
@@ -574,7 +584,11 @@ export class LandingPageModal extends React.Component {
               </a>
             </Modal.Header>
             <Modal.Body>
-              <StudyAddForm handleSubmit={this.uploadStudyAdd} changeStudyAddProcess={changeStudyAddProcess} />
+              <StudyAddForm
+                handleSubmit={this.uploadStudyAdd}
+                changeStudyAddProcess={changeStudyAddProcess}
+                removeStudyAd={this.removeStudyAd}
+              />
             </Modal.Body>
           </Modal>
           <Modal
