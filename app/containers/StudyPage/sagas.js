@@ -741,7 +741,7 @@ function* submitPatientNote() {
 function* submitEmail() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
-    const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
+    const { studyId, patientId, email, message, subject } = yield take(SUBMIT_EMAIL);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
