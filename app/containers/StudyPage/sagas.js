@@ -35,6 +35,7 @@ DELETE_PATIENT,
 DOWNLOAD_CLIENT_REPORT,
 GENERATE_PATIENT_REFERRAL,
 DOWNLOAD_PATIENT_REFERRAL,
+SUBMIT_EMAIL,
 } from './constants';
 
 import {
@@ -66,6 +67,7 @@ import {
   submitScheduleFailed,
   deletePatientSuccess,
   deletePatientError,
+  submitEmailSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -736,6 +738,40 @@ function* submitPatientNote() {
   }
 }
 
+function* submitEmail() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL action
+    const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
+    console.log('submitEmail', studyId, patientId, currentUser, email, message, subject);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/emailSend`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          study_id: studyId,
+          patientId,
+          email,
+          message,
+          subject,
+        }),
+      });
+      yield put(submitEmailSuccess(response));
+      toastr.success('', 'Success! Your email have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
 function* submitDeleteNote() {
   while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
@@ -977,6 +1013,7 @@ export function* fetchStudySaga() {
     const watcherX = yield fork(downloadReferral);
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
+    const watcherEmail = yield fork(submitEmail);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -1005,6 +1042,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherY);
     yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
+    yield cancel(watcherEmail);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
