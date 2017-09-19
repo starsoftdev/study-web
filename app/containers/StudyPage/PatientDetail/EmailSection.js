@@ -112,7 +112,7 @@ class EmailSection extends React.Component {
           />
         </div>
         <div className="textarea">
-          {/* <a href="#" className="btn btn-gray-outline pull-left">back</a>*/}
+          {/* <a href="#" className="btn btn-gray-outline pull-left">back</a> */}
           <input type="submit" value="Send" className="btn btn-default pull-right" />
         </div>
       </Form>
