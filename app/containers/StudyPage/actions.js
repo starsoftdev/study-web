@@ -79,6 +79,9 @@ import {
   DOWNLOAD_PATIENT_REFERRAL,
   SUBMIT_EMAIL,
   SUBMIT_EMAIL_SUCCESS,
+  FETCH_EMAILS,
+  FETCH_EMAILS_SUCCESS,
+  FETCH_EMAILS_ERROR,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -510,6 +513,31 @@ export function submitEmail(studyId, patientId, currentUser, email, message, sub
 export function submitEmailSuccess(payload) {
   return {
     type: SUBMIT_EMAIL_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchEmails(studyId, patientId) {
+  console.log('fetchEmails', studyId, patientId);
+  return {
+    type: FETCH_EMAILS,
+    studyId,
+    patientId,
+  };
+}
+
+export function emailsFetched(payload) {
+  console.log('emailsFetched', payload);
+  return {
+    type: FETCH_EMAILS_SUCCESS,
+    payload,
+  };
+}
+
+export function emailsFetchError(payload) {
+  console.log('emailsFetchError', payload);
+  return {
+    type: FETCH_EMAILS_ERROR,
     payload,
   };
 }
