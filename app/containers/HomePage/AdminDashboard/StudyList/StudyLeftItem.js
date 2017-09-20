@@ -54,7 +54,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
   render() {
     const { item, onSelectStudy, id } = this.props;
 
-    const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(`${DASHBOARD_TIMEZONE}`).format('MM/DD/YY [at] h:mm A') : 'N/A';
+    const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
     const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
     const facebookHref = item.landing_page_facebook_url;
