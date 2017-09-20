@@ -275,7 +275,7 @@ class FilterBar extends Component {
               value={filter.indication}
               options={this.state.indicationOptions}
               disabled={this.state.siteLocation === null}
-              placeholder={this.state.siteLocation ? 'Select Indication' : 'N/A'}
+              placeholder="Select Indication"
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
@@ -285,7 +285,7 @@ class FilterBar extends Component {
               value={filter.protocol}
               options={this.state.protocolOptions}
               disabled={this.state.indication === null}
-              placeholder={this.state.indication ? 'Select Protocol' : 'N/A'}
+              placeholder="Select Protocol"
               onChange={(option) => this.handleFilterChange('protocol', option)}
             />
           </div>
