@@ -24,6 +24,7 @@ ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
 SUBMIT_TEXT_BLAST,
+SUBMIT_EMAIL_BLAST,
 SUBMIT_PATIENT_IMPORT,
 SUBMIT_ADD_PATIENT,
 SUBMIT_PATIENT_NOTE,
@@ -34,6 +35,8 @@ DELETE_PATIENT,
 DOWNLOAD_CLIENT_REPORT,
 GENERATE_PATIENT_REFERRAL,
 DOWNLOAD_PATIENT_REFERRAL,
+SUBMIT_EMAIL,
+FETCH_EMAILS,
 } from './constants';
 
 import {
@@ -65,6 +68,9 @@ import {
   submitScheduleFailed,
   deletePatientSuccess,
   deletePatientError,
+  submitEmailSuccess,
+  emailsFetched,
+  emailsFetchError,
 } from './actions';
 
 // Bootstrap sagas
@@ -143,23 +149,23 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
   const { studyId, text, campaignId, sourceId } = action;
 
   try {
-    // TODO fix landing page views endpoint to have better performance
-    const queryParams = {};
-
+    const options = {
+      method: 'GET',
+    };
+    if (text || campaignId || sourceId) {
+      options.query = {};
+    }
     if (campaignId) {
-      queryParams.campaignId = campaignId;
+      options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      queryParams.sourceId = sourceId;
+      options.query.sourceId = sourceId;
     }
     if (text) {
-      queryParams.text = text;
+      options.query.text = text;
     }
-    const queryString = composeQueryString(queryParams);
-    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews?${queryString}`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
+    const requestURL = `${API_URL}/studies/${studyId}/landingPageViews`;
+    const response = yield call(request, requestURL, options);
     yield put(studyViewsStatFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
@@ -210,8 +216,10 @@ function* fetchStudyTextStats(action) {
     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
     const options = {
       method: 'GET',
-      query: {},
     };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
     if (campaignId) {
       options.query.campaignId = campaignId;
     }
@@ -735,6 +743,74 @@ function* submitPatientNote() {
   }
 }
 
+function* submitEmail() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL action
+    const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}/emailSend`;
+      const response = yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          study_id: studyId,
+          patientId,
+          email,
+          userId: currentUser.id,
+          message,
+          subject,
+        }),
+      });
+      yield put(submitEmailSuccess(response));
+      toastr.success('', 'Success! Your email have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+function* fetchEmails() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL action
+    const { studyId, patientId } = yield take(FETCH_EMAILS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const queryParams = {};
+      if (studyId) {
+        queryParams.studyId = studyId;
+      }
+      if (patientId) {
+        queryParams.patientId = patientId;
+      }
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/patients/fetchEmails?${queryString}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(emailsFetched(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+      yield put(emailsFetchError(e));
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
 function* submitDeleteNote() {
   while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
@@ -788,6 +864,42 @@ function* submitTextBlast() {
       toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+function* submitEmailBlast() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL_BLAST action
+    const { patients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/emails/addBlastEmails`;
+
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientsIDs: patients.map(patient => (
+            patient.id
+          )),
+          from,
+          subject,
+          clientRoleId,
+          message,
+        }),
+      });
+      onClose();
+      toastr.success('', 'Success! Your email blast have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -939,6 +1051,9 @@ export function* fetchStudySaga() {
     const watcherW = yield fork(downloadReport);
     const watcherX = yield fork(downloadReferral);
     const watcherY = yield fork(generateReferral);
+    const watcherZ = yield fork(submitEmailBlast);
+    const watcherEmail = yield fork(submitEmail);
+    const watcherEmailsFetch = yield fork(fetchEmails);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -965,7 +1080,10 @@ export function* fetchStudySaga() {
     yield cancel(watcherW);
     yield cancel(watcherX);
     yield cancel(watcherY);
+    yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
+    yield cancel(watcherEmail);
+    yield cancel(watcherEmailsFetch);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

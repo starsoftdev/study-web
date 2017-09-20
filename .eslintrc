@@ -23,7 +23,8 @@
     "SOCKET_URL": true,
     "MIXPANEL_TOKEN": true,
     "SITE_KEY": true,
-    "ga": true
+    "ga": true,
+    "DASHBOARD_TIMEZONE": true
   },
   "rules": {
     "arrow-parens": 0,

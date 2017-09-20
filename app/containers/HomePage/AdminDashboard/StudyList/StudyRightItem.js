@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { selectHoverRowIndex } from '../selectors';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -44,8 +44,8 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   render() {
     const { item } = this.props;
 
-    const campaignDateFrom = moment(item.campaign_datefrom);
-    const campaignDateTo = moment(item.campaign_dateto);
+    const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);
+    const campaignDateTo = moment(item.campaign_dateto).tz(item.timezone);
 
     const totalDays = campaignDateTo.diff(campaignDateFrom, 'days');
     let daysRan = moment.utc().diff(campaignDateFrom, 'days');
