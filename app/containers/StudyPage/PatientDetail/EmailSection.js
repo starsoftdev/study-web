@@ -6,17 +6,17 @@ import React from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change, reset } from 'redux-form';
+import { reduxForm, change, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
-import Form from 'react-bootstrap/lib/Form';
-
-import Input from '../../../components/Input/index';
-import { submitEmail } from '../actions';
-import { selectSubmittingEmail } from '../selectors';
+import { submitEmail, fetchEmails } from '../actions';
+import { selectSubmittingEmail, selectEmails } from '../selectors';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { selectCurrentUser } from '../../../containers/App/selectors';
-import formValidator from './emailValidator';
+
+import EmailSectionList from '../../../components/EmailSectionList/index';
+import EmailSectionSendForm from '../../../components/EmailSectionSendForm/index';
+import formValidator from '../../../components/EmailSectionSendForm/validator';
 
 const formName = 'PatientDetailModal.Email';
 
@@ -25,10 +25,12 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   formSyncErrors: selectSyncErrors(formName),
   submittingEmail: selectSubmittingEmail(),
+  emails: selectEmails(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
+  fetchEmails: (studyId, patientId) => dispatch(fetchEmails(studyId, patientId)),
   clearForm: () => dispatch(reset(formName)),
   submitEmail: (studyId, currentPatientId, currentUser, message, email, subject) => dispatch(submitEmail(studyId, currentPatientId, currentUser, message, email, subject)),
 });
@@ -50,6 +52,8 @@ class EmailSection extends React.Component {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     submitEmail: React.PropTypes.func.isRequired,
+    fetchEmails: React.PropTypes.func.isRequired,
+    emails: React.PropTypes.object,
     clearForm: React.PropTypes.func.isRequired,
     submittingEmail: React.PropTypes.bool,
   };
@@ -58,14 +62,18 @@ class EmailSection extends React.Component {
     super(props);
 
     this.submitEmailBlast = this.submitEmailBlast.bind(this);
+    this.switchCompose = this.switchCompose.bind(this);
 
-    this.state = {};
+    this.state = {
+      compose: false,
+    };
   }
 
   componentWillReceiveProps(newProps) {
     const { clearForm } = this.props;
     if (this.props.submittingEmail !== newProps.submittingEmail && !newProps.submittingEmail) {
       clearForm();
+      this.switchCompose();
     }
   }
 
@@ -83,39 +91,31 @@ class EmailSection extends React.Component {
     }
   }
 
+  switchCompose() {
+    this.setState({ compose: !this.state.compose });
+  }
+
   render() {
-    const { active } = this.props;
+    const { active, change, fetchEmails, emails, studyId, currentPatient } = this.props;
+    const { compose } = this.state;
     return (
-      <Form onSubmit={this.submitEmailBlast} className={classNames('item emails-info', { active })}>
-        <div className="emails-info-holder">
-          <Field
-            name="email"
-            component={Input}
-            bsClass="form-control sender"
-            type="text"
-            placeholder="Enter your email address"
-          />
-          <Field
-            name="subject"
-            component={Input}
-            bsClass="form-control subject"
-            type="text"
-            placeholder="Subject"
-          />
-          <Field
-            name="message"
-            component={Input}
-            componentClass="textarea"
-            className="message-box"
-            bsClass="form-control"
-            placeholder="Type message..."
-          />
-        </div>
-        <div className="textarea">
-          {/* <a href="#" className="btn btn-gray-outline pull-left">back</a> */}
-          <input type="submit" value="Send" className="btn btn-default pull-right" />
-        </div>
-      </Form>
+      <div className={classNames((!active ? 'emails-tab' : ''), { active })}>
+        {(!compose && currentPatient.id) && <EmailSectionList
+          switchCompose={this.switchCompose}
+          fetchEmails={fetchEmails}
+          emails={emails}
+          studyId={studyId}
+          currentPatient={currentPatient}
+          active={active}
+        />}
+
+        {compose && <EmailSectionSendForm
+          submitEmailBlast={this.submitEmailBlast}
+          switchCompose={this.switchCompose}
+          active={active}
+          change={change}
+        />}
+      </div>
     );
   }
 }

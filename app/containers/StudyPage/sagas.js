@@ -36,6 +36,7 @@ DOWNLOAD_CLIENT_REPORT,
 GENERATE_PATIENT_REFERRAL,
 DOWNLOAD_PATIENT_REFERRAL,
 SUBMIT_EMAIL,
+FETCH_EMAILS,
 } from './constants';
 
 import {
@@ -68,6 +69,8 @@ import {
   deletePatientSuccess,
   deletePatientError,
   submitEmailSuccess,
+  emailsFetched,
+  emailsFetchError,
 } from './actions';
 
 // Bootstrap sagas
@@ -743,7 +746,7 @@ function* submitPatientNote() {
 function* submitEmail() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
-    const { studyId, patientId, email, message, subject } = yield take(SUBMIT_EMAIL);
+    const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -757,6 +760,7 @@ function* submitEmail() {
           study_id: studyId,
           patientId,
           email,
+          userId: currentUser.id,
           message,
           subject,
         }),
@@ -765,6 +769,40 @@ function* submitEmail() {
       toastr.success('', 'Success! Your email have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+function* fetchEmails() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL action
+    const { studyId, patientId } = yield take(FETCH_EMAILS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const queryParams = {};
+      if (studyId) {
+        queryParams.studyId = studyId;
+      }
+      if (patientId) {
+        queryParams.patientId = patientId;
+      }
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/patients/fetchEmails?${queryString}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(emailsFetched(response));
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while fetching study view stats. Please try again later.');
+      yield put(emailsFetchError(e));
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -1015,6 +1053,7 @@ export function* fetchStudySaga() {
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
     const watcherEmail = yield fork(submitEmail);
+    const watcherEmailsFetch = yield fork(fetchEmails);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
@@ -1044,6 +1083,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherZ);
     yield cancel(deletePatientWatcher);
     yield cancel(watcherEmail);
+    yield cancel(watcherEmailsFetch);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
