@@ -37,7 +37,7 @@ export default class AddNewCardForm extends Component { // eslint-disable-line r
     const { savedCard, handleSubmit } = this.props;
 
     return (
-      <form className="form-add-new-card" onSubmit={handleSubmit}>
+      <form className="form-add-new-card fs-hide" onSubmit={handleSubmit}>
         <div className="add-new-card scroll-holder jcf--scrollable">
           <div className="row form-group">
             <strong className="required col-sm-4">

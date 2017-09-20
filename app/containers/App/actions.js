@@ -200,6 +200,10 @@ import {
 
   ADD_MESSAGES_COUNT_STAT,
   DELETE_MESSAGES_COUNT_STAT,
+
+  GET_TIMEZONE,
+  GET_TIMEZONE_SUCCESS,
+  GET_TIMEZONE_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1328,6 +1332,29 @@ export function addMessagesCountStat(payload) {
 export function deleteMessagesCountStat(payload) {
   return {
     type: DELETE_MESSAGES_COUNT_STAT,
+    payload,
+  };
+}
+
+
+export function getTimezone(lat, lng) {
+  return {
+    type: GET_TIMEZONE,
+    lat,
+    lng,
+  };
+}
+
+export function getTimezoneSuccess(payload) {
+  return {
+    type: GET_TIMEZONE_SUCCESS,
+    payload,
+  };
+}
+
+export function getTimezoneError(payload) {
+  return {
+    type: GET_TIMEZONE_ERROR,
     payload,
   };
 }

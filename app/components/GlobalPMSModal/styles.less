@@ -27,6 +27,7 @@
 
       padding: 0;
       max-height: 100%;
+      min-height: 50%;
       overflow-y: auto;
 
       li:hover {
@@ -45,6 +46,10 @@
             position: absolute;
             transform: translate(0, -50%);
           }
+        }
+
+        .field + .field {
+          margin-top: 15px;
         }
       }
     }

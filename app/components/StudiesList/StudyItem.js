@@ -29,6 +29,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     push: PropTypes.func,
     orderNumber: PropTypes.number,
     siteId: PropTypes.number,
+    siteTimezone: PropTypes.string,
     url: PropTypes.string,
   };
 
@@ -87,7 +88,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
   }
 
   render() {
-    const { currentUser, indication, location, siteName, sponsor, protocol, patientQualificationSuite, status,
+    const { currentUser, indication, location, siteName, siteTimezone, sponsor, protocol, patientQualificationSuite, status,
       startDate, endDate, unreadMessageCount, orderNumber, studyId, url } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let purchasable = true;
@@ -131,10 +132,10 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{status}</span>
         </td>
         <td className="start-date">
-          <span>{startDate ? this.parseDate(startDate) : 'TBD'}</span>
+          <span>{startDate ? this.parseDate(startDate, siteTimezone) : 'TBD'}</span>
         </td>
         <td className="end-date">
-          <span>{endDate ? this.parseDate(endDate) : 'TBD'}</span>
+          <span>{endDate ? this.parseDate(endDate, siteTimezone) : 'TBD'}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
