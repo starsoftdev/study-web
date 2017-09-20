@@ -214,7 +214,7 @@ export class PatientDetailModal extends React.Component {
                   studyId={studyId}
                 />
                 <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                <EmailSection active={carousel.email} />
+                <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
                 {this.renderOtherSection()}
               </div>
             </div>

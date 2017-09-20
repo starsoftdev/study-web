@@ -449,14 +449,16 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           />
         </div>
         <div className="field-row">
-          <div className="label">
+          <strong className="label">
+            <label htmlFor="unsubscribed">Unsubscribe</label>
+          </strong>
+          <div className="field">
             <Field
               name="unsubscribed"
               type="checkbox"
               component={Checkbox}
               className="pull-left"
             />
-            <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
         </div>
         <div className="btn-block text-right">
