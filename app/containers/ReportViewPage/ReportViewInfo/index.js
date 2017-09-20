@@ -37,15 +37,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">Active</span>
+                  <span className="sub-title">ACTIVE</span>
                   <strong className="number">{totals.active}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Inactive</span>
+                  <span className="sub-title">INACTIVE</span>
                   <strong className="number">{totals.inActive}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Total</span>
+                  <span className="sub-title">TOTAL</span>
                   <strong className="number">{totals.active + totals.inActive}</strong>
                 </li>
               </ul>
@@ -67,19 +67,19 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities">
                 <li>
-                  <span className="sub-title">Text<br />Sent</span>
+                  <span className="sub-title">TEXT<br />SENT</span>
                   <strong className="number">{totals.textSent}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Text<br />Received</span>
+                  <span className="sub-title">TEXT<br />RECEIVED</span>
                   <strong className="number">{totals.textReceived}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Unread<br />Text</span>
+                  <span className="sub-title">UNREAD<br />TEXT</span>
                   <strong className="number">{totals.unreadText}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">Email<br />Sent</span>
+                  <span className="sub-title">EMAIL<br />SENT</span>
                   <strong className="number">{totals.emailSent}</strong>
                 </li>
               </ul>

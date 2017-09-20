@@ -42,6 +42,7 @@ import {
   FETCH_INDICATION_LEVEL_PRICE,
 
   CHANGE_USERS_TIMEZONE,
+  GET_TIMEZONE,
 
   FETCH_LANDING,
   SUBSCRIBE_FROM_LANDING,
@@ -126,6 +127,8 @@ import {
   fetchIndicationLevelPriceError,
   changeUsersTimezoneSuccess,
   changeUsersTimezoneError,
+  getTimezoneSuccess,
+  getTimezoneError,
   landingFetched,
   fetchLandingError,
   patientSubscribed,
@@ -183,9 +186,10 @@ export default function* baseDataSaga() {
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
+  yield fork(getTimezoneWatcher);
   yield fork(fetchClientAdminsWatcher);
   yield fork(changeTemporaryPassword);
-  yield fork(takeLatest, FETCH_LANDING, fetchLanding);
+  yield fork(fetchLanding);
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
@@ -838,6 +842,31 @@ export function* changeUsersTimezoneWatcher() {
   }
 }
 
+export function* getTimezoneWatcher() {
+  yield* takeLatest(GET_TIMEZONE, getTimezoneWorker);
+}
+
+export function* getTimezoneWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getTimezone`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        lat: action.lat,
+        lng: action.lng,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(getTimezoneSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching timezone');
+    toastr.error('', errorMessage);
+    yield put(getTimezoneError(err));
+  }
+}
+
 export function* fetchClientAdminsWatcher() {
   yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminsWorker);
 }
@@ -879,17 +908,20 @@ export function* changeTemporaryPassword() {
   }
 }
 
-function* fetchLanding(action) {
-  const { studyId } = action;
-  // put the fetching study action in case of a navigation action
-  try {
-    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-    });
-    yield put(landingFetched(response));
-  } catch (err) {
-    yield put(fetchLandingError(err));
+export function* fetchLanding() {
+  while (true) {
+    const { studyId } = yield take(FETCH_LANDING);
+
+    // put the fetching study action in case of a navigation action
+    try {
+      const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+      yield put(landingFetched(response));
+    } catch (err) {
+      yield put(fetchLandingError(err));
+    }
   }
 }
 

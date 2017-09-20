@@ -12,7 +12,6 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
 
-import { selectCurrentUser } from '../../containers/App/selectors';
 import * as Selector from '../../containers/StudyPage/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
@@ -102,7 +101,7 @@ class PatientCategory extends React.Component {
     category: React.PropTypes.object.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
-    currentUser: React.PropTypes.object.isRequired,
+    currentSite: React.PropTypes.object,
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
     isOver: React.PropTypes.bool.isRequired,
@@ -146,7 +145,7 @@ class PatientCategory extends React.Component {
   }
 
   renderPatients() {
-    const { category, currentPatientId, currentUser, onPatientClick, onPatientTextClick } = this.props;
+    const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
 
     if (category.patients.length > 0) {
       const getLastUpdate = (patient) => {
@@ -172,7 +171,7 @@ class PatientCategory extends React.Component {
                   currentPatientId={currentPatientId}
                   patient={patient}
                   unreadMessageCount={patient.unreadMessageCount}
-                  currentUser={currentUser}
+                  currentSite={currentSite}
                   onPatientClick={onPatientClick}
                   onPatientTextClick={onPatientTextClick}
                 />
@@ -211,7 +210,7 @@ class PatientCategory extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
-  currentUser: selectCurrentUser(),
+  currentSite: Selector.selectSite(),
   studyId: Selector.selectStudyId(),
 });
 

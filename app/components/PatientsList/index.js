@@ -112,6 +112,11 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     payload.site_id = patientData.site;
     payload.studyId = patientData.protocol;
 
+    if (patientData.dobDay && patientData.dobMonth && patientData.dobYear) {
+      const date = moment().year(patientData.dobYear).month(patientData.dobMonth - 1).date(patientData.dobDay).startOf('day');
+      payload.dob = date.toISOString();
+    }
+
     savePatient(currentUser.roleForClient.id, selectedPatient.details.id, payload);
   }
 
@@ -258,7 +263,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
       total = textBlastFormValues.patients.length;
     }
     return (
-      <div className="patient-database-fixed-table-wrapper">
+      <div className="patient-database-fixed-table-wrapper fs-hide">
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">

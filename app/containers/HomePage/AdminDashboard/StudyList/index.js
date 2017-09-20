@@ -96,7 +96,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeStudyStatus = this.changeStudyStatus.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
     this.deactivateStudies = this.deactivateStudies.bind(this);
-    this.adSetStudies = this.adSetStudies.bind(this);
+    this.callTrackingStudies = this.callTrackingStudies.bind(this);
     this.historyStudies = this.historyStudies.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
@@ -262,6 +262,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
   toggleStudy(studyId, checked) {
     this.props.toggleStudy(studyId, checked);
     this.showEditInformationModal(false);
+    this.showThankYouPageModal(false);
+    this.showLandingPageModal(false);
 
     let selectedAllStudies = true;
     let selectedStudyCount = 0;
@@ -336,7 +338,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
-  adSetStudies() {
+  callTrackingStudies() {
   }
 
   historyStudies() {
@@ -675,6 +677,15 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
+                        onClick={this.callTrackingStudies}
+                      > Call Tracking </Button>
+                    }
+                    {
+                      selectedStudyCount === 1 &&
+                      <Button
+                        bsStyle="primary"
+                        className="pull-left"
+                        data-class="btn-deactivate"
                         onClick={() => this.showCampaignPageModal(true)}
                       > Campaign </Button>
                     }
@@ -686,15 +697,6 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         data-class="btn-deactivate"
                         onClick={() => this.showEditInformationModal(true)}
                       > Info </Button>
-                    }
-                    {
-                      selectedStudyCount === 1 &&
-                      <Button
-                        bsStyle="primary"
-                        className="pull-left"
-                        data-class="btn-deactivate"
-                        onClick={this.adSetStudies}
-                      > Ad Set </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
