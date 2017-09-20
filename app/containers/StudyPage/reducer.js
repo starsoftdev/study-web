@@ -55,6 +55,9 @@ import {
   SUBMIT_EMAIL,
   SUBMIT_EMAIL_SUCCESS,
   SUBMIT_EMAIL_ERROR,
+  FETCH_EMAILS,
+  FETCH_EMAILS_SUCCESS,
+  FETCH_EMAILS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -75,6 +78,11 @@ const initialState = {
   submittingEmail:false,
   deletePatientProcess: {
     isDeleting: false,
+    error: null,
+  },
+  emails: {
+    details: [],
+    fetching: false,
     error: null,
   },
 };
@@ -211,6 +219,33 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         submittingEmail: false,
+      };
+    case FETCH_EMAILS:
+      return {
+        ...state,
+        emails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_EMAILS_SUCCESS:
+      return {
+        ...state,
+        emails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_EMAILS_ERROR:
+      return {
+        ...state,
+        emails: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
       };
     case SUBMIT_ADD_PATIENT_FAILURE:
       return {
