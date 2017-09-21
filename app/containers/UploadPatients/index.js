@@ -10,7 +10,6 @@ import { fetchIndications, fetchSources, fetchClientSites } from '../../containe
 import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
 
 import { exportPatients } from './actions';
-import { selectExportPatientsStatus } from './selectors';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import { normalizePhoneForServer } from '../../common/helper/functions';
@@ -26,7 +25,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     sites: PropTypes.array,
     indications: PropTypes.array,
     sources: PropTypes.array,
-    exportPatientsStatus: PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
   };
 
@@ -98,7 +96,6 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   indications: selectIndications(),
   sources: selectSources(),
-  exportPatientsStatus: selectExportPatientsStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
