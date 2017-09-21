@@ -54,8 +54,6 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     const { changeField } = this.props;
     const value = (name === 'gender') ? event : event.target.value;
 
-    console.log('changeField', event, name, index);
-
     changeField(value, name, index);
   }
 
