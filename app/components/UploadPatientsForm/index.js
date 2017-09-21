@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, change, Field, FieldArray, reduxForm, touch } from 'redux-form';
+import { blur, change, Field, FieldArray, reduxForm, touch, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -12,7 +12,7 @@ import { selectIndications, selectSiteLocations, selectSources, selectCurrentUse
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../../containers/UploadPatients/actions';
-import { selectIsFetchingProtocols, selectProtocols } from '../../containers/UploadPatients/selectors';
+import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus } from '../../containers/UploadPatients/selectors';
 import RenderPatientsList from './RenderPatientsList';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields } from './validator';
@@ -27,10 +27,12 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
   sources: selectSources(),
+  exportPatientsStatus: selectExportPatientsStatus(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
+  clearForm: () => dispatch(reset(formName)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
   submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
@@ -45,7 +47,8 @@ export default class UploadPatientsForm extends React.Component {
     currentUser: React.PropTypes.object,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
-    // formError: React.PropTypes.bool,
+    clearForm: React.PropTypes.func.isRequired,
+    exportPatientsStatus: React.PropTypes.any,
     indications: React.PropTypes.array,
     isFetchingProtocols: React.PropTypes.bool,
     onClose: React.PropTypes.func,
@@ -75,6 +78,23 @@ export default class UploadPatientsForm extends React.Component {
     this.addField = this.addField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const {exportPatientsStatus, clearForm, change} = this.props;
+    const fields = this.state.fields;
+    if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
+      clearForm();
+
+      change('group-name', '');
+      change('group-email', '');
+      change('group-phone', '');
+      change('group-age', '');
+      change('group-gender', '');
+      change('group-bmi', '');
+
+      this.setState({ fields: [], showPreview: false });
+    }
   }
 
   mapTextAreaGroups(event) {
@@ -196,8 +216,13 @@ export default class UploadPatientsForm extends React.Component {
   changeField(value, name, index) {
     const fields = this.state.fields;
     const scope = this;
+    let val = value;
 
-    fields[index][name] = value;
+    if (val === '' && name !== 'phone') {
+      val = 'N/A'
+    }
+
+    fields[index][name] = val;
     _.forEach(fields, (field, i) => {
       if ((i !== index) && !fields[i][name]) {
         if (name !== 'phone') {

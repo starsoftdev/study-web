@@ -91,8 +91,6 @@ export function* exportPatientsWatcher() {
   while (true) {
     const { data } = yield take(EXPORT_PATIENTS);
 
-    console.log('exportPatientsWatcher', data);
-
     try {
       // check if we need to update the patient with study info
       const requestURL = `${API_URL}/patients/exportPatients`;
