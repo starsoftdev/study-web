@@ -35,6 +35,10 @@ import {
   GET_TOTAL_PATIENTS_COUNT,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
+
+  EXPORT_PATIENTS,
+  EXPORT_PATIENTS_SUCCESS,
+  EXPORT_PATIENTS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -80,9 +84,12 @@ const initialState = {
   addPatientStatus:{
     adding: false,
   },
+  exportPatientsStatus:{
+    exporting: false,
+  },
 };
 
-export default function patientDatabasePageReducer(state = initialState, action) {
+export default function uploadPatientsPageReducer(state = initialState, action) {
   const { payload, total, totalUnsubscribed } = action;
   const patientsCollection = map(state.patients.details, cloneDeep);
   let foundIndex = -1;
@@ -133,6 +140,27 @@ export default function patientDatabasePageReducer(state = initialState, action)
         },
         addPatientStatus:{
           adding: false,
+        },
+      };
+    case EXPORT_PATIENTS:
+      return {
+        ...state,
+        exportPatientsStatus:{
+          exporting: true,
+        },
+      };
+    case EXPORT_PATIENTS_SUCCESS:
+      return {
+        ...state,
+        exportPatientsStatus:{
+          exporting: false,
+        },
+      };
+    case EXPORT_PATIENTS_ERROR:
+      return {
+        ...state,
+        exportPatientsStatus:{
+          exporting: false,
         },
       };
     case DOWNLOAD_COMPLETE:
