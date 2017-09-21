@@ -58,6 +58,9 @@ import {
   CHANGE_STUDY_ADD,
   CHANGE_STUDY_ADD_SUCCESS,
   CHANGE_STUDY_ADD_ERROR,
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
   RESET_CHANGE_STUDY_ADD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
@@ -274,6 +277,25 @@ export function changeStudyAddError(payload) {
   return {
     type: CHANGE_STUDY_ADD_ERROR,
     payload,
+  };
+}
+
+export function removeStudyAd(studyId) {
+  return {
+    type: REMOVE_STUDY_AD,
+    studyId,
+  };
+}
+
+export function removeStudyAdSuccess() {
+  return {
+    type: REMOVE_STUDY_AD_SUCCESS,
+  };
+}
+
+export function removeStudyAdError() {
+  return {
+    type: REMOVE_STUDY_AD_ERROR,
   };
 }
 

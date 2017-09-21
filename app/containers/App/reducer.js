@@ -288,7 +288,7 @@ const initialState = {
       saving: false,
     },
     globalPMSPaginationOptions: {
-      hasMoreItems: true,
+      hasMoreItems: false,
       page: 1,
       search: '',
     },

@@ -30,6 +30,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
+    removeStudyAd: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -249,13 +250,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
               <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
             </div>
           </div>
-          <div className="field-row remove-btn-row">
-            <label
-              onClick={this.clearPreview}
-              data-text="Remove Image"
-              data-hover-text="Remove Image"
-              className="btn btn-gray upload-btn"
-            />
+          <div className="field-row">
+            <a className="link" onClick={this.props.removeStudyAd}>Remove Image</a>
           </div>
           <div className="text-right">
             <button

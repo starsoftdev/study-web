@@ -696,8 +696,135 @@
       }
     }
   }
+  .emails-tab {
+    display: none;
+  }
   .emails-info {
-    padding: 20px;
+    background: #fff;
+    padding: 0 0 85px;
+    height: 427px;
+
+    .emails-info-holder {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+
+      .preview-holder {
+        display: block;
+        color: #101010;
+        position: relative;
+        border-width: 0 0 2px;
+        overflow: hidden;
+        padding: 15px 0 15px 75px;
+        cursor: pointer;
+
+        .img-holder {
+          top: 15px;
+          left: 15px;
+          width: 50px;
+          position: absolute;
+          border-radius: 100%;
+        }
+
+        .subject, .author {
+          display: block;
+          font-weight: 600;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .post-email-alert {
+        display: block;
+        color: #101010;
+        position: relative;
+        border: solid #ccc;
+        border-width: 0 0 2px;
+        overflow: hidden;
+        padding: 15px 0 15px 75px;
+        min-height: 85px;
+        cursor: pointer;
+
+        &:hover {
+          color: #fff;
+          background: #00afef;
+
+          time{
+            color: #fff;
+          }
+        }
+
+        .img-holder {
+          top: 15px;
+          left: 15px;
+          position: absolute;
+          width: 50px;
+          border-radius: 100%;
+        }
+
+        .subject, .author {
+          display: block;
+          font-weight: 600;
+          margin: 0;
+          padding: 0;
+        }
+
+        time {
+          color: #949ca1;
+          display: block;
+          font-size: 14px;
+        }
+
+        .email-content {
+          max-height: 70px;
+          overflow: hidden;
+          margin: 0 0 5px;
+          position: relative;
+          padding-right: 20px;
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+
+      .message-box{
+        height: 100%;
+      }
+
+      .subject, .sender {
+        border-radius: 0;
+        padding: 6px 25px;
+        border-color: #ccc;
+        border-width: 0 0 2px;
+      }
+
+      textarea.form-control {
+        resize: none;
+        border-width: 0;
+        padding: 8px 25px 10px;
+        height: calc(~'100% - 80px');
+      }
+    }
+    .textarea {
+      padding: 22px 25px 21px;
+      height: 85px;
+
+      .btn-default, .btn-gray-outline {
+        top: 50%;
+        position: absolute;
+        transform: translate(0, -50%);
+        -ms-transform: translate(0, -50%);
+
+        &.right {
+          right: 25px;
+        }
+
+        &.left {
+          left: 25px;
+        }
+      }
+    }
   }
   .post {
     color: #101010;
