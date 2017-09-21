@@ -252,7 +252,7 @@ export default class SchedulePatientModal extends Component {
                   id="popup-protocol"
                   name="protocol"
                   component={ReactSelect}
-                  placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
+                  placeholder="Select Protocol"
                   options={protocolOptions}
                   className="data-search"
                   disabled={submitting || !this.state.siteLocation}
@@ -270,7 +270,7 @@ export default class SchedulePatientModal extends Component {
                   id="patient"
                   name="patient"
                   component={ReactSelect}
-                  placeholder={this.state.patient ? 'Select Patient' : 'N/A'}
+                  placeholder="Select Patient"
                   options={patientOptions}
                   className="data-search"
                   disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}
