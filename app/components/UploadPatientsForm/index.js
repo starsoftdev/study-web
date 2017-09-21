@@ -7,23 +7,23 @@ import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-import { selectSyncErrorBool/* , selectValues*/ } from '../../common/selectors/form.selector';
-import { /* normalizePhoneForServer,*/ normalizePhoneDisplay } from '../../common/helper/functions';
+// import { selectSyncErrorBool } from '../../common/selectors/form.selector';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../../containers/UploadPatients/actions';
 import { selectIsFetchingProtocols, selectProtocols } from '../../containers/UploadPatients/selectors';
+import RenderPatientsList from './RenderPatientsList';
+import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields } from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  formError: selectSyncErrorBool(formName),
+  // formError: selectSyncErrorBool(formName),
   indications: selectIndications(),
   isFetchingProtocols: selectIsFetchingProtocols(formName),
-  // newPatientnewPatient: selectValues(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
   sources: selectSources(),
@@ -43,19 +43,18 @@ export default class UploadPatientsForm extends React.Component {
   static propTypes = {
     addPatientStatus: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    blur: React.PropTypes.func,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
-    formError: React.PropTypes.bool,
+    // formError: React.PropTypes.bool,
     indications: React.PropTypes.array,
     isFetchingProtocols: React.PropTypes.bool,
-    // newPatients: React.PropTypes.object,
     onClose: React.PropTypes.func,
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
     submitting: React.PropTypes.bool,
     handleSubmit: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func,
+    blur: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
 
@@ -63,66 +62,167 @@ export default class UploadPatientsForm extends React.Component {
     super(props);
 
     this.state = {
+      showPreview: false,
       siteLocation: null,
+      fields: [],
     };
 
-    this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
-    // this.addPatients = this.addPatients.bind(this);
     this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
+    this.mapTextAreaGroups = this.mapTextAreaGroups.bind(this);
+    this.updateFields = this.updateFields.bind(this);
+    this.addField = this.addField.bind(this);
+    this.changeField = this.changeField.bind(this);
+    this.switchPreview = this.switchPreview.bind(this);
   }
 
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', newProps);
+  mapTextAreaGroups(event) {
+    const pattern = /\r\n|\r|\n/g;
+    const replaced = event.target.value.replace(pattern, '|');
+    const items = replaced.split('|');
+    // console.log(event.target.name, items);
+
+    const key = event.target.name.split('-')[1];
+    const fields = this.state.fields;
+
+    if (items.length < fields.length) {
+      _.forEach(fields, (item, index) => {
+        fields[index][key] = '';
+      });
+    }
+
+    _.forEach(items, (item, index) => {
+      if (fields[index]) {
+        if (fields[index][key] !== item) {
+          fields[index][key] = item;
+        }
+      } else if (item && item !== '') {
+        fields[index] = {
+          [key]: item,
+        };
+      }
+    });
+
+    this.setState({ fields });
   }
 
-  onPhoneBlur(event, name) {
-    const { blur } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
-    blur(name, formattedPhoneNumber);
+  updateFields(index) {
+    const { change } = this.props;
+    const fields = this.state.fields;
+
+    let groupName = '';
+    let groupEmail = '';
+    let groupPhone = '';
+    let groupAge = '';
+    let groupGender = '';
+    let groupBmi = '';
+
+    if (index !== null) {
+      fields.splice(index, 1);
+    }
+
+    _.forEach(fields, (field) => {
+      _.forEach(field, (value, key) => {
+        switch (key) {
+          case 'name':
+            if (groupName !== '') {
+              groupName += `\n${value}`;
+            } else {
+              groupName += `${value}`;
+            }
+            break;
+          case 'email':
+            if (groupEmail !== '') {
+              groupEmail += `\n${value}`;
+            } else {
+              groupEmail += `${value}`;
+            }
+            break;
+          case 'phone':
+            if (groupPhone !== '') {
+              groupPhone += `\n${normalizePhoneForServer(value)}`;
+            } else {
+              groupPhone += `${normalizePhoneForServer(value)}`;
+            }
+            break;
+          case 'age':
+            if (groupAge !== '') {
+              groupAge += `\n${value || 'N/A'}`;
+            } else {
+              groupAge += `${value || 'N/A'}`;
+            }
+            break;
+          case 'gender':
+            if (groupGender !== '') {
+              groupGender += `\n${value || 'N/A'}`;
+            } else {
+              groupGender += `${value || 'N/A'}`;
+            }
+            break;
+          case 'bmi':
+            if (groupBmi !== '') {
+              groupBmi += `\n${value || 'N/A'}`;
+            } else {
+              groupBmi += `${value || 'N/A'}`;
+            }
+            break;
+          default:
+            break;
+        }
+      });
+    });
+
+    change('group-name', groupName);
+    change('group-email', groupEmail);
+    change('group-phone', groupPhone);
+    change('group-age', groupAge);
+    change('group-gender', groupGender);
+    change('group-bmi', groupBmi);
+
+    this.setState({ fields });
+  }
+
+  switchPreview() {
+    this.setState({ showPreview: !this.state.showPreview });
+  }
+
+  addField() {
+    const fields = this.state.fields;
+    fields.push({});
+    this.setState({ fields });
+  }
+
+  changeField(value, name, index) {
+    const fields = this.state.fields;
+    const scope = this;
+
+    fields[index][name] = value;
+    _.forEach(fields, (field, i) => {
+      if ((i !== index) && !fields[i][name]) {
+        if (name !== 'phone') {
+          fields[i][name] = 'N/A';
+        } else {
+          fields[i][name] = '';
+        }
+      }
+    });
+
+    this.setState({ fields }, () => {
+      scope.updateFields(null);
+    });
   }
 
   changeSiteLocation(siteId) {
+    const { currentUser, fetchFilteredProtcols, change } = this.props;
     this.setState({ siteLocation: siteId });
     if (siteId) {
-      const { currentUser, fetchFilteredProtcols } = this.props;
       fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
     } else {
-      const { change } = this.props;
       // clear the protocol value if there is no site id
       change('protocol', null);
     }
   }
-
-  /* addPatients(event) {
-    console.log(event);
-    event.preventDefault();
-    const { currentUser, formError, onClose, newPatients, submitAddPatient, touchFields } = this.props;
-
-    if (formError) {
-      touchFields();
-      return;
-    }
-
-    const patient = Object.assign({}, newPatients);
-    patient.client_id = currentUser.roleForClient.client_id;
-    /!* normalizing the phone number *!/
-    patient.phone = normalizePhoneForServer(newPatients.phone);
-    patient.indication_id = newPatients.indication;
-    delete patient.indication;
-    patient.site_id = newPatients.site;
-    delete patient.site;
-    // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
-    // since it's easier to transform and display this way while still displaying studies by protocol
-    if (newPatients.protocol) {
-      patient.study_id = newPatients.protocol;
-    }
-    delete patient.protocol;
-    patient.source_id = newPatients.source;
-    delete patient.source;
-    submitAddPatient(patient, onClose);
-  }*/
 
   selectIndication(indicationId) {
     if (indicationId) {
@@ -146,7 +246,8 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
+    const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
+    const { fields, showPreview } = this.state;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -164,115 +265,8 @@ export default class UploadPatientsForm extends React.Component {
       label: source.type,
       value: source.id,
     }));
-    const genderOptions = [
-      {
-        label: 'Male',
-        value: 'Male',
-      }, {
-        label: 'Female',
-        value: 'Female',
-      },
-    ];
 
     // {error && <span className="error">{error}</span>}
-
-    const renderPatients = ({ fields/* , meta: { error }*/ }) => <div className="fields-holder array clearfix">
-      {fields.map((patient, index) => (
-        <div
-          className={`field-row ${(index === 0) ? 'first' : ''}`}
-          key={index}
-        >
-          <span
-            className="icomoon-icon_trash remove"
-            onClick={() => fields.remove(index)}
-          />
-          <div className="field name pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-name">Name</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.name`}
-              component={Input}
-              type="text"
-            />
-          </div>
-          <div className="field email pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-email">Email</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.email`}
-              component={Input}
-              type="text"
-            />
-          </div>
-          <div className="field phone pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-phone">Phone</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.phone`}
-              component={Input}
-              type="tel"
-              onBlur={(event) => {
-                this.onPhoneBlur(event, `${patient}.phone`);
-              }}
-            />
-          </div>
-          <div className="field age pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-phone">Age</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.age`}
-              component={Input}
-              type="text"
-            />
-          </div>
-          <div className="field gender pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-phone">Gender</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.gender`}
-              component={ReactSelect}
-              options={genderOptions}
-            />
-          </div>
-          <div className="field bmi pull-left">
-            {(index === 0) &&
-              <span className="title">
-                <label htmlFor="import-patient-phone">BMI</label>
-              </span>
-              }
-            <Field
-              name={`${patient}.bmi`}
-              component={Input}
-              type="text"
-            />
-          </div>
-        </div>
-        ))}
-      <div className="text-left">
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => fields.push()}
-        >
-            + Add Patient
-          </button>
-      </div>
-    </div>;
 
     return (
       <Form
@@ -331,9 +325,93 @@ export default class UploadPatientsForm extends React.Component {
             options={sourceOptions}
           />
         </div>
-        <FieldArray name="patients" component={renderPatients} />
+        {!this.state.showPreview && <div className="column-groups">
+          <div className="column names">
+            <span className="title">
+              <label htmlFor="import-patient-name">Name</label>
+            </span>
+            <Field
+              name="group-name"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+          <div className="column emails">
+            <span className="title">
+              <label htmlFor="import-patient-name">Email</label>
+            </span>
+            <Field
+              name="group-email"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+          <div className="column phones">
+            <span className="title">
+              <label htmlFor="import-patient-name">Phone</label>
+            </span>
+            <Field
+              name="group-phone"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+          <div className="column ages">
+            <span className="title">
+              <label htmlFor="import-patient-name">Age</label>
+            </span>
+            <Field
+              name="group-age"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+          <div className="column genders">
+            <span className="title">
+              <label htmlFor="import-patient-name">Gender</label>
+            </span>
+            <Field
+              name="group-gender"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+          <div className="column bmis">
+            <span className="title">
+              <label htmlFor="import-patient-name">Bmi</label>
+            </span>
+            <Field
+              name="group-bmi"
+              component={Input}
+              componentClass="textarea"
+              className="group"
+              onChange={this.mapTextAreaGroups}
+            />
+          </div>
+        </div>}
+        {this.state.showPreview && <FieldArray
+          name="patients"
+          component={RenderPatientsList}
+          patients={fields}
+          change={change}
+          addField={this.addField}
+          changeField={this.changeField}
+          updateFields={this.updateFields}
+          blur={blur}
+        />}
         <div className="text-right">
-          <Button type="submit" disabled={submitting}>Submit</Button>
+          <Button type="button" onClick={this.switchPreview}>{(!showPreview) ? 'Preview' : 'Edit' }</Button>
+          {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
         </div>
       </Form>
     );
