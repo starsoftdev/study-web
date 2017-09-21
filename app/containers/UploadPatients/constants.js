@@ -37,7 +37,6 @@ export const IMPORT_PATIENTS                    = 'PatientDatabasePage/IMPORT_PA
 export const SUBMIT_ADD_PATIENT                 = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
 export const SUBMIT_ADD_PATIENT_SUCCESS         = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
 export const SUBMIT_ADD_PATIENT_FAILURE         = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_FAILURE';
-export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const DOWNLOAD_COMPLETE                  = 'PatientDatabasePage/DOWNLOAD_COMPLETE';
 
 export const CLEAR_PATIENTS_LIST                = 'PatientDatabasePage/CLEAR_PATIENTS_LIST';
@@ -52,3 +51,7 @@ export const GET_TOTAL_PATIENTS_COUNT           = 'PatientDatabasePage/GET_TOTAL
 export const GET_TOTAL_PATIENTS_COUNT_SUCCESS   = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_SUCCESS';
 export const GET_TOTAL_PATIENTS_COUNT_ERROR     = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_ERROR';
 export const SUBMIT_EMAIL_BLAST                 = 'StudyPage/SUBMIT_EMAIL_BLAST';
+
+export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PATIENTS';
+export const EXPORT_PATIENTS_SUCCESS            = 'PatientDatabasePage/EXPORT_PATIENTS_SUCCESS';
+export const EXPORT_PATIENTS_ERROR              = 'PatientDatabasePage/EXPORT_PATIENTS_ERROR';

@@ -3,42 +3,47 @@ import { createSelector } from 'reselect';
 import { selectStudiesFromSites } from '../App/selectors';
 
 /**
- * Direct selector to the patientDatabasePage state domain
+ * Direct selector to the uploadPatientsPage state domain
  */
-const selectPatientDatabasePageDomain = () => state => state.patientDatabasePage;
+const selectUploadPatientsPageDomain = () => state => state.uploadPatientsPage;
 
 /**
  * Default selector used by PatientDatabasePage
  */
 
 const selectPatientDatabasePage = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate
 );
 export default selectPatientDatabasePage;
 
+export const selectExportPatientsStatus = () => createSelector(
+  selectUploadPatientsPageDomain(),
+  (subState) => subState.exportPatientsStatus
+);
+
 export const selectPatients = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.patients
 );
 
 export const selectTotalPatients = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.totalPatients
 );
 
 export const selectPatientCategories = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.patientCategories
 );
 
 export const selectSelectedPatient = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.selectedPatient
 );
 
 export const selectSelectedPatientDetailsForForm = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   selectStudiesFromSites(),
   (substate) => {
     const selectedPatientDetails = substate.selectedPatient.details;
@@ -70,27 +75,27 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
 );
 
 export const selectSavedPatient = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.savedPatient
 );
 
 export const selectImportPatientsStatus = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.importPatientsStatus
 );
 
 export const selectPaginationOptions = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.paginationOptions
 );
 
 export const selectChat = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (substate) => substate.chat
 );
 
 export const selectAddPatientStatus = () => createSelector(
-  selectPatientDatabasePageDomain(),
+  selectUploadPatientsPageDomain(),
   (subState) => subState.addPatientStatus
 );
 
