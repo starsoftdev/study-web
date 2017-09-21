@@ -96,7 +96,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.changeStudyStatus = this.changeStudyStatus.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
     this.deactivateStudies = this.deactivateStudies.bind(this);
-    this.sourceTrackingStudies = this.sourceTrackingStudies.bind(this);
+    this.callTrackingStudies = this.callTrackingStudies.bind(this);
     this.historyStudies = this.historyStudies.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
@@ -338,7 +338,7 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
     this.props.changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
-  sourceTrackingStudies() {
+  callTrackingStudies() {
   }
 
   historyStudies() {
@@ -677,8 +677,8 @@ class StudyList extends Component { // eslint-disable-line react/prefer-stateles
                         bsStyle="primary"
                         className="pull-left"
                         data-class="btn-deactivate"
-                        onClick={this.sourceTrackingStudies}
-                      > Source Tracking </Button>
+                        onClick={this.callTrackingStudies}
+                      > Call Tracking </Button>
                     }
                     {
                       selectedStudyCount === 1 &&
