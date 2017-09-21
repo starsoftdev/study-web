@@ -52,6 +52,12 @@ import {
   DELETE_PATIENT,
   DELETE_PATIENT_SUCCESS,
   DELETE_PATIENT_ERROR,
+  SUBMIT_EMAIL,
+  SUBMIT_EMAIL_SUCCESS,
+  SUBMIT_EMAIL_ERROR,
+  FETCH_EMAILS,
+  FETCH_EMAILS_SUCCESS,
+  FETCH_EMAILS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -69,8 +75,14 @@ const initialState = {
   },
   fetchingPatientsError: {},
   submittingSchedule:false,
+  submittingEmail:false,
   deletePatientProcess: {
     isDeleting: false,
+    error: null,
+  },
+  emails: {
+    details: [],
+    fetching: false,
     error: null,
   },
 };
@@ -192,6 +204,48 @@ function studyPageReducer(state = initialState, action) {
           }
           return category;
         }),
+      };
+    case SUBMIT_EMAIL:
+      return {
+        ...state,
+        submittingEmail: true,
+      };
+    case SUBMIT_EMAIL_SUCCESS:
+      return {
+        ...state,
+        submittingEmail: false,
+      };
+    case SUBMIT_EMAIL_ERROR:
+      return {
+        ...state,
+        submittingEmail: false,
+      };
+    case FETCH_EMAILS:
+      return {
+        ...state,
+        emails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_EMAILS_SUCCESS:
+      return {
+        ...state,
+        emails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_EMAILS_ERROR:
+      return {
+        ...state,
+        emails: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
       };
     case SUBMIT_ADD_PATIENT_FAILURE:
       return {

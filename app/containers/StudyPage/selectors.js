@@ -174,6 +174,16 @@ export const selectSubmittingSchedule = () => createSelector(
   (subState) => subState.submittingSchedule
 );
 
+export const selectSubmittingEmail = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.submittingEmail
+);
+
+export const selectEmails = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.emails
+);
+
 export const selectDeletePatientProcess = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.deletePatientProcess
