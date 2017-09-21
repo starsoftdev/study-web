@@ -1,0 +1,148 @@
+.upload-patients-form {
+  padding: 25px 0;
+
+  .field-row.main {
+    font-size: 0;
+    line-height: 0;
+    margin: 0 0 15px;
+    position: relative;
+
+    .label {
+      width: 15%;
+      color: #101010;
+      margin: -1px 0;
+      text-align: left;
+      font-size: 18px;
+      line-height: 22px;
+      padding: 0 5px 0 0;
+      text-transform: uppercase;
+    }
+
+    .field {
+      width: 35%;
+      position: relative;
+    }
+  }
+
+  .fields-holder.array {
+    margin: 0;
+    padding: 0;
+
+    .field-row  {
+      margin: 0;
+      padding: 0 0 15px;
+      height: 55px;
+
+      .remove {
+        float: left;
+        margin: 10px 10px 0 0;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      &.first {
+        height: 95px;
+        padding-top: 15px;
+
+        .remove {
+          margin: 30px 10px 0 0;
+        }
+      }
+
+      .title {
+        font-size: 18px;
+        line-height: 1.25;
+        color: #354052;
+        display: block;
+        margin: 0 0 2px 10px;
+        text-transform: uppercase;
+      }
+
+      .field {
+        margin-right: 1%;
+        position: relative;
+
+        &.name {
+          width: 22%;
+        }
+
+        &.email {
+          width: 22%;
+        }
+
+        &.phone {
+          width: 16%;
+        }
+
+        &.age {
+          width: 6%;
+        }
+
+        &.gender {
+          width: 15%;
+        }
+
+        &.bmi {
+          width: 10%;
+        }
+      }
+    }
+  }
+
+  .column-groups {
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 30px;
+
+    .column {
+      position: relative;
+      overflow: hidden;
+      float: left;
+      margin-right: 1%;
+
+      &.names {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.emails {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.phones {
+        width: 16%;
+      }
+
+      &.ages {
+        width: 9%;
+      }
+
+      &.genders {
+        width: 15%;
+      }
+
+      &.bmis {
+        width: 10%;
+      }
+    }
+
+    .group {
+
+      textarea.form-control {
+        min-height: 370px;
+      }
+    }
+  }
+
+  .text-right {
+
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
+}
