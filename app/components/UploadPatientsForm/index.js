@@ -81,8 +81,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const {exportPatientsStatus, clearForm, change} = this.props;
-    const fields = this.state.fields;
+    const { exportPatientsStatus, clearForm, change } = this.props;
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       clearForm();
 
@@ -219,7 +218,7 @@ export default class UploadPatientsForm extends React.Component {
     let val = value;
 
     if (val === '' && name !== 'phone') {
-      val = 'N/A'
+      val = 'N/A';
     }
 
     fields[index][name] = val;
