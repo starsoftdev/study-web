@@ -19,11 +19,11 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT,
   FETCH_FILTERED_PROTOCOLS,
-  SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
   SUBMIT_EMAIL_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
+  EXPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -37,12 +37,13 @@ import {
   patientCategoriesFetchingError,
   patientFetched,
   patientFetchingError,
-  patientSaved,
-  patientSavingError,
   // downloadComplete,
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
+
+  patientsExported,
+  exportPatientsError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -53,12 +54,13 @@ export function* patientDatabasePageSaga() {
   const watcherE = yield fork(addPatientIndicationWatcher);
   const watcherF = yield fork(removePatientIndicationWatcher);
   const watcherG = yield fork(updatePatientIndicationWatcher);
-  const watcherH = yield fork(savePatientWatcher);
   const watcherI = yield fork(submitTextBlast);
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
   const watcherL = yield fork(getTotalPatientsCountWatcher);
   const watcherZ = yield fork(submitEmailBlast);
+
+  const watcherH = yield fork(exportPatientsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -71,18 +73,49 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
-  yield cancel(watcherH);
   yield cancel(watcherI);
   yield cancel(watcherJ);
   yield cancel(watcherK);
   yield cancel(watcherL);
   yield cancel(watcherZ);
+
+  yield cancel(watcherH);
 }
 
 // Bootstrap sagas
 export default [
   patientDatabasePageSaga,
 ];
+
+export function* exportPatientsWatcher() {
+  while (true) {
+    const { data } = yield take(EXPORT_PATIENTS);
+
+    console.log('exportPatientsWatcher', data);
+
+    try {
+      // check if we need to update the patient with study info
+      const requestURL = `${API_URL}/patients/exportPatients`;
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          ...data,
+        }),
+      };
+      const response = yield call(request, requestURL, options);
+
+      toastr.success('Export Patients', 'Patient exported successfully!');
+      yield put(patientsExported(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      toastr.error('', errorMessage);
+      yield put(exportPatientsError(err));
+      if (err.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
 
 export function* fetchPatientsWatcher() {
   while (true) {
@@ -415,37 +448,6 @@ export function* updatePatientIndicationWatcher() {
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while updating indications.');
       toastr.error('', errorMessage);
-      if (err.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
-export function* savePatientWatcher() {
-  while (true) {
-    const { clientRoleId, id, data } = yield take(SAVE_PATIENT);
-
-    try {
-      // check if we need to update the patient with study info
-      const requestURL = `${API_URL}/patients/${id}/updatePatientForDB`;
-      const options = {
-        method: 'POST',
-        query: {
-          clientRoleId,
-        },
-        body: JSON.stringify({
-          ...data,
-        }),
-      };
-      const response = yield call(request, requestURL, options);
-
-      toastr.success('Save Patient', 'Patient saved successfully!');
-      yield put(patientSaved(response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      toastr.error('', errorMessage);
-      yield put(patientSavingError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }

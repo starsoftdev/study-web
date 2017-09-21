@@ -21,8 +21,6 @@ import {
   FETCH_FILTERED_PROTOCOLS_SUCCESS,
   FETCH_FILTERED_PROTOCOLS_ERROR,
   CLEAR_SELECTED_PATIENT,
-  SAVE_PATIENT,
-  SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
   INIT_CHAT,
   DISABLE_CHAT,
@@ -45,6 +43,9 @@ import {
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
   SUBMIT_EMAIL_BLAST,
+  EXPORT_PATIENTS,
+  EXPORT_PATIENTS_SUCCESS,
+  EXPORT_PATIENTS_ERROR,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -231,18 +232,23 @@ export function updatePatientIndication(patientId, indicationId, studyId) {
   };
 }
 
-export function savePatient(clientRoleId, id, data) {
+export function exportPatients(data) {
   return {
-    type: SAVE_PATIENT,
-    clientRoleId,
-    id,
+    type: EXPORT_PATIENTS,
     data,
   };
 }
 
-export function patientSaved(payload) {
+export function patientsExported(payload) {
   return {
-    type: SAVE_PATIENT_SUCCESS,
+    type: EXPORT_PATIENTS_SUCCESS,
+    payload,
+  };
+}
+
+export function exportPatientsError(payload) {
+  return {
+    type: EXPORT_PATIENTS_ERROR,
     payload,
   };
 }
