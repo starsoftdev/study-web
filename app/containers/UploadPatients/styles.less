@@ -90,4 +90,59 @@
       }
     }
   }
+
+  .column-groups {
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 30px;
+
+    .column {
+      position: relative;
+      overflow: hidden;
+      float: left;
+      margin-right: 1%;
+
+      &.names {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.emails {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.phones {
+        width: 16%;
+      }
+
+      &.ages {
+        width: 9%;
+      }
+
+      &.genders {
+        width: 15%;
+      }
+
+      &.bmis {
+        width: 10%;
+      }
+    }
+
+    .group {
+
+      textarea.form-control {
+        min-height: 370px;
+      }
+    }
+  }
+
+  .text-right {
+
+    button:first-child {
+      margin-right: 10px;
+    }
+  }
 }
