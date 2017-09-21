@@ -2,7 +2,6 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
-import { bindActionCreators } from 'redux';
 import { toastr } from 'react-redux-toastr';
 import _ from 'lodash';
 
