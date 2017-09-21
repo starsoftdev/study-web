@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import _ from 'lodash';
 
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
@@ -25,7 +25,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     sites: PropTypes.array,
     indications: PropTypes.array,
     sources: PropTypes.array,
-    toastrActions: React.PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -72,9 +71,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           options.patients[index].phone = normalizePhoneForServer(patient.phone);
         }
       });
-    }
 
-    exportPatients(options);
+      exportPatients(options);
+    } else {
+      toastr.error('', 'Required at least one patient.');
+    }
   }
 
   render() {
@@ -104,7 +105,6 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
-    toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 }
 
