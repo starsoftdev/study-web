@@ -4,11 +4,16 @@ import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
+import _ from 'lodash';
 
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
 import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
 
+import { exportPatients } from './actions';
+import { selectExportPatientsStatus } from './selectors';
+
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
+import { normalizePhoneForServer } from '../../common/helper/functions';
 
 export class UploadPatientsPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -16,10 +21,12 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatients: PropTypes.func,
+    exportPatients: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
     sites: PropTypes.array,
     indications: PropTypes.array,
     sources: PropTypes.array,
+    exportPatientsStatus: PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
   };
 
@@ -36,12 +43,40 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites(currentUser.roleForClient.client_id);
   }
 
-  componentWillReceiveProps() {
-    // console.log('componentWillReceiveProps', newProps);
-  }
-
   onSubmitForm(params) {
-    console.log('onSubmitForm', params);
+    const { exportPatients } = this.props;
+    const options = _.clone(params);
+
+    // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
+    // since it's easier to transform and display this way while still displaying studies by protocol
+    if (options.protocol) {
+      options.study_id = options.protocol;
+    }
+
+    delete options.protocol;
+    delete options['group-name'];
+    delete options['group-email'];
+    delete options['group-phone'];
+    delete options['group-age'];
+    delete options['group-gender'];
+    delete options['group-bmi'];
+
+    if (options.patients && options.patients.length) {
+      /* normalizing the phone number */
+      _.forEach(options.patients, (patient, index) => {
+        _.forEach(patient, (value, key) => {
+          if (value === 'N/A') {
+            options.patients[index][key] = null;
+          }
+        });
+
+        if (patient.phone) {
+          options.patients[index].phone = normalizePhoneForServer(patient.phone);
+        }
+      });
+    }
+
+    exportPatients(options);
   }
 
   render() {
@@ -63,6 +98,7 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   indications: selectIndications(),
   sources: selectSources(),
+  exportPatientsStatus: selectExportPatientsStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -70,6 +106,7 @@ function mapDispatchToProps(dispatch) {
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSources: () => dispatch(fetchSources()),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
+    exportPatients: (params) => dispatch(exportPatients(params)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 }

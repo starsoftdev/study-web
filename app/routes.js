@@ -141,7 +141,7 @@ export default function createRoutes(store) {
     }, {
       onEnter: redirectToLogin,
       path: '/app/upload-patients',
-      name: 'uploadPatients',
+      name: 'uploadPatientsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
           System.import('./containers/UploadPatients/reducer'),
@@ -152,7 +152,7 @@ export default function createRoutes(store) {
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('uploadPatients', reducer.default);
+          injectReducer('uploadPatientsPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
