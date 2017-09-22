@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { blur, change, Field, FieldArray, reduxForm, reset } from 'redux-form';
+import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -429,7 +430,7 @@ export default class UploadPatientsForm extends React.Component {
           blur={blur}
         />}
         <div className="text-right">
-          <Button type="button" onClick={this.switchPreview}>{(!showPreview) ? 'Preview' : 'Edit' }</Button>
+          <Button type="button" className={classNames((!showPreview ? 'no-margin-right' : 'margin-right'))} onClick={this.switchPreview}>{(!showPreview) ? 'Preview' : 'Edit' }</Button>
           {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
         </div>
       </Form>
