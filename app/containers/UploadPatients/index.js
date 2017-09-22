@@ -64,8 +64,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     delete options['group-gender'];
     delete options['group-bmi'];
 
-    console.log('options', options, formSyncErrors);
-
     if (!_.isEmpty(formSyncErrors)) {
       if (formSyncErrors['group-name']) {
         toastr.error('', formSyncErrors['group-name']);
