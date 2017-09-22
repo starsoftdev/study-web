@@ -21,8 +21,6 @@ import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError, selectUpgrad
 import RenewStudyForm from '../../components/RenewStudyForm/index';
 import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
 import EditStudyForm from '../../components/EditStudyForm';
-import { upgradeStudyFields } from '../../components/UpgradeStudyForm/validator';
-import { renewStudyFields } from '../../components/RenewStudyForm/validator';
 import { editStudyFields } from '../../components/EditStudyForm/validator';
 import StudyItem from './StudyItem';
 import pqsImage from '../../assets/images/pqs.png';
