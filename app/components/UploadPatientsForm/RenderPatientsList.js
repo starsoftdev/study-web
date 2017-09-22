@@ -92,7 +92,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             />
             <div className="field name pull-left">
               {(index === 0) &&
-                <span className="title">
+                <span className="title required">
                   <label htmlFor="import-patient-name">Name</label>
                 </span>
                 }
@@ -106,7 +106,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             </div>
             <div className="field email pull-left">
               {(index === 0) &&
-                <span className="title">
+                <span className="title required">
                   <label htmlFor="import-patient-email">Email</label>
                 </span>
                 }
@@ -120,7 +120,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             </div>
             <div className="field phone pull-left">
               {(index === 0) &&
-                <span className="title">
+                <span className="title required">
                   <label htmlFor="import-patient-phone">Phone</label>
                 </span>
                 }
