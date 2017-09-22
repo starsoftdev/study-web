@@ -11,14 +11,13 @@ class TextEmailBlastModal extends React.Component {
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
     toggleTextBlast: React.PropTypes.func.isRequired,
-    toggleEmailBlast: React.PropTypes.func.isRequired,
   };
 
   componentDidMount() {
   }
 
   render() {
-    const { toggleTextBlast, toggleEmailBlast, ...props } = this.props;
+    const { toggleTextBlast, ...props } = this.props;
     return (
       <Modal
         {...props}
@@ -47,7 +46,7 @@ class TextEmailBlastModal extends React.Component {
           <span className="or">
             <span className="text">OR</span>
           </span>
-          <span className="modal-opener" onClick={toggleEmailBlast}>
+          <span className="modal-opener coming-soon-wrapper">
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-envelop" />
