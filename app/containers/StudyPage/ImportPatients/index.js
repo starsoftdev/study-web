@@ -6,8 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
+import { push } from 'react-router-redux';
 import Modal from 'react-bootstrap/lib/Modal';
-import Form from 'react-bootstrap/lib/Form';
 import CenteredModal from '../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import sanitizeProps from '../../../utils/sanitizeProps';
@@ -16,6 +16,7 @@ import { submitPatientImport, clearForm } from '../actions';
 @reduxForm({ form: 'importPatients' })
 class ImportPatientsModal extends React.Component {
   static propTypes = {
+    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     clearForm: React.PropTypes.func,
     fileUploaded: React.PropTypes.string,
@@ -31,6 +32,7 @@ class ImportPatientsModal extends React.Component {
     super(props);
     this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
+    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   componentDidMount() {
@@ -48,8 +50,13 @@ class ImportPatientsModal extends React.Component {
     }
   }
 
+  moveToUploadPage() {
+    const { push } = this.props;
+    push('/app/upload-patients');
+  }
+
   renderUpload() {
-    const { toggleAddPatient, uploadStart, fileUploaded } = this.props;
+    const { toggleAddPatient, uploadStart } = this.props;
     if (uploadStart) {
       return (
         <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
@@ -64,28 +71,25 @@ class ImportPatientsModal extends React.Component {
     }
     return (
       <div>
-        <Form className="upload-patient-info">
-          <a className="modal-opener " onClick={this.uploadFile}>
-            <div className="table">
-              <div className="table-cell">
-                <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-                <span className="text coming-soon-old">Upload Patients</span>
-                <span className="text coming-soon-new" />
-              </div>
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
+          <div className="table">
+            <div className="table-cell">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text">Upload Patients</span>
             </div>
-          </a>
-        </Form>
+          </div>
+        </span>
         <span className="or">
           <span>or</span>
         </span>
-        <a className="add-patient-info-import" onClick={toggleAddPatient}>
+        <span className="modal-opener" onClick={toggleAddPatient}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
               <span className="text">Add Patient</span>
             </div>
           </div>
-        </a>
+        </span>
       </div>
     );
   }
@@ -135,6 +139,7 @@ const mapStateToProps = (state) => (
 
 function mapDispatchToProps(dispatch) {
   return {
+    push: (path) => dispatch(push(path)),
     submitPatientImport: (clientId, studyId, file, onClose) => dispatch(submitPatientImport(clientId, studyId, file, onClose)),
     clearForm: () => dispatch(clearForm()),
   };
