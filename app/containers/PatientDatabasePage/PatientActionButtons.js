@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
-import { push } from 'react-router-redux';
 
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -24,7 +23,6 @@ import { clearForm, importPatients } from '../../containers/PatientDatabasePage/
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
-    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
@@ -56,18 +54,12 @@ class PatientActionButtons extends React.Component {
     this.download = this.download.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
-    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   toggleImportPatientsModal() {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
     });
-  }
-
-  moveToUploadPage() {
-    const { push } = this.props;
-    push('/app/upload-patients');
   }
 
   toggleAddPatientModal() {
@@ -165,8 +157,8 @@ class PatientActionButtons extends React.Component {
     }
     return (
       <div>
-        <Form className="upload-patient-info" onClick={this.moveToUploadPage}>
-          <span className="modal-opener">
+        <Form className="upload-patient-info">
+          <span className="modal-opener coming-soon-wrapper">
             <div className="table">
               <div className="table-cell">
                 <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
@@ -278,7 +270,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    push: (path) => dispatch(push(path)),
     clearForm: () => (dispatch(clearForm())),
     importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
   };
