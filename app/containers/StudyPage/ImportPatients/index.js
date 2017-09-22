@@ -65,15 +65,13 @@ class ImportPatientsModal extends React.Component {
     return (
       <div>
         <Form className="upload-patient-info">
-          <a className="modal-opener " onClick={this.uploadFile}>
-            <div className="table">
-              <div className="table-cell">
-                <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-                <span className="text coming-soon-old">Upload Patients</span>
-                <span className="text coming-soon-new" />
-              </div>
+          <div className="table">
+            <div className="table-cell">
+              <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
+              <span className="text coming-soon-old">Upload Patients</span>
+              <span className="text coming-soon-new" />
             </div>
-          </a>
+          </div>
         </Form>
         <span className="or">
           <span>or</span>
