@@ -18,11 +18,12 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
   static propTypes = {
     fields: PropTypes.object,
     formValues: PropTypes.object,
+    meta: PropTypes.object,
   };
 
   componentWillMount() {
     if (this.props.fields.length === 0) {
-      this.props.fields.push({});
+      this.props.fields.push({ source_id: null });
     }
   }
 
@@ -48,15 +49,19 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <i className="icomoon-icon_trash" />
                 </button>
               </div>
-              <div className={classnames('field-row', { hidden: !showName })}>
-                <strong className="label required"><label>Source Name</label></strong>
-                <Field
-                  name={`${lead}.source_name`}
-                  component={Input}
-                  type="text"
-                  className="field"
-                />
-              </div>
+              {
+                showName && (
+                  <div className={classnames('field-row')}>
+                    <strong className="label required"><label>Source Name</label></strong>
+                    <Field
+                      name={`${lead}.source_name`}
+                      component={Input}
+                      type="text"
+                      className="field"
+                    />
+                  </div>
+                )
+              }
             </div>
           );
         }
