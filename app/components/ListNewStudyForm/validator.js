@@ -36,7 +36,7 @@ export default values => {
       if (!lead.source_id) {
         leadError.source_id = 'Lead source can\'t be blank';
       }
-      if (!lead.source_source) {
+      if (!lead.source_name) {
         leadError.source_name = 'Lead source name can\'t be blank';
       }
       leadSourceErrors[index] = leadError;

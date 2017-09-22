@@ -4,7 +4,6 @@ const schema = {
   exposureLevel: { presence: true },
   campaignLength: { presence: true },
   condenseTwoWeeks: { presence: false },
-  callTracking: { presence: false },
   startDate: { presence: false },
   notes: { presence: false },
 };
@@ -13,4 +12,27 @@ const renewStudyFields = Object.keys(schema);
 
 export { renewStudyFields };
 
-export default validatorFactory(schema);
+export default values => {
+  const fieldValidator = validatorFactory(schema);
+  const fieldErrors = fieldValidator(values);
+  const leadSourceErrors = [];
+
+  if (values.callTracking && values.leadSource) {
+    values.leadSource.forEach((lead, index) => {
+      const leadError = {};
+
+      if (!lead.source_id) {
+        leadError.source_id = 'Lead source can\'t be blank';
+      }
+      if (!lead.source_name) {
+        leadError.source_name = 'Lead source name can\'t be blank';
+      }
+      leadSourceErrors[index] = leadError;
+    });
+  }
+
+  return {
+    ...fieldErrors,
+    leadSource: leadSourceErrors,
+  };
+};
