@@ -16,8 +16,8 @@ import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../../containers/HomePage/actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
-import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../components/RenewStudyForm/selectors';
-import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../components/UpgradeStudyForm/selectors';
+import { selectRenewStudyFormValues, selectRenewStudyFormError, selectRenewStudyFields } from '../../components/RenewStudyForm/selectors';
+import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError, selectUpgradeStudyFields } from '../../components/UpgradeStudyForm/selectors';
 import RenewStudyForm from '../../components/RenewStudyForm/index';
 import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
 import EditStudyForm from '../../components/EditStudyForm';
@@ -44,6 +44,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     paginationOptions: React.PropTypes.object,
     renewStudyFormError: PropTypes.bool,
     renewStudyFormValues: PropTypes.object,
+    renewStudyFields: PropTypes.array,
     renewedStudy: PropTypes.object,
     renewStudy: PropTypes.func,
     reset: PropTypes.func.isRequired,
@@ -63,6 +64,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     upgradeStudy: PropTypes.func,
     upgradedStudy: PropTypes.object,
     upgradeStudyFormValues: PropTypes.object,
+    upgradeStudyFields: PropTypes.array,
     upgradeStudyFormError: PropTypes.bool,
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
@@ -331,10 +333,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleRenewStudyFormSubmit() {
     const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy, renewStudyFormError, shoppingCartFormValues, shoppingCartFormError,
-      touchRenewStudy, touchShoppingCart } = this.props;
+      touchRenewStudy, touchShoppingCart, renewStudyFields } = this.props;
 
     if (renewStudyFormError || shoppingCartFormError) {
-      touchRenewStudy();
+      touchRenewStudy(renewStudyFields);
       touchShoppingCart();
       return;
     }
@@ -390,10 +392,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleUpgradeStudyFormSubmit() {
     const { shoppingCartFormError, shoppingCartFormValues, upgradeStudyFormError, touchUpgradeStudy, touchShoppingCart,
-      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
+      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy, upgradeStudyFields } = this.props;
 
     if (upgradeStudyFormError || shoppingCartFormError) {
-      touchUpgradeStudy();
+      touchUpgradeStudy(upgradeStudyFields);
       touchShoppingCart();
       return;
     }
@@ -755,6 +757,7 @@ const mapStateToProps = createStructuredSelector({
   renewedStudy: selectRenewedStudy(),
   renewStudyFormValues: selectRenewStudyFormValues(),
   renewStudyFormError: selectRenewStudyFormError(),
+  renewStudyFields: selectRenewStudyFields(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   shoppingCartFormError: selectShoppingCartFormError(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
@@ -762,6 +765,7 @@ const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
   upgradeStudyFormValues: selectUpgradeStudyFormValues(),
   upgradeStudyFormError: selectUpgradeStudyFormError(),
+  upgradeStudyFields: selectUpgradeStudyFields(),
   upgradedStudy: selectUpgradedStudy(),
   currentUserClientId: selectCurrentUserClientId(),
   clientSites: selectClientSites(),
@@ -781,8 +785,8 @@ function mapDispatchToProps(dispatch) {
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
     reset: (formName) => dispatch(reset(formName)),
     touchEditStudy: () => dispatch(touch('editStudy', ...editStudyFields)),
-    touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
-    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchRenewStudy: (fields) => dispatch(touch('renewStudy', ...fields)),
+    touchUpgradeStudy: (fields) => dispatch(touch('upgradeStudy', ...fields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
     fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),

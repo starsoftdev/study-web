@@ -71,6 +71,11 @@ const selectRenewStudyFormNotesValue = () => createSelector(
   substate => get(substate, 'renewStudy.values.notes', null)
 );
 
+const selectRenewStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => Object.keys(get(substate, 'renewStudy.registeredFields', []))
+);
+
 export default selectFormDomain;
 export {
   selectRenewStudyFormValues,
@@ -83,4 +88,5 @@ export {
   selectRenewStudyFormStartDateValue,
   selectRenewStudyFormNotesValue,
   selectLeadsCount,
+  selectRenewStudyFields,
 };

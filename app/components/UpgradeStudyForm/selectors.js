@@ -53,6 +53,11 @@ const selectUpgradeStudyFormLeadsCount = () => createSelector(
   }
 );
 
+const selectUpgradeStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => Object.keys(get(substate, 'upgradeStudy.registeredFields', []))
+);
+
 export default selectFormDomain;
 export {
   selectUpgradeStudyFormValues,
@@ -62,4 +67,5 @@ export {
   selectUpgradeStudyFormCallTrackingValue,
   selectUpgradeStudyFormNotesValue,
   selectUpgradeStudyFormLeadsCount,
+  selectUpgradeStudyFields,
 };
