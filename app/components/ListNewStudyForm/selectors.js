@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, forEach } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
@@ -44,10 +44,16 @@ const selectLeadsCount = () => createSelector(
   }
 );
 
+const selectRegisteredFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => Object.keys(get(substate, 'listNewStudy.registeredFields', []))
+);
+
 export default selectFormDomain;
 export {
   selectListNewStudyFormValues,
   selectListNewStudyFormError,
   selectCallTracking,
   selectLeadsCount,
+  selectRegisteredFields,
 };
