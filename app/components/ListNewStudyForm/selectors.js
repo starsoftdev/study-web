@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get, forEach } from 'lodash';
+import { get } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
