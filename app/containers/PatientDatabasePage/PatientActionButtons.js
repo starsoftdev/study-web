@@ -171,14 +171,14 @@ class PatientActionButtons extends React.Component {
         <span className="or">
           <span>or</span>
         </span>
-        <a className="add-patient-info-import" onClick={this.toggleAddPatientModal}>
+        <span className="modal-opener" onClick={this.toggleAddPatientModal}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
               <span className="text">Add Patient</span>
             </div>
           </div>
-        </a>
+        </span>
       </div>
     );
   }
