@@ -133,6 +133,7 @@ const mapStateToProps = (state) => (
 
 function mapDispatchToProps(dispatch) {
   return {
+    push: (path) => dispatch(push(path)),
     submitPatientImport: (clientId, studyId, file, onClose) => dispatch(submitPatientImport(clientId, studyId, file, onClose)),
     clearForm: () => dispatch(clearForm()),
   };
