@@ -60,12 +60,10 @@ import {
   fetchSiteLocationsError,
   updateDashboardStudySuccess,
   updateDashboardStudyError,
-  fetchAllClientUsersDashboard,
   fetchAllClientUsersDashboardSuccess,
   fetchAllClientUsersDashboardError,
   fetchStudyCampaignsDashboardSuccess,
   fetchStudyCampaignsDashboardError,
-  fetchCustomNotificationEmails,
   fetchCustomNotificationEmailsSuccess,
   fetchCustomNotificationEmailsError,
   changeStudyStatusDashboardSuccess,
@@ -111,18 +109,15 @@ import {
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
 } from '../../containers/App/constants';
 import {
-  addEmailNotificationUserSuccess,
-  addEmailNotificationUserError,
-  addCustomEmailNotificationSuccess,
-  addCustomEmailNotificationError,
   removeCustomEmailNotificationSuccess,
-  removeCustomEmailNotificationError,
   fetchClientSites,
   fetchClientCredits,
   fetchRewardsBalance,
 } from '../../containers/App/actions';
 
 import {
+  addEmailNotificationUserSuccess,
+  addCustomEmailNotificationSuccess,
   fetchPatientSignUpsSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
@@ -679,7 +674,7 @@ export function* addEmailNotificationUserWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(addEmailNotificationUserSuccess(response.user));
+    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Could not add the user.');
     yield put(toastrActions.error('', errorMessage));
@@ -700,7 +695,7 @@ export function* addCustomEmailNotificationWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(addCustomEmailNotificationSuccess(response));
+    yield put(addCustomEmailNotificationSuccess(response.id, response.email));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Could not add the custom notification email to the study.');
     yield put(toastrActions.error('', errorMessage));

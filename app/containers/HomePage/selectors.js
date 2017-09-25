@@ -68,11 +68,6 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
-const selectAddNotificationProcess = () => createSelector(
-  selectHomePageDomain(),
-  substate => substate.addNotificationProcess
-);
-
 const selectHomePageClientAdmins = () => createSelector(
   selectHomePageDomain(),
   substate => substate.clientAdmins
@@ -107,7 +102,6 @@ export {
   selectEditedStudy,
   selectPaginationOptions,
   selectSearchProtocolsFormValues,
-  selectAddNotificationProcess,
   selectHomePageClientAdmins,
   selectQueryParams,
 };

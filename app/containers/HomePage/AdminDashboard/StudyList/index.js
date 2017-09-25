@@ -25,7 +25,6 @@ import EditInformationModal from '../../../../components/EditStudyForms/EditInfo
 import {
   selectStudies,
   selectPaginationOptions,
-  selectAddNotificationProcess,
   selectDashboardEditNoteProcess,
   selectDashboardNote,
 } from '../selectors';
@@ -44,7 +43,6 @@ import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
 
 const mapStateToProps = createStructuredSelector({
-  addNotificationProcess: selectAddNotificationProcess(),
   editStudyValues: selectValues('Dashboard.EditStudyForm'),
   editNoteProcess: selectDashboardEditNoteProcess(),
   note: selectDashboardNote(),
@@ -69,7 +67,6 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class StudyList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    addNotificationProcess: PropTypes.object,
     addEmailNotificationUser: PropTypes.func.isRequired,
     addCustomEmailNotification: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
@@ -378,9 +375,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
       addEmailNotificationUser({
         ...values,
         clientId: editStudyValues.client_id,
-        addForNotification: true,
-        studyId: editStudyValues.study_id,
-        clientRole:{
+        clientRole: {
           siteId: editStudyValues.site,
         },
       });

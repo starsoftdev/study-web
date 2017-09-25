@@ -84,11 +84,6 @@ const selectAllCustomNotificationEmails = () => createSelector(
   substate => substate.allCustomNotificationEmails
 );
 
-const selectAddNotificationProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.addNotificationProcess
-);
-
 const selectLandingPageUpdateProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updateLandingPageProcess
@@ -173,7 +168,6 @@ export {
   selectStudiesTotals,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectAddNotificationProcess,
   selectThankYouPageUpdateProcess,
   selectUpdatePatientThankYouEmailProcess,
   selectLandingPageUpdateProcess,
