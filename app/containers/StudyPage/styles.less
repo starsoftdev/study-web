@@ -693,41 +693,56 @@
       height: 100%;
       overflow: auto;
 
-      .preview-holder {
-        display: block;
-        color: #101010;
-        position: relative;
+      .sender-field-holder {
+        border-color: #ccc;
         border-width: 0 0 2px;
+        border-bottom-style: solid;
         overflow: hidden;
-        padding: 15px 0 15px 75px;
-        cursor: pointer;
 
-        .img-holder {
-          top: 15px;
-          left: 15px;
-          width: 50px;
-          position: absolute;
-          border-radius: 100%;
+        .sender-field-prev {
+          font-weight: bold;
+          float: left;
+          margin-top: 8px;
+          margin-left: 25px;
         }
 
-        .subject, .author {
-          display: block;
-          font-weight: 600;
-          margin: 0;
-          padding: 0;
+        .sender-field {
+          float: left;
+          width: 85%;
+
+          input {
+            border: none;
+          }
+        }
+
+        .subject {
+          border: none;
+          padding: 5px 25px;
         }
       }
 
       .post-email-alert {
+        border: solid #ccc;
+        min-height: 85px;
+
+        .email-content {
+          max-height: 70px;
+        }
+
+      }
+
+      .post-email-alert,
+      .preview-holder {
+        .font(18px);
         display: block;
         color: #101010;
         position: relative;
-        border: solid #ccc;
         border-width: 0 0 2px;
         overflow: hidden;
         padding: 15px 0 15px 75px;
-        min-height: 85px;
         cursor: pointer;
+        margin: 0;
+        background: #fff;
 
         &:hover {
           color: #fff;
@@ -741,15 +756,15 @@
         .img-holder {
           top: 15px;
           left: 15px;
-          position: absolute;
           width: 50px;
+          position: absolute;
           border-radius: 100%;
         }
 
         .subject, .author {
           display: block;
           font-weight: 600;
-          margin: 0;
+          margin: 0 0 12.5px;
           padding: 0;
         }
 
@@ -760,9 +775,8 @@
         }
 
         .email-content {
-          max-height: 70px;
           overflow: hidden;
-          margin: 0 0 5px;
+          margin: 0 0 12.5px;
           position: relative;
           padding-right: 20px;
 
