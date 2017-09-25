@@ -80,16 +80,17 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   render() {
-    const { me, userRoleType } = this.props;
+    const { me, userRoleType, currentUser } = this.props;
     const initialValues = {
       initialValues: {
-        user_id: this.props.currentUser.id,
+        user_id: currentUser.id,
       },
     };
     const timezoneOptions = _.map(_.filter(moment.tz.names(), (t => t.split('/').length === 2)), t => {
       const timezone = formatTimezone(t);
       return { label: timezone, value: t };
     });
+
     return (
       <form>
         <div className="field-row label-top file-img active">
@@ -98,7 +99,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             <div className="profile-image">
               <label htmlFor="profile-img" className="image">
                 <span>
-                  <img src={this.props.currentUser.profileImageURL || defaultImage} alt="" /><br />
+                  <img src={currentUser.profileImageURL || defaultImage} alt="" /><br />
                 </span>
               </label>
             </div>
@@ -148,7 +149,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           />
         </div>
         {
-          (userRoleType === 'sponsor' || userRoleType === 'dashboard') &&
+          !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
             <div className="field-row">
               <strong className="label"><label>Time Zone</label></strong>
               <Field
