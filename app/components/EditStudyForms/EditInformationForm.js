@@ -255,6 +255,15 @@ export default class EditInformationForm extends React.Component {
           delete newParam.emailNotifications;
         }
       }
+      if (newParam.customEmailNotifications) {
+        newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => (
+          (typeof value.isChecked === 'undefined' && typeof initialValues.customEmailNotifications[key].isChecked !== 'undefined') || (typeof value.isChecked !== 'undefined' && typeof initialValues.customEmailNotifications[key].isChecked === 'undefined') || value.isChecked !== initialValues.customEmailNotifications[key].isChecked
+        ));
+        // the diff'ed email notifications are empty, don't include in the request
+        if (newParam.customEmailNotifications.length === 0) {
+          delete newParam.customEmailNotifications;
+        }
+      }
       console.log(newParam);
       updateDashboardStudy(initialValues.study_id, newParam, stopSubmit);
     }

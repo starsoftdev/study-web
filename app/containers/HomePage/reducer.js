@@ -41,12 +41,6 @@ import {
 } from './constants';
 
 import {
-  ADD_EMAIL_NOTIFICATION_USER,
-  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
-  ADD_EMAIL_NOTIFICATION_USER_ERROR,
-  ADD_CUSTOM_EMAIL_NOTIFICATION,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
@@ -584,60 +578,6 @@ export default function homePageReducer(state = initialState, action) {
           total: state.studies.total || 0,
           active: state.studies.active || 0,
           inactive: state.studies.inactive || 0,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: true,
-          error: null,
-          savedUser: null,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: null,
-          savedUser: action.payload,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: action.payload,
-          savedUser: null,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: true,
-          error: null,
-          savedUser: null,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: false,
-          error: null,
-          savedUser: action.payload,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: false,
-          error: action.payload,
-          savedUser: null,
         },
       };
     case NEW_MESSAGE_FOR_PROTOCOL:
