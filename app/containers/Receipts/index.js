@@ -212,7 +212,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
-  siteLocations : selectSites(),
+  sites : selectSites(),
   currentUser: selectCurrentUser(),
   receipts: selectReceiptsList(),
   receiptsStatus: selectReceiptsStatus(),
