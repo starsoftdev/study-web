@@ -58,10 +58,6 @@ import {
   FETCH_MESSAGING_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
 
-  FETCH_CUSTOM_NOTIFICATION_EMAILS,
-  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
-  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
-
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
@@ -87,9 +83,6 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
-  ADD_EMAIL_NOTIFICATION_USER,
-  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
-  ADD_EMAIL_NOTIFICATION_USER_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -585,60 +578,6 @@ export default function dashboardPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
-        },
-      };
-    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
-      return {
-        ...state,
-        allCustomNotificationEmails: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
-      return {
-        ...state,
-        allCustomNotificationEmails: {
-          details: action.payload,
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
-      return {
-        ...state,
-        allCustomNotificationEmails: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: true,
-          error: null,
-          savedUser: null,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: null,
-          savedUser: action.payload,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: action.payload,
-          savedUser: null,
         },
       };
     case FETCH_STUDY_CAMPAIGNS:

@@ -140,22 +140,18 @@ export const CLEAR_CLINICAL_TRIALS_SEARCH          = 'App/CLEAR_CLINICAL_TRIALS_
 export const LIST_SITE_NOW                         = 'App/LIST_SITE_NOW';
 export const LIST_SITE_NOW_SUCCESS                 = 'App/LIST_SITE_NOW_SUCCESS';
 export const RESET_LIST_SITE_NOW_SUCCESS           = 'App/RESET_LIST_SITE_NOW_SUCCESS';
-export const LIST_SITE_NOW_ERROR                   = 'App/LIST_SITE_NOW_ERROR';
 
 export const GET_PROPOSAL                          = 'App/GET_PROPOSAL';
 export const GET_PROPOSAL_SUCCESS                  = 'App/GET_PROPOSAL_SUCCESS';
 export const RESET_GET_PROPOSAL_SUCCESS            = 'App/RESET_GET_PROPOSAL_SUCCESS';
-export const GET_PROPOSAL_ERROR                    = 'App/GET_PROPOSAL_ERROR';
 
 export const LEARN_ABOUT_FUTURE_TRIALS             = 'App/LEARN_ABOUT_FUTURE_TRIALS';
 export const LEARN_ABOUT_FUTURE_TRIALS_SUCCESS     = 'App/LEARN_ABOUT_FUTURE_TRIALS_SUCCESS';
 export const RESET_LEARN_ABOUT_FUTURE_TRIALS       = 'App/RESET_LEARN_ABOUT_FUTURE_TRIALS';
-export const LEARN_ABOUT_FUTURE_TRIALS_ERROR       = 'App/LEARN_ABOUT_FUTURE_TRIALS_ERROR';
 
 export const NEW_CONTACT                           = 'App/NEW_CONTACT';
 export const NEW_CONTACT_SUCCESS                   = 'App/NEW_CONTACT_SUCCESS';
 export const RESET_NEW_CONTACT_SUCCESS             = 'App/RESET_NEW_CONTACT_SUCCESS';
-export const NEW_CONTACT_ERROR                     = 'App/NEW_CONTACT_ERROR';
 
 export const ADD_EMAIL_NOTIFICATION_USER           = 'App/ADD_EMAIL_NOTIFICATION_USER';
 export const ADD_EMAIL_NOTIFICATION_USER_SUCCESS   = 'App/ADD_EMAIL_NOTIFICATION_USER_SUCCESS';

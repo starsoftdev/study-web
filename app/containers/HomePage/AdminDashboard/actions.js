@@ -1,8 +1,9 @@
 /*
  *
- * Patient Database page actions
+ * Admin Dashboard actions
  *
  */
+
 import {
   UPDATE_FILTERS,
   FETCH_NOTE,
@@ -165,7 +166,7 @@ export function updateDashboardStudy(id, params, stopSubmit) {
     type: UPDATE_DASHBOARD_STUDY,
     id,
     params,
-    stopSubmit
+    stopSubmit,
   };
 }
 
