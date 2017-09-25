@@ -119,6 +119,11 @@ const selectUpdatedStudyAd = () => createSelector(
   substate => substate.updatedStudyAd
 );
 
+const selectRemovedStudyAdId = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.removedStudyAdId
+);
+
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updateThankYouPageProcess
@@ -203,6 +208,7 @@ export {
   selectChangeStudyAddProcess,
   selectMessagingNumbers,
   selectUpdatedStudyAd,
+  selectRemovedStudyAdId,
   selectHoverRowIndex,
   selectStudyIndicationTags,
   selectDashboardCampaigns,
