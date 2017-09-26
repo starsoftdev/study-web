@@ -1050,9 +1050,9 @@ export function* removeStudyAdWorker(action) {
       body: JSON.stringify({ studyId }),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
     toastr.success('', 'Success! Study ad has been removed.');
-    yield put(removeStudyAdSuccess(response));
+    yield put(removeStudyAdSuccess(studyId));
   } catch (err) {
     toastr.error('Error!');
     yield put(removeStudyAdError(err));
