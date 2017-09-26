@@ -36,23 +36,55 @@ class PatientNote extends React.Component {
   render() {
     const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
     return (
-      <div className={classNames('post-msg', { reply: note.user.id === currentUser.id })}>
-        <div className="img-holder">
-          {this.renderProfileImage()}
+      <div className={classNames('note-msg', { reply: note.user.id === currentUser.id })}>
+        <div className="note">
+          <div className="note-header">
+            <a
+              className="btn-trash"
+              onClick={() => {
+                submitDeleteNote(currentPatient.id, currentPatient.patientCategoryId, note.id);
+              }}
+            >
+              <i className="icomoon-icon_trash" />
+            </a>
+          </div>
+          <div className="note-content">
+            <p>{note.note}</p>
+          </div>
+          <div className="note-userinfo">
+            <div className="img-holder">
+              {this.renderProfileImage()}
+            </div>
+            <div className="info">
+              <div className="info-line">
+                <span className="label"> Name: </span>
+                <div className="content">
+                  <span>
+                    {note.user.firstName} {note.user.lastName}
+                  </span>
+                </div>
+              </div>
+
+              <div className="info-line">
+                <span className="label"> Date: </span>
+                <div className="content">
+                  <span>
+                    {moment.tz(note.createdAt, currentUser.timezone).format('MM/DD/YY')}
+                  </span>
+                </div>
+              </div>
+
+              <div className="info-line">
+                <span className="label"> Time: </span>
+                <div className="content">
+                  <span>
+                    {moment.tz(note.createdAt, currentUser.timezone).format('h:mm A')}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="post-content">
-          <p>{note.note}</p>
-          <a
-            className="btn-trash"
-            onClick={() => {
-              submitDeleteNote(currentPatient.id, currentPatient.patientCategoryId, note.id);
-            }}
-          >
-            <i className="icomoon-icon_trash" />
-          </a>
-        </div>
-        <strong className="name">{note.user.firstName} {note.user.lastName}</strong>
-        <time dateTime={note.createdAt}>{moment.tz(note.createdAt, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
       </div>
     );
   }

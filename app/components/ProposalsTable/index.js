@@ -40,6 +40,7 @@ const formName = 'ProposalsTable.Proposals';
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
+    sites: PropTypes.arrary,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     range: PropTypes.any,
@@ -316,6 +317,15 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   mapProposals(raw, result) {
+    const { currentUser, sites } = this.props;
+    let timezone = currentUser.timezone;
+    if (currentUser.roleForClient && currentUser.roleForClient.site_id) {
+      const site = _.find(sites, site => site.id === currentUser.roleForClient.site_id);
+      if (site) {
+        timezone = site.timezone;
+      }
+    }
+
     if (this.state.activeSort === null) {
       const directionUnits = {
         more: 1,
@@ -334,7 +344,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       });
     }
     _.map(raw, (source, key) => {
-      const dateWrapper = moment(source.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(timezone).format('MM/DD/YY');
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.id;
