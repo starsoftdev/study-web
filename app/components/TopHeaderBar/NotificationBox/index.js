@@ -49,7 +49,6 @@ class NotificationBox extends React.Component {
   componentDidMount() {
     const { currentUser } = this.props;
 
-    console.log('current user', currentUser);
     this.props.fetchUnreadNotificationsCount(currentUser.id);
     this.props.fetchNotifications(currentUser.id);
   }
@@ -108,7 +107,7 @@ class NotificationBox extends React.Component {
                       if (html.indexOf('<a href="/app/study') !== -1) {
                         showTime = false;
                         html = `${html.substring(0, html.indexOf('</a>'))}
-                          <time>${this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time></a>`;
+                          <time>${this.parseNotificationTime(n.event_log.created, timezone)}</time></a>`;
                       }
                       return (
                         <li key={n.id}>
@@ -118,7 +117,7 @@ class NotificationBox extends React.Component {
                             </div>
                             <p dangerouslySetInnerHTML={{ __html: html }} />
                             {showTime &&
-                            <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
+                            <time>{this.parseNotificationTime(n.event_log.created, timezone)}</time>
                             }
                           </a>
                         </li>
