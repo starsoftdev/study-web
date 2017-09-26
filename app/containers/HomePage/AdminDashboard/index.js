@@ -161,7 +161,8 @@ export class AdminDashboard extends Component { // eslint-disable-line react/pre
     this.props.fetchCro();
     this.props.fetchUsersByRole();
     this.props.fetchMessagingNumbersDashboard();
-    this.props.fetchFive9List();
+    // TODO re-enable when Five 9 is verified to work
+    // this.props.fetchFive9List();
     this.props.fetchSources();
 
     // this.props.fetchStudiesDashboard({ onlyTotals: true }, 10, 0);
