@@ -38,7 +38,7 @@ import {
   removeTaggedIndicationForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
-import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
+import { selectInitialValues, selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
 
@@ -49,6 +49,7 @@ const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
   formValues: selectValues(formName),
   indications: selectIndications(),
+  initialFormValues: selectInitialValues(formName),
   messagingNumbers: selectMessagingNumbers(),
   protocols: selectProtocols(),
   siteLocations: selectSiteLocations(),
@@ -96,6 +97,7 @@ export default class EditInformationForm extends React.Component {
     onClose: PropTypes.func.isRequired,
     onHide: PropTypes.func,
     onShow: PropTypes.func,
+    initialFormValues: PropTypes.object,
     allCustomNotificationEmails: PropTypes.object,
     messagingNumbers: PropTypes.object.isRequired,
     protocols: PropTypes.array.isRequired,
@@ -234,43 +236,49 @@ export default class EditInformationForm extends React.Component {
 
   updateDashboardStudy(event) {
     event.preventDefault();
-    const { formError, formValues, initialValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
+    const { formError, formValues, initialFormValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
     if (!formError) {
       startSubmit();
       // diff the updated form values
       const newParam = _.pickBy(formValues, (value, key) => (
-        value !== initialValues[key]
+        value !== initialFormValues[key]
       ));
       // delete tagged indications from the request because we already submitted the changes for the tagged indications
       delete newParam.taggedIndicationsForStudy;
       if (newParam.recruitment_phone) {
         newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
       }
+      // check the diff between the initial values of email notifications
       if (newParam.emailNotifications) {
-        newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => (
-          (typeof value.isChecked === 'undefined' && typeof initialValues.emailNotifications[key].isChecked !== 'undefined') || (typeof value.isChecked !== 'undefined' && typeof initialValues.emailNotifications[key].isChecked === 'undefined') || value.isChecked !== initialValues.emailNotifications[key].isChecked
-        ));
+        if (initialFormValues.emailNotifications) {
+          newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => (
+            value.isChecked !== initialFormValues.emailNotifications[key].isChecked
+          ));
+        }
         // the diff'ed email notifications are empty, don't include in the request
         if (newParam.emailNotifications.length === 0) {
           delete newParam.emailNotifications;
         }
       }
+      // check the diff between the initial values of custom email notifications
       if (newParam.customEmailNotifications) {
-        newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => (
-          (typeof value.isChecked === 'undefined' && typeof initialValues.customEmailNotifications[key].isChecked !== 'undefined') || (typeof value.isChecked !== 'undefined' && typeof initialValues.customEmailNotifications[key].isChecked === 'undefined') || value.isChecked !== initialValues.customEmailNotifications[key].isChecked
-        ));
+        if (initialFormValues.customEmailNotifications) {
+          newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => (
+            value.isChecked !== initialFormValues.customEmailNotifications[key].isChecked
+          ));
+        }
         // the diff'ed email notifications are empty, don't include in the request
         if (newParam.customEmailNotifications.length === 0) {
           delete newParam.customEmailNotifications;
         }
       }
       console.log(newParam);
-      updateDashboardStudy(initialValues.study_id, newParam, stopSubmit);
+      updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit);
     }
   }
 
   renderIndications() {
-    const { formValues, initialValues, removeTaggedIndicationForStudy } = this.props;
+    const { formValues, initialFormValues, removeTaggedIndicationForStudy } = this.props;
     if (formValues.taggedIndicationsForStudy) {
       return (
         <div className="category-list">
@@ -281,7 +289,7 @@ export default class EditInformationForm extends React.Component {
                 <span
                   className="icomoon-icon_trash"
                   onClick={() => {
-                    removeTaggedIndicationForStudy(initialValues.study_id, indication);
+                    removeTaggedIndicationForStudy(initialFormValues.study_id, indication);
                   }}
                 />
               </span>
@@ -294,7 +302,7 @@ export default class EditInformationForm extends React.Component {
   }
 
   render() {
-    const { addEmailNotificationClick, addTaggedIndicationForStudy, change, cro, formValues, indications, initialValues, messagingNumbers, protocols,
+    const { addEmailNotificationClick, addTaggedIndicationForStudy, change, cro, formValues, indications, initialFormValues, messagingNumbers, protocols,
       removeCustomEmailNotification, siteLocations, sponsors, submitting, usersByRoles } = this.props;
 
     if (formValues) {
@@ -315,7 +323,7 @@ export default class EditInformationForm extends React.Component {
       const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
 
       const studyValues = {
-        id: initialValues.study_id ? initialValues.study_id : null,
+        id: initialFormValues.study_id ? initialFormValues.study_id : null,
         taggedIndicationsForStudy: formValues.taggedIndicationsForStudy ? formValues.taggedIndicationsForStudy : [],
       };
 
@@ -464,7 +472,7 @@ export default class EditInformationForm extends React.Component {
                 <Field
                   name="site_address"
                   component={FormGeosuggest}
-                  initialValue={initialValues.site_address}
+                  initialValue={initialFormValues.site_address}
                   refObj={(el) => {
                     this.geoSuggest = el;
                   }}
@@ -747,7 +755,7 @@ export default class EditInformationForm extends React.Component {
                     this.toggleIndicationPopover();
                   }}
                 >
-                  <IndicationOverlay indications={indications} selectIndication={addTaggedIndicationForStudy} study={studyValues} onClose={this.toggleIndicationPopover}/>
+                  <IndicationOverlay indications={indications} selectIndication={addTaggedIndicationForStudy} study={studyValues} onClose={this.toggleIndicationPopover} />
                 </Overlay>
               </div>
             </div>

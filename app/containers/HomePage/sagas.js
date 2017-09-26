@@ -813,11 +813,14 @@ export function* updateDashboardStudyWorker(action) {
       body: JSON.stringify(params),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
 
-    yield put(updateDashboardStudySuccess(response));
+    const statusChanged = typeof params.is_active !== 'undefined';
+
+    yield put(updateDashboardStudySuccess(id, params));
     stopSubmit();
   } catch (err) {
+    console.log(err);
     yield put(updateDashboardStudyError(err));
     stopSubmit(err);
   }

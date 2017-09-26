@@ -2,6 +2,7 @@
  * Created by mike on 08/22/17.
  */
 
+import _ from 'lodash';
 import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
@@ -9,6 +10,7 @@ import {
 import {
   ADD_STUDY_INDICATION_TAG_SUCCESS,
   REMOVE_STUDY_INDICATION_TAG_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
 } from '../../containers/HomePage/AdminDashboard/constants';
 
 const initialState = {};
@@ -78,7 +80,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
           {
             email: action.email,
             userId: action.userId,
-            isChecked: true,
+            isChecked: false,
           },
         ];
       } else {
@@ -86,7 +88,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
           {
             email: action.email,
             userId: action.userId,
-            isChecked: true,
+            isChecked: false,
           },
         ];
       }
@@ -129,7 +131,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
           {
             email: action.email,
             id: action.id,
-            isChecked: true,
+            isChecked: false,
           },
         ];
       } else {
@@ -137,7 +139,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
           {
             email: action.email,
             userId: action.userId,
-            isChecked: true,
+            isChecked: false,
           },
         ];
       }
@@ -150,6 +152,42 @@ export default function editDashboardStudyReducer(state = initialState, action) 
         initial: {
           ...state.initial,
           customEmailNotifications: initialCustomEmailNotifications,
+        },
+      };
+    }
+    case UPDATE_DASHBOARD_STUDY_SUCCESS: {
+      let emailNotifications;
+      if (state.initial.emailNotifications && action.updatedStudyParams.emailNotifications) {
+        emailNotifications = state.initial.emailNotifications.map(emailNotification => {
+          const updatedEmailNotification = _.find(action.updatedStudyParams.emailNotifications, { userId: emailNotification.userId })
+          const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
+          return {
+            ...emailNotification,
+            isChecked,
+          };
+        });
+      } else {
+        emailNotifications = state.initial.emailNotifications;
+      }
+      let customEmailNotifications;
+      if (state.initial.customEmailNotifications && action.updatedStudyParams.customEmailNotifications) {
+        customEmailNotifications = state.initial.customEmailNotifications.map(emailNotification => {
+          const updatedEmailNotification = _.find(action.updatedStudyParams.customEmailNotifications, { userId: emailNotification.userId })
+          const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
+          return {
+            ...emailNotification,
+            isChecked,
+          };
+        });
+      } else {
+        customEmailNotifications = state.initial.customEmailNotifications;
+      }
+      return {
+        ...state,
+        initial: {
+          ...state.initial,
+          emailNotifications,
+          customEmailNotifications,
         },
       };
     }

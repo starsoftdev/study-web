@@ -1,3 +1,3 @@
 /* eslint-disable no-multi-spaces */
 
-export const FETCHED_USER_EMAIL_NOTIFICATIONS                      = 'AdminDashboard/FETCHED_USER_EMAIL_NOTIFICATIONS';
+export const FETCH_EDIT_STUDY_INFORMATION                      = 'AdminDashboard/FETCH_EDIT_STUDY_INFORMATION';
