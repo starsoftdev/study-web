@@ -156,8 +156,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
     const pageTitle = `${study.name} - StudyKIK`;
     let campaignOptions = campaigns.map(campaign => {
-      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).format('MM/DD/YYYY') : 'TBD';
-      const dateTo = campaign.dateTo ? moment(campaign.dateTo).format('MM/DD/YYYY') : 'TBD';
+      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
+      const dateTo = campaign.dateTo ? moment(campaign.dateTo).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       return {
         label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
