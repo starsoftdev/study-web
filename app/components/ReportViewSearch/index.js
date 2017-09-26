@@ -141,7 +141,7 @@ export class ReportViewSearch extends React.Component {
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
