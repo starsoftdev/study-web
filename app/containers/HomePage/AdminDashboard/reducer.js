@@ -21,9 +21,7 @@ import {
   FETCH_TOTALS_DASHBOARD_ERROR,
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
-  UPDATE_DASHBOARD_STUDY,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
-  UPDATE_DASHBOARD_STUDY_ERROR,
   FETCH_ALL_CLIENT_USERS,
   FETCH_ALL_CLIENT_USERS_SUCCESS,
   FETCH_ALL_CLIENT_USERS_ERROR,
@@ -57,6 +55,10 @@ import {
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
+
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
@@ -108,11 +110,6 @@ const initialState = {
     details: {},
     fetching: false,
     error: null,
-  },
-  updateStudyProcess: {
-    saving: false,
-    error: null,
-    study: null,
   },
   updateLandingPageProcess: {
     success: false,
@@ -495,32 +492,21 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case UPDATE_DASHBOARD_STUDY:
-      return {
-        ...state,
-        updateStudyProcess: {
-          saving: true,
-          error: null,
-          study: null,
-        },
-      };
     case UPDATE_DASHBOARD_STUDY_SUCCESS: {
-      const savedStudy = action.payload.study;
       const studiesCopy = [
         ...state.studies.details,
       ];
-      const studyIndex = _.findIndex(studiesCopy, (item) => (item.study_id === savedStudy.study_id));
-      if (studyIndex) {
-        savedStudy.selected = true;
-        studiesCopy[studyIndex] = savedStudy;
-      }
-      _.forEach(studiesCopy, (study, key) => {
-        if (studiesCopy[key].is_active) {
+      const study = _.find(studiesCopy, (item) => (item.study_id === action.studyId));
+      if (study && typeof action.updatedStudyParams.is_active !== 'undefined') {
+        study.is_active = action.updatedStudyParams.is_active;
+        if (study.is_active) {
           totalActive++;
+          totalInactive--;
         } else {
+          totalActive--;
           totalInactive++;
         }
-      });
+      }
       return {
         ...state,
         totals: {
@@ -537,22 +523,8 @@ export default function dashboardPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        updateStudyProcess: {
-          saving: false,
-          error: null,
-          study: savedStudy,
-        },
       };
     }
-    case UPDATE_DASHBOARD_STUDY_ERROR:
-      return {
-        ...state,
-        updateStudyProcess: {
-          saving: false,
-          error: null,
-          study: null,
-        },
-      };
     case FETCH_ALL_CLIENT_USERS:
       return {
         ...state,
@@ -575,6 +547,33 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         allClientUsers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
           details: [],
           fetching: false,
           error: action.payload,
