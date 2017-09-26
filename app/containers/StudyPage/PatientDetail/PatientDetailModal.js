@@ -140,14 +140,14 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory, site } = this.props;
+    const { currentPatient, currentPatientCategory, site, currentUser } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <PatientDetailSection initialValues={formattedPatient} site={site} />
+        <PatientDetailSection initialValues={formattedPatient} site={site} currentUser={currentUser} />
       );
     }
     return null;
