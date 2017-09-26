@@ -55,6 +55,11 @@ import {
   CHANGE_STUDY_ADD,
   CHANGE_STUDY_ADD_SUCCESS,
   CHANGE_STUDY_ADD_ERROR,
+
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
+
   RESET_CHANGE_STUDY_ADD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
@@ -210,6 +215,7 @@ const initialState = {
     error: false,
   },
   updatedStudyAd: null,
+  removedStudyAd: null,
   levels: [],
   siteLocations: [],
   siteNames: [],
@@ -866,6 +872,22 @@ export default function dashboardPageReducer(state = initialState, action) {
           saving: false,
           error: true,
         },
+      };
+    case REMOVE_STUDY_AD:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case REMOVE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        removedStudyAdId: action.studyId,
+        updatedStudyAd: null,
+      };
+    case REMOVE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        removedStudyAdId: null,
       };
     case RESET_CHANGE_STUDY_ADD_STATE:
       return {
