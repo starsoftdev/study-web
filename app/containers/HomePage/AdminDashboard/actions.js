@@ -170,10 +170,11 @@ export function updateDashboardStudy(id, params, stopSubmit) {
   };
 }
 
-export function updateDashboardStudySuccess(payload) {
+export function updateDashboardStudySuccess(studyId, updatedStudyParams) {
   return {
     type: UPDATE_DASHBOARD_STUDY_SUCCESS,
-    payload,
+    studyId,
+    updatedStudyParams,
   };
 }
 

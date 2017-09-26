@@ -83,22 +83,21 @@ export default class EditInformationModal extends React.Component {
 
           let isAllChecked = true;
           nextProps.allClientUsers.details.forEach(item => {
-            const isChecked = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
-            if (!isChecked) {
+            const emailNotification = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
+            if (!emailNotification) {
               isAllChecked = false;
             }
             // set internal state to hold the value for the fields without re-rendering
             this.emailNotificationFields.push({
               email: item.email,
               userId: item.user_id,
-              isChecked,
+              isChecked: typeof emailNotification === 'object' && emailNotification.isChecked,
             });
           });
           // set internal state to hold the value for the field boolean without re-rendering
           this.checkAllEmailNotificationFields = isAllChecked;
         }
       } else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
-
         this.customEmailNotificationFields = [];
         let isAllCustomChecked = true;
         nextProps.customNotificationEmails.details.forEach(item => {
@@ -134,7 +133,7 @@ export default class EditInformationModal extends React.Component {
           value: item.indication_id,
         }));
       } else if (!openModal && nextProps.openModal) {
-        const { fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy } = this.props;
+        const { fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;
         // fetch more information about the users, the tagged indications, and the messaging numbers
         fetchAllClientUsersDashboard(study.client_id, study.site_id);
         fetchCustomNotificationEmails(study.study_id);
