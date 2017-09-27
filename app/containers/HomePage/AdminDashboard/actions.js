@@ -287,9 +287,10 @@ export function removeStudyAd(studyId) {
   };
 }
 
-export function removeStudyAdSuccess() {
+export function removeStudyAdSuccess(studyId) {
   return {
     type: REMOVE_STUDY_AD_SUCCESS,
+    studyId,
   };
 }
 
