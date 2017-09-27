@@ -53,7 +53,6 @@ class PatientActionButtons extends React.Component {
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
     this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
@@ -136,14 +135,6 @@ class PatientActionButtons extends React.Component {
       });
     } else {
       this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
-    }
-  }
-
-  uploadFile(e) {
-    const { clientId } = this.props;
-    if (e.target.files[0]) {
-      this.props.importPatients(clientId, e.target.files[0], this.toggleImportPatientsModal);
-      this.fileBttn.value = '';
     }
   }
 
@@ -274,7 +265,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    push: (path) => dispatch(push(path)),
     clearForm: () => (dispatch(clearForm())),
     importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
   };
