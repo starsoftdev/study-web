@@ -55,11 +55,13 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
   render() {
     const { switchCompose, active, emails } = this.props;
     const { preview, selected } = this.state;
+
     return (
       <div className={classNames('item emails-info', { active })}>
         <section className="emails-info-holder">
-          {(emails.details.length && !preview) &&
-              emails.details.map((email, index) => <article className="post-email-alert" key={index} onClick={() => { this.enablePreview(email); }}>
+          {(emails.details.length > 0 && !preview) &&
+            emails.details.map((email, index) =>
+              <article className="post-email-alert" key={index} onClick={() => { this.enablePreview(email); }}>
                 <div className="img-holder">
                   {this.renderProfileImage(email)}
                 </div>
@@ -75,27 +77,28 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                 <time dateTime={email.date_sent}>
                   {moment.tz(email.date_sent, email.timezone).format('MM/DD/YY [at] h:mm A')}
                 </time>
-              </article>)
-            }
+              </article>
+            )
+          }
           {(preview && selected) &&
-          <article className="preview-holder">
-            <div className="img-holder">
-              {this.renderProfileImage(selected)}
-            </div>
-            <strong className="subject">
-              {selected.subject}
-            </strong>
-            <div className="email-content">
-              <p>{selected.body}</p>
-            </div>
-            <strong className="author">
-              {`${selected.first_name} ${(selected.last_name) ? selected.last_name : ''}`}
-            </strong>
-            <time dateTime={selected.date_sent}>
-              {moment.tz(selected.date_sent, selected.timezone).format('MM/DD/YY [at] h:mm A')}
-            </time>
-          </article>
-            }
+            <article className="preview-holder">
+              <div className="img-holder">
+                {this.renderProfileImage(selected)}
+              </div>
+              <strong className="subject">
+                {selected.subject}
+              </strong>
+              <div className="email-content">
+                <p>{selected.body}</p>
+              </div>
+              <strong className="author">
+                {`${selected.first_name} ${(selected.last_name) ? selected.last_name : ''}`}
+              </strong>
+              <time dateTime={selected.date_sent}>
+                {moment.tz(selected.date_sent, selected.timezone).format('MM/DD/YY [at] h:mm A')}
+              </time>
+            </article>
+          }
         </section>
         <div className="textarea">
           {preview && <input type="button" value="back" className="btn btn-gray-outline left" onClick={this.disablePreview} />}
