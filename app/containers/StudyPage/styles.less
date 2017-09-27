@@ -792,12 +792,21 @@
 
       .post-email-alert {
         border: solid #ccc;
+        cursor: pointer;
         min-height: 85px;
 
         .email-content {
           max-height: 70px;
         }
 
+        &:hover {
+          color: #fff;
+          background: #00afef;
+
+          time{
+            color: #fff;
+          }
+        }
       }
 
       .post-email-alert,
@@ -809,18 +818,8 @@
         border-width: 0 0 2px;
         overflow: hidden;
         padding: 15px 0 15px 75px;
-        cursor: pointer;
         margin: 0;
         background: #fff;
-
-        &:hover {
-          color: #fff;
-          background: #00afef;
-
-          time{
-            color: #fff;
-          }
-        }
 
         .img-holder {
           top: 15px;
@@ -830,10 +829,13 @@
           border-radius: 100%;
         }
 
+        .subject {
+          margin: 0 0 12.5px;
+        }
+
         .subject, .author {
           display: block;
           font-weight: 600;
-          margin: 0 0 12.5px;
           padding: 0;
         }
 
