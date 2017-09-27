@@ -815,8 +815,6 @@ export function* updateDashboardStudyWorker(action) {
 
     yield call(request, requestURL, options);
 
-    const statusChanged = typeof params.is_active !== 'undefined';
-
     yield put(updateDashboardStudySuccess(id, params));
     stopSubmit();
   } catch (err) {
