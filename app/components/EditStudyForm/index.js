@@ -23,6 +23,7 @@ import {
 import {
   selectChangeStudyAddProcess,
   selectUpdatedStudyAd,
+  selectRemovedStudyAdId,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
@@ -69,6 +70,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     removeStudyAd: PropTypes.func.isRequired,
     changeStudyAddProcess: PropTypes.any,
     updatedStudyAd: PropTypes.any,
+    removedStudyAdId: PropTypes.number,
     resetChangeAddState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
@@ -344,10 +346,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { editedStudy, changeStudyAddProcess } = this.props;
+    const { editedStudy, changeStudyAddProcess, removedStudyAdId } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
-    const fileSrc = this.state.updatedStudyAd || image;
-
+    const fileSrc = (removedStudyAdId && removedStudyAdId === this.state.currentStudy.id) ? null : this.state.updatedStudyAd || image;
     const preview =
       (<div className="img-preview">
         <a
@@ -529,6 +530,7 @@ const mapStateToProps = createStructuredSelector({
   editedStudy: selectEditedStudy(),
   clientSites: selectClientSites(),
   updatedStudyAd: selectUpdatedStudyAd(),
+  removedStudyAdId: selectRemovedStudyAdId(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),

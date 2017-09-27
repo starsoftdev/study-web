@@ -329,8 +329,12 @@ export function* fetchPatientSignUpsWatcher() {
 export function* fetchPatientSignUpsWorker(action) {
   try {
     let requestURL = '';
+    let timezone = action.currentUser.timezone;
     if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
       requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+      if (!action.currentUser.roleForClient.isAdmin) {
+        timezone = action.currentUser.roleForClient.site.timezone;
+      }
     } else {
       requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;
     }
@@ -338,7 +342,7 @@ export function* fetchPatientSignUpsWorker(action) {
     const params = {
       method: 'GET',
       query: {
-        timezone: action.currentUser.timezone,
+        timezone,
       },
     };
     const response = yield call(request, requestURL, params);
@@ -1050,9 +1054,9 @@ export function* removeStudyAdWorker(action) {
       body: JSON.stringify({ studyId }),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
     toastr.success('', 'Success! Study ad has been removed.');
-    yield put(removeStudyAdSuccess(response));
+    yield put(removeStudyAdSuccess(studyId));
   } catch (err) {
     toastr.error('Error!');
     yield put(removeStudyAdError(err));

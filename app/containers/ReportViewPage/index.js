@@ -68,7 +68,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
     this.props.getReportsList(filters);
@@ -101,7 +101,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
 
