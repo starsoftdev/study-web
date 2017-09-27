@@ -5,9 +5,9 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
+import { push } from 'react-router-redux';
 
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -23,6 +23,7 @@ import { clearForm, importPatients } from '../../containers/PatientDatabasePage/
 
 class PatientActionButtons extends React.Component {
   static propTypes = {
+    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
@@ -52,14 +53,19 @@ class PatientActionButtons extends React.Component {
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
+    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   toggleImportPatientsModal() {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
     });
+  }
+
+  moveToUploadPage() {
+    const { push } = this.props;
+    push('/app/upload-patients');
   }
 
   toggleAddPatientModal() {
@@ -132,16 +138,8 @@ class PatientActionButtons extends React.Component {
     }
   }
 
-  uploadFile(e) {
-    const { clientId } = this.props;
-    if (e.target.files[0]) {
-      this.props.importPatients(clientId, e.target.files[0], this.toggleImportPatientsModal);
-      this.fileBttn.value = '';
-    }
-  }
-
   renderUpload() {
-    const { importPatientsStatus: { uploadStart, fileUploaded } } = this.props;
+    const { importPatientsStatus: { uploadStart } } = this.props;
 
     if (uploadStart) {
       return (
@@ -157,28 +155,25 @@ class PatientActionButtons extends React.Component {
     }
     return (
       <div>
-        <Form className="upload-patient-info">
-          <span className="modal-opener coming-soon-wrapper">
-            <div className="table">
-              <div className="table-cell">
-                <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-                <span className="text coming-soon-old">Upload Patients</span>
-                <span className="text coming-soon-new" />
-              </div>
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
+          <div className="table">
+            <div className="table-cell">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text">Upload Patients</span>
             </div>
-          </span>
-        </Form>
+          </div>
+        </span>
         <span className="or">
           <span>or</span>
         </span>
-        <a className="add-patient-info-import" onClick={this.toggleAddPatientModal}>
+        <span className="modal-opener" onClick={this.toggleAddPatientModal}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
               <span className="text">Add Patient</span>
             </div>
           </div>
-        </a>
+        </span>
       </div>
     );
   }
