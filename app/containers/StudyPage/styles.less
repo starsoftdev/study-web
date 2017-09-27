@@ -594,7 +594,7 @@
     
     .note {
       border: 2px solid #636363;
-      color: 2px solid #101010;
+      color: #101010;
       background-color: #f9f4b5;
 
       .note-header {
@@ -617,12 +617,17 @@
         position: relative;
         padding: 25px 25px 0px;
         min-height: 45px;
+
+        p {
+          word-wrap: break-word;
+          color: #636363;
+        }
       }
 
       .note-userinfo {
         position: relative;
         display: flex;
-        margin: 25px;
+        margin: 25px 25px 5px 25px;
         border-top: 2px solid #636363;
         align-items: center;
 
@@ -651,6 +656,7 @@
               flex: 1;
               span {
                 padding: 0 0 5px 0;
+                color: #636363;
               }
             }
           }
