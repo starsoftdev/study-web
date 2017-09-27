@@ -1,27 +1,25 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, change, Field, FieldArray, reduxForm, touch, reset } from 'redux-form';
+import { blur, change, Field, FieldArray, reduxForm, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-// import { selectSyncErrorBool } from '../../common/selectors/form.selector';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { fetchFilteredProtcols, submitAddPatient } from '../../containers/UploadPatients/actions';
+import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus } from '../../containers/UploadPatients/selectors';
 import RenderPatientsList from './RenderPatientsList';
 import { normalizePhoneForServer } from '../../common/helper/functions';
-import formValidator, { fields } from './validator';
+import formValidator from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
-  // formError: selectSyncErrorBool(formName),
   indications: selectIndications(),
   isFetchingProtocols: selectIsFetchingProtocols(formName),
   protocols: selectProtocols(formName),
@@ -35,8 +33,6 @@ const mapDispatchToProps = (dispatch) => ({
   clearForm: () => dispatch(reset(formName)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
-  submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
-  touchFields: () => dispatch(touch(formName, ...fields)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -56,7 +52,6 @@ export default class UploadPatientsForm extends React.Component {
     sources: React.PropTypes.array,
     submitting: React.PropTypes.bool,
     handleSubmit: React.PropTypes.func.isRequired,
-    touchFields: React.PropTypes.func,
     blur: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
@@ -351,7 +346,7 @@ export default class UploadPatientsForm extends React.Component {
         </div>
         {!this.state.showPreview && <div className="column-groups">
           <div className="column names">
-            <span className="title">
+            <span className="title required">
               <label htmlFor="import-patient-name">Name</label>
             </span>
             <Field
@@ -363,7 +358,7 @@ export default class UploadPatientsForm extends React.Component {
             />
           </div>
           <div className="column emails">
-            <span className="title">
+            <span className="title required">
               <label htmlFor="import-patient-name">Email</label>
             </span>
             <Field
@@ -375,7 +370,7 @@ export default class UploadPatientsForm extends React.Component {
             />
           </div>
           <div className="column phones">
-            <span className="title">
+            <span className="title required">
               <label htmlFor="import-patient-name">Phone</label>
             </span>
             <Field
@@ -434,7 +429,8 @@ export default class UploadPatientsForm extends React.Component {
           blur={blur}
         />}
         <div className="text-right">
-          <Button type="button" onClick={this.switchPreview}>{(!showPreview) ? 'Preview' : 'Edit' }</Button>
+          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Preview</Button>}
+          {showPreview && <button type="button" className="btn btn-primary margin-right" onClick={this.switchPreview}>Edit</button>}
           {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
         </div>
       </Form>
