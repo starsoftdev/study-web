@@ -64,7 +64,9 @@ class PatientText extends React.Component {
   }
 
   render() {
-    const { textMessage, site } = this.props;
+    const { textMessage, site, currentUser } = this.props;
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+
     if (textMessage) {
       let addon = '';
 
@@ -93,7 +95,7 @@ class PatientText extends React.Component {
           </div>
           {this.renderTextMessageOriginUser()}
           <time dateTime={textMessage.dateCreated}>
-            {moment.tz(textMessage.dateCreated, site.timezone).format('MM/DD/YY [at] h:mm A')}
+            {moment.tz(textMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}
           </time>
         </div>
       );

@@ -35,6 +35,7 @@ class PatientDetailSection extends React.Component {
     formValues: React.PropTypes.object,
     formDidChange: React.PropTypes.bool,
     site: React.PropTypes.object,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -91,11 +92,13 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting, initialValues, site } = this.props;
+    const { submitting, initialValues, site, currentUser } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -159,7 +162,7 @@ class PatientDetailSection extends React.Component {
             <label htmlFor="new-patient-phone">Signed Up</label>
           </strong>
           <div className="field">
-            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, site.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
           </div>
         </div>
 
@@ -168,7 +171,7 @@ class PatientDetailSection extends React.Component {
             <label htmlFor="new-patient-phone">Updated</label>
           </strong>
           <div className="field">
-            <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, site.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+            <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
           </div>
         </div>
 
