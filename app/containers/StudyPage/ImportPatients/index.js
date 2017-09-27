@@ -30,24 +30,11 @@ class ImportPatientsModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
     this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   componentDidMount() {
-  }
-
-  uploadFile(event) {
-    const { clientId, onHide, submitPatientImport, studyId } = this.props;
-    // if the file is a csv
-    if (event.target.files && (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values')) {
-      const file = event.target.files[0];
-      submitPatientImport(clientId, studyId, file, onHide);
-    } else {
-      // display error
-      toastr.error('Wrong file type');
-    }
   }
 
   moveToUploadPage() {
