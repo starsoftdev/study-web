@@ -7,6 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
+import { push } from 'react-router-redux';
 
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -25,12 +26,14 @@ const mapStateToProps = createStructuredSelector({
   importPatientsStatus: selectImportPatientsStatus(),
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch) => ({
+  push: (path) => dispatch(push(path)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class PatientActionButtons extends React.Component {
   static propTypes = {
+    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     formValues: React.PropTypes.object,
     importPatientsStatus: React.PropTypes.object,
@@ -59,12 +62,18 @@ export default class PatientActionButtons extends React.Component {
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
+    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   toggleImportPatientsModal() {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
     });
+  }
+
+  moveToUploadPage() {
+    const { push } = this.props;
+    push('/app/upload-patients');
   }
 
   toggleAddPatientModal() {
@@ -140,12 +149,11 @@ export default class PatientActionButtons extends React.Component {
   renderUpload() {
     return (
       <div>
-        <span className="modal-opener coming-soon-wrapper">
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text coming-soon-old">Upload Patients</span>
-              <span className="text coming-soon-new" />
+              <span className="text">Upload Patients</span>
             </div>
           </div>
         </span>
