@@ -688,7 +688,7 @@ export function* addCustomEmailNotificationWatcher() {
 export function* addCustomEmailNotificationWorker(action) {
   const { payload } = action;
   try {
-    const requestURL = `${API_URL}/clients/addCustomNotificationEmail`;
+    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
     const options = {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -709,9 +709,9 @@ export function* removeCustomEmailNotificationWatcher() {
 export function* removeCustomEmailNotificationWorker(action) {
   const { payload } = action;
   try {
-    const requestURL = `${API_URL}/clients/removeCustomNotificationEmail`;
+    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
     const options = {
-      method: 'POST',
+      method: 'DELETE',
       body: JSON.stringify(payload),
     };
 
