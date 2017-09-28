@@ -5,77 +5,47 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { toastr } from 'react-redux-toastr';
-import { push } from 'react-router-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
-import LoadingSpinner from '../../../components/LoadingSpinner';
 import sanitizeProps from '../../../utils/sanitizeProps';
-import { submitPatientImport, clearForm } from '../actions';
 
+const mapStateToProps = (state) => ({
+  clientId: state.global.userData.roleForClient.client.id,
+  studyId: state.studyPage.studyId,
+});
+
+const mapDispatchToProps = () => ({
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({ form: 'importPatients' })
-class ImportPatientsModal extends React.Component {
+export default class ImportPatientsModal extends React.Component {
   static propTypes = {
-    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
-    clearForm: React.PropTypes.func,
-    fileUploaded: React.PropTypes.string,
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
     toggleAddPatient: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number,
-    submitPatientImport: React.PropTypes.func.isRequired,
-    uploadStart: React.PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
-    this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
-    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   componentDidMount() {
   }
 
-  uploadFile(event) {
-    const { clientId, onHide, submitPatientImport, studyId } = this.props;
-    // if the file is a csv
-    if (event.target.files && (event.target.files[0].type === 'text/csv' || event.target.files[0].type === '' || event.target.files[0].type === 'application/vnd.ms-excel' || event.target.files[0].type === 'application/excel' || event.target.files[0].type === 'text/anytext' || event.target.files[0].type === 'application/vnd.msexcel' || event.target.files[0].type === 'text/comma-separated-values')) {
-      const file = event.target.files[0];
-      submitPatientImport(clientId, studyId, file, onHide);
-    } else {
-      // display error
-      toastr.error('Wrong file type');
-    }
-  }
-
-  moveToUploadPage() {
-    const { push } = this.props;
-    push('/app/upload-patients');
-  }
-
   renderUpload() {
-    const { toggleAddPatient, uploadStart } = this.props;
-    if (uploadStart) {
-      return (
-        <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
-          <p>
-            <LoadingSpinner showOnlyIcon />
-          </p>
-          <p className="text-info spinner-text">
-            Uploading CSV File...
-          </p>
-        </div>
-      );
-    }
+    const { toggleAddPatient } = this.props;
     return (
       <div>
-        <span className="modal-opener" onClick={this.moveToUploadPage}>
+        <span className="modal-opener coming-soon-wrapper">
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text">Upload Patients</span>
+              <span className="text coming-soon-old">Upload Patients</span>
+              <span className="text coming-soon-new" />
             </div>
           </div>
         </span>
@@ -98,12 +68,7 @@ class ImportPatientsModal extends React.Component {
     const { onHide, ...props } = this.props;
     const sanitizedProps = sanitizeProps(props);
     delete sanitizedProps.toggleAddPatient;
-    delete sanitizedProps.toggleAddPatient;
-    delete sanitizedProps.uploadStart;
-    delete sanitizedProps.fileUploaded;
-    delete sanitizedProps.clearForm;
     delete sanitizedProps.studyId;
-    delete sanitizedProps.submitPatientImport;
     return (
       <Modal
         {...sanitizedProps}
@@ -128,21 +93,3 @@ class ImportPatientsModal extends React.Component {
     );
   }
 }
-const mapStateToProps = (state) => (
-  {
-    clientId: state.global.userData.roleForClient.client.id,
-    studyId: state.studyPage.studyId,
-    uploadStart: state.studyPage.uploadStarted,
-    fileUploaded: state.studyPage.fileUploaded,
-  }
-);
-
-function mapDispatchToProps(dispatch) {
-  return {
-    push: (path) => dispatch(push(path)),
-    submitPatientImport: (clientId, studyId, file, onClose) => dispatch(submitPatientImport(clientId, studyId, file, onClose)),
-    clearForm: () => dispatch(clearForm()),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ImportPatientsModal);
