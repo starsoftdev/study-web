@@ -68,7 +68,7 @@ export class LandingPage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { subscribedFromLanding, landing, sendThankYouEmail, landingError } = newProps;
+    const { subscribedFromLanding, landing, landingError } = newProps;
     const { siteLocation } = newProps.params;
     let invalidSite = false;
 
@@ -92,7 +92,7 @@ export class LandingPage extends React.Component {
 
     if (subscribedFromLanding) {
       if (subscribedFromLanding.email.trim().toLowerCase() !== 'testing@studykik.com') {
-        sendThankYouEmail(subscribedFromLanding);
+        // sendThankYouEmail(subscribedFromLanding);
       }
       browserHistory.push('/thankyou');
     }
