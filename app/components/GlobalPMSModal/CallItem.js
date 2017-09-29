@@ -10,14 +10,14 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
     messageData: PropTypes.object,
     currentUser: PropTypes.object,
     postMsg: PropTypes.bool,
-    site: React.PropTypes.object,
+    timezone: React.PropTypes.object,
   };
 
   render() {
-    const { messageData, currentUser, site } = this.props;
+    const { messageData, currentUser } = this.props;
     const cts = messageData.twilioCallRecord.created;
 
-    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+    const timezone = this.props.timezone || currentUser.timezone;
 
     const cdate = `${moment.tz(cts.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}`;
 
