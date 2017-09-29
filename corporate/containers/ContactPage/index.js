@@ -1,10 +1,11 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Field, reduxForm, reset, touch, blur } from 'redux-form';
+import { Field, reduxForm, reset, touch, blur, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import { Link } from 'react-router';
 import Isvg from 'react-inlinesvg';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
@@ -28,6 +29,12 @@ import formValidator, { fields } from './validator';
 
 const formName = 'contactForm';
 
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+  newContact: selectValues(formName),
+  newContactSuccess: selectNewContactSuccess(),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
     blur: (field, value) => dispatch(blur(formName, field, value)),
@@ -35,6 +42,7 @@ function mapDispatchToProps(dispatch) {
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
     resetNewContactSuccess: () => dispatch(resetNewContactSuccess()),
+    change: (name, value) => dispatch(change(formName, name, value)),
   };
 }
 
@@ -42,9 +50,8 @@ function mapDispatchToProps(dispatch) {
   form: formName,
   validate: formValidator,
 })
-@connect(null, mapDispatchToProps)
-
-export class ContactPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+@connect(mapStateToProps, mapDispatchToProps)
+export default class ContactPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     blur: React.PropTypes.func.isRequired,
@@ -55,6 +62,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
     touchFields: React.PropTypes.func.isRequired,
     newContactSuccess: React.PropTypes.any,
     resetNewContactSuccess: React.PropTypes.func,
+    change: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -64,6 +72,7 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
     this.setVisible = this.setVisible.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentWillMount() {
@@ -84,6 +93,10 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
     this.watcher.dispose();
   }
 
+  onChange(value) {
+    this.props.change('reCaptcha', value);
+  }
+
   onPhoneBlur(event) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
@@ -97,17 +110,19 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newContact, touchFields, submitForm } = this.props;
+    const { formError, touchFields } = this.props;
     if (formError) {
       touchFields();
       return;
     }
-
+    const { newContact, submitForm } = this.props;
     const contact = Object.assign({}, newContact);
     /* normalizing the phone number */
     contact.phone = normalizePhoneForServer(newContact.phone);
-
     submitForm(contact);
+    if (this.recaptcha) {
+      this.recaptcha.reset();
+    }
   }
 
   render() {
@@ -182,6 +197,19 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
                 bsClass="form-control input-lg"
                 componentClass="textarea"
               />
+              <ReCAPTCHA
+                ref={(ref) => { this.recaptcha = ref; }}
+                sitekey={SITE_KEY}
+                onChange={this.onChange}
+                className="recaptcha-wrapper"
+              />
+              <Field
+                name="reCaptcha"
+                type="hidden"
+                component={Input}
+                className="field"
+                bsClass="form-control input-lg"
+              />
               <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
               <div className="image left">
                 <Isvg src={img17} className="svg" width="351" height="437" />
@@ -200,10 +228,3 @@ export class ContactPage extends React.Component { // eslint-disable-line react/
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  formError: selectSyncErrorBool(formName),
-  newContact: selectValues(formName),
-  newContactSuccess: selectNewContactSuccess(),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactPage);

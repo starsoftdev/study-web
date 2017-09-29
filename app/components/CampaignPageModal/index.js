@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
 
-import moment from 'moment';
+import _ from 'lodash';
+import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -37,6 +38,7 @@ export class CampaignPageModal extends React.Component {
     fetchCampaignsByStudy: PropTypes.func,
     submitForm: PropTypes.func,
     deleteCampaign: PropTypes.func,
+    five9List: PropTypes.object,
     formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
@@ -49,6 +51,7 @@ export class CampaignPageModal extends React.Component {
     super(props);
 
     this.state = {
+      five9List: [],
       selectedCampaign: 0,
       isCampaignHasPatients: false,
     };
@@ -56,6 +59,8 @@ export class CampaignPageModal extends React.Component {
     this.campaignChanged = this.campaignChanged.bind(this);
     this.submitCampaignForm = this.submitCampaignForm.bind(this);
     this.deleteCampaignClick = this.deleteCampaignClick.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.five9ValueChanged = this.five9ValueChanged.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -66,7 +71,33 @@ export class CampaignPageModal extends React.Component {
     if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
       this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
+      this.five9ValueChanged();
     }
+
+    if (newProps.five9List.details.length && !this.state.five9List.length) {
+      this.setState({ five9List: newProps.five9List.details });
+    }
+
+    if (newProps.formValues.five_9_value && this.state.five9List.length) {
+      const five9List = this.state.five9List;
+      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
+      if (index === -1 && newProps.formValues.five_9_value !== null) {
+        five9List.push({ name: newProps.formValues.five_9_value });
+        this.setState({ five9List });
+      }
+    }
+
+    if (newProps.study && newProps.study !== this.props.study) {
+      this.five9ValueChanged(newProps.study.five_9_value);
+    }
+  }
+
+  onClose() {
+    const { onClose } = this.props;
+    this.setState({ five9List: [] }, () => {
+      change('five_9_value', null);
+      onClose();
+    });
   }
 
   campaignChanged(e, studyCampaigns = this.props.studyCampaigns.details) {
@@ -84,6 +115,10 @@ export class CampaignPageModal extends React.Component {
     }
   }
 
+  five9ValueChanged(five9value) {
+    this.props.change('five_9_value', five9value);
+  }
+
   submitCampaignForm(e) {
     e.preventDefault();
     const { formValues, study, submitForm } = this.props;
@@ -94,6 +129,7 @@ export class CampaignPageModal extends React.Component {
       levelId: formValues.level_id,
       patientQualificationSuite: formValues.patient_qualification_suite || false,
       studyId: +study.study_id,
+      five9value: formValues.five_9_value,
     };
     if (formValues.custom_patient_goal) {
       submitValues.customPatientGoal = +formValues.custom_patient_goal;
@@ -112,17 +148,17 @@ export class CampaignPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, onClose, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess } = this.props;
+    const { openModal, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
-
+    const timezone = (study && study.timezone) ? study.timezone : 'utc';
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
       return { label: c.orderNumber, value: c.id };
     });
-    const dateFrom = formValues.datefrom ? moment(formValues.datefrom) : undefined;
-    const dateTo = formValues.dateto ? moment(formValues.dateto) : undefined;
+    const dateFrom = formValues.datefrom ? moment(formValues.datefrom).tz(timezone) : undefined;
+    const dateTo = formValues.dateto ? moment(formValues.dateto).tz(timezone) : undefined;
     let fromMinDate = null;
     let toMaxDate = null;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
@@ -137,6 +173,8 @@ export class CampaignPageModal extends React.Component {
       }
     }
 
+    const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
+
     return (
       <Collapse
         dimension="width"
@@ -149,7 +187,7 @@ export class CampaignPageModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">Campaign</strong>
-                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
+                <a className="btn-right-arrow" onClick={this.onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form
@@ -205,8 +243,7 @@ export class CampaignPageModal extends React.Component {
                       className={'form-control datepicker-input'}
                       initialDate={dateFrom}
                       minDate={fromMinDate}
-                      maxDate={moment(formValues.dateto).subtract(1, 'days').utc()}
-                      useUTC
+                      maxDate={moment(formValues.dateto).subtract(1, 'days')}
                     />
                   </div>
                 </div>
@@ -221,9 +258,8 @@ export class CampaignPageModal extends React.Component {
                       component={DatePicker}
                       className={'form-control datepicker-input'}
                       initialDate={dateTo}
-                      minDate={moment(formValues.datefrom).add(1, 'days').utc()}
+                      minDate={moment(formValues.datefrom).add(1, 'days')}
                       maxDate={toMaxDate}
-                      useUTC
                     />
                   </div>
                 </div>
@@ -249,6 +285,23 @@ export class CampaignPageModal extends React.Component {
                       component={Toggle}
                       className="field"
                       onChange={(e) => { change('patientQualificationSuite', e.toString()); }}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label>FIVE 9 LIST</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="five_9_value"
+                      component={ReactSelect}
+                      placeholder="Select list name on Five9"
+                      searchPlaceholder=""
+                      searchable
+                      options={five9Options}
+                      customSearchIconClass="icomoon-icon_search2"
+                      onChange={(e) => { change('five9value', e ? e.toString() : null); }}
                     />
                   </div>
                 </div>

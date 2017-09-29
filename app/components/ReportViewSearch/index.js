@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { defaultRanges, DateRange } from 'react-date-range';
+import { bindActionCreators } from 'redux';
+import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -29,6 +31,7 @@ export class ReportViewSearch extends React.Component {
     currentUser: PropTypes.object,
     reportsList: PropTypes.object,
     socket: React.PropTypes.any,
+    toastrActions: React.PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -65,6 +68,7 @@ export class ReportViewSearch extends React.Component {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifySponsorReportReady', (data) => {
           if (currentUser.roleForSponsor && data.url && currentUser.roleForSponsor.id === data.sponsorRoleId) {
+            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportStudies'); }, 1000);
             location.replace(data.url);
           }
         });
@@ -137,7 +141,7 @@ export class ReportViewSearch extends React.Component {
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging };
+    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
@@ -300,6 +304,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     exportStudies: (payload) => dispatch(exportStudies(payload)),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 }
 

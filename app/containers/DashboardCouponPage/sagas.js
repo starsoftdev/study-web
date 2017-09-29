@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -62,7 +62,7 @@ export function* fetchCouponWorker() {
     yield put(fetchCouponSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching coupons');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchCouponError(err));
   }
 }
@@ -85,7 +85,7 @@ export function* addCouponWorker(action) {
     yield put(fetchCoupon());
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving coupons');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addCouponError(err));
   }
 }
@@ -107,7 +107,7 @@ export function* editCouponWorker(action) {
     yield put(editCouponSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving coupons');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editCouponError(err));
   }
 }
@@ -128,7 +128,7 @@ export function* deleteCouponWorker(action) {
     yield put(deleteCouponSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting coupons');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteCouponError(err));
   }
 }

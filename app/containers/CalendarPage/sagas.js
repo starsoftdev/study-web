@@ -4,7 +4,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import { removeItem } from '../../utils/localStorage';
@@ -59,7 +59,7 @@ export function* fetchPatientsByStudyWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     yield put(fetchPatientsByStudyFailed(err));
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     if (err.status === 401) {
       removeItem('auth_token');
       yield call(() => { location.href = '/login'; });
@@ -82,7 +82,7 @@ export function* fetchSchedulesWorker(action) {
     yield put(fetchSchedulesSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSchedulesFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');
@@ -112,7 +112,7 @@ export function* fetchSponsorSchedulesWorker(action) {
     yield put(fetchSponsorSchedulesSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSponsorSchedulesFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');
@@ -142,7 +142,7 @@ export function* fetchSponsorSitesWorker(action) {
     yield put(fetchSponsorSitesSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching sites');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchSponsorSitesFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');
@@ -208,7 +208,7 @@ export function* submitSchedulesWorker(action) {
     yield put(submitScheduleSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting a schedule');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(submitScheduleFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');
@@ -235,7 +235,7 @@ export function* deleteSchedulesWorker(action) {
     yield put(deleteScheduleSucceeded(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting a schedule');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteScheduleFailed(err));
     if (err.status === 401) {
       removeItem('auth_token');

@@ -5,27 +5,34 @@
 import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import Form from 'react-bootstrap/lib/Form';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
 
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
 import { selectCurrentUserClientId } from '../App/selectors';
 import AlertModal from '../../components/AlertModal';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
 import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index';
-import { clearForm, importPatients } from '../../containers/PatientDatabasePage/actions';
+import EmailBlastModal from '../../components/PatientDatabaseEmailBlastModal/index';
 
-class PatientActionButtons extends React.Component {
+const formName = 'PatientDatabase.TextBlastModal';
+const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
+  formValues: selectValues(formName),
+  importPatientsStatus: selectImportPatientsStatus(),
+});
+
+const mapDispatchToProps = () => ({
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class PatientActionButtons extends React.Component {
   static propTypes = {
     clientId: React.PropTypes.number,
-    clearForm: React.PropTypes.func,
     formValues: React.PropTypes.object,
-    importPatients: React.PropTypes.func,
     importPatientsStatus: React.PropTypes.object,
     paginationOptions: React.PropTypes.object,
     searchPatients: React.PropTypes.func,
@@ -51,7 +58,6 @@ class PatientActionButtons extends React.Component {
     this.toggleEmailBlastModal = this.toggleEmailBlastModal.bind(this);
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
-    this.uploadFile = this.uploadFile.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
   }
 
@@ -131,53 +137,29 @@ class PatientActionButtons extends React.Component {
     }
   }
 
-  uploadFile(e) {
-    const { clientId } = this.props;
-    if (e.target.files[0]) {
-      this.props.importPatients(clientId, e.target.files[0], this.toggleImportPatientsModal);
-      this.fileBttn.value = '';
-    }
-  }
-
   renderUpload() {
-    const { importPatientsStatus: { uploadStart, fileUploaded } } = this.props;
-
-    if (uploadStart) {
-      return (
-        <div className="text-center" style={{ marginTop: '20px', marginBottom: '20px' }}>
-          <p>
-            <LoadingSpinner showOnlyIcon />
-          </p>
-          <p className="text-info spinner-text">
-            Uploading CSV File...
-          </p>
-        </div>
-      );
-    }
     return (
       <div>
-        <Form className="upload-patient-info">
-          <span className="modal-opener coming-soon-wrapper">
-            <div className="table">
-              <div className="table-cell">
-                <i className={fileUploaded ? 'icomoon-icon_check' : 'icomoon-arrow_up_alt'} />
-                <span className="text coming-soon-old">Upload Patients</span>
-                <span className="text coming-soon-new" />
-              </div>
+        <span className="modal-opener coming-soon-wrapper">
+          <div className="table">
+            <div className="table-cell">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text coming-soon-old">Upload Patients</span>
+              <span className="text coming-soon-new" />
             </div>
-          </span>
-        </Form>
+          </div>
+        </span>
         <span className="or">
           <span>or</span>
         </span>
-        <a className="add-patient-info-import" onClick={this.toggleAddPatientModal}>
+        <span className="modal-opener" onClick={this.toggleAddPatientModal}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
               <span className="text">Add Patient</span>
             </div>
           </div>
-        </a>
+        </span>
       </div>
     );
   }
@@ -187,23 +169,33 @@ class PatientActionButtons extends React.Component {
     return (
       <div>
         <div className="col pull-right no-right-padding">
-          <button type="button" className="btn btn-primary download pull-right" onClick={this.download} disabled>
+          <button type="button" className="btn btn-primary download pull-right" onClick={this.download}>
             <i className="icomoon-icon_download" />
             &nbsp;Download
           </button>
         </div>
         <div className="col pull-right">
-          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Import</label>
+          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Upload Patients</label>
         </div>
         <div className="col pull-right">
           <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</div>
         </div>
-        <TextEmailBlastModal show={this.state.showTextEmailBlastModal} onHide={this.toggleTextEmailBlastModal} toggleTextBlast={this.toggleTextBlastModal} />
+        <TextEmailBlastModal
+          show={this.state.showTextEmailBlastModal}
+          onHide={this.toggleTextEmailBlastModal}
+          toggleTextBlast={this.toggleTextBlastModal}
+          toggleEmailBlast={this.toggleEmailBlastModal}
+        />
         <AlertModal show={this.state.showAlertModal} onHide={this.toggleAlertModal} name="patient" />
         <TextBlastModal
           show={this.state.showTextBlastModal}
           onClose={this.closeTextBlastModal}
           onHide={this.toggleTextBlastModal}
+        />
+        <EmailBlastModal
+          show={this.state.showEmailBlastModal}
+          onClose={this.closeEmailBlastModal}
+          onHide={this.toggleEmailBlastModal}
         />
         <Modal
           show={this.state.showImportPatientsModal}
@@ -249,19 +241,3 @@ class PatientActionButtons extends React.Component {
     );
   }
 }
-
-const formName = 'PatientDatabase.TextBlastModal';
-const mapStateToProps = createStructuredSelector({
-  clientId: selectCurrentUserClientId(),
-  formValues: selectValues(formName),
-  importPatientsStatus: selectImportPatientsStatus(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    clearForm: () => (dispatch(clearForm())),
-    importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PatientActionButtons);

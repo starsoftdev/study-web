@@ -376,6 +376,7 @@ export default class CalendarPage extends React.Component {
     const fetchingSites = sites.isFetching;
     const fetchingPatientsByStudy = patientsByStudy.isFetching;
     let isAdmin = false;
+    let currentSite = null;
 
     if (currentUser && currentUser.roleForClient) {
       isAdmin = (currentUser.roleForClient.name === 'Super Admin') || (currentUser.roleForClient.name === 'Admin');
@@ -397,12 +398,12 @@ export default class CalendarPage extends React.Component {
       if (currentUser && currentUser.roleForClient) {
         siteId = currentUser.roleForClient.site_id;
       }
-      const site = _.find(sites, { id: siteId });
-      if (site) {     // if site is fetched
+      currentSite = _.find(sites, { id: siteId });
+      if (currentSite) {     // if site is fetched
         siteLocationOptions = [{
-          label: site.name,
-          value: site.name,
-          siteId: site.id,
+          label: currentSite.name,
+          value: currentSite.name,
+          siteId: currentSite.id,
         }];
       }
     }
@@ -429,6 +430,7 @@ export default class CalendarPage extends React.Component {
               />
               <CalendarWidget
                 currentUser={currentUser}
+                currentSite={currentSite}
                 schedules={this.state.filteredSchedules}
                 handleOpenModal={this.handleModalVisibility}
                 handleShowAll={this.handleShowAll}
@@ -497,6 +499,7 @@ export default class CalendarPage extends React.Component {
                 />
                 <SponsorCalendarWidget
                   currentUser={currentUser}
+                  protocols={sponsorProtocols.details}
                   sponsorSchedules={this.state.filteredSponsorSchedules}
                   handleOpenModal={this.handleModalVisibility}
                   handleShowAll={this.handleShowAll}

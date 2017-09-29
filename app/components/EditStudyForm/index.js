@@ -17,11 +17,13 @@ import { selectEditedStudy, selectHomePageClientAdmins, selectStudies } from '..
 import StudyAddForm from '../../components/StudyAddForm';
 import {
   changeStudyAdd,
+  removeStudyAd,
   resetChangeStudyAddState,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectChangeStudyAddProcess,
   selectUpdatedStudyAd,
+  selectRemovedStudyAdId,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import RenderEmailsList from './RenderEmailsList';
 import formValidator from './validator';
@@ -34,6 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (name, value) => dispatch(change(formName, name, value)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
   submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+  removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
   resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   resetForm: () => dispatch(reset(formName)),
 });
@@ -63,8 +66,10 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     clientAdmins: PropTypes.object,
     fetchClientAdmins: PropTypes.func.isRequired,
     submitStudyAdd: PropTypes.func.isRequired,
+    removeStudyAd: PropTypes.func.isRequired,
     changeStudyAddProcess: PropTypes.any,
     updatedStudyAd: PropTypes.any,
+    removedStudyAdId: PropTypes.number,
     resetChangeAddState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
@@ -87,6 +92,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.handleFileChange = this.handleFileChange.bind(this);
 
@@ -314,6 +320,11 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
     }
   }
 
+  removeStudyAd() {
+    this.props.removeStudyAd(this.state.currentStudy.id);
+    this.closeStudyAddModal();
+  }
+
   renderEmailList() {
     const { change, formValues } = this.props;
 
@@ -333,10 +344,9 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { editedStudy, changeStudyAddProcess } = this.props;
+    const { editedStudy, changeStudyAddProcess, removedStudyAdId } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
-    const fileSrc = this.state.updatedStudyAd || image;
-
+    const fileSrc = (removedStudyAdId && removedStudyAdId === this.state.currentStudy.id) ? null : this.state.updatedStudyAd || image;
     const preview =
       (<div className="img-preview">
         <a
@@ -479,6 +489,7 @@ class EditStudyForm extends Component { // eslint-disable-line react/prefer-stat
             <StudyAddForm
               handleSubmit={this.uploadStudyAdd}
               changeStudyAddProcess={changeStudyAddProcess}
+              removeStudyAd={this.removeStudyAd}
             />
           </Modal.Body>
         </Modal>
@@ -516,6 +527,7 @@ const mapStateToProps = createStructuredSelector({
   editedStudy: selectEditedStudy(),
   clientSites: selectClientSites(),
   updatedStudyAd: selectUpdatedStudyAd(),
+  removedStudyAdId: selectRemovedStudyAdId(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),

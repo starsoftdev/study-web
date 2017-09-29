@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 
@@ -66,7 +66,7 @@ export function* fetchAdminsWorker(action) {
     yield put(fetchAdminsSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching users');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchAdminsError(err));
   }
 }
@@ -87,7 +87,7 @@ export function* fetchAdminRolesWorker() {
     yield put(fetchAdminRolesSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching roles');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchAdminRolesError(err));
   }
 }
@@ -110,7 +110,7 @@ export function* editDashboardUserWorker(action) {
     yield put(editDashboardUserSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editDashboardUserError(err));
   }
 }
@@ -133,7 +133,7 @@ export function* deleteDashboardUserWorker(action) {
     yield put(deleteDashboardUserSuccess(action.payload));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteDashboardUserError(err));
   }
 }

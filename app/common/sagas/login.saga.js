@@ -7,7 +7,7 @@
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { selectLocationState } from '../../containers/App/selectors';
 
@@ -77,7 +77,7 @@ export function* authorize(data) {
     yield put(setAuthState(true));
 
     // show toastr message
-    yield put(toastrActions.success('', 'Login successful!'));
+    toastr.success('', 'Login successful!');
 
     // fetch details of authenticated user
     yield put(fetchMeFromToken());
@@ -87,7 +87,7 @@ export function* authorize(data) {
   } catch (err) {
     // dispatch LOGIN_ERROR action
     yield put(loginError(err));
-    yield put(toastrActions.error('', 'Login Failed!'));
+    toastr.error('', 'Login Failed!');
   } finally {
     // because this generator task is asyc, it is possible to
     // send a logout action before the user gets logged in
@@ -146,7 +146,7 @@ export function* resetPassword() {
       yield put(resetPasswordSuccess());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -165,17 +165,17 @@ export function* setNewPassword() {
         };
         const requestURL = `${API_URL}/users/reset-password`;
         yield call(request, requestURL, params);
-        yield put(toastrActions.success('', 'Success! Your password has been reset, check your inbox.'));
+        toastr.success('', 'Success! Your password has been reset, check your inbox.');
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
-        yield put(toastrActions.error('', errorMessage));
+        toastr.error('', errorMessage);
       }
     } catch (err) {
       let errorMessage = get(err, 'message', 'Something went wrong!');
       if (err.status === 401) {
         errorMessage = 'Error! The link is no longer valid, you have to repeat the forgot password process.';
       }
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }
@@ -190,12 +190,12 @@ export function* confirmPasswordChange() {
       };
       const requestURL = `${API_URL}/userPasswordChange/confirm-change-password`;
       yield call(request, requestURL, params);
-      yield put(toastrActions.success('Change password', 'The password has been changed successfully'));
+      toastr.success('Change password', 'The password has been changed successfully');
 
       yield put(logoutAction());
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
     }
   }
 }

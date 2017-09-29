@@ -1,0 +1,174 @@
+.upload-patients-form {
+  padding: 25px;
+  background: #fff;
+  border: 2px solid #f78e1e;
+
+  .field-row.main {
+    font-size: 0;
+    line-height: 0;
+    margin: 0 0 30px;
+    position: relative;
+
+    .label {
+      width: 15%;
+      color: #354052;
+      margin: -1px 0;
+      text-align: left;
+      font-size: 18px;
+      line-height: 21px;
+      padding: 0 10px 0 0;
+      text-transform: uppercase;
+    }
+
+    .field {
+      width: 35%;
+      position: relative;
+    }
+  }
+
+  .fields-holder.array {
+    margin: 0;
+    padding: 0;
+
+    .field-row  {
+      margin: 0;
+      padding: 0 0 15px;
+      height: 55px;
+
+      .remove {
+        float: left;
+        margin: 10px 0 0 -2px;
+
+        &:hover {
+          cursor: pointer;
+          color: #999;
+        }
+      }
+
+      &.first {
+        height: 95px;
+        padding-top: 15px;
+
+        .remove {
+          margin: 30px 0 0 -2px;
+        }
+      }
+
+      .title {
+        font-size: 18px;
+        line-height: 1.25;
+        color: #354052;
+        display: block;
+        margin: 0 0 2px 0;
+        text-transform: uppercase;
+      }
+
+      .field {
+        margin-right: 1%;
+        position: relative;
+
+        &.trash {
+          width: 1%;
+        }
+
+        &.name {
+          width: 22%;
+        }
+
+        &.email {
+          width: 22%;
+        }
+
+        &.phone {
+          width: 16%;
+        }
+
+        &.age {
+          width: 8%;
+        }
+
+        &.gender {
+          width: 15%;
+        }
+
+        &.bmi {
+          width: 10%;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+  .column-groups {
+    width: 100%;
+    overflow: hidden;
+    margin: 0 0 30px;
+
+    .column {
+      position: relative;
+      overflow: hidden;
+      float: left;
+      margin-right: 1%;
+      text-transform: uppercase;
+
+      &.names {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.emails {
+        width: 22%;
+        textarea {
+        }
+      }
+
+      &.phones {
+        width: 16%;
+      }
+
+      &.ages {
+        width: 9%;
+      }
+
+      &.genders {
+        width: 15%;
+      }
+
+      &.bmis {
+        width: 11%;
+        margin-right: 0;
+      }
+    }
+
+    .group {
+
+      textarea.form-control {
+        min-height: 370px;
+      }
+    }
+  }
+
+  .text-right {
+
+    button {
+      &.no-margin-right {
+        margin-right: 0;
+      }
+
+      &.margin-right {
+        margin-right: 12px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .upload-patients-form {
+    .field-row.main {
+      .label {
+        font-size: 15px;
+      }
+    }
+  }
+}
