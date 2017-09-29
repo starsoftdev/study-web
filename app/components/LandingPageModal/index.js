@@ -16,6 +16,7 @@ import Button from 'react-bootstrap/lib/Button';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
+import Toggle from '../../components/Input/Toggle';
 import CenteredModal from '../../components/CenteredModal/index';
 import StudyAddForm from '../../components/StudyAddForm';
 import LoadingSpinner from '../LoadingSpinner';
@@ -27,6 +28,7 @@ import {
   resetLandingPageState,
   changeStudyAdd,
   resetChangeStudyAddState,
+  removeStudyAd,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectLandingPageUpdateProcess,
@@ -44,6 +46,7 @@ function mapDispatchToProps(dispatch) {
     resetState: () => dispatch(resetLandingPageState()),
     resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
     submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+    removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
@@ -73,6 +76,7 @@ export class LandingPageModal extends React.Component {
     updateLandingPageProcess: React.PropTypes.any,
     changeStudyAddProcess: React.PropTypes.any,
     submitStudyAdd: React.PropTypes.func.isRequired,
+    removeStudyAd: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     isOnTop: React.PropTypes.bool,
@@ -89,6 +93,7 @@ export class LandingPageModal extends React.Component {
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
     this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.state = {
       code: null,
@@ -138,6 +143,7 @@ export class LandingPageModal extends React.Component {
           change('hideClickToCall', landing.hideClickToCall);
           change('initialMessageText', landing.initialMessageText);
           change('facebookUrl', landing.facebookUrl);
+          change('isSendInitialMessageText', landing.isSendInitialMessageText);
 
           this.setState({
             initialValuesEntered: true,
@@ -152,9 +158,12 @@ export class LandingPageModal extends React.Component {
     }
 
     if (!newProps.updateLandingPageProcess.saving && newProps.updateLandingPageProcess.success) {
-      fetchLanding(this.state.selected.study_id);
       resetState();
       onClose();
+    }
+
+    if (!newProps.openModal && this.props.openModal) {
+      this.onHide();
     }
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
@@ -200,6 +209,9 @@ export class LandingPageModal extends React.Component {
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
+    if (list.isSendInitialMessageText === undefined) {
+      list.isSendInitialMessageText = false;
+    }
     submitForm(list);
   }
 
@@ -232,6 +244,12 @@ export class LandingPageModal extends React.Component {
       this.props.submitStudyAdd({ file: e, study_id: this.state.selected.study_id });
     }
   }
+
+  removeStudyAd() {
+    this.props.removeStudyAd(this.state.selected.study_id);
+    this.closeStudyAddModal();
+  }
+
 
   render() {
     const { openModal, onClose, changeStudyAddProcess } = this.props;
@@ -503,6 +521,18 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
+                    <label htmlFor="new-patient-first-name">Initial text</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      name="isSendInitialMessageText"
+                      component={Toggle}
+                      className="field"
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">Initial text message</label>
                   </strong>
                   <div className="field">
@@ -554,7 +584,11 @@ export class LandingPageModal extends React.Component {
               </a>
             </Modal.Header>
             <Modal.Body>
-              <StudyAddForm handleSubmit={this.uploadStudyAdd} changeStudyAddProcess={changeStudyAddProcess} />
+              <StudyAddForm
+                handleSubmit={this.uploadStudyAdd}
+                changeStudyAddProcess={changeStudyAddProcess}
+                removeStudyAd={this.removeStudyAd}
+              />
             </Modal.Body>
           </Modal>
           <Modal

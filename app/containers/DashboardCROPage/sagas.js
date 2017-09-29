@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -64,7 +64,7 @@ export function* fetchCroWorker(action) {
     yield put(fetchCroSuccess(response, hasMoreItems, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchCroError(err));
   }
 }
@@ -86,7 +86,7 @@ export function* addCroWorker(action) {
     yield put(addCroSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addCroError(err));
   }
 }
@@ -108,7 +108,7 @@ export function* editCroWorker(action) {
     yield put(editCroSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editCroError(err));
   }
 }
@@ -129,7 +129,7 @@ export function* deleteCroWorker(action) {
     yield put(deleteCroSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteCroError(err));
   }
 }

@@ -44,6 +44,7 @@ class Patient extends React.Component {
   static propTypes = {
     category: React.PropTypes.object.isRequired,
     connectDragSource: React.PropTypes.func.isRequired,
+    currentSite: React.PropTypes.object.isRequired,
     currentUser: React.PropTypes.object.isRequired,
     currentPatientId: React.PropTypes.number,
     isDragging: React.PropTypes.bool.isRequired,
@@ -71,10 +72,13 @@ class Patient extends React.Component {
   }
 
   renderTextCreatedDate() {
-    const { currentUser, patient: { lastTextMessage } } = this.props;
-    if (lastTextMessage.dateCreated) {
+    const { currentUser, currentSite, patient: { lastTextMessage } } = this.props;
+
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? currentSite.timezone : currentUser.timezone;
+
+    if (lastTextMessage && lastTextMessage.dateCreated) {
       return (
-        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}</time>
       );
     }
     return null;
@@ -83,7 +87,7 @@ class Patient extends React.Component {
   renderPatientTextMessageSummary() {
     const { category, onPatientTextClick, patient, unreadMessageCount } = this.props;
 
-    if (patient.lastTextMessage.dateCreated || unreadMessageCount > 0) {
+    if ((patient.lastTextMessage && patient.lastTextMessage.dateCreated) || unreadMessageCount > 0) {
       return (
         <a
           className="bottom"

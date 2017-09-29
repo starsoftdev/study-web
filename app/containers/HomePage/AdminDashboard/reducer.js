@@ -16,6 +16,9 @@ import {
   FETCH_STUDIES_DASHBOARD,
   FETCH_STUDIES_DASHBOARD_SUCCESS,
   FETCH_STUDIES_DASHBOARD_ERROR,
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
   FETCH_TOTALS_DASHBOARD,
   FETCH_TOTALS_DASHBOARD_SUCCESS,
   FETCH_TOTALS_DASHBOARD_ERROR,
@@ -50,6 +53,11 @@ import {
   CHANGE_STUDY_ADD,
   CHANGE_STUDY_ADD_SUCCESS,
   CHANGE_STUDY_ADD_ERROR,
+
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
+
   RESET_CHANGE_STUDY_ADD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
@@ -102,6 +110,11 @@ const initialState = {
     filters: [],
   },
   studies: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  five9List: {
     details: [],
     fetching: false,
     error: null,
@@ -184,6 +197,7 @@ const initialState = {
     error: false,
   },
   updatedStudyAd: null,
+  removedStudyAd: null,
   levels: [],
   siteLocations: [],
   siteNames: [],
@@ -411,6 +425,33 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         studies: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_FIVE_9_LIST:
+      return {
+        ...state,
+        five9List: {
+          details: state.five9List.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_SUCCESS:
+      return {
+        ...state,
+        five9List: {
+          details: action.payload.details,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_ERROR:
+      return {
+        ...state,
+        five9List: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -737,6 +778,22 @@ export default function dashboardPageReducer(state = initialState, action) {
           saving: false,
           error: true,
         },
+      };
+    case REMOVE_STUDY_AD:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case REMOVE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        removedStudyAdId: action.studyId,
+        updatedStudyAd: null,
+      };
+    case REMOVE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        removedStudyAdId: null,
       };
     case RESET_CHANGE_STUDY_ADD_STATE:
       return {

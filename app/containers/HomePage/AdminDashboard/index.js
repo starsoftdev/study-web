@@ -30,25 +30,28 @@ import {
   selectStudiesTotals,
   selectAllCustomNotificationEmails,
   selectPaginationOptions,
+  selectDashboardfive9List,
 } from './selectors';
 import {
+  changeStudyStatusDashboard,
+  clearFilters,
+  fetchFive9List,
   fetchStudiesDashboard,
   fetchTotalsDashboard,
   fetchSiteLocations,
-  clearFilters,
   fetchStudyCampaignsDashboard,
-  changeStudyStatusDashboard,
   updateTwilioNumbers,
 } from './actions';
 import {
+  addCustomEmailNotification,
+  addEmailNotificationUser,
+  fetchCro,
   fetchLevels,
   fetchIndications,
+  fetchSources,
   fetchSponsors,
   fetchProtocols,
-  fetchCro,
   fetchUsersByRole,
-  addEmailNotificationUser,
-  addCustomEmailNotification,
 } from '../../App/actions';
 
 const PieChart = rd3.PieChart;
@@ -58,6 +61,7 @@ const mapStateToProps = createStructuredSelector({
   allCustomNotificationEmails: selectAllCustomNotificationEmails(),
   cro: selectCro(),
   filtersFormValues: selectFilterFormValues(),
+  five9List: selectDashboardfive9List(),
   indications: selectIndications(),
   protocols: selectProtocols(),
   levels: selectLevels(),
@@ -76,10 +80,12 @@ const mapDispatchToProps = (dispatch) => ({
   changeStudyStatusDashboard: (params, status, isChecked) => dispatch(changeStudyStatusDashboard(params, status, isChecked)),
   addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
   fetchCro: () => dispatch(fetchCro()),
+  fetchFive9List: () => dispatch(fetchFive9List()),
   fetchLevels: () => dispatch(fetchLevels()),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),
   fetchSiteLocations: () => dispatch(fetchSiteLocations()),
+  fetchSources: () => dispatch(fetchSources()),
   fetchSponsors: () => dispatch(fetchSponsors()),
   fetchStudyCampaignsDashboard: (params) => dispatch(fetchStudyCampaignsDashboard(params)),
   fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
@@ -100,6 +106,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     clearFilters: PropTypes.func.isRequired,
     cro: PropTypes.array,
     fetchCro: PropTypes.func,
+    fetchFive9List: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchLevels: PropTypes.func,
     fetchProtocols: PropTypes.func,
@@ -107,8 +114,10 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     fetchSponsors: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
+    fetchSources: PropTypes.func,
     fetchTotalsDashboard: PropTypes.func,
     fetchUsersByRole: PropTypes.func,
+    five9List: PropTypes.object,
     filtersFormValues: PropTypes.object.isRequired,
     levels: PropTypes.array,
     indications: PropTypes.array,
@@ -169,6 +178,8 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
+    this.props.fetchFive9List();
+    this.props.fetchSources();
   }
 
   componentWillReceiveProps(newProps) {
@@ -335,7 +346,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
-    if ((value && key) || (key === 'campaign')) {
+    if ((value && key) || (key === 'campaign') || (key === 'source')) {
       const newFilterValues = _.cloneDeep(value);
       filters = { ...filters, [key]:newFilterValues };
     }
@@ -344,7 +355,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
     _.forEach(filters, (filter, key) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'nearbyStudies' && key !== 'address') {
+      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'source' && key !== 'nearbyStudies' && key !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[key] = withoutAll;
       }

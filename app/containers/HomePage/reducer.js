@@ -663,6 +663,12 @@ export default function homePageReducer(state = initialState, action) {
             active: state.studies.active || 0,
             inactive: state.studies.inactive || 0,
           },
+          patientMessagesCount: {
+            unreadTexts: state.patientMessagesCount.unreadTexts - action.count,
+            unreadEmails: state.patientMessagesCount.unreadEmails,
+            total: state.patientMessagesCount.total,
+            overallTotal: state.patientMessagesCount.overallTotal,
+          },
         };
       }
       return state;

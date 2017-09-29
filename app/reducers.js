@@ -12,6 +12,7 @@ import { default as ScheduledPatientModal } from './containers/StudyPage/Schedul
 import { default as patientsListReducer } from './containers/PatientDatabasePage/TextBlast/reducer';
 import { default as editPatientReducer } from './containers/PatientDatabasePage/EditPatientForm/reducer';
 import { default as addPatientReducer } from './containers/PatientDatabasePage/ImportPatients/reducer';
+import { default as uploadPatientsReducer } from './components/UploadPatientsForm/reducer';
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
 import { default as editDashboardStudyReducer } from './components/EditStudyForms/reducer';
@@ -25,13 +26,15 @@ export default function createReducer(asyncReducers) {
   return combineReducers({
     routing: routerReducer,
     form: formReducer.plugin({
-      'StudyPage.TextBlastModal': textBlastModalReducer,
+      'Dashboard.EditStudyForm': editDashboardStudyReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
+      'PatientDatabase.EmailBlastModal': patientsListReducer,
       'PatientDatabase.EditPatientModal': editPatientReducer,
       'PatientDatabase.AddPatientModal': addPatientReducer,
-      'Dashboard.EditStudyForm': editDashboardStudyReducer,
       ScheduledPatientModal,
+      'StudyPage.TextBlastModal': textBlastModalReducer,
       rewardForm,
+      'UploadPatients.UploadPatientsForm': uploadPatientsReducer,
     }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,

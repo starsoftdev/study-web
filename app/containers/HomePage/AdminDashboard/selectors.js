@@ -99,6 +99,11 @@ const selectUpdatedStudyAd = () => createSelector(
   substate => substate.updatedStudyAd
 );
 
+const selectRemovedStudyAdId = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.removedStudyAdId
+);
+
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updateThankYouPageProcess
@@ -149,6 +154,11 @@ const selectDashboardDeleteCampaignProcess = () => createSelector(
   (substate) => substate.deleteCampaignProcess
 );
 
+const selectDashboardfive9List = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.five9List
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -174,9 +184,11 @@ export {
   selectChangeStudyAddProcess,
   selectMessagingNumbers,
   selectUpdatedStudyAd,
+  selectRemovedStudyAdId,
   selectHoverRowIndex,
   selectTaggedIndicationsForStudy,
   selectDashboardCampaigns,
   selectDashboardEditCampaignProcess,
   selectDashboardDeleteCampaignProcess,
+  selectDashboardfive9List,
 };
