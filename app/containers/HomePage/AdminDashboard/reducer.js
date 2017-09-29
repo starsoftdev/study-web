@@ -534,9 +534,54 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     case UPDATE_DASHBOARD_STUDY_SUCCESS: {
-      const studiesCopy = [
-        ...state.studies.details,
-      ];
+      let studiesCopy;
+      if (action.updatedStudyParams.site) {
+        studiesCopy = state.studies.details.map(study => {
+          if (study.study_id === action.studyId) {
+            let emailNotifications;
+            if (action.updatedStudyParams.emailNotifications) {
+              emailNotifications = action.emailNotifications.filter(emailNotification => {
+                return emailNotification.isChecked;
+              }).map(emailNotification => {
+                return emailNotification.userId;
+              });
+            } else {
+              emailNotifications = study.emailNotifications;
+            }
+            return {
+              ...study,
+              ...action.updatedStudyParams,
+              emailNotifications,
+            };
+          } else {
+            return study;
+          }
+        });
+      } else {
+        studiesCopy = state.studies.details.map(study => {
+          if (study.study_id === action.studyId) {
+            let emailNotifications;
+            if (action.updatedStudyParams.emailNotifications) {
+              // combine the updated study objects because we then need to transform it out
+              emailNotifications = action.emailNotifications.filter(emailNotification => {
+                return emailNotification.isChecked;
+              }).map(emailNotification => {
+                return emailNotification.userId;
+              });
+            } else {
+              emailNotifications = study.emailNotifications;
+            }
+            return {
+              ...study,
+              ...action.updatedStudyParams,
+              emailNotifications,
+            };
+          } else {
+            return study;
+          }
+        });
+      }
+
       const study = _.find(studiesCopy, (item) => (item.study_id === action.studyId));
       if (study && typeof action.updatedStudyParams.is_active !== 'undefined') {
         study.is_active = action.updatedStudyParams.is_active;

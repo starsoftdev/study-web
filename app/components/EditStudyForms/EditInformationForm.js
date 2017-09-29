@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
-  updateDashboardStudy: (id, params, stopSubmit) => dispatch(updateDashboardStudy(id, params, stopSubmit)),
+  updateDashboardStudy: (id, emailNotifications, params, stopSubmit) => dispatch(updateDashboardStudy(id, emailNotifications, params, stopSubmit)),
 });
 
 @reduxForm({
@@ -272,7 +272,7 @@ export default class EditInformationForm extends React.Component {
           delete newParam.customEmailNotifications;
         }
       }
-      updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit);
+      updateDashboardStudy(initialFormValues.study_id, formValues.emailNotifications, newParam, stopSubmit);
     }
   }
 
