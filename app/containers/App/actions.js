@@ -1006,10 +1006,11 @@ export function addCustomEmailNotificationError(payload) {
   };
 }
 
-export function removeCustomEmailNotification(payload) {
+export function removeCustomEmailNotification(id, email) {
   return {
     type: REMOVE_CUSTOM_EMAIL_NOTIFICATION,
-    payload,
+    id,
+    email,
   };
 }
 
