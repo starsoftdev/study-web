@@ -9,7 +9,7 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { filter, map } from 'lodash';
+import { filter, map, first } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
@@ -229,6 +229,16 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     const sitePatientArray = [];
 
     const isAdmin = currentUser.roleForClient.isAdmin;
+    let timezone = currentUser.timezone;
+    let site = null;
+    console.log('current user', currentUser);
+    if (!isAdmin && currentUser.roleForClient.site_id) {
+      site = first(sites, item => item.id === currentUser.roleForClient.site_id);
+      if (site) {
+        timezone = site.timezone;
+        console.log('site timezone', site, timezone);
+      }
+    }
 
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
@@ -252,6 +262,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
           key={index}
           onSelectPatient={this.selectPatient}
           patientSelected={this.state.selectedPatient.id === item.id}
+          timezone={timezone}
         />);
       }
       return '';
@@ -262,11 +273,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         return (<MessageItem
           messageData={item}
           key={index}
+          timezone={timezone}
         />);
       }
       return (<CallItem
         messageData={item}
         key={index}
+        timezone={timezone}
       />);
     });
 
