@@ -151,8 +151,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       if (!currentUser.roleForClient.isAdmin) {
         const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
         change('siteLocation', nLocation);
-      } else {
-        change('siteLocation', '0');
       }
     }
   }
@@ -250,7 +248,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     });
     let filteredPatients = sitePatients.details;
     if (siteLocation && siteLocation !== '0') {
-      filteredPatients = filter(sitePatients.details, item => item.site_id === siteLocation);
+      filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
+      console.log('sitepatients', sitePatients.details, siteLocation, filteredPatients);
     }
 
     const sitePatientsListContents = filteredPatients.map((item, index) => {
