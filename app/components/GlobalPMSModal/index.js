@@ -9,7 +9,7 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { filter } from 'lodash';
+import { filter, map } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
@@ -21,6 +21,7 @@ import formValidator from './validator';
 import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
 import CenteredModal from '../../components/CenteredModal/index';
 import {
+  selectSites,
   selectCurrentUser,
   selectSitePatients,
   selectPatientMessages,
@@ -85,7 +86,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     readStudyPatientMessages: React.PropTypes.func,
     addMessagesCountStat: React.PropTypes.func,
     subtractStudyUnreadMessages: React.PropTypes.func,
-    siteLocations: React.PropTypes.array,
+    sites: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -109,7 +110,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser } = newProps;
+    const { currentUser, change } = newProps;
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         const socketMessage = newMessage;
@@ -144,6 +145,15 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
       this.props.fetchSitePatients(currentUser.id);
+    }
+
+    if (currentUser && currentUser.roleForClient) {
+      if (!currentUser.roleForClient.isAdmin) {
+        const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
+        change('siteLocation', nLocation);
+      } else {
+        change('siteLocation', '0');
+      }
     }
   }
 
@@ -213,17 +223,23 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   render() {
-    const { sitePatients, patientMessages, sendStudyPatientMessages, siteLocations } = this.props;
+    const { sitePatients, patientMessages, sendStudyPatientMessages, sites, currentUser } = this.props;
     const { siteLocation } = this.state;
     const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
+
+    const isAdmin = currentUser.roleForClient.isAdmin;
+
+    const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+    siteOptions.unshift({ label: 'All', value: '0' });
+
     sitePatients.details.forEach((item) => {
       if (item.show === undefined || (item.show && item.show === true)) {
         sitePatientArray.push(item);
       }
     });
     let filteredPatients = sitePatients.details;
-    if (siteLocation) {
+    if (siteLocation && siteLocation !== '0') {
       filteredPatients = filter(sitePatients.details, item => item.site_id === siteLocation);
     }
 
@@ -314,8 +330,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                             name="siteLocation"
                             component={ReactSelect}
                             placeholder="Select Site Location"
-                            options={siteLocations}
+                            options={siteOptions}
                             onChange={this.siteLocationChanged}
+                            include
+                            disabled={!isAdmin}
                           />
                         </div>
                       </div>
@@ -371,6 +389,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectGlobalPMSFormValues(),
   globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
   siteLocations: selectSiteLocations(),
+  sites: selectSites(),
 });
 
 function mapDispatchToProps(dispatch) {
