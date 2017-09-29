@@ -56,10 +56,7 @@ export default class RenderCustomEmailsList extends React.Component { // eslint-
 
   deleteEmail(notificationId, email) {
     const { removeCustomEmailNotification } = this.props;
-    removeCustomEmailNotification({
-      notificationId,
-      email,
-    });
+    removeCustomEmailNotification(notificationId, email);
   }
 
   render() {

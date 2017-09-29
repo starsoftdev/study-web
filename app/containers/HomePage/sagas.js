@@ -109,7 +109,6 @@ import {
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
 } from '../../containers/App/constants';
 import {
-  removeCustomEmailNotificationSuccess,
   fetchClientSites,
   fetchClientCredits,
   fetchRewardsBalance,
@@ -118,6 +117,7 @@ import {
 import {
   addEmailNotificationUserSuccess,
   addCustomEmailNotificationSuccess,
+  removeCustomEmailNotificationSuccess,
   fetchPatientSignUpsSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
@@ -711,12 +711,12 @@ export function* removeCustomEmailNotificationWorker(action) {
   try {
     const requestURL = `${API_URL}/studyNotificationEmails/${id}`;
     const options = {
-      method: 'DELETE'
+      method: 'DELETE',
     };
 
     yield call(request, requestURL, options);
 
-    yield put(removeCustomEmailNotificationSuccess(id, email);
+    yield put(removeCustomEmailNotificationSuccess(id, email));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Could not remove the custom notification email to the study.');
     yield put(toastrActions.error('', errorMessage));

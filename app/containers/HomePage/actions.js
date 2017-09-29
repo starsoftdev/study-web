@@ -7,6 +7,7 @@
 import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
 } from '../App/constants';
 
 import {
@@ -329,6 +330,14 @@ export function addEmailNotificationUserSuccess(userId, email) {
 export function addCustomEmailNotificationSuccess(id, email) {
   return {
     type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    id,
+    email,
+  };
+}
+
+export function removeCustomEmailNotificationSuccess(id, email) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
     id,
     email,
   };

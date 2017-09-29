@@ -6,6 +6,7 @@ import _ from 'lodash';
 import {
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
   ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
 } from '../../containers/App/constants';
 import {
   ADD_STUDY_INDICATION_TAG_SUCCESS,
@@ -125,9 +126,9 @@ export default function editDashboardStudyReducer(state = initialState, action) 
         ];
       }
       let initialCustomEmailNotifications;
-      if (state.initial.emailNotifications) {
+      if (state.initial.customEmailNotifications) {
         initialCustomEmailNotifications = [
-          ...state.initial.emailNotifications,
+          ...state.initial.customEmailNotifications,
           {
             email: action.email,
             id: action.id,
@@ -155,16 +156,37 @@ export default function editDashboardStudyReducer(state = initialState, action) 
         },
       };
     }
+    case REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS: {
+      return {
+        ...state,
+        values: {
+          ...state.values,
+          customEmailNotifications: state.values.customEmailNotifications.filter(customEmailNotification => (
+            customEmailNotification.id !== action.id
+          )),
+        },
+        initial: {
+          ...state.initial,
+          customEmailNotifications: state.initial.customEmailNotifications.filter(customEmailNotification => (
+            customEmailNotification.id !== action.id
+          )),
+        },
+      };
+    }
     case UPDATE_DASHBOARD_STUDY_SUCCESS: {
       let emailNotifications;
       if (state.initial.emailNotifications && action.updatedStudyParams.emailNotifications) {
         emailNotifications = state.initial.emailNotifications.map(emailNotification => {
-          const updatedEmailNotification = _.find(action.updatedStudyParams.emailNotifications, { userId: emailNotification.userId })
-          const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
-          return {
-            ...emailNotification,
-            isChecked,
-          };
+          const updatedEmailNotification = _.find(action.updatedStudyParams.emailNotifications, { userId: emailNotification.userId });
+          if (updatedEmailNotification) {
+            const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
+            return {
+              ...emailNotification,
+              isChecked,
+            };
+          } else {
+            return emailNotification;
+          }
         });
       } else {
         emailNotifications = state.initial.emailNotifications;
@@ -172,12 +194,16 @@ export default function editDashboardStudyReducer(state = initialState, action) 
       let customEmailNotifications;
       if (state.initial.customEmailNotifications && action.updatedStudyParams.customEmailNotifications) {
         customEmailNotifications = state.initial.customEmailNotifications.map(emailNotification => {
-          const updatedEmailNotification = _.find(action.updatedStudyParams.customEmailNotifications, { userId: emailNotification.userId })
-          const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
-          return {
-            ...emailNotification,
-            isChecked,
-          };
+          const updatedEmailNotification = _.find(action.updatedStudyParams.customEmailNotifications, { id: emailNotification.id });
+          if (updatedEmailNotification) {
+            const isChecked = updatedEmailNotification ? updatedEmailNotification.isChecked : false;
+            return {
+              ...emailNotification,
+              isChecked,
+            };
+          } else {
+            return emailNotification;
+          }
         });
       } else {
         customEmailNotifications = state.initial.customEmailNotifications;
@@ -186,6 +212,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
         ...state,
         initial: {
           ...state.initial,
+          ...action.updatedStudyParams,
           emailNotifications,
           customEmailNotifications,
         },
