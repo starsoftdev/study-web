@@ -65,7 +65,7 @@ const mapDispatchToProps = (dispatch) => ({
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
-  removeCustomEmailNotification: (payload) => dispatch(removeCustomEmailNotification(payload)),
+  removeCustomEmailNotification: (id, email) => dispatch(removeCustomEmailNotification(id, email)),
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
