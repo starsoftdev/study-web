@@ -82,8 +82,10 @@ export default class EditInformationModal extends React.Component {
           studyEmailUsers = studyEmailUsers.split(',');
 
           let isAllChecked = true;
-          nextProps.allClientUsers.details.forEach(item => {
-            const emailNotification = _.find(studyEmailUsers, (o) => (parseInt(o) === item.user_id));
+          for (const item of nextProps.allClientUsers.details) {
+            const emailNotification = _.find(studyEmailUsers, (notification) => (
+              parseInt(notification) === item.user_id
+            ));
             if (!emailNotification) {
               isAllChecked = false;
             }
@@ -91,9 +93,9 @@ export default class EditInformationModal extends React.Component {
             this.emailNotificationFields.push({
               email: item.email,
               userId: item.user_id,
-              isChecked: typeof emailNotification === 'object' && emailNotification.isChecked,
+              isChecked: !!emailNotification,
             });
-          });
+          }
           // set internal state to hold the value for the field boolean without re-rendering
           this.checkAllEmailNotificationFields = isAllChecked;
         }
