@@ -846,7 +846,7 @@ export function* updateDashboardStudyWatcher() {
 }
 
 export function* updateDashboardStudyWorker(action) {
-  const { id, params, stopSubmit } = action;
+  const { id, emailNotifications, params, stopSubmit } = action;
 
   try {
     const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
@@ -857,12 +857,16 @@ export function* updateDashboardStudyWorker(action) {
 
     yield call(request, requestURL, options);
 
-    yield put(updateDashboardStudySuccess(id, params));
+    yield put(updateDashboardStudySuccess(id, emailNotifications, params));
     stopSubmit();
   } catch (err) {
+    const errorMessage = get(err, 'message', 'We were unable to update the study. Please contact support.');
+    toastr.error('', errorMessage);
     console.log(err);
-    yield put(updateDashboardStudyError(err));
     stopSubmit(err);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
