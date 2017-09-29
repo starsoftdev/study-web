@@ -187,19 +187,21 @@ export function fetchSiteLocationsError(payload) {
   };
 }
 
-export function updateDashboardStudy(id, params, stopSubmit) {
+export function updateDashboardStudy(id, emailNotifications, params, stopSubmit) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
     id,
+    emailNotifications,
     params,
     stopSubmit,
   };
 }
 
-export function updateDashboardStudySuccess(studyId, updatedStudyParams) {
+export function updateDashboardStudySuccess(studyId, emailNotifications, updatedStudyParams) {
   return {
     type: UPDATE_DASHBOARD_STUDY_SUCCESS,
     studyId,
+    emailNotifications,
     updatedStudyParams,
   };
 }

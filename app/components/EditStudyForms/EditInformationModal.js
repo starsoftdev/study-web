@@ -73,32 +73,26 @@ export default class EditInformationModal extends React.Component {
     const { allClientUsers, customNotificationEmails, messagingNumbers, openModal, study, taggedIndicationsForStudy } = this.props;
     if (study) {
       if (allClientUsers.fetching && !nextProps.allClientUsers.fetching) {
-        let studyEmailUsers = study.study_notification_users;
-
         this.emailNotificationFields = [];
-        if (studyEmailUsers) { // notification emails
-          studyEmailUsers = studyEmailUsers.substr(studyEmailUsers.indexOf('{') + 1);
-          studyEmailUsers = studyEmailUsers.substr(0, studyEmailUsers.indexOf('}'));
-          studyEmailUsers = studyEmailUsers.split(',');
-
-          let isAllChecked = true;
-          for (const item of nextProps.allClientUsers.details) {
-            const emailNotification = _.find(studyEmailUsers, (notification) => (
-              parseInt(notification) === item.user_id
-            ));
-            if (!emailNotification) {
-              isAllChecked = false;
-            }
-            // set internal state to hold the value for the fields without re-rendering
-            this.emailNotificationFields.push({
-              email: item.email,
-              userId: item.user_id,
-              isChecked: !!emailNotification,
-            });
+        // notification email records for users
+        let isAllChecked = true;
+        for (const item of nextProps.allClientUsers.details) {
+          // compare and expand the details for the list of user ids in the notification array (this is because we're getting user IDs by custom SQL in the request)
+          const emailNotification = _.find(study.emailNotifications, (notification) => (
+            notification === item.user_id
+          ));
+          if (!emailNotification) {
+            isAllChecked = false;
           }
-          // set internal state to hold the value for the field boolean without re-rendering
-          this.checkAllEmailNotificationFields = isAllChecked;
+          // set internal state to hold the value for the fields without triggering component updates
+          this.emailNotificationFields.push({
+            email: item.email,
+            userId: item.user_id,
+            isChecked: !!emailNotification,
+          });
         }
+        // set internal state to hold the value for the field boolean without triggering component updates
+        this.checkAllEmailNotificationFields = isAllChecked;
       } else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
         this.customEmailNotificationFields = [];
         let isAllCustomChecked = true;
@@ -107,14 +101,14 @@ export default class EditInformationModal extends React.Component {
           if (!isChecked) {
             isAllCustomChecked = false;
           }
-          // set internal state to hold the value for the field boolean without re-rendering
+          // set internal state to hold the value for the field boolean without triggering component updates
           this.customEmailNotificationFields.push({
             id: item.id,
             email: item.email,
             isChecked,
           });
         });
-        // set internal state to hold the value for the field boolean without re-rendering
+        // set internal state to hold the value for the field boolean without triggering component updates
         this.checkAllCustomEmailNotificationFields = isAllCustomChecked;
       } else if (messagingNumbers.fetching && !nextProps.messagingNumbers.fetching) {
         const messagingNumbersOptions = nextProps.messagingNumbers.details.map(item => ({
@@ -127,6 +121,7 @@ export default class EditInformationModal extends React.Component {
             value: study.text_number_id,
           });
         }
+        // set internal state to hold the value for the field boolean without triggering component updates
         this.messagingNumbersForStudy = messagingNumbersOptions;
       } else if (taggedIndicationsForStudy.fetching && !nextProps.taggedIndicationsForStudy.fetching) {
         // set the tagged indications for the study
