@@ -161,6 +161,8 @@ class TextSection extends React.Component {
   renderText() {
     const { currentUser, currentPatient, site } = this.props;
     const { twilioMessages } = this.state;
+    const timezone = currentUser.roleForClient.isAdmin ? currentUser.timezone : site.timezone;
+
     if (currentPatient && twilioMessages.length) {
       return (
         <section
@@ -182,7 +184,7 @@ class TextSection extends React.Component {
             return (<CallItem
               messageData={twilioMessage}
               key={index}
-              site={site}
+              timezone={timezone}
               postMsg
             />);
           })}
