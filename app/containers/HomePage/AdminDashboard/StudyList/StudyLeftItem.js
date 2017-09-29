@@ -58,6 +58,19 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
     const facebookHref = item.landing_page_facebook_url;
+
+    const maxLength = (str, len) => {
+      const clearStr = str.replace(/<\/?[^>]+>/gi, '');
+      if (clearStr.length > len) {
+        return `${str.substr(0, len)}...`;
+      }
+      return str;
+    };
+
+    const sm = item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'SM: N/A';
+    const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
+    const ae = item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A';
+
     return (
       <tr
         onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
@@ -93,9 +106,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
             <li><span>{`${(item.percent || item.percent === 0) ? `${item.percent}%` : ''}`}</span></li>
 
-            <li><span>{item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'SM: N/A'}</span></li>
-            <li><span>{item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A'}</span></li>
-            <li><span>{item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A'}</span></li>
+            <li><span>{maxLength(sm, 15)}</span></li>
+            <li><span>{maxLength(bd, 15)}</span></li>
+            <li><span>{maxLength(ae, 15)}</span></li>
 
             {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li> */}
             <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : ''}`}</span></li>
