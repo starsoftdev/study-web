@@ -65,7 +65,6 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
     return (
       <div className="table-responsive table-holder table-indication alt">
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.loadItems}
           initialLoad={false}

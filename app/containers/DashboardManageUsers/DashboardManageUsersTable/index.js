@@ -135,7 +135,6 @@ export default class DashboardManageUsersTable extends React.Component { // esli
     return (
       <div className="table-holder">
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.props.loadMore}
           initialLoad={false}

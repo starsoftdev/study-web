@@ -1,6 +1,6 @@
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 
@@ -45,14 +45,14 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('IRB Ad Creation', 'The request has been submitted successfully'));
+      toastr.success('IRB Ad Creation', 'The request has been submitted successfully');
       yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('irbAdCreation'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -72,7 +72,7 @@ export function* fetchIrbProductListWatcher() {
       yield put(fetchIrbProductListSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not fetch IrbAd Product List');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchIrbProductListError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -92,7 +92,7 @@ export function* fetchIrbAdCreationWatcher() {
       yield put(fetchIrbAdCreationSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while fetching the irb ad creation');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(fetchIrbAdCreationError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });

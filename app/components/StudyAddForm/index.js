@@ -8,7 +8,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -30,7 +30,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool.isRequired,
-    displayToastrError: React.PropTypes.func.isRequired,
+    removeStudyAd: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -123,7 +123,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 
   handleFileChange(img, width, height) {
     if (width > 2000 || height > 2000) {
-      this.props.displayToastrError('Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
+      toastr.error('', 'Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
     }
     this.setState({
       selectedImage: img,
@@ -250,13 +250,8 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
               <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
             </div>
           </div>
-          <div className="field-row remove-btn-row">
-            <label
-              onClick={this.clearPreview}
-              data-text="Remove Image"
-              data-hover-text="Remove Image"
-              className="btn btn-gray upload-btn"
-            />
+          <div className="field-row">
+            <a className="link" onClick={this.props.removeStudyAd}>Remove Image</a>
           </div>
           <div className="text-right">
             <button
@@ -275,9 +270,4 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createStructuredSelector({
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    displayToastrError: (error) => dispatch(toastrActions.error(error)),
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(StudyAddForm);
+export default connect(mapStateToProps, null)(StudyAddForm);

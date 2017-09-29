@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import request from '../../utils/request';
 
 import {
@@ -75,7 +75,7 @@ export function* getProposals() {
       yield put(proposalsReceived(resultArr, hasMore, page));
     } catch (err) {
       const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -95,10 +95,10 @@ export function* createPdf() {
 
       const response = yield call(request, requestURL, params);
       yield put(pdfCreated(response));
-      yield put(toastrActions.success('', 'Success! DPF created.'));
+      toastr.success('', 'Success! DPF created.');
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (payload.cb && typeof payload.cb === 'function') {
         payload.cb(err, null);
       }
@@ -128,7 +128,7 @@ export function* getPdf() {
       location.replace(`${requestURL}?${serializeParams(params)}`);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       payload.cb(err, null);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -153,7 +153,7 @@ export function* showPdf() {
       window.open(response.url, '_blank');
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -28,6 +29,7 @@ import {
   selectDashboardEditNoteProcess,
   selectDashboardNote,
 } from '../selectors';
+import { selectSources } from '../../../../containers/App/selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import {
@@ -41,12 +43,12 @@ import {
 } from '../actions';
 import { submitToClientPortal } from '../../../DashboardPortalsPage/actions';
 
-
 const mapStateToProps = createStructuredSelector({
-  editStudyValues: selectValues('Dashboard.EditStudyForm'),
   editNoteProcess: selectDashboardEditNoteProcess(),
+  editStudyValues: selectValues('Dashboard.EditStudyForm'),
   note: selectDashboardNote(),
   paginationOptions: selectPaginationOptions(),
+  sources: selectSources(),
   studies: selectStudies(),
 });
 
@@ -59,6 +61,7 @@ const mapDispatchToProps = (dispatch) => ({
   editNote: (payload) => dispatch(editNote(payload)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
+  setFilterFormValues: (key, value) => dispatch(change('dashboardFilters', key, value)),
   toggleStudy: (id, status) => dispatch(toggleStudy(id, status)),
   toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
@@ -67,30 +70,33 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class StudyList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    addEmailNotificationUser: PropTypes.func.isRequired,
     addCustomEmailNotification: PropTypes.func.isRequired,
+    addEmailNotificationUser: PropTypes.func.isRequired,
+    addNote: PropTypes.func,
     change: PropTypes.func.isRequired,
     changeStudyStatusDashboard: PropTypes.func.isRequired,
-    editStudyValues: PropTypes.object,
-    fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
-    fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
-    allCustomNotificationEmails: PropTypes.object,
-    levels: PropTypes.array,
-    paginationOptions: PropTypes.object,
-    studies: PropTypes.object,
-    toggleStudy: PropTypes.func,
-    totals: PropTypes.object,
-    setHoverRowIndex: PropTypes.func,
-    filtersFormValues: PropTypes.object,
-    submitToClientPortal: PropTypes.func,
-    fetchNote: PropTypes.func,
-    note: PropTypes.object,
-    addNote: PropTypes.func,
-    editNote: PropTypes.func,
-    toggleAllStudies: PropTypes.func.isRequired,
+    clearCampaignFilter: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
-    clearCampaignFilter: PropTypes.func,
+    editStudyValues: PropTypes.object,
+    editNote: PropTypes.func,
+    fetchNote: PropTypes.func,
+    fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
+    fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
+    filtersFormValues: PropTypes.object,
+    five9List: PropTypes.object,
+    allCustomNotificationEmails: PropTypes.object,
+    levels: PropTypes.array,
+    note: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    setFilterFormValues: PropTypes.func,
+    setHoverRowIndex: PropTypes.func,
+    sources: PropTypes.array,
+    studies: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
+    toggleAllStudies: PropTypes.func.isRequired,
+    toggleStudy: PropTypes.func,
+    totals: PropTypes.object,
   };
 
   constructor(props) {
@@ -100,9 +106,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.toggleStudy = this.toggleStudy.bind(this);
     this.activateStudies = this.activateStudies.bind(this);
     this.deactivateStudies = this.deactivateStudies.bind(this);
-    this.adSetStudies = this.adSetStudies.bind(this);
-    this.historyStudies = this.historyStudies.bind(this);
-    this.sortBy = this.sortBy.bind(this);
     this.loadItems = this.loadItems.bind(this);
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
@@ -114,6 +117,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
+    this.sourceChanged = this.sourceChanged.bind(this);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
     this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
@@ -218,40 +222,8 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     changeStudyStatusDashboard(selectedStudies, 'inactive', true);
   }
 
-  adSetStudies() {
-  }
-
-  historyStudies() {
-  }
-
   loadItems() {
     this.props.fetchStudiesAccordingToFilters(null, null, true);
-    // this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, false);
-  }
-
-  sortBy(ev) {
-    ev.preventDefault();
-    // let sort = ev.currentTarget.dataset.sort;
-    // let direction = 'up';
-
-    // if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
-    //   direction = 'down';
-    // } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
-    //   direction = null;
-    //   sort = null;
-    // }
-
-    // this.props.setActiveSort(sort, direction);
-
-    // if (sort !== 'orderNumber') {
-    //   this.props.searchPatients({ ...this.props.paginationOptions.prevSearchFilter, sort, direction }, true);
-    // } else {
-    //   const dir = ((direction === 'down') ? 'desc' : 'asc');
-    //   const sortedPatients = _.orderBy(this.props.studies.details, [function (o) {
-    //     return o.orderNumber;
-    //   }], [dir]);
-    //   this.props.sortPatientsSuccess(sortedPatients);
-    // }
   }
 
   showDateRangeModal() {
@@ -354,10 +326,17 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   campaignChanged(e) {
-    const { change } = this.props;
-    change('dashboardFilters', 'campaign', e);
+    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    setFilterFormValues('campaign', e);
     this.toggleAllStudies(false);
-    this.props.fetchStudiesAccordingToFilters(e, 'campaign');
+    fetchStudiesAccordingToFilters(e, 'campaign');
+  }
+
+  sourceChanged(e) {
+    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    setFilterFormValues('source', e);
+    this.toggleAllStudies(false);
+    fetchStudiesAccordingToFilters(e, 'source');
   }
 
   addEmailNotificationClick(custom = false) {
@@ -479,7 +458,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             bsStyle="primary"
             className="pull-left"
             data-class="btn-deactivate"
-            onClick={this.historyStudies}
           > History </Button>
         </span>
       );
@@ -528,6 +506,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
     const selectedStudies = studies.details.filter(s => s.selected);
 
+    const sourcesOptions = [];
+    _.forEach((this.props.sources), (item) => {
+      sourcesOptions.push({ label: item.type, value: item.id });
+    });
+
+    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+
     if (studies.details.length > 0) {
       return (
         <div>
@@ -564,6 +549,20 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 <div className="btns pull-right">
                   <form className="campaign-filter">
                     <div className="select pull-left">
+                      <div className="select pull-left">
+                        <Field
+                          name="source-search"
+                          className="data-search source-search"
+                          component={ReactSelect}
+                          placeholder="Select Source"
+                          searchPlaceholder="Search"
+                          searchable
+                          options={sourcesOptions}
+                          selectedValue={sourceSelectedValue}
+                          customSearchIconClass="icomoon-icon_search2"
+                          onChange={this.sourceChanged}
+                        />
+                      </div>
                       <Field
                         name="data-search"
                         className="data-search"
@@ -646,7 +645,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 </Modal>
               </div>
               <InfiniteScroll
-                className="test-test"
                 pageStart={0}
                 loadMore={this.loadItems}
                 initialLoad={false}
@@ -864,44 +862,45 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             </div>
             <EditInformationModal
               addEmailNotificationClick={this.addEmailNotificationClick}
-              study={selectedStudies[0]}
-              openModal={this.state.showEditInformationModal}
               onClose={() => {
                 this.showEditInformationModal(false);
               }}
+              openModal={this.state.showEditInformationModal}
+              study={selectedStudies[0]}
             />
             <LandingPageModal
-              openModal={this.state.showLandingPageModal}
-              studies={studies.details}
+              isOnTop={this.state.landingPageOnTop}
               onClose={() => {
                 this.showLandingPageModal(false);
               }}
-              isOnTop={this.state.landingPageOnTop}
+              openModal={this.state.showLandingPageModal}
+              studies={studies.details}
             />
             <ThankYouPageModal
-              openModal={this.state.showThankYouPageModal}
-              studies={studies.details}
+              isOnTop={this.state.thankYouPageOnTop}
               onClose={() => {
                 this.showThankYouPageModal(false);
               }}
-              isOnTop={this.state.thankYouPageOnTop}
+              openModal={this.state.showThankYouPageModal}
+              studies={studies.details}
             />
             <PatientThankYouEmailModal
-              openModal={this.state.showPatientThankYouPageModal}
-              studies={studies.details}
+              isOnTop={this.state.patientThankYouEmailPageOnTop}
               onClose={() => {
                 this.showPatientThankYouPageModal(false);
               }}
-              isOnTop={this.state.patientThankYouEmailPageOnTop}
+              openModal={this.state.showPatientThankYouPageModal}
+              studies={studies.details}
             />
             <CampaignPageModal
-              study={selectedStudies[0]}
-              openModal={this.state.showCampaignPageModal}
+              five9List={this.props.five9List}
+              isOnTop={this.state.campaignPageOnTop}
+              levels={this.props.levels}
               onClose={() => {
                 this.showCampaignPageModal(false);
               }}
-              isOnTop={this.state.campaignPageOnTop}
-              levels={this.props.levels}
+              openModal={this.state.showCampaignPageModal}
+              study={selectedStudies[0]}
             />
             <Modal
               className={`admin-note-modal ${this.state.hideNoteModal ? 'invisible' : ''}`}
