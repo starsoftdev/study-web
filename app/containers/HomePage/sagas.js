@@ -707,17 +707,16 @@ export function* removeCustomEmailNotificationWatcher() {
 }
 
 export function* removeCustomEmailNotificationWorker(action) {
-  const { payload } = action;
+  const { id, email } = action;
   try {
-    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
+    const requestURL = `${API_URL}/studyNotificationEmails/${id}`;
     const options = {
-      method: 'DELETE',
-      body: JSON.stringify(payload),
+      method: 'DELETE'
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
 
-    yield put(removeCustomEmailNotificationSuccess(response));
+    yield put(removeCustomEmailNotificationSuccess(id, email);
   } catch (err) {
     const errorMessage = get(err, 'message', 'Could not remove the custom notification email to the study.');
     yield put(toastrActions.error('', errorMessage));

@@ -54,11 +54,11 @@ export default class RenderCustomEmailsList extends React.Component { // eslint-
     }
   }
 
-  deleteEmail(emailId) {
-    const { formValues, removeCustomEmailNotification } = this.props;
+  deleteEmail(notificationId, email) {
+    const { removeCustomEmailNotification } = this.props;
     removeCustomEmailNotification({
-      emailId,
-      studyId: formValues.study_id,
+      notificationId,
+      email,
     });
   }
 
@@ -97,7 +97,7 @@ export default class RenderCustomEmailsList extends React.Component { // eslint-
                 <span
                   className="icomoon-icon_trash"
                   onClick={() => {
-                    this.deleteEmail(email.id);
+                    this.deleteEmail(email.id, email.email);
                   }}
                 />
               </li>
