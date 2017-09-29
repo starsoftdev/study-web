@@ -241,3 +241,22 @@ export default class PatientActionButtons extends React.Component {
     );
   }
 }
+<<<<<<< HEAD
+=======
+
+const formName = 'PatientDatabase.TextBlastModal';
+const mapStateToProps = createStructuredSelector({
+  clientId: selectCurrentUserClientId(),
+  formValues: selectValues(formName),
+  importPatientsStatus: selectImportPatientsStatus(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    clearForm: () => (dispatch(clearForm())),
+    importPatients: (clientId, payload, onClose) => dispatch(importPatients(clientId, payload, onClose)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientActionButtons);
+>>>>>>> master

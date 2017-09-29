@@ -178,7 +178,8 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
-    this.props.fetchFive9List();
+    // TODO re-enable when Five 9 is verified to work
+    // this.props.fetchFive9List();
     this.props.fetchSources();
   }
 
