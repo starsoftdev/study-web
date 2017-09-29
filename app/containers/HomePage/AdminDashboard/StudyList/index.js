@@ -549,20 +549,20 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 <div className="btns pull-right">
                   <form className="campaign-filter">
                     <div className="select pull-left">
-                      <div className="select pull-left">
-                        <Field
-                          name="source-search"
-                          className="data-search source-search"
-                          component={ReactSelect}
-                          placeholder="Select Source"
-                          searchPlaceholder="Search"
-                          searchable
-                          options={sourcesOptions}
-                          selectedValue={sourceSelectedValue}
-                          customSearchIconClass="icomoon-icon_search2"
-                          onChange={this.sourceChanged}
-                        />
-                      </div>
+                      <Field
+                        name="source-search"
+                        className="data-search source-search"
+                        component={ReactSelect}
+                        placeholder="Select Source"
+                        searchPlaceholder="Search"
+                        searchable
+                        options={sourcesOptions}
+                        selectedValue={sourceSelectedValue}
+                        customSearchIconClass="icomoon-icon_search2"
+                        onChange={this.sourceChanged}
+                      />
+                    </div>
+                    <div className="select pull-left">
                       <Field
                         name="data-search"
                         className="data-search"
