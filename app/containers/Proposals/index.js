@@ -28,6 +28,7 @@ import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
+  selectSites,
 } from '../../containers/App/selectors';
 import { selectProposalsList, selectProposalsStatus, selectPaginationOptions } from './selectors';
 
@@ -45,6 +46,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
     proposals: PropTypes.array,
     showProposalPdf: PropTypes.func,
     siteLocations: PropTypes.array,
+    sites: PropTypes.array,
     unsubscribeFromAll: PropTypes.func,
     unsubscribeFromPageEvent: PropTypes.func,
     paginationOptions: PropTypes.object,
@@ -100,15 +102,6 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.proposals) {
-      for (const proposal of nextProps.proposals) {
-        proposal.selected = false;
-      }
-      this.setState({
-        proposals: nextProps.proposals,
-      });
-    }
-
     const { currentUser, siteLocations } = nextProps;
 
     if (siteLocations.length > 0 && this.props.siteLocations.length < 1) {
@@ -255,6 +248,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
+  sites : selectSites(),
   currentUser: selectCurrentUser(),
   proposals: selectProposalsList(),
   proposalsStatus: selectProposalsStatus(),

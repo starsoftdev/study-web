@@ -9,6 +9,8 @@ import Helmet from 'react-helmet';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
@@ -49,6 +51,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchStudyTextNewStats: React.PropTypes.func,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
+    toastrActions: React.PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -115,6 +118,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         socket.on('notifyClientReportReady', (data) => {
           if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId) {
             // this.props.downloadReport(data.reportName);
+            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
             location.replace(data.url);
           }
         });
@@ -152,8 +156,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
     const pageTitle = `${study.name} - StudyKIK`;
     let campaignOptions = campaigns.map(campaign => {
-      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).format('MM/DD/YYYY') : 'TBD';
-      const dateTo = campaign.dateTo ? moment(campaign.dateTo).format('MM/DD/YYYY') : 'TBD';
+      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
+      const dateTo = campaign.dateTo ? moment(campaign.dateTo).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       return {
         label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
@@ -242,6 +246,7 @@ function mapDispatchToProps(dispatch) {
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
     fetchSources: () => dispatch(fetchSources()),
     fetchStudyTextNewStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyTextNewStats(studyId, campaignId, sourceId)),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 }
 

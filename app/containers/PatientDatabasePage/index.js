@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import _, { map, omit, omitBy, isUndefined } from 'lodash';
 import { createStructuredSelector } from 'reselect';
+import { bindActionCreators } from 'redux';
+import { actions as toastrActions } from 'react-redux-toastr';
 
 import SearchPatientsForm from '../../components/SearchPatientsForm/index';
 import PatientsList from '../../components/PatientsList/index';
@@ -10,6 +12,9 @@ import { fetchIndications, fetchSources, fetchClientSites, fetchProtocols } from
 import { fetchPatientCategories, fetchPatients, clearPatientsList, resetTextBlast, getTotalPatientsCount } from './actions';
 import { selectPaginationOptions, selectPatients } from './selectors';
 import { selectCurrentUser, selectSiteLocations } from '../App/selectors';
+import {
+  selectSocket,
+} from '../../containers/GlobalNotifications/selectors';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -25,36 +30,53 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     clearPatientsList: PropTypes.func,
     getTotalPatientsCount: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
+    socket: React.PropTypes.any,
     sites: PropTypes.array,
+    toastrActions: React.PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
+    this.state = {
+      socketBinded: false,
+    };
 
     this.searchPatients = this.searchPatients.bind(this);
   }
 
   componentWillMount() {
-    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser, getTotalPatientsCount } = this.props;
+    const { fetchIndications, fetchSources, fetchPatientCategories, fetchClientSites, fetchProtocols, currentUser } = this.props;
     fetchIndications();
     fetchSources();
     fetchPatientCategories();
     fetchProtocols(currentUser.roleForClient.id);
     fetchClientSites(currentUser.roleForClient.client_id);
-    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
-    if (userIsAdmin) {
-      getTotalPatientsCount(currentUser.roleForClient.client_id, null);
-    }
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser, getTotalPatientsCount } = this.props;
+    const { currentUser, socket } = this.props;
     if (newProps.sites && newProps.sites.length > 0 && this.props.sites.length === 0) {
-      let defaultSiteLocation = null;
-      if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
-        defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
+      const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+      if (userIsAdmin) {
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: 'All', limit: 15, skip: 0 }, this.props.patients.details, { site: 'All' }, false);
+      } else {
+        let defaultSiteLocation = null;
+        if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
+          defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
+        }
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: defaultSiteLocation, limit: 15, skip: 0 }, this.props.patients.details, { site: defaultSiteLocation }, false);
       }
-      getTotalPatientsCount(currentUser.roleForClient.client_id, defaultSiteLocation);
+    }
+
+    if (socket && this.state.socketBinded === false) {
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifyPatientsDbReportReady', (data) => {
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.client_id === data.clientId) {
+            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportDbPatients'); }, 1000);
+            location.replace(data.url);
+          }
+        });
+      });
     }
   }
 
@@ -91,11 +113,12 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
       || queryParams.includeIndication || queryParams.name || queryParams.site
       || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom
-      || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo) {
+      || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo || !isSearch) {
       this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     } else {
       this.props.clearPatientsList();
       this.props.resetTextBlast();
+      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
     }
   }
 
@@ -123,6 +146,7 @@ const mapStateToProps = createStructuredSelector({
   patients: selectPatients(),
   currentUser: selectCurrentUser(),
   sites: selectSiteLocations(),
+  socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -136,6 +160,7 @@ function mapDispatchToProps(dispatch) {
     resetTextBlast: () => dispatch(resetTextBlast()),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     clearPatientsList: () => dispatch(clearPatientsList()),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 }
 

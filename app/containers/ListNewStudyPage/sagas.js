@@ -1,6 +1,6 @@
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
@@ -51,7 +51,7 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      yield put(toastrActions.success('List New Study', 'The request has been submitted successfully'));
+      toastr.success('List New Study', 'The request has been submitted successfully');
       yield put(fetchClientCredits(formValues.user_id));
       yield put(formSubmitted(response));
 
@@ -60,7 +60,7 @@ export function* submitFormWatcher() {
       yield put(reset('shoppingCart'));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       // if returns forbidden we remove the token from local storage
       if (err.status === 401) {

@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { reset, blur, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -33,6 +34,8 @@ class PatientDetailSection extends React.Component {
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
     formDidChange: React.PropTypes.bool,
+    site: React.PropTypes.object,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -89,11 +92,13 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting, initialValues } = this.props;
+    const { submitting, initialValues, site, currentUser } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -151,8 +156,29 @@ class PatientDetailSection extends React.Component {
             />
           </div>
         </div>
+
         <div className="field-row">
-          <strong className="label" />
+          <strong className="label">
+            <label htmlFor="new-patient-phone">Signed Up</label>
+          </strong>
+          <div className="field">
+            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label htmlFor="new-patient-phone">Updated</label>
+          </strong>
+          <div className="field">
+            <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label htmlFor="unsubscribed">Unsubscribe</label>
+          </strong>
           <div className="field">
             <Field
               name="unsubscribed"
@@ -160,7 +186,6 @@ class PatientDetailSection extends React.Component {
               component={Checkbox}
               className={unsubscribedClassName}
             />
-            <label htmlFor="unsubscribed">Unsubscribe</label>
           </div>
         </div>
         {this.renderUpdateButtons()}

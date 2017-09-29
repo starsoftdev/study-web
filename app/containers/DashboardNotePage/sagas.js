@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -109,7 +109,7 @@ export function* fetchNoteWorker() {
     yield put(fetchNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchNoteError(err));
   }
 }
@@ -131,7 +131,7 @@ export function* addNoteWorker(action) {
     yield put(addNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addNoteError(err));
   }
 }
@@ -153,7 +153,7 @@ export function* editNoteWorker(action) {
     yield put(editNoteSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editNoteError(err));
   }
 }
@@ -174,7 +174,7 @@ export function* deleteNoteWorker(action) {
     yield put(deleteNoteSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting note');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteNoteError(err));
   }
 }

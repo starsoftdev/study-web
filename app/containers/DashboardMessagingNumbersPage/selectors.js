@@ -26,6 +26,11 @@ const selectDashboardMessagingNumber = () => createSelector(
   (substate) => substate.messagingNumber
 );
 
+const selectDashboardAvailableNumber = () => createSelector(
+  selectDashboardMessagingNumbersPageDomain(),
+  (substate) => substate.availableNumber
+);
+
 const selectDashboardEditMessagingNumberProcess = () => createSelector(
   selectDashboardMessagingNumbersPageDomain(),
   (substate) => substate.editMessagingNumberProcess
@@ -34,6 +39,11 @@ const selectDashboardEditMessagingNumberProcess = () => createSelector(
 const selectDashboardMessagingNumberSearchFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'dashboardMessagingNumberForm.values', {})
+);
+
+const selectDashboardAddMessagingNumberFormValues = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'dashboardAddMessagingNumberForm.values', {})
 );
 
 const selectPaginationOptions = () => createSelector(
@@ -45,7 +55,9 @@ export default selectDashboardMessagingNumbersPage;
 export {
   selectDashboardMessagingNumbersPageDomain,
   selectDashboardMessagingNumber,
+  selectDashboardAvailableNumber,
   selectDashboardEditMessagingNumberProcess,
   selectDashboardMessagingNumberSearchFormValues,
+  selectDashboardAddMessagingNumberFormValues,
   selectPaginationOptions,
 };

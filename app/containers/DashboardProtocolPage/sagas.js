@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -63,7 +63,7 @@ export function* fetchProtocolWorker(action) {
     yield put(fetchProtocolSuccess(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching protocols');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchProtocolError(err));
   }
 }
@@ -85,7 +85,7 @@ export function* addProtocolWorker(action) {
     yield put(addProtocolSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving protocols');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addProtocolError(err));
   }
 }
@@ -110,7 +110,7 @@ export function* editProtocolWorker(action) {
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving protocols');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editProtocolError(err));
   }
 }
@@ -131,7 +131,7 @@ export function* deleteProtocolWorker(action) {
     yield put(deleteProtocolSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting protocols');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteProtocolError(err));
   }
 }

@@ -2,8 +2,9 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
-import LoadingSpinner from '../../../components/LoadingSpinner';
+import ReactTooltip from 'react-tooltip';
 
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectCurrentUser } from '../../App/selectors';
 import { setActiveSort, sortSuccess, addNewMessageForProtocol } from '../actions';
 import { selectProtocols, selectPaginationOptions } from '../selectors';
@@ -11,6 +12,7 @@ import ProtocolItem from './ProtocolItem';
 import {
   selectSocket,
 } from '../../../containers/GlobalNotifications/selectors';
+import pqsImage from '../../../assets/images/pqs.png';
 
 class ProtocolsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -118,9 +120,9 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
                 <th onClick={this.sortBy} data-sort="protocolNumber" className={(this.props.paginationOptions.activeSort === 'protocolNumber') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="croName" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>CRO<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="unreadMessageCount" className={(this.props.paginationOptions.activeSort === 'unreadMessageCount') ? this.props.paginationOptions.activeDirection : ''}>
-                  <span className="icomoon-credit" data-original-title="Patient Messaging Suite" />
-                  <i className="caret-arrow" />
+                <th onClick={this.sortBy} data-sort="unreadMessageCount" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>
+                  <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip="Patient Qualification Suite" />
+                  <ReactTooltip id="pqs-logo" type="info" class="tooltipClass wide" effect="solid" />
                 </th>
                 <th onClick={this.sortBy} data-sort="activeCount" className={(this.props.paginationOptions.activeSort === 'activeCount') ? this.props.paginationOptions.activeDirection : ''}>ACTIVE<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="inactiveCount" className={(this.props.paginationOptions.activeSort === 'inactiveCount') ? this.props.paginationOptions.activeDirection : ''}>INACTIVE<i className="caret-arrow" /></th>
@@ -130,7 +132,6 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           </table>
         </div>
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.loadItems}
           initialLoad={false}

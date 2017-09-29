@@ -46,6 +46,7 @@ const formName = 'ReceiptsTable.Receipts';
 class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
+    sites: PropTypes.array,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     searchBy: PropTypes.any,
@@ -77,11 +78,25 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
     };
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(newProps) {
     if (this.state.filteredReceipts) {
       this.setState({
         filteredReceipts: null,
       });
+    }
+
+    if (newProps.receipts.length > this.props.receipts.length) {
+      if (this.state.checkAll) {
+        const selectedArr = [];
+        for (const receipt of newProps.receipts) {
+          receipt.selected = true;
+          if (receipt.invoice_pdf_id && receipt.selected) {
+            selectedArr.push(receipt);
+          }
+        }
+        this.selectedReceipts = selectedArr;
+        this.props.selectAll(this.selectedReceipts);
+      }
     }
   }
 
@@ -218,8 +233,17 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   mapReceipts(raw, result) {
     let invoiceId = null;
+    const { currentUser, sites } = this.props;
+    let timezone = currentUser.timezone;
+    if (currentUser.roleForClient && currentUser.roleForClient.site_id) {
+      const site = _.find(sites, site => site.id === currentUser.roleForClient.site_id);
+      if (site) {
+        timezone = site.timezone;
+      }
+    }
+
     _.map(raw, (receipt, key) => {
-      const dateWrapper = moment(receipt.created).tz(this.props.currentUser.timezone).format('MM/DD/YY');
+      const dateWrapper = moment(receipt.created).tz(timezone).format('MM/DD/YY');
       const siteName = receipt.site_name || '-';
 
       let invoiceIdLink = receipt.invoice_id;

@@ -115,7 +115,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     const addressArr = (address) ? address.split(',') : [];
 
     return (
-      <tr className="client-site-container">
+      <tr className="client-site-container fs-hide">
         <td className="name">
           <span>{name}</span>
         </td>

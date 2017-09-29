@@ -1,17 +1,21 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-
+import { Field, reduxForm, change, touch } from 'redux-form';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Parallax } from 'react-parallax';
+import ReCAPTCHA from 'react-google-recaptcha';
 
-import FindOutPatientsFormValidator from './validator';
+import FindOutPatientsFormValidator, { fields } from './validator';
 import Input from '../../../app/components/Input';
+import { selectSyncErrorBool } from '../../../app/common/selectors/form.selector';
 
 import img2 from '../../assets/images/img2.svg';
 import img3 from '../../assets/images/img3.svg';
 import bg1 from '../../assets/images/bg1.jpg';
 
+const formName = 'find-location';
 @reduxForm({
-  form: 'find-location',
+  form: formName,
   validate: FindOutPatientsFormValidator,
 })
 
@@ -19,7 +23,15 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
 
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
+    change: React.PropTypes.func,
+    formError: React.PropTypes.bool.isRequired,
+    touchFields: React.PropTypes.func.isRequired,
   };
+  constructor(props) {
+    super(props);
+
+    this.onChange = this.onChange.bind(this);
+  }
 
   componentDidMount() {
   }
@@ -27,14 +39,30 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
   componentWillUnmount() {
   }
 
+  onChange(value) {
+    this.props.change('reCaptcha', value);
+    // if (value) {
+    //   this.props.handleSubmit();
+    //   this.recaptcha.reset();
+    // }
+  }
+
   render() {
-    const { handleSubmit } = this.props;
     return (
       <form
         action="#"
         className="form-find-location"
         data-formvalidation="true"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const { formError, touchFields } = this.props;
+          if (formError) {
+            touchFields();
+            return;
+          }
+          this.props.handleSubmit();
+          this.recaptcha.reset();
+        }}
       >
         <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={800}>
           <div className="container">
@@ -82,6 +110,19 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 onFocus={this.focusField}
                 onBlur={this.blurField}
               />
+              <Field
+                name="reCaptcha"
+                type="hidden"
+                component={Input}
+                className="field-wrapper"
+                bsClass="form-control input-lg"
+              />
+              <ReCAPTCHA
+                ref={(ref) => { this.recaptcha = ref; }}
+                sitekey={SITE_KEY}
+                onChange={this.onChange}
+                className="recaptcha-wrapper"
+              />
               <input type="submit" className="btn btn-block input-lg" value="RECEIVE REPORT" />
               <div className="images">
                 <div className="img-holder left">
@@ -99,4 +140,14 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
   }
 }
 
-export default FindOutPatientsForm;
+
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+});
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (name, value) => dispatch(change(formName, name, value)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(FindOutPatientsForm);

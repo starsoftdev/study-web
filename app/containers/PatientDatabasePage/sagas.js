@@ -1,8 +1,10 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
+import React from 'react';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { actions as toastrActions, toastr } from 'react-redux-toastr';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
@@ -19,6 +21,7 @@ import {
   FETCH_FILTERED_PROTOCOLS,
   SAVE_PATIENT,
   SUBMIT_TEXT_BLAST,
+  SUBMIT_EMAIL_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
 } from './constants';
@@ -36,7 +39,7 @@ import {
   patientFetchingError,
   patientSaved,
   patientSavingError,
-  downloadComplete,
+  // downloadComplete,
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
@@ -55,6 +58,7 @@ export function* patientDatabasePageSaga() {
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
   const watcherL = yield fork(getTotalPatientsCountWatcher);
+  const watcherZ = yield fork(submitEmailBlast);
 
   yield take(LOCATION_CHANGE);
 
@@ -72,6 +76,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherJ);
   yield cancel(watcherK);
   yield cancel(watcherL);
+  yield cancel(watcherZ);
 }
 
 // Bootstrap sagas
@@ -82,6 +87,7 @@ export default [
 export function* fetchPatientsWatcher() {
   while (true) {
     const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
+
     try {
       const filterObj = {
         include: [
@@ -205,10 +211,22 @@ export function* fetchPatientsWatcher() {
       const queryString = composeQueryString(queryParams);
       const requestURL = `${API_URL}/patients/getPatientsForDB?${queryString}`;
       if (isExport) {
-        location.replace(`${requestURL}`);
-        yield put(downloadComplete());
-      } else {
-        const response = yield call(request, requestURL);
+        const toastrOptions = {
+          id: 'loadingToasterForExportDbPatients',
+          type: 'success',
+          message: 'Loading...',
+          options: {
+            timeOut: 0,
+            icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+            showCloseButton: true,
+          },
+        };
+
+        yield put(toastrActions.add(toastrOptions));
+      }
+
+      const response = yield call(request, requestURL);
+      if (!isExport) {
         yield put(patientsFetched(searchParams, response, patients, searchFilter, { filter: filterObj, clientId }));
       }
     } catch (err) {
@@ -345,7 +363,7 @@ export function* addPatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while adding indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -370,7 +388,7 @@ export function* removePatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while removing indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -396,7 +414,7 @@ export function* updatePatientIndicationWatcher() {
       yield call(request, requestURL, options);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while updating indications.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -422,11 +440,11 @@ export function* savePatientWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      yield put(toastrActions.success('Save Patient', 'Patient saved successfully!'));
+      toastr.success('Save Patient', 'Patient saved successfully!');
       yield put(patientSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(patientSavingError(err));
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -461,8 +479,10 @@ function* submitTextBlast() {
               offset: null,
             },
           },
-          excludePatients: formValues.uncheckedPatients,
         };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
@@ -475,10 +495,46 @@ function* submitTextBlast() {
         body: JSON.stringify(reqParams),
       });
       onClose();
-      yield put(toastrActions.success('', 'Success! Your text blast have been sent.'));
+      toastr.success('', 'Success! Your text blast have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+function* submitEmailBlast() {
+  while (true) {
+    // listen for the SUBMIT_EMAIL_BLAST action
+    const { filter, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/emails/addBlastEmails`;
+
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          filter,
+          uncheckedPatients,
+          from,
+          subject,
+          clientRoleId,
+          message,
+        }),
+      });
+      onClose();
+      toastr.success('', 'Success! Your email blast have been sent.');
+    } catch (e) {
+      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
+      toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
@@ -499,12 +555,12 @@ function* importPatients() {
         method: 'POST',
         body: formData,
       });
-      yield put(toastrActions.success('Import Patients', 'Patients imported successfully!'));
+      toastr.success('Import Patients', 'Patients imported successfully!');
       yield put(submitAddPatientSuccess(response, payload.name));
       onClose();
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
-      yield put(toastrActions.error('', errorMessage));
+      toastr.error('', errorMessage);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -529,7 +585,7 @@ function* submitAddPatient() {
         body: JSON.stringify(patient),
       });
       onClose();
-      yield put(toastrActions.success('Add Patient', 'Patient added successfully!'));
+      toastr.success('Add Patient', 'Patient added successfully!');
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
@@ -544,7 +600,7 @@ function* submitAddPatient() {
       } else {
         errorMessages = 'Something went wrong while adding a patient. Please try again later.';
       }
-      yield put(toastrActions.error('', errorMessages));
+      toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });

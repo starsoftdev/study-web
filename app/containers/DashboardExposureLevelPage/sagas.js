@@ -1,7 +1,7 @@
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { actions as toastrActions } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
 import {
@@ -52,7 +52,7 @@ export function* fetchLevelWorker() {
     yield put(fetchLevelSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(fetchLevelError(err));
   }
 }
@@ -73,7 +73,7 @@ export function* addLevelWorker(action) {
     yield put(addLevelSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(addLevelError(err));
   }
 }
@@ -95,7 +95,7 @@ export function* editLevelWorker(action) {
     yield put(editLevelSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(editLevelError(err));
   }
 }
@@ -116,7 +116,7 @@ export function* deleteLevelWorker(action) {
     yield put(deleteLevelSuccess({ id: action.payload }));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting cro');
-    yield put(toastrActions.error('', errorMessage));
+    toastr.error('', errorMessage);
     yield put(deleteLevelError(err));
   }
 }

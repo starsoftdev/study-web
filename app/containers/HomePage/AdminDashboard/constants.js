@@ -44,6 +44,10 @@ export const CHANGE_STUDY_ADD_SUCCESS                    = 'DashboardPage/CHANGE
 export const CHANGE_STUDY_ADD_ERROR                      = 'DashboardPage/CHANGE_STUDY_ADD_ERROR';
 export const RESET_CHANGE_STUDY_ADD_STATE                = 'DashboardPage/RESET_CHANGE_STUDY_ADD_STATE';
 
+export const REMOVE_STUDY_AD                            = 'DashboardPage/REMOVE_STUDY_AD';
+export const REMOVE_STUDY_AD_SUCCESS                    = 'DashboardPage/REMOVE_STUDY_AD_SUCCESS';
+export const REMOVE_STUDY_AD_ERROR                      = 'DashboardPage/REMOVE_STUDY_AD_ERROR';
+
 export const CLEAR_FILTERS                               = 'DashboardPage/CLEAR_FILTERS';
 
 export const FETCH_ALL_CLIENT_USERS                      = 'DashboardPage/FETCH_ALL_CLIENT_USERS';
@@ -112,3 +116,7 @@ export const EDIT_CAMPAIGN_ERROR                         = 'DashboardPage/EDIT_C
 export const DELETE_CAMPAIGN                             = 'DashboardPage/DELETE_CAMPAIGN';
 export const DELETE_CAMPAIGN_SUCCESS                     = 'DashboardPage/DELETE_CAMPAIGN_SUCCESS';
 export const DELETE_CAMPAIGN_ERROR                       = 'DashboardPage/DELETE_CAMPAIGN_ERROR';
+
+export const FETCH_FIVE_9_LIST                           = 'DashboardPage/FETCH_FIVE_9_LIST';
+export const FETCH_FIVE_9_LIST_SUCCESS                   = 'DashboardPage/FETCH_FIVE_9_LIST_SUCCESS';
+export const FETCH_FIVE_9_LIST_ERROR                     = 'DashboardPage/FETCH_FIVE_9_LIST_ERROR';

@@ -68,7 +68,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     }
 
     return (
-      <tr className="client-role-container">
+      <tr className="client-role-container fs-hide">
         <td className="name">
           <span>{user.firstName} {user.lastName}</span>
         </td>

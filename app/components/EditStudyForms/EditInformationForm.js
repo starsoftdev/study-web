@@ -272,7 +272,6 @@ export default class EditInformationForm extends React.Component {
           delete newParam.customEmailNotifications;
         }
       }
-      console.log(newParam);
       updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit);
     }
   }
