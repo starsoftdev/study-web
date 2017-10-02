@@ -11,7 +11,6 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     id: PropTypes.number,
     item: PropTypes.object,
     onSelectStudy: PropTypes.func,
-    onStatusChange: PropTypes.func,
     changeStudyStatusDashboard: PropTypes.func,
     hoverRowIndex: PropTypes.any,
     setHoverRowIndex: PropTypes.func,
