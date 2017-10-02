@@ -54,3 +54,5 @@ export const NEW_MESSAGE_FOR_PROTOCOL                    = 'HomePage/Viewport/NE
 export const INCREMENT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/INCREMENT_STUDY_UNREAD_MESSAGES';
 
 export const SUBTRACT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/SUBTRACT_STUDY_UNREAD_MESSAGES';
+
+export const SET_EMAIL_NOTIFICATIONS                    = 'HomePage/Viewport/SET_EMAIL_NOTIFICATIONS';
