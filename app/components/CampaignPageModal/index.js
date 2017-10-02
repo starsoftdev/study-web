@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
 
-import _ from 'lodash';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';

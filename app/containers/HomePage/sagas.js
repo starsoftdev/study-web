@@ -61,7 +61,6 @@ import {
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
   updateDashboardStudySuccess,
-  updateDashboardStudyError,
   fetchAllClientUsersDashboardSuccess,
   fetchAllClientUsersDashboardError,
   fetchStudyCampaignsDashboardSuccess,
@@ -633,21 +632,22 @@ export function* editStudyWatcher() {
 
 export function* editStudyWorker(action) {
   try {
-    const { studyId } = action;
-
+    const { studyId, options } = action;
     const requestURL = `${API_URL}/clientRoles/editStudy`;
 
     const data = new FormData();
-    _.forEach(action.formValues, (value, index) => {
+    _.forEach(options, (value, index) => {
       if (index !== 'studyAd' && index !== 'emailNotifications') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
-    data.append('emailNotifications', JSON.stringify(action.formValues.emailNotifications));
+    if (options.emailNotifications) {
+      data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
 
-    if (action.formValues.studyAd && action.formValues.studyAd[0]) {
-      data.append('file', action.formValues.studyAd[0]);
+    if (options.studyAd && options.studyAd[0]) {
+      data.append('file', options.studyAd[0]);
     }
 
     const params = {
@@ -657,7 +657,7 @@ export function* editStudyWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchClientSites(action.formValues.clientId, {}));
+    yield put(fetchClientSites(options.clientId, {}));
 
     toastr.success('Edit Study', 'The request has been submitted successfully');
     yield put(studyEdited(response));
@@ -689,7 +689,7 @@ export function* addEmailNotificationUserWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email));
+    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email, response.user));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Could not add the user.');
     toastr.error('', errorMessage);
