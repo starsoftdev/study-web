@@ -16,10 +16,6 @@ export const FETCH_TOTALS_DASHBOARD                     = 'DashboardPage/FETCH_T
 export const FETCH_TOTALS_DASHBOARD_SUCCESS             = 'DashboardPage/FETCH_TOTALS_DASHBOARD_SUCCESS';
 export const FETCH_TOTALS_DASHBOARD_ERROR               = 'DashboardPage/FETCH_TOTALS_DASHBOARD_ERROR';
 
-export const FETCH_SITE_NAMES                            = 'DashboardPage/FETCH_SITE_NAMES';
-export const FETCH_SITE_NAMES_SUCCESS                    = 'DashboardPage/FETCH_SITE_NAMES_SUCCESS';
-export const FETCH_SITE_NAMES_ERROR                      = 'DashboardPage/FETCH_SITE_NAMES_ERROR';
-
 export const FETCH_SITE_LOCATIONS                        = 'DashboardPage/FETCH_SITE_LOCATIONS';
 export const FETCH_SITE_LOCATIONS_SUCCESS                = 'DashboardPage/FETCH_SITE_LOCATIONS_SUCCESS';
 export const FETCH_SITE_LOCATIONS_ERROR                  = 'DashboardPage/FETCH_SITE_LOCATIONS_ERROR';
@@ -67,6 +63,7 @@ export const CHANGE_STUDY_STATUS_SUCCESS                 = 'DashboardPage/CHANGE
 export const CHANGE_STUDY_STATUS_ERROR                   = 'DashboardPage/CHANGE_STUDY_STATUS_ERROR';
 
 export const TOGGLE_STUDY                                = 'DashboardPage/TOGGLE_STUDY';
+export const TOGGLE_ALL_STUDIES                          = 'DashboardPage/TOGGLE_ALL_STUDIES';
 
 export const FETCH_MESSAGING_NUMBERS                     = 'DashboardPage/FETCH_MESSAGING_NUMBERS';
 export const FETCH_MESSAGING_NUMBERS_SUCCESS             = 'DashboardPage/FETCH_MESSAGING_NUMBERS_SUCCESS';
@@ -98,19 +95,15 @@ export const DELETE_NOTE                                 = 'DashboardPage/DELETE
 
 export const ADD_STUDY_INDICATION_TAG                    = 'DashboardPage/ADD_STUDY_INDICATION_TAG';
 export const ADD_STUDY_INDICATION_TAG_SUCCESS            = 'DashboardPage/ADD_STUDY_INDICATION_TAG_SUCCESS';
-export const ADD_STUDY_INDICATION_TAG_ERROR              = 'DashboardPage/ADD_STUDY_INDICATION_TAG_ERROR';
 
 export const REMOVE_STUDY_INDICATION_TAG                 = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG';
 export const REMOVE_STUDY_INDICATION_TAG_SUCCESS         = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_SUCCESS';
-export const REMOVE_STUDY_INDICATION_TAG_ERROR           = 'DashboardPage/REMOVE_STUDY_INDICATION_TAG_ERROR';
 
 export const FETCH_STUDY_INDICATION_TAG                  = 'DashboardPage/FETCH_STUDY_INDICATION_TAG';
 export const FETCH_STUDY_INDICATION_TAG_SUCCESS          = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_SUCCESS';
 export const FETCH_STUDY_INDICATION_TAG_ERROR            = 'DashboardPage/FETCH_STUDY_INDICATION_TAG_ERROR';
 
 export const SET_HOVER_ROW_INDEX                         = 'DashboardPage/SET_HOVER_ROW_INDEX';
-
-export const SET_EDIT_STUDY_FORM_VALUES                  = 'DashboardPage/SET_EDIT_STUDY_FORM_VALUES';
 
 export const FETCH_CAMPAIGNS_BY_STUDY                    = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY';
 export const FETCH_CAMPAIGNS_BY_STUDY_SUCCESS            = 'DashboardPage/FETCH_CAMPAIGNS_BY_STUDY_SUCCESS';

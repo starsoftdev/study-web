@@ -60,7 +60,6 @@ export class DashboardSponsorTable extends React.Component { // eslint-disable-l
     return (
       <div className="table-responsive table-holder table-indication alt">
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.props.loadMore}
           initialLoad={false}
