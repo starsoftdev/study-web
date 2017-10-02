@@ -250,7 +250,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     return (
       <div className="table-holder">
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.props.loadMore}
           initialLoad={false}
