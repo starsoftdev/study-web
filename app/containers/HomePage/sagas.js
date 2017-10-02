@@ -642,7 +642,9 @@ export function* editStudyWorker(action) {
       }
     });
     data.append('id', studyId);
-    data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    if (options.emailNotifications) {
+      data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
 
     if (options.studyAd && options.studyAd[0]) {
       data.append('file', options.studyAd[0]);
