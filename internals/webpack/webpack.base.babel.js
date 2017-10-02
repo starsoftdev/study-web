@@ -108,6 +108,7 @@ module.exports = (options) => ({
       SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
       MIXPANEL_TOKEN: JSON.stringify(process.env.MIXPANEL_TOKEN || false),
       SITE_KEY: JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITE_KEY),
+      DASHBOARD_TIMEZONE: JSON.stringify(process.env.DASHBOARD_TIMEZONE),
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),
