@@ -38,12 +38,14 @@ import {
   SORT_SUCCESS,
   INCREMENT_STUDY_UNREAD_MESSAGES,
   SUBTRACT_STUDY_UNREAD_MESSAGES,
+  SET_EMAIL_NOTIFICATIONS,
 } from './constants';
 
 import {
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
 } from '../../containers/App/constants';
 
 import {
@@ -141,6 +143,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  emailNotifications: []
 };
 
 export default function homePageReducer(state = initialState, action) {
@@ -672,6 +675,26 @@ export default function homePageReducer(state = initialState, action) {
         };
       }
       return state;
+
+    case SET_EMAIL_NOTIFICATIONS: {
+      return {
+        ...state,
+        emailNotifications: action.notifications,
+      };
+    }
+
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS: {
+      const emailNotifications = concat(state.emailNotifications, {
+        email: action.email,
+        firstName: (action.user) ? action.user.firstName : null,
+        lastName: (action.user) ? action.user.lastName : null,
+        userId: action.userId
+      });
+      return {
+        ...state,
+        emailNotifications,
+      };
+    }
 
     default:
       return state;
