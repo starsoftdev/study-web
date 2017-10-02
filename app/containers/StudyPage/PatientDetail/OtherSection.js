@@ -120,7 +120,7 @@ class OtherSection extends React.Component {
     }
   }
 
-  addIndication(studyId, indication) {
+  addIndication(patientId, indication) {
     const { initialValues, addPatientIndication } = this.props;
     addPatientIndication(initialValues.id, initialValues.patientCategoryId, indication);
   }
@@ -217,7 +217,7 @@ class OtherSection extends React.Component {
       const overlayValues = { ...initialValues };
 
       if (initialValues.patientIndications) {
-        overlayValues.indications = initialValues.patientIndications.map(pi => pi.indication.id);
+        overlayValues.indications = initialValues.patientIndications.map(pi => pi.indication);
       }
 
       return (

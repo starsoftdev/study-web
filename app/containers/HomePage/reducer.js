@@ -38,18 +38,14 @@ import {
   SORT_SUCCESS,
   INCREMENT_STUDY_UNREAD_MESSAGES,
   SUBTRACT_STUDY_UNREAD_MESSAGES,
+  SET_EMAIL_NOTIFICATIONS,
 } from './constants';
 
 import {
-  ADD_EMAIL_NOTIFICATION_USER,
-  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
-  ADD_EMAIL_NOTIFICATION_USER_ERROR,
-  ADD_CUSTOM_EMAIL_NOTIFICATION,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
 } from '../../containers/App/constants';
 
 import {
@@ -147,6 +143,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  emailNotifications: []
 };
 
 export default function homePageReducer(state = initialState, action) {
@@ -586,60 +583,6 @@ export default function homePageReducer(state = initialState, action) {
           inactive: state.studies.inactive || 0,
         },
       };
-    case ADD_EMAIL_NOTIFICATION_USER:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: true,
-          error: null,
-          savedUser: null,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: null,
-          savedUser: action.payload,
-        },
-      };
-    case ADD_EMAIL_NOTIFICATION_USER_ERROR:
-      return {
-        ...state,
-        addNotificationProcess: {
-          saving: false,
-          error: action.payload,
-          savedUser: null,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: true,
-          error: null,
-          savedUser: null,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: false,
-          error: null,
-          savedUser: action.payload,
-        },
-      };
-    case ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR:
-      return {
-        ...state,
-        addCustomNotificationEmailProcess: {
-          saving: false,
-          error: action.payload,
-          savedUser: null,
-        },
-      };
     case NEW_MESSAGE_FOR_PROTOCOL:
       protocols = _.cloneDeep(state.protocols.details);
       _.forEach(protocols, (item, index) => {
@@ -732,6 +675,26 @@ export default function homePageReducer(state = initialState, action) {
         };
       }
       return state;
+
+    case SET_EMAIL_NOTIFICATIONS: {
+      return {
+        ...state,
+        emailNotifications: action.notifications,
+      };
+    }
+
+    case ADD_EMAIL_NOTIFICATION_USER_SUCCESS: {
+      const emailNotifications = concat(state.emailNotifications, {
+        email: action.email,
+        firstName: (action.user) ? action.user.firstName : null,
+        lastName: (action.user) ? action.user.lastName : null,
+        userId: action.userId
+      });
+      return {
+        ...state,
+        emailNotifications,
+      };
+    }
 
     default:
       return state;
