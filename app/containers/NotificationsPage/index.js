@@ -182,7 +182,6 @@ export class NotificationsPage extends React.Component {
               <h2>HISTORY</h2>
             </header>
             <InfiniteScroll
-              className="test-test"
               pageStart={0}
               loadMore={this.loadMore}
               initialLoad={false}

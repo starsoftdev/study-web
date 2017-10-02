@@ -68,11 +68,6 @@ const selectPaginationOptions = () => createSelector(
   substate => substate.paginationOptions
 );
 
-const selectAddNotificationProcess = () => createSelector(
-  selectHomePageDomain(),
-  substate => substate.addNotificationProcess
-);
-
 const selectHomePageClientAdmins = () => createSelector(
   selectHomePageDomain(),
   substate => substate.clientAdmins
@@ -83,13 +78,17 @@ const selectQueryParams = () => createSelector(
   (substate) => substate.queryParams
 );
 
+const selectEditStudyEmailNotifications = () => createSelector(
+  selectHomePageDomain(),
+  (substate) => substate.emailNotifications
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchProtocolsFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'searchProtocols.values', {})
 );
-
 
 export default selectHomePage;
 export {
@@ -107,7 +106,7 @@ export {
   selectEditedStudy,
   selectPaginationOptions,
   selectSearchProtocolsFormValues,
-  selectAddNotificationProcess,
   selectHomePageClientAdmins,
   selectQueryParams,
+  selectEditStudyEmailNotifications,
 };

@@ -107,7 +107,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
 
-      const addr = e.label;
       for (const val of addressComponents) {
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
@@ -144,10 +143,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         }
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
-          change('address', `${streetNmber} ${route}`);
         }
       }
-      change('address', addr);
     } else {
       const addressArr = e.label.split(',');
       if (addressArr[1]) {
@@ -160,13 +157,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         change('countryCode', toShortCode(addressArr[3]));
       }
       this.geoSuggest.update(`${addressArr[0]}`);
-      change('address', `${addressArr[0]}`);
     }
-    this.valid = true;
   }
 
   render() {
-    const { savedSite, handleSubmit, isEdit } = this.props;
+    const { handleSubmit, isEdit, initialValues, savedSite } = this.props;
 
     return (
       <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>
@@ -208,17 +203,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 component={FormGeosuggest}
                 refObj={(el) => { this.geoSuggest = el; }}
                 onSuggestSelect={this.onSuggestSelect}
-                initialValue={isEdit ? this.props.initialValues.address : ''}
+                initialValue={isEdit ? initialValues.address : ''}
                 placeholder=""
-                onFocus={() => {
-                  this.valid = false;
-                }}
-                onBlur={() => {
-                  if (this.valid === false) {
-                    this.geoSuggest.update('');
-                    this.props.change('address', '');
-                  }
-                }}
               />
             </div>
           </div>
