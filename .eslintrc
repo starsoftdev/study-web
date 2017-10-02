@@ -23,9 +23,11 @@
     "SOCKET_URL": true,
     "MIXPANEL_TOKEN": true,
     "SITE_KEY": true,
-    "ga": true
+    "ga": true,
+    "DASHBOARD_TIMEZONE": true
   },
   "rules": {
+    "arrow-body-style": 0,
     "arrow-parens": 0,
     "class-methods-use-this": 0,
     "comma-dangle": [
@@ -57,6 +59,7 @@
     "jsx-a11y/role-supports-aria-props": 2,
     "key-spacing": 0,
     "max-len": 0,
+    "no-else-return": 0,
     "new-cap": 0,
     "newline-per-chained-call": 0,
     "no-class-assign": 0,
