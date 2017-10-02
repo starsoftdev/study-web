@@ -78,13 +78,17 @@ const selectQueryParams = () => createSelector(
   (substate) => substate.queryParams
 );
 
+const selectEditStudyEmailNotifications = () => createSelector(
+  selectHomePageDomain(),
+  (substate) => substate.emailNotifications
+);
+
 const selectFormDomain = () => state => state.form;
 
 const selectSearchProtocolsFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'searchProtocols.values', {})
 );
-
 
 export default selectHomePage;
 export {
@@ -104,4 +108,5 @@ export {
   selectSearchProtocolsFormValues,
   selectHomePageClientAdmins,
   selectQueryParams,
+  selectEditStudyEmailNotifications,
 };
