@@ -50,6 +50,7 @@ import {
   NEW_MESSAGE_FOR_PROTOCOL,
   INCREMENT_STUDY_UNREAD_MESSAGES,
   SUBTRACT_STUDY_UNREAD_MESSAGES,
+  SET_EMAIL_NOTIFICATIONS,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -274,11 +275,18 @@ export function studyUpgradingError(payload) {
   };
 }
 
-export function editStudy(studyId, formValues) {
+export function setEmailNotifications(notifications) {
+  return {
+    type: SET_EMAIL_NOTIFICATIONS,
+    notifications,
+  };
+}
+
+export function editStudy(studyId, options) {
   return {
     type: EDIT_STUDY,
     studyId,
-    formValues,
+    options,
   };
 }
 
@@ -319,11 +327,12 @@ export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
   };
 }
 
-export function addEmailNotificationUserSuccess(userId, email) {
+export function addEmailNotificationUserSuccess(userId, email, user = null) {
   return {
     type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
     userId,
     email,
+    user,
   };
 }
 

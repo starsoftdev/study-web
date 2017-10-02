@@ -56,7 +56,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
       };
     case ADD_EMAIL_NOTIFICATION_USER_SUCCESS: {
       let emailNotifications;
-      if (state.values.emailNotifications) {
+      if (state.values && state.values.emailNotifications) {
         emailNotifications = [
           ...state.values.emailNotifications,
           {
@@ -75,7 +75,7 @@ export default function editDashboardStudyReducer(state = initialState, action) 
         ];
       }
       let initialEmailNotifications;
-      if (state.initial.emailNotifications) {
+      if (state.initial && state.initial.emailNotifications) {
         initialEmailNotifications = [
           ...state.initial.emailNotifications,
           {
