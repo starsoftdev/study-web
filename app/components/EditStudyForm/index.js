@@ -276,8 +276,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       recruitmentPhone: normalizePhoneForServer(formValues.recruitmentPhone),
     };
 
-    console.log(formValues);
-
     if (!formError) {
       const newEmailNotifications = _.pickBy(formValues.emailNotifications, (value, key) => {
         const isCheckedCurrent = (_.has(value, 'isChecked')) ? value.isChecked : false;
@@ -296,7 +294,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         params.emailNotifications = newEmailNotifications;
       }
     }
-
     onSubmit(params);
   }
 
