@@ -318,7 +318,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
               rewards={this.props.rewards}
               paginationOptions={this.props.paginationOptions}
               setActiveSort={this.props.setActiveSort}
-              siteLocations={siteLocations}
+              siteLocations={this.props.sites}
             />
           </section>
 
