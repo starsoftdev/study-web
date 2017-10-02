@@ -60,14 +60,14 @@ export default class ImportPatientsModal extends React.Component {
         <span className="or">
           <span>or</span>
         </span>
-        <span className="modal-opener" onClick={toggleAddPatient}>
+        <a className="add-patient-info-import" onClick={toggleAddPatient}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
               <span className="text">Add Patient</span>
             </div>
           </div>
-        </span>
+        </a>
       </div>
     );
   }

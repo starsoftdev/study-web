@@ -22,16 +22,15 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
   };
 
   render() {
-    const { balance, points, reward_data, created, timezone } = this.props;
+    const { balance, points, reward_data, created } = this.props;
     let { rewardData } = this.props;
-    const localTime = moment(created).tz(timezone);
-    const date = localTime.format('MM/DD/YYYY');
-    const time = localTime.format('hh:mm A');
+    let timezone = this.props.timezone;
     if (reward_data) {
       rewardData = JSON.parse(reward_data);
     }
     const foundIndex = findIndex(this.props.siteLocations, { id: this.props.site_id });
     if (foundIndex !== -1) {
+      timezone = this.props.siteLocations[foundIndex].timezone;
       if (rewardData) {
         rewardData.siteLocationName = this.props.siteLocations[foundIndex].name;
       } else {
@@ -40,6 +39,10 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
         };
       }
     }
+
+    const localTime = moment(created).tz(timezone);
+    const date = localTime.format('MM/DD/YYYY');
+    const time = localTime.format('hh:mm A');
     const infoTag = (rewardData && rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} now has {balance} KIKs</p> : null;
 
     let content = null;
