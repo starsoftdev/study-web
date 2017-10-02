@@ -27,6 +27,7 @@ function FormGeosuggest({ refObj, input, name, className, enableTooltip, meta: {
     className={className}
     onBlur={e => input.onBlur(e)}
     onFocus={e => input.onFocus(e)}
+    onChange={e => input.onChange(e)}
     ref={(el) => {
       refObj(el);
     }}
