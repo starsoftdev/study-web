@@ -15,6 +15,7 @@ import { selectCurrentUser, selectSiteLocations } from '../App/selectors';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { getItem } from '../../utils/localStorage';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -71,7 +72,8 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyPatientsDbReportReady', (data) => {
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.client_id === data.clientId) {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.client_id === data.clientId && authToken === data.authToken) {
             setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportDbPatients'); }, 1000);
             location.replace(data.url);
           }
