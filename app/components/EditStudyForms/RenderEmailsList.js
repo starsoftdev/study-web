@@ -52,16 +52,31 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
     }
   }
 
+  renderEmailList(email, index) {
+    const { formValues } = this.props;
+    return (
+      <li key={index}>
+        <Field
+          name={`${email}.isChecked`}
+          component={Checkbox}
+          type="checkbox"
+          className="field-active"
+          onChange={this.selectEmail}
+        />
+        <span className="email">{formValues.emailNotifications[index].email} </span>
+      </li>
+    );
+  }
+
   render() {
     const { fields, formValues } = this.props;
-    const fLength = fields.length;
-    let frLength;
+    let formValuesLength;
     if (formValues.emailNotifications) {
-      frLength = formValues.emailNotifications.length;
+      formValuesLength = formValues.emailNotifications.length;
     } else {
-      frLength = 0;
+      formValuesLength = 0;
     }
-    if (fLength !== frLength && fields.length !== 0) {
+    if (fields.length !== formValuesLength && fields.length !== 0) {
       return (
         <div></div>
       );
@@ -81,18 +96,9 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
 
         <ul className="list-unstyled list-emails">
           {
-            fields.map((email, index) =>
-              <li key={index}>
-                <Field
-                  name={`${email}.isChecked`}
-                  component={Checkbox}
-                  type="checkbox"
-                  className="field-active"
-                  onChange={this.selectEmail}
-                />
-                <span className="email">{formValues.emailNotifications[index].email} </span>
-              </li>
-            )
+            fields.map((emailNotification, index) => {
+              return this.renderEmailList(emailNotification, index);
+            })
           }
         </ul>
         <div className="btn-holder">
