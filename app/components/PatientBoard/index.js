@@ -178,8 +178,6 @@ class PatientBoard extends React.Component {
 
     const time = scheduledDate.hour(formValues.amPm === 'AM' ? formValues.hours % 12 : (formValues.hours % 12) + 12).minute(formValues.minutes);
 
-    console.log('time', time.format('h:mm A [on] MM/DD/YYYY'));
-
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
     }
