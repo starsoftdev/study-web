@@ -279,7 +279,9 @@ export function* exportPatients() {
       const requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
       const options = {
         method: 'GET',
-        query: {},
+        query: {
+          authToken,
+        },
       };
       if (campaignId) {
         options.query.campaignId = campaignId;
