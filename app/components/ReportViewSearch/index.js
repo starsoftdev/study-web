@@ -14,7 +14,7 @@ import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
 import Input from '../Input/index';
 import { exportStudies } from '../../containers/ReportViewPage/actions';
-
+import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -67,7 +67,8 @@ export class ReportViewSearch extends React.Component {
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifySponsorReportReady', (data) => {
-          if (currentUser.roleForSponsor && data.url && currentUser.roleForSponsor.id === data.sponsorRoleId) {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForSponsor && data.url && currentUser.roleForSponsor.id === data.sponsorRoleId && authToken === data.authToken) {
             setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportStudies'); }, 1000);
             location.replace(data.url);
           }
