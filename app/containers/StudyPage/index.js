@@ -24,6 +24,7 @@ import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePa
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { getItem } from '../../utils/localStorage';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -116,7 +117,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId) {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId && authToken === data.authToken) {
             // this.props.downloadReport(data.reportName);
             setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
             location.replace(data.url);
