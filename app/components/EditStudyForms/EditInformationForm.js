@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
-  updateDashboardStudy: (id, emailNotifications, params, stopSubmit) => dispatch(updateDashboardStudy(id, emailNotifications, params, stopSubmit)),
+  updateDashboardStudy: (id, params, stopSubmit, formValues) => dispatch(updateDashboardStudy(id, params, stopSubmit, formValues)),
 });
 
 @reduxForm({
@@ -272,7 +272,7 @@ export default class EditInformationForm extends React.Component {
           delete newParam.customEmailNotifications;
         }
       }
-      updateDashboardStudy(initialFormValues.study_id, formValues.emailNotifications, newParam, stopSubmit);
+      updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
     }
   }
 
@@ -346,11 +346,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="is_active"
+                  name="isPublic"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('is_public', e.toString());
+                    change('isPublic', e);
                   }}
                 />
               </div>
@@ -363,7 +363,7 @@ export default class EditInformationForm extends React.Component {
                 <Field
                   type="text"
                   id="edit-information-page-name"
-                  name="landing_page_url"
+                  name="landingPageUrl"
                   component={Input}
                 />
               </div>
@@ -595,11 +595,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="patient_messaging_suite"
+                  name="patientMessagingSuite"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('patientMessagingSuite', e.toString());
+                    change('patientMessagingSuite', e);
                   }}
                 />
               </div>
@@ -667,11 +667,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="should_show_in_sponsor_portal"
+                  name="shouldShowInSponsorPortal"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('shouldShowInSponsorPortal', e.toString());
+                    change('shouldShowInSponsorPortal', e);
                   }}
                 />
               </div>
