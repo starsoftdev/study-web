@@ -330,10 +330,10 @@ export default class EditInformationForm extends React.Component {
         value: item.id,
         label: item.phone_number,
       }));
-      if (formValues.text_number_id) {
+      if (initialFormValues.text_number_id) {
         messagingNumbersOptions.unshift({
-          value: formValues.text_number_id,
-          label: formValues.phone_number,
+          value: initialFormValues.text_number_id,
+          label: initialFormValues.phone_number,
         });
       }
 
@@ -458,7 +458,7 @@ export default class EditInformationForm extends React.Component {
               <div className="field">
                 <Field
                   type="text"
-                  name="site_id"
+                  name="site"
                   component={Input}
                   isDisabled
                 />
@@ -617,8 +617,10 @@ export default class EditInformationForm extends React.Component {
                   searchable
                   options={messagingNumbersOptions}
                   customSearchIconClass="icomoon-icon_search2"
-                  onChange={(e) => {
-                    change('messaging_number', e.toString());
+                  onChange={(messagingNumberId) => {
+                    if (messagingNumberId) {
+                      change('messagingNumber', parseInt(messagingNumberId));
+                    }
                   }}
                 />
               </div>
