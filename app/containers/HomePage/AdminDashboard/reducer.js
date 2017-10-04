@@ -710,7 +710,8 @@ export default function dashboardPageReducer(state = initialState, action) {
       _.forEach(studiesCopy, (study, key) => {
         // then iterate through the response of studies and re-calculate the stats
         const studyIndex = _.findIndex(action.payload.studies, (item) => (item === study.study_id));
-        if (studyIndex) {
+        // check for a nonexistent index, otherwise set the study status accordingly
+        if (studyIndex !== -1) {
           studiesCopy[key].isPublic = action.payload.status === 'active';
         }
         if (studiesCopy[key].isPublic) {
