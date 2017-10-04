@@ -212,6 +212,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <PatientBoard
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
+            site={site}
             params={params}
             ePMS={ePMS}
           />

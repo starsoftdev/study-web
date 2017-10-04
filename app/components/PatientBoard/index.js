@@ -44,6 +44,7 @@ const scroll = Scroll.animateScroll;
 class PatientBoard extends React.Component {
   static propTypes = {
     params: React.PropTypes.object,
+    site: React.PropTypes.object,
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
     currentPatient: React.PropTypes.object,
@@ -165,7 +166,7 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal, site } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
@@ -177,6 +178,7 @@ class PatientBoard extends React.Component {
     let currentAppointmentId;
 
     const time = scheduledDate.hour(formValues.amPm === 'AM' ? formValues.hours % 12 : (formValues.hours % 12) + 12).minute(formValues.minutes);
+    const relativeOffset = moment().utcOffset() - moment.tz(site.timezone).utcOffset();
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
@@ -186,7 +188,7 @@ class PatientBoard extends React.Component {
       id: currentAppointmentId,
       patientId: currentPatient.id,
       clientId: currentUser.roleForClient.client_id,
-      time: time.toISOString(),
+      time: time.tz(site.timezone).add(relativeOffset, 'minutes').toISOString(),
       textReminder: formValues.textReminder || false,
     };
 
