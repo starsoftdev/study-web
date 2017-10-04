@@ -447,6 +447,7 @@ export default class EditInformationForm extends React.Component {
                   }}
                   customSearchIconClass="icomoon-icon_search2"
                   clearable={false}
+                  disabled
                 />
               </div>
             </div>
