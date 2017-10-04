@@ -799,10 +799,6 @@ export function* fetchStudiesDashboardWorker(action) {
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
-    console.log(err);
-    if (err.message && err.message.indexOf('invalid input syntax for integer') !== -1) {
-      toastr.error('', 'Error! Invalid study number.');
-    }
     yield put(fetchStudiesDashboardError(err));
   }
 }
