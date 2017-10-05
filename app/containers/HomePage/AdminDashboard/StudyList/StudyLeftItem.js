@@ -55,8 +55,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(`${DASHBOARD_TIMEZONE}`).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
-    const landingHref = item.landing_page_url ? `/${item.study_id}-${item.landing_page_url.toLowerCase().replace(/ /ig, '-')}` : '';
-    const facebookHref = item.landing_page_facebook_url;
+    const landingHref = item.landingPageUrl ? `/${item.study_id}-${item.landingPageUrl.toLowerCase().replace(/ /ig, '-')}` : '';
+    const facebookHref = item.facebookUrl;
 
     const maxLength = (str, len) => {
       const clearStr = str.replace(/<\/?[^>]+>/gi, '');
@@ -92,7 +92,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             component={Toggle}
             className="field"
             onChange={(value) => { this.props.changeStudyStatusDashboard([item.study_id], value ? 'active' : 'inactive', false); }}
-            initValue={item.is_active}
+            initValue={item.isPublic}
           />
         </td>
         <td>
