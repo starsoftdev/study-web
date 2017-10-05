@@ -1186,9 +1186,8 @@ export function* editCampaignWorker(action) {
       method: 'PUT',
       body: JSON.stringify(action.payload),
     };
-    const response = yield call(request, requestURL, params);
-    yield put(editCampaignSuccess(action.payload));
-    yield put(updateDashboardStudySuccess(response));
+    yield call(request, requestURL, params);
+    yield put(editCampaignSuccess(action.payload, action.campaignInfo));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     toastr.error('', errorMessage);
