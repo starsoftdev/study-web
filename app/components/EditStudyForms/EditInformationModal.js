@@ -11,7 +11,6 @@ import { normalizePhoneDisplay } from '../../common/helper/functions';
 import {
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectMessagingNumbers,
   selectTaggedIndicationsForStudy,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
@@ -26,7 +25,6 @@ import EditInformationForm from './EditInformationForm';
 const mapStateToProps = createStructuredSelector({
   allClientUsers: selectAllClientUsers(),
   customNotificationEmails: selectAllCustomNotificationEmails(),
-  messagingNumbers: selectMessagingNumbers(),
   taggedIndicationsForStudy: selectTaggedIndicationsForStudy(),
 });
 
@@ -47,7 +45,6 @@ export default class EditInformationModal extends React.Component {
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
     fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
-    messagingNumbers: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
     study: PropTypes.object,
@@ -59,7 +56,6 @@ export default class EditInformationModal extends React.Component {
   static customEmailNotificationFields = [];
   static checkAllCustomEmailNotificationFields = false;
   static taggedIndicationsForStudy = false;
-  static messagingNumbersForStudy = [];
 
   constructor(props) {
     super(props);
@@ -70,7 +66,7 @@ export default class EditInformationModal extends React.Component {
   }
 
   componentWillUpdate(nextProps) {
-    const { allClientUsers, customNotificationEmails, messagingNumbers, openModal, study, taggedIndicationsForStudy } = this.props;
+    const { allClientUsers, customNotificationEmails, openModal, study, taggedIndicationsForStudy } = this.props;
     if (study) {
       if (allClientUsers.fetching && !nextProps.allClientUsers.fetching) {
         this.emailNotificationFields = [];
@@ -110,19 +106,6 @@ export default class EditInformationModal extends React.Component {
         });
         // set internal state to hold the value for the field boolean without triggering component updates
         this.checkAllCustomEmailNotificationFields = isAllCustomChecked;
-      } else if (messagingNumbers.fetching && !nextProps.messagingNumbers.fetching) {
-        const messagingNumbersOptions = nextProps.messagingNumbers.details.map(item => ({
-          label: item.phone_number,
-          value: item.id,
-        }));
-        if (study.text_number_id) {
-          messagingNumbersOptions.unshift({
-            label: study.phone_number,
-            value: study.text_number_id,
-          });
-        }
-        // set internal state to hold the value for the field boolean without triggering component updates
-        this.messagingNumbersForStudy = messagingNumbersOptions;
       } else if (taggedIndicationsForStudy.fetching && !nextProps.taggedIndicationsForStudy.fetching) {
         // set the tagged indications for the study
         this.taggedIndicationsForStudy = nextProps.taggedIndicationsForStudy.details.map(item => ({
@@ -147,7 +130,6 @@ export default class EditInformationModal extends React.Component {
       initialValues.site = study.site_id;
       delete initialValues.site_id;
       initialValues.messagingNumber = study.text_number_id;
-      delete initialValues.text_number_id;
       // populate the user email notifications
       initialValues.emailNotifications = this.emailNotificationFields;
       initialValues.checkAllInput = this.checkAllEmailNotificationFields;
@@ -156,9 +138,6 @@ export default class EditInformationModal extends React.Component {
       initialValues.checkAllCustomInput = this.checkAllCustomEmailNotificationFields;
       // set the tagged indications for the study
       initialValues.taggedIndicationsForStudy = this.taggedIndicationsForStudy;
-      // set the messaging numbers
-      initialValues.messagingNumbers = this.messagingNumbersForStudy;
-
       return initialValues;
     }
     return {};
