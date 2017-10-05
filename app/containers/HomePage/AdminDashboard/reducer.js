@@ -540,7 +540,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           if (study.study_id === action.studyId) {
             let emailNotifications;
             if (action.updatedStudyParams.emailNotifications) {
-              emailNotifications = action.emailNotifications.filter(emailNotification => {
+              emailNotifications = action.formValues.emailNotifications.filter(emailNotification => {
                 return emailNotification.isChecked;
               }).map(emailNotification => {
                 return emailNotification.userId;
@@ -548,10 +548,20 @@ export default function dashboardPageReducer(state = initialState, action) {
             } else {
               emailNotifications = study.emailNotifications;
             }
+            // map the messaging number back
+            let textNumberId = study.text_number_id;
+            let phoneNumber = study.phone_number;
+            if (action.updatedStudyParams.messagingNumber) {
+              textNumberId = action.updatedStudyParams.messagingNumber;
+              const phoneNumberObject = _.find(action.formValues.messagingNumbers, { value: action.updatedStudyParams.messagingNumber });
+              phoneNumber = phoneNumberObject.label;
+            }
             return {
               ...study,
               ...action.updatedStudyParams,
               emailNotifications,
+              text_number_id: textNumberId,
+              phone_number: phoneNumber,
             };
           } else {
             return study;
@@ -563,7 +573,7 @@ export default function dashboardPageReducer(state = initialState, action) {
             let emailNotifications;
             if (action.updatedStudyParams.emailNotifications) {
               // combine the updated study objects because we then need to transform it out
-              emailNotifications = action.emailNotifications.filter(emailNotification => {
+              emailNotifications = action.formValues.emailNotifications.filter(emailNotification => {
                 return emailNotification.isChecked;
               }).map(emailNotification => {
                 return emailNotification.userId;
@@ -583,9 +593,9 @@ export default function dashboardPageReducer(state = initialState, action) {
       }
 
       const study = _.find(studiesCopy, (item) => (item.study_id === action.studyId));
-      if (study && typeof action.updatedStudyParams.is_active !== 'undefined') {
-        study.is_active = action.updatedStudyParams.is_active;
-        if (study.is_active) {
+      if (study && typeof action.updatedStudyParams.isPublic !== 'undefined') {
+        study.isPublic = action.updatedStudyParams.isPublic;
+        if (study.isPublic) {
           totalActive++;
           totalInactive--;
         } else {
@@ -700,10 +710,11 @@ export default function dashboardPageReducer(state = initialState, action) {
       _.forEach(studiesCopy, (study, key) => {
         // then iterate through the response of studies and re-calculate the stats
         const studyIndex = _.findIndex(action.payload.studies, (item) => (item === study.study_id));
-        if (studyIndex) {
-          studiesCopy[key].is_active = action.payload.status === 'active';
+        // check for a nonexistent index, otherwise set the study status accordingly
+        if (studyIndex !== -1) {
+          studiesCopy[key].isPublic = action.payload.status === 'active';
         }
-        if (studiesCopy[key].is_active) {
+        if (studiesCopy[key].isPublic) {
           totalActive++;
         } else {
           totalInactive++;
