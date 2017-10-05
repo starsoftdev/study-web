@@ -1014,6 +1014,22 @@ export default function dashboardPageReducer(state = initialState, action) {
         } :
         item
       ));
+      const studiesCopy = state.studies.details.map(study => {
+        if (study.study_id === action.payload.studyId && study.campaign_id === action.payload.campaignId) {
+          return {
+            ...study,
+            campaign_id: action.payload.campaignId,
+            campaign_datefrom: action.payload.dateFrom,
+            campaign_dateto: action.payload.dateTo,
+            campaign_length: action.campaignInfo.campaignLength,
+            level_id: action.payload.levelId,
+            level_name: action.campaignInfo.levelName,
+            custom_patient_goal: action.payload.customPatientGoal,
+          };
+        } else {
+          return study;
+        }
+      });
       return {
         ...state,
         editCampaignProcess: {
@@ -1024,6 +1040,10 @@ export default function dashboardPageReducer(state = initialState, action) {
           details: updatedCampaigns,
           fetching: false,
           error: null,
+        },
+        studies: {
+          ...state.studies,
+          details: studiesCopy,
         },
       };
     }
