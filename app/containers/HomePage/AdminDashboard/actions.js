@@ -652,17 +652,19 @@ export function fetchCampaignsByStudyError(payload) {
   };
 }
 
-export function editCampaign(payload) {
+export function editCampaign(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN,
     payload,
+    campaignInfo,
   };
 }
 
-export function editCampaignSuccess(payload) {
+export function editCampaignSuccess(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN_SUCCESS,
     payload,
+    campaignInfo,
   };
 }
 
