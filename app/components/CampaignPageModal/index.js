@@ -2,16 +2,18 @@
  * Created by Younes on 13/07/16.
  */
 
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
-
-import moment from 'moment-timezone';
+import Moment from 'moment-timezone';
+import { extendMoment } from 'moment-range';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
+
 import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Input from '../Input/index';
@@ -21,6 +23,7 @@ import { selectValues } from '../../common/selectors/form.selector';
 import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
 import { fetchCampaignsByStudy, editCampaign, deleteCampaign } from '../../containers/HomePage/AdminDashboard/actions';
 
+const moment = extendMoment(Moment);
 const formName = 'campaignPageForm';
 
 @reduxForm({
@@ -121,7 +124,7 @@ export class CampaignPageModal extends React.Component {
 
   submitCampaignForm(e) {
     e.preventDefault();
-    const { formValues, study, submitForm } = this.props;
+    const { formValues, study, submitForm, levels } = this.props;
     const submitValues = {
       dateFrom: formValues.datefrom,
       dateTo: formValues.dateto,
@@ -131,12 +134,17 @@ export class CampaignPageModal extends React.Component {
       studyId: +study.study_id,
       five9value: formValues.five_9_value,
     };
-    if (formValues.custom_patient_goal) {
-      submitValues.customPatientGoal = +formValues.custom_patient_goal;
+    if (typeof formValues.custom_patient_goal === 'number') {
+      submitValues.customPatientGoal = formValues.custom_patient_goal;
     } else {
       submitValues.customPatientGoal = null;
     }
-    submitForm(submitValues);
+    const level = _.find(levels, { id: formValues.level_id });
+    const campaignInfo = {
+      campaignLength: moment.range(formValues.datefrom, formValues.dateto).diff('months'),
+      levelName: level.name,
+    };
+    submitForm(submitValues, campaignInfo);
   }
 
   deleteCampaignClick() {
@@ -339,7 +347,7 @@ function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
-    submitForm: (values) => dispatch(editCampaign(values)),
+    submitForm: (values, campaignInfo) => dispatch(editCampaign(values, campaignInfo)),
     deleteCampaign: (values) => dispatch(deleteCampaign(values)),
   };
 }
