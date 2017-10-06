@@ -55,7 +55,7 @@ export default class Filter extends React.Component {
       >
         <strong className="title">Search</strong>
         <input
-          type="text" name={name} className="form-control" placeholder="Study Number" ref={(searchVal) => (
+          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
           this.searchVal = searchVal
         )}
         />
