@@ -4,7 +4,7 @@
   border: 2px solid #f78e1e;
 
   .status {
-    margin: 0 0 20px;
+    margin: 0 0 30px;
 
     .step-one {
       color: #00afef;
@@ -91,17 +91,15 @@
   }
 
   .fields-holder.array {
-    margin: 0;
-    padding: 0;
+    margin: 0 0 30px;
+    padding: 15px;
+    border: 1px solid #f78e1e;
+    min-height: 694px;
 
     .field-row {
       margin: 0;
       padding: 0 0 15px;
-      height: 55px;
-
-      &.counters {
-        padding-left: 2%;
-      }
+      overflow: hidden;
 
       .remove {
         float: left;
@@ -114,7 +112,6 @@
       }
 
       &.first {
-        height: 95px;
         padding-top: 15px;
 
         .remove {
@@ -134,10 +131,6 @@
       .field {
         margin-right: 1%;
         position: relative;
-
-        &.counter {
-          text-align: center;
-        }
 
         &.trash {
           width: 1%;
@@ -170,6 +163,11 @@
         &.bmi {
           width: 10%;
           margin-right: 0;
+        }
+
+        .counter {
+          margin: 0 0 10px;
+          text-align: center;
         }
       }
     }

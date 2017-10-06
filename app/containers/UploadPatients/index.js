@@ -64,7 +64,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     delete options['group-gender'];
     delete options['group-bmi'];
 
-    console.log('fields', fields);
+    // console.log('fields', fields);
 
     touchFields();
 
