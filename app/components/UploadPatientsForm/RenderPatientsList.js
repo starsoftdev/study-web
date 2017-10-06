@@ -31,6 +31,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
   componentDidMount() {
     const { fields, patients } = this.props;
 
+    // console.log('componentDidMount', patients);
     if (patients && patients.length) {
       if (fields.length) {
         fields.removeAll();
