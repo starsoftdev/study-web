@@ -115,7 +115,7 @@ export default class UploadPatientsForm extends React.Component {
     // recognize decimals for age fields
     const bmiPattern = /[^\d.]+/g;
     const replaced = event.target.value.replace(pattern, '|');
-    const items = replaced.split('|').splice(0, 10);
+    const items = replaced.split('|');
 
     const key = event.target.name.substring(5);
 
@@ -260,7 +260,9 @@ export default class UploadPatientsForm extends React.Component {
 
   switchPreview() {
     const scope = this;
-    this.setState({ showPreview: !this.state.showPreview }, () => {
+    const { fields } = this.state;
+    const cloneFields = _.clone(fields).splice(0, 10);
+    this.setState({ fields: cloneFields, showPreview: !this.state.showPreview }, () => {
       scope.updateFields(null);
     });
   }
