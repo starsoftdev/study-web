@@ -146,16 +146,26 @@ export default class AddPatientForm extends React.Component {
   }
 
   render() {
-    const { submitting, indications, isFetchingProtocols, protocols, sites, sources } = this.props;
+    const { submitting, indications, isFetchingProtocols, protocols, sites, sources, currentUser } = this.props;
+    const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
     }));
 
-    const siteOptions = sites.map(siteIterator => ({
+    let siteOptions = sites.map(siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
     }));
+
+    if (sites.length > 0 && !userIsAdmin) {
+      const usersSite = _.find(sites, { id: currentUser.roleForClient.site_id });
+      siteOptions = [{
+        label: usersSite.name,
+        value: usersSite.id,
+      }];
+    }
+
     const protocolOptions = protocols.map(protocolIterator => ({
       label: protocolIterator.number,
       value: protocolIterator.studyId,
