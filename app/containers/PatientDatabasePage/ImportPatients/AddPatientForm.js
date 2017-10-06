@@ -148,6 +148,8 @@ export default class AddPatientForm extends React.Component {
   render() {
     const { submitting, indications, isFetchingProtocols, protocols, sites, sources, currentUser } = this.props;
     const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+    const uploadSources = _.clone(sources);
+    uploadSources.shift();
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -170,7 +172,7 @@ export default class AddPatientForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    const sourceOptions = sources.map(source => ({
+    const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
     }));

@@ -2,6 +2,7 @@
  * Created by mike on 10/9/16.
  */
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { blur, Field, reduxForm, touch } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
@@ -66,7 +67,9 @@ class AddPatientForm extends React.Component {
 
   render() {
     const { addPatientStatus, sources } = this.props;
-    const sourceOptions = sources.map(source => ({
+    const uploadSources = _.clone(sources);
+    uploadSources.shift();
+    const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
     }));
