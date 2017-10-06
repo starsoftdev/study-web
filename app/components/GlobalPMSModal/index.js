@@ -116,16 +116,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         const socketMessage = newMessage;
         if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
           this.props.fetchClientCredits(currentUser.id);
-          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.twilioTextMessage.direction === 'inbound') {
+          if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
             this.props.addMessagesCountStat(1);
           }
