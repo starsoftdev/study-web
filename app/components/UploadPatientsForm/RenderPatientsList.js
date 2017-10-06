@@ -81,11 +81,8 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
 
   addNewFields() {
     const { fields, addField } = this.props;
-
-    if (fields.length < 10) {
-      fields.push();
-      addField();
-    }
+    fields.push();
+    addField();
   }
 
   removeField(index) {
@@ -108,148 +105,173 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     ];
 
     return (
-      <div className="fields-holder array clearfix">
-        {
-          fields.map((patient, index) => {
-            return (<div className={`field-row ${(index === 0) ? 'first' : ''}`} key={index}>
-              <div className={`field trash pull-left ${(index === 0) ? 'first' : ''}`}>
-                <span
-                  className="icomoon-icon_trash remove"
-                  onClick={() => this.removeField(index)}
-                />
-              </div>
-              <div className="field name pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-name">Name</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].name`}
-                  component={Input}
-                  value={patient.name ? patient.name : null}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'name', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.name}
+      <div>
+        <div className="fields-holder array clearfix">
+          {
+            fields.map((patient, index) => {
+              return (<div className={`field-row ${(index === 0) ? 'first' : ''}`} key={index}>
+                <div className={`field trash pull-left ${(index === 0) ? 'first' : ''}`}>
+                  <span
+                    className="icomoon-icon_trash remove"
+                    onClick={() => this.removeField(index)}
+                  />
                 </div>
-                }
-              </div>
-              <div className="field email pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-email">Email</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].email`}
-                  component={Input}
-                  value={patient.email || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'email', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.email}
+                <div className="field name pull-left">
+                  {(index === 0) &&
+                  <span className="title required">
+                    <label htmlFor="import-patient-name">Name</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].name`}
+                    component={Input}
+                    value={patient.name ? patient.name : null}
+                    type="text"
+                    onChange={(e) => { this.changeField(e, 'name', index); }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.name}
+                  </div>
+                  }
                 </div>
-                }
-              </div>
-              <div className="field phone pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-phone">Phone</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].phone`}
-                  component={Input}
-                  value={patient.phone || ''}
-                  type="tel"
-                  onChange={(e) => { this.changeField(e, 'phone', index); }}
-                  onBlur={(event) => {
-                    this.onPhoneBlur(event, `patients[${index}].phone`);
-                  }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.phone}
+                <div className="field email pull-left">
+                  {(index === 0) &&
+                  <span className="title required">
+                    <label htmlFor="import-patient-email">Email</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].email`}
+                    component={Input}
+                    value={patient.email || ''}
+                    type="text"
+                    onChange={(e) => { this.changeField(e, 'email', index); }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.email}
+                  </div>
+                  }
                 </div>
-                }
-              </div>
-              <div className="field age pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">Age</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].age`}
-                  component={Input}
-                  value={patient.age || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'age', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.age}
+                <div className="field phone pull-left">
+                  {(index === 0) &&
+                  <span className="title required">
+                    <label htmlFor="import-patient-phone">Phone</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].phone`}
+                    component={Input}
+                    value={patient.phone || ''}
+                    type="tel"
+                    onChange={(e) => { this.changeField(e, 'phone', index); }}
+                    onBlur={(event) => {
+                      this.onPhoneBlur(event, `patients[${index}].phone`);
+                    }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.phone}
+                  </div>
+                  }
                 </div>
-                }
-              </div>
-              <div className="field gender pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">Gender</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].gender`}
-                  placeholder="Select Gender"
-                  component={ReactSelect}
-                  value={patient.gender || ''}
-                  options={genderOptions}
-                  onChange={(e) => { this.changeField(e, 'gender', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.gender}
+                <div className="field age pull-left">
+                  {(index === 0) &&
+                  <span className="title">
+                    <label htmlFor="import-patient-phone">Age</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].age`}
+                    component={Input}
+                    value={patient.age || ''}
+                    type="text"
+                    onChange={(e) => { this.changeField(e, 'age', index); }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.age}
+                  </div>
+                  }
                 </div>
-                }
-              </div>
-              <div className="field bmi pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">BMI</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].bmi`}
-                  component={Input}
-                  value={patient.bmi || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'bmi', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.bmi}
+                <div className="field gender pull-left">
+                  {(index === 0) &&
+                  <span className="title">
+                    <label htmlFor="import-patient-phone">Gender</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].gender`}
+                    placeholder="Select Gender"
+                    component={ReactSelect}
+                    value={patient.gender || ''}
+                    options={genderOptions}
+                    onChange={(e) => { this.changeField(e, 'gender', index); }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.gender}
+                  </div>
+                  }
                 </div>
-                }
-              </div>
-            </div>);
-          })
-        }
+                <div className="field bmi pull-left">
+                  {(index === 0) &&
+                  <span className="title">
+                    <label htmlFor="import-patient-phone">BMI</label>
+                  </span>
+                  }
+                  <Field
+                    name={`patients[${index}].bmi`}
+                    component={Input}
+                    value={patient.bmi || ''}
+                    type="text"
+                    onChange={(e) => { this.changeField(e, 'bmi', index); }}
+                  />
+                  {(index === (fields.length - 1)) &&
+                  <div className="counter">
+                    {rowsCounts.bmi}
+                  </div>
+                  }
+                </div>
+              </div>);
+            })
+          }
+        </div>
+        {/*<div className="counters">
+          <div className="counter name">
+            {rowsCounts.name}
+          </div>
+          <div className="counter email">
+            {rowsCounts.email}
+          </div>
+          <div className="counter phone">
+            {rowsCounts.phone}
+          </div>
+          <div className="counter age">
+            {rowsCounts.phone}
+          </div>
+          <div className="counter age">
+            {rowsCounts.age}
+          </div>
+          <div className="counter gender">
+            {rowsCounts.gender}
+          </div>
+          <div className="counter bmi">
+            {rowsCounts.bmi}
+          </div>
+        </div>*/}
         <div className="text-left">
           <button
             type="button"
             className="btn btn-primary"
-            disabled={fields.length >= 10}
             onClick={this.addNewFields}
           >
             + Add Patient
           </button>
         </div>
       </div>
+
     );
   }
 }
