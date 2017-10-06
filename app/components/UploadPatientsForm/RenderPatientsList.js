@@ -31,7 +31,6 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
   componentDidMount() {
     const { fields, patients } = this.props;
 
-    // console.log('componentDidMount', patients, fields);
     if (patients && patients.length) {
       if (fields.length) {
         fields.removeAll();
@@ -64,7 +63,22 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
 
   changeField(event, name, index) {
     const { changeField } = this.props;
-    const value = (name === 'gender') ? event : event.target.value;
+    let value = (name === 'gender') ? event : event.target.value;
+    const agePattern = /[^\d]+/g;
+    const bmiPattern = /^[0-9]+([,.][0-9]+)?$/g;
+
+
+    if (name === 'age' && value !== 'N/A') {
+      if (agePattern.test(value)) {
+        value = value.replace(agePattern, '');
+      }
+    }
+
+    if (name === 'bmi' && value !== 'N/A') {
+      if (bmiPattern.test(value)) {
+        value = value.replace(bmiPattern, '');
+      }
+    }
 
     changeField(value, name, index);
   }

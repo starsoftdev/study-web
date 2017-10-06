@@ -10,18 +10,18 @@ const schema = {
   source: {
     presence: true,
   },
-  'group-name': {
-    presence: { message: '^Name column can\'t be blank' },
+  groupname: {
+    presence: true,
   },
-  'group-email': {
-    presence: { message: '^Email column can\'t be blank' },
+  groupemail: {
+    presence: true,
   },
-  'group-phone': {
-    presence: { message: '^Phone column can\'t be blank' },
+  groupphone: {
+    presence: true,
   },
-  'group-age': { presence: false },
-  'group-gender': { presence: false },
-  'group-bmi': { presence: false },
+  groupage: { presence: false },
+  groupgender: { presence: false },
+  groupbmi: { presence: false },
 };
 
 const fields = Object.keys(schema);
