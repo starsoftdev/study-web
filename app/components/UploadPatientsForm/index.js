@@ -87,6 +87,7 @@ export default class UploadPatientsForm extends React.Component {
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
     this.renderGroupFields = this.renderGroupFields.bind(this);
+    this.updateCounters = this.updateCounters.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -106,11 +107,11 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   mapTextAreaGroups(event) {
-    const { fields, rowsCounts } = this.state;
+    const { fields } = this.state;
+    const scope = this;
     const pattern = /\r\n|\r|\n/g;
     const replaced = event.target.value.replace(pattern, '|');
     const items = replaced.split('|');
-    let counter = 0;
 
     const key = event.target.name.split('-')[1];
 
@@ -138,18 +139,16 @@ export default class UploadPatientsForm extends React.Component {
           [key]: value,
         };
       }
-
-      if (value !== '') {
-        counter++;
-      }
     });
-    rowsCounts[key] = counter;
-    this.setState({ fields, rowsCounts });
+    this.setState({ fields }, () => {
+      scope.updateCounters();
+    });
   }
 
   updateFields(index) {
     const { change } = this.props;
-    const fields = this.state.fields;
+    const { fields } = this.state;
+    const scope = this;
 
     let groupName = '';
     let groupEmail = '';
@@ -220,7 +219,31 @@ export default class UploadPatientsForm extends React.Component {
     change('group-gender', groupGender);
     change('group-bmi', groupBmi);
 
-    this.setState({ fields });
+    this.setState({ fields }, () => {
+      scope.updateCounters();
+    });
+  }
+
+  updateCounters() {
+    const { fields } = this.state;
+    const counters = {
+      name: 0,
+      email: 0,
+      phone: 0,
+      age: 0,
+      gender: 0,
+      bmi: 0,
+    };
+
+    _.forEach(fields, (field) => {
+      _.forEach(field, (value, key) => {
+        if (value && value !== '') {
+          counters[key]++;
+        }
+      });
+    });
+
+    this.setState({ rowsCounts: counters });
   }
 
   switchPreview() {
@@ -324,7 +347,8 @@ export default class UploadPatientsForm extends React.Component {
 
   render() {
     const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
-    const { fields, showPreview } = this.state;
+    const { fields, showPreview, rowsCounts } = this.state;
+    const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -338,7 +362,8 @@ export default class UploadPatientsForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    const sourceOptions = sources.map(source => ({
+    uploadSources.shift();
+    const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
     }));
@@ -378,7 +403,7 @@ export default class UploadPatientsForm extends React.Component {
           <Field
             name="protocol"
             component={ReactSelect}
-            placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
+            placeholder="Select Protocol"
             className="field"
             options={protocolOptions}
             disabled={isFetchingProtocols || !this.state.siteLocation}
@@ -436,6 +461,7 @@ export default class UploadPatientsForm extends React.Component {
           name="patients"
           component={RenderPatientsList}
           patients={fields}
+          rowsCounts={rowsCounts}
           change={change}
           addField={this.addField}
           changeField={this.changeField}
