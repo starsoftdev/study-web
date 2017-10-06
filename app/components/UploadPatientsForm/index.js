@@ -259,7 +259,10 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   switchPreview() {
-    this.setState({ showPreview: !this.state.showPreview });
+    const scope = this;
+    this.setState({ showPreview: !this.state.showPreview }, () => {
+      scope.updateFields(null);
+    });
   }
 
   addField() {
