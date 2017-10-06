@@ -317,7 +317,7 @@ export default class UploadPatientsForm extends React.Component {
           <span className="rows-counter">{rowsCounts[name]}</span>
         </div>
       );
-    })
+    });
 
     return groupFields;
   }
