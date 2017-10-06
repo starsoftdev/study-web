@@ -119,6 +119,8 @@ export default class UploadPatientsForm extends React.Component {
     const items = replaced.split('|');
     const cloneFields = _.clone(fields);
 
+    console.log('items', items);
+
     const key = event.target.name.substring(5);
     // console.log('key', key);
 
@@ -166,7 +168,7 @@ export default class UploadPatientsForm extends React.Component {
       cloneFields.pop();
     }
 
-    const emptyRows = this.findMaxEmptyColumn(cloneFields);
+    // const emptyRows = this.findMaxEmptyColumn(cloneFields);
     // console.log('cloneFields', fields);
     // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
@@ -309,13 +311,14 @@ export default class UploadPatientsForm extends React.Component {
       });
     });
 
+    console.log('updateCounters', counters);
     this.setState({ rowsCounts: counters });
   }
 
   switchPreview() {
     const scope = this;
     const { fields } = this.state;
-    const cloneFields = _.clone(fields).splice(0, 10);
+    const cloneFields = _.clone(fields);
     this.setState({ fields: cloneFields, showPreview: !this.state.showPreview }, () => {
       scope.updateFields(null);
     });
