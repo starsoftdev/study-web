@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { blur, change, Field, FieldArray, reduxForm, reset } from 'redux-form';
+import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -14,7 +15,7 @@ import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus } from '../../containers/UploadPatients/selectors';
 import RenderPatientsList from './RenderPatientsList';
 import { normalizePhoneForServer } from '../../common/helper/functions';
-import formValidator from './validator';
+import formValidator, { fields as formFields } from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
 
@@ -35,7 +36,11 @@ const mapDispatchToProps = (dispatch) => ({
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
 });
 
-@reduxForm({ form: formName, validate: formValidator })
+@reduxForm({
+  form: formName,
+  validate: formValidator,
+  formFields,
+})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class UploadPatientsForm extends React.Component {
   static propTypes = {
@@ -43,7 +48,7 @@ export default class UploadPatientsForm extends React.Component {
     currentUser: React.PropTypes.object,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
-    clearForm: React.PropTypes.func.isRequired,
+    clearForm: React.PropTypes.func,
     exportPatientsStatus: React.PropTypes.any,
     indications: React.PropTypes.array,
     isFetchingProtocols: React.PropTypes.bool,
@@ -51,7 +56,7 @@ export default class UploadPatientsForm extends React.Component {
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
     submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func,
     blur: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
@@ -63,6 +68,14 @@ export default class UploadPatientsForm extends React.Component {
       showPreview: false,
       siteLocation: null,
       fields: [],
+      rowsCounts: {
+        name: 0,
+        email: 0,
+        phone: 0,
+        age: 0,
+        gender: 0,
+        bmi: 0,
+      },
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
@@ -73,6 +86,7 @@ export default class UploadPatientsForm extends React.Component {
     this.addField = this.addField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
+    this.renderGroupFields = this.renderGroupFields.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -92,33 +106,45 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   mapTextAreaGroups(event) {
+    const { fields, rowsCounts } = this.state;
     const pattern = /\r\n|\r|\n/g;
     const replaced = event.target.value.replace(pattern, '|');
     const items = replaced.split('|');
-    // console.log(event.target.name, items);
+    let counter = 0;
 
     const key = event.target.name.split('-')[1];
-    const fields = this.state.fields;
 
     if (items.length < fields.length) {
+      // add empty strings to keep balance with rest of the columns
       _.forEach(fields, (item, index) => {
         fields[index][key] = '';
       });
     }
 
     _.forEach(items, (item, index) => {
+      let value = item;
+
+      // recognize lower case for gender fields
+      if (key === 'gender' && value !== 'N/A') {
+        value = value.toLowerCase();
+      }
+
       if (fields[index]) {
-        if (fields[index][key] !== item) {
-          fields[index][key] = item;
+        if (fields[index][key] !== value) {
+          fields[index][key] = value;
         }
-      } else if (item && item !== '') {
+      } else if (value && value !== '') {
         fields[index] = {
-          [key]: item,
+          [key]: value,
         };
       }
-    });
 
-    this.setState({ fields });
+      if (value !== '') {
+        counter++;
+      }
+    });
+    rowsCounts[key] = counter;
+    this.setState({ fields, rowsCounts });
   }
 
   updateFields(index) {
@@ -264,6 +290,38 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
+  renderGroupFields(names) {
+    const { rowsCounts } = this.state;
+
+    const groupFields = names.map(item => {
+      const key = item.split('-')[0];
+      const name = item.split('-')[1];
+      const required = (item === 'group-name' || item === 'group-email' || item === 'group-phone');
+
+      if (key && key !== 'group') {
+        return null;
+      }
+
+      return (
+        <div className={classNames('column', `${name}s`)}>
+          <span className={classNames('title', (required ? 'required' : ''))}>
+            <label htmlFor={`group-${name}`}>{name}</label>
+          </span>
+          <Field
+            name={`group-${name}`}
+            component={Input}
+            componentClass="textarea"
+            className="group"
+            onChange={this.mapTextAreaGroups}
+          />
+          <span className="rows-counter">{rowsCounts[name]}</span>
+        </div>
+      );
+    })
+
+    return groupFields;
+  }
+
   render() {
     const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
     const { fields, showPreview } = this.state;
@@ -292,6 +350,14 @@ export default class UploadPatientsForm extends React.Component {
         className="upload-patients-form"
         onSubmit={handleSubmit}
       >
+        <div className="field-row status">
+          <span className="step-one">
+            1. Copy & Paste contacts
+          </span>
+          <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
+            1. Preview Contacts
+          </span>
+        </div>
         <div className="field-row main">
           <strong className="label required">
             <label>Site Location</label>
@@ -344,80 +410,28 @@ export default class UploadPatientsForm extends React.Component {
             options={sourceOptions}
           />
         </div>
-        {!this.state.showPreview && <div className="column-groups">
-          <div className="column names">
-            <span className="title required">
-              <label htmlFor="import-patient-name">Name</label>
-            </span>
-            <Field
-              name="group-name"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
+        {!this.state.showPreview &&
+          <span className="tip">
+            Copy & Paste contacts
+          </span>
+        }
+        {!this.state.showPreview &&
+          <div className="column-groups">
+            {this.renderGroupFields(formFields)}
           </div>
-          <div className="column emails">
-            <span className="title required">
-              <label htmlFor="import-patient-name">Email</label>
+        }
+        {!this.state.showPreview &&
+          <div className="instructions">
+            <span className="head">Pasting instructions</span>
+            <span className="body">Please separate your fields by entering one contact per line.</span>
+            <span className="examples">
+              <span className="title">Examples:</span>
+              <span className="item">John Doe</span>
+              <span className="item">Jane Doe</span>
+              <span className="item">Janie Doe</span>
             </span>
-            <Field
-              name="group-email"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
           </div>
-          <div className="column phones">
-            <span className="title required">
-              <label htmlFor="import-patient-name">Phone</label>
-            </span>
-            <Field
-              name="group-phone"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
-          </div>
-          <div className="column ages">
-            <span className="title">
-              <label htmlFor="import-patient-name">Age</label>
-            </span>
-            <Field
-              name="group-age"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
-          </div>
-          <div className="column genders">
-            <span className="title">
-              <label htmlFor="import-patient-name">Gender</label>
-            </span>
-            <Field
-              name="group-gender"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
-          </div>
-          <div className="column bmis">
-            <span className="title">
-              <label htmlFor="import-patient-name">Bmi</label>
-            </span>
-            <Field
-              name="group-bmi"
-              component={Input}
-              componentClass="textarea"
-              className="group"
-              onChange={this.mapTextAreaGroups}
-            />
-          </div>
-        </div>}
+        }
         {this.state.showPreview && <FieldArray
           name="patients"
           component={RenderPatientsList}
@@ -429,8 +443,8 @@ export default class UploadPatientsForm extends React.Component {
           blur={blur}
         />}
         <div className="text-right">
-          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Preview</Button>}
-          {showPreview && <button type="button" className="btn btn-primary margin-right" onClick={this.switchPreview}>Edit</button>}
+          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
+          {showPreview && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
           {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
         </div>
       </Form>
