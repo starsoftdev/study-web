@@ -4,6 +4,9 @@ const schema = {
   title: {
     presence: false,
   },
+  locationMask: {
+    presence: false,
+  },
   description: {
     presence: false,
   },
