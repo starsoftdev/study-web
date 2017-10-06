@@ -30,11 +30,13 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
   componentDidMount() {
     const { fields, patients } = this.props;
 
+    // console.log('componentDidMount', patients, fields);
     if (patients && patients.length) {
       if (fields.length) {
         fields.removeAll();
       }
       _.forEach(patients, (item) => {
+        // console.log('item', item);
         const patient = item;
         if (patient.phone) {
           patient.phone = normalizePhoneDisplay(patient.phone);
@@ -75,10 +77,10 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     const genderOptions = [
       {
         label: 'Male',
-        value: 'Male',
+        value: 'male',
       }, {
         label: 'Female',
-        value: 'Female',
+        value: 'female',
       },
     ];
 
@@ -86,7 +88,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
       <div className="fields-holder array clearfix">
         {
           fields.map((patient, index) => <div className={`field-row ${(index === 0) ? 'first' : ''}`} key={index}>
-            <div className="field trash pull-left">
+            <div className={`field trash pull-left ${(index === 0) ? 'first' : ''}`}>
               <span
                 className="icomoon-icon_trash remove"
                 onClick={() => this.removeField(index)}
@@ -159,6 +161,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                 }
               <Field
                 name={`patients[${index}].gender`}
+                placeholder="Select Gender"
                 component={ReactSelect}
                 value={patient.gender || ''}
                 options={genderOptions}
@@ -181,6 +184,28 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             </div>
           </div>
           )
+        }
+        {(fields.length > 0) &&
+          <div className="field-row counters">
+            <div className="field counter name pull-left">
+              0
+            </div>
+            <div className="field counter email pull-left">
+              0
+            </div>
+            <div className="field counter phone pull-left">
+              0
+            </div>
+            <div className="field counter age pull-left">
+              0
+            </div>
+            <div className="field counter gender pull-left">
+              0
+            </div>
+            <div className="field counter bmi pull-left">
+              0
+            </div>
+          </div>
         }
         <div className="text-left">
           <button
