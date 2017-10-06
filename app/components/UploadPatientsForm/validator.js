@@ -19,6 +19,9 @@ const schema = {
   'group-phone': {
     presence: { message: '^Phone column can\'t be blank' },
   },
+  'group-age': { presence: false },
+  'group-gender': { presence: false },
+  'group-bmi': { presence: false },
 };
 
 const fields = Object.keys(schema);
