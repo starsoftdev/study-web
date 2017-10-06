@@ -799,6 +799,7 @@ export function* fetchStudiesDashboardWorker(action) {
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
+    console.log(err);
     yield put(fetchStudiesDashboardError(err));
   }
 }
@@ -846,7 +847,7 @@ export function* updateDashboardStudyWatcher() {
 }
 
 export function* updateDashboardStudyWorker(action) {
-  const { id, emailNotifications, params, stopSubmit } = action;
+  const { id, formValues, params, stopSubmit } = action;
 
   try {
     const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
@@ -857,7 +858,7 @@ export function* updateDashboardStudyWorker(action) {
 
     yield call(request, requestURL, options);
 
-    yield put(updateDashboardStudySuccess(id, emailNotifications, params));
+    yield put(updateDashboardStudySuccess(id, params, formValues));
     stopSubmit();
   } catch (err) {
     const errorMessage = get(err, 'message', 'We were unable to update the study. Please contact support.');
@@ -1186,9 +1187,8 @@ export function* editCampaignWorker(action) {
       method: 'PUT',
       body: JSON.stringify(action.payload),
     };
-    const response = yield call(request, requestURL, params);
-    yield put(editCampaignSuccess(action.payload));
-    yield put(updateDashboardStudySuccess(response));
+    yield call(request, requestURL, params);
+    yield put(editCampaignSuccess(action.payload, action.campaignInfo));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     toastr.error('', errorMessage);
