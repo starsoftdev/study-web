@@ -88,6 +88,7 @@ export default class UploadPatientsForm extends React.Component {
     this.switchPreview = this.switchPreview.bind(this);
     this.renderGroupFields = this.renderGroupFields.bind(this);
     this.updateCounters = this.updateCounters.bind(this);
+    this.findMaxEmptyColumn = this.findMaxEmptyColumn.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -116,14 +117,16 @@ export default class UploadPatientsForm extends React.Component {
     const bmiPattern = /[^\d.]+/g;
     const replaced = event.target.value.replace(pattern, '|');
     const items = replaced.split('|');
+    const cloneFields = _.clone(fields);
 
     const key = event.target.name.substring(5);
+    // console.log('key', key);
 
-    if (items.length < fields.length) {
+    if (items.length < cloneFields.length) {
       // add empty strings to keep balance with rest of the columns
-      _.forEach(fields, (item, index) => {
-        fields[index][key] = '';
-      });
+      // _.forEach(cloneFields, (item, index) => {
+      //   fields[index][key] = '';
+      // });
     }
 
     _.forEach(items, (item, index) => {
@@ -142,19 +145,70 @@ export default class UploadPatientsForm extends React.Component {
         value = value.replace(bmiPattern, '');
       }
 
-      if (fields[index]) {
-        if (fields[index][key] !== value) {
-          fields[index][key] = value;
+      if (cloneFields[index]) {
+        if (cloneFields[index][key] !== value) {
+          cloneFields[index][key] = (value !== '') ? value : 'N/A';
         }
-      } else if (value && value !== '') {
-        fields[index] = {
-          [key]: value,
-        };
+      } else {
+        if (value && value !== '') {
+          cloneFields[index] = {
+            [key]: value,
+          };
+        } else {
+          cloneFields[index] = {
+            [key]: 'N/A',
+          };
+        }
       }
     });
-    this.setState({ fields }, () => {
+    
+    if (cloneFields[cloneFields.length - 1][key] === 'N/A') {
+      cloneFields.pop();
+    }
+
+    const emptyRows = this.findMaxEmptyColumn(cloneFields);
+    // console.log('cloneFields', fields);
+    // console.log('emptyRows', emptyRows);
+    this.setState({ fields: cloneFields }, () => {
       scope.updateCounters();
     });
+  }
+
+  findMaxEmptyColumn(fields) {
+    let maxEmptyValue = null;
+    let maxKey = null;
+    const emptyRows = {
+      name: 0,
+      email: 0,
+      phone: 0,
+      age: 0,
+      gender: 0,
+      bmi: 0,
+    };
+
+    _.forEach(fields, (field, index) => {
+      _.forEach(field, (value, key) => {
+        if ((index + 1 < fields.length) && (!value || value === 'N/A')) {
+          // console.log(index + 1, fields.length, field);
+          emptyRows[key]++;
+        }
+      });
+    });
+
+    _.forEach(emptyRows, (row, key) => {
+      if (!maxEmptyValue) {
+        maxEmptyValue = row;
+        maxKey = key;
+      } else {
+        maxEmptyValue = (maxEmptyValue <= row) ? row : maxEmptyValue;
+        maxKey = (maxEmptyValue <= row) ? key : maxKey;
+      }
+    })
+
+    return {
+      maxKey,
+      emptyRows
+    };
   }
 
   updateFields(index) {
@@ -178,23 +232,23 @@ export default class UploadPatientsForm extends React.Component {
         switch (key) {
           case 'name':
             if (groupName !== '') {
-              groupName += `\n${value}`;
+              groupName += `\n${value || 'N/A'}`;
             } else {
-              groupName += `${value}`;
+              groupName += `${value || 'N/A'}`;
             }
             break;
           case 'email':
             if (groupEmail !== '') {
-              groupEmail += `\n${value}`;
+              groupEmail += `\n${value || 'N/A'}`;
             } else {
-              groupEmail += `${value}`;
+              groupEmail += `${value || 'N/A'}`;
             }
             break;
           case 'phone':
             if (groupPhone !== '') {
-              groupPhone += `\n${normalizePhoneForServer(value)}`;
+              groupPhone += `\n${normalizePhoneForServer(value) || 'N/A'}`;
             } else {
-              groupPhone += `${normalizePhoneForServer(value)}`;
+              groupPhone += `${normalizePhoneForServer(value) || 'N/A'}`;
             }
             break;
           case 'age':
