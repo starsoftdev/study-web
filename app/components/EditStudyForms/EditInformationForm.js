@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
   stopSubmit: (errors) => dispatch(stopSubmit(formName, errors)),
-  updateDashboardStudy: (id, emailNotifications, params, stopSubmit) => dispatch(updateDashboardStudy(id, emailNotifications, params, stopSubmit)),
+  updateDashboardStudy: (id, params, stopSubmit, formValues) => dispatch(updateDashboardStudy(id, params, stopSubmit, formValues)),
 });
 
 @reduxForm({
@@ -272,7 +272,7 @@ export default class EditInformationForm extends React.Component {
           delete newParam.customEmailNotifications;
         }
       }
-      updateDashboardStudy(initialFormValues.study_id, formValues.emailNotifications, newParam, stopSubmit);
+      updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
     }
   }
 
@@ -330,10 +330,10 @@ export default class EditInformationForm extends React.Component {
         value: item.id,
         label: item.phone_number,
       }));
-      if (formValues.text_number_id) {
+      if (initialFormValues.text_number_id) {
         messagingNumbersOptions.unshift({
-          value: formValues.text_number_id,
-          label: formValues.phone_number,
+          value: initialFormValues.text_number_id,
+          label: initialFormValues.phone_number,
         });
       }
 
@@ -346,11 +346,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="is_active"
+                  name="isPublic"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('is_public', e.toString());
+                    change('isPublic', e);
                   }}
                 />
               </div>
@@ -363,7 +363,7 @@ export default class EditInformationForm extends React.Component {
                 <Field
                   type="text"
                   id="edit-information-page-name"
-                  name="landing_page_url"
+                  name="landingPageUrl"
                   component={Input}
                 />
               </div>
@@ -458,7 +458,7 @@ export default class EditInformationForm extends React.Component {
               <div className="field">
                 <Field
                   type="text"
-                  name="site_id"
+                  name="site"
                   component={Input}
                   isDisabled
                 />
@@ -595,11 +595,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="patient_messaging_suite"
+                  name="patientMessagingSuite"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('patientMessagingSuite', e.toString());
+                    change('patientMessagingSuite', e);
                   }}
                 />
               </div>
@@ -617,8 +617,10 @@ export default class EditInformationForm extends React.Component {
                   searchable
                   options={messagingNumbersOptions}
                   customSearchIconClass="icomoon-icon_search2"
-                  onChange={(e) => {
-                    change('messaging_number', e.toString());
+                  onChange={(messagingNumberId) => {
+                    if (messagingNumberId) {
+                      change('messagingNumber', parseInt(messagingNumberId));
+                    }
                   }}
                 />
               </div>
@@ -665,11 +667,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="should_show_in_sponsor_portal"
+                  name="shouldShowInSponsorPortal"
                   component={Toggle}
                   className="field"
                   onChange={(e) => {
-                    change('shouldShowInSponsorPortal', e.toString());
+                    change('shouldShowInSponsorPortal', e);
                   }}
                 />
               </div>

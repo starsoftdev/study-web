@@ -187,22 +187,22 @@ export function fetchSiteLocationsError(payload) {
   };
 }
 
-export function updateDashboardStudy(id, emailNotifications, params, stopSubmit) {
+export function updateDashboardStudy(id, params, stopSubmit, formValues) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
     id,
-    emailNotifications,
     params,
     stopSubmit,
+    formValues,
   };
 }
 
-export function updateDashboardStudySuccess(studyId, emailNotifications, updatedStudyParams) {
+export function updateDashboardStudySuccess(studyId, updatedStudyParams, formValues) {
   return {
     type: UPDATE_DASHBOARD_STUDY_SUCCESS,
     studyId,
-    emailNotifications,
     updatedStudyParams,
+    formValues,
   };
 }
 
@@ -652,17 +652,19 @@ export function fetchCampaignsByStudyError(payload) {
   };
 }
 
-export function editCampaign(payload) {
+export function editCampaign(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN,
     payload,
+    campaignInfo,
   };
 }
 
-export function editCampaignSuccess(payload) {
+export function editCampaignSuccess(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN_SUCCESS,
     payload,
+    campaignInfo,
   };
 }
 
