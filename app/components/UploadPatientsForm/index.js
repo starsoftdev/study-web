@@ -110,9 +110,10 @@ export default class UploadPatientsForm extends React.Component {
     const { fields } = this.state;
     const scope = this;
     const pattern = /\r\n|\r|\n/g;
+    // recognize integers for age fields
     const agePattern = /[^\d]+/g;
-    // const bmiPattern = /^\d*(?:\.\d{1,2})?$/
-    const bmiPattern = /^[1-9][\.\d]*(,\d+)?$/;
+    // recognize decimals for age fields
+    const bmiPattern = /[^\d.]+/g;
     const replaced = event.target.value.replace(pattern, '|');
     const items = replaced.split('|').splice(0, 10);
 
@@ -132,19 +133,13 @@ export default class UploadPatientsForm extends React.Component {
       if (key === 'gender' && value !== 'N/A') {
         value = value.toLowerCase();
       }
-
+      // recognize integers for age fields
       if (key === 'age' && value !== 'N/A') {
-        if (agePattern.test(value)) {
-          value = value.replace(agePattern, '');
-        }
-        console.log(key, value);
+        value = value.replace(agePattern, '');
       }
-
+      // recognize decimals for age fields
       if (key === 'bmi' && value !== 'N/A') {
-        if (agePattern.test(value)) {
-          value = value.replace(agePattern, '');
-        }
-        console.log(key, value);
+        value = value.replace(bmiPattern, '');
       }
 
       if (fields[index]) {
