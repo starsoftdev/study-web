@@ -229,7 +229,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     const isAdmin = currentUser.roleForClient && currentUser.roleForClient.isAdmin;
     let timezone = currentUser.timezone;
     let site = null;
-    console.log('current user', currentUser);
     if (currentUser.roleForClient.site_id) {
       site = first(sites, item => item.id === currentUser.roleForClient.site_id);
       if (site) {
