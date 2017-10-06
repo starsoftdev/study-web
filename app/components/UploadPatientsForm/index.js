@@ -95,12 +95,12 @@ export default class UploadPatientsForm extends React.Component {
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       clearForm();
 
-      change('group-name', '');
-      change('group-email', '');
-      change('group-phone', '');
-      change('group-age', '');
-      change('group-gender', '');
-      change('group-bmi', '');
+      change('groupname', '');
+      change('groupemail', '');
+      change('groupphone', '');
+      change('groupage', '');
+      change('groupgender', '');
+      change('groupbmi', '');
 
       this.setState({ fields: [], showPreview: false });
     }
@@ -110,10 +110,13 @@ export default class UploadPatientsForm extends React.Component {
     const { fields } = this.state;
     const scope = this;
     const pattern = /\r\n|\r|\n/g;
+    const agePattern = /[^\d]+/g;
+    // const bmiPattern = /^\d*(?:\.\d{1,2})?$/
+    const bmiPattern = /^[1-9][\.\d]*(,\d+)?$/;
     const replaced = event.target.value.replace(pattern, '|');
-    const items = replaced.split('|');
+    const items = replaced.split('|').splice(0, 10);
 
-    const key = event.target.name.split('-')[1];
+    const key = event.target.name.substring(5);
 
     if (items.length < fields.length) {
       // add empty strings to keep balance with rest of the columns
@@ -128,6 +131,20 @@ export default class UploadPatientsForm extends React.Component {
       // recognize lower case for gender fields
       if (key === 'gender' && value !== 'N/A') {
         value = value.toLowerCase();
+      }
+
+      if (key === 'age' && value !== 'N/A') {
+        if (agePattern.test(value)) {
+          value = value.replace(agePattern, '');
+        }
+        console.log(key, value);
+      }
+
+      if (key === 'bmi' && value !== 'N/A') {
+        if (agePattern.test(value)) {
+          value = value.replace(agePattern, '');
+        }
+        console.log(key, value);
       }
 
       if (fields[index]) {
@@ -212,12 +229,12 @@ export default class UploadPatientsForm extends React.Component {
       });
     });
 
-    change('group-name', groupName);
-    change('group-email', groupEmail);
-    change('group-phone', groupPhone);
-    change('group-age', groupAge);
-    change('group-gender', groupGender);
-    change('group-bmi', groupBmi);
+    change('groupname', groupName);
+    change('groupemail', groupEmail);
+    change('groupphone', groupPhone);
+    change('groupage', groupAge);
+    change('groupgender', groupGender);
+    change('groupbmi', groupBmi);
 
     this.setState({ fields }, () => {
       scope.updateCounters();
@@ -315,23 +332,25 @@ export default class UploadPatientsForm extends React.Component {
 
   renderGroupFields(names) {
     const { rowsCounts } = this.state;
+    let counter = 0;
 
     const groupFields = names.map(item => {
-      const key = item.split('-')[0];
-      const name = item.split('-')[1];
-      const required = (item === 'group-name' || item === 'group-email' || item === 'group-phone');
+      const key = item.substring(0, 5);
+      const name = item.substring(5);
+      const required = (item === 'groupname' || item === 'groupemail' || item === 'groupphone');
 
       if (key && key !== 'group') {
         return null;
       }
 
+      counter++;
       return (
-        <div className={classNames('column', `${name}s`)}>
+        <div className={classNames('column', `${name}s`)} key={counter}>
           <span className={classNames('title', (required ? 'required' : ''))}>
-            <label htmlFor={`group-${name}`}>{name}</label>
+            <label htmlFor={`group${name}`}>{name}</label>
           </span>
           <Field
-            name={`group-${name}`}
+            name={`group${name}`}
             component={Input}
             componentClass="textarea"
             className="group"
