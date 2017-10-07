@@ -117,18 +117,23 @@ export default class UploadPatientsForm extends React.Component {
     const bmiPattern = /[^\d.]+/g;
     const replaced = event.target.value.replace(pattern, '|');
     const items = replaced.split('|');
+
     const cloneFields = _.clone(fields);
 
-    console.log('items', items);
+    if (items[items.length - 1] === '') {
+      items.pop();
+    }
+
+    // console.log('items', items);
 
     const key = event.target.name.substring(5);
     // console.log('key', key);
 
     if (items.length < cloneFields.length) {
       // add empty strings to keep balance with rest of the columns
-      // _.forEach(cloneFields, (item, index) => {
-      //   fields[index][key] = '';
-      // });
+      _.forEach(cloneFields, (item, index) => {
+        cloneFields[index][key] = '';
+      });
     }
 
     _.forEach(items, (item, index) => {
@@ -147,31 +152,63 @@ export default class UploadPatientsForm extends React.Component {
         value = value.replace(bmiPattern, '');
       }
 
-      if (cloneFields[index]) {
+
+      if (!cloneFields[index]) {
+        cloneFields[index] = {
+          [key]: value,
+        };
+      } else if (cloneFields[index][key] !== value) {
+        cloneFields[index][key] = value;
+      }
+
+      /* if (cloneFields[index]) {
+        if (cloneFields[index][key] !== value) {
+          cloneFields[index][key] = value;
+        }
+      } else {
+        cloneFields[index] = {
+          [key]: value,
+        };
+      }*/
+
+      /* if (cloneFields[index]) {
+        if (cloneFields[index][key] !== value) {
+          cloneFields[index][key] = value;
+        }
+      } else {
+        cloneFields[index] = {
+          [key]: (value !== '') ? value : 'N/A',
+        };
+      }*/
+
+      /* if (cloneFields[index]) {
         if (cloneFields[index][key] !== value) {
           cloneFields[index][key] = (value !== '') ? value : 'N/A';
         }
+      } else if (value && value !== '') {
+        cloneFields[index] = {
+          [key]: value,
+        };
       } else {
-        if (value && value !== '') {
-          cloneFields[index] = {
-            [key]: value,
-          };
-        } else {
-          cloneFields[index] = {
-            [key]: 'N/A',
-          };
-        }
-      }
+        cloneFields[index] = {
+          [key]: 'N/A',
+        };
+      }*/
     });
-    
-    if (cloneFields[cloneFields.length - 1][key] === 'N/A') {
-      cloneFields.pop();
+
+    if (cloneFields[cloneFields.length - 1][key] === '') {
+      delete cloneFields[cloneFields.length - 1][key];
+
+      if (_.isEmpty(cloneFields[cloneFields.length - 1][key])) {
+        cloneFields.pop();
+      }
     }
 
+    // console.log('cloneFields', cloneFields);
     // const emptyRows = this.findMaxEmptyColumn(cloneFields);
-    // console.log('cloneFields', fields);
     // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
+      // scope.updateFields(null);
       scope.updateCounters();
     });
   }
@@ -205,11 +242,11 @@ export default class UploadPatientsForm extends React.Component {
         maxEmptyValue = (maxEmptyValue <= row) ? row : maxEmptyValue;
         maxKey = (maxEmptyValue <= row) ? key : maxKey;
       }
-    })
+    });
 
     return {
       maxKey,
-      emptyRows
+      emptyRows,
     };
   }
 
@@ -305,13 +342,12 @@ export default class UploadPatientsForm extends React.Component {
 
     _.forEach(fields, (field) => {
       _.forEach(field, (value, key) => {
-        if (value && value !== '') {
-          counters[key]++;
-        }
+        // console.log(value, key);
+        counters[key]++;
       });
     });
 
-    console.log('updateCounters', counters);
+    // console.log('updateCounters', counters);
     this.setState({ rowsCounts: counters });
   }
 
@@ -453,10 +489,10 @@ export default class UploadPatientsForm extends React.Component {
       >
         <div className="field-row status">
           <span className="step-one">
-            1. Copy & Paste contacts
+            1. Copy & Paste Contacts
           </span>
           <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
-            1. Preview Contacts
+            2. Preview Contacts
           </span>
         </div>
         <div className="field-row main">
