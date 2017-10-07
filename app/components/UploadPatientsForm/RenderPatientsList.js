@@ -238,7 +238,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             })
           }
         </div>
-        {/*<div className="counters">
+        {/* <div className="counters">
           <div className="counter name">
             {rowsCounts.name}
           </div>
