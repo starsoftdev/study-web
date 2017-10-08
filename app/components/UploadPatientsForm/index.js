@@ -107,6 +107,28 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
+  updateCounters() {
+    const { fields } = this.state;
+    const counters = {
+      name: 0,
+      email: 0,
+      phone: 0,
+      age: 0,
+      gender: 0,
+      bmi: 0,
+    };
+
+    _.forEach(fields, (field) => {
+      _.forEach(field, (value, key) => {
+        if (value !== '') {
+          counters[key]++;
+        }
+      });
+    });
+
+    this.setState({ rowsCounts: counters });
+  }
+
   mapTextAreaGroups(event) {
     const { fields } = this.state;
     const scope = this;
@@ -124,20 +146,19 @@ export default class UploadPatientsForm extends React.Component {
       items.pop();
     }
 
-    // console.log('items', items);
-
     const key = event.target.name.substring(5);
-    // console.log('key', key);
+    console.log('items:', items);
+    console.log('key:', key);
 
     if (items.length < cloneFields.length) {
-      // add empty strings to keep balance with rest of the columns
       _.forEach(cloneFields, (item, index) => {
-        cloneFields[index][key] = '';
+        delete cloneFields[index][key];
       });
     }
 
     _.forEach(items, (item, index) => {
       let value = item;
+      // console.log('prev value: ', cloneFields[index], 'current value: ', value);
 
       // recognize lower case for gender fields
       if (key === 'gender' && value !== 'N/A') {
@@ -152,7 +173,7 @@ export default class UploadPatientsForm extends React.Component {
         value = value.replace(bmiPattern, '');
       }
 
-
+      // insert if field doesn't exist
       if (!cloneFields[index]) {
         cloneFields[index] = {
           [key]: value,
@@ -160,55 +181,16 @@ export default class UploadPatientsForm extends React.Component {
       } else if (cloneFields[index][key] !== value) {
         cloneFields[index][key] = value;
       }
-
-      /* if (cloneFields[index]) {
-        if (cloneFields[index][key] !== value) {
-          cloneFields[index][key] = value;
-        }
-      } else {
-        cloneFields[index] = {
-          [key]: value,
-        };
-      }*/
-
-      /* if (cloneFields[index]) {
-        if (cloneFields[index][key] !== value) {
-          cloneFields[index][key] = value;
-        }
-      } else {
-        cloneFields[index] = {
-          [key]: (value !== '') ? value : 'N/A',
-        };
-      }*/
-
-      /* if (cloneFields[index]) {
-        if (cloneFields[index][key] !== value) {
-          cloneFields[index][key] = (value !== '') ? value : 'N/A';
-        }
-      } else if (value && value !== '') {
-        cloneFields[index] = {
-          [key]: value,
-        };
-      } else {
-        cloneFields[index] = {
-          [key]: 'N/A',
-        };
-      }*/
     });
 
-    if (cloneFields[cloneFields.length - 1][key] === '') {
-      delete cloneFields[cloneFields.length - 1][key];
-
-      if (_.isEmpty(cloneFields[cloneFields.length - 1][key])) {
-        cloneFields.pop();
-      }
+    if (_.isEmpty(cloneFields[cloneFields.length - 1])) {
+      cloneFields.pop();
     }
 
-    // console.log('cloneFields', cloneFields);
+    console.log('cloneFields', cloneFields);
     // const emptyRows = this.findMaxEmptyColumn(cloneFields);
     // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
-      // scope.updateFields(null);
       scope.updateCounters();
     });
   }
@@ -327,28 +309,6 @@ export default class UploadPatientsForm extends React.Component {
     this.setState({ fields }, () => {
       scope.updateCounters();
     });
-  }
-
-  updateCounters() {
-    const { fields } = this.state;
-    const counters = {
-      name: 0,
-      email: 0,
-      phone: 0,
-      age: 0,
-      gender: 0,
-      bmi: 0,
-    };
-
-    _.forEach(fields, (field) => {
-      _.forEach(field, (value, key) => {
-        // console.log(value, key);
-        counters[key]++;
-      });
-    });
-
-    // console.log('updateCounters', counters);
-    this.setState({ rowsCounts: counters });
   }
 
   switchPreview() {
@@ -566,6 +526,28 @@ export default class UploadPatientsForm extends React.Component {
               <span className="item">John Doe</span>
               <span className="item">Jane Doe</span>
               <span className="item">Janie Doe</span>
+            </span>
+          </div>
+        }
+        {this.state.showPreview &&
+          <div className={`legends ${(fields.length > 10) ? 'scroll-fix' : ''}`}>
+            <span className="title name required">
+              <label htmlFor="import-patient-name">Name</label>
+            </span>
+            <span className="title email required">
+              <label htmlFor="import-patient-email">Email</label>
+            </span>
+            <span className="title phone required">
+              <label htmlFor="import-patient-phone">Phone</label>
+            </span>
+            <span className="title age">
+              <label htmlFor="import-patient-phone">Age</label>
+            </span>
+            <span className="title gender">
+              <label htmlFor="import-patient-phone">Gender</label>
+            </span>
+            <span className="title bmi">
+              <label htmlFor="import-patient-phone">BMI</label>
             </span>
           </div>
         }
