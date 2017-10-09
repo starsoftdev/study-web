@@ -144,7 +144,7 @@ export default class UploadPatientsForm extends React.Component {
 
       if (hasPhone) {
         _.forEach(fields, (compareWith) => {
-          if (patient.phone === compareWith.phone) {
+          if (patient.phone !== '' && patient.phone === compareWith.phone) {
             samePhone++;
           }
         });
