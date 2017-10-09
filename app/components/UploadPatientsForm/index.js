@@ -12,7 +12,7 @@ import { selectIndications, selectSiteLocations, selectSources, selectCurrentUse
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
-import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus } from '../../containers/UploadPatients/selectors';
+import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectEmptyRowRequiredError } from '../../containers/UploadPatients/selectors';
 import RenderPatientsList from './RenderPatientsList';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields as formFields } from './validator';
@@ -27,6 +27,7 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
+  emptyRowRequiredError: selectEmptyRowRequiredError(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -55,7 +56,7 @@ export default class UploadPatientsForm extends React.Component {
     onClose: React.PropTypes.func,
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
-    submitting: React.PropTypes.bool,
+    emptyRowRequiredError: React.PropTypes.object,
     handleSubmit: React.PropTypes.func,
     blur: React.PropTypes.func,
     protocols: React.PropTypes.array,
@@ -93,6 +94,7 @@ export default class UploadPatientsForm extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const { exportPatientsStatus, clearForm, change } = this.props;
+
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       clearForm();
 
@@ -142,13 +144,12 @@ export default class UploadPatientsForm extends React.Component {
 
     const cloneFields = _.clone(fields);
 
+    // TODO: check this
     if (items[items.length - 1] === '') {
       items.pop();
     }
 
     const key = event.target.name.substring(5);
-    console.log('items:', items);
-    console.log('key:', key);
 
     if (items.length < cloneFields.length) {
       _.forEach(cloneFields, (item, index) => {
@@ -187,7 +188,7 @@ export default class UploadPatientsForm extends React.Component {
       cloneFields.pop();
     }
 
-    console.log('cloneFields', cloneFields);
+    // console.log('cloneFields', cloneFields);
     // const emptyRows = this.findMaxEmptyColumn(cloneFields);
     // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
@@ -237,60 +238,67 @@ export default class UploadPatientsForm extends React.Component {
     const { fields } = this.state;
     const scope = this;
 
-    let groupName = '';
-    let groupEmail = '';
-    let groupPhone = '';
-    let groupAge = '';
-    let groupGender = '';
-    let groupBmi = '';
+    let groupName = null;
+    let groupEmail = null;
+    let groupPhone = null;
+    let groupAge = null;
+    let groupGender = null;
+    let groupBmi = null;
 
     if (index !== null) {
       fields.splice(index, 1);
     }
 
+    // console.log('updateFields: ', fields);
     _.forEach(fields, (field) => {
       _.forEach(field, (value, key) => {
         switch (key) {
           case 'name':
-            if (groupName !== '') {
-              groupName += `\n${value || 'N/A'}`;
+            if (groupName !== null) {
+              groupName += `\n${value}`;
             } else {
-              groupName += `${value || 'N/A'}`;
+              groupName = '';
+              groupName += `${value}`;
             }
             break;
           case 'email':
-            if (groupEmail !== '') {
-              groupEmail += `\n${value || 'N/A'}`;
+            if (groupEmail !== null) {
+              groupEmail += `\n${value}`;
             } else {
-              groupEmail += `${value || 'N/A'}`;
+              groupEmail = '';
+              groupEmail += `${value}`;
             }
             break;
           case 'phone':
-            if (groupPhone !== '') {
-              groupPhone += `\n${normalizePhoneForServer(value) || 'N/A'}`;
+            if (groupPhone !== null) {
+              groupPhone += `\n${normalizePhoneForServer(value)}`;
             } else {
-              groupPhone += `${normalizePhoneForServer(value) || 'N/A'}`;
+              groupPhone = '';
+              groupPhone += `${normalizePhoneForServer(value)}`;
             }
             break;
           case 'age':
-            if (groupAge !== '') {
-              groupAge += `\n${value || 'N/A'}`;
+            if (groupAge !== null) {
+              groupAge += `\n${value}`;
             } else {
-              groupAge += `${value || 'N/A'}`;
+              groupAge = '';
+              groupAge += `${value}`;
             }
             break;
           case 'gender':
-            if (groupGender !== '') {
-              groupGender += `\n${value || 'N/A'}`;
+            if (groupGender !== null) {
+              groupGender += `\n${value}`;
             } else {
-              groupGender += `${value || 'N/A'}`;
+              groupGender = '';
+              groupGender += `${value}`;
             }
             break;
           case 'bmi':
-            if (groupBmi !== '') {
-              groupBmi += `\n${value || 'N/A'}`;
+            if (groupBmi !== null) {
+              groupBmi += `\n${value}`;
             } else {
-              groupBmi += `${value || 'N/A'}`;
+              groupBmi = '';
+              groupBmi += `${value}`;
             }
             break;
           default:
@@ -332,14 +340,14 @@ export default class UploadPatientsForm extends React.Component {
     let val = value;
 
     if (val === '' && name !== 'phone') {
-      val = 'N/A';
+      val = '\n';
     }
-
     fields[index][name] = val;
     _.forEach(fields, (field, i) => {
+      console.log('changeField', val, fields[i][name], (i !== index));
       if ((i !== index) && !fields[i][name]) {
         if (name !== 'phone') {
-          fields[i][name] = 'N/A';
+          fields[i][name] = ''; // N/A
         } else {
           fields[i][name] = '';
         }
@@ -418,7 +426,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
+    const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
     const { fields, showPreview, rowsCounts } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
@@ -556,6 +564,7 @@ export default class UploadPatientsForm extends React.Component {
           component={RenderPatientsList}
           patients={fields}
           rowsCounts={rowsCounts}
+          emptyRowRequiredError={emptyRowRequiredError}
           change={change}
           addField={this.addField}
           changeField={this.changeField}
@@ -565,7 +574,7 @@ export default class UploadPatientsForm extends React.Component {
         <div className="text-right">
           {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
           {showPreview && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
+          {showPreview && <Button type="submit">Submit</Button>}
         </div>
       </Form>
     );

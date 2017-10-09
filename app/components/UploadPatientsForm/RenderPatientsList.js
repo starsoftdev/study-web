@@ -17,6 +17,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     rowsCounts: PropTypes.object,
     fields: PropTypes.any,
     blur: React.PropTypes.func,
+    emptyRowRequiredError: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -37,21 +38,11 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
         fields.removeAll();
       }
       _.forEach(patients, (item) => {
-        let empty = true;
-
-        _.forEach(item, (prop) => {
-          if (prop !== '') {
-            empty = false;
-          }
-        });
-
-        if (item && item !== '' && !empty) {
-          const patient = item;
-          if (patient.phone) {
-            patient.phone = normalizePhoneDisplay(patient.phone);
-          }
-          fields.push(patient);
+        const patient = item;
+        if (patient.phone) {
+          patient.phone = normalizePhoneDisplay(patient.phone);
         }
+        fields.push(patient);
       });
     }
   }
@@ -93,7 +84,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { fields, rowsCounts } = this.props;
+    const { patients, fields, rowsCounts, emptyRowRequiredError } = this.props;
     const genderOptions = [
       {
         label: 'Male',
@@ -122,6 +113,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                       name={`patients[${index}].name`}
                       component={Input}
                       value={patient.name ? patient.name : null}
+                      className={((!patients[index].name || patients[index].name === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
                       type="text"
                       onChange={(e) => { this.changeField(e, 'name', index); }}
                     />
@@ -131,6 +123,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                       name={`patients[${index}].email`}
                       component={Input}
                       value={patient.email || ''}
+                      className={((!patients[index].email || patients[index].email === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
                       type="text"
                       onChange={(e) => { this.changeField(e, 'email', index); }}
                     />
@@ -140,6 +133,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                       name={`patients[${index}].phone`}
                       component={Input}
                       value={patient.phone || ''}
+                      className={((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
                       type="tel"
                       onChange={(e) => { this.changeField(e, 'phone', index); }}
                       onBlur={(event) => {

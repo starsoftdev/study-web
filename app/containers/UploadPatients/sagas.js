@@ -16,6 +16,7 @@ import {
   filteredProtcolsFetchingError,
   patientsExported,
   exportPatientsError,
+  emptyRowRequiredError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -50,6 +51,7 @@ export function* exportPatientsWatcher() {
 
       toastr.success('Export Patients', 'Patient exported successfully!');
       yield put(patientsExported(response));
+      yield put(emptyRowRequiredError(false));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);

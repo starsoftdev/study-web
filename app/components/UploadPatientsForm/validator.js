@@ -11,13 +11,19 @@ const schema = {
     presence: true,
   },
   groupname: {
-    presence: true,
+    presence: {
+      message: '^Names can\'t be blank',
+    },
   },
   groupemail: {
-    presence: true,
+    presence: {
+      message: '^Emails can\'t be blank',
+    },
   },
   groupphone: {
-    presence: true,
+    presence: {
+      message: '^Phones can\'t be blank',
+    },
   },
   groupage: { presence: false },
   groupgender: { presence: false },

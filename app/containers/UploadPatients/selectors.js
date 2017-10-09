@@ -10,6 +10,8 @@ const selectUploadPatientsPageDomain = () => state => state.uploadPatientsPage;
  * Default selector used by PatientDatabasePage
  */
 
+
+// steel need this?
 const selectPatientDatabasePage = () => createSelector(
   selectUploadPatientsPageDomain(),
   (substate) => substate
@@ -26,6 +28,11 @@ const selectFormDomain = () => state => state.form;
 export const selectProtocols = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.protocols.details`, [])
+);
+
+export const selectEmptyRowRequiredError = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.emptyRowRequiredError`, false)
 );
 
 export const selectIsFetchingProtocols = (formName) => createSelector(
