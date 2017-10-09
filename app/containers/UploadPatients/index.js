@@ -90,7 +90,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           }
         });
 
-        console.log('options', options);
         if (!hasEmpty) {
           exportPatients(options);
         }
