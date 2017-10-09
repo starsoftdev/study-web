@@ -102,16 +102,16 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
           {
             fields.map((patient, index) => {
               let phoneHasError = false;
-              const duplicateIndex = _.findIndex(duplicates, function(d) { return d === patients[index].phone; });
+              const duplicateIndex = _.findIndex(duplicates, (d) => { return d === patients[index].phone; });
 
               if (duplicateIndex !== -1) {
-                phoneHasError = true
+                phoneHasError = true;
               }
 
               if ((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) {
-                phoneHasError = true
+                phoneHasError = true;
               }
-              
+
               return (
                 <div className="field-row" key={index}>
                   <div className="field trash pull-left">
