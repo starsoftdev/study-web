@@ -111,8 +111,12 @@ export function* editMessagingNumberWorker(action) {
 
     yield put(editMessagingNumberSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
-    toastr.error('', errorMessage);
+    if (get(err, 'constraint') === 'twilio_number_id_idx') {
+      toastr.error('', 'This number has already been assigned.');
+    } else {
+      const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
+      toastr.error('', errorMessage);
+    }
     yield put(editMessagingNumberError(err));
   }
 }
