@@ -16,6 +16,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     patients: PropTypes.array,
     rowsCounts: PropTypes.object,
     fields: PropTypes.any,
+    duplicates: PropTypes.array,
     blur: React.PropTypes.func,
     emptyRowRequiredError: React.PropTypes.object,
   };
@@ -84,7 +85,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
   }
 
   render() {
-    const { patients, fields, rowsCounts, emptyRowRequiredError } = this.props;
+    const { patients, fields, rowsCounts, emptyRowRequiredError, duplicates } = this.props;
     const genderOptions = [
       {
         label: 'Male',
@@ -100,6 +101,17 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
         <div className="fields-holder array clearfix">
           {
             fields.map((patient, index) => {
+              let phoneHasError = false;
+              const duplicateIndex = _.findIndex(duplicates, function(d) { return d === patients[index].phone; });
+
+              if (duplicateIndex !== -1) {
+                phoneHasError = true
+              }
+
+              if ((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) {
+                phoneHasError = true
+              }
+              
               return (
                 <div className="field-row" key={index}>
                   <div className="field trash pull-left">
@@ -133,7 +145,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                       name={`patients[${index}].phone`}
                       component={Input}
                       value={patient.phone || ''}
-                      className={((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
+                      className={phoneHasError ? 'has-error' : ''}
                       type="tel"
                       onChange={(e) => { this.changeField(e, 'phone', index); }}
                       onBlur={(event) => {

@@ -69,6 +69,7 @@ export default class UploadPatientsForm extends React.Component {
       showPreview: false,
       siteLocation: null,
       fields: [],
+      duplicates: [],
       rowsCounts: {
         name: 0,
         email: 0,
@@ -90,6 +91,7 @@ export default class UploadPatientsForm extends React.Component {
     this.renderGroupFields = this.renderGroupFields.bind(this);
     this.updateCounters = this.updateCounters.bind(this);
     this.findMaxEmptyColumn = this.findMaxEmptyColumn.bind(this);
+    this.checkSameNumbers = this.checkSameNumbers.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -132,6 +134,28 @@ export default class UploadPatientsForm extends React.Component {
     });
 
     this.setState({ rowsCounts: counters });
+  }
+
+  checkSameNumbers(fields) {
+    const duplicates = [];
+    _.forEach(fields, (patient) => {
+      const hasPhone = _.hasIn(patient, 'phone');
+      let samePhone = 0;
+
+      if (hasPhone) {
+        _.forEach(fields, (compareWith) => {
+          if (patient.phone === compareWith.phone) {
+            samePhone++;
+          }
+        })
+
+        if (samePhone > 1 && _.findIndex(duplicates, function(d) { return d === patient.phone; }) === -1) {
+          duplicates.push(patient.phone)
+        }
+      }
+    });
+
+    this.setState({ duplicates });
   }
 
   mapTextAreaGroups(event) {
@@ -196,6 +220,7 @@ export default class UploadPatientsForm extends React.Component {
     // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
       scope.updateCounters();
+      scope.checkSameNumbers(cloneFields);
     });
   }
 
@@ -319,6 +344,7 @@ export default class UploadPatientsForm extends React.Component {
 
     this.setState({ fields }, () => {
       scope.updateCounters();
+      scope.checkSameNumbers(fields);
     });
   }
 
@@ -347,7 +373,7 @@ export default class UploadPatientsForm extends React.Component {
     }
     fields[index][name] = val;
     _.forEach(fields, (field, i) => {
-      console.log('changeField', val, fields[i][name], (i !== index));
+      // console.log('changeField', val, fields[i][name], (i !== index));
       if ((i !== index) && !fields[i][name]) {
         if (name !== 'phone') {
           fields[i][name] = ''; // N/A
@@ -430,7 +456,7 @@ export default class UploadPatientsForm extends React.Component {
 
   render() {
     const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
-    const { fields, showPreview, rowsCounts } = this.state;
+    const { fields, showPreview, rowsCounts, duplicates } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -566,6 +592,7 @@ export default class UploadPatientsForm extends React.Component {
           name="patients"
           component={RenderPatientsList}
           patients={fields}
+          duplicates={duplicates}
           rowsCounts={rowsCounts}
           emptyRowRequiredError={emptyRowRequiredError}
           change={change}
