@@ -10,7 +10,7 @@ import { fetchIndications, fetchSources, fetchClientSites } from '../../containe
 import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 
-import { exportPatients } from './actions';
+import { exportPatients, emptyRowRequiredError } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import { fields } from '../../components/UploadPatientsForm/validator';
@@ -31,12 +31,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     sources: PropTypes.array,
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
+    notifyEmptyRowRequiredError: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
+    this.checkEmptyRequired = this.checkEmptyRequired.bind(this);
   }
 
   componentWillMount() {
@@ -47,7 +49,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   onSubmitForm(params) {
-    const { exportPatients, formSyncErrors, touchFields } = this.props;
+    const { exportPatients, formSyncErrors, touchFields, notifyEmptyRowRequiredError } = this.props;
     const options = _.clone(params);
 
     // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
@@ -57,47 +59,60 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     }
 
     delete options.protocol;
-    delete options['group-name'];
-    delete options['group-email'];
-    delete options['group-phone'];
-    delete options['group-age'];
-    delete options['group-gender'];
-    delete options['group-bmi'];
+    delete options.groupname;
+    delete options.groupemail;
+    delete options.groupphone;
+    delete options.groupage;
+    delete options.groupgender;
+    delete options.groupbmi;
 
     // console.log('fields', fields);
 
     touchFields();
 
-    console.log('onSubmitForm', formSyncErrors, options);
-
     if (options.patients && options.patients.length) {
+      const hasEmpty = this.checkEmptyRequired(options.patients);
+      notifyEmptyRowRequiredError(hasEmpty);
+
       if (!_.isEmpty(formSyncErrors)) {
-        if (formSyncErrors['group-name']) {
-          toastr.error('', formSyncErrors['group-name']);
-        } else if (formSyncErrors['group-email']) {
-          toastr.error('', formSyncErrors['group-email']);
-        } else if (formSyncErrors['group-phone']) {
-          toastr.error('', formSyncErrors['group-phone']);
+        if (formSyncErrors.groupname) {
+          toastr.error('', formSyncErrors.groupname);
+        } else if (formSyncErrors.groupemail) {
+          toastr.error('', formSyncErrors.groupemail);
+        } else if (formSyncErrors.groupphone) {
+          toastr.error('', formSyncErrors.groupphone);
         }
       } else {
         /* normalizing the phone number */
         _.forEach(options.patients, (patient, index) => {
-          _.forEach(patient, (value, key) => {
-            if (value === 'N/A') {
-              options.patients[index][key] = null;
-            }
-          });
-
           if (patient.phone) {
             options.patients[index].phone = normalizePhoneForServer(patient.phone);
           }
         });
 
-        exportPatients(options);
+        console.log('options', options);
+        if (!hasEmpty) {
+          exportPatients(options);
+        }
       }
     } else {
       toastr.error('', 'Error! There are no patients to be added.');
     }
+  }
+
+  checkEmptyRequired(patients) {
+    let empty = false;
+    _.forEach(patients, (patient) => {
+      const hasName = _.hasIn(patient, 'name');
+      const hasEmail = _.hasIn(patient, 'email');
+      const hasPhone = _.hasIn(patient, 'phone');
+
+      if (!hasName || !patient.name || !hasEmail || !patient.email || !hasPhone || !patient.phone) {
+        empty = true;
+      }
+    });
+
+    return empty;
   }
 
   render() {
@@ -127,6 +142,7 @@ function mapDispatchToProps(dispatch) {
     touchFields: () => dispatch(touch(formName, ...fields)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSources: () => dispatch(fetchSources()),
+    notifyEmptyRowRequiredError: (hasEmpty) => dispatch(emptyRowRequiredError(hasEmpty)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
   };
