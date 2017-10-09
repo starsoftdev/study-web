@@ -10,6 +10,7 @@ import {
   EXPORT_PATIENTS,
   EXPORT_PATIENTS_SUCCESS,
   EXPORT_PATIENTS_ERROR,
+  EMPTY_ROW_REQUIRED_ERROR,
 } from './constants';
 
 export function exportPatients(data) {
@@ -52,5 +53,12 @@ export function filteredProtcolsFetchingError(payload) {
   return {
     type: FETCH_FILTERED_PROTOCOLS_ERROR,
     payload,
+  };
+}
+
+export function emptyRowRequiredError(hasEmpty) {
+  return {
+    type: EMPTY_ROW_REQUIRED_ERROR,
+    hasEmpty,
   };
 }
