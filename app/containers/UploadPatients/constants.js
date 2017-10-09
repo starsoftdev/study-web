@@ -7,3 +7,5 @@ export const FETCH_FILTERED_PROTOCOLS_ERROR     = 'PatientDatabasePage/FETCH_FIL
 export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const EXPORT_PATIENTS_SUCCESS            = 'PatientDatabasePage/EXPORT_PATIENTS_SUCCESS';
 export const EXPORT_PATIENTS_ERROR              = 'PatientDatabasePage/EXPORT_PATIENTS_ERROR';
+
+export const EMPTY_ROW_REQUIRED_ERROR           = 'PatientDatabasePage/EMPTY_ROW_REQUIRED_ERROR';
