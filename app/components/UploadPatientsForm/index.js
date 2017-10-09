@@ -147,10 +147,10 @@ export default class UploadPatientsForm extends React.Component {
           if (patient.phone === compareWith.phone) {
             samePhone++;
           }
-        })
+        });
 
-        if (samePhone > 1 && _.findIndex(duplicates, function(d) { return d === patient.phone; }) === -1) {
-          duplicates.push(patient.phone)
+        if (samePhone > 1 && _.findIndex(duplicates, (d) => { return d === patient.phone; }) === -1) {
+          duplicates.push(patient.phone);
         }
       }
     });
