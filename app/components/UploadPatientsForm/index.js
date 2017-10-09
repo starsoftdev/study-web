@@ -94,6 +94,7 @@ export default class UploadPatientsForm extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const { exportPatientsStatus, clearForm, change } = this.props;
+    const scope = this;
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       clearForm();
@@ -105,7 +106,9 @@ export default class UploadPatientsForm extends React.Component {
       change('groupgender', '');
       change('groupbmi', '');
 
-      this.setState({ fields: [], showPreview: false });
+      this.setState({ fields: [], showPreview: false }, () => {
+        scope.updateCounters();
+      });
     }
   }
 
