@@ -70,6 +70,7 @@ export default class UploadPatientsForm extends React.Component {
       siteLocation: null,
       fields: [],
       duplicates: [],
+      prevItems: [],
       rowsCounts: {
         name: 0,
         email: 0,
@@ -90,7 +91,7 @@ export default class UploadPatientsForm extends React.Component {
     this.switchPreview = this.switchPreview.bind(this);
     this.renderGroupFields = this.renderGroupFields.bind(this);
     this.updateCounters = this.updateCounters.bind(this);
-    this.findMaxEmptyColumn = this.findMaxEmptyColumn.bind(this);
+    this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
   }
 
@@ -177,6 +178,7 @@ export default class UploadPatientsForm extends React.Component {
     }
 
     const key = event.target.name.substring(5);
+    // this.fixOffset(items, key);
 
     if (items.length < cloneFields.length) {
       _.forEach(cloneFields, (item, index) => {
@@ -216,49 +218,66 @@ export default class UploadPatientsForm extends React.Component {
     }
 
     // console.log('cloneFields', cloneFields);
-    // const emptyRows = this.findMaxEmptyColumn(cloneFields);
-    // console.log('emptyRows', emptyRows);
     this.setState({ fields: cloneFields }, () => {
       scope.updateCounters();
       scope.checkSameNumbers(cloneFields);
     });
   }
 
-  findMaxEmptyColumn(fields) {
-    let maxEmptyValue = null;
-    let maxKey = null;
-    const emptyRows = {
-      name: 0,
-      email: 0,
-      phone: 0,
-      age: 0,
-      gender: 0,
-      bmi: 0,
-    };
+  fixOffset(current, key) {
+    const { prevItems } = this.state;
+    let offset = 0;
+    // console.log('prevItems', prevItems);
 
-    _.forEach(fields, (field, index) => {
-      _.forEach(field, (value, key) => {
-        if ((index + 1 < fields.length) && (!value || value === 'N/A')) {
-          // console.log(index + 1, fields.length, field);
-          emptyRows[key]++;
+    if (prevItems.length > 0) {
+      let emptyInCurrent = 0;
+      let emptyInPrev = 0;
+
+      _.forEach(current, (field, index) => { // eslint-disable-line consistent-return
+        emptyInCurrent++;
+        if (current[index + 1] && current[index + 1][index] !== '') {
+          return false;
         }
       });
-    });
+      _.forEach(prevItems, (field, index) => { // eslint-disable-line consistent-return
+        emptyInPrev++;
+        if (prevItems[index + 1] && prevItems[index + 1][index] !== '') {
+          return false;
+        }
+      });
 
-    _.forEach(emptyRows, (row, key) => {
-      if (!maxEmptyValue) {
-        maxEmptyValue = row;
-        maxKey = key;
-      } else {
-        maxEmptyValue = (maxEmptyValue <= row) ? row : maxEmptyValue;
-        maxKey = (maxEmptyValue <= row) ? key : maxKey;
+      // console.log('emptyInCurrent: ', emptyInCurrent, 'emptyInPrev: ', emptyInPrev);
+
+      if (emptyInCurrent > emptyInPrev) {
+        offset = emptyInCurrent - emptyInPrev;
+        // console.log('need to remove: ', offset);
+        current.splice(0, offset);
+      } else if (emptyInCurrent < emptyInPrev) {
+        offset = emptyInPrev - emptyInCurrent;
+        // console.log('need to add: ', offset);
+        for (let i = 0; i < offset; i++) {
+          current.unshift('');
+        }
       }
-    });
+    }
 
-    return {
-      maxKey,
-      emptyRows,
-    };
+    if (offset) {
+      let result = null;
+      _.forEach(current, (value) => {
+        if (result !== null) {
+          result += `\n${value}`;
+        } else {
+          result = '';
+          result += `${value}`;
+        }
+      });
+
+      // console.log('current', current.join('\n'), `group${key}`);
+      change(`group${key}`, current.join('\n'));
+      // document.getElementById(`group${key}`).value = current.join('\r\n');
+    }
+
+    this.setState({ prevItems: current });
   }
 
   updateFields(index) {
@@ -373,7 +392,6 @@ export default class UploadPatientsForm extends React.Component {
     }
     fields[index][name] = val;
     _.forEach(fields, (field, i) => {
-      // console.log('changeField', val, fields[i][name], (i !== index));
       if ((i !== index) && !fields[i][name]) {
         if (name !== 'phone') {
           fields[i][name] = ''; // N/A
@@ -424,7 +442,7 @@ export default class UploadPatientsForm extends React.Component {
     const { rowsCounts } = this.state;
     let counter = 0;
 
-    const groupFields = names.map(item => {
+    return names.map(item => {
       const key = item.substring(0, 5);
       const name = item.substring(5);
       const required = (item === 'groupname' || item === 'groupemail' || item === 'groupphone');
@@ -440,6 +458,7 @@ export default class UploadPatientsForm extends React.Component {
             <label htmlFor={`group${name}`}>{name}</label>
           </span>
           <Field
+            id={`group${name}`}
             name={`group${name}`}
             component={Input}
             componentClass="textarea"
@@ -450,8 +469,6 @@ export default class UploadPatientsForm extends React.Component {
         </div>
       );
     });
-
-    return groupFields;
   }
 
   render() {
@@ -476,8 +493,6 @@ export default class UploadPatientsForm extends React.Component {
       label: source.type,
       value: source.id,
     }));
-
-    // {error && <span className="error">{error}</span>}
 
     return (
       <Form
@@ -556,7 +571,7 @@ export default class UploadPatientsForm extends React.Component {
         }
         {!this.state.showPreview &&
           <div className="instructions">
-            <span className="head">Pasting instructions</span>
+            <span className="head">Pasting Instructions</span>
             <span className="body">Please separate your fields by entering one contact per line.</span>
             <span className="examples">
               <span className="title">Examples:</span>
