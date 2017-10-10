@@ -9,6 +9,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
+import moment from 'moment';
+import classNames from 'classnames';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -18,6 +20,8 @@ import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../components/CenteredModal/index';
 import PatientNote from './PatientNote';
+
+import unknownImageUrl from '../../assets/images/unknown.png';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
@@ -142,6 +146,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let notes = '';
     if (this.props.categoryNotes.details.length > 0) {
       let innerCounter = 1;
+      let switchColorClass = false;
       let isNextPatientDifferent = true;
       notes =
         (<div className="category-notes-container">
@@ -178,6 +183,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             //     </div>
             //     {isNextPatientDifferent && <hr></hr>}
             //   </div>);
+            
+
             // return result;
           })
         }
