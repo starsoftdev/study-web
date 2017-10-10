@@ -296,10 +296,10 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  updateFields(index, updateFields = true) {
+  updateFields(index, allowUpdateFields = true) {
     const { change } = this.props;
-    const { fields, cachedColumns } = this.state;
-    const cloneCachedColumns = _.clone(cachedColumns);
+    const { fields } = this.state;
+    const scope = this;
 
     let groupName = null;
     let groupEmail = null;
@@ -376,8 +376,11 @@ export default class UploadPatientsForm extends React.Component {
     change('groupgender', groupGender);
     change('groupbmi', groupBmi);
 
-    if (updateFields) {
-      this.setState({ fields });
+    if (allowUpdateFields) {
+      this.setState({ fields }, () => {
+        scope.updateCounters();
+        scope.checkSameNumbers(fields);
+      });
     }
   }
 
@@ -386,8 +389,6 @@ export default class UploadPatientsForm extends React.Component {
     const { fields } = this.state;
     this.setState({ fields, showPreview: !this.state.showPreview }, () => {
       scope.updateFields(null);
-      scope.updateCounters();
-      scope.checkSameNumbers(fields);
     });
   }
 
@@ -418,8 +419,6 @@ export default class UploadPatientsForm extends React.Component {
 
     this.setState({ fields }, () => {
       scope.updateFields(null);
-      scope.updateCounters();
-      scope.checkSameNumbers(fields);
     });
   }
 
