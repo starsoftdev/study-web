@@ -71,7 +71,6 @@ export default class UploadPatientsForm extends React.Component {
       fields: [],
       duplicates: [],
       prevItems: [],
-      prevKey: null,
       rowsCounts: {
         name: 0,
         email: 0,
@@ -79,6 +78,14 @@ export default class UploadPatientsForm extends React.Component {
         age: 0,
         gender: 0,
         bmi: 0,
+      },
+      cachedColumns: {
+        name: null,
+        email: null,
+        phone: null,
+        age: null,
+        gender: null,
+        bmi: null,
       },
     };
 
@@ -161,7 +168,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   mapTextAreaGroups(event) {
-    const { fields } = this.state;
+    const { fields, cachedColumns } = this.state;
     const scope = this;
     const pattern = /\r\n|\r|\n/g;
     // recognize integers for age fields
@@ -172,67 +179,83 @@ export default class UploadPatientsForm extends React.Component {
     const items = replaced.split('|');
 
     const cloneFields = _.clone(fields);
+    const cloneCachedColumns = _.clone(cachedColumns);
     const key = event.target.name.substring(5);
+    let isEmptyCurrent = true;
+
+    _.forEach(items, (item) => { // eslint-disable-line consistent-return
+      if (item !== '') {
+        isEmptyCurrent = false;
+        return false;
+      }
+    });
+
+    cloneCachedColumns[key] = (!isEmptyCurrent) ? event.target.value : null;
 
     if (items[items.length - 1] === '') {
       items.pop();
     }
 
-    this.fixOffset(items, key, () => {
-      if (items.length < cloneFields.length) {
-        _.forEach(cloneFields, (item, index) => {
-          delete cloneFields[index][key];
-        });
+    this.fixOffset(items, key);
+
+    if (items.length < cloneFields.length) {
+      _.forEach(cloneFields, (item, index) => {
+        delete cloneFields[index][key];
+      });
+    }
+
+    _.forEach(items, (item, index) => {
+      let value = item;
+      // console.log('prev value: ', cloneFields[index], 'current value: ', value);
+
+      // recognize lower case for gender fields
+      if (key === 'gender' && value !== 'N/A') {
+        value = value.toLowerCase();
+      }
+      // recognize integers for age fields
+      if (key === 'age' && value !== 'N/A') {
+        value = value.replace(agePattern, '');
+      }
+      // recognize decimals for age fields
+      if (key === 'bmi' && value !== 'N/A') {
+        value = value.replace(bmiPattern, '');
       }
 
-      _.forEach(items, (item, index) => {
-        let value = item;
-        // console.log('prev value: ', cloneFields[index], 'current value: ', value);
-
-        // recognize lower case for gender fields
-        if (key === 'gender' && value !== 'N/A') {
-          value = value.toLowerCase();
-        }
-        // recognize integers for age fields
-        if (key === 'age' && value !== 'N/A') {
-          value = value.replace(agePattern, '');
-        }
-        // recognize decimals for age fields
-        if (key === 'bmi' && value !== 'N/A') {
-          value = value.replace(bmiPattern, '');
-        }
-
-        // insert if field doesn't exist
-        if (!cloneFields[index]) {
-          cloneFields[index] = {
-            [key]: value,
-          };
-        } else if (cloneFields[index][key] !== value) {
-          cloneFields[index][key] = value;
-        }
-      });
-
-      if (_.isEmpty(cloneFields[cloneFields.length - 1])) {
-        cloneFields.pop();
+      // insert if field doesn't exist
+      if (!cloneFields[index]) {
+        cloneFields[index] = {
+          [key]: value,
+        };
+      } else if (cloneFields[index][key] !== value) {
+        cloneFields[index][key] = value;
       }
+    });
 
-      // console.log('cloneFields', cloneFields);
-      this.setState({ fields: cloneFields }, () => {
-        scope.updateCounters();
-        scope.checkSameNumbers(cloneFields);
-      });
+    if (_.isEmpty(cloneFields[cloneFields.length - 1])) {
+      cloneFields.pop();
+    }
+
+    // console.log('cloneFields', cloneFields);
+    this.setState({ fields: cloneFields, cachedColumns: cloneCachedColumns }, () => {
+      scope.updateCounters();
+      scope.checkSameNumbers(cloneFields);
     });
   }
 
-  fixOffset(current, key, cb) {
-    const { prevItems, prevKey } = this.state;
+  fixOffset(current, key) {
+    const { prevItems, cachedColumns } = this.state;
+    const scope = this;
     let offset = 0;
-    // console.log('prevItems', prevItems);
-    // console.log('current', current);
-    // console.log('prevKey', prevKey);
-    // console.log('key', key);
+    let isEmptyCurrent = true;
 
-    if (prevItems.length > 0 && prevKey !== key) {
+    _.forEach(current, (field) => { // eslint-disable-line consistent-return
+      if (field !== '') {
+        isEmptyCurrent = false;
+        return false;
+      }
+    });
+
+    if (prevItems.length > 0 && cachedColumns[key] === null) {
       let emptyInCurrent = 0;
       let emptyInPrev = 0;
 
@@ -253,15 +276,11 @@ export default class UploadPatientsForm extends React.Component {
         }
       });
 
-      // console.log('emptyInCurrent: ', emptyInCurrent, 'emptyInPrev: ', emptyInPrev);
-
-      if (emptyInCurrent > emptyInPrev) {
+      if (!isEmptyCurrent && emptyInCurrent > emptyInPrev) {
         offset = emptyInCurrent - emptyInPrev;
-        // console.log('need to remove: ', offset);
         current.splice(0, offset);
-      } else if (emptyInCurrent < emptyInPrev) {
+      } else if (!isEmptyCurrent && emptyInCurrent < emptyInPrev) {
         offset = emptyInPrev - emptyInCurrent;
-        // console.log('need to add: ', offset);
         for (let i = 0; i < offset; i++) {
           current.unshift('');
         }
@@ -269,29 +288,18 @@ export default class UploadPatientsForm extends React.Component {
     }
 
     if (offset) {
-      /* let result = null;
-      _.forEach(current, (value) => {
-        if (result !== null) {
-          result += `\n${value}`;
-        } else {
-          result = '';
-          result += `${value}`;
-        }
-      });*/
-
-      // console.log('current', current.join('\n'), `group${key}`);
-      change(`group${key}`, current.join('\n'));
-      // document.getElementById(`group${key}`).value = current.join('\r\n');
+      this.setState({ prevItems: current }, () => {
+        scope.updateFields(null, false);
+      });
+    } else {
+      this.setState({ prevItems: (isEmptyCurrent ? prevItems : current) });
     }
-
-    // this.setState({ prevItems: current, prevKey: key }, cb);
-    cb();
   }
 
-  updateFields(index) {
+  updateFields(index, updateFields = true) {
     const { change } = this.props;
-    const { fields } = this.state;
-    const scope = this;
+    const { fields, cachedColumns } = this.state;
+    const cloneCachedColumns = _.clone(cachedColumns);
 
     let groupName = null;
     let groupEmail = null;
@@ -304,7 +312,6 @@ export default class UploadPatientsForm extends React.Component {
       fields.splice(index, 1);
     }
 
-    // console.log('updateFields: ', fields);
     _.forEach(fields, (field) => {
       _.forEach(field, (value, key) => {
         switch (key) {
@@ -369,18 +376,18 @@ export default class UploadPatientsForm extends React.Component {
     change('groupgender', groupGender);
     change('groupbmi', groupBmi);
 
-    this.setState({ fields }, () => {
-      scope.updateCounters();
-      scope.checkSameNumbers(fields);
-    });
+    if (updateFields) {
+      this.setState({ fields });
+    }
   }
 
   switchPreview() {
     const scope = this;
     const { fields } = this.state;
-    const cloneFields = _.clone(fields);
-    this.setState({ fields: cloneFields, showPreview: !this.state.showPreview }, () => {
+    this.setState({ fields, showPreview: !this.state.showPreview }, () => {
       scope.updateFields(null);
+      scope.updateCounters();
+      scope.checkSameNumbers(fields);
     });
   }
 
@@ -411,6 +418,8 @@ export default class UploadPatientsForm extends React.Component {
 
     this.setState({ fields }, () => {
       scope.updateFields(null);
+      scope.updateCounters();
+      scope.checkSameNumbers(fields);
     });
   }
 
@@ -466,7 +475,6 @@ export default class UploadPatientsForm extends React.Component {
             <label htmlFor={`group${name}`}>{name}</label>
           </span>
           <Field
-            id={`group${name}`}
             name={`group${name}`}
             component={Input}
             componentClass="textarea"
