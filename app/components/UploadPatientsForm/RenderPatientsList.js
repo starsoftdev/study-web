@@ -185,28 +185,26 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
             })
           }
         </div>
-        {(fields.length > 0) &&
-          <div className="counters">
-            <div className={`counter name ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
-              {rowsCounts.name}
-            </div>
-            <div className="counter email">
-              {rowsCounts.email}
-            </div>
-            <div className="counter phone">
-              {rowsCounts.phone}
-            </div>
-            <div className="counter age">
-              {rowsCounts.age}
-            </div>
-            <div className={`counter gender ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
-              {rowsCounts.gender}
-            </div>
-            <div className="counter bmi">
-              {rowsCounts.bmi}
-            </div>
+        <div className="counters">
+          <div className={`counter name ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
+            {rowsCounts.name}
           </div>
-        }
+          <div className="counter email">
+            {rowsCounts.email}
+          </div>
+          <div className="counter phone">
+            {rowsCounts.phone}
+          </div>
+          <div className="counter age">
+            {rowsCounts.age}
+          </div>
+          <div className={`counter gender ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
+            {rowsCounts.gender}
+          </div>
+          <div className="counter bmi">
+            {rowsCounts.bmi}
+          </div>
+        </div>
         <div className="text-left">
           <button
             type="button"
