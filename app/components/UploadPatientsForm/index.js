@@ -71,6 +71,7 @@ export default class UploadPatientsForm extends React.Component {
       fields: [],
       duplicates: [],
       prevItems: [],
+      prevKey: null,
       rowsCounts: {
         name: 0,
         email: 0,
@@ -171,76 +172,82 @@ export default class UploadPatientsForm extends React.Component {
     const items = replaced.split('|');
 
     const cloneFields = _.clone(fields);
+    const key = event.target.name.substring(5);
 
-    // TODO: check this
     if (items[items.length - 1] === '') {
       items.pop();
     }
 
-    const key = event.target.name.substring(5);
-    // this.fixOffset(items, key);
+    this.fixOffset(items, key, () => {
+      if (items.length < cloneFields.length) {
+        _.forEach(cloneFields, (item, index) => {
+          delete cloneFields[index][key];
+        });
+      }
 
-    if (items.length < cloneFields.length) {
-      _.forEach(cloneFields, (item, index) => {
-        delete cloneFields[index][key];
+      _.forEach(items, (item, index) => {
+        let value = item;
+        // console.log('prev value: ', cloneFields[index], 'current value: ', value);
+
+        // recognize lower case for gender fields
+        if (key === 'gender' && value !== 'N/A') {
+          value = value.toLowerCase();
+        }
+        // recognize integers for age fields
+        if (key === 'age' && value !== 'N/A') {
+          value = value.replace(agePattern, '');
+        }
+        // recognize decimals for age fields
+        if (key === 'bmi' && value !== 'N/A') {
+          value = value.replace(bmiPattern, '');
+        }
+
+        // insert if field doesn't exist
+        if (!cloneFields[index]) {
+          cloneFields[index] = {
+            [key]: value,
+          };
+        } else if (cloneFields[index][key] !== value) {
+          cloneFields[index][key] = value;
+        }
       });
-    }
 
-    _.forEach(items, (item, index) => {
-      let value = item;
-      // console.log('prev value: ', cloneFields[index], 'current value: ', value);
-
-      // recognize lower case for gender fields
-      if (key === 'gender' && value !== 'N/A') {
-        value = value.toLowerCase();
-      }
-      // recognize integers for age fields
-      if (key === 'age' && value !== 'N/A') {
-        value = value.replace(agePattern, '');
-      }
-      // recognize decimals for age fields
-      if (key === 'bmi' && value !== 'N/A') {
-        value = value.replace(bmiPattern, '');
+      if (_.isEmpty(cloneFields[cloneFields.length - 1])) {
+        cloneFields.pop();
       }
 
-      // insert if field doesn't exist
-      if (!cloneFields[index]) {
-        cloneFields[index] = {
-          [key]: value,
-        };
-      } else if (cloneFields[index][key] !== value) {
-        cloneFields[index][key] = value;
-      }
-    });
-
-    if (_.isEmpty(cloneFields[cloneFields.length - 1])) {
-      cloneFields.pop();
-    }
-
-    // console.log('cloneFields', cloneFields);
-    this.setState({ fields: cloneFields }, () => {
-      scope.updateCounters();
-      scope.checkSameNumbers(cloneFields);
+      // console.log('cloneFields', cloneFields);
+      this.setState({ fields: cloneFields }, () => {
+        scope.updateCounters();
+        scope.checkSameNumbers(cloneFields);
+      });
     });
   }
 
-  fixOffset(current, key) {
-    const { prevItems } = this.state;
+  fixOffset(current, key, cb) {
+    const { prevItems, prevKey } = this.state;
     let offset = 0;
     // console.log('prevItems', prevItems);
+    // console.log('current', current);
+    // console.log('prevKey', prevKey);
+    // console.log('key', key);
 
-    if (prevItems.length > 0) {
+    if (prevItems.length > 0 && prevKey !== key) {
       let emptyInCurrent = 0;
       let emptyInPrev = 0;
 
       _.forEach(current, (field, index) => { // eslint-disable-line consistent-return
-        emptyInCurrent++;
+        if (field === '') {
+          emptyInCurrent++;
+        }
         if (current[index + 1] && current[index + 1][index] !== '') {
           return false;
         }
       });
       _.forEach(prevItems, (field, index) => { // eslint-disable-line consistent-return
-        emptyInPrev++;
+        if (field === '') {
+          emptyInPrev++;
+        }
         if (prevItems[index + 1] && prevItems[index + 1][index] !== '') {
           return false;
         }
@@ -262,7 +269,7 @@ export default class UploadPatientsForm extends React.Component {
     }
 
     if (offset) {
-      let result = null;
+      /* let result = null;
       _.forEach(current, (value) => {
         if (result !== null) {
           result += `\n${value}`;
@@ -270,14 +277,15 @@ export default class UploadPatientsForm extends React.Component {
           result = '';
           result += `${value}`;
         }
-      });
+      });*/
 
       // console.log('current', current.join('\n'), `group${key}`);
       change(`group${key}`, current.join('\n'));
       // document.getElementById(`group${key}`).value = current.join('\r\n');
     }
 
-    this.setState({ prevItems: current });
+    // this.setState({ prevItems: current, prevKey: key }, cb);
+    cb();
   }
 
   updateFields(index) {
