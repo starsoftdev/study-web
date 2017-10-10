@@ -19,8 +19,6 @@ import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../components/CenteredModal/index';
-import PatientNote from './PatientNote';
-
 import unknownImageUrl from '../../assets/images/unknown.png';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -155,37 +153,30 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
             const isNewPatient = isNextPatientDifferent;
             isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
+            const result =
+              (<div className="patient-note-container" key={index}>
+                {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
+                { isNewPatient && <div className="img-holder">
+                  <img alt="" src={unknownImageUrl} />
+                </div> }
+                <div className="category-notes-item">
+                  <div>
 
+                    <div className={classNames('post-content', switchColorClass ? '' : 'reply')}>
+                      <p>{note.note}</p>
+                    </div>
+                    <div className="username font-bold">{`${note.firstName} ${note.lastName}`}</div>
+                    <time dateTime={note.created_at}>{moment.tz(note.created_at, this.props.currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+                  </div>
+                </div>
+                {isNextPatientDifferent && <hr></hr>}
+              </div>);
             if (isNextPatientDifferent) {
               innerCounter++;
+              switchColorClass = !switchColorClass;
             }
 
-            return (
-              <PatientNote key={note.id} currentUser={this.props.currentUser} note={note} isNewPatient={isNewPatient} counter={innerCounter} />
-            );
-
-
-            // const result =
-            //   (<div className="patient-note-container" key={index}>
-            //     {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
-            //     { isNewPatient && <div className="img-holder">
-            //       <img alt="" src={unknownImageUrl} />
-            //     </div> }
-            //     <div className="category-notes-item">
-            //       <div>
-
-            //         <div className={classNames('post-content', switchColorClass ? '' : 'reply')}>
-            //           <p>{note.note}</p>
-            //         </div>
-            //         <div className="username font-bold">{`${note.firstName} ${note.lastName}`}</div>
-            //         <time dateTime={note.created_at}>{moment.tz(note.created_at, this.props.currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
-            //       </div>
-            //     </div>
-            //     {isNextPatientDifferent && <hr></hr>}
-            //   </div>);
-            
-
-            // return result;
+            return result;
           })
         }
         </div>);

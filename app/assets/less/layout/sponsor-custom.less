@@ -180,121 +180,76 @@
 }
 
 .category-notes-container {
-  
-  .note-msg {
-    margin: 25px;
+  margin: 25px;
+  .name {
+    padding-left: 75px;
+    margin-bottom: 10px;
+  }
+  .patient-note-container {
     position: relative;
-    
-    .note {
-      border: 2px solid #636363;
-      color: #101010;
-      background-color: #f9f4b5;
-
-      .note-header {
-        border-bottom: 2px solid #636363;
-        background-color: #f8f197;
-        width: 100%;
-        height: 41px;
-        position: relative;
-        line-height: 41px;
-        padding-left: 10px;
-
-        .btn-trash {
-          position: absolute;
-          top: 7px;
-          right: 10px;
-        }
-      }
-
-      .note-content {
-        .font(18px);
-        margin: 0 0 5px;
-        position: relative;
-        padding: 25px 25px 0px;
-        min-height: 45px;
-
-        p {
-          word-wrap: break-word;
-          color: #636363;
-        }
-      }
-
-      .note-userinfo {
-        position: relative;
-        display: flex;
-        margin: 25px 25px 5px 25px;
-        border-top: 2px solid #636363;
-        align-items: center;
-
-        .img-holder {
-          position: relative;
-          top: 0;
-          left: 0;
-        }
-
-        .info {
-          flex: 1;
-          margin-left: 15px;
-          padding: 10px;
-
-          .info-line {
-            display: flex;
-
-            .label {
-              width: 65px;
-              display: block;
-              text-align: left;
-            }
-
-            .content {
-              border-bottom: 1px solid #636363;
-              flex: 1;
-              span {
-                padding: 0 0 5px 0;
-                color: #636363;
-              }
-            }
-          }
-        }
-      }
-    }
   }
-
-  .postarea {
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 342px;
-  }
-  .notes {
-    .btn-trash {
-      right: 10px;
-      bottom: 10px;
-      cursor: pointer;
-    }
-    .post-content {
-      padding-right: 35px;
-    }
-  }
-
   .img-holder {
-    top: 21px;
-    left: 25px;
-    width: 50px;
     position: absolute;
+    width: 50px;
     border-radius: 100%;
+    top: 0;
+    left: 0;
     img {
       display: block;
       max-width: 100%;
       border-radius: 100%;
     }
   }
-  .btn-trash {
-    bottom: 25px;
-    right: 25px;
-    color: #636363;
-    position: absolute;
-    &:hover {
-      color: #999;
+  .category-notes-item {
+    position: relative;
+    padding-left: 75px;
+    .post-content {
+      &.reply {
+        background: #00afef;
+        border-color: #76daff;
+        &:after {
+          border-right-color: #00afef;
+        }
+        &:before {
+          border-right-color: #76daff;
+        }
+      }
+      .font(18px);
+      margin: 0 0 5px;
+      position: relative;
+      padding: 7px 15px 5px;
+      border: solid 2px #c0e890;
+      color: #fff;
+      background: #a0cf67;
+      &:after, &:before {
+        top: 11px;
+        right: 100%;
+        .arrow(10px 10px 10px 0);
+        border-right-color: #c0e890;
+      }
+      &:after {
+        top: 13px;
+        z-index: 2;
+        margin: 0 -1px 0 0;
+        border-width: 8px 8px 8px 0;
+        border-right-color: #a0cf67;
+      }
+      .stop-list-notification,
+      .blast-message-notification {
+        display: inline-block;
+        margin: 10px 0 0;
+        font-size: 15px;
+        width: 100%;
+      }
+      p {
+        margin-bottom: 5px;
+      }
+    }
+    time {
+      color: #949ca1;
+      display: block;
+      font-size: 14px;
+      margin-bottom: 15px;
     }
   }
 }
