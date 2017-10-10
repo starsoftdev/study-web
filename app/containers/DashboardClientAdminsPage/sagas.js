@@ -114,7 +114,7 @@ export function* editMessagingNumberWorker(action) {
     if (get(err, 'constraint') === 'twilio_number_id_idx') {
       toastr.error('', 'This number has already been assigned.');
     } else {
-      const errorMessage = get(err, 'message', 'Something went wrong while adding sponsor user');
+      const errorMessage = get(err, 'message', 'Something went wrong while editing the messaging number.');
       toastr.error('', errorMessage);
     }
     yield put(editMessagingNumberError(err));
