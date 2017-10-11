@@ -126,13 +126,13 @@ export default class AddPatientForm extends React.Component {
 
   selectIndication(indicationId) {
     if (indicationId) {
-      const { change, protocols } = this.props;
+      const { protocols } = this.props;
       const protocol = _.find(protocols, { indicationId });
       if (protocol) {
-        change('protocol', protocol.studyId);
+        // change('protocol', protocol.studyId);
       } else {
         // clear the protocol value if the indicationId doesn't match
-        change('protocol', null);
+        // change('protocol', null);
       }
     }
   }
