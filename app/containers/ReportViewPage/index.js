@@ -9,8 +9,6 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import moment from 'moment';
-import classNames from 'classnames';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
