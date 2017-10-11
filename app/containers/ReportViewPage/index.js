@@ -20,6 +20,7 @@ import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../components/CenteredModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
+import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
@@ -144,7 +145,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let notes = '';
     if (this.props.categoryNotes.details.length > 0) {
       let innerCounter = 1;
-      let switchColorClass = false;
       let isNextPatientDifferent = true;
       notes =
         (<div className="category-notes-container">
@@ -159,23 +159,12 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
                 { isNewPatient && <div className="img-holder">
                   <img alt="" src={unknownImageUrl} />
                 </div> }
-                <div className="category-notes-item">
-                  <div>
-
-                    <div className={classNames('post-content', switchColorClass ? '' : 'reply')}>
-                      <p>{note.note}</p>
-                    </div>
-                    <div className="username font-bold">{`${note.firstName} ${note.lastName}`}</div>
-                    <time dateTime={note.created_at}>{moment.tz(note.created_at, this.props.currentUser.timezone).format('MM/DD/YY [at] h:mm A')}</time>
-                  </div>
-                </div>
+                <PatientNote key={note.id} currentUser={this.props.currentUser} note={note} isNewPatient={isNewPatient} counter={innerCounter} />
                 {isNextPatientDifferent && <hr></hr>}
               </div>);
             if (isNextPatientDifferent) {
               innerCounter++;
-              switchColorClass = !switchColorClass;
             }
-
             return result;
           })
         }
