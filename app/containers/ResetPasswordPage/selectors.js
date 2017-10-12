@@ -24,8 +24,14 @@ const selectResetPasswordSuccess = () => createSelector(
   (substate) => substate.resetPasswordSuccess
 );
 
+const selectNewPassword = () => createSelector(
+  selectResetPasswordPageDomain(),
+  (substate) => substate.newPassword
+);
+
 export default selectResetPasswordPage;
 export {
   selectResetPasswordPageDomain,
   selectResetPasswordSuccess,
+  selectNewPassword,
 };
