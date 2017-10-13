@@ -42,7 +42,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   handleAddMessagingNumber() {
-    this.props.addMessagingNumber(this.props.item.phone_number);
+    this.props.addMessagingNumber(this.props.item.phoneNumber);
   }
 
   renderCapabilities(capabilities) {
@@ -62,17 +62,18 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
+    const { item } = this.props
     const initialValues = {
-      id: this.props.item.id,
-      number: this.props.item.phone_number,
-      type: this.props.item.address_requirements || 'Local',
-      capabilities: this.props.item.capabilities,
-      price: this.props.item.price || 1.00,
+      id: item.id,
+      phoneNumber: item.phoneNumber,
+      type: item.addressRequirements || 'Local',
+      capabilities: item.capabilities,
+      price: item.price || 1.00,
     };
     return (
       <tr>
         <td>
-          {initialValues.number}
+          {initialValues.phoneNumber}
         </td>
         <td>
           {this.renderCapabilities(initialValues.capabilities)}
@@ -103,7 +104,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
                     <label className="add-exposure-level">Number</label>
                   </strong>
                   <div className="field disabled">
-                    {initialValues.number}
+                    {initialValues.phoneNumber}
                   </div>
                 </div>
                 <div className="field-row">
