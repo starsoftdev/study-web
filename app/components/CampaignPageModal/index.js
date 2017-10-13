@@ -2,17 +2,18 @@
  * Created by Younes on 13/07/16.
  */
 
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
-
-import _ from 'lodash';
-import moment from 'moment-timezone';
+import Moment from 'moment-timezone';
+import { extendMoment } from 'moment-range';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
+
 import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Input from '../Input/index';
@@ -22,6 +23,7 @@ import { selectValues } from '../../common/selectors/form.selector';
 import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
 import { fetchCampaignsByStudy, editCampaign, deleteCampaign } from '../../containers/HomePage/AdminDashboard/actions';
 
+const moment = extendMoment(Moment);
 const formName = 'campaignPageForm';
 
 @reduxForm({
@@ -68,24 +70,25 @@ export class CampaignPageModal extends React.Component {
       this.props.fetchCampaignsByStudy(this.props.study.study_id);
       this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
-    if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
-      this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
-      this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
-      this.five9ValueChanged();
-    }
+    // TODO re-enable Five9 when we figure out how to integrate it with the new web app code-base
+    // if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
+    //   this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
+    //   this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
+    //   this.five9ValueChanged();
+    // }
 
-    if (newProps.five9List.details.length && !this.state.five9List.length) {
-      this.setState({ five9List: newProps.five9List.details });
-    }
+    // if (newProps.five9List.details.length && !this.state.five9List.length) {
+    //   this.setState({ five9List: newProps.five9List.details });
+    // }
 
-    if (newProps.formValues.five_9_value && this.state.five9List.length) {
-      const five9List = this.state.five9List;
-      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
-      if (index === -1 && newProps.formValues.five_9_value !== null) {
-        five9List.push({ name: newProps.formValues.five_9_value });
-        this.setState({ five9List });
-      }
-    }
+    // if (newProps.formValues.five_9_value && this.state.five9List.length) {
+    //   const five9List = this.state.five9List;
+    //   const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
+    //   if (index === -1 && newProps.formValues.five_9_value !== null) {
+    //     five9List.push({ name: newProps.formValues.five_9_value });
+    //     this.setState({ five9List });
+    //   }
+    // }
 
     if (newProps.study && newProps.study !== this.props.study) {
       this.five9ValueChanged(newProps.study.five_9_value);
@@ -115,13 +118,13 @@ export class CampaignPageModal extends React.Component {
     }
   }
 
-  five9ValueChanged(five9value = this.props.study.five_9_value) {
+  five9ValueChanged(five9value) {
     this.props.change('five_9_value', five9value);
   }
 
   submitCampaignForm(e) {
     e.preventDefault();
-    const { formValues, study, submitForm } = this.props;
+    const { formValues, study, submitForm, levels } = this.props;
     const submitValues = {
       dateFrom: formValues.datefrom,
       dateTo: formValues.dateto,
@@ -131,12 +134,17 @@ export class CampaignPageModal extends React.Component {
       studyId: +study.study_id,
       five9value: formValues.five_9_value,
     };
-    if (formValues.custom_patient_goal) {
-      submitValues.customPatientGoal = +formValues.custom_patient_goal;
+    if (typeof formValues.custom_patient_goal === 'number') {
+      submitValues.customPatientGoal = formValues.custom_patient_goal;
     } else {
       submitValues.customPatientGoal = null;
     }
-    submitForm(submitValues);
+    const level = _.find(levels, { id: formValues.level_id });
+    const campaignInfo = {
+      campaignLength: moment.range(formValues.datefrom, formValues.dateto).diff('months'),
+      levelName: level.name,
+    };
+    submitForm(submitValues, campaignInfo);
   }
 
   deleteCampaignClick() {
@@ -339,7 +347,7 @@ function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
-    submitForm: (values) => dispatch(editCampaign(values)),
+    submitForm: (values, campaignInfo) => dispatch(editCampaign(values, campaignInfo)),
     deleteCampaign: (values) => dispatch(deleteCampaign(values)),
   };
 }

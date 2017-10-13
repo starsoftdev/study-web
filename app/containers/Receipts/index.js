@@ -27,6 +27,7 @@ import {
   selectSiteLocations,
   selectCurrentUser,
   selectEvents,
+  selectSites,
 } from '../../containers/App/selectors';
 
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions, selectReceiptsStatus } from './selectors';
@@ -36,6 +37,7 @@ import TableSearchForm from '../../components/TableSearchForm';
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     siteLocations: PropTypes.array,
+    sites: PropTypes.array,
     fetchClientSites: PropTypes.func.isRequired,
     getReceipts: PropTypes.func,
     getPDF: PropTypes.func,
@@ -199,6 +201,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
             setActiveSort={this.props.setActiveSort}
             showInvoicePdf={this.props.showInvoicePdf}
             sortProposalsSuccess={this.props.sortProposalsSuccess}
+            sites={this.props.sites}
             {...this.props}
           />
         </section>
@@ -209,6 +212,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
 
 const mapStateToProps = createStructuredSelector({
   siteLocations : selectSiteLocations(),
+  sites : selectSites(),
   currentUser: selectCurrentUser(),
   receipts: selectReceiptsList(),
   receiptsStatus: selectReceiptsStatus(),
