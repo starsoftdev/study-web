@@ -62,7 +62,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   }
 
   render() {
-    const { item } = this.props
+    const { item } = this.props;
     const initialValues = {
       id: item.id,
       phoneNumber: item.phoneNumber,
