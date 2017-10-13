@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 
-import { selectSelectedUser } from '../../containers/App/selectors';
+
+import { selectCurrentUser } from '../../containers/App/selectors';
 
 import defaultUserImage from '../../assets/images/Default-User-Img.png';
 import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
@@ -14,6 +15,8 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     patientData: PropTypes.object,
     onSelectPatient: PropTypes.func,
     patientSelected: PropTypes.bool,
+    timezone: PropTypes.string,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -27,10 +30,12 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { patientData, patientSelected } = this.props;
+    const { patientData, patientSelected, currentUser } = this.props;
+
+    const timezone = this.props.timezone || currentUser.timezone;
 
     const lastDate = (new Date(patientData.last_message_date ? patientData.last_message_date : patientData.created_at));
-    const lastDateFormatted = moment(lastDate).format('MM/DD/YY [at] h:mm A');
+    const lastDateFormatted = moment(lastDate).tz(timezone).format('MM/DD/YY [at] h:mm A');
     return (
       <li className={patientSelected === true ? 'active' : ''} onClick={this.selectPatient}>
         <a className="tab-opener">
@@ -53,7 +58,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
 }
 
 const mapStateToProps = createStructuredSelector({
-  selectedUser: selectSelectedUser(),
+  currentUser: selectCurrentUser(),
 });
 
 const mapDispatchToProps = {};

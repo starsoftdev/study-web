@@ -11,7 +11,6 @@ class PatientNote extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object.isRequired,
     note: React.PropTypes.object.isRequired,
-    submitDeleteNote: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -22,45 +21,37 @@ class PatientNote extends React.Component {
   renderProfileImage() {
     const { note } = this.props;
     /* eslint-disable global-require */
-    if (note.user.profileImageURL) {
+    if (note.profileImageURL) {
       return (
-        <img alt="" src={note.user.profileImageURL} />
+        <img alt="" src={note.profileImageURL} />
       );
     }
-    const url = require('../../../assets/images/Default-User-Img-Dr.png');
+    const url = require('../../assets/images/Default-User-Img-Dr.png');
     return (
       <img alt="" src={url} />
     );
   }
 
   render() {
-    const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
+    const { currentUser, note } = this.props;
     return (
-      <div className={classNames('note-msg', { reply: note.user.id === currentUser.id })}>
+      <div className={classNames('note-msg', { reply: note.user_id === currentUser.id })}>
         <div className="note">
           <div className="note-header">
-            <a
-              className="btn-trash"
-              onClick={() => {
-                submitDeleteNote(currentPatient.id, currentPatient.patientCategoryId, note.id);
-              }}
-            >
-              <i className="icomoon-icon_trash" />
-            </a>
           </div>
           <div className="note-content">
             <p>{note.note}</p>
           </div>
           <div className="note-userinfo">
             <div className="img-holder">
-              {this.renderProfileImage()}
+              { this.renderProfileImage() }
             </div>
             <div className="info">
               <div className="info-line">
                 <span className="label"> Name: </span>
                 <div className="content">
                   <span>
-                    {note.user.firstName} {note.user.lastName}
+                    {note.firstName} {note.lastName}
                   </span>
                 </div>
               </div>
@@ -69,7 +60,7 @@ class PatientNote extends React.Component {
                 <span className="label"> Date: </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.createdAt, currentUser.timezone).format('MM/DD/YY')}
+                    {moment.tz(note.created_at, currentUser.timezone).format('MM/DD/YY')}
                   </span>
                 </div>
               </div>
@@ -78,7 +69,7 @@ class PatientNote extends React.Component {
                 <span className="label"> Time: </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.createdAt, currentUser.timezone).format('h:mm A')}
+                    {moment.tz(note.created_at, currentUser.timezone).format('h:mm A')}
                   </span>
                 </div>
               </div>

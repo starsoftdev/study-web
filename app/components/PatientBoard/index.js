@@ -9,7 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import { push } from 'react-router-redux';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
@@ -44,7 +44,7 @@ const scroll = Scroll.animateScroll;
 class PatientBoard extends React.Component {
   static propTypes = {
     params: React.PropTypes.object,
-    study: React.PropTypes.object,
+    site: React.PropTypes.object,
     currentPatientId: React.PropTypes.number,
     currentPatientCategoryId: React.PropTypes.number,
     currentPatient: React.PropTypes.object,
@@ -166,17 +166,19 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal, site } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
       return;
     }
 
-    const defaultDate = moment().startOf('day');
-    const scheduledDate = selectedDate || defaultDate;
+    const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().startOf('day');
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
+
+    const time = scheduledDate.hour(formValues.amPm === 'AM' ? formValues.hours % 12 : (formValues.hours % 12) + 12).minute(formValues.minutes);
+    const relativeOffset = moment().utcOffset() - moment.tz(site.timezone).utcOffset();
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
@@ -186,9 +188,7 @@ class PatientBoard extends React.Component {
       id: currentAppointmentId,
       patientId: currentPatient.id,
       clientId: currentUser.roleForClient.client_id,
-      time: moment(scheduledDate).add(formValues.amPm === 'AM' ?
-      formValues.hours % 12 :
-      (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes').toISOString(),
+      time: time.tz(site.timezone).add(relativeOffset, 'minutes').toISOString(),
       textReminder: formValues.textReminder || false,
     };
 
@@ -258,7 +258,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, study } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -266,7 +266,7 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} study={study} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
               ))}
             </ul>
           </nav>

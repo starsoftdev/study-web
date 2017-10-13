@@ -147,6 +147,7 @@ class TextSection extends React.Component {
       if (!err) {
         this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
           lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
+          updatedAt: data.dateCreated,
         });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
@@ -161,6 +162,8 @@ class TextSection extends React.Component {
   renderText() {
     const { currentUser, currentPatient, site } = this.props;
     const { twilioMessages } = this.state;
+    const timezone = currentUser.roleForClient.isAdmin ? currentUser.timezone : site.timezone;
+
     if (currentPatient && twilioMessages.length) {
       return (
         <section
@@ -170,6 +173,7 @@ class TextSection extends React.Component {
           }}
         >
           {twilioMessages.map((twilioMessage, index) => {
+            console.log('text section', twilioMessage, currentPatient);
             if (twilioMessage.text_message_id) {
               return (<PatientText
                 key={index}
@@ -182,7 +186,7 @@ class TextSection extends React.Component {
             return (<CallItem
               messageData={twilioMessage}
               key={index}
-              site={site}
+              timezone={timezone}
               postMsg
             />);
           })}

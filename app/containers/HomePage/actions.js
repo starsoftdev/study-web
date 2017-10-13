@@ -1,3 +1,15 @@
+/*
+ *
+ * Homepage actions
+ *
+ */
+
+import {
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+} from '../App/constants';
+
 import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PATIENT_SIGN_UPS_SUCCEESS,
@@ -38,6 +50,7 @@ import {
   NEW_MESSAGE_FOR_PROTOCOL,
   INCREMENT_STUDY_UNREAD_MESSAGES,
   SUBTRACT_STUDY_UNREAD_MESSAGES,
+  SET_EMAIL_NOTIFICATIONS,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser) {
@@ -262,11 +275,18 @@ export function studyUpgradingError(payload) {
   };
 }
 
-export function editStudy(studyId, formValues) {
+export function setEmailNotifications(notifications) {
+  return {
+    type: SET_EMAIL_NOTIFICATIONS,
+    notifications,
+  };
+}
+
+export function editStudy(studyId, options) {
   return {
     type: EDIT_STUDY,
     studyId,
-    formValues,
+    options,
   };
 }
 
@@ -304,6 +324,31 @@ export function fetchUpgradeStudyPrice(fromLevel, toLevel) {
     type: FETCH_UPGRADE_STUDY_PRICE,
     fromLevel,
     toLevel,
+  };
+}
+
+export function addEmailNotificationUserSuccess(userId, email, user = null) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+    userId,
+    email,
+    user,
+  };
+}
+
+export function addCustomEmailNotificationSuccess(id, email) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    id,
+    email,
+  };
+}
+
+export function removeCustomEmailNotificationSuccess(id, email) {
+  return {
+    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    id,
+    email,
   };
 }
 
