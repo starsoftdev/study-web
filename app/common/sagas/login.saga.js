@@ -155,10 +155,14 @@ export function* resetPassword() {
 export function* setNewPassword() {
   while (true) {
     try {
-      const { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
+      let { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
       const state = yield select(selectLocationState());
 
       if (state.query && state.query.token) {
+        if (!payload) {
+          payload = {};
+        }
+        payload.token = state.query.token;
         const params = {
           method: 'POST',
           body: JSON.stringify(payload),
