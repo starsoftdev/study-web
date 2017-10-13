@@ -142,6 +142,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       if (!currentUser.roleForClient.isAdmin) {
         const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
         change('siteLocation', nLocation);
+        this.setState({ siteLocation: nLocation });
       }
     }
   }
@@ -221,10 +222,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     let timezone = currentUser.timezone;
     let site = null;
     if (currentUser.roleForClient.site_id) {
-      site = first(sites, item => item.id === currentUser.roleForClient.site_id);
-      if (site) {
-        timezone = site.timezone;
-        console.log('site timezone', site, timezone);
+      if (currentUser.roleForClient.site) {
+        timezone = currentUser.roleForClient.site.timezone;
+      } else {
+        site = first(sites, item => item.id === currentUser.roleForClient.site_id);
+        if (site) {
+          timezone = site.timezone;
+        }
       }
     }
 
@@ -239,7 +243,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     let filteredPatients = sitePatients.details;
     if (siteLocation && siteLocation !== '0') {
       filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
-      console.log('sitepatients', sitePatients.details, siteLocation, filteredPatients);
     }
 
     const sitePatientsListContents = filteredPatients.map((item, index) => {

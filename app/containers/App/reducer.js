@@ -844,6 +844,7 @@ export default function appReducer(state = initialState, action) {
           }
           patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
+          patientData.last_message_date = action.newMessage.twilioTextMessage.dateCreated;
         }
         return patientData;
       });
