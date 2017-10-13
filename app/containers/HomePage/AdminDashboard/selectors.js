@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
 /**
- * Direct selector to the patientDatabasePage state domain
+ * Direct selector to the Dashboard Page state domain
  */
 const selectDashboardPageDomain = () => state => state.dashboardPage;
 const selectFormDomain = () => state => state.form;
 /**
- * Default selector used by PatientDatabasePage
+ * Default selector used by Dashboard Page
  */
 
 const selectDashboardPage = () => createSelector(
@@ -19,19 +19,14 @@ const selectFilterFormValues = () => createSelector(
   substate => get(substate, 'dashboardFilters.values', {})
 );
 
-const selectEditStudyValues = () => createSelector(
-  selectFormDomain(),
-  substate => get(substate, 'dashboardEditStudyForm.values', {})
-);
-
 const selectStudies = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.studies
 );
 
-const selectStudyIndicationTags = () => createSelector(
+const selectTaggedIndicationsForStudy = () => createSelector(
   selectDashboardPageDomain(),
-  substate => substate.studyIndicationTags
+  substate => substate.taggedIndicationsForStudy
 );
 
 const selectLevels = () => createSelector(
@@ -79,11 +74,6 @@ const selectStudiesTotals = () => createSelector(
   substate => substate.totals
 );
 
-const selectStudyUpdateProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.updateStudyProcess
-);
-
 const selectAllClientUsers = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.allClientUsers
@@ -92,16 +82,6 @@ const selectAllClientUsers = () => createSelector(
 const selectAllCustomNotificationEmails = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.allCustomNotificationEmails
-);
-
-const selectAddNotificationProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.addNotificationProcess
-);
-
-const selectStudyCampaigns = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.studyCampaigns
 );
 
 const selectLandingPageUpdateProcess = () => createSelector(
@@ -117,6 +97,11 @@ const selectChangeStudyAddProcess = () => createSelector(
 const selectUpdatedStudyAd = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.updatedStudyAd
+);
+
+const selectRemovedStudyAdId = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.removedStudyAdId
 );
 
 const selectThankYouPageUpdateProcess = () => createSelector(
@@ -191,20 +176,17 @@ export {
   selectCro,
   selectUsersByRoles,
   selectStudiesTotals,
-  selectStudyUpdateProcess,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
-  selectEditStudyValues,
-  selectAddNotificationProcess,
-  selectStudyCampaigns,
   selectThankYouPageUpdateProcess,
   selectUpdatePatientThankYouEmailProcess,
   selectLandingPageUpdateProcess,
   selectChangeStudyAddProcess,
   selectMessagingNumbers,
   selectUpdatedStudyAd,
+  selectRemovedStudyAdId,
   selectHoverRowIndex,
-  selectStudyIndicationTags,
+  selectTaggedIndicationsForStudy,
   selectDashboardCampaigns,
   selectDashboardEditCampaignProcess,
   selectDashboardDeleteCampaignProcess,

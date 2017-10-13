@@ -129,6 +129,7 @@ export class LandingPageModal extends React.Component {
         if (!this.state.initialValuesEntered) {
           const { change } = this.props;
           change('title', landing.title);
+          change('locationMask', landing.locationMask);
           change('instructions', landing.instructions);
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
@@ -304,6 +305,19 @@ export class LandingPageModal extends React.Component {
                       type="text"
                       id="enter-landing-page-name"
                       name="title"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-first-name">Location</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      id="enter-landing-page-location"
+                      name="locationMask"
                       component={Input}
                     />
                   </div>

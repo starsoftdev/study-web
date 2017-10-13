@@ -25,6 +25,7 @@ import {
 
 import {
   resetPasswordSuccess,
+  newPasswordReceived,
 } from '../../containers/ResetPasswordPage/actions';
 
 import {
@@ -164,7 +165,8 @@ export function* setNewPassword() {
           authToken: state.query.token,
         };
         const requestURL = `${API_URL}/users/reset-password`;
-        yield call(request, requestURL, params);
+        const { password } = yield call(request, requestURL, params);
+        yield put(newPasswordReceived(password));
         toastr.success('', 'Success! Your password has been reset, check your inbox.');
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');

@@ -191,7 +191,15 @@ export default class CalendarPage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.schedules.data !== nextProps.schedules.data || this.props.currentUser.timezone !== nextProps.currentUser.timezone) {
-      const timezone = nextProps.currentUser.timezone;
+      let timezone = nextProps.currentUser.timezone;
+      if (nextProps.currentUser.roleForClient && nextProps.currentUser.roleForClient.site_id) {
+        const site = _.first(nextProps.sites, item => item.id === nextProps.currentUser.roleForClient.site_id);
+        if (site) {
+          timezone = site.timezone;
+          console.log('site timezone', timezone);
+        }
+      }
+
       const localSchedules = nextProps.schedules.data.map(s => ({
         ...s,
         time: moment(s.time).tz(timezone),
