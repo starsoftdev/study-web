@@ -92,6 +92,9 @@ function* fetchStudyDetails() {
     include: [
       {
         relation: 'campaigns',
+        scope: {
+          order: 'orderNumber DESC',
+        },
       },
       {
         relation: 'protocol',
