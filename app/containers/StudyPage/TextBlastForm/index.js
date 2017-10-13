@@ -29,6 +29,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: Selector.selectPatientCategories(),
   sources: selectSources(),
   studyId: Selector.selectStudyId(),
+  site: Selector.selectSite(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -37,7 +38,7 @@ const mapDispatchToProps = (dispatch) => ({
   filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
-  submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
+  submitTextBlast: (patients, message, clientRoleId, studyId, siteName, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, studyId, siteName, onClose)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
@@ -62,6 +63,7 @@ class TextBlastForm extends React.Component {
     removePatients: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     studyId: React.PropTypes.number,
+    site: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
     ePMS: React.PropTypes.bool,
     campaign: React.PropTypes.number,
@@ -198,9 +200,9 @@ class TextBlastForm extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose, studyId, site } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, (err, data) => {
+      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, (err, data) => {
         onClose(err, data);
         this.props.fetchClientCredits(currentUser.id);
       });

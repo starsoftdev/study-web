@@ -26,13 +26,19 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
     return (
       <Form onSubmit={submitEmailBlast} className={classNames('item emails-info', { active })}>
         <div className="emails-info-holder">
-          <Field
-            name="email"
-            component={Input}
-            bsClass="form-control sender"
-            type="text"
-            placeholder="Enter your email address"
-          />
+          <div className="sender-field-holder">
+            <div className="sender-field-prev">
+              From
+            </div>
+            <Field
+              name="email"
+              component={Input}
+              bsClass="form-control sender"
+              className="sender-field"
+              type="text"
+              placeholder="Enter your email address"
+            />
+          </div>
           <Field
             name="subject"
             component={Input}

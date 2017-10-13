@@ -11,6 +11,7 @@ API_URL=http://localhost:3000/api/v1
 SOCKET_URL=http://localhost:3000
 HTTP=true
 GOOGLE_RECAPTCHA_SITE_KEY=(your Google Recaptcha Site Key)
+DASHBOARD_TIMEZONE=America/Los_Angeles
 ```
 If you like inline source maps, and debugging anywhere in the app with Chrome Dev Tools, enter this line into the .env file as well:
 ```
