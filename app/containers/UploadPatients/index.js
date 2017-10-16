@@ -1,11 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
 import { touch } from 'redux-form';
 import _ from 'lodash';
 
+import CenteredModal from '../../components/CenteredModal/index';
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
 import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
@@ -13,6 +15,7 @@ import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { exportPatients, emptyRowRequiredError } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
+import NewProtocolForm from '../../components/AddNewProtocolForm/index';
 import { fields } from '../../components/UploadPatientsForm/validator';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 
@@ -39,6 +42,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.checkEmptyRequired = this.checkEmptyRequired.bind(this);
+    this.addProtocol = this.addProtocol.bind(this);
+    this.closeAddProtocolModal = this.closeAddProtocolModal.bind(this);
   }
 
   componentWillMount() {
@@ -114,6 +119,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     return empty;
   }
 
+  addProtocol() {
+    console.log('addProtocol');
+  }
+
+  closeAddProtocolModal() {
+    console.log('closeAddProtocolModal');
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -123,6 +136,17 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
           <UploadPatientsForm onSubmit={this.onSubmitForm} />
         </section>
+        <Modal dialogComponentClass={CenteredModal} show={true} onHide={this.closeAddProtocolModal}>
+          <Modal.Header>
+            <Modal.Title>ADD NEW PROTOCOL</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeAddProtocolModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <NewProtocolForm onSubmit={this.addProtocol} />
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
