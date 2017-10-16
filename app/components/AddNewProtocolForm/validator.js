@@ -1,8 +1,11 @@
 import { validatorFactory } from '../../utils/reduxForm';
 
 const schema = {
-  name: { presence: true },
-  phoneNumber: {
+  siteLocation: { presence: { message: '^You need to select site location' } },
+  indication_id: { presence: { message: '^You need to select indication' } },
+  protocolNumber: { presence: true },
+  sponsorName: { presence: true },
+  recruitmentPhone: {
     presence: {
       message: '^Phone number cannot be blank',
     },
@@ -12,12 +15,6 @@ const schema = {
       message: '^Invalid phone number',
     },
   },
-  address: { presence: true },
-  city: { presence: true },
-  countryCode: { presence: false },
-  zip: { presence: true },
-  selectedRegion: { presence: true },
-  selectedTimezone: { presence: true },
 };
 
 const editStudyFields = Object.keys(schema);
