@@ -57,6 +57,7 @@
     }
 
     .examples {
+      overflow: hidden;
 
       .title {
         width: 100%;
@@ -64,10 +65,59 @@
         margin: 0 0 10px;
       }
 
-      .item {
-        width: 100%;
-        display: inline-block;
-        margin: 0;
+      .column {
+        position: relative;
+        overflow: hidden;
+        float: left;
+        margin-right: 1%;
+
+        &.names {
+          width: 22%;
+          textarea {
+          }
+        }
+
+        &.emails {
+          width: 22%;
+          textarea {
+          }
+        }
+
+        &.phones {
+          width: 16%;
+        }
+
+        &.ages {
+          width: 9%;
+        }
+
+        &.genders {
+          width: 15%;
+        }
+
+        &.bmis {
+          width: 11%;
+          margin-right: 0;
+        }
+
+        .title {
+          width: 100%;
+          display: inline-block;
+          text-transform: uppercase;
+          margin: 0 0 10px;
+        }
+
+        .group {
+          border: 2px solid;
+          padding: 10px;
+          border-radius: 3px;
+
+          .item {
+            width: 100%;
+            display: inline-block;
+            margin: 0;
+          }
+        }
       }
     }
   }
@@ -99,7 +149,8 @@
     margin: 0;
     padding: 15px 15px 0;
     border: 2px solid #f78e1e;
-    height: 570px;
+    min-height: 75px;
+    max-height: 570px;
     overflow: auto;
 
     .field-row {
@@ -181,6 +232,7 @@
     width: 100%;
     overflow: hidden;
     margin: 0 0 30px;
+    padding: 10px;
 
     .column {
       position: relative;

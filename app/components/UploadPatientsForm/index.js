@@ -87,6 +87,38 @@ export default class UploadPatientsForm extends React.Component {
         gender: null,
         bmi: null,
       },
+      examples: {
+        names: [
+          'John Doe',
+          'Jane Doe',
+          'Janie Doe',
+        ],
+        emails: [
+          'JohnDoe@example.com',
+          'JaneDoe@example.com',
+          'JanieDoe@example.com',
+        ],
+        phones: [
+          '+18888888888',
+          '+19999999999',
+          '+15111111111',
+        ],
+        ages: [
+          22,
+          33,
+          44,
+        ],
+        genders: [
+          'Male',
+          'Male',
+          'Female',
+        ],
+        bmis: [
+          '18.4',
+          '24.5',
+          '29',
+        ],
+      },
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
@@ -486,6 +518,37 @@ export default class UploadPatientsForm extends React.Component {
     });
   }
 
+  renderExampleGroupFields(names) {
+    const { examples } = this.state;
+    let counter = 0;
+
+    return names.map(item => {
+      const key = item.substring(0, 5);
+      const name = item.substring(5);
+      const required = (item === 'groupname' || item === 'groupemail' || item === 'groupphone');
+
+      if (key && key !== 'group') {
+        return null;
+      }
+
+      counter++;
+      return (
+        <div className={classNames('column', `${name}s`)} key={counter}>
+          <span className={classNames('title', (required ? 'required' : ''))}>
+            <label htmlFor={`group${name}`}>{name}</label>
+          </span>
+          <div className="group">
+            {
+              examples[`${name}s`].map(item => {
+                return <span className="item">{item}<br /></span>;
+              })
+            }
+          </div>
+        </div>
+      );
+    });
+  }
+
   render() {
     const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
     const { fields, showPreview, rowsCounts, duplicates } = this.state;
@@ -580,20 +643,18 @@ export default class UploadPatientsForm extends React.Component {
           </span>
         }
         {!this.state.showPreview &&
-          <div className="column-groups">
-            {this.renderGroupFields(formFields)}
-          </div>
-        }
-        {!this.state.showPreview &&
           <div className="instructions">
             <span className="head">Pasting Instructions</span>
             <span className="body">Please separate your fields by entering one contact per line.</span>
-            <span className="examples">
+            <div className="examples">
               <span className="title">Examples:</span>
-              <span className="item">John Doe</span>
-              <span className="item">Jane Doe</span>
-              <span className="item">Janie Doe</span>
-            </span>
+              {this.renderExampleGroupFields(formFields)}
+            </div>
+          </div>
+        }
+        {!this.state.showPreview &&
+          <div className="column-groups">
+            {this.renderGroupFields(formFields)}
           </div>
         }
         {this.state.showPreview &&
