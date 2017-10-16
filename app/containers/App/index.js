@@ -68,6 +68,14 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showChangePwdModal: true });
     }
 
+    if (window.FS && nextProps.userData) {
+      window.FS.identify(nextProps.userData.id, {
+        displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        timezone_str: nextProps.userData.timezone,
+      });
+    }
+
     if (process.env.NODE_ENV !== 'development') {
       if (!this.props.userData && nextProps.userData) {
         ReactGA.initialize('UA-91568063-1', {
