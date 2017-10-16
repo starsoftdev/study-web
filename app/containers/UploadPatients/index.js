@@ -39,11 +39,15 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   constructor(props) {
     super(props);
+    this.state = {
+      showAddProtocolModal: false
+    }
+
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.checkEmptyRequired = this.checkEmptyRequired.bind(this);
     this.addProtocol = this.addProtocol.bind(this);
-    this.closeAddProtocolModal = this.closeAddProtocolModal.bind(this);
+    this.switchShowAddProtocolModal = this.switchShowAddProtocolModal.bind(this);
   }
 
   componentWillMount() {
@@ -123,8 +127,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     console.log('addProtocol');
   }
 
-  closeAddProtocolModal() {
-    console.log('closeAddProtocolModal');
+  switchShowAddProtocolModal() {
+    this.setState({ showAddProtocolModal: !this.state.showAddProtocolModal});
   }
 
   render() {
@@ -134,12 +138,12 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
 
-          <UploadPatientsForm onSubmit={this.onSubmitForm} />
+          <UploadPatientsForm onSubmit={this.onSubmitForm} showSiteLocationModal={this.switchShowAddProtocolModal} />
         </section>
-        <Modal dialogComponentClass={CenteredModal} show={true} onHide={this.closeAddProtocolModal}>
+        <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
             <Modal.Title>ADD NEW PROTOCOL</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeAddProtocolModal}>
+            <a className="lightbox-close close" onClick={this.switchShowAddProtocolModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
