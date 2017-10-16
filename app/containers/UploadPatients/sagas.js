@@ -49,7 +49,7 @@ export function* exportPatientsWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Export Patients', 'Patient exported successfully!');
+      toastr.success('Export Patients', 'Success! You have uploaded your patients.');
       yield put(patientsExported(response));
       yield put(emptyRowRequiredError(false));
     } catch (err) {

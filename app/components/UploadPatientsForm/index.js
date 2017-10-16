@@ -95,14 +95,14 @@ export default class UploadPatientsForm extends React.Component {
           'Janie Doe',
         ],
         emails: [
-          'JohnDoe@example.com',
-          'JaneDoe@example.com',
-          'JanieDoe@example.com',
+          'johndoe@example.com',
+          'janedoe@example.com',
+          'janiedoe@example.com',
         ],
         phones: [
-          '+18888888888',
-          '+19999999999',
-          '+15111111111',
+          '(111) 111-1111',
+          '(555) 555-5555',
+          '(888) 888-8888',
         ],
         ages: [
           22,
@@ -111,7 +111,7 @@ export default class UploadPatientsForm extends React.Component {
         ],
         genders: [
           'Male',
-          'Male',
+          'Female',
           'Female',
         ],
         bmis: [
