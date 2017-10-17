@@ -458,7 +458,7 @@ export function* savePatientWatcher() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { formValues, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { formValues, clientRoleId, currentUser, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -492,6 +492,7 @@ function* submitTextBlast() {
           clientRoleId,
         };
       }
+      reqParams.currentUser = currentUser;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(reqParams),
