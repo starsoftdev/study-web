@@ -457,16 +457,22 @@ export default class UploadPatientsForm extends React.Component {
 
   changeSiteLocation(location) {
     const { currentUser, fetchFilteredProtcols, showProtocolModal, change } = this.props;
-    this.setState({ siteLocation: location });
+    let siteLocation = null;
 
     if (location === 'add-new-protocol') {
+      change('protocol', null);
+      change('indication', null);
       showProtocolModal();
     } else if (location) {
       fetchFilteredProtcols(currentUser.roleForClient.id, location);
+      siteLocation = location
     } else {
         // clear the protocol value if there is no site id
       change('protocol', null);
+      change('indication', null);
     }
+
+    this.setState({ siteLocation });
   }
 
   selectIndication(indicationId) {
@@ -566,7 +572,7 @@ export default class UploadPatientsForm extends React.Component {
       label: siteIterator.name,
       value: siteIterator.id,
     }));
-    siteOptions.push({ id: 'add-new-protocol', name: 'Add New Protocol' });
+    siteOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
     const protocolOptions = protocols.map(protocolIterator => ({
       label: protocolIterator.number,
       value: protocolIterator.studyId,
