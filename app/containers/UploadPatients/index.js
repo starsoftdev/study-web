@@ -68,9 +68,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites(currentUser.roleForClient.client_id);
   }
 
-  componentWillReceiveProps(newProps) {
-    // console.log('componentWillReceiveProps', newProps);
-  }
+  // componentWillReceiveProps(newProps) {
+  //   console.log('componentWillReceiveProps', newProps);
+  // }
 
   onSubmitForm(params) {
     const { exportPatients, formSyncErrors, touchFields, notifyEmptyRowRequiredError } = this.props;
