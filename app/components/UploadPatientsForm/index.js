@@ -49,7 +49,7 @@ export default class UploadPatientsForm extends React.Component {
     currentUser: React.PropTypes.object,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
-    showSiteLocationModal: React.PropTypes.func,
+    showProtocolModal: React.PropTypes.func,
     clearForm: React.PropTypes.func,
     exportPatientsStatus: React.PropTypes.any,
     indications: React.PropTypes.array,
@@ -456,18 +456,16 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   changeSiteLocation(location) {
-    const { currentUser, fetchFilteredProtcols, showSiteLocationModal, change } = this.props;
+    const { currentUser, fetchFilteredProtcols, showProtocolModal, change } = this.props;
     this.setState({ siteLocation: location });
 
-    if (location === 'add-new-location') {
-      showSiteLocationModal();
+    if (location === 'add-new-protocol') {
+      showProtocolModal();
+    } else if (location) {
+      fetchFilteredProtcols(currentUser.roleForClient.id, location);
     } else {
-      if (location) {
-        fetchFilteredProtcols(currentUser.roleForClient.id, location);
-      } else {
         // clear the protocol value if there is no site id
-        change('protocol', null);
-      }
+      change('protocol', null);
     }
   }
 
@@ -568,7 +566,7 @@ export default class UploadPatientsForm extends React.Component {
       label: siteIterator.name,
       value: siteIterator.id,
     }));
-    siteOptions.push({ id: 'add-new-location', name: 'Add Site Location' });
+    siteOptions.push({ id: 'add-new-protocol', name: 'Add New Protocol' });
     const protocolOptions = protocols.map(protocolIterator => ({
       label: protocolIterator.number,
       value: protocolIterator.studyId,

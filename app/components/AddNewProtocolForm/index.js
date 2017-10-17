@@ -32,7 +32,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     change: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
     blur: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func,
+    onSubmit: PropTypes.func,
     formValues: PropTypes.object,
     indications: PropTypes.array,
     fullSiteLocations: PropTypes.object,
@@ -41,6 +41,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   constructor(props) {
     super(props);
 
+    this.onSubmitForm = this.onSubmitForm.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
   }
 
@@ -50,8 +51,15 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     blur('recruitmentPhone', formattedPhoneNumber);
   }
 
+  onSubmitForm(ev) {
+    const { onSubmit } = this.props;
+    ev.preventDefault();
+    console.log('onSubmitForm', ev);
+    onSubmit(ev)
+  }
+
   render() {
-    const { handleSubmit, savedSite, indications, fullSiteLocations } = this.props;
+    const { savedSite, indications, fullSiteLocations } = this.props;
 
     const siteLocations = _.map(fullSiteLocations.details, row => ({
       id: row.id,
@@ -59,7 +67,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     }));
 
     return (
-      <form className="form-lightbox form-add-protocol" onSubmit={handleSubmit}>
+      <form className="form-lightbox form-add-protocol" onSubmit={this.onSubmitForm}>
         <div className="add-protocol form-fields">
           <div className="field-row">
             <strong className="label required"><label>Site Location</label></strong>
