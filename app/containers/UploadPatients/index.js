@@ -69,7 +69,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== this.props.addProtocolProcess.fetching) {
+    const { addProtocolProcess }  = this.props;
+    if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
   }
