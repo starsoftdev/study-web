@@ -17,8 +17,9 @@ import {
   selectClientSites,
 } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
+import { selectAddProtocolProcessStatus } from './selectors';
 
-import { exportPatients, emptyRowRequiredError } from './actions';
+import { exportPatients, emptyRowRequiredError, addProtocol } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
@@ -33,6 +34,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatients: PropTypes.func,
+    addProtocol: PropTypes.func,
     fullSiteLocations: PropTypes.object,
     exportPatients: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
@@ -42,6 +44,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
+    formValues: PropTypes.object,
+    addProtocolProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -62,6 +66,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchIndications();
     fetchSources();
     fetchClientSites(currentUser.roleForClient.client_id);
+  }
+
+  componentWillReceiveProps(newProps) {
+    // console.log('componentWillReceiveProps', newProps);
   }
 
   onSubmitForm(params) {
@@ -130,8 +138,24 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     return empty;
   }
 
-  addProtocol(params) {
-    console.log('addProtocol', params);
+  addProtocol(err, data) {
+    const { fullSiteLocations, indications, currentUser, addProtocol } = this.props;
+    if (!err) {
+      const siteLocation = _.find(fullSiteLocations.details, { id: data.siteLocation });
+      const indication = _.find(indications, { id: data.indication_id });
+
+      const params = {
+        ...data,
+        siteLocationName: siteLocation.name,
+        indicationName: indication.name,
+        user_id: currentUser.id,
+        currentUser,
+        client_id: currentUser.roleForClient.client_id,
+        stripeCustomerId: currentUser.roleForClient.client.stripeCustomerId,
+      };
+      params.recruitmentPhone = normalizePhoneForServer(data.recruitmentPhone);
+      addProtocol(params);
+    }
   }
 
   switchShowAddProtocolModal() {
@@ -176,12 +200,14 @@ const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
   formSyncErrors: selectSyncErrors(formName),
   fullSiteLocations : selectClientSites(),
+  addProtocolProcess: selectAddProtocolProcessStatus(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     touchFields: () => dispatch(touch(formName, ...fields)),
     fetchIndications: () => dispatch(fetchIndications()),
+    addProtocol: (payload) => dispatch(addProtocol(payload)),
     fetchSources: () => dispatch(fetchSources()),
     notifyEmptyRowRequiredError: (hasEmpty) => dispatch(emptyRowRequiredError(hasEmpty)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
