@@ -12,6 +12,7 @@ import Input from '../../components/Input';
 import { selectLoginError } from '../../containers/App/selectors';
 import loginFormValidator, { fields } from './validator';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
+import { selectNewPassword } from '../../containers/ResetPasswordPage/selectors';
 
 const formName = 'login';
 @reduxForm({
@@ -28,6 +29,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     formError: React.PropTypes.bool.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
+    loginPassword: React.PropTypes.string,
   };
 
   constructor(props) {
@@ -88,7 +90,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { submitting, loginError } = this.props;
+    const { submitting, loginError, loginPassword } = this.props;
     const code = loginError ? loginError.code : null;
 
     return (
@@ -122,6 +124,9 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           <Alert bsStyle="danger">
             <p>The email or password is incorrect!</p>
           </Alert>
+        }
+        {loginPassword &&
+          <p>Your new password is: {loginPassword}</p>
         }
         <Field
           name="email"
@@ -179,6 +184,7 @@ const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
   formValues: selectValues(formName),
   loginError: selectLoginError(),
+  loginPassword: selectNewPassword(),
 });
 function mapDispatchToProps(dispatch) {
   return {
