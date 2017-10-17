@@ -295,11 +295,12 @@ export function removePatientsFromTextBlast(patients) {
   };
 }
 
-export function submitTextBlast(formValues, clientRoleId, onClose) {
+export function submitTextBlast(formValues, clientRoleId, currentUser, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     formValues,
     clientRoleId,
+    currentUser,
     onClose,
   };
 }
