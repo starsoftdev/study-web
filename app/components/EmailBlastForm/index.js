@@ -183,14 +183,14 @@ class EmailBlastForm extends React.Component {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
-    } else if (formSyncErrors.message) {
-      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
+    } else if (formSyncErrors.message) {
+      toastr.error('', formSyncErrors.message);
     }
   }
 
