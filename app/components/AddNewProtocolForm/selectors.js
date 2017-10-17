@@ -9,7 +9,7 @@ const selectFormDomain = () => state => state.form;
 /**
  * EditSiteForm -> all values
  */
-const selectEditSiteFormValues = () => createSelector(
+const selectAddProtocolFormValues = () => createSelector(
   selectFormDomain(),
   (substate) => get(substate, 'addProtocol.values', {})
 );
@@ -17,7 +17,7 @@ const selectEditSiteFormValues = () => createSelector(
 /**
  * EditSiteForm -> checking validation error
  */
-const selectEditSiteFormError = () => createSelector(
+const selectAddProtocolFormError = () => createSelector(
   selectFormDomain(),
   (substate) => {
     const errors = get(substate, 'addProtocol.syncErrors', {});
@@ -27,6 +27,6 @@ const selectEditSiteFormError = () => createSelector(
 
 export default selectFormDomain;
 export {
-  selectEditSiteFormValues,
-  selectEditSiteFormError,
+  selectAddProtocolFormValues,
+  selectAddProtocolFormError,
 };

@@ -8,4 +8,8 @@ export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PA
 export const EXPORT_PATIENTS_SUCCESS            = 'PatientDatabasePage/EXPORT_PATIENTS_SUCCESS';
 export const EXPORT_PATIENTS_ERROR              = 'PatientDatabasePage/EXPORT_PATIENTS_ERROR';
 
+export const ADD_PROTOCOL                       = 'PatientDatabasePage/ADD_PROTOCOL';
+export const ADD_PROTOCOL_SUCCESS               = 'PatientDatabasePage/ADD_PROTOCOL_SUCCESS';
+export const ADD_PROTOCOL_ERROR                 = 'PatientDatabasePage/ADD_PROTOCOL_ERROR';
+
 export const EMPTY_ROW_REQUIRED_ERROR           = 'PatientDatabasePage/EMPTY_ROW_REQUIRED_ERROR';

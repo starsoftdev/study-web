@@ -9,13 +9,17 @@ import { selectSavedSite, selectTimezone } from '../../containers/App/selectors'
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { selectEditSiteFormValues } from './selectors';
+import {
+  selectAddProtocolFormValues,
+  selectAddProtocolFormError,
+} from './selectors';
 import formValidator from './validator';
 const formName = 'addProtocol';
 
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
-  formValues: selectEditSiteFormValues(),
+  formValues: selectAddProtocolFormValues(),
+  formErrors: selectAddProtocolFormError(),
   timezone: selectTimezone(),
 });
 
@@ -34,6 +38,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     blur: PropTypes.func.isRequired,
     onSubmit: PropTypes.func,
     formValues: PropTypes.object,
+    formErrors: PropTypes.bool,
     indications: PropTypes.array,
     fullSiteLocations: PropTypes.object,
   };
@@ -52,10 +57,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   onSubmitForm(ev) {
-    const { onSubmit } = this.props;
+    const { onSubmit, formValues, formErrors } = this.props;
     ev.preventDefault();
-    console.log('onSubmitForm', ev);
-    onSubmit(ev);
+    onSubmit(formErrors, formValues);
   }
 
   render() {

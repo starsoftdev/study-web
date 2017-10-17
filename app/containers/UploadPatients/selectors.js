@@ -23,6 +23,11 @@ export const selectExportPatientsStatus = () => createSelector(
   (subState) => subState.exportPatientsStatus
 );
 
+export const selectAddProtocolProcessStatus = () => createSelector(
+  selectUploadPatientsPageDomain(),
+  (subState) => subState.addProtocolProcess
+);
+
 const selectFormDomain = () => state => state.form;
 
 export const selectProtocols = (formName) => createSelector(
