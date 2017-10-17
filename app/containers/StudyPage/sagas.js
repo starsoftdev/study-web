@@ -92,6 +92,9 @@ function* fetchStudyDetails() {
     include: [
       {
         relation: 'campaigns',
+        scope: {
+          order: 'orderNumber DESC',
+        },
       },
       {
         relation: 'protocol',
@@ -844,7 +847,7 @@ function* submitDeleteNote() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, clientRoleId, studyId, siteName, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -860,6 +863,8 @@ function* submitTextBlast() {
           )),
           clientRoleId,
           message,
+          studyId,
+          siteName,
         }),
       });
       onClose();

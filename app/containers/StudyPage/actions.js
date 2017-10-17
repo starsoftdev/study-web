@@ -456,12 +456,14 @@ export function hideScheduledModal() {
   };
 }
 
-export function submitTextBlast(patients, message, clientRoleId, onClose) {
+export function submitTextBlast(patients, message, clientRoleId, studyId, siteName, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
     clientRoleId,
+    studyId,
+    siteName,
     onClose,
   };
 }

@@ -9,7 +9,7 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { filter, map, first } from 'lodash';
+import { filter, map, find } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
@@ -116,16 +116,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         const socketMessage = newMessage;
         if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
           this.props.fetchClientCredits(currentUser.id);
-          if (socketMessage.twilioTextMessage.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.twilioTextMessage = socketMessage.twilioTextMessage.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.study.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.study = socketMessage.study.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.patient.__data) { // eslint-disable-line no-underscore-dangle
-            socketMessage.patient = socketMessage.patient.__data; // eslint-disable-line no-underscore-dangle
-          }
-          if (socketMessage.twilioTextMessage.direction === 'inbound') {
+          if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
             this.props.addMessagesCountStat(1);
           }
@@ -151,6 +142,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       if (!currentUser.roleForClient.isAdmin) {
         const nLocation = currentUser.roleForClient.site_id ? currentUser.roleForClient.site_id.toString() : null;
         change('siteLocation', nLocation);
+        this.setState({ siteLocation: nLocation });
       }
     }
   }
@@ -229,12 +221,14 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     const isAdmin = currentUser.roleForClient && currentUser.roleForClient.isAdmin;
     let timezone = currentUser.timezone;
     let site = null;
-    console.log('current user', currentUser);
     if (currentUser.roleForClient.site_id) {
-      site = first(sites, item => item.id === currentUser.roleForClient.site_id);
-      if (site) {
-        timezone = site.timezone;
-        console.log('site timezone', site, timezone);
+      if (currentUser.roleForClient.site) {
+        timezone = currentUser.roleForClient.site.timezone;
+      } else {
+        site = find(sites, item => item.id === currentUser.roleForClient.site_id);
+        if (site) {
+          timezone = site.timezone;
+        }
       }
     }
 
@@ -249,7 +243,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     let filteredPatients = sitePatients.details;
     if (siteLocation && siteLocation !== '0') {
       filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
-      console.log('sitepatients', sitePatients.details, siteLocation, filteredPatients);
     }
 
     const sitePatientsListContents = filteredPatients.map((item, index) => {
