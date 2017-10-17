@@ -9,7 +9,13 @@ import _ from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
-import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
+import {
+  selectCurrentUser,
+  selectSiteLocations,
+  selectSources,
+  selectIndications,
+  selectClientSites
+} from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 
 import { exportPatients, emptyRowRequiredError } from './actions';
@@ -27,6 +33,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
     fetchPatients: PropTypes.func,
+    fullSiteLocations: PropTypes.object,
     exportPatients: PropTypes.func,
     currentUser: PropTypes.object.isRequired,
     sites: PropTypes.array,
@@ -132,6 +139,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   render() {
+    const { indications, fullSiteLocations } = this.props;
+
     return (
       <div className="container-fluid">
         <section className="patient-upload">
@@ -148,7 +157,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             </a>
           </Modal.Header>
           <Modal.Body>
-            <NewProtocolForm onSubmit={this.addProtocol} />
+            <NewProtocolForm
+              onSubmit={this.addProtocol}
+              fullSiteLocations={fullSiteLocations}
+              indications={indications}
+            />
           </Modal.Body>
         </Modal>
       </div>
@@ -162,6 +175,7 @@ const mapStateToProps = createStructuredSelector({
   indications: selectIndications(),
   sources: selectSources(),
   formSyncErrors: selectSyncErrors(formName),
+  fullSiteLocations : selectClientSites(),
 });
 
 function mapDispatchToProps(dispatch) {
