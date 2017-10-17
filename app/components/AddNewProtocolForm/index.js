@@ -55,7 +55,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     const { onSubmit } = this.props;
     ev.preventDefault();
     console.log('onSubmitForm', ev);
-    onSubmit(ev)
+    onSubmit(ev);
   }
 
   render() {
