@@ -33,18 +33,15 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     savedSite: PropTypes.object,
     blur: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func,
-    formValues: PropTypes.object
+    formValues: PropTypes.object,
+    indications: PropTypes.array,
+    fullSiteLocations: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.handleSiteLocationChoose = this.handleSiteLocationChoose.bind(this);
-  }
-
-  componentWillReceiveProps(newProps) {
-    // ..
   }
 
   onPhoneBlur(event) {
@@ -53,27 +50,27 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     blur('recruitmentPhone', formattedPhoneNumber);
   }
 
-  handleSiteLocationChoose() {
-    console.log('handleSiteLocationChoose');
-  }
-
   render() {
-    const { handleSubmit, savedSite } = this.props;
+    const { handleSubmit, savedSite, indications, fullSiteLocations } = this.props;
+
+    const siteLocations = _.map(fullSiteLocations.details, row => ({
+      id: row.id,
+      name: row.name,
+    }));
 
     return (
       <form className="form-lightbox form-add-protocol" onSubmit={handleSubmit}>
         <div className="add-protocol form-fields">
-          {/*<div className="field-row">
+          <div className="field-row">
             <strong className="label required"><label>Site Location</label></strong>
             <Field
               name="siteLocation"
               component={ReactSelect}
               placeholder="Select Site Location"
-              options=""
+              options={siteLocations}
               className="field"
-              onChange={this.handleSiteLocationChoose}
             />
-          </div>*/}
+          </div>
           <div className="field-row">
             <strong className="label required"><label>Recruitment Phone</label></strong>
             <Field
@@ -84,16 +81,16 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               onBlur={this.onPhoneBlur}
             />
           </div>
-          {/*<div className="field-row">
+          <div className="field-row">
             <strong className="label required"><label>Indication</label></strong>
             <Field
               name="indication_id"
               component={ReactSelect}
               placeholder="Select Indication"
-              options=""
+              options={indications}
               className="field"
             />
-          </div>*/}
+          </div>
           <div className="field-row">
             <strong className="label required"><label>Protocol</label></strong>
             <Field
