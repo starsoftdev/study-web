@@ -74,7 +74,6 @@ export default class AddPatientForm extends React.Component {
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
   }
 
@@ -124,19 +123,6 @@ export default class AddPatientForm extends React.Component {
     submitAddPatient(patient, onClose);
   }
 
-  selectIndication(indicationId) {
-    if (indicationId) {
-      const { change, protocols } = this.props;
-      const protocol = _.find(protocols, { indicationId });
-      if (protocol) {
-        change('protocol', protocol.studyId);
-      } else {
-        // clear the protocol value if the indicationId doesn't match
-        change('protocol', null);
-      }
-    }
-  }
-
   selectProtocol(studyId) {
     if (studyId) {
       const { change, protocols } = this.props;
@@ -148,6 +134,8 @@ export default class AddPatientForm extends React.Component {
   render() {
     const { submitting, indications, isFetchingProtocols, protocols, sites, sources, currentUser } = this.props;
     const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
+    const uploadSources = _.clone(sources);
+    uploadSources.shift();
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -170,7 +158,7 @@ export default class AddPatientForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    const sourceOptions = sources.map(source => ({
+    const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
     }));
@@ -264,7 +252,6 @@ export default class AddPatientForm extends React.Component {
             className="field"
             placeholder="Select Indication"
             options={indicationOptions}
-            onChange={this.selectIndication}
           />
         </div>
         <div className="field-row">

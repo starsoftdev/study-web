@@ -10,7 +10,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
     messageData: PropTypes.object,
     currentUser: PropTypes.object,
     postMsg: PropTypes.bool,
-    timezone: React.PropTypes.object,
+    timezone: React.PropTypes.string,
   };
 
   render() {
@@ -19,7 +19,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
 
     const timezone = this.props.timezone || currentUser.timezone;
 
-    const cdate = `${moment.tz(cts.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}`;
+    const cdate = moment(cts).tz(timezone).format('MM/DD/YY [at] h:mm A');
 
     let containerClassName = 'post-holder call';
     // todo remove and put back Anonymous behavior

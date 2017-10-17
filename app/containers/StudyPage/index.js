@@ -113,6 +113,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
               unreadMessageCount: (unreadMessageCount + 1),
               lastTextMessage: socketMessage.twilioTextMessage,
             });
+          } else if (curCategoryId && socketMessage.twilioTextMessage.direction !== 'inbound') {
+            this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
+              unreadMessageCount,
+              lastTextMessage: socketMessage.twilioTextMessage,
+            });
           }
         });
 
