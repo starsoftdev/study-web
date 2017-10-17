@@ -11,6 +11,9 @@ import {
   EXPORT_PATIENTS_SUCCESS,
   EXPORT_PATIENTS_ERROR,
   EMPTY_ROW_REQUIRED_ERROR,
+  ADD_PROTOCOL,
+  ADD_PROTOCOL_SUCCESS,
+  ADD_PROTOCOL_ERROR,
 } from './constants';
 
 export function exportPatients(data) {
@@ -60,5 +63,26 @@ export function emptyRowRequiredError(hasEmpty) {
   return {
     type: EMPTY_ROW_REQUIRED_ERROR,
     hasEmpty,
+  };
+}
+
+export function addProtocol(payload) {
+  return {
+    type: ADD_PROTOCOL,
+    payload,
+  };
+}
+
+export function addProtocolSucceess(payload) {
+  return {
+    type: ADD_PROTOCOL_SUCCESS,
+    payload,
+  };
+}
+
+export function addProtocolError(payload) {
+  return {
+    type: ADD_PROTOCOL_ERROR,
+    payload,
   };
 }
