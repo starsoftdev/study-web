@@ -14,7 +14,7 @@ import {
   selectSiteLocations,
   selectSources,
   selectIndications,
-  selectClientSites
+  selectClientSites,
 } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 
@@ -47,8 +47,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   constructor(props) {
     super(props);
     this.state = {
-      showAddProtocolModal: false
-    }
+      showAddProtocolModal: false,
+    };
 
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
@@ -130,12 +130,12 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     return empty;
   }
 
-  addProtocol() {
-    console.log('addProtocol');
+  addProtocol(params) {
+    console.log('addProtocol', params);
   }
 
   switchShowAddProtocolModal() {
-    this.setState({ showAddProtocolModal: !this.state.showAddProtocolModal});
+    this.setState({ showAddProtocolModal: !this.state.showAddProtocolModal });
   }
 
   render() {
@@ -147,7 +147,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
 
-          <UploadPatientsForm onSubmit={this.onSubmitForm} showSiteLocationModal={this.switchShowAddProtocolModal} />
+          <UploadPatientsForm onSubmit={this.onSubmitForm} showProtocolModal={this.switchShowAddProtocolModal} />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
