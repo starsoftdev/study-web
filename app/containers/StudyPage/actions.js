@@ -456,7 +456,7 @@ export function hideScheduledModal() {
   };
 }
 
-export function submitTextBlast(patients, message, clientRoleId, studyId, siteName, onClose) {
+export function submitTextBlast(patients, message, clientRoleId, studyId, siteName, currentUser, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
@@ -464,6 +464,7 @@ export function submitTextBlast(patients, message, clientRoleId, studyId, siteNa
     clientRoleId,
     studyId,
     siteName,
+    currentUser,
     onClose,
   };
 }
