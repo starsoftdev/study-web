@@ -3,6 +3,70 @@
   background: #fff;
   border: 2px solid #f78e1e;
 
+  .status {
+    margin: 0 0 30px;
+
+    .step-one {
+      color: #00afef;
+      display: inline-block;
+      padding: 0 10px 10px 0;
+      border-bottom: 10px solid #00afef;
+    }
+
+    .step-two {
+      display: inline-block;
+      padding: 0 0 10px 10px;
+      border-bottom: 10px solid #f1f1f1;
+
+      &.active {
+        color: #00afef;
+        border-color: #00afef;
+      }
+    }
+  }
+
+  .tip {
+    font-size: 14px;
+    width: 100%;
+    margin: 0 0 20px;
+    display: inline-block;
+  }
+
+  .instructions {
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin: 0 0 10px;
+    font-size: 14px;
+
+    .head {
+      width: 100%;
+      margin: 0 0 10px;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .body {
+      width: 100%;
+      margin: 0 0 10px;
+      display: inline-block;
+    }
+
+    .examples {
+
+      .title {
+        width: 100%;
+        display: inline-block;
+        margin: 0 0 10px;
+      }
+
+      .item {
+        width: 100%;
+        display: inline-block;
+        margin: 0;
+      }
+    }
+  }
+
   .field-row.main {
     font-size: 0;
     line-height: 0;
@@ -27,13 +91,15 @@
   }
 
   .fields-holder.array {
-    margin: 0;
-    padding: 0;
+    margin: 0 0 30px;
+    padding: 15px;
+    border: 1px solid #f78e1e;
+    min-height: 694px;
 
-    .field-row  {
+    .field-row {
       margin: 0;
       padding: 0 0 15px;
-      height: 55px;
+      overflow: hidden;
 
       .remove {
         float: left;
@@ -46,7 +112,6 @@
       }
 
       &.first {
-        height: 95px;
         padding-top: 15px;
 
         .remove {
@@ -69,6 +134,10 @@
 
         &.trash {
           width: 1%;
+
+          &.first {
+            margin-top: 4px;
+          }
         }
 
         &.name {
@@ -94,6 +163,11 @@
         &.bmi {
           width: 10%;
           margin-right: 0;
+        }
+
+        .counter {
+          margin: 0 0 10px;
+          text-align: center;
         }
       }
     }
@@ -141,6 +215,12 @@
       }
     }
 
+    .rows-counter {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+
     .group {
 
       textarea.form-control {
@@ -151,7 +231,7 @@
 
   .text-right {
 
-    button {
+    button, input {
       &.no-margin-right {
         margin-right: 0;
       }

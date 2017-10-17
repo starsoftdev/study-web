@@ -64,33 +64,39 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     delete options['group-gender'];
     delete options['group-bmi'];
 
-    if (!_.isEmpty(formSyncErrors)) {
-      if (formSyncErrors['group-name']) {
-        toastr.error('', formSyncErrors['group-name']);
-      } else if (formSyncErrors['group-email']) {
-        toastr.error('', formSyncErrors['group-email']);
-      } else if (formSyncErrors['group-phone']) {
-        toastr.error('', formSyncErrors['group-phone']);
-      }
+    // console.log('fields', fields);
 
-      touchFields();
-    } else if (options.patients && options.patients.length) {
+    touchFields();
+
+    console.log('onSubmitForm', formSyncErrors, options);
+
+    if (options.patients && options.patients.length) {
+      if (!_.isEmpty(formSyncErrors)) {
+        if (formSyncErrors['group-name']) {
+          toastr.error('', formSyncErrors['group-name']);
+        } else if (formSyncErrors['group-email']) {
+          toastr.error('', formSyncErrors['group-email']);
+        } else if (formSyncErrors['group-phone']) {
+          toastr.error('', formSyncErrors['group-phone']);
+        }
+      } else {
         /* normalizing the phone number */
-      _.forEach(options.patients, (patient, index) => {
-        _.forEach(patient, (value, key) => {
-          if (value === 'N/A') {
-            options.patients[index][key] = null;
+        _.forEach(options.patients, (patient, index) => {
+          _.forEach(patient, (value, key) => {
+            if (value === 'N/A') {
+              options.patients[index][key] = null;
+            }
+          });
+
+          if (patient.phone) {
+            options.patients[index].phone = normalizePhoneForServer(patient.phone);
           }
         });
 
-        if (patient.phone) {
-          options.patients[index].phone = normalizePhoneForServer(patient.phone);
-        }
-      });
-
-      exportPatients(options);
+        exportPatients(options);
+      }
     } else {
-      toastr.error('', 'Required at least one patient');
+      toastr.error('', 'Error! There are no patients to be added.');
     }
   }
 
