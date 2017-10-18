@@ -189,7 +189,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       addProtocol(params);
     } else {
       console.log('addProtocol', err, data);
-      touchAddProtocolFields()
+      touchAddProtocolFields();
     }
   }
 
