@@ -465,7 +465,7 @@ export default class UploadPatientsForm extends React.Component {
       showProtocolModal();
     } else if (location) {
       fetchFilteredProtcols(currentUser.roleForClient.id, location);
-      siteLocation = location
+      siteLocation = location;
     } else {
         // clear the protocol value if there is no site id
       change('protocol', null);

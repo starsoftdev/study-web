@@ -13,3 +13,4 @@ export const ADD_PROTOCOL_SUCCESS               = 'PatientDatabasePage/ADD_PROTO
 export const ADD_PROTOCOL_ERROR                 = 'PatientDatabasePage/ADD_PROTOCOL_ERROR';
 
 export const EMPTY_ROW_REQUIRED_ERROR           = 'PatientDatabasePage/EMPTY_ROW_REQUIRED_ERROR';
+export const VALIDATION_ERROR                   = 'PatientDatabasePage/VALIDATION_ERROR';

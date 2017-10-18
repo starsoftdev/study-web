@@ -19,7 +19,7 @@ import {
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus } from './selectors';
 
-import { exportPatients, emptyRowRequiredError, addProtocol } from './actions';
+import { exportPatients, emptyRowRequiredError, addProtocol, validationError } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
@@ -44,6 +44,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
+    notifyValidationError: React.PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
   };
@@ -57,7 +58,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.checkEmptyRequired = this.checkEmptyRequired.bind(this);
+    this.validateEmailOrPhone = this.validateEmailOrPhone.bind(this);
     this.addProtocol = this.addProtocol.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
     this.switchShowAddProtocolModal = this.switchShowAddProtocolModal.bind(this);
   }
 
@@ -69,14 +72,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess }  = this.props;
+    const { addProtocolProcess } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
   }
 
   onSubmitForm(params) {
-    const { exportPatients, formSyncErrors, touchFields, notifyEmptyRowRequiredError } = this.props;
+    const { exportPatients, formSyncErrors, touchFields } = this.props;
     const options = _.clone(params);
 
     // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
@@ -97,9 +100,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
     touchFields();
 
+
     if (options.patients && options.patients.length) {
       const hasEmpty = this.checkEmptyRequired(options.patients);
-      notifyEmptyRowRequiredError(hasEmpty);
+      const hasError = this.validateEmailOrPhone(options.patients);
 
       if (!_.isEmpty(formSyncErrors)) {
         if (formSyncErrors.groupname) {
@@ -109,24 +113,28 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         } else if (formSyncErrors.groupphone) {
           toastr.error('', formSyncErrors.groupphone);
         }
-      } else {
-        /* normalizing the phone number */
+      } else if (!hasEmpty && !hasError) {
+          /* normalizing the phone number */
         _.forEach(options.patients, (patient, index) => {
           if (patient.phone) {
             options.patients[index].phone = normalizePhoneForServer(patient.phone);
           }
         });
 
-        if (!hasEmpty) {
-          exportPatients(options);
-        }
+        exportPatients(options);
       }
     } else {
       toastr.error('', 'Error! There are no patients to be added.');
     }
   }
 
+  validateEmail(email) {
+    const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(email);
+  }
+
   checkEmptyRequired(patients) {
+    const { notifyEmptyRowRequiredError } = this.props;
     let empty = false;
     _.forEach(patients, (patient) => {
       const hasName = _.hasIn(patient, 'name');
@@ -137,8 +145,27 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         empty = true;
       }
     });
-
+    notifyEmptyRowRequiredError(empty);
     return empty;
+  }
+
+  validateEmailOrPhone(patients) {
+    const { notifyValidationError } = this.props;
+    let error = false;
+    _.forEach(patients, (patient) => {
+      const hasEmail = _.hasIn(patient, 'email');
+      const hasPhone = _.hasIn(patient, 'phone');
+
+      if (hasEmail && !this.validateEmail(patient.email)) {
+        error = true;
+      }
+
+      if (hasPhone && patient.phone && normalizePhoneForServer(patient.phone).length < 12) {
+        error = true;
+      }
+    });
+    notifyValidationError(error);
+    return error;
   }
 
   addProtocol(err, data) {
@@ -213,6 +240,7 @@ function mapDispatchToProps(dispatch) {
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     fetchSources: () => dispatch(fetchSources()),
     notifyEmptyRowRequiredError: (hasEmpty) => dispatch(emptyRowRequiredError(hasEmpty)),
+    notifyValidationError: (hasError) => dispatch(validationError(hasError)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
   };
