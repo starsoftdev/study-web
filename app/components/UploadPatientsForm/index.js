@@ -456,14 +456,10 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   changeSiteLocation(location) {
-    const { currentUser, fetchFilteredProtcols, showProtocolModal, change } = this.props;
+    const { currentUser, fetchFilteredProtcols, change } = this.props;
     let siteLocation = null;
 
-    if (location === 'add-new-protocol') {
-      change('protocol', null);
-      change('indication', null);
-      showProtocolModal();
-    } else if (location) {
+    if (location) {
       fetchFilteredProtcols(currentUser.roleForClient.id, location);
       siteLocation = location;
     } else {
@@ -489,8 +485,13 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   selectProtocol(studyId) {
-    if (studyId) {
-      const { change, protocols } = this.props;
+    const { protocols, showProtocolModal, change } = this.props;
+
+    if (studyId === 'add-new-protocol') {
+      change('protocol', null);
+      change('indication', null);
+      showProtocolModal();
+    } else {
       const protocol = _.find(protocols, { studyId });
       change('indication', protocol.indicationId);
     }
@@ -560,7 +561,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
+    const { handleSubmit, emptyRowRequiredError, indications, protocols, sites, sources, change, blur } = this.props;
     const { fields, showPreview, rowsCounts, duplicates } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
@@ -572,12 +573,12 @@ export default class UploadPatientsForm extends React.Component {
       label: siteIterator.name,
       value: siteIterator.id,
     }));
-    siteOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
     const protocolOptions = protocols.map(protocolIterator => ({
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
     uploadSources.shift();
+    protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
     const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
@@ -619,7 +620,6 @@ export default class UploadPatientsForm extends React.Component {
             placeholder="Select Protocol"
             className="field"
             options={protocolOptions}
-            disabled={isFetchingProtocols || !this.state.siteLocation}
             onChange={this.selectProtocol}
           />
         </div>
