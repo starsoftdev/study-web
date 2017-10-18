@@ -17,8 +17,8 @@ const schema = {
   },
 };
 
-const editStudyFields = Object.keys(schema);
+const addProtocolFields = Object.keys(schema);
 
-export { editStudyFields };
+export { addProtocolFields };
 
 export default validatorFactory(schema);
