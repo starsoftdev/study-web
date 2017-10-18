@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { normalizePhoneDisplay } from '../../common/helper/functions';
+import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
 
 class RenderPatientsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -28,6 +28,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     this.removeField = this.removeField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +85,11 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     fields.remove(index);
   }
 
+  validateEmail(email) {
+    const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(email);
+  }
+
   render() {
     const { patients, fields, rowsCounts, emptyRowRequiredError, duplicates } = this.props;
     const genderOptions = [
@@ -102,6 +108,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
           {
             fields.map((patient, index) => {
               let phoneHasError = false;
+              let emailHasError = false;
               const duplicateIndex = _.findIndex(duplicates, (d) => { return d === patients[index].phone; });
 
               if (duplicateIndex !== -1) {
@@ -110,6 +117,18 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
 
               if ((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) {
                 phoneHasError = true;
+              }
+
+              if (patients[index].phone && normalizePhoneForServer(patients[index].phone).length < 12) {
+                phoneHasError = true;
+              }
+
+              if ((!patients[index].email || patients[index].email === '') && emptyRowRequiredError.hasEmpty) {
+                emailHasError = true;
+              }
+
+              if (patients[index].email) {
+                emailHasError = !this.validateEmail(patients[index].email);
               }
 
               return (
@@ -135,7 +154,7 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
                       name={`patients[${index}].email`}
                       component={Input}
                       value={patient.email || ''}
-                      className={((!patients[index].email || patients[index].email === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
+                      className={emailHasError ? 'has-error' : ''}
                       type="text"
                       onChange={(e) => { this.changeField(e, 'email', index); }}
                     />

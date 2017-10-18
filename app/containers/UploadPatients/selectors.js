@@ -40,6 +40,11 @@ export const selectEmptyRowRequiredError = (formName) => createSelector(
   (substate) => get(substate, `${formName}.emptyRowRequiredError`, false)
 );
 
+export const selectValidationError = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.validationError`, false)
+);
+
 export const selectIsFetchingProtocols = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.protocols.fetching`, false)
