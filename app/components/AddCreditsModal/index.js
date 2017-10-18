@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, touch, reset, change } from 'redux-form';
 import _ from 'lodash';
+import { toastr } from 'react-redux-toastr';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -78,6 +79,8 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     super(props);
     this.incQuantity = this.incQuantity.bind(this);
     this.decQuantity = this.decQuantity.bind(this);
+    this.incEmailQuantity = this.incEmailQuantity.bind(this);
+    this.decEmailQuantity = this.decEmailQuantity.bind(this);
     this.addCreditsSubmit = this.addCreditsSubmit.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleNewModalOpen = this.handleNewModalOpen.bind(this);
@@ -89,8 +92,11 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
     this.state = {
       quantity: 1,
+      emailQuantity: 1,
       credits: 0,
+      emailCredits: 0,
       total: 0,
+      emailTotal: 0,
       price: 0,
       addCardModalOpenC: false,
       showSiteLocationModal: false,
@@ -112,7 +118,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     if (newProps.creditsPrice.price && !this.props.creditsPrice.price) {
       this.setState({
         quantity: 1,
+        emailQuantity: 1,
         credits: newProps.creditsPrice.attributes.amount,
+        emailCredits: newProps.creditsPrice.attributes.amount,
         price: newProps.creditsPrice.price,
       });
     }
@@ -151,7 +159,9 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     const resetState = {
       quantity: 1,
       credits: 100,
+      emailCredits: 100,
       total: 0,
+      emailTotal: 0,
       price: 7700,
     };
 
@@ -178,11 +188,31 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   }
 
   decQuantity() {
-    if (this.state.quantity > 1) {
+    if (this.state.quantity > 0) {
       this.setState({
         quantity: this.state.quantity - 1,
         credits: (this.state.quantity - 1) * this.props.creditsPrice.attributes.amount,
         total: (this.state.quantity - 1) * this.props.creditsPrice.price,
+      });
+    }
+  }
+
+  incEmailQuantity() {
+    if (this.state.emailQuantity < 999) {
+      this.setState({
+        emailQuantity: this.state.emailQuantity + 1,
+        emailCredits: (this.state.emailQuantity + 1) * this.props.creditsPrice.attributes.amount,
+        emailTotal: (this.state.emailQuantity + 1) * this.props.creditsPrice.price,
+      });
+    }
+  }
+
+  decEmailQuantity() {
+    if (this.state.emailQuantity > 0) {
+      this.setState({
+        emailQuantity: this.state.emailQuantity - 1,
+        emailCredits: (this.state.emailQuantity - 1) * this.props.creditsPrice.attributes.amount,
+        emailTotal: (this.state.emailQuantity - 1) * this.props.creditsPrice.price,
       });
     }
   }
@@ -232,6 +262,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     const siteLocationName = _.find(this.props.siteLocations, { id: addCreditsFormValues.siteLocation });
     const data = {
       quantity: this.state.quantity,
+      emailQuantity: this.state.emailQuantity,
       totalAmount: parseInt(shoppingCartFormValues.total),
       cardId: shoppingCartFormValues.creditCard,
       couponId: shoppingCartFormValues.couponId,
@@ -240,7 +271,11 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       siteLocationName: siteLocationName.name,
     };
 
-    addCredits(currentUser.roleForClient.client_id, currentUser.roleForClient.client.stripeCustomerId, data);
+    if (this.state.quantity > 0 && this.state.emailQuantity > 0) {
+      addCredits(currentUser.roleForClient.client_id, currentUser.roleForClient.client.stripeCustomerId, data);
+    } else {
+      toastr.error('Error!', 'No products selected.');
+    }
   }
 
 
@@ -249,14 +284,26 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     if (!_.find(siteLocations, (o) => o.id === 'add-new-location')) {
       siteLocations.push({ id: 'add-new-location', name: 'Add Site Location' });
     }
-    const products = [
-      {
-        title: '100 Credits',
+    const products = [];
+
+    if (this.state.quantity > 0) {
+      products.push({
+        title: '100 Text Credits',
         quantity: this.state.quantity,
         price: this.state.price,
         total: this.state.quantity * this.props.creditsPrice.price,
-      },
-    ];
+      });
+    }
+
+    if (this.state.emailQuantity > 0) {
+      products.push({
+        title: '500 Email Credits',
+        quantity: this.state.emailQuantity,
+        price: this.state.price,
+        total: this.state.emailQuantity * this.props.creditsPrice.price,
+      });
+    }
+
     return (
       <div>
         <Modal
@@ -302,12 +349,12 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                         </div>
 
                         <div className="field-row">
-                          <strong className="label required"><label htmlFor="quantity">QUANTITY</label></strong>
+                          <strong className="label required"><label htmlFor="quantity">Text Credits</label></strong>
                           <div className="field">
                             <span className="jcf-number parent-active">
                               <input
-                                type="number"
-                                value={this.state.quantity}
+                                type="text"
+                                value={`${this.state.quantity * 100} Text Credits ($${(this.state.quantity * this.props.creditsPrice.price) / 100})`}
                                 id="quantity"
                                 className="form-control jcf-real-element field-active"
                                 name="quantity"
@@ -319,33 +366,26 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                           </div>
                         </div>
 
+
                         <div className="field-row">
-                          <strong className="label"><label htmlFor="credits">CREDITS</label></strong>
+                          <strong className="label required"><label htmlFor="emailQuantity">Email Credits</label></strong>
                           <div className="field">
-                            <input
-                              className="form-control"
-                              value={this.state.credits}
-                              type="text"
-                              id="credits"
-                              name="credits"
-                              disabled
-                            />
+                            <span className="jcf-number parent-active">
+                              <input
+                                type="text"
+                                value={`${this.state.emailQuantity * 500} Email Credits ($${(this.state.emailQuantity * this.props.creditsPrice.price) / 100})`}
+                                id="emailQuantity"
+                                className="form-control jcf-real-element field-active"
+                                name="emailQuantity"
+                                readOnly
+                              />
+                              <span className="jcf-btn-inc" onClick={this.incEmailQuantity} />
+                              <span className="jcf-btn-dec" onClick={this.decEmailQuantity} />
+                            </span>
                           </div>
                         </div>
 
-                        <div className="field-row">
-                          <strong className="label"><label htmlFor="price">PRICE</label></strong>
-                          <div className="field">
-                            <input
-                              className="form-control"
-                              value={`$${(this.state.quantity * this.props.creditsPrice.price) / 100}`}
-                              type="text"
-                              id="price"
-                              name="price"
-                              disabled
-                            />
-                          </div>
-                        </div>
+
                       </div>
                     </div>
                   </div>
