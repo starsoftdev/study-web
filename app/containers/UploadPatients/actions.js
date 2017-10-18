@@ -11,6 +11,7 @@ import {
   EXPORT_PATIENTS_SUCCESS,
   EXPORT_PATIENTS_ERROR,
   EMPTY_ROW_REQUIRED_ERROR,
+  VALIDATION_ERROR,
   ADD_PROTOCOL,
   ADD_PROTOCOL_SUCCESS,
   ADD_PROTOCOL_ERROR,
@@ -63,6 +64,13 @@ export function emptyRowRequiredError(hasEmpty) {
   return {
     type: EMPTY_ROW_REQUIRED_ERROR,
     hasEmpty,
+  };
+}
+
+export function validationError(hasError) {
+  return {
+    type: VALIDATION_ERROR,
+    hasError,
   };
 }
 

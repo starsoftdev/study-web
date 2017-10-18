@@ -12,17 +12,17 @@ const schema = {
   },
   groupname: {
     presence: {
-      message: '^Names can\'t be blank',
+      message: '^Error! Name field is required.',
     },
   },
   groupemail: {
     presence: {
-      message: '^Emails can\'t be blank',
+      message: '^Error! Email field is required.',
     },
   },
   groupphone: {
     presence: {
-      message: '^Phones can\'t be blank',
+      message: '^Error! Phone field is required.',
     },
   },
   groupage: { presence: false },
