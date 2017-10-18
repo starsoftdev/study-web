@@ -561,7 +561,7 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   render() {
-    const { handleSubmit, emptyRowRequiredError, indications, protocols, sites, sources, change, blur } = this.props;
+    const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
     const { fields, showPreview, rowsCounts, duplicates } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
@@ -620,6 +620,7 @@ export default class UploadPatientsForm extends React.Component {
             placeholder="Select Protocol"
             className="field"
             options={protocolOptions}
+            disabled={isFetchingProtocols || !this.state.siteLocation}
             onChange={this.selectProtocol}
           />
         </div>
