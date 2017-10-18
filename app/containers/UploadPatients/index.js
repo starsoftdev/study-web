@@ -24,6 +24,7 @@ import { exportPatients, emptyRowRequiredError, addProtocol, validationError } f
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
 import { fields } from '../../components/UploadPatientsForm/validator';
+import { addProtocolFields } from '../../components/AddNewProtocolForm/validator';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 
 const formName = 'UploadPatients.UploadPatientsForm';
@@ -43,6 +44,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     sources: PropTypes.array,
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
+    touchAddProtocolFields: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
     notifyValidationError: React.PropTypes.func,
     formValues: PropTypes.object,
@@ -169,7 +171,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   addProtocol(err, data) {
-    const { fullSiteLocations, indications, currentUser, addProtocol } = this.props;
+    const { fullSiteLocations, indications, currentUser, addProtocol, touchAddProtocolFields } = this.props;
     if (!err) {
       const siteLocation = _.find(fullSiteLocations.details, { id: data.siteLocation });
       const indication = _.find(indications, { id: data.indication_id });
@@ -187,6 +189,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       addProtocol(params);
     } else {
       console.log('addProtocol', err, data);
+      touchAddProtocolFields()
     }
   }
 
@@ -238,6 +241,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     touchFields: () => dispatch(touch(formName, ...fields)),
+    touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
     fetchIndications: () => dispatch(fetchIndications()),
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     fetchSources: () => dispatch(fetchSources()),
