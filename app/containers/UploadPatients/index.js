@@ -185,6 +185,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       };
       params.recruitmentPhone = normalizePhoneForServer(data.recruitmentPhone);
       addProtocol(params);
+    } else {
+      console.log('addProtocol', err, data);
     }
   }
 
