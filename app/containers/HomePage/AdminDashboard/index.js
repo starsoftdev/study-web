@@ -699,6 +699,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
+            five9List={this.props.five9List}
           />
         </StickyContainer>
       </div>
