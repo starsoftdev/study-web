@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch) => ({
   filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
-  submitTextBlast: (patients, message, clientRoleId, studyId, siteName, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, studyId, siteName, onClose)),
+  submitTextBlast: (patients, message, clientRoleId, studyId, siteName, currentUser, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, studyId, siteName, currentUser, onClose)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
@@ -202,7 +202,7 @@ class TextBlastForm extends React.Component {
     event.preventDefault();
     const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose, studyId, site } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, (err, data) => {
+      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, currentUser, (err, data) => {
         onClose(err, data);
         this.props.fetchClientCredits(currentUser.id);
       });
