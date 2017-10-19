@@ -125,7 +125,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong className="title">Email Blast1</strong>
+            <strong className="title">Email Blast</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
