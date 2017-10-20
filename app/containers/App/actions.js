@@ -205,9 +205,10 @@ import {
 // ///////////////////////////////////////////
 // auth related action creators
 // ///////////////////////////////////////////
-export function fetchMeFromToken() {
+export function fetchMeFromToken(redirect) {
   return {
     type: FETCH_ME_FROM_TOKEN,
+    redirect,
   };
 }
 
