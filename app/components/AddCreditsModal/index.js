@@ -271,7 +271,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
       siteLocationName: siteLocationName.name,
     };
 
-    if (this.state.quantity > 0 && this.state.emailQuantity > 0) {
+    if (this.state.quantity > 0 || this.state.emailQuantity > 0) {
       addCredits(currentUser.roleForClient.client_id, currentUser.roleForClient.client.stripeCustomerId, data);
     } else {
       toastr.error('Error!', 'No products selected.');
