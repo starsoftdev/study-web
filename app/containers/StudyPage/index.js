@@ -162,7 +162,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
-    let campaignOptions = campaigns.map(campaign => {
+    const campaignOptions = campaigns.map(campaign => {
       const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       const dateTo = campaign.dateTo ? moment(campaign.dateTo).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       return {
@@ -170,7 +170,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         value: campaign.id,
       };
     });
-    campaignOptions = _.orderBy(campaignOptions, ['label'], ['desc']);
     campaignOptions.unshift({ label: 'All', value: -1 });
     const sourceOptions = sources.map(source => (
       {
