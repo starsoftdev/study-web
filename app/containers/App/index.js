@@ -52,7 +52,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   componentWillMount() {
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(true);
   }
 
   componentDidMount() {
@@ -158,7 +158,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
   };
 }
 
