@@ -81,7 +81,7 @@ export function* authorize(data) {
     toastr.success('', 'Login successful!');
 
     // fetch details of authenticated user
-    yield put(fetchMeFromToken());
+    yield put(fetchMeFromToken(true));
 
     // return the response from the generator task
     return response;
