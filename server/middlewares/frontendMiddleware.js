@@ -118,6 +118,10 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/lv14', (req, res) => res.redirect(301, 'https://studykik.com/4001200-lv14'));
 
+  app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
+
+  app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   // for loader.io verification
