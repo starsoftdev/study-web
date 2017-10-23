@@ -82,12 +82,12 @@ class EmailSection extends React.Component {
     const { submitEmail, studyId, currentPatient, currentUser, formSyncErrors, formValues } = this.props;
     if (_.isEmpty(formSyncErrors)) {
       submitEmail(studyId, currentPatient.id, currentUser, formValues.email, formValues.message, formValues.subject);
-    } else if (formSyncErrors.message) {
-      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
+    } else if (formSyncErrors.message) {
+      toastr.error('', formSyncErrors.message);
     }
   }
 
