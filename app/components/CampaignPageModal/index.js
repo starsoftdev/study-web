@@ -134,8 +134,9 @@ export class CampaignPageModal extends React.Component {
       studyId: +study.study_id,
       five9value: formValues.five_9_value,
     };
-    if (typeof formValues.custom_patient_goal === 'number') {
-      submitValues.customPatientGoal = formValues.custom_patient_goal;
+    const customPatientGoal = parseInt(formValues.custom_patient_goal);
+    if (customPatientGoal) {
+      submitValues.customPatientGoal = customPatientGoal;
     } else {
       submitValues.customPatientGoal = null;
     }
