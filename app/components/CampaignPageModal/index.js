@@ -71,24 +71,24 @@ export class CampaignPageModal extends React.Component {
       this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
     // TODO re-enable Five9 when we figure out how to integrate it with the new web app code-base
-    // if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
-    //   this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
-    //   this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
-    //   this.five9ValueChanged();
-    // }
+    if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
+      this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
+      this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
+      this.five9ValueChanged();
+    }
 
-    // if (newProps.five9List.details.length && !this.state.five9List.length) {
-    //   this.setState({ five9List: newProps.five9List.details });
-    // }
+    if (newProps.five9List.details.length && !this.state.five9List.length) {
+      this.setState({ five9List: newProps.five9List.details });
+    }
 
-    // if (newProps.formValues.five_9_value && this.state.five9List.length) {
-    //   const five9List = this.state.five9List;
-    //   const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
-    //   if (index === -1 && newProps.formValues.five_9_value !== null) {
-    //     five9List.push({ name: newProps.formValues.five_9_value });
-    //     this.setState({ five9List });
-    //   }
-    // }
+    if (newProps.formValues.five_9_value && this.state.five9List.length) {
+      const five9List = this.state.five9List;
+      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
+      if (index === -1 && newProps.formValues.five_9_value !== null) {
+        five9List.push({ name: newProps.formValues.five_9_value });
+        this.setState({ five9List });
+      }
+    }
 
     if (newProps.study && newProps.study !== this.props.study) {
       this.five9ValueChanged(newProps.study.five_9_value);
