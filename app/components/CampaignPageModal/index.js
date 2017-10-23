@@ -95,6 +95,13 @@ export class CampaignPageModal extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    // when campaigns have been loaded we need select first campaign by default
+    if (prevProps.studyCampaigns.details.length === 0 && this.props.studyCampaigns.details.length > 0) {
+      this.campaignChanged(1);
+    }
+  }
+
   onClose() {
     const { onClose } = this.props;
     this.setState({ five9List: [] }, () => {
