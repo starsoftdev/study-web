@@ -847,7 +847,7 @@ function* submitDeleteNote() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, studyId, siteName, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, clientRoleId, studyId, siteName, currentUser, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -865,6 +865,7 @@ function* submitTextBlast() {
           message,
           studyId,
           siteName,
+          currentUser,
         }),
       });
       onClose();
