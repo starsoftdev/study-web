@@ -52,7 +52,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   componentWillMount() {
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(true);
   }
 
   componentDidMount() {
@@ -66,6 +66,14 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (tempPassword) {
       this.setState({ showChangePwdModal: true });
+    }
+
+    if (window.FS && nextProps.userData) {
+      window.FS.identify(nextProps.userData.id, {
+        displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        timezone_str: nextProps.userData.timezone,
+      });
     }
 
     if (process.env.NODE_ENV !== 'development') {
@@ -150,7 +158,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
   };
 }
 

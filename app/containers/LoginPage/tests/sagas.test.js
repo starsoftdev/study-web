@@ -48,7 +48,7 @@ describe('LoginPage/sagas', () => {
     it('should dispatch the fetchMeFromToken if it gets successful response', () => {
       const response = {};
       const actualYield = iterator.next(response).value;
-      expect(actualYield).toEqual(fork(fetchMeFromToken()));
+      expect(actualYield).toEqual(fork(fetchMeFromToken(true)));
     });
   });
 });
