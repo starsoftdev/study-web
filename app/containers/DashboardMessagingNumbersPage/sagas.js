@@ -158,11 +158,10 @@ export function* archiveMessagingNumberWatcher() {
 
 export function* archiveMessagingNumberWorker(action) {
   try {
-    const requestURL = `${API_URL}/twilioNumbers/archiveNumber`;
+    const requestURL = `${API_URL}/twilioNumbers/${action.payload}`;
 
     const params = {
-      method: 'POST',
-      body: JSON.stringify({ id: action.payload }),
+      method: 'DELETE',
     };
     const response = yield call(request, requestURL, params);
 
