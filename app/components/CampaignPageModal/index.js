@@ -97,8 +97,8 @@ export class CampaignPageModal extends React.Component {
 
   componentDidUpdate(prevProps) {
     // when campaigns have been loaded we need select first campaign by default
-    if (prevProps.studyCampaigns.details.length === 0 && this.props.studyCampaigns.details.length > 0) {
-      this.campaignChanged(1);
+    if ((prevProps.studyCampaigns.fetching && !this.props.studyCampaigns.fetching) || (!prevProps.openModal && this.props.openModal)) {
+      this.campaignChanged(this.props.studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
