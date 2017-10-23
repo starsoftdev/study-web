@@ -123,6 +123,15 @@ export default class MultiSelectCheckbox extends Component {
 
     let options = _.clone(this.state.options);
 
+    if (this.state.nameFilter) {
+      options = _.filter(this.state.options, (o) => {
+        if (o.name && o.name.indexOf(this.state.nameFilter)){
+          return false
+        }
+        return true
+      })
+    }
+
     options.splice(0, 1);
 
     const selectedArr = _.filter(options, (o) => {
@@ -131,10 +140,6 @@ export default class MultiSelectCheckbox extends Component {
       }
       return o.value;
     });
-
-    if (this.state.nameFilter) {
-      options = _.filter(this.state.options, (o) => (o.name.indexOf(this.state.nameFilter) !== -1));
-    }
 
     return (
       <div className={className}>
