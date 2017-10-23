@@ -60,13 +60,14 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   render() {
     const options = [];
+    console.log(333, this.props.protocols);
     _.forEach(this.props.protocols, (protocol) => {
       const value = (this.props.item.id === protocol.id);
       options.push({
         id: protocol.id,
         name: protocol.number,
         value,
-        studies: protocol.studies,
+        studyId: protocol.studyId,
       });
     });
 
@@ -85,6 +86,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         options[index].value = _.find(item.studies, (o) => (o.protocol_id === option.id));
       });
 
+      console.log(444, options);
+
       return (
         <ExpandedItem
           key={index}
@@ -99,33 +102,33 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     const initialValues = {
       initialValues: {
-        protocolNumber: this.props.item.protocolNumber,
-        indication: this.props.item.indicationName,
-        cro: this.props.item.cro ? this.props.item.croName : '',
-        irb: this.props.item.irb,
-        iwrs: this.props.item.iwrs,
-        protocolId: this.props.item.protocolId,
+        protocolNumber: this.props.item.protocol ? this.props.item.protocol.number : '',
+        indication: this.props.item.indication ? this.props.item.indication.name : '',
+        cro: this.props.item.cro ? this.props.item.cro.name : '',
+        irb: this.props.item.protocol ? this.props.item.protocol.irb : '',
+        iwrs: this.props.item.protocol ? this.props.item.protocol.iwrs : '',
+        protocolId: this.props.item.protocol ? this.props.item.protocol.id : null,
       },
     };
 
     const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
-
+    console.log(123, this.props.item)
     return (
       <tr>
         <td className="col1">
-          {this.props.item.protocolNumber}
+          {this.props.item.protocol ? this.props.item.protocol.number : ''}
         </td>
         <td className="col2">
-          {this.props.item.indicationName}
+          {this.props.item.indication ? this.props.item.indication.name : ''}
         </td>
         <td className="col3">
-          {this.props.item.croName}
+          {this.props.item.cro ? this.props.item.cro.name : ''}
         </td>
         <td className="col4">
-          {this.props.item.irb}
+          {this.props.item.protocol ? this.props.item.protocol.irb : ''}
         </td>
         <td className="col5">
-          {this.props.item.iwrs}
+          {this.props.item.protocol ? this.props.item.protocol.iwrs : ''}
         </td>
         <td className="col6">
 
