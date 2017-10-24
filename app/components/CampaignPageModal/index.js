@@ -90,7 +90,7 @@ export class CampaignPageModal extends React.Component {
       }
     }
 
-    if (newProps.study && newProps.study !== this.props.study) {
+    if ((newProps.study && !this.props.study) || (newProps.study && this.props.study && newProps.study.study_id !== this.props.study.study_id)) {
       this.five9ValueChanged(newProps.study.five_9_value);
     }
   }
