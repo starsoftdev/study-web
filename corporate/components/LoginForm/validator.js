@@ -1,7 +1,7 @@
 import { validatorFactory } from '../../../app/utils/reduxForm';
 
 const schema = {
-  email: { presence: true, email: true, emailDomain: true },
+  email: { presence: true, email: true },
   password: { presence: true },
 };
 

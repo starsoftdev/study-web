@@ -13,9 +13,6 @@ const schema = {
     email: {
       message: '^Email not valid',
     },
-    emailDomain : {
-      message: '^Invalid Email domain',
-    },
   },
   phone: {
     presence: {
