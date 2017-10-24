@@ -5,7 +5,7 @@ const schema = {
   indication_id: { presence: { message: '^You need to select indication' } },
   protocolNumber: { presence: true },
   sponsorName: { presence: true },
-  sponsorEmail: { email: true, emailDomain: true },
+  sponsorEmail: { email: true },
   recruitmentPhone: {
     presence: {
       message: '^Phone number cannot be blank',
@@ -16,8 +16,8 @@ const schema = {
       message: '^Invalid phone number',
     },
   },
-  croContactEmail: { email: true, emailDomain: true },
-  irbEmail: { email: true, emailDomain: true },
+  croContactEmail: { email: true },
+  irbEmail: { email: true },
   exposureLevel: { presence: { message: '^You need to select exposure level' } },
   campaignLength: { presence: { message: '^You need to select campaign length' } },
 };

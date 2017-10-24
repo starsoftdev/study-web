@@ -4,7 +4,7 @@ import forEach from 'lodash/forEach';
 const schema = {
   firstName: { presence: true },
   lastName: { presence: true },
-  email: { presence: true, email: true, emailDomain: true },
+  email: { presence: true, email: true },
 };
 
 export function validatorFactory() {
