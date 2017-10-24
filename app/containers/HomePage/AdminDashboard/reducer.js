@@ -1025,6 +1025,7 @@ export default function dashboardPageReducer(state = initialState, action) {
             level_id: action.payload.levelId,
             level_name: action.campaignInfo.levelName,
             custom_patient_goal: action.payload.customPatientGoal,
+            five_9_value: action.payload.five9value,
           };
         } else {
           return study;
