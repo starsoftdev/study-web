@@ -66,7 +66,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: protocol.id,
         name: protocol.number,
         value,
-        studyId: protocol.studyId,
+        studies: protocol.studies,
       });
     });
 
@@ -99,32 +99,33 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
     const initialValues = {
       initialValues: {
-        protocolNumber: this.props.item.protocol ? this.props.item.protocol.number : '',
-        indication: this.props.item.indication ? this.props.item.indication.name : '',
-        cro: this.props.item.cro ? this.props.item.cro.name : '',
-        irb: this.props.item.protocol ? this.props.item.protocol.irb : '',
-        iwrs: this.props.item.protocol ? this.props.item.protocol.iwrs : '',
-        protocolId: this.props.item.protocol ? this.props.item.protocol.id : null,
+        protocolNumber: this.props.item.protocolNumber,
+        indication: this.props.item.indicationName,
+        cro: this.props.item.cro ? this.props.item.croName : '',
+        irb: this.props.item.irb,
+        iwrs: this.props.item.iwrs,
+        protocolId: this.props.item.protocolId,
       },
     };
 
     const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
+
     return (
       <tr>
         <td className="col1">
-          {this.props.item.protocol ? this.props.item.protocol.number : ''}
+          {this.props.item.protocolNumber}
         </td>
         <td className="col2">
-          {this.props.item.indication ? this.props.item.indication.name : ''}
+          {this.props.item.indicationName}
         </td>
         <td className="col3">
-          {this.props.item.cro ? this.props.item.cro.name : ''}
+          {this.props.item.croName}
         </td>
         <td className="col4">
-          {this.props.item.protocol ? this.props.item.protocol.irb : ''}
+          {this.props.item.irb}
         </td>
         <td className="col5">
-          {this.props.item.protocol ? this.props.item.protocol.iwrs : ''}
+          {this.props.item.iwrs}
         </td>
         <td className="col6">
 
