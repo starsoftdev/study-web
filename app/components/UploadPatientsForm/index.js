@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import * as XLSX from 'xlsx';
 import { blur, change, Field, /* FieldArray, */reduxForm, reset } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
@@ -140,6 +141,7 @@ export default class UploadPatientsForm extends React.Component {
     this.updateCounters = this.updateCounters.bind(this);
     this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
+    this.handleFile = this.handleFile.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -508,6 +510,24 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
+  handleFile(e) {
+    const rABS = false;
+    const files = e.target.files;
+    const f = files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      let data = e.target.result;
+      if (!rABS) data = new Uint8Array(data);
+      const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+      const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(firstWorksheet, { header:1 });
+
+      console.log('target', e.target);
+      console.log('json', json);
+    };
+    if (rABS) reader.readAsBinaryString(f); else reader.readAsArrayBuffer(f);
+  }
+
   renderGroupFields(names) {
     const { rowsCounts } = this.state;
     let counter = 0;
@@ -586,7 +606,7 @@ export default class UploadPatientsForm extends React.Component {
           <td>John Doe</td>
           <td>johndoe@example.com</td>
           <td>(111) 111-1111</td>
-          <td className="dob">22</td>
+          <td className="dob">1/1/1111</td>
           <td>Male</td>
           <td className="bmi">18.4</td>
         </tr>
@@ -594,7 +614,7 @@ export default class UploadPatientsForm extends React.Component {
           <td>Jane Doe</td>
           <td>janedoe@example.com</td>
           <td>(555) 555-5555</td>
-          <td className="dob">33</td>
+          <td className="dob">5/5/5555</td>
           <td>Female</td>
           <td className="bmi">24.5</td>
         </tr>
@@ -602,7 +622,7 @@ export default class UploadPatientsForm extends React.Component {
           <td>Janie Doe</td>
           <td>janiedoe@example.com</td>
           <td>(888) 888-8888</td>
-          <td className="dob">44</td>
+          <td className="dob">8/8/8888</td>
           <td>Female</td>
           <td className="bmi">29</td>
         </tr>
@@ -719,6 +739,7 @@ export default class UploadPatientsForm extends React.Component {
                 inputRef={fileInputRef}
                 component={Input}
                 type="file"
+                onChange={this.handleFile}
               />
             </div>
           </div>
@@ -728,11 +749,11 @@ export default class UploadPatientsForm extends React.Component {
             <span className="head">Upload Instructions</span>
             <span className="body">
               Please upload an Excel file up to 20,000 rows and less then 50MB in size.<br />
-              Please format the first row of your colums with the proper column names
-              i.e. "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
+              Please format the first row of your colums with the proper column<br /> names
+              i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
             </span>
             <div className="examples">
-              <span className="title">* Only the Phone is required; all other fields are optional.</span>
+              <span className="title">* Only the Phone field is required; all other fields are optional.</span>
               {/* this.renderExampleGroupFields(formFields)*/}
               {this.renderExampleTable()}
             </div>
@@ -783,7 +804,7 @@ export default class UploadPatientsForm extends React.Component {
             <div className="title">
               <span className="head">Preview Upload Data</span>
               <span className="body">
-                Please validate the data based on the firs 10 rows of the uploaded file.
+                Please validate the data based on the firs 3 rows of the upload file.
               </span>
             </div>
             {this.renderExampleTable()}
