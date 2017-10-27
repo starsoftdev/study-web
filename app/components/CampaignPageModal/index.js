@@ -95,6 +95,13 @@ export class CampaignPageModal extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    // when campaigns have been loaded we need select first campaign by default
+    if ((prevProps.studyCampaigns.fetching && !this.props.studyCampaigns.fetching) || (!prevProps.openModal && this.props.openModal)) {
+      this.campaignChanged(this.props.studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+    }
+  }
+
   onClose() {
     const { onClose } = this.props;
     this.setState({ five9List: [] }, () => {
@@ -134,8 +141,9 @@ export class CampaignPageModal extends React.Component {
       studyId: +study.study_id,
       five9value: formValues.five_9_value,
     };
-    if (typeof formValues.custom_patient_goal === 'number') {
-      submitValues.customPatientGoal = formValues.custom_patient_goal;
+    const customPatientGoal = parseInt(formValues.custom_patient_goal);
+    if (customPatientGoal) {
+      submitValues.customPatientGoal = customPatientGoal;
     } else {
       submitValues.customPatientGoal = null;
     }
