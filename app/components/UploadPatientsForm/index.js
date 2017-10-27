@@ -1,19 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, change, Field, FieldArray, reduxForm, reset } from 'redux-form';
+import { blur, change, Field, /* FieldArray, */reduxForm, reset } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
+import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectEmptyRowRequiredError } from '../../containers/UploadPatients/selectors';
-import RenderPatientsList from './RenderPatientsList';
+// import RenderPatientsList from './RenderPatientsList';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields as formFields } from './validator';
 
@@ -51,9 +52,12 @@ export default class UploadPatientsForm extends React.Component {
     fetchFilteredProtcols: React.PropTypes.func,
     showProtocolModal: React.PropTypes.func,
     clearForm: React.PropTypes.func,
+    fileInputRef: React.PropTypes.func.isRequired,
     exportPatientsStatus: React.PropTypes.any,
     indications: React.PropTypes.array,
     isFetchingProtocols: React.PropTypes.bool,
+    isImporting: React.PropTypes.bool,
+    switchIsImporting: React.PropTypes.func,
     onClose: React.PropTypes.func,
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
@@ -131,13 +135,15 @@ export default class UploadPatientsForm extends React.Component {
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
     this.renderGroupFields = this.renderGroupFields.bind(this);
+    this.renderExampleGroupFields = this.renderExampleGroupFields.bind(this);
+    this.renderExampleTable = this.renderExampleTable.bind(this);
     this.updateCounters = this.updateCounters.bind(this);
     this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, clearForm, change } = this.props;
+    const { /* isImporting, */exportPatientsStatus, clearForm, change } = this.props;
     const scope = this;
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
@@ -418,10 +424,15 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   switchPreview() {
-    const scope = this;
+    // const scope = this;
     const { fields } = this.state;
+    const { isImporting, switchIsImporting } = this.props;
     this.setState({ fields, showPreview: !this.state.showPreview }, () => {
-      scope.updateFields(null);
+      // scope.updateFields(null);
+
+      if (isImporting) {
+        switchIsImporting();
+      }
     });
   }
 
@@ -560,9 +571,48 @@ export default class UploadPatientsForm extends React.Component {
     });
   }
 
+  renderExampleTable() {
+    return (
+      <table className="example-table">
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>DOB</th>
+          <th>Gender</th>
+          <th>BMI</th>
+        </tr>
+        <tr>
+          <td>John Doe</td>
+          <td>johndoe@example.com</td>
+          <td>(111) 111-1111</td>
+          <td className="dob">22</td>
+          <td>Male</td>
+          <td className="bmi">18.4</td>
+        </tr>
+        <tr>
+          <td>Jane Doe</td>
+          <td>janedoe@example.com</td>
+          <td>(555) 555-5555</td>
+          <td className="dob">33</td>
+          <td>Female</td>
+          <td className="bmi">24.5</td>
+        </tr>
+        <tr>
+          <td>Janie Doe</td>
+          <td>janiedoe@example.com</td>
+          <td>(888) 888-8888</td>
+          <td className="dob">44</td>
+          <td>Female</td>
+          <td className="bmi">29</td>
+        </tr>
+      </table>
+    );
+  }
+
   render() {
-    const { handleSubmit, emptyRowRequiredError, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
-    const { fields, showPreview, rowsCounts, duplicates } = this.state;
+    const { handleSubmit, /* emptyRowRequiredError,*/ fileInputRef, indications, isFetchingProtocols, protocols, sites, sources, isImporting/* , change, blur*/ } = this.props;
+    const { /* fields, */showPreview/* , rowsCounts, duplicates*/ } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -591,85 +641,109 @@ export default class UploadPatientsForm extends React.Component {
       >
         <div className="field-row status">
           <span className="step-one">
-            1. Copy & Paste Contacts
+            1. Upload Patients List
           </span>
           <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
-            2. Preview Contacts
+            2. Preview & Finish
           </span>
         </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Site Location</label>
-          </strong>
-          <Field
-            name="site"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Site Location"
-            options={siteOptions}
-            onChange={this.changeSiteLocation}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label">
-            <label>Protocol</label>
-          </strong>
-          <Field
-            name="protocol"
-            component={ReactSelect}
-            placeholder="Select Protocol"
-            className="field"
-            options={protocolOptions}
-            disabled={isFetchingProtocols || !this.state.siteLocation}
-            onChange={this.selectProtocol}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Indication</label>
-          </strong>
-          <Field
-            name="indication"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Indication"
-            options={indicationOptions}
-            onChange={this.selectIndication}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Source</label>
-          </strong>
-          <Field
-            name="source"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Source"
-            options={sourceOptions}
-          />
-        </div>
-        {!this.state.showPreview &&
-          <span className="tip">
-            Copy & Paste contacts
-          </span>
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>Site Location</label>
+            </strong>
+            <Field
+              name="site"
+              component={ReactSelect}
+              className="field"
+              placeholder="Select Site Location"
+              options={siteOptions}
+              onChange={this.changeSiteLocation}
+            />
+          </div>
         }
-        {!this.state.showPreview &&
-          <div className="instructions">
-            <span className="head">Pasting Instructions</span>
-            <span className="body">Please separate your fields by entering one contact per line.</span>
-            <div className="examples">
-              <span className="title">Examples:</span>
-              {this.renderExampleGroupFields(formFields)}
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>Protocol</label>
+            </strong>
+            <Field
+              name="protocol"
+              component={ReactSelect}
+              placeholder="Select Protocol"
+              className="field"
+              options={protocolOptions}
+              disabled={isFetchingProtocols || !this.state.siteLocation}
+              onChange={this.selectProtocol}
+            />
+          </div>
+        }
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>Indication</label>
+            </strong>
+            <Field
+              name="indication"
+              component={ReactSelect}
+              className="field"
+              placeholder="Select Indication"
+              options={indicationOptions}
+              onChange={this.selectIndication}
+            />
+          </div>
+        }
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>Source</label>
+            </strong>
+            <Field
+              name="source"
+              component={ReactSelect}
+              className="field"
+              placeholder="Select Source"
+              options={sourceOptions}
+            />
+          </div>
+        }
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>UPLOAD PATIENTS LIST</label></strong>
+            <div className="field">
+              <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
+              <Field
+                id="patients_list"
+                name="file"
+                inputRef={fileInputRef}
+                component={Input}
+                type="file"
+              />
             </div>
           </div>
         }
-        {!this.state.showPreview &&
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="instructions">
+            <span className="head">Upload Instructions</span>
+            <span className="body">
+              Please upload an Excel file up to 20,000 rows and less then 50MB in size.<br />
+              Please format the first row of your colums with the proper column names
+              i.e. "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
+            </span>
+            <div className="examples">
+              <span className="title">* Only the Phone is required; all other fields are optional.</span>
+              {/* this.renderExampleGroupFields(formFields)*/}
+              {this.renderExampleTable()}
+            </div>
+          </div>
+        }
+        {/*! this.state.showPreview &&
           <div className="column-groups">
             {this.renderGroupFields(formFields)}
           </div>
-        }
-        {this.state.showPreview &&
+        */}
+        {/* this.state.showPreview &&
           <div className={`legends ${(fields.length > 10) ? 'scroll-fix' : ''}`}>
             <span className="title name required">
               <label htmlFor="import-patient-name">Name</label>
@@ -690,8 +764,8 @@ export default class UploadPatientsForm extends React.Component {
               <label htmlFor="import-patient-phone">BMI</label>
             </span>
           </div>
-        }
-        {this.state.showPreview && <FieldArray
+        */}
+        {/* this.state.showPreview && <FieldArray
           name="patients"
           component={RenderPatientsList}
           patients={fields}
@@ -703,11 +777,40 @@ export default class UploadPatientsForm extends React.Component {
           changeField={this.changeField}
           updateFields={this.updateFields}
           blur={blur}
-        />}
+        />*/}
+        {(this.state.showPreview && !isImporting) &&
+          <div className="preview">
+            <div className="title">
+              <span className="head">Preview Upload Data</span>
+              <span className="body">
+                Please validate the data based on the firs 10 rows of the uploaded file.
+              </span>
+            </div>
+            {this.renderExampleTable()}
+          </div>
+        }
+        {isImporting &&
+          <div className="import-progress">
+            <ProgressBar bsStyle="success" now={40} />
+            <div className="control">
+              <span className="title">Import of <b>123.csv</b> in progress.</span>
+              <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />
+            </div>
+          </div>
+        }
+        {isImporting &&
+          <div className="upload-history">
+            <div className="header">
+              <span className="title">Import history</span>
+              <span className="tip">Import sessions are kept for 90 days, but can only be deleted in the first 48 hours after upload. </span>
+            </div>
+            <div className="histoList"></div>
+          </div>
+        }
         <div className="text-right">
           {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
-          {showPreview && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {showPreview && <Button type="submit">Submit</Button>}
+          {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
+          {(showPreview && !isImporting) && <Button type="submit">Submit</Button>}
         </div>
       </Form>
     );
