@@ -30,6 +30,54 @@
     }
   }
 
+  .import-progress {
+    margin: 0 0 20px;
+    padding: 15px;
+    border: 2px solid #f78e1e;
+    overflow: hidden;
+
+    .progress {
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .control {
+      overflow: hidden;
+      text-align: center;
+
+      .title {
+        font-size: 16px;
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 10px;
+      }
+    }
+  }
+
+  .upload-history {
+    margin: 0 0 20px;
+    padding: 15px;
+    border: 2px solid #f78e1e;
+    overflow: hidden;
+    margin: 0 0 20px;
+
+    .header {
+      font-size: 16px;
+
+      .title {
+        width: 100%;
+        display: inline-block;
+        font-weight: bold;
+      }
+
+      .tip {
+        width: 100%;
+        margin: 0 0 10px;
+        display: inline-block;
+      }
+    }
+  }
+
   .tip {
     font-size: 16px;
     width: 100%;
@@ -59,13 +107,39 @@
     .examples {
       overflow: hidden;
 
+      .example-table{
+        width: 100%;
+        font-size: 14px;
+
+        tr {
+
+          th {
+            font-weight: inherit;
+            cursor: inherit;
+
+            &:hover {
+              color: inherit;
+            }
+          }
+
+          th, td {
+            border: 1px solid;
+            padding: 3px;
+
+            &.dob, &.bmi {
+              text-align: right;
+            }
+          }
+        }
+      }
+
       .title {
         width: 100%;
         display: inline-block;
         margin: 0 0 10px;
       }
 
-      .column {
+      /*.column {
         position: relative;
         overflow: hidden;
         float: left;
@@ -118,6 +192,52 @@
             margin: 0;
           }
         }
+      }*/
+    }
+  }
+
+  .preview {
+    margin: 0 0 20px;
+
+    .title {
+      font-size: 16px;
+
+      .head {
+        width: 100%;
+        display: inline-block;
+        font-weight: bold;
+      }
+
+      .body {
+        width: 100%;
+        margin: 0 0 10px;
+        display: inline-block;
+      }
+    }
+
+    .example-table{
+      width: 100%;
+      font-size: 14px;
+
+      tr {
+
+        th {
+          font-weight: inherit;
+          cursor: inherit;
+
+          &:hover {
+            color: inherit;
+          }
+        }
+
+        th, td {
+          border: 1px solid;
+          padding: 3px;
+
+          &.dob, &.bmi {
+            text-align: right;
+          }
+        }
       }
     }
   }
@@ -142,6 +262,10 @@
     .field {
       width: 35%;
       position: relative;
+
+      #patients_list{
+        display: none;
+      }
     }
   }
 

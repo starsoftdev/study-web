@@ -55,6 +55,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     super(props);
     this.state = {
       showAddProtocolModal: false,
+      isImporting: false,
     };
 
 
@@ -64,6 +65,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     this.addProtocol = this.addProtocol.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
     this.switchShowAddProtocolModal = this.switchShowAddProtocolModal.bind(this);
+    this.switchIsImporting = this.switchIsImporting.bind(this);
   }
 
   componentWillMount() {
@@ -84,50 +86,52 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { exportPatients, formSyncErrors, touchFields } = this.props;
     const options = _.clone(params);
 
-    // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
-    // since it's easier to transform and display this way while still displaying studies by protocol
-    if (options.protocol) {
-      options.study_id = options.protocol;
-    }
-
-    delete options.protocol;
-    delete options.groupname;
-    delete options.groupemail;
-    delete options.groupphone;
-    delete options.groupage;
-    delete options.groupgender;
-    delete options.groupbmi;
-
-    // console.log('fields', fields);
-
-    touchFields();
-
-
-    if (options.patients && options.patients.length) {
-      const hasEmpty = this.checkEmptyRequired(options.patients);
-      const hasError = this.validateEmailOrPhone(options.patients);
-
-      if (!_.isEmpty(formSyncErrors)) {
-        if (formSyncErrors.groupname) {
-          toastr.error('', formSyncErrors.groupname);
-        } else if (formSyncErrors.groupemail) {
-          toastr.error('', formSyncErrors.groupemail);
-        } else if (formSyncErrors.groupphone) {
-          toastr.error('', formSyncErrors.groupphone);
-        }
-      } else if (!hasEmpty && !hasError) {
-          /* normalizing the phone number */
-        _.forEach(options.patients, (patient, index) => {
-          if (patient.phone) {
-            options.patients[index].phone = normalizePhoneForServer(patient.phone);
-          }
-        });
-
-        exportPatients(options);
+    this.setState({ isImporting : true }, () => {
+      // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
+      // since it's easier to transform and display this way while still displaying studies by protocol
+      if (options.protocol) {
+        options.study_id = options.protocol;
       }
-    } else {
-      toastr.error('', 'Error! There are no patients to be added.');
-    }
+
+      delete options.protocol;
+      delete options.groupname;
+      delete options.groupemail;
+      delete options.groupphone;
+      delete options.groupage;
+      delete options.groupgender;
+      delete options.groupbmi;
+
+      // console.log('fields', fields);
+
+      touchFields();
+
+
+      if (options.patients && options.patients.length) {
+        const hasEmpty = this.checkEmptyRequired(options.patients);
+        const hasError = this.validateEmailOrPhone(options.patients);
+
+        if (!_.isEmpty(formSyncErrors)) {
+          if (formSyncErrors.groupname) {
+            toastr.error('', formSyncErrors.groupname);
+          } else if (formSyncErrors.groupemail) {
+            toastr.error('', formSyncErrors.groupemail);
+          } else if (formSyncErrors.groupphone) {
+            toastr.error('', formSyncErrors.groupphone);
+          }
+        } else if (!hasEmpty && !hasError) {
+          /* normalizing the phone number */
+          _.forEach(options.patients, (patient, index) => {
+            if (patient.phone) {
+              options.patients[index].phone = normalizePhoneForServer(patient.phone);
+            }
+          });
+
+          exportPatients(options);
+        }
+      } else {
+        toastr.error('', 'Error! There are no patients to be added.');
+      }
+    });
   }
 
   validateEmail(email) {
@@ -197,8 +201,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     this.setState({ showAddProtocolModal: !this.state.showAddProtocolModal });
   }
 
+  switchIsImporting() {
+    const { isImporting } = this.state;
+    this.setState({ isImporting: !isImporting });
+  }
+
   render() {
     const { indications, fullSiteLocations } = this.props;
+    const { isImporting } = this.state;
 
     return (
       <div className="container-fluid">
@@ -206,7 +216,15 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
 
-          <UploadPatientsForm onSubmit={this.onSubmitForm} showProtocolModal={this.switchShowAddProtocolModal} />
+          <UploadPatientsForm
+            onSubmit={this.onSubmitForm}
+            isImporting={isImporting}
+            switchIsImporting={this.switchIsImporting}
+            showProtocolModal={this.switchShowAddProtocolModal}
+            fileInputRef={(ref) => {
+              this.uploadPatientsListInput = ref;
+            }}
+          />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
