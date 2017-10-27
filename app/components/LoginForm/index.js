@@ -126,7 +126,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           </Alert>
         }
         {loginPassword &&
-          <p>Your new password is: {loginPassword}</p>
+          <p id="new_password">Your new password is: {loginPassword}</p>
         }
         <Field
           name="email"
