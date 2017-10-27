@@ -10,6 +10,9 @@ const schema = {
   source: {
     presence: true,
   },
+  protocol: {
+    presence: true,
+  },
   groupname: {
     presence: {
       message: '^Error! Name field is required.',
