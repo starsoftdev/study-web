@@ -56,7 +56,7 @@ import {
   studyViewsStatFetched,
   submitAddPatientSuccess,
   submitAddPatientFailure,
-  textStatsFetched,
+  studyStatsFetched,
   addPatientIndicationSuccess,
   removePatientIndicationSuccess,
   updatePatientSuccess,
@@ -207,7 +207,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 //   }
 // }
 
-function* fetchStudyTextStats(action) {
+function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
@@ -216,7 +216,7 @@ function* fetchStudyTextStats(action) {
   const { studyId, campaignId, sourceId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+    const requestURL = `${API_URL}/studies/${studyId}/stats/count`;
     const options = {
       method: 'GET',
     };
@@ -230,7 +230,7 @@ function* fetchStudyTextStats(action) {
       options.query.sourceId = sourceId;
     }
     const response = yield call(request, requestURL, options);
-    yield put(textStatsFetched(response));
+    yield put(studyStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
     toastr.error('', errorMessage);
@@ -1035,12 +1035,10 @@ export function* deletePatient() {
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
-    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
-    const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
-    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
     // watch for socket.io or filtering actions that will refresh the text message stats
-    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
+    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -1066,8 +1064,6 @@ export function* fetchStudySaga() {
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
-    yield cancel(watcherB);
-    yield cancel(watcherD);
     yield cancel(watcherE);
     yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
