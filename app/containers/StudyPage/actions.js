@@ -25,7 +25,7 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
-  FETCH_STUDY_TEXTS_SUCCESS,
+  FETCH_STUDY_STATS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
@@ -304,9 +304,9 @@ export function callStatsFetched(payload) {
   };
 }
 
-export function textStatsFetched(payload) {
+export function studyStatsFetched(payload) {
   return {
-    type: FETCH_STUDY_TEXTS_SUCCESS,
+    type: FETCH_STUDY_STATS_SUCCESS,
     payload,
   };
 }
