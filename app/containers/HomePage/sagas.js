@@ -1130,7 +1130,7 @@ export function* updateTwilioNumbersWorker() {
     const response = yield call(request, requestURL, params);
 
     yield put(updateTwilioNumbersSuccess(response));
-    toastr.success('Syncing for Twilio numbers has been queued. Please wait about 5 minutes for the task to process.');
+    toastr.success('', 'Messaging Numbers are syncing. Please wait about 5 minutes.');
   } catch (err) {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
