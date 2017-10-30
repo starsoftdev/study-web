@@ -826,7 +826,6 @@ export default class UploadPatientsForm extends React.Component {
         />*/}
         {(this.state.showPreview && !isImporting && patients.length) &&
           <UploadPatientsPreviewForm
-            renderExampleTable={this.renderExampleTable}
             patients={patients}
           />
         }
