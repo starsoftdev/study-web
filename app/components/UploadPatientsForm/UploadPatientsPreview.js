@@ -14,8 +14,21 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
   constructor(props) {
     super(props);
+    this.state = {
+      patients: [],
+    };
 
     this.renderExampleTable = this.renderExampleTable.bind(this);
+    this.validatePatients = this.validatePatients.bind(this);
+  }
+
+  componentWillMount() {
+    const { patients } = this.props;
+    this.validatePatients(patients);
+  }
+
+  validatePatients(patients) {
+    console.log('validatePatients', patients);
   }
 
   renderExampleTable() {
@@ -28,7 +41,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
           patients.map((patient, patientIndex) => {
             if (patientIndex <= 3) {
               return (
-                <tr>
+                <tr key={patientIndex}>
                   {
                     patient.map((prop, propIndex) => {
                       if (patientIndex === 0) {
