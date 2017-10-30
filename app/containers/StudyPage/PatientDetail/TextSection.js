@@ -173,7 +173,6 @@ class TextSection extends React.Component {
           }}
         >
           {twilioMessages.map((twilioMessage, index) => {
-            console.log('text section', twilioMessage, currentPatient);
             if (twilioMessage.text_message_id) {
               return (<PatientText
                 key={index}
