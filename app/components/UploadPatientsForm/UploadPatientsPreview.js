@@ -36,15 +36,14 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
                           <th>{prop}</th>
                         );
                       } else {
-                        let className = ''
+                        let className = '';
 
                         if (propIndex === 3) {
-                          className = 'dob'
+                          className = 'dob';
                         }
 
                         if (propIndex === 5) {
-                          className = 'bmi'
-
+                          className = 'bmi';
                         }
                         return (
                           <td className={className}>{prop}</td>
