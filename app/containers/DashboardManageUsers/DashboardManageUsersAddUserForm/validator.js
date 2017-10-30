@@ -3,7 +3,7 @@ import { validatorFactory } from '../../../utils/reduxForm';
 const schema = {
   firstName: { presence: true },
   lastName: { presence: true },
-  email: { presence: true, email: true },
+  email: { presence: true, email: true, emailDomain: true },
   phone: {
     format: {
       // must be a phone in the format of (123) 456-7890 or E.164 format phone numbers
