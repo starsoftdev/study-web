@@ -9,7 +9,7 @@ import React, { PropTypes } from 'react';
 class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    patients: React.PropTypes.array,
+    patients: PropTypes.array,
   };
 
   constructor(props) {
