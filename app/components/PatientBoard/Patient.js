@@ -6,6 +6,7 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
+import Button from 'react-bootstrap/lib/Button';
 import { formatPhone } from '../../common/helper/functions';
 import DragTypes from './dragSourceTypes';
 
@@ -62,7 +63,8 @@ class Patient extends React.Component {
   }
 
   renderUnreadMessageCount() {
-    const { unreadMessageCount } = this.props;
+    // const { unreadMessageCount } = this.props;
+    const unreadMessageCount = 2;
     if (unreadMessageCount > 0) {
       return (
         <span className="counter-circle">{unreadMessageCount}</span>
@@ -91,9 +93,6 @@ class Patient extends React.Component {
       return (
         <a
           className="bottom"
-          onClick={() => {
-            onPatientTextClick(category, patient);
-          }}
         >
           <div className="msg-alert">
             <div className="msg">
@@ -101,6 +100,7 @@ class Patient extends React.Component {
             </div>
             <div className="time">
               {this.renderUnreadMessageCount()}
+              <Button bsStyle="primary" className="btn-reply" onClick={() => { onPatientTextClick(category, patient); }}>Reply</Button>
               {this.renderTextCreatedDate()}
             </div>
           </div>

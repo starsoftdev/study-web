@@ -52,7 +52,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
   componentWillMount() {
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(true);
   }
 
   componentDidMount() {
@@ -86,6 +86,15 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.set({ page: nextProps.location.pathname });
         ReactGA.pageview(nextProps.location.pathname);
       }
+    }
+
+    console.log(1, window.OneSignal);
+    if (window.OneSignal && nextProps.userData) {
+      window.OneSignal.sendTags({
+        userId: nextProps.userData.id,
+      }, (tagsSent) => {
+        console.log(2, tagsSent);
+      });
     }
   }
 
@@ -158,7 +167,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
   };
 }
 

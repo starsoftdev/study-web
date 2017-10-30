@@ -61,7 +61,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         id: protocol.id,
         name: protocol.number,
         value: true,
-        studies: protocol.studies,
+        studyId: protocol.studyId,
       });
     });
 
