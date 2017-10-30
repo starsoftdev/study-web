@@ -13,7 +13,7 @@ const schema = {
   protocol: {
     presence: true,
   },
-  groupname: {
+  /*groupname: {
     presence: {
       message: '^Error! Name field is required.',
     },
@@ -30,7 +30,7 @@ const schema = {
   },
   groupage: { presence: false },
   groupgender: { presence: false },
-  groupbmi: { presence: false },
+  groupbmi: { presence: false },*/
 };
 
 const fields = Object.keys(schema);
