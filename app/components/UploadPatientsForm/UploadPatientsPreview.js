@@ -9,7 +9,6 @@ import React, { PropTypes } from 'react';
 class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    renderExampleTable: PropTypes.func,
     patients: React.PropTypes.array,
   };
 
@@ -21,11 +20,50 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
   renderExampleTable() {
     const { patients } = this.props;
-    console.log('renderExampleTable', patients);
+    // console.log('renderExampleTable', patients);
+
+    return (
+      <table className="example-table">
+        {
+          patients.map((patient, patientIndex) => {
+            if (patientIndex <= 3) {
+              return (
+                <tr>
+                  {
+                    patient.map((prop, propIndex) => {
+                      if (patientIndex === 0) {
+                        return (
+                          <th>{prop}</th>
+                        );
+                      } else {
+                        let className = ''
+
+                        if (propIndex === 3) {
+                          className = 'dob'
+                        }
+
+                        if (propIndex === 5) {
+                          className = 'bmi'
+
+                        }
+                        return (
+                          <td className={className}>{prop}</td>
+                        );
+                      }
+                    })
+                  }
+                </tr>
+              );
+            } else {
+              return null;
+            }
+          })
+        }
+      </table>
+    );
   }
 
   render() {
-    const { renderExampleTable } = this.props;
     return (
       <div className="preview">
         <div className="title">
@@ -34,7 +72,6 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
                 Please validate the data based on the firs 3 rows of the upload file.
               </span>
         </div>
-        {renderExampleTable()}
         {this.renderExampleTable()}
       </div>
     );
