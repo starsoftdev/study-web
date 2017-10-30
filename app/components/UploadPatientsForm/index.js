@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as XLSX from 'xlsx';
-import { blur, change, Field, /* FieldArray, */reduxForm, reset } from 'redux-form';
+import { blur, change, Field, /* FieldArray, */reduxForm, reset, touch } from 'redux-form';
 import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
@@ -15,7 +15,9 @@ import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectEmptyRowRequiredError } from '../../containers/UploadPatients/selectors';
+import { selectSyncErrors } from '../../common/selectors/form.selector';
 // import RenderPatientsList from './RenderPatientsList';
+import UploadPatientsPreviewForm from './UploadPatientsPreview';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields as formFields } from './validator';
 
@@ -30,9 +32,11 @@ const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
   emptyRowRequiredError: selectEmptyRowRequiredError(formName),
+  formSyncErrors: selectSyncErrors(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  touchFields: () => dispatch(touch(formName, ...formFields)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
   clearForm: () => dispatch(reset(formName)),
   change: (field, value) => dispatch(change(formName, field, value)),
@@ -47,6 +51,8 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class UploadPatientsForm extends React.Component {
   static propTypes = {
+    touchFields: React.PropTypes.func,
+    formSyncErrors: React.PropTypes.object,
     addPatientStatus: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     change: React.PropTypes.func,
@@ -74,6 +80,8 @@ export default class UploadPatientsForm extends React.Component {
     this.state = {
       showPreview: false,
       siteLocation: null,
+      fileName: null,
+      patients: [],
       fields: [],
       duplicates: [],
       prevItems: [],
@@ -93,7 +101,7 @@ export default class UploadPatientsForm extends React.Component {
         gender: null,
         bmi: null,
       },
-      examples: {
+      /*examples: {
         names: [
           'John Doe',
           'Jane Doe',
@@ -124,7 +132,7 @@ export default class UploadPatientsForm extends React.Component {
           '24.5',
           '29',
         ],
-      },
+      },*/
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
@@ -428,14 +436,20 @@ export default class UploadPatientsForm extends React.Component {
   switchPreview() {
     // const scope = this;
     const { fields } = this.state;
-    const { isImporting, switchIsImporting } = this.props;
-    this.setState({ fields, showPreview: !this.state.showPreview }, () => {
-      // scope.updateFields(null);
+    const { isImporting, switchIsImporting, touchFields, formSyncErrors } = this.props;
 
-      if (isImporting) {
-        switchIsImporting();
-      }
-    });
+    touchFields();
+
+    if (_.isEmpty(formSyncErrors)) {
+      this.setState({ fields, showPreview: !this.state.showPreview }, () => {
+        // scope.updateFields(null);
+        if (isImporting) {
+          switchIsImporting();
+        }
+      });
+    } else {
+      console.log(formSyncErrors);
+    }
   }
 
   addField() {
@@ -512,9 +526,13 @@ export default class UploadPatientsForm extends React.Component {
 
   handleFile(e) {
     const rABS = false;
+    const scope = this;
     const files = e.target.files;
     const f = files[0];
+    const name = f ? f.name : '';
     const reader = new FileReader();
+    console.log('f', f);
+    console.log('name', name);
     reader.onload = function (e) {
       let data = e.target.result;
       if (!rABS) data = new Uint8Array(data);
@@ -522,10 +540,14 @@ export default class UploadPatientsForm extends React.Component {
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { header:1 });
 
-      console.log('target', e.target);
-      console.log('json', json);
+      scope.setState({ fileName: name, patients: json });
     };
-    if (rABS) reader.readAsBinaryString(f); else reader.readAsArrayBuffer(f);
+
+    if (rABS) {
+      reader.readAsBinaryString(f);
+    } else {
+      reader.readAsArrayBuffer(f);
+    }
   }
 
   renderGroupFields(names) {
@@ -603,7 +625,7 @@ export default class UploadPatientsForm extends React.Component {
           <th>BMI</th>
         </tr>
         <tr>
-          <td>John Doe</td>
+          <td>John, Doe</td>
           <td>johndoe@example.com</td>
           <td>(111) 111-1111</td>
           <td className="dob">1/1/1111</td>
@@ -611,7 +633,7 @@ export default class UploadPatientsForm extends React.Component {
           <td className="bmi">18.4</td>
         </tr>
         <tr>
-          <td>Jane Doe</td>
+          <td>Jane, Doe</td>
           <td>janedoe@example.com</td>
           <td>(555) 555-5555</td>
           <td className="dob">5/5/5555</td>
@@ -619,7 +641,7 @@ export default class UploadPatientsForm extends React.Component {
           <td className="bmi">24.5</td>
         </tr>
         <tr>
-          <td>Janie Doe</td>
+          <td>Janie, Doe</td>
           <td>janiedoe@example.com</td>
           <td>(888) 888-8888</td>
           <td className="dob">8/8/8888</td>
@@ -632,7 +654,7 @@ export default class UploadPatientsForm extends React.Component {
 
   render() {
     const { handleSubmit, /* emptyRowRequiredError,*/ fileInputRef, indications, isFetchingProtocols, protocols, sites, sources, isImporting/* , change, blur*/ } = this.props;
-    const { /* fields, */showPreview/* , rowsCounts, duplicates*/ } = this.state;
+    const { /* fields, */showPreview/* , rowsCounts, duplicates*/, patients } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -741,6 +763,9 @@ export default class UploadPatientsForm extends React.Component {
                 type="file"
                 onChange={this.handleFile}
               />
+              <strong className="label filename">
+                <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
+              </strong>
             </div>
           </div>
         }
@@ -748,8 +773,8 @@ export default class UploadPatientsForm extends React.Component {
           <div className="instructions">
             <span className="head">Upload Instructions</span>
             <span className="body">
-              Please upload an Excel file up to 20,000 rows and less then 50MB in size.<br />
-              Please format the first row of your colums with the proper column<br /> names
+              <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+              Please format the first row of your colums with the proper column names
               i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
             </span>
             <div className="examples">
@@ -799,16 +824,11 @@ export default class UploadPatientsForm extends React.Component {
           updateFields={this.updateFields}
           blur={blur}
         />*/}
-        {(this.state.showPreview && !isImporting) &&
-          <div className="preview">
-            <div className="title">
-              <span className="head">Preview Upload Data</span>
-              <span className="body">
-                Please validate the data based on the firs 3 rows of the upload file.
-              </span>
-            </div>
-            {this.renderExampleTable()}
-          </div>
+        {(this.state.showPreview && !isImporting && patients.length) &&
+          <UploadPatientsPreviewForm
+            renderExampleTable={this.renderExampleTable}
+            patients={patients}
+          />
         }
         {isImporting &&
           <div className="import-progress">
@@ -829,7 +849,7 @@ export default class UploadPatientsForm extends React.Component {
           </div>
         }
         <div className="text-right">
-          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
+          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview} disabled={this.state.fileName === null}>Next</Button>}
           {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
           {(showPreview && !isImporting) && <Button type="submit">Submit</Button>}
         </div>
