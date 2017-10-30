@@ -143,9 +143,8 @@ export default class UploadPatientsForm extends React.Component {
     this.addField = this.addField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
-    this.renderGroupFields = this.renderGroupFields.bind(this);
-    this.renderExampleGroupFields = this.renderExampleGroupFields.bind(this);
-    this.renderExampleTable = this.renderExampleTable.bind(this);
+    // this.renderGroupFields = this.renderGroupFields.bind(this);
+    // this.renderExampleGroupFields = this.renderExampleGroupFields.bind(this);
     this.updateCounters = this.updateCounters.bind(this);
     this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
@@ -538,7 +537,7 @@ export default class UploadPatientsForm extends React.Component {
       if (!rABS) data = new Uint8Array(data);
       const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(firstWorksheet, { header:1 });
+      const json = XLSX.utils.sheet_to_json(firstWorksheet, { header:1, defval: '' });
 
       scope.setState({ fileName: name, patients: json });
     };
@@ -550,7 +549,7 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  renderGroupFields(names) {
+  /*renderGroupFields(names) {
     const { rowsCounts } = this.state;
     let counter = 0;
 
@@ -580,9 +579,9 @@ export default class UploadPatientsForm extends React.Component {
         </div>
       );
     });
-  }
+  }*/
 
-  renderExampleGroupFields(names) {
+  /*renderExampleGroupFields(names) {
     const { examples } = this.state;
     let counter = 0;
 
@@ -611,46 +610,7 @@ export default class UploadPatientsForm extends React.Component {
         </div>
       );
     });
-  }
-
-  renderExampleTable() {
-    return (
-      <table className="example-table">
-        <tr>
-          <th>Full Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>DOB</th>
-          <th>Gender</th>
-          <th>BMI</th>
-        </tr>
-        <tr>
-          <td>John, Doe</td>
-          <td>johndoe@example.com</td>
-          <td>(111) 111-1111</td>
-          <td className="dob">1/1/1111</td>
-          <td>Male</td>
-          <td className="bmi">18.4</td>
-        </tr>
-        <tr>
-          <td>Jane, Doe</td>
-          <td>janedoe@example.com</td>
-          <td>(555) 555-5555</td>
-          <td className="dob">5/5/5555</td>
-          <td>Female</td>
-          <td className="bmi">24.5</td>
-        </tr>
-        <tr>
-          <td>Janie, Doe</td>
-          <td>janiedoe@example.com</td>
-          <td>(888) 888-8888</td>
-          <td className="dob">8/8/8888</td>
-          <td>Female</td>
-          <td className="bmi">29</td>
-        </tr>
-      </table>
-    );
-  }
+  }*/
 
   render() {
     const { handleSubmit, /* emptyRowRequiredError,*/ fileInputRef, indications, isFetchingProtocols, protocols, sites, sources, isImporting/* , change, blur*/ } = this.props;
@@ -780,7 +740,40 @@ export default class UploadPatientsForm extends React.Component {
             <div className="examples">
               <span className="title">* Only the Phone field is required; all other fields are optional.</span>
               {/* this.renderExampleGroupFields(formFields)*/}
-              {this.renderExampleTable()}
+              <table className="example-table">
+                <tr>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>DOB</th>
+                  <th>Gender</th>
+                  <th>BMI</th>
+                </tr>
+                <tr>
+                  <td>John, Doe</td>
+                  <td>johndoe@example.com</td>
+                  <td>(111) 111-1111</td>
+                  <td className="dob">1/1/1111</td>
+                  <td>Male</td>
+                  <td className="bmi">18.4</td>
+                </tr>
+                <tr>
+                  <td>Jane, Doe</td>
+                  <td>janedoe@example.com</td>
+                  <td>(555) 555-5555</td>
+                  <td className="dob">5/5/5555</td>
+                  <td>Female</td>
+                  <td className="bmi">24.5</td>
+                </tr>
+                <tr>
+                  <td>Janie, Doe</td>
+                  <td>janiedoe@example.com</td>
+                  <td>(888) 888-8888</td>
+                  <td className="dob">8/8/8888</td>
+                  <td>Female</td>
+                  <td className="bmi">29</td>
+                </tr>
+              </table>
             </div>
           </div>
         }
