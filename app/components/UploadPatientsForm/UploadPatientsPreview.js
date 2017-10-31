@@ -11,7 +11,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
   static propTypes = {
     patients: PropTypes.array,
-    setValidationResult: PropTypes.func,
+    setDuplicateValidationResult: PropTypes.func,
+    setRequiredValidationResult: PropTypes.func,
   };
 
   constructor(props) {
@@ -19,6 +20,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     this.state = {
       patients: [],
       missingColumnNames: [],
+      duplicatedColumnNames: [],
       missingKeys: [],
       validKeys: [
         'Full Name',
@@ -33,11 +35,13 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     this.renderExampleTable = this.renderExampleTable.bind(this);
     this.clearInvalidKeys = this.clearInvalidKeys.bind(this);
     this.validateRequiredKeys = this.validateRequiredKeys.bind(this);
+    this.validateDuplicateKeys = this.validateDuplicateKeys.bind(this);
   }
 
   componentWillMount() {
     const { patients } = this.props;
     this.clearInvalidKeys(patients);
+    this.validateDuplicateKeys(patients);
     this.validateRequiredKeys(patients);
   }
 
@@ -55,8 +59,44 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     });
   }
 
+  validateDuplicateKeys(patients) {
+    const { setDuplicateValidationResult } = this.props;
+    const { validKeys } = this.state;
+    const duplicatedColumnNames = [];
+    const firstPatientKeys = _.keys(patients[0]);
+
+    const getAllIndexes = (arr, val) => {
+      const indexes = [];
+      let i;
+      for (i = 0; i < arr.length; i++) {
+        if (arr[i].toLowerCase() === val) {
+          indexes.push(i);
+        }
+      }
+      return indexes;
+    };
+
+    _.forEach(validKeys, (key) => {
+      const indexes = getAllIndexes(firstPatientKeys, key.toLowerCase());
+      const duplicatedKeys = [];
+
+      if (indexes.length >= 2) {
+        _.forEach(indexes, (index) => {
+          duplicatedKeys.push(firstPatientKeys[index]);
+        });
+        duplicatedColumnNames.push(`"${_.join(duplicatedKeys, '" and "')}" column names are duplicated.`);
+      }
+    });
+
+    if (duplicatedColumnNames.length) {
+      this.setState({ duplicatedColumnNames });
+    } else {
+      setDuplicateValidationResult(true);
+    }
+  }
+
   validateRequiredKeys(patients) {
-    const { setValidationResult } = this.props;
+    const { setRequiredValidationResult } = this.props;
     const { validKeys } = this.state;
     const missingColumnNames = [];
     const missingKeys = [];
@@ -74,25 +114,25 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     if (missingColumnNames.length) {
       this.setState({ missingColumnNames, missingKeys });
     } else {
-      setValidationResult(true);
+      setRequiredValidationResult(true);
     }
   }
 
   renderExampleTable() {
     const { patients } = this.props;
-    const { validKeys, missingKeys } = this.state;
-    console.log('validKeys', validKeys);
+    const { missingKeys } = this.state;
+    const firstPatientKeys = _.keys(patients[0]);
 
     return (
       <table className="example-table">
         <tbody>
-          <tr>
+          <tr key={_.uniqueId()}>
             {
-              validKeys.map((key) => {
+              firstPatientKeys.map((key) => {
                 const index = _.findIndex(missingKeys, (k) => { return k.toLowerCase() === key.toLowerCase(); });
                 if (index === -1) {
                   return (
-                    <th>{key}</th>
+                    <th key={_.uniqueId()}>{key}</th>
                   );
                 } else {
                   return null;
@@ -105,7 +145,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
               const patientProps = _.map(patient);
               if (patientIndex <= 2) {
                 return (
-                  <tr>
+                  <tr key={_.uniqueId()}>
                     {
                       patientProps.map((value, propIndex) => {
                         let className = '';
@@ -118,7 +158,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
                           className = 'bmi';
                         }
                         return (
-                          <td className={className}>{value}</td>
+                          <td className={className} key={_.uniqueId()}>{value}</td>
                         );
                       })
                     }
@@ -151,11 +191,12 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   }
 
   render() {
-    const { missingColumnNames } = this.state;
+    const { missingColumnNames, duplicatedColumnNames } = this.state;
+    const errorMessages = _.union(missingColumnNames, duplicatedColumnNames);
 
     return (
       <div className="preview">
-        {missingColumnNames.length > 0 && this.renderErrorMessages(missingColumnNames)}
+        {(missingColumnNames.length > 0 || duplicatedColumnNames.length > 0) && this.renderErrorMessages(errorMessages)}
         <div className="title">
           <span className="head">Preview Upload Data</span>
           <span className="body">
