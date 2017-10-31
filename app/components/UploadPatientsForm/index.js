@@ -829,7 +829,7 @@ export default class UploadPatientsForm extends React.Component {
           updateFields={this.updateFields}
           blur={blur}
         />*/}
-        {(this.state.showPreview && !isImporting && patients.length) &&
+        {(this.state.showPreview && !isImporting) &&
           <UploadPatientsPreviewForm
             setDuplicateValidationResult={this.setDuplicateValidationResult}
             setRequiredValidationResult={this.setRequiredValidationResult}
