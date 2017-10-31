@@ -31,9 +31,9 @@ import {
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
   CLEAR_FILTERS,
-  FETCH_ALL_CLIENT_USERS,
-  FETCH_ALL_CLIENT_USERS_SUCCESS,
-  FETCH_ALL_CLIENT_USERS_ERROR,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
   FETCH_STUDY_CAMPAIGNS,
   FETCH_STUDY_CAMPAIGNS_SUCCESS,
   FETCH_STUDY_CAMPAIGNS_ERROR,
@@ -347,24 +347,25 @@ export function clearFilters() {
   };
 }
 
-export function fetchAllClientUsersDashboard(clientId, siteId) {
+export function fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId) {
   return {
-    type: FETCH_ALL_CLIENT_USERS,
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
     clientId,
     siteId,
+    studyId,
   };
 }
 
-export function fetchAllClientUsersDashboardSuccess(payload) {
+export function fetchAllStudyEmailNotificationsSuccess(payload) {
   return {
-    type: FETCH_ALL_CLIENT_USERS_SUCCESS,
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
     payload,
   };
 }
 
-export function fetchAllClientUsersDashboardError(payload) {
+export function fetchAllStudyEmailNotificationsError(payload) {
   return {
-    type: FETCH_ALL_CLIENT_USERS_ERROR,
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
     payload,
   };
 }
