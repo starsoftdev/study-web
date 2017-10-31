@@ -78,7 +78,8 @@ export default class UploadPatientsForm extends React.Component {
     super(props);
 
     this.state = {
-      validationResult: false,
+      duplicateValidationResult: false,
+      requiredValidationResult: false,
       showPreview: false,
       siteLocation: null,
       fileName: null,
@@ -150,7 +151,8 @@ export default class UploadPatientsForm extends React.Component {
     this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
     this.handleFile = this.handleFile.bind(this);
-    this.setValidationResult = this.setValidationResult.bind(this);
+    this.setRequiredValidationResult = this.setRequiredValidationResult.bind(this);
+    this.setDuplicateValidationResult = this.setDuplicateValidationResult.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -173,8 +175,12 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  setValidationResult(validationResult) {
-    this.setState({ validationResult });
+  setRequiredValidationResult(requiredValidationResult) {
+    this.setState({ requiredValidationResult });
+  }
+
+  setDuplicateValidationResult(duplicateValidationResult) {
+    this.setState({ duplicateValidationResult });
   }
 
   updateCounters() {
@@ -620,7 +626,7 @@ export default class UploadPatientsForm extends React.Component {
 
   render() {
     const { handleSubmit, /* emptyRowRequiredError,*/ fileInputRef, indications, isFetchingProtocols, protocols, sites, sources, isImporting/* , change, blur*/ } = this.props;
-    const { /* fields, */showPreview/* , rowsCounts, duplicates*/, patients } = this.state;
+    const { /* fields, */showPreview/* , rowsCounts, duplicates*/, patients, requiredValidationResult, duplicateValidationResult } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -825,7 +831,8 @@ export default class UploadPatientsForm extends React.Component {
         />*/}
         {(this.state.showPreview && !isImporting && patients.length) &&
           <UploadPatientsPreviewForm
-            setValidationResult={this.setValidationResult}
+            setDuplicateValidationResult={this.setDuplicateValidationResult}
+            setRequiredValidationResult={this.setRequiredValidationResult}
             patients={patients}
           />
         }
@@ -850,7 +857,7 @@ export default class UploadPatientsForm extends React.Component {
         <div className="text-right">
           {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview} disabled={this.state.fileName === null}>Next</Button>}
           {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {(showPreview && !isImporting) && <Button type="submit" disabled={this.state.validationResult !== true}>Submit</Button>}
+          {(showPreview && !isImporting) && <Button type="submit" disabled={duplicateValidationResult !== true || requiredValidationResult !== true}>Submit</Button>}
         </div>
       </Form>
     );
