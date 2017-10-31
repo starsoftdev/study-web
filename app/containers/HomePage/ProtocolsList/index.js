@@ -132,7 +132,6 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           </table>
         </div>
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.loadItems}
           initialLoad={false}

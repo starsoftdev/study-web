@@ -1,16 +1,16 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import { forEach, filter } from 'lodash';
 
 import Checkbox from '../../components/Input/Checkbox';
 
-class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     change: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
-    addEmailNotification: PropTypes.func,
+    addEmailNotificationClick: PropTypes.func,
     closeEmailNotification: PropTypes.func,
     emailFields: PropTypes.array,
   };
@@ -19,43 +19,16 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     super(props);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
-    this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
-    this.addEmailNotificationFields = this.addEmailNotificationFields.bind(this);
-    this.addNewFields = this.addNewFields.bind(this);
-
-    this.state = {
-      addEmailModalShow: false,
-    };
   }
 
   componentDidMount() {
   }
 
-  addNewFields(values) {
-    const { change, fields } = this.props;
-    forEach(values, (Object) => {
-      fields.push(Object);
-    });
-    change('checkAllInput', false);
-  }
-
-  addEmailNotificationFields(values) {
-    const { change, fields } = this.props;
-    fields.push(values);
-    this.closeAddEmailModal();
-    change('checkAllInput', false);
-  }
-
   addEmailNotificationClick() {
-    const { addEmailNotification } = this.props;
-    addEmailNotification();
-  }
-
-  closeAddEmailModal() {
-    const { closeEmailNotification } = this.props;
-    closeEmailNotification();
+    const { addEmailNotificationClick } = this.props;
+    addEmailNotificationClick();
   }
 
   selectAll(e) {
@@ -79,16 +52,31 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     }
   }
 
+  renderEmailList(email, index) {
+    const { formValues } = this.props;
+    return (
+      <li key={index}>
+        <Field
+          name={`${email}.isChecked`}
+          component={Checkbox}
+          type="checkbox"
+          className="field-active"
+          onChange={this.selectEmail}
+        />
+        <span className="email">{formValues.emailNotifications[index].email} </span>
+      </li>
+    );
+  }
+
   render() {
     const { fields, formValues } = this.props;
-    const fLength = fields.length;
-    let frLength;
+    let formValuesLength;
     if (formValues.emailNotifications) {
-      frLength = formValues.emailNotifications.length;
+      formValuesLength = formValues.emailNotifications.length;
     } else {
-      frLength = 0;
+      formValuesLength = 0;
     }
-    if (fLength !== frLength && fields.length !== 0) {
+    if (fields.length !== formValuesLength && fields.length !== 0) {
       return (
         <div></div>
       );
@@ -108,18 +96,9 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
 
         <ul className="list-unstyled list-emails">
           {
-            fields.map((email, index) =>
-              <li key={index}>
-                <Field
-                  name={`${email}.isChecked`}
-                  component={Checkbox}
-                  type="checkbox"
-                  className="field-active"
-                  onChange={this.selectEmail}
-                />
-                <span className="email">{formValues.emailNotifications[index].email} </span>
-              </li>
-            )
+            fields.map((emailNotification, index) => {
+              return this.renderEmailList(emailNotification, index);
+            })
           }
         </ul>
         <div className="btn-holder">
@@ -129,5 +108,3 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     );
   }
 }
-
-export default RenderEmailsList;

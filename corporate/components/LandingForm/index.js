@@ -75,6 +75,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const state = (landing.state) ? landing.state : '';
 
     const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
+    const location = landing.locationMask ? ` ${landing.locationMask}` : cityAndState;
 
     const title = (landing.title) ? landing.title : indication;
     const fullNamePlaceholder = (landing.fullNamePlaceholder) ? landing.fullNamePlaceholder : '* Full Name';
@@ -113,10 +114,10 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         <h1 className="main-heading">
           {title}
         </h1>
-        {city &&
+        {location &&
           <h2 className="txt-orange">
             <i className="icomoon-map-marker" />
-            {cityAndState}
+            {location}
           </h2>
         }
         <div

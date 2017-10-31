@@ -9,7 +9,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import { push } from 'react-router-redux';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import Scroll from 'react-scroll';
@@ -172,10 +172,11 @@ class PatientBoard extends React.Component {
       return;
     }
 
-    const defaultDate = moment().startOf('day');
-    const scheduledDate = selectedDate || defaultDate;
+    const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().startOf('day');
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
+
+    const time = scheduledDate.hour(formValues.amPm === 'AM' ? formValues.hours % 12 : (formValues.hours % 12) + 12).minute(formValues.minutes);
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
@@ -185,9 +186,7 @@ class PatientBoard extends React.Component {
       id: currentAppointmentId,
       patientId: currentPatient.id,
       clientId: currentUser.roleForClient.client_id,
-      time: moment(scheduledDate).add(formValues.amPm === 'AM' ?
-      formValues.hours % 12 :
-      (formValues.hours % 12) + 12, 'hours').add(formValues.minutes, 'minutes').toISOString(),
+      time,
       textReminder: formValues.textReminder || false,
     };
 

@@ -1,8 +1,9 @@
 /*
  *
- * Patient Database page actions
+ * Admin Dashboard actions
  *
  */
+
 import {
   UPDATE_FILTERS,
   FETCH_NOTE,
@@ -26,9 +27,6 @@ import {
   FETCH_SITE_LOCATIONS,
   FETCH_SITE_LOCATIONS_SUCCESS,
   FETCH_SITE_LOCATIONS_ERROR,
-  FETCH_SITE_NAMES,
-  FETCH_SITE_NAMES_SUCCESS,
-  FETCH_SITE_NAMES_ERROR,
   UPDATE_DASHBOARD_STUDY,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
   UPDATE_DASHBOARD_STUDY_ERROR,
@@ -43,6 +41,7 @@ import {
   CHANGE_STUDY_STATUS_SUCCESS,
   CHANGE_STUDY_STATUS_ERROR,
   TOGGLE_STUDY,
+  TOGGLE_ALL_STUDIES,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
@@ -69,16 +68,13 @@ import {
   UPDATE_TWILIO_NUMBERS_SUCCESS,
   UPDATE_TWILIO_NUMBERS_ERROR,
   SET_HOVER_ROW_INDEX,
-  SET_EDIT_STUDY_FORM_VALUES,
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
   ADD_STUDY_INDICATION_TAG,
   ADD_STUDY_INDICATION_TAG_SUCCESS,
-  ADD_STUDY_INDICATION_TAG_ERROR,
   REMOVE_STUDY_INDICATION_TAG,
   REMOVE_STUDY_INDICATION_TAG_SUCCESS,
-  REMOVE_STUDY_INDICATION_TAG_ERROR,
   FETCH_STUDY_INDICATION_TAG,
   FETCH_STUDY_INDICATION_TAG_SUCCESS,
   FETCH_STUDY_INDICATION_TAG_ERROR,
@@ -191,37 +187,22 @@ export function fetchSiteLocationsError(payload) {
   };
 }
 
-export function fetchSiteNames() {
-  return {
-    type: FETCH_SITE_NAMES,
-  };
-}
-
-export function fetchSiteNamesSuccess(payload) {
-  return {
-    type: FETCH_SITE_NAMES_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchSiteNamesError(payload) {
-  return {
-    type: FETCH_SITE_NAMES_ERROR,
-    payload,
-  };
-}
-
-export function updateDashboardStudy(params) {
+export function updateDashboardStudy(id, params, stopSubmit, formValues) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
+    id,
     params,
+    stopSubmit,
+    formValues,
   };
 }
 
-export function updateDashboardStudySuccess(payload) {
+export function updateDashboardStudySuccess(studyId, updatedStudyParams, formValues) {
   return {
     type: UPDATE_DASHBOARD_STUDY_SUCCESS,
-    payload,
+    studyId,
+    updatedStudyParams,
+    formValues,
   };
 }
 
@@ -287,9 +268,10 @@ export function removeStudyAd(studyId) {
   };
 }
 
-export function removeStudyAdSuccess() {
+export function removeStudyAdSuccess(studyId) {
   return {
     type: REMOVE_STUDY_AD_SUCCESS,
+    studyId,
   };
 }
 
@@ -365,10 +347,11 @@ export function clearFilters() {
   };
 }
 
-export function fetchAllClientUsersDashboard(params) {
+export function fetchAllClientUsersDashboard(clientId, siteId) {
   return {
     type: FETCH_ALL_CLIENT_USERS,
-    params,
+    clientId,
+    siteId,
   };
 }
 
@@ -407,10 +390,10 @@ export function fetchStudyCampaignsDashboardError(payload) {
   };
 }
 
-export function fetchCustomNotificationEmails(params) {
+export function fetchCustomNotificationEmails(id) {
   return {
     type: FETCH_CUSTOM_NOTIFICATION_EMAILS,
-    params,
+    id,
   };
 }
 
@@ -455,6 +438,13 @@ export function toggleStudy(id, status) {
   return {
     type: TOGGLE_STUDY,
     id,
+    status,
+  };
+}
+
+export function toggleAllStudies(status) {
+  return {
+    type: TOGGLE_ALL_STUDIES,
     status,
   };
 }
@@ -589,76 +579,52 @@ export function setHoverRowIndex(index) {
   };
 }
 
-export function setEditStudyFormValues(values) {
-  return {
-    type: SET_EDIT_STUDY_FORM_VALUES,
-    values,
-  };
-}
-
-export function addStudyIndicationTag(studyId, indicationId) {
+export function addTaggedIndicationForStudy(studyId, indication) {
   return {
     type: ADD_STUDY_INDICATION_TAG,
-    payload: {
-      studyId,
-      indicationId,
-    },
+    studyId,
+    indication,
   };
 }
 
-export function addStudyIndicationTagSuccess(payload) {
+export function addTaggedIndicationForStudySuccess(studyId, indication) {
   return {
     type: ADD_STUDY_INDICATION_TAG_SUCCESS,
-    payload,
+    studyId,
+    indication,
   };
 }
 
-export function addStudyIndicationTagError(payload) {
-  return {
-    type: ADD_STUDY_INDICATION_TAG_ERROR,
-    payload,
-  };
-}
-
-export function removeStudyIndicationTag(studyId, indicationId) {
+export function removeTaggedIndicationForStudy(studyId, indication) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG,
-    payload: {
-      studyId,
-      indicationId,
-    },
+    studyId,
+    indication,
   };
 }
 
-export function removeStudyIndicationTagSuccess(payload) {
+export function removeTaggedIndicationForStudySuccess(studyId, indication) {
   return {
     type: REMOVE_STUDY_INDICATION_TAG_SUCCESS,
-    payload,
+    studyId,
+    indication,
   };
 }
-
-export function removeStudyIndicationTagError(payload) {
-  return {
-    type: REMOVE_STUDY_INDICATION_TAG_ERROR,
-    payload,
-  };
-}
-
-export function fetchStudyIndicationTag(params) {
+export function fetchTaggedIndicationsForStudy(studyId) {
   return {
     type: FETCH_STUDY_INDICATION_TAG,
-    params,
+    studyId,
   };
 }
 
-export function fetchStudyIndicationTagSuccess(payload) {
+export function fetchTaggedIndicationsForStudySuccess(payload) {
   return {
     type: FETCH_STUDY_INDICATION_TAG_SUCCESS,
     payload,
   };
 }
 
-export function fetchStudyIndicationTagError(payload) {
+export function fetchTaggedIndicationsForStudyError(payload) {
   return {
     type: FETCH_STUDY_INDICATION_TAG_ERROR,
     payload,
@@ -686,17 +652,19 @@ export function fetchCampaignsByStudyError(payload) {
   };
 }
 
-export function editCampaign(payload) {
+export function editCampaign(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN,
     payload,
+    campaignInfo,
   };
 }
 
-export function editCampaignSuccess(payload) {
+export function editCampaignSuccess(payload, campaignInfo) {
   return {
     type: EDIT_CAMPAIGN_SUCCESS,
     payload,
+    campaignInfo,
   };
 }
 

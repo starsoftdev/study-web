@@ -25,6 +25,7 @@ import {
 
 import {
   resetPasswordSuccess,
+  newPasswordReceived,
 } from '../../containers/ResetPasswordPage/actions';
 
 import {
@@ -80,7 +81,7 @@ export function* authorize(data) {
     toastr.success('', 'Login successful!');
 
     // fetch details of authenticated user
-    yield put(fetchMeFromToken());
+    yield put(fetchMeFromToken(true));
 
     // return the response from the generator task
     return response;
@@ -154,17 +155,22 @@ export function* resetPassword() {
 export function* setNewPassword() {
   while (true) {
     try {
-      const { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
+      let { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
       const state = yield select(selectLocationState());
 
       if (state.query && state.query.token) {
+        if (!payload) {
+          payload = {};
+        }
+        payload.token = state.query.token;
         const params = {
           method: 'POST',
           body: JSON.stringify(payload),
           authToken: state.query.token,
         };
         const requestURL = `${API_URL}/users/reset-password`;
-        yield call(request, requestURL, params);
+        const { password } = yield call(request, requestURL, params);
+        yield put(newPasswordReceived(password));
         toastr.success('', 'Success! Your password has been reset, check your inbox.');
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');

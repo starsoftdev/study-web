@@ -92,6 +92,9 @@ function* fetchStudyDetails() {
     include: [
       {
         relation: 'campaigns',
+        scope: {
+          order: 'orderNumber DESC',
+        },
       },
       {
         relation: 'protocol',
@@ -279,7 +282,9 @@ export function* exportPatients() {
       const requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
       const options = {
         method: 'GET',
-        query: {},
+        query: {
+          authToken,
+        },
       };
       if (campaignId) {
         options.query.campaignId = campaignId;
@@ -842,7 +847,7 @@ function* submitDeleteNote() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, clientRoleId, studyId, siteName, currentUser, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -858,6 +863,9 @@ function* submitTextBlast() {
           )),
           clientRoleId,
           message,
+          studyId,
+          siteName,
+          currentUser,
         }),
       });
       onClose();

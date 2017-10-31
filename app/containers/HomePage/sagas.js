@@ -33,7 +33,6 @@ import {
   FETCH_FIVE_9_LIST,
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
-  FETCH_SITE_NAMES,
   UPDATE_DASHBOARD_STUDY,
   FETCH_ALL_CLIENT_USERS,
   FETCH_STUDY_CAMPAIGNS,
@@ -61,16 +60,11 @@ import {
   fetchTotalsDashboardError,
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
-  fetchSiteNamesSuccess,
-  fetchSiteNamesError,
   updateDashboardStudySuccess,
-  updateDashboardStudyError,
-  fetchAllClientUsersDashboard,
   fetchAllClientUsersDashboardSuccess,
   fetchAllClientUsersDashboardError,
   fetchStudyCampaignsDashboardSuccess,
   fetchStudyCampaignsDashboardError,
-  fetchCustomNotificationEmails,
   fetchCustomNotificationEmailsSuccess,
   fetchCustomNotificationEmailsError,
   changeStudyStatusDashboardSuccess,
@@ -83,7 +77,6 @@ import {
   updatePatientThankYouEmailError,
   fetchMessagingNumbersDashboardSuccess,
   fetchMessagingNumbersDashboardError,
-  fetchMessagingNumbersDashboard,
   changeStudyAddSuccess,
   changeStudyAddError,
   updateTwilioNumbersSuccess,
@@ -97,13 +90,10 @@ import {
   editNoteError,
   deleteNoteSuccess,
   deleteNoteError,
-  fetchStudyIndicationTag,
-  fetchStudyIndicationTagSuccess,
-  fetchStudyIndicationTagError,
-  addStudyIndicationTagSuccess,
-  addStudyIndicationTagError,
-  removeStudyIndicationTagSuccess,
-  removeStudyIndicationTagError,
+  fetchTaggedIndicationsForStudySuccess,
+  fetchTaggedIndicationsForStudyError,
+  addTaggedIndicationForStudySuccess,
+  removeTaggedIndicationForStudySuccess,
   fetchCampaignsByStudySuccess,
   fetchCampaignsByStudyError,
   editCampaignSuccess,
@@ -123,18 +113,15 @@ import {
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
 } from '../../containers/App/constants';
 import {
-  addEmailNotificationUserSuccess,
-  addEmailNotificationUserError,
-  addCustomEmailNotificationSuccess,
-  addCustomEmailNotificationError,
-  removeCustomEmailNotificationSuccess,
-  removeCustomEmailNotificationError,
   fetchClientSites,
   fetchClientCredits,
   fetchRewardsBalance,
 } from '../../containers/App/actions';
 
 import {
+  addEmailNotificationUserSuccess,
+  addCustomEmailNotificationSuccess,
+  removeCustomEmailNotificationSuccess,
   fetchPatientSignUpsSucceeded,
   fetchPrincipalInvestigatorTotalsSucceeded,
   studiesFetched,
@@ -161,69 +148,76 @@ export default [
   homePageSaga,
 ];
 
-export function* addStudyIndicationTagWatcher() {
-  yield* takeLatest(ADD_STUDY_INDICATION_TAG, addStudyIndicationTagWorker);
+export function* addTaggedIndicationForStudyWatcher() {
+  yield* takeLatest(ADD_STUDY_INDICATION_TAG, addTaggedIndicationForStudyWorker);
 }
 
-export function* addStudyIndicationTagWorker(action) {
-  const { payload } = action;
+export function* addTaggedIndicationForStudyWorker(action) {
+  const { studyId, indication } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
     const options = {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        studyId,
+        indicationId: indication.id,
+      }),
     };
 
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchStudyIndicationTag(payload.studyId));
-    yield put(addStudyIndicationTagSuccess(response));
+    yield call(request, requestURL, options);
+    // add the tagged indication
+    yield put(addTaggedIndicationForStudySuccess(studyId, indication));
   } catch (err) {
-    yield put(addStudyIndicationTagError(err));
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', `Could not add tagged indication: ${indication.name}`);
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
-export function* removeStudyIndicationTagWatcher() {
-  yield* takeLatest(REMOVE_STUDY_INDICATION_TAG, removeStudyIndicationTagWorker);
+export function* removeTaggedIndicationForStudyWatcher() {
+  yield* takeLatest(REMOVE_STUDY_INDICATION_TAG, removeTaggedIndicationForStudyWorker);
 }
 
-export function* removeStudyIndicationTagWorker(action) {
-  const { payload } = action;
+export function* removeTaggedIndicationForStudyWorker(action) {
+  const { studyId, indication } = action;
   try {
     const requestURL = `${API_URL}/studyIndicationTags`;
     const options = {
       method: 'DELETE',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        studyId,
+        indicationId: indication.value,
+      }),
     };
 
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchStudyIndicationTag(payload.studyId));
-    yield put(removeStudyIndicationTagSuccess(response));
+    yield call(request, requestURL, options);
+    // remove the tagged indication
+    yield put(removeTaggedIndicationForStudySuccess(studyId, indication));
   } catch (err) {
-    yield put(removeStudyIndicationTagError(err));
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', `Could not remove tagged indication: ${indication.label}`);
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
-export function* fetchStudyIndicationTagsWatcher() {
-  yield* takeLatest(FETCH_STUDY_INDICATION_TAG, fetchStudyIndicationTagsWorker);
+export function* fetchTaggedIndicationsForStudyWatcher() {
+  yield* takeLatest(FETCH_STUDY_INDICATION_TAG, fetchTaggedIndicationsForStudyWorker);
 }
 
-export function* fetchStudyIndicationTagsWorker(action) {
+export function* fetchTaggedIndicationsForStudyWorker(action) {
   try {
-    const requestURL = `${API_URL}/studies/getStudyIndicationTags`;
+    const requestURL = `${API_URL}/studies/${action.studyId}/taggedIndications`;
+    const response = yield call(request, requestURL);
 
-    const params = {
-      method: 'GET',
-      query: {
-        id: action.params,
-      },
-    };
-    const response = yield call(request, requestURL, params);
-
-    yield put(fetchStudyIndicationTagSuccess(response));
+    yield put(fetchTaggedIndicationsForStudySuccess(response));
   } catch (err) {
-    yield put(fetchStudyIndicationTagError(err));
+    yield put(fetchTaggedIndicationsForStudyError(err));
   }
 }
 
@@ -329,8 +323,12 @@ export function* fetchPatientSignUpsWatcher() {
 export function* fetchPatientSignUpsWorker(action) {
   try {
     let requestURL = '';
+    let timezone = action.currentUser.timezone;
     if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
       requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
+      if (!action.currentUser.roleForClient.isAdmin) {
+        timezone = action.currentUser.roleForClient.site.timezone;
+      }
     } else {
       requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;
     }
@@ -338,7 +336,7 @@ export function* fetchPatientSignUpsWorker(action) {
     const params = {
       method: 'GET',
       query: {
-        timezone: action.currentUser.timezone,
+        timezone,
       },
     };
     const response = yield call(request, requestURL, params);
@@ -634,21 +632,22 @@ export function* editStudyWatcher() {
 
 export function* editStudyWorker(action) {
   try {
-    const { studyId } = action;
-
+    const { studyId, options } = action;
     const requestURL = `${API_URL}/clientRoles/editStudy`;
 
     const data = new FormData();
-    _.forEach(action.formValues, (value, index) => {
+    _.forEach(options, (value, index) => {
       if (index !== 'studyAd' && index !== 'emailNotifications') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
-    data.append('emailNotifications', JSON.stringify(action.formValues.emailNotifications));
+    if (options.emailNotifications) {
+      data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
 
-    if (action.formValues.studyAd && action.formValues.studyAd[0]) {
-      data.append('file', action.formValues.studyAd[0]);
+    if (options.studyAd && options.studyAd[0]) {
+      data.append('file', options.studyAd[0]);
     }
 
     const params = {
@@ -658,7 +657,7 @@ export function* editStudyWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchClientSites(action.formValues.clientId, {}));
+    yield put(fetchClientSites(options.clientId, {}));
 
     toastr.success('Edit Study', 'The request has been submitted successfully');
     yield put(studyEdited(response));
@@ -681,7 +680,6 @@ export function* addEmailNotificationUserWorker(action) {
   const { payload } = action;
   try {
     const clientId = payload.clientId;
-    const siteId = payload.clientRole.siteId;
     delete payload.clientId;
 
     const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
@@ -691,12 +689,13 @@ export function* addEmailNotificationUserWorker(action) {
     };
 
     const response = yield call(request, requestURL, options);
-
-    yield put(fetchAllClientUsersDashboard({ clientId, siteId }));
-    yield put(fetchClientSites(clientId, {}));
-    yield put(addEmailNotificationUserSuccess(response.user));
+    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email, response.user));
   } catch (err) {
-    yield put(addEmailNotificationUserError(err));
+    const errorMessage = get(err, 'message', 'Could not add the user.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -707,18 +706,20 @@ export function* addCustomEmailNotificationWatcher() {
 export function* addCustomEmailNotificationWorker(action) {
   const { payload } = action;
   try {
-    const requestURL = `${API_URL}/clients/addCustomNotificationEmail`;
+    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
     const options = {
       method: 'POST',
       body: JSON.stringify(payload),
     };
 
     const response = yield call(request, requestURL, options);
-
-    yield put(fetchCustomNotificationEmails(payload.studyId));
-    yield put(addCustomEmailNotificationSuccess(response));
+    yield put(addCustomEmailNotificationSuccess(response.id, response.email));
   } catch (err) {
-    yield put(addCustomEmailNotificationError(err));
+    const errorMessage = get(err, 'message', 'Could not add the custom notification email to the study.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -727,20 +728,22 @@ export function* removeCustomEmailNotificationWatcher() {
 }
 
 export function* removeCustomEmailNotificationWorker(action) {
-  const { payload } = action;
+  const { id, email } = action;
   try {
-    const requestURL = `${API_URL}/clients/removeCustomNotificationEmail`;
+    const requestURL = `${API_URL}/studyNotificationEmails/${id}`;
     const options = {
-      method: 'POST',
-      body: JSON.stringify(payload),
+      method: 'DELETE',
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
 
-    yield put(fetchCustomNotificationEmails(payload.studyId));
-    yield put(removeCustomEmailNotificationSuccess(response));
+    yield put(removeCustomEmailNotificationSuccess(id, email));
   } catch (err) {
-    yield put(removeCustomEmailNotificationError(err));
+    const errorMessage = get(err, 'message', 'Could not remove the custom notification email to the study.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -796,6 +799,7 @@ export function* fetchStudiesDashboardWorker(action) {
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
+    console.log(err);
     yield put(fetchStudiesDashboardError(err));
   }
 }
@@ -838,45 +842,32 @@ export function* fetchSiteLocationsWorker() {
   }
 }
 
-export function* fetchSiteNamesWatcher() {
-  yield* takeLatest(FETCH_SITE_NAMES, fetchSiteNamesWorker);
-}
-
-export function* fetchSiteNamesWorker() {
-  try {
-    const requestURL = `${API_URL}/sites/getSiteNames`;
-    const options = {
-      method: 'GET',
-    };
-
-    const response = yield call(request, requestURL, options);
-
-    yield put(fetchSiteNamesSuccess(response));
-  } catch (err) {
-    yield put(fetchSiteNamesError(err));
-  }
-}
-
 export function* updateDashboardStudyWatcher() {
   yield* takeLatest(UPDATE_DASHBOARD_STUDY, updateDashboardStudyWorker);
 }
 
 export function* updateDashboardStudyWorker(action) {
-  const { params } = action;
+  const { id, formValues, params, stopSubmit } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/updateDashboardStudy`;
+    const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
     const options = {
       method: 'POST',
       body: JSON.stringify(params),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
 
-    yield put(fetchMessagingNumbersDashboard());
-    yield put(updateDashboardStudySuccess(response));
+    yield put(updateDashboardStudySuccess(id, params, formValues));
+    stopSubmit();
   } catch (err) {
-    yield put(updateDashboardStudyError(err));
+    const errorMessage = get(err, 'message', 'We were unable to update the study. Please contact support.');
+    toastr.error('', errorMessage);
+    console.log(err);
+    stopSubmit(err);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
 
@@ -890,7 +881,10 @@ export function* fetchAllClientUsersWorker(action) {
 
     const params = {
       method: 'GET',
-      query: action.params,
+      query: {
+        clientId: action.clientId,
+        siteId: action.siteId,
+      },
     };
     const response = yield call(request, requestURL, params);
 
@@ -938,15 +932,8 @@ export function* fetchCustomNotificationEmailsWatcher() {
 
 export function* fetchCustomNotificationEmailsWorker(action) {
   try {
-    const requestURL = `${API_URL}/studies/getCustomNotificationEmails`;
-
-    const params = {
-      method: 'GET',
-      query: {
-        id: action.params,
-      },
-    };
-    const response = yield call(request, requestURL, params);
+    const requestURL = `${API_URL}/studies/${action.id}/customNotificationEmails`;
+    const response = yield call(request, requestURL);
 
     yield put(fetchCustomNotificationEmailsSuccess(response));
   } catch (err) {
@@ -1050,9 +1037,9 @@ export function* removeStudyAdWorker(action) {
       body: JSON.stringify({ studyId }),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
     toastr.success('', 'Success! Study ad has been removed.');
-    yield put(removeStudyAdSuccess(response));
+    yield put(removeStudyAdSuccess(studyId));
   } catch (err) {
     toastr.error('Error!');
     yield put(removeStudyAdError(err));
@@ -1143,7 +1130,7 @@ export function* updateTwilioNumbersWorker() {
     const response = yield call(request, requestURL, params);
 
     yield put(updateTwilioNumbersSuccess(response));
-    toastr.success('Syncing for Twilio numbers has been queued. Please wait about 5 minutes for the task to process.');
+    toastr.success('', 'Messaging Numbers are syncing. Please wait about 5 minutes.');
   } catch (err) {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
@@ -1200,9 +1187,8 @@ export function* editCampaignWorker(action) {
       method: 'PUT',
       body: JSON.stringify(action.payload),
     };
-    const response = yield call(request, requestURL, params);
-    yield put(editCampaignSuccess(action.payload));
-    yield put(updateDashboardStudySuccess(response));
+    yield call(request, requestURL, params);
+    yield put(editCampaignSuccess(action.payload, action.campaignInfo));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     toastr.error('', errorMessage);
@@ -1266,7 +1252,6 @@ export function* homePageSaga() {
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
   const fetchTotalsDashboardWatcher1 = yield fork(fetchTotalsDashboardWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
-  const fetchSiteNamesWatcher1 = yield fork(fetchSiteNamesWatcher);
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
   const fetchAllClientUsersWatcher1 = yield fork(fetchAllClientUsersWatcher);
   const fetchStudyCampaignsWatcher1 = yield fork(fetchStudyCampaignsWatcher);
@@ -1284,9 +1269,9 @@ export function* homePageSaga() {
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
   const watcherM = yield fork(deleteNoteWatcher);
-  const watcherN = yield fork(fetchStudyIndicationTagsWatcher);
-  const watcherO = yield fork(addStudyIndicationTagWatcher);
-  const watcherP = yield fork(removeStudyIndicationTagWatcher);
+  const watcherN = yield fork(fetchTaggedIndicationsForStudyWatcher);
+  const watcherO = yield fork(addTaggedIndicationForStudyWatcher);
+  const watcherP = yield fork(removeTaggedIndicationForStudyWatcher);
   const watcherR = yield fork(fetchFive9ListWatcher);
   const watcherS = yield fork(removeStudyAdWatcher);
 
@@ -1315,7 +1300,6 @@ export function* homePageSaga() {
     yield cancel(fetchStudiesDashboardWatcher1);
     yield cancel(fetchTotalsDashboardWatcher1);
     yield cancel(fetchSiteLocationsWatcher1);
-    yield cancel(fetchSiteNamesWatcher1);
     yield cancel(updateDashboardStudyWatcher1);
     yield cancel(fetchAllClientUsersWatcher1);
     yield cancel(fetchStudyCampaignsWatcher1);

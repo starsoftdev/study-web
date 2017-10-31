@@ -121,7 +121,9 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
   filterProtocols(searchQuery) {
     if (searchQuery !== '' && searchQuery) {
       this.setState({
-        protocolFilterMethod: (protocol) => protocol.protocolNumber.toUpperCase().includes(searchQuery.toUpperCase())
+        protocolFilterMethod: (study) => {
+          return study.protocol ? study.protocol.number.toUpperCase().includes(searchQuery.toUpperCase()) : null;
+        }
         ,
       });
     } else {
