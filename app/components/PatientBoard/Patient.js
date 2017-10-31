@@ -6,6 +6,7 @@ import React from 'react';
 import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
+import Button from 'react-bootstrap/lib/Button';
 import { formatPhone } from '../../common/helper/functions';
 import DragTypes from './dragSourceTypes';
 
@@ -45,6 +46,7 @@ class Patient extends React.Component {
     category: React.PropTypes.object.isRequired,
     connectDragSource: React.PropTypes.func.isRequired,
     currentSite: React.PropTypes.object.isRequired,
+    currentUser: React.PropTypes.object.isRequired,
     currentPatientId: React.PropTypes.number,
     isDragging: React.PropTypes.bool.isRequired,
     onPatientClick: React.PropTypes.func.isRequired,
@@ -61,7 +63,8 @@ class Patient extends React.Component {
   }
 
   renderUnreadMessageCount() {
-    const { unreadMessageCount } = this.props;
+    // const { unreadMessageCount } = this.props;
+    const unreadMessageCount = 2;
     if (unreadMessageCount > 0) {
       return (
         <span className="counter-circle">{unreadMessageCount}</span>
@@ -71,10 +74,13 @@ class Patient extends React.Component {
   }
 
   renderTextCreatedDate() {
-    const { currentSite, patient: { lastTextMessage } } = this.props;
+    const { currentUser, currentSite, patient: { lastTextMessage } } = this.props;
+
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? currentSite.timezone : currentUser.timezone;
+
     if (lastTextMessage && lastTextMessage.dateCreated) {
       return (
-        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, currentSite.timezone).format('MM/DD/YY [at] h:mm A')}</time>
+        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}</time>
       );
     }
     return null;
@@ -87,9 +93,6 @@ class Patient extends React.Component {
       return (
         <a
           className="bottom"
-          onClick={() => {
-            onPatientTextClick(category, patient);
-          }}
         >
           <div className="msg-alert">
             <div className="msg">
@@ -97,6 +100,7 @@ class Patient extends React.Component {
             </div>
             <div className="time">
               {this.renderUnreadMessageCount()}
+              <Button bsStyle="primary" className="btn-reply" onClick={() => { onPatientTextClick(category, patient); }}>Reply</Button>
               {this.renderTextCreatedDate()}
             </div>
           </div>

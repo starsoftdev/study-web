@@ -8,14 +8,13 @@ import ReactTooltip from 'react-tooltip';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
-import { normalizePhoneForServer } from '../../common/helper/functions';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../containers/App/actions';
 import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId, selectCurrentUserClientId, selectClientSites } from '../../containers/App/selectors';
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../../containers/HomePage/actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
-import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
+import { selectSyncErrorBool } from '../../common/selectors/form.selector';
 import { selectRenewStudyFormValues, selectRenewStudyFormError, selectRenewStudyFields } from '../../components/RenewStudyForm/selectors';
 import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError, selectUpgradeStudyFields } from '../../components/UpgradeStudyForm/selectors';
 import RenewStudyForm from '../../components/RenewStudyForm/index';
@@ -38,7 +37,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     editStudy: PropTypes.func,
     editedStudy: PropTypes.object,
     editStudyFormError: PropTypes.bool,
-    editStudyFormValues: PropTypes.object,
     paginationOptions: React.PropTypes.object,
     renewStudyFormError: PropTypes.bool,
     renewStudyFormValues: PropTypes.object,
@@ -457,18 +455,14 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     });
   }
 
-  handleEditStudyFormSubmit() {
-    const { editStudyFormError, editStudyFormValues, touchEditStudy } = this.props;
+  handleEditStudyFormSubmit(params) {
+    const { editStudyFormError, touchEditStudy } = this.props;
     if (editStudyFormError) {
       touchEditStudy();
       return;
     }
 
-    this.props.editStudy(this.state.selectedStudyId, {
-      emailNotifications: editStudyFormValues.emailNotifications,
-      recruitmentPhone: normalizePhoneForServer(editStudyFormValues.recruitmentPhone),
-      clientId: this.props.currentUserClientId,
-    });
+    this.props.editStudy(this.state.selectedStudyId, { ...params, clientId: this.props.currentUserClientId });
   }
 
   generateRenewStudyShoppingCartAddOns() {
@@ -749,7 +743,6 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   currentUserStripeCustomerId: selectCurrentUserStripeCustomerId(),
   editedStudy: selectEditedStudy(),
-  editStudyFormValues: selectValues('editStudy'),
   editStudyFormError: selectSyncErrorBool('editStudy'),
   paginationOptions: selectPaginationOptions(),
   renewedStudy: selectRenewedStudy(),
@@ -776,7 +769,7 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     fetchIndicationLevelPrice: (levelId, indicationId) => dispatch(fetchIndicationLevelPrice(levelId, indicationId)),
     fetchUpgradeStudyPrice: (fromLevel, toLevel) => dispatch(fetchUpgradeStudyPrice(fromLevel, toLevel)),
-    editStudy: (studyId, formValues) => dispatch(editStudy(studyId, formValues)),
+    editStudy: (studyId, options) => dispatch(editStudy(studyId, options)),
     renewStudy: (studyId, cartValues, formValues, onClose) => dispatch(renewStudy(studyId, cartValues, formValues, onClose)),
     saveCard: (clientId, customerId, cardData) => dispatch(saveCard(clientId, customerId, cardData)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),

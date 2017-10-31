@@ -2,7 +2,7 @@ import expect from 'expect';
 import { validatorFactory } from '../reduxForm';
 
 const schema = {
-  email: { presence: true, email: true },
+  email: { presence: true, email: true, emailDomain: true },
   name: { presence: true },
 };
 

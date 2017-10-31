@@ -64,7 +64,9 @@ class PatientText extends React.Component {
   }
 
   render() {
-    const { textMessage, site } = this.props;
+    const { textMessage, site, currentUser } = this.props;
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+
     if (textMessage) {
       let addon = '';
 
@@ -78,7 +80,9 @@ class PatientText extends React.Component {
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>
-          <div className="post-content">
+          <div className={classNames('post-content', { error: textMessage.errorCode })}>
+            {(textMessage.errorCode) ?
+              <i className="icomoon-warning">!</i> : ''}
             <p>
               {textMessage.body}
               {addon}
@@ -91,9 +95,13 @@ class PatientText extends React.Component {
               <i className="icomoon-icon_trash" />
             </a>
           </div>
+          {(textMessage.errorCode) ?
+            <span className="error-message">
+              Not Delivered
+            </span> : ''}
           {this.renderTextMessageOriginUser()}
           <time dateTime={textMessage.dateCreated}>
-            {moment.tz(textMessage.dateCreated, site.timezone).format('MM/DD/YY [at] h:mm A')}
+            {moment.tz(textMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}
           </time>
         </div>
       );

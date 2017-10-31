@@ -23,6 +23,11 @@ export const selectValues = (formName) => createSelector(
   (substate) => get(substate, `${formName}.values`, {})
 );
 
+export const selectInitialValues = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.initial`, {})
+);
+
 export const selectSyncErrors = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.syncErrors`, {})
