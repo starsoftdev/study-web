@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as XLSX from 'xlsx';
 import { blur, change, Field, /* FieldArray, */reduxForm, reset, touch } from 'redux-form';
-import classNames from 'classnames';
+// import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -78,6 +78,7 @@ export default class UploadPatientsForm extends React.Component {
     super(props);
 
     this.state = {
+      validationResult: false,
       showPreview: false,
       siteLocation: null,
       fileName: null,
@@ -149,6 +150,7 @@ export default class UploadPatientsForm extends React.Component {
     this.fixOffset = this.fixOffset.bind(this);
     this.checkSameNumbers = this.checkSameNumbers.bind(this);
     this.handleFile = this.handleFile.bind(this);
+    this.setValidationResult = this.setValidationResult.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -169,6 +171,10 @@ export default class UploadPatientsForm extends React.Component {
         scope.updateCounters();
       });
     }
+  }
+
+  setValidationResult(validationResult) {
+    this.setState({ validationResult });
   }
 
   updateCounters() {
@@ -537,7 +543,7 @@ export default class UploadPatientsForm extends React.Component {
       if (!rABS) data = new Uint8Array(data);
       const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(firstWorksheet, { header:1, defval: '' });
+      const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
       scope.setState({ fileName: name, patients: json });
     };
@@ -549,7 +555,7 @@ export default class UploadPatientsForm extends React.Component {
     }
   }
 
-  /*renderGroupFields(names) {
+  /* renderGroupFields(names) {
     const { rowsCounts } = this.state;
     let counter = 0;
 
@@ -581,7 +587,7 @@ export default class UploadPatientsForm extends React.Component {
     });
   }*/
 
-  /*renderExampleGroupFields(names) {
+  /* renderExampleGroupFields(names) {
     const { examples } = this.state;
     let counter = 0;
 
@@ -819,14 +825,15 @@ export default class UploadPatientsForm extends React.Component {
         />*/}
         {(this.state.showPreview && !isImporting && patients.length) &&
           <UploadPatientsPreviewForm
+            setValidationResult={this.setValidationResult}
             patients={patients}
           />
         }
         {isImporting &&
           <div className="import-progress">
-            <ProgressBar bsStyle="success" now={40} />
+            <ProgressBar bsStyle="success" now={10} />
             <div className="control">
-              <span className="title">Import of <b>123.csv</b> in progress.</span>
+              <span className="title">Import of <b>{this.state.fileName}</b> in progress.</span>
               <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />
             </div>
           </div>
@@ -843,7 +850,7 @@ export default class UploadPatientsForm extends React.Component {
         <div className="text-right">
           {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview} disabled={this.state.fileName === null}>Next</Button>}
           {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {(showPreview && !isImporting) && <Button type="submit">Submit</Button>}
+          {(showPreview && !isImporting) && <Button type="submit" disabled={this.state.validationResult !== true}>Submit</Button>}
         </div>
       </Form>
     );
