@@ -120,6 +120,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     if (userRoleType === 'client') {
       const credits = this.props.clientCredits.details.customerCredits || 0;
       const emailCredits = this.props.clientCredits.details.emailCredits || 0;
+
       return (
         <header id="header">
           <div className="container-fluid">
