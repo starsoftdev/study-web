@@ -74,7 +74,6 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
     return (
       <div className="table-responsive table-holder table-sponsor-admin alt">
         <InfiniteScroll
-          className="test-test"
           pageStart={0}
           loadMore={this.props.loadMore}
           initialLoad={false}

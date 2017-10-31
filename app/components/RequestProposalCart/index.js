@@ -151,6 +151,7 @@ export class RequestProposalCart extends Component {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       email: currentUser.email,
+      timezone: currentUser.timezone,
       site_id: formValues.site,
       exposureLevelName: selectedLevel.name,
       phone: '1111',

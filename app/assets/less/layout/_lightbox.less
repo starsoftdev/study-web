@@ -719,49 +719,53 @@ input:focus {
   }
 }
 
-#text-email-blast .modal-opener,
-.add-patient-info-import,
-.upload-patient-info {
-  padding: 3px;
-  height: 150px;
-  display: block;
-  color: #00afef;
-  font-size: 18px;
-  font-weight: 600;
-  position: relative;
-  text-align: center;
-  text-transform: uppercase;
-  &:hover {
-    color: #fff;
-    .table {
-      background: #00afef;
-    }
-  }
-  [class^="icomoon-"],
-  [class*=" icomoon-"] {
+#text-email-blast,
+#import-info{
+
+  .modal-opener,
+  .add-patient-info-import,
+  .upload-patient-info {
+    padding: 3px;
+    height: 150px;
     display: block;
-    font-size: 40px;
-    margin: 0 0 10px;
-    &.icomoon-envelop {
-      font-size: 34px;
-    }
-  }
-  .text {
-    display: block;
-  }
-  .table {
-    .size(100%);
-    color: inherit;
-    display: table;
+    color: #00afef;
     font-size: 18px;
-    table-layout: fixed;
-    transition: all 0.25s ease;
-    cursor: pointer;
-  }
-  .table-cell {
-    padding: 10px;
-    display: table-cell;
-    vertical-align: middle;
+    font-weight: 600;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    &:hover {
+      color: #fff;
+      .table {
+        background: #00afef;
+      }
+    }
+    [class^="icomoon-"],
+    [class*=" icomoon-"] {
+      display: block;
+      font-size: 40px;
+      margin: 0 0 10px;
+      &.icomoon-envelop {
+        font-size: 34px;
+      }
+    }
+    .text {
+      display: block;
+    }
+    .table {
+      .size(100%);
+      color: inherit;
+      display: table;
+      font-size: 18px;
+      table-layout: fixed;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .table-cell {
+      padding: 10px;
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 }
 .or {
@@ -908,6 +912,7 @@ input:focus {
 
       .sender-field {
         float: left;
+        width: calc(~'100% - 72px');
 
         input {
           border: none;

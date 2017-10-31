@@ -82,12 +82,12 @@ class EmailSection extends React.Component {
     const { submitEmail, studyId, currentPatient, currentUser, formSyncErrors, formValues } = this.props;
     if (_.isEmpty(formSyncErrors)) {
       submitEmail(studyId, currentPatient.id, currentUser, formValues.email, formValues.message, formValues.subject);
-    } else if (formSyncErrors.message) {
-      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
+    } else if (formSyncErrors.message) {
+      toastr.error('', formSyncErrors.message);
     }
   }
 
@@ -100,21 +100,25 @@ class EmailSection extends React.Component {
     const { compose } = this.state;
     return (
       <div className={classNames((!active ? 'emails-tab' : ''), { active })}>
-        {(!compose && currentPatient.id) && <EmailSectionList
+        {(!compose && currentPatient.id) &&
+        <EmailSectionList
           switchCompose={this.switchCompose}
           fetchEmails={fetchEmails}
           emails={emails}
           studyId={studyId}
           currentPatient={currentPatient}
           active={active}
-        />}
+        />
+        }
 
-        {compose && <EmailSectionSendForm
+        {compose &&
+        <EmailSectionSendForm
           submitEmailBlast={this.submitEmailBlast}
           switchCompose={this.switchCompose}
           active={active}
           change={change}
-        />}
+        />
+        }
       </div>
     );
   }

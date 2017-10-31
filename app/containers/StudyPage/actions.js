@@ -456,12 +456,15 @@ export function hideScheduledModal() {
   };
 }
 
-export function submitTextBlast(patients, message, clientRoleId, onClose) {
+export function submitTextBlast(patients, message, clientRoleId, studyId, siteName, currentUser, onClose) {
   return {
     type: SUBMIT_TEXT_BLAST,
     patients,
     message,
     clientRoleId,
+    studyId,
+    siteName,
+    currentUser,
     onClose,
   };
 }
@@ -518,7 +521,6 @@ export function submitEmailSuccess(payload) {
 }
 
 export function fetchEmails(studyId, patientId) {
-  console.log('fetchEmails', studyId, patientId);
   return {
     type: FETCH_EMAILS,
     studyId,
@@ -527,7 +529,6 @@ export function fetchEmails(studyId, patientId) {
 }
 
 export function emailsFetched(payload) {
-  console.log('emailsFetched', payload);
   return {
     type: FETCH_EMAILS_SUCCESS,
     payload,
@@ -535,7 +536,6 @@ export function emailsFetched(payload) {
 }
 
 export function emailsFetchError(payload) {
-  console.log('emailsFetchError', payload);
   return {
     type: FETCH_EMAILS_ERROR,
     payload,

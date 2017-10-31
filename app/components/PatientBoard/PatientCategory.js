@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 
 import * as Selector from '../../containers/StudyPage/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import {
@@ -89,7 +90,6 @@ const collect = (connect, monitor) => ({
 class PatientCategory extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.number.isRequired,
-    study: React.PropTypes.object.isRequired,
     category: React.PropTypes.object.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
@@ -98,6 +98,7 @@ class PatientCategory extends React.Component {
     onPatientClick: React.PropTypes.func.isRequired,
     isOver: React.PropTypes.bool.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
+    currentUser: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -160,6 +161,7 @@ class PatientCategory extends React.Component {
                 <Patient
                   key={patient.id}
                   category={category}
+                  currentUser={this.props.currentUser}
                   currentPatientId={currentPatientId}
                   patient={patient}
                   unreadMessageCount={patient.unreadMessageCount}
@@ -204,6 +206,7 @@ const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
   currentSite: Selector.selectSite(),
   studyId: Selector.selectStudyId(),
+  currentUser: selectCurrentUser(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

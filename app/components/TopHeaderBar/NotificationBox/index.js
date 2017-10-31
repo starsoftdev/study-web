@@ -22,6 +22,10 @@ import {
 } from '../../../containers/GlobalNotifications/selectors';
 
 import {
+  selectSites,
+} from '../../../containers/App/selectors';
+
+import {
   getAvatarUrl,
   eventMessage,
 } from '../../../containers/NotificationsPage';
@@ -30,6 +34,7 @@ import {
 class NotificationBox extends React.Component {
   static propTypes = {
     currentUser: PropTypes.any,
+    sites: PropTypes.array,
     notifications: PropTypes.array,
     unreadNotificationsCount: PropTypes.number,
     fetchNotifications: PropTypes.func.isRequired,
@@ -68,7 +73,14 @@ class NotificationBox extends React.Component {
   }
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, sites } = this.props;
+    let timezone = currentUser.timezone;
+    if (currentUser.roleForClient && currentUser.roleForClient.site_id) {
+      const site = _.find(sites, site => site.id === currentUser.roleForClient.site_id);
+      if (site) {
+        timezone = site.timezone;
+      }
+    }
 
     return (
       <div className="notifications pull-left open-close">
@@ -95,7 +107,7 @@ class NotificationBox extends React.Component {
                       if (html.indexOf('<a href="/app/study') !== -1) {
                         showTime = false;
                         html = `${html.substring(0, html.indexOf('</a>'))}
-                          <time>${this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time></a>`;
+                          <time>${this.parseNotificationTime(n.event_log.created, timezone)}</time></a>`;
                       }
                       return (
                         <li key={n.id}>
@@ -105,7 +117,7 @@ class NotificationBox extends React.Component {
                             </div>
                             <p dangerouslySetInnerHTML={{ __html: html }} />
                             {showTime &&
-                            <time>{this.parseNotificationTime(n.event_log.created, currentUser.timezone)}</time>
+                            <time>{this.parseNotificationTime(n.event_log.created, timezone)}</time>
                             }
                           </a>
                         </li>
@@ -133,6 +145,7 @@ class NotificationBox extends React.Component {
 const mapStateToProps = createStructuredSelector({
   notifications: selectNotifications,
   unreadNotificationsCount: selectUnreadNotificationsCount,
+  sites: selectSites(),
 });
 
 const mapDispatchToProps = {

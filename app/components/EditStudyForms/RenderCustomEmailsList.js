@@ -1,16 +1,16 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import { forEach, filter } from 'lodash';
 
 import Checkbox from '../../components/Input/Checkbox';
 
-class RenderCustomEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
+export default class RenderCustomEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     change: PropTypes.func.isRequired,
     formValues: PropTypes.object.isRequired,
     fields: PropTypes.object,
-    addEmailNotification: PropTypes.func,
+    addEmailNotificationClick: PropTypes.func,
     closeEmailNotification: PropTypes.func,
     removeCustomEmailNotification: PropTypes.func,
     emailFields: PropTypes.array,
@@ -20,44 +20,17 @@ class RenderCustomEmailsList extends Component { // eslint-disable-line react/pr
     super(props);
 
     this.addEmailNotificationClick = this.addEmailNotificationClick.bind(this);
-    this.closeAddEmailModal = this.closeAddEmailModal.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
     this.deleteEmail = this.deleteEmail.bind(this);
-    this.addEmailNotificationFields = this.addEmailNotificationFields.bind(this);
-    this.addNewFields = this.addNewFields.bind(this);
-
-    this.state = {
-      addEmailModalShow: false,
-    };
   }
 
   componentDidMount() {
   }
 
-  addNewFields(values) {
-    const { change, fields } = this.props;
-    forEach(values, (Object) => {
-      fields.push(Object);
-    });
-    change('checkAllCustomInput', false);
-  }
-
-  addEmailNotificationFields(values) {
-    const { change, fields } = this.props;
-    fields.push(values);
-    this.closeAddEmailModal();
-    change('checkAllCustomInput', false);
-  }
-
   addEmailNotificationClick() {
-    const { addEmailNotification } = this.props;
-    addEmailNotification(true);
-  }
-
-  closeAddEmailModal() {
-    const { closeEmailNotification } = this.props;
-    closeEmailNotification(true);
+    const { addEmailNotificationClick } = this.props;
+    addEmailNotificationClick(true);
   }
 
   selectAll(e) {
@@ -81,12 +54,9 @@ class RenderCustomEmailsList extends Component { // eslint-disable-line react/pr
     }
   }
 
-  deleteEmail(emailId) {
-    const { formValues } = this.props;
-    this.props.removeCustomEmailNotification({
-      emailId,
-      studyId: formValues.study_id,
-    });
+  deleteEmail(notificationId, email) {
+    const { removeCustomEmailNotification } = this.props;
+    removeCustomEmailNotification(notificationId, email);
   }
 
   render() {
@@ -124,7 +94,7 @@ class RenderCustomEmailsList extends Component { // eslint-disable-line react/pr
                 <span
                   className="icomoon-icon_trash"
                   onClick={() => {
-                    this.deleteEmail(email.id);
+                    this.deleteEmail(email.id, email.email);
                   }}
                 />
               </li>
@@ -138,5 +108,3 @@ class RenderCustomEmailsList extends Component { // eslint-disable-line react/pr
     );
   }
 }
-
-export default RenderCustomEmailsList;
