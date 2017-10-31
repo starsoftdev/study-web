@@ -3,15 +3,20 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
+import { touch } from 'redux-form';
 import _ from 'lodash';
 
 import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
 import { selectCurrentUser, selectSiteLocations, selectSources, selectIndications } from '../App/selectors';
+import { selectSyncErrors } from '../../common/selectors/form.selector';
 
 import { exportPatients } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
+import { fields } from '../../components/UploadPatientsForm/validator';
 import { normalizePhoneForServer } from '../../common/helper/functions';
+
+const formName = 'UploadPatients.UploadPatientsForm';
 
 export class UploadPatientsPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -24,6 +29,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     sites: PropTypes.array,
     indications: PropTypes.array,
     sources: PropTypes.array,
+    formSyncErrors: PropTypes.object,
+    touchFields: PropTypes.func,
   };
 
   constructor(props) {
@@ -40,7 +47,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   onSubmitForm(params) {
-    const { exportPatients } = this.props;
+    const { exportPatients, formSyncErrors, touchFields } = this.props;
     const options = _.clone(params);
 
     // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
@@ -57,23 +64,39 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     delete options['group-gender'];
     delete options['group-bmi'];
 
+    // console.log('fields', fields);
+
+    touchFields();
+
+    console.log('onSubmitForm', formSyncErrors, options);
+
     if (options.patients && options.patients.length) {
-      /* normalizing the phone number */
-      _.forEach(options.patients, (patient, index) => {
-        _.forEach(patient, (value, key) => {
-          if (value === 'N/A') {
-            options.patients[index][key] = null;
+      if (!_.isEmpty(formSyncErrors)) {
+        if (formSyncErrors['group-name']) {
+          toastr.error('', formSyncErrors['group-name']);
+        } else if (formSyncErrors['group-email']) {
+          toastr.error('', formSyncErrors['group-email']);
+        } else if (formSyncErrors['group-phone']) {
+          toastr.error('', formSyncErrors['group-phone']);
+        }
+      } else {
+        /* normalizing the phone number */
+        _.forEach(options.patients, (patient, index) => {
+          _.forEach(patient, (value, key) => {
+            if (value === 'N/A') {
+              options.patients[index][key] = null;
+            }
+          });
+
+          if (patient.phone) {
+            options.patients[index].phone = normalizePhoneForServer(patient.phone);
           }
         });
 
-        if (patient.phone) {
-          options.patients[index].phone = normalizePhoneForServer(patient.phone);
-        }
-      });
-
-      exportPatients(options);
+        exportPatients(options);
+      }
     } else {
-      toastr.error('', 'Required at least one patient.');
+      toastr.error('', 'Error! There are no patients to be added.');
     }
   }
 
@@ -96,10 +119,12 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   indications: selectIndications(),
   sources: selectSources(),
+  formSyncErrors: selectSyncErrors(formName),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    touchFields: () => dispatch(touch(formName, ...fields)),
     fetchIndications: () => dispatch(fetchIndications()),
     fetchSources: () => dispatch(fetchSources()),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),

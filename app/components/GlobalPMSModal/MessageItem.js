@@ -13,18 +13,19 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
   static propTypes = {
     messageData: PropTypes.object,
     currentUser: PropTypes.object,
+    timezone: PropTypes.string,
   };
 
   render() {
     const { messageData, currentUser } = this.props;
     const cts = messageData.twilioTextMessage.dateCreated;
-
     let addon = '';
     let containerClassName = 'post-holder';
     let senderImage = defaultUserImage;
     // todo remove and put back Anonymous behavior
     // let senderName = 'Anonymous';
     let senderName = `${currentUser.firstName} ${currentUser.lastName || ''}`;
+    const timezone = this.props.timezone || currentUser.timezone;
 
     if (messageData.twilioTextMessage.direction === 'outbound-api') {
       containerClassName = 'post-holder even';
@@ -60,7 +61,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
           </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time>{moment(cts).tz(currentUser.timezone).format('M/DD/YYYY [at] h:mm:ss A')}</time>
+        <time>{moment(cts).tz(timezone).format('M/DD/YYYY [at] h:mm:ss A')}</time>
       </div>
     );
   }

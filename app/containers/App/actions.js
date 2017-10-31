@@ -143,12 +143,8 @@ import {
   ADD_EMAIL_NOTIFICATION_USER_ERROR,
 
   ADD_CUSTOM_EMAIL_NOTIFICATION,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-  ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
 
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
-  REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-  REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
 
   LIST_SITE_NOW,
   LIST_SITE_NOW_SUCCESS,
@@ -209,9 +205,10 @@ import {
 // ///////////////////////////////////////////
 // auth related action creators
 // ///////////////////////////////////////////
-export function fetchMeFromToken() {
+export function fetchMeFromToken(redirect) {
   return {
     type: FETCH_ME_FROM_TOKEN,
+    redirect,
   };
 }
 
@@ -996,38 +993,11 @@ export function addCustomEmailNotification(payload) {
   };
 }
 
-export function addCustomEmailNotificationSuccess(payload) {
-  return {
-    type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-    payload,
-  };
-}
-
-export function addCustomEmailNotificationError(payload) {
-  return {
-    type: ADD_CUSTOM_EMAIL_NOTIFICATION_ERROR,
-    payload,
-  };
-}
-
-export function removeCustomEmailNotification(payload) {
+export function removeCustomEmailNotification(id, email) {
   return {
     type: REMOVE_CUSTOM_EMAIL_NOTIFICATION,
-    payload,
-  };
-}
-
-export function removeCustomEmailNotificationSuccess(payload) {
-  return {
-    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
-    payload,
-  };
-}
-
-export function removeCustomEmailNotificationError(payload) {
-  return {
-    type: REMOVE_CUSTOM_EMAIL_NOTIFICATION_ERROR,
-    payload,
+    id,
+    email,
   };
 }
 

@@ -141,6 +141,7 @@
     "mixpanel-browser": "^2.11.1",
     "mocha": "3.0.2",
     "moment": "^2.15.1",
+    "moment-range": "^3.0.3",
     "moment-timezone": "^0.5.11",
     "ngrok": "2.2.2",
     "null-loader": "0.1.1",

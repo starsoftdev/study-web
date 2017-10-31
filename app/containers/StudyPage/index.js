@@ -24,6 +24,7 @@ import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePa
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { getItem } from '../../utils/localStorage';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -112,11 +113,17 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
               unreadMessageCount: (unreadMessageCount + 1),
               lastTextMessage: socketMessage.twilioTextMessage,
             });
+          } else if (curCategoryId && socketMessage.twilioTextMessage.direction !== 'inbound') {
+            this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
+              unreadMessageCount,
+              lastTextMessage: socketMessage.twilioTextMessage,
+            });
           }
         });
 
         socket.on('notifyClientReportReady', (data) => {
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId) {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId && authToken === data.authToken) {
             // this.props.downloadReport(data.reportName);
             setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
             location.replace(data.url);
@@ -155,15 +162,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
-    let campaignOptions = campaigns.map(campaign => {
-      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).format('MM/DD/YYYY') : 'TBD';
-      const dateTo = campaign.dateTo ? moment(campaign.dateTo).format('MM/DD/YYYY') : 'TBD';
+    const campaignOptions = campaigns.map(campaign => {
+      const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
+      const dateTo = campaign.dateTo ? moment(campaign.dateTo).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       return {
         label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
       };
     });
-    campaignOptions = _.orderBy(campaignOptions, ['label'], ['desc']);
     campaignOptions.unshift({ label: 'All', value: -1 });
     const sourceOptions = sources.map(source => (
       {
@@ -210,6 +216,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <PatientBoard
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
+            site={site}
             params={params}
             ePMS={ePMS}
           />

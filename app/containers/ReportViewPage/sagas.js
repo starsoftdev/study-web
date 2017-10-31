@@ -90,10 +90,15 @@ export function* changeProtocolStatusWatcher() {
 
 export function* changeProtocolStatusWorker(action) {
   try {
-    const queryString = composeQueryString(action.payload);
-    const requestURL = `${API_URL}/studies/changeProtocolStatus?${queryString}`;
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/changeProtocolStatus`;
+    const options = {
+      method: 'GET',
+      query: {
+        status: action.status,
+      },
+    };
 
-    const response = yield call(request, requestURL);
+    const response = yield call(request, requestURL, options);
     yield put(changeProtocolStatusSuccess(response));
     toastr.success('Success!', `The study is now ${action.payload.status ? 'active' : 'inactive'}.`);
   } catch (err) {
@@ -114,7 +119,7 @@ export function* exportStudiesWorker(action) {
   }
 
   try {
-    const queryString = composeQueryString(action.payload);
+    const queryString = composeQueryString({ ...action.payload, authToken });
     const requestURL = `${API_URL}/studies/getStudiesForDB?${queryString}`;
     yield call(request, requestURL);
     const toastrOptions = {

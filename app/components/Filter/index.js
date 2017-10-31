@@ -5,9 +5,10 @@
 import React from 'react';
 import classNames from 'classnames';
 import Select from 'react-select';
+import { toastr } from 'react-redux-toastr';
 import _ from 'lodash';
 
-class Filter extends React.Component {
+export default class Filter extends React.Component {
   static propTypes = {
     options: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
@@ -18,6 +19,14 @@ class Filter extends React.Component {
   };
 
   componentDidMount() {
+  }
+
+  submitSearch(value) {
+    if (!value || !/^\d+$/.test(value)) {
+      toastr.error('', 'Error! Invalid study number.');
+      return;
+    }
+    this.props.onSubmit(value);
   }
 
   createValueBox(options) {
@@ -46,11 +55,11 @@ class Filter extends React.Component {
       >
         <strong className="title">Search</strong>
         <input
-          type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
+          type="text" name={name} className="form-control" placeholder="Study #" ref={(searchVal) => (
           this.searchVal = searchVal
         )}
         />
-        <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
+        <button className="btn btn-default" onClick={() => this.submitSearch(this.searchVal.value)}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
           <i className="icomoon-icon_close"></i>
         </a>
@@ -164,5 +173,3 @@ class Filter extends React.Component {
     }
   }
 }
-
-export default Filter;
