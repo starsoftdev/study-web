@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
-import { toastr } from 'react-redux-toastr';
+// import { toastr } from 'react-redux-toastr';
 import { touch } from 'redux-form';
 import _ from 'lodash';
 
@@ -83,7 +83,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   onSubmitForm(params) {
-    const { exportPatients, formSyncErrors, touchFields } = this.props;
+    // const { exportPatients, formSyncErrors, touchFields } = this.props;
     const options = _.clone(params);
 
     this.setState({ isImporting : true }, () => {
@@ -93,7 +93,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         options.study_id = options.protocol;
       }
 
-      delete options.protocol;
+      console.log('onSubmitForm', params);
+
+      /* delete options.protocol;
       delete options.groupname;
       delete options.groupemail;
       delete options.groupphone;
@@ -119,7 +121,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             toastr.error('', formSyncErrors.groupphone);
           }
         } else if (!hasEmpty && !hasError) {
-          /* normalizing the phone number */
+          /!* normalizing the phone number *!/
           _.forEach(options.patients, (patient, index) => {
             if (patient.phone) {
               options.patients[index].phone = normalizePhoneForServer(patient.phone);
@@ -130,7 +132,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         }
       } else {
         toastr.error('', 'Error! There are no patients to be added.');
-      }
+      }*/
     });
   }
 
