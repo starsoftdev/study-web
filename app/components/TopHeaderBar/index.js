@@ -119,6 +119,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     }
     if (userRoleType === 'client') {
       const credits = this.props.clientCredits.details.customerCredits || 0;
+      const emailCredits = this.props.clientCredits.details.emailCredits || 0;
       return (
         <header id="header">
           <div className="container-fluid">
@@ -161,8 +162,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </a>
 
             <div className="get-credits pull-left">
-              <span>{credits} Messaging Credits</span>
-              <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              <div>
+                <div>{credits} Text Credits</div>
+                <div>{emailCredits} Email Credits</div>
+              </div>
+              <div>
+                <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              </div>
             </div>
 
             <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} userRoleType={userRoleType} />
