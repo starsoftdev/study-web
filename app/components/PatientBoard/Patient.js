@@ -63,8 +63,7 @@ class Patient extends React.Component {
   }
 
   renderUnreadMessageCount() {
-    // const { unreadMessageCount } = this.props;
-    const unreadMessageCount = 2;
+    const { unreadMessageCount } = this.props;
     if (unreadMessageCount > 0) {
       return (
         <span className="counter-circle">{unreadMessageCount}</span>
