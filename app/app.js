@@ -70,6 +70,19 @@ const render = () => {
   );
 };
 
+
+const sentryDns = process.env.SENTRY_DNS;
+const script = document.createElement('script');
+script.src = 'https://cdn.ravenjs.com/3.19.1/raven.min.js';
+script.async = true;
+script.crossOrign = 'anonymous';
+script.onload = () => {
+  console.log('sentry is loaded on web', sentryDns);
+  window.Raven.config('https://954f7a372f4d4d5da2953548907b24fb@sentry.io/222632').install();
+};
+script.async = true;
+document.body.appendChild(script);
+
 render();
 
 // Install ServiceWorker and AppCache in the end since
