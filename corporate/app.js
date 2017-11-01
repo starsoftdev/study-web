@@ -102,14 +102,8 @@ const render = () => {
   );
 };
 
-const script = document.createElement('script');
-script.src = 'https://cdn.ravenjs.com/3.19.1/raven.min.js';
-script.async = true;
-script.crossOrign = 'anonymous';
-script.onload = () => {
-  window.Raven.config(SENTRY_DSN).install();
-};
-script.async = true;
-document.body.appendChild(script);
+if (SENTRY_DSN) {
+  Raven.config(SENTRY_DSN).install();
+}
 
 render();
