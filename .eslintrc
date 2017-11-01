@@ -24,7 +24,8 @@
     "MIXPANEL_TOKEN": true,
     "SITE_KEY": true,
     "ga": true,
-    "DASHBOARD_TIMEZONE": true
+    "DASHBOARD_TIMEZONE": true,
+    "SENTRY_DSN": true
   },
   "rules": {
     "arrow-body-style": 0,

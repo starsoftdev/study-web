@@ -102,14 +102,12 @@ const render = () => {
   );
 };
 
-const sentryDsn = process.env.SENTRY_DSN;
 const script = document.createElement('script');
 script.src = 'https://cdn.ravenjs.com/3.19.1/raven.min.js';
 script.async = true;
 script.crossOrign = 'anonymous';
 script.onload = () => {
-  console.log('sentry is loaded on corporate', sentryDsn);
-  window.Raven.config(sentryDsn).install();
+  window.Raven.config(SENTRY_DSN).install();
 };
 script.async = true;
 document.body.appendChild(script);
