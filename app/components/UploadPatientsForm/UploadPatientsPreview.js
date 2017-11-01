@@ -13,6 +13,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     patients: PropTypes.array,
     setDuplicateValidationResult: PropTypes.func,
     setRequiredValidationResult: PropTypes.func,
+    setPatients: PropTypes.func,
   };
 
   constructor(props) {
@@ -46,6 +47,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   }
 
   clearInvalidKeys(patients) {
+    const { setPatients } = this.props;
     const { validKeys } = this.state;
     const clonePatients = _.clone(patients);
     _.forEach(clonePatients, (patient, patientKey) => {
@@ -57,6 +59,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
         }
       });
     });
+
+    setPatients(clonePatients);
   }
 
   validateDuplicateKeys(patients) {
