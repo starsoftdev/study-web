@@ -5223,9 +5223,10 @@ div[data-percentage],
       color: #9c6;
       border-color: #9c6;
       background: #fff;
-      &:hover {
+      &:focus, &:active:focus, &:hover {
         background: #9c6;
         color: #fff;
+        border-color: #9c6;
       }
     }
   }
