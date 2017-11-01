@@ -14,7 +14,12 @@ import { selectIndications, selectSiteLocations, selectSources, selectCurrentUse
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
-import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectEmptyRowRequiredError } from '../../containers/UploadPatients/selectors';
+import {
+  selectIsFetchingProtocols,
+  selectProtocols,
+  selectExportPatientsStatus,
+  // selectEmptyRowRequiredError
+} from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 // import RenderPatientsList from './RenderPatientsList';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
@@ -31,7 +36,7 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
-  emptyRowRequiredError: selectEmptyRowRequiredError(formName),
+  // emptyRowRequiredError: selectEmptyRowRequiredError(formName),
   formSyncErrors: selectSyncErrors(formName),
 });
 
@@ -65,10 +70,11 @@ export default class UploadPatientsForm extends React.Component {
     isFetchingProtocols: React.PropTypes.bool,
     isImporting: React.PropTypes.bool,
     switchIsImporting: React.PropTypes.func,
+    setPatients: React.PropTypes.func,
     onClose: React.PropTypes.func,
     sites: React.PropTypes.array,
     sources: React.PropTypes.array,
-    emptyRowRequiredError: React.PropTypes.object,
+    // emptyRowRequiredError: React.PropTypes.object,
     handleSubmit: React.PropTypes.func,
     blur: React.PropTypes.func,
     protocols: React.PropTypes.array,
@@ -138,7 +144,7 @@ export default class UploadPatientsForm extends React.Component {
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
+    // this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
     this.mapTextAreaGroups = this.mapTextAreaGroups.bind(this);
     this.updateFields = this.updateFields.bind(this);
@@ -156,13 +162,18 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { /* isImporting, */exportPatientsStatus, clearForm, change } = this.props;
-    const scope = this;
+    const {
+      // isImporting,
+      exportPatientsStatus,
+      clearForm,
+      // switchIsImporting
+    } = this.props;
+    // const scope = this;
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       clearForm();
 
-      change('groupname', '');
+      /* change('groupname', '');
       change('groupemail', '');
       change('groupphone', '');
       change('groupage', '');
@@ -171,7 +182,7 @@ export default class UploadPatientsForm extends React.Component {
 
       this.setState({ fields: [], showPreview: false }, () => {
         scope.updateCounters();
-      });
+      });*/
     }
   }
 
@@ -509,7 +520,7 @@ export default class UploadPatientsForm extends React.Component {
     this.setState({ siteLocation });
   }
 
-  selectIndication(indicationId) {
+  /* selectIndication(indicationId) {
     if (indicationId) {
       const { change, protocols } = this.props;
       const protocol = _.find(protocols, { indicationId });
@@ -520,7 +531,7 @@ export default class UploadPatientsForm extends React.Component {
         change('protocol', null);
       }
     }
-  }
+  }*/
 
   selectProtocol(studyId) {
     const { protocols, showProtocolModal, change } = this.props;
@@ -625,8 +636,29 @@ export default class UploadPatientsForm extends React.Component {
   }*/
 
   render() {
-    const { handleSubmit, /* emptyRowRequiredError,*/ fileInputRef, indications, isFetchingProtocols, protocols, sites, sources, isImporting/* , change, blur*/ } = this.props;
-    const { /* fields, */showPreview/* , rowsCounts, duplicates*/, patients, requiredValidationResult, duplicateValidationResult } = this.state;
+    const {
+      setPatients,
+      handleSubmit,
+      // emptyRowRequiredError,
+      fileInputRef,
+      indications,
+      isFetchingProtocols,
+      protocols,
+      sites,
+      sources,
+      isImporting,
+      // change,
+      // blur,
+    } = this.props;
+    const {
+      // fields,
+      showPreview,
+      // rowsCounts,
+      // duplicates,
+      patients,
+      requiredValidationResult,
+      duplicateValidationResult,
+    } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -694,7 +726,7 @@ export default class UploadPatientsForm extends React.Component {
         }
         {(!this.state.showPreview && !isImporting) &&
           <div className="field-row main">
-            <strong className="label required">
+            <strong className="label">
               <label>Indication</label>
             </strong>
             <Field
@@ -703,7 +735,7 @@ export default class UploadPatientsForm extends React.Component {
               className="field"
               placeholder="Select Indication"
               options={indicationOptions}
-              onChange={this.selectIndication}
+              disabled
             />
           </div>
         }
@@ -762,7 +794,7 @@ export default class UploadPatientsForm extends React.Component {
                   <th>BMI</th>
                 </tr>
                 <tr>
-                  <td>John, Doe</td>
+                  <td>Doe, John</td>
                   <td>johndoe@example.com</td>
                   <td>(111) 111-1111</td>
                   <td className="dob">1/1/1111</td>
@@ -770,7 +802,7 @@ export default class UploadPatientsForm extends React.Component {
                   <td className="bmi">18.4</td>
                 </tr>
                 <tr>
-                  <td>Jane, Doe</td>
+                  <td>Doe, Jane</td>
                   <td>janedoe@example.com</td>
                   <td>(555) 555-5555</td>
                   <td className="dob">5/5/5555</td>
@@ -778,7 +810,7 @@ export default class UploadPatientsForm extends React.Component {
                   <td className="bmi">24.5</td>
                 </tr>
                 <tr>
-                  <td>Janie, Doe</td>
+                  <td>Doe, Janie</td>
                   <td>janiedoe@example.com</td>
                   <td>(888) 888-8888</td>
                   <td className="dob">8/8/8888</td>
@@ -833,6 +865,7 @@ export default class UploadPatientsForm extends React.Component {
           <UploadPatientsPreviewForm
             setDuplicateValidationResult={this.setDuplicateValidationResult}
             setRequiredValidationResult={this.setRequiredValidationResult}
+            setPatients={setPatients}
             patients={patients}
           />
         }

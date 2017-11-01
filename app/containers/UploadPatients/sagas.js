@@ -18,7 +18,7 @@ import {
   filteredProtcolsFetchingError,
   patientsExported,
   exportPatientsError,
-  emptyRowRequiredError,
+  // emptyRowRequiredError,
   addProtocolSucceess,
   addProtocolError,
 } from './actions';
@@ -57,7 +57,7 @@ export function* exportPatientsWatcher() {
 
       toastr.success('Export Patients', 'Success! You have uploaded your patients.');
       yield put(patientsExported(response));
-      yield put(emptyRowRequiredError(false));
+      // yield put(emptyRowRequiredError(false));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);

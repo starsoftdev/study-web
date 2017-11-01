@@ -54,6 +54,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   constructor(props) {
     super(props);
     this.state = {
+      patients: [],
       showAddProtocolModal: false,
       isImporting: false,
     };
@@ -66,6 +67,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     this.validateEmail = this.validateEmail.bind(this);
     this.switchShowAddProtocolModal = this.switchShowAddProtocolModal.bind(this);
     this.switchIsImporting = this.switchIsImporting.bind(this);
+    this.setPatients = this.setPatients.bind(this);
   }
 
   componentWillMount() {
@@ -83,7 +85,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   onSubmitForm(params) {
-    // const { exportPatients, formSyncErrors, touchFields } = this.props;
+    const { exportPatients/* , formSyncErrors, touchFields*/ } = this.props;
+    const { patients } = this.state;
     const options = _.clone(params);
 
     this.setState({ isImporting : true }, () => {
@@ -93,7 +96,13 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         options.study_id = options.protocol;
       }
 
-      console.log('onSubmitForm', params);
+      if (patients.length > 0) {
+        options.patients = patients;
+      }
+
+      console.log('onSubmitForm', options);
+
+      exportPatients(options);
 
       /* delete options.protocol;
       delete options.groupname;
@@ -134,6 +143,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         toastr.error('', 'Error! There are no patients to be added.');
       }*/
     });
+  }
+
+  setPatients(patients) {
+    console.log('setPatients: ', patients);
+    this.setState({ patients });
   }
 
   validateEmail(email) {
@@ -221,6 +235,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             isImporting={isImporting}
+            setPatients={this.setPatients}
             switchIsImporting={this.switchIsImporting}
             showProtocolModal={this.switchShowAddProtocolModal}
             fileInputRef={(ref) => {
