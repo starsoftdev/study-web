@@ -71,13 +71,13 @@ const render = () => {
 };
 
 
-const sentryDns = process.env.SENTRY_DNS;
+const sentryDsn = process.env.SENTRY_DSN;
 const script = document.createElement('script');
 script.src = 'https://cdn.ravenjs.com/3.19.1/raven.min.js';
 script.async = true;
 script.crossOrign = 'anonymous';
 script.onload = () => {
-  console.log('sentry is loaded on web', sentryDns);
+  console.log('sentry is loaded on web', sentryDsn);
   window.Raven.config('https://954f7a372f4d4d5da2953548907b24fb@sentry.io/222632').install();
 };
 script.async = true;
