@@ -87,6 +87,15 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.pageview(nextProps.location.pathname);
       }
     }
+
+    console.log(1, window.OneSignal);
+    if (window.OneSignal && nextProps.userData) {
+      window.OneSignal.sendTags({
+        userId: nextProps.userData.id,
+      }, (tagsSent) => {
+        console.log(2, tagsSent);
+      });
+    }
   }
 
   handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function

@@ -102,4 +102,8 @@ const render = () => {
   );
 };
 
+if (SENTRY_DSN) {
+  Raven.config(SENTRY_DSN).install();
+}
+
 render();

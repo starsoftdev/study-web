@@ -20,11 +20,13 @@
   },
   "globals": {
     "API_URL": true,
-    "SOCKET_URL": true,
-    "MIXPANEL_TOKEN": true,
-    "SITE_KEY": true,
+    "DASHBOARD_TIMEZONE": true,
     "ga": true,
-    "DASHBOARD_TIMEZONE": true
+    "MIXPANEL_TOKEN": true,
+    "Raven": true,
+    "SENTRY_DSN": true,
+    "SITE_KEY": true,
+    "SOCKET_URL": true
   },
   "rules": {
     "arrow-body-style": 0,
