@@ -332,6 +332,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       touchRenewStudy, touchShoppingCart, renewStudyFields } = this.props;
 
     if (renewStudyFormError || shoppingCartFormError) {
+      console.log(333, renewStudyFields)
       touchRenewStudy(renewStudyFields);
       touchShoppingCart();
       return;

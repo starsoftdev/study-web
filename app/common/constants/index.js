@@ -1,9 +1,9 @@
 export const LEAD_SOURCE_LIST = [
-  { value: 1, label: 'TV' },
-  { value: 2, label: 'Radio' },
+  { value: 5, label: 'TV' },
+  { value: 4, label: 'Radio' },
   { value: 3, label: 'Print' },
-  { value: 4, label: 'Digital' },
-  { value: 5, label: 'Other' },
+  { value: 2, label: 'Digital' },
+  { value: 6, label: 'Other' },
 ];
 
 export const CAMPAIGN_LENGTH_LIST = [

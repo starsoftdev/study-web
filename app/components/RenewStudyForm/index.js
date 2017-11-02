@@ -81,6 +81,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       minDate: moment(),
       dateStyle: 'MM/DD/YY',
       isReset: false,
+      isCallTrackingAlreadySet: false,
     };
   }
 
@@ -104,6 +105,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
+      const { change } = this.props;
       if (newProps.selectedStudy.latestDateTo && moment(newProps.selectedStudy.latestDateTo).isAfter(moment())) {
         const { selectedStudy } = newProps;
         const minDate = moment(selectedStudy.latestDateTo).add(1, 'days');
@@ -111,14 +113,25 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           minDate,
           initDate: minDate,
         });
-        const { change } = this.props;
         change('startDate', minDate);
       } else {
         this.setState({
           initDate: moment(),
         });
-        const { change } = this.props;
         change('startDate', moment());
+      }
+
+      if (newProps.selectedStudy.callTracking){
+        console.log(222);
+        change('callTracking', true);
+        this.setState({
+          isCallTrackingAlreadySet: true,
+        });
+      }else{
+        change('callTracking', false);
+        this.setState({
+          isCallTrackingAlreadySet: false,
+        });
       }
     }
 
@@ -291,6 +304,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
     const currentDate = moment();
 
+    console.log(this.props.selectedStudy)
+
     const addOns = this.generateRenewStudyShoppingCartAddOns();
     return (
       <div>
@@ -385,11 +400,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                             <Field
                               name="callTracking"
                               component={Toggle}
+                              disabled={this.state.isCallTrackingAlreadySet}
                             />
                           </div>
                         </div>
                       }
-                      {callTracking &&
+                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
                         <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
                       }
                       <div className="field-row">
