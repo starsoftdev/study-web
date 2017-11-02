@@ -6,7 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { Field } from 'redux-form';
+import { Field, change } from 'redux-form';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
@@ -37,10 +37,11 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           return (
             <div className="lead-item" key={index}>
               <div className="field-row">
-                <strong className="label required"><label>Lead Source</label></strong>
+                <strong className="label required"><label>Lead Source #{(index + 1)}</label></strong>
                 <Field
                   name={`${lead}.source_id`}
                   component={ReactSelect}
+                  objectValue
                   placeholder="Select Lead Source"
                   options={LEAD_SOURCE_LIST}
                   className="field"
@@ -52,7 +53,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Source Name</label></strong>
+                    <strong className="label required"><label>Source Name #{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.source_name`}
                       component={Input}
