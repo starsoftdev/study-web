@@ -46,7 +46,11 @@ const selectLeadsCount = () => createSelector(
 
 const selectRegisteredFields = () => createSelector(
   selectFormDomain(),
-  (substate) => Object.keys(get(substate, 'listNewStudy.registeredFields', []))
+  (substate) => {
+    return get(substate, 'listNewStudy.registeredFields', []).map((item) => {
+      return item.name;
+    })
+  }
 );
 
 export default selectFormDomain;
