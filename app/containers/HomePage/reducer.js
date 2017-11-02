@@ -627,10 +627,12 @@ export default function homePageReducer(state = initialState, action) {
       };
 
     case INCREMENT_STUDY_UNREAD_MESSAGES:
-      // studiesCopy = _.cloneDeep(state.studies.details);
-      // foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
-      // if (foundStudy) {
-      //   foundStudy.unreadMessageCount ++;
+      studiesCopy = _.cloneDeep(state.studies.details);
+      foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
+      if (foundStudy) {
+        foundStudy.unreadMessageCount ++;
+      }
+
       return {
         ...state,
         studies: {
@@ -648,8 +650,6 @@ export default function homePageReducer(state = initialState, action) {
           overallTotal: state.patientMessagesCount.overallTotal + 1,
         },
       };
-      // }
-      // return state;
 
     case SUBTRACT_STUDY_UNREAD_MESSAGES:
       studiesCopy = _.cloneDeep(state.studies.details);
