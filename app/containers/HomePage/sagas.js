@@ -34,7 +34,7 @@ import {
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
   UPDATE_DASHBOARD_STUDY,
-  FETCH_ALL_CLIENT_USERS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
   FETCH_STUDY_CAMPAIGNS,
   CHANGE_STUDY_STATUS,
   UPDATE_LANDING_PAGE,
@@ -61,8 +61,8 @@ import {
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
   updateDashboardStudySuccess,
-  fetchAllClientUsersDashboardSuccess,
-  fetchAllClientUsersDashboardError,
+  fetchAllStudyEmailNotificationsSuccess,
+  fetchAllStudyEmailNotificationsError,
   fetchStudyCampaignsDashboardSuccess,
   fetchStudyCampaignsDashboardError,
   fetchCustomNotificationEmailsSuccess,
@@ -872,25 +872,26 @@ export function* updateDashboardStudyWorker(action) {
 }
 
 export function* fetchAllClientUsersWatcher() {
-  yield* takeLatest(FETCH_ALL_CLIENT_USERS, fetchAllClientUsersWorker);
+  yield* takeLatest(FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS, fetchAllClientUsersWorker);
 }
 
 export function* fetchAllClientUsersWorker(action) {
   try {
-    const requestURL = `${API_URL}/sites/getSiteUsersAndAdmins`;
+    const requestURL = `${API_URL}/sites/getAllStudyNotificationEmails`;
 
     const params = {
       method: 'GET',
       query: {
         clientId: action.clientId,
         siteId: action.siteId,
+        studyId: action.studyId,
       },
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchAllClientUsersDashboardSuccess(response));
+    yield put(fetchAllStudyEmailNotificationsSuccess(response));
   } catch (err) {
-    yield put(fetchAllClientUsersDashboardError(err));
+    yield put(fetchAllStudyEmailNotificationsError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     toastr.error('', errorMessage);
     if (err.status === 401) {
@@ -1130,7 +1131,7 @@ export function* updateTwilioNumbersWorker() {
     const response = yield call(request, requestURL, params);
 
     yield put(updateTwilioNumbersSuccess(response));
-    toastr.success('Syncing for Twilio numbers has been queued. Please wait about 5 minutes for the task to process.');
+    toastr.success('', 'Messaging Numbers are syncing. Please wait about 5 minutes.');
   } catch (err) {
     yield put(updateTwilioNumbersError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while updating twili numbers');
