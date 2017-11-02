@@ -73,7 +73,9 @@ const selectRenewStudyFormNotesValue = () => createSelector(
 
 const selectRenewStudyFields = () => createSelector(
   selectFormDomain(),
-  (substate) => Object.keys(get(substate, 'renewStudy.registeredFields', []))
+  (substate) => get(substate, 'renewStudy.registeredFields', []).map((item) => {
+    return item.name;
+  })
 );
 
 export default selectFormDomain;

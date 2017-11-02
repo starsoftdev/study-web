@@ -122,7 +122,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       }
 
       if (newProps.selectedStudy.callTracking){
-        console.log(222);
         change('callTracking', true);
         this.setState({
           isCallTrackingAlreadySet: true,
