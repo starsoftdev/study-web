@@ -100,6 +100,7 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
+  UPDATE_USER_SUCCESS,
 
   GET_CREDITS_PRICE_SUCCESS,
 
@@ -1474,6 +1475,12 @@ export default function appReducer(state = initialState, action) {
           ...state.baseData,
           ...baseDataInnerState,
         },
+      };
+      break;
+    case UPDATE_USER_SUCCESS:
+      resultState = {
+        ...state,
+        userData: Object.assign(state.userData, payload),
       };
       break;
     case CHANGE_USERS_TIMEZONE_ERROR:
