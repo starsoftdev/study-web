@@ -615,7 +615,7 @@ export default class UploadPatientsForm extends React.Component {
     };
 
     /* the saveAs call downloads a file on the local machine */
-    FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'patients-upload-template.xlsx');
+    FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Upload_Patients_Template.xlsx');
   }
 
   /* renderGroupFields(names) {
@@ -751,7 +751,7 @@ export default class UploadPatientsForm extends React.Component {
             />
             <div className="icon">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text">Drag and drop <br /> spreadsheet here</span>
+              <span className="text">Drag and drop <br /> file here</span>
             </div>
           </div>
         }
