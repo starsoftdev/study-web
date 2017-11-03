@@ -159,6 +159,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
                 options={timezoneOptions}
                 className="field"
                 onChange={this.onChangeTimezone}
+                clearable={false}
               />
             </div>
         }
