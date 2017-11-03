@@ -5083,7 +5083,7 @@ div[data-percentage],
         }
         &.patient-selected,
         &:hover {
-          a.top {
+          a {
             color: #fff;
             background: #00afef;
             &:before {
@@ -5091,10 +5091,16 @@ div[data-percentage],
             }
             time {
               color: #fff;
-              display: none;
             }
           }
-          a.bottom {
+          
+          a.has-counter {
+            background: #fff;
+
+            time {
+              display: none;
+            }
+
             .btn-reply {
               display: block;
             }
@@ -5102,13 +5108,12 @@ div[data-percentage],
             {
               display: none;
             }
-          }
-          .counter-circle  {
-            display: none;
-          }
-          
-          .msg-alert {
-            border-top: solid 2px #fff;
+            .counter-circle  {
+              display: none;
+            }
+            .msg-alert {
+              border-top: solid 2px #fff;
+            }
           }
         }
 
