@@ -91,7 +91,7 @@ class Patient extends React.Component {
     if ((patient.lastTextMessage && patient.lastTextMessage.dateCreated) || unreadMessageCount > 0) {
       return (
         <a
-          className="bottom"
+          className={classNames({ bottom: true, 'has-counter': unreadMessageCount > 0 })}
         >
           <div className="msg-alert">
             <div className="msg">
