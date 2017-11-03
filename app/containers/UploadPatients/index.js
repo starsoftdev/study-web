@@ -88,6 +88,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { exportPatients/* , formSyncErrors, touchFields*/ } = this.props;
     const { patients } = this.state;
     const options = _.clone(params);
+    options.patients = [];
 
     this.setState({ isImporting : true }, () => {
       // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
@@ -97,7 +98,21 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       }
 
       if (patients.length > 0) {
-        options.patients = patients;
+        _.forEach(patients, (patient) => {
+          const normalizedPatient = {};
+          _.forEach(patient, (value, key) => {
+            normalizedPatient[key.toLowerCase()] = value;
+          });
+
+          options.patients.push({
+            name: normalizedPatient['full name'],
+            email: normalizedPatient.email,
+            phone: normalizedPatient.phone,
+            dob: normalizedPatient.dob,
+            gender: normalizedPatient.gender,
+            bmi: normalizedPatient.bmi,
+          });
+        });
       }
 
       console.log('onSubmitForm', options);
