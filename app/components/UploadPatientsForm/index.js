@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
 import { blur, change, Field, /* FieldArray, */reduxForm, reset, touch } from 'redux-form';
 // import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
@@ -87,6 +88,7 @@ export default class UploadPatientsForm extends React.Component {
       duplicateValidationResult: false,
       requiredValidationResult: false,
       showPreview: false,
+      isDragOver: false,
       siteLocation: null,
       fileName: null,
       patients: [],
@@ -159,6 +161,9 @@ export default class UploadPatientsForm extends React.Component {
     this.handleFile = this.handleFile.bind(this);
     this.setRequiredValidationResult = this.setRequiredValidationResult.bind(this);
     this.setDuplicateValidationResult = this.setDuplicateValidationResult.bind(this);
+    this.downloadExample = this.downloadExample.bind(this);
+    this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
+    this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -184,6 +189,14 @@ export default class UploadPatientsForm extends React.Component {
         scope.updateCounters();
       });*/
     }
+  }
+
+  onDragEnterHandler() {
+    // ..
+  }
+
+  onDragLeaveHandler() {
+    // ..
   }
 
   setRequiredValidationResult(requiredValidationResult) {
@@ -547,6 +560,8 @@ export default class UploadPatientsForm extends React.Component {
   }
 
   handleFile(e) {
+    e.stopPropagation();
+    e.preventDefault();
     const rABS = false;
     const scope = this;
     const files = e.target.files;
@@ -570,6 +585,37 @@ export default class UploadPatientsForm extends React.Component {
     } else {
       reader.readAsArrayBuffer(f);
     }
+  }
+
+  downloadExample() {
+    const header = {
+      header:[
+        'Full Name',
+        'Email',
+        'Phone',
+        'DOB',
+        'Gender',
+        'BMI',
+      ],
+    };
+    const wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([], header);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'SheetJS');
+
+    const wbout = XLSX.write(workbook, wopts);
+
+    const s2ab = (s) => {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i !== s.length; ++i) {
+        view[i] = s.charCodeAt(i) & 0xFF; // eslint-disable-line no-bitwise
+      }
+      return buf;
+    };
+
+    /* the saveAs call downloads a file on the local machine */
+    FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'patients-upload-template.xlsx');
   }
 
   /* renderGroupFields(names) {
@@ -694,6 +740,42 @@ export default class UploadPatientsForm extends React.Component {
           </span>
         </div>
         {(!this.state.showPreview && !isImporting) &&
+          <div
+            className="drop-zone"
+          >
+            <input
+              type="file"
+              onChange={this.handleFile}
+              onDragEnter={this.onDragEnterHandler}
+              onDragLeave={this.onDragLeaveHandler}
+            />
+            <div className="icon">
+              <i className="icomoon-arrow_up_alt" />
+              <span className="text">Drag and drop <br /> spreadsheet here</span>
+            </div>
+          </div>
+        }
+        {(!this.state.showPreview && !isImporting) &&
+          <div className="field-row main">
+            <strong className="label required">
+              <label>UPLOAD PATIENTS LIST</label></strong>
+            <div className="field">
+              <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
+              <Field
+                id="patients_list"
+                name="file"
+                inputRef={fileInputRef}
+                component={Input}
+                type="file"
+                onChange={this.handleFile}
+              />
+              <strong className="label filename">
+                <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
+              </strong>
+            </div>
+          </div>
+        }
+        {(!this.state.showPreview && !isImporting) &&
           <div className="field-row main">
             <strong className="label required">
               <label>Site Location</label>
@@ -754,26 +836,6 @@ export default class UploadPatientsForm extends React.Component {
           </div>
         }
         {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label required">
-              <label>UPLOAD PATIENTS LIST</label></strong>
-            <div className="field">
-              <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
-              <Field
-                id="patients_list"
-                name="file"
-                inputRef={fileInputRef}
-                component={Input}
-                type="file"
-                onChange={this.handleFile}
-              />
-              <strong className="label filename">
-                <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
-              </strong>
-            </div>
-          </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
           <div className="instructions">
             <span className="head">Upload Instructions</span>
             <span className="body">
@@ -819,6 +881,12 @@ export default class UploadPatientsForm extends React.Component {
                 </tr>
               </table>
             </div>
+            <span
+              className="download-template"
+              onClick={this.downloadExample}
+            >
+              Download Template
+            </span>
           </div>
         }
         {/*! this.state.showPreview &&
