@@ -6,7 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { Field, change } from 'redux-form';
+import { Field } from 'redux-form';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
@@ -19,6 +19,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     fields: PropTypes.object,
     formValues: PropTypes.object,
     meta: PropTypes.object,
+    disableDelete: PropTypes.bool,
   };
 
   componentWillMount() {
@@ -45,10 +46,13 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   placeholder="Select Lead Source"
                   options={LEAD_SOURCE_LIST}
                   className="field"
+                  disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
-                <button className="link-delete" onClick={() => fields.remove(index)}>
+                {(!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) &&
+                <div className="link-delete" onClick={() => fields.remove(index)}>
                   <i className="icomoon-icon_trash" />
-                </button>
+                </div>
+                }
               </div>
               {
                 showName && (
@@ -72,12 +76,12 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           <div className="field-row">
             <strong className="label"></strong>
             <div className="field">
-              <button
+              <div
                 className="add-new-source"
-                onClick={() => fields.push({})}
+                onClick={() => fields.push({ isNew: true })}
               >
                 <i className="icomoon-icon_close" /> Add Lead Source
-              </button>
+              </div>
             </div>
           </div>
         }
