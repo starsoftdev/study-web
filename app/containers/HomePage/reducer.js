@@ -46,6 +46,9 @@ import {
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR
 } from '../../containers/App/constants';
 
 import {
@@ -143,7 +146,12 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  emailNotifications: []
+  emailNotifications: [],
+  studyLeadSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  }
 };
 
 export default function homePageReducer(state = initialState, action) {
@@ -695,6 +703,42 @@ export default function homePageReducer(state = initialState, action) {
         emailNotifications,
       };
     }
+
+    case FETCH_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: state.studyLeadSources.details,
+          fetching: true,
+          error: null,
+        }
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              source_id: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId
+            };
+          }),
+          fetching: false,
+          error: null,
+        }
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        }
+      };
 
     default:
       return state;

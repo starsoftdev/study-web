@@ -55,7 +55,9 @@ const selectUpgradeStudyFormLeadsCount = () => createSelector(
 
 const selectUpgradeStudyFields = () => createSelector(
   selectFormDomain(),
-  (substate) => Object.keys(get(substate, 'upgradeStudy.registeredFields', []))
+  (substate) => get(substate, 'upgradeStudy.registeredFields', []).map((item) => {
+    return item.name;
+  })
 );
 
 export default selectFormDomain;

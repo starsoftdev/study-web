@@ -121,12 +121,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         change('startDate', moment());
       }
 
-      if (newProps.selectedStudy.callTracking){
+      if (newProps.selectedStudy.callTracking) {
         change('callTracking', true);
         this.setState({
           isCallTrackingAlreadySet: true,
         });
-      }else{
+      } else {
         change('callTracking', false);
         this.setState({
           isCallTrackingAlreadySet: false,
@@ -286,7 +286,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         total: QUALIFICATION_SUITE_PRICE * monthLength.value,
       });
     }
-    if (callTracking) {
+    if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
         title: 'Call Tracking',
         price: CALL_TRACKING_PRICE,
@@ -303,7 +303,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
     const currentDate = moment();
 
-    console.log(this.props.selectedStudy)
+    console.log(this.props.selectedStudy);
 
     const addOns = this.generateRenewStudyShoppingCartAddOns();
     return (
