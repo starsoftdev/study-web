@@ -49,7 +49,7 @@ const selectRegisteredFields = () => createSelector(
   (substate) => {
     return get(substate, 'listNewStudy.registeredFields', []).map((item) => {
       return item.name;
-    })
+    });
   }
 );
 

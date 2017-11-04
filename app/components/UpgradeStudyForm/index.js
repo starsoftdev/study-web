@@ -58,6 +58,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       level: null,
       patientQualificationSuite: false,
       addCardModalOpenU: false,
+      isCallTrackingAlreadySet: false,
     };
   }
 
@@ -78,6 +79,20 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenU) {
       this.closeAddCardModal();
+    }
+
+    if (!this.props.selectedStudy && newProps.selectedStudy) {
+      if (newProps.selectedStudy.callTracking) {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', true));
+        this.setState({
+          isCallTrackingAlreadySet: true,
+        });
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+        this.setState({
+          isCallTrackingAlreadySet: false,
+        });
+      }
     }
   }
 
@@ -160,7 +175,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (callTracking) {
+    if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
         title: 'Call Tracking',
         price: CALL_TRACKING_PRICE,
@@ -273,11 +288,12 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                             <Field
                               name="callTracking"
                               component={Toggle}
+                              disabled={this.state.isCallTrackingAlreadySet}
                             />
                           </div>
                         </div>
                       }
-                      {callTracking &&
+                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
                         <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
                       }
                       <div className="field-row label-top">
