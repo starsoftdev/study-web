@@ -27,18 +27,18 @@ export default values => {
       if (!lead.source_name) {
         leadError.source_name = 'Lead source name can\'t be blank';
       }
-      if (!lead.source_id || !lead.source_name){
+      if (!lead.source_id || !lead.source_name) {
         leadSourceErrors[index] = leadError;
       }
     });
   }
 
-  if (leadSourceErrors && leadSourceErrors.length > 0){
+  if (leadSourceErrors && leadSourceErrors.length > 0) {
     return {
       ...fieldErrors,
       leadSource: leadSourceErrors,
     };
-  }else{
+  } else {
     return fieldErrors;
   }
 };

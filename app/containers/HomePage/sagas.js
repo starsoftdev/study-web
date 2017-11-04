@@ -637,13 +637,17 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'studyAd' && index !== 'emailNotifications') {
+      if (index !== 'studyAd' && index !== 'emailNotifications' && index !== 'leadSource') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
     if (options.emailNotifications) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
+
+    if (options.leadSource) {
+      data.append('leadSource', JSON.stringify(options.leadSource));
     }
 
     if (options.studyAd && options.studyAd[0]) {

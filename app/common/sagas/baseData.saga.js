@@ -62,6 +62,7 @@ import {
   GET_CNS_INFO,
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_STUDY_LEAD_SOURCES,
 } from '../../containers/App/constants';
 
 import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
@@ -155,6 +156,8 @@ import {
   getCnsInfoError,
   submitCnsSuccess,
   submitCnsError,
+  fetchStudyLeadSourcesSuccess,
+  fetchStudyLeadSourcesError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -207,6 +210,7 @@ export default function* baseDataSaga() {
   yield fork(getCnsInfoWatcher);
   yield fork(submitCnsWatcher);
   yield fork(readStudyPatientMessages);
+  yield fork(fetchStudyLeadSources);
 }
 
 export function* fetchIndicationsWatcher() {
@@ -1257,6 +1261,20 @@ function* readStudyPatientMessages() {
       }
     } else {
       yield put(readStudyPatientMessagesSuccess([]));
+    }
+  }
+}
+
+function* fetchStudyLeadSources() {
+  while (true) {
+    const { studyId } = yield take(FETCH_STUDY_LEAD_SOURCES);
+    try {
+      const requestURL = `${API_URL}/studies/${studyId}/fetchStudyLeadSources`;
+      const response = yield call(request, requestURL);
+
+      yield put(fetchStudyLeadSourcesSuccess(response));
+    } catch (err) {
+      yield put(fetchStudyLeadSourcesError(err));
     }
   }
 }

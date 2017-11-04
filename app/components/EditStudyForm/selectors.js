@@ -16,8 +16,16 @@ const selectEditStudyFormStudyAdValue = () => createSelector(
   substate => get(substate, 'editStudy.values.studyAd', null)
 );
 
+const selectEditStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'editStudy.registeredFields', []).map((item) => {
+    return item.name;
+  })
+);
+
 export default selectFormDomain;
 export {
   selectEditStudyFormRecruitmentPhoneValue,
   selectEditStudyFormStudyAdValue,
+  selectEditStudyFields,
 };
