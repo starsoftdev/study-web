@@ -117,8 +117,8 @@ export class CampaignPageModal extends React.Component {
       this.setState({ selectedCampaign : campaignIndex, isCampaignHasPatients: (!!((foundCampaign.patients && foundCampaign.patients.length > 0))) });
       const { change } = this.props;
       change('campaign_id', foundCampaign.id);
-      change('datefrom', foundCampaign.dateFrom);
-      change('dateto', foundCampaign.dateTo);
+      change('datefrom', moment(foundCampaign.dateFrom).tz(this.props.study.timezone));
+      change('dateto', moment(foundCampaign.dateTo).tz(this.props.study.timezone));
       change('custom_patient_goal', foundCampaign.customPatientGoal);
       change('level_id', foundCampaign.level_id);
       change('patient_qualification_suite', foundCampaign.patientQualificationSuite);
