@@ -41,7 +41,7 @@ export default function request(url, options = {}) {
   }
 
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
-  options.credentials = 'include'; // eslint-disable-line
+
 
   return retry(async () => {
     // if anything throws, we retry
