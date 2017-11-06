@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
@@ -55,9 +55,12 @@ const selectUpgradeStudyFormLeadsCount = () => createSelector(
 
 const selectUpgradeStudyFields = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'upgradeStudy.registeredFields', []).map((item) => {
-    return item.name;
-  })
+  (substate) => {
+    const regFieldsArr = get(substate, 'upgradeStudy.registeredFields', []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
+  }
 );
 
 export default selectFormDomain;
