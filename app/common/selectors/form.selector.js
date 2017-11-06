@@ -3,7 +3,7 @@
  */
 
 import { createSelector } from 'reselect';
-import { get, isEqual } from 'lodash';
+import { get, isEqual, map } from 'lodash';
 
 /**
  * Form selector to the form state domain
@@ -43,9 +43,13 @@ export const selectSyncErrorBool = (formName) => createSelector(
 
 export const selectFormFieldNames = (formName) => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, `${formName}.registeredFields`, []).map((item) => {
-    return item.name;
-  })
+
+  (substate) => {
+    const regFieldsArr = get(substate, `${formName}.registeredFields`, []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
+  }
 );
 
 export const selectFormDidChange = (formName) => createSelector(
