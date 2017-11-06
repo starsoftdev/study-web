@@ -146,7 +146,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
               <div className="row contact-info">
                 <div className="col-xs-4">
                   <h3 className="txt-orange"><i className="icomoon-phone txt-orange" /> PHONE</h3>
-                  <a href="tel:7143884361">714.388.4361</a>
+                  <a href="tel:8776272509">877.627.2509</a>
                 </div>
                 <div className="col-xs-4">
                   <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange" /> LOCATION</h3>
