@@ -17,9 +17,9 @@ import {
   selectClientSites,
 } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
-import { selectAddProtocolProcessStatus } from './selectors';
+import { selectAddProtocolProcessStatus, selectRevertBulkUploadProcess } from './selectors';
 
-import { exportPatients, emptyRowRequiredError, addProtocol, validationError } from './actions';
+import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
@@ -31,6 +31,7 @@ const formName = 'UploadPatients.UploadPatientsForm';
 
 export class UploadPatientsPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    fetchHistory: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchClientSites: PropTypes.func,
     fetchSources: PropTypes.func,
@@ -49,6 +50,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     notifyValidationError: React.PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
+    revertBulkUploadProcess: PropTypes.object,
   };
 
   constructor(props) {
@@ -56,6 +58,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     this.state = {
       patients: [],
       showAddProtocolModal: false,
+      fileName: null,
       isImporting: false,
     };
 
@@ -68,25 +71,33 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     this.switchShowAddProtocolModal = this.switchShowAddProtocolModal.bind(this);
     this.switchIsImporting = this.switchIsImporting.bind(this);
     this.setPatients = this.setPatients.bind(this);
+    this.setFileName = this.setFileName.bind(this);
   }
 
   componentWillMount() {
-    const { fetchIndications, fetchSources, fetchClientSites, currentUser } = this.props;
+    const { fetchIndications, fetchSources, fetchClientSites, currentUser, fetchHistory } = this.props;
     fetchIndications();
+    fetchHistory(currentUser.id);
     fetchSources();
     fetchClientSites(currentUser.roleForClient.client_id);
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess } = this.props;
+    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
+    }
+
+
+    console.log('revertBulkUploadProcess', revertBulkUploadProcess);
+    if (revertBulkUploadProcess.processing && !newProps.revertBulkUploadProcess.processing) {
+      fetchHistory(currentUser.id);
     }
   }
 
   onSubmitForm(params) {
-    const { exportPatients/* , formSyncErrors, touchFields*/ } = this.props;
-    const { patients } = this.state;
+    const { exportPatients, currentUser/* , formSyncErrors, touchFields*/ } = this.props;
+    const { patients, fileName } = this.state;
     const options = _.clone(params);
     options.patients = [];
 
@@ -95,6 +106,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       // since it's easier to transform and display this way while still displaying studies by protocol
       if (options.protocol) {
         options.study_id = options.protocol;
+      }
+
+      if (currentUser) {
+        options.currentUser = currentUser.id;
+      }
+
+      if (fileName) {
+        options.fileName = fileName;
       }
 
       if (patients.length > 0) {
@@ -107,7 +126,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           options.patients.push({
             name: normalizedPatient['full name'],
             email: normalizedPatient.email,
-            phone: normalizedPatient.phone,
+            phone: normalizePhoneForServer(normalizedPatient.phone),
             dob: normalizedPatient.dob,
             gender: normalizedPatient.gender,
             bmi: normalizedPatient.bmi,
@@ -163,6 +182,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   setPatients(patients) {
     console.log('setPatients: ', patients);
     this.setState({ patients });
+  }
+
+  setFileName(fileName) {
+    console.log('setFileName: ', fileName);
+    this.setState({ fileName });
   }
 
   validateEmail(email) {
@@ -238,7 +262,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { indications, fullSiteLocations } = this.props;
+    const { indications, fullSiteLocations, fetchHistory } = this.props;
     const { isImporting } = this.state;
 
     return (
@@ -250,12 +274,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             isImporting={isImporting}
+            fetchHistory={fetchHistory}
             setPatients={this.setPatients}
+            setFileName={this.setFileName}
             switchIsImporting={this.switchIsImporting}
             showProtocolModal={this.switchShowAddProtocolModal}
-            fileInputRef={(ref) => {
-              this.uploadPatientsListInput = ref;
-            }}
           />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
@@ -286,6 +309,7 @@ const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   fullSiteLocations : selectClientSites(),
   addProtocolProcess: selectAddProtocolProcessStatus(),
+  revertBulkUploadProcess: selectRevertBulkUploadProcess(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -294,6 +318,7 @@ function mapDispatchToProps(dispatch) {
     touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
     fetchIndications: () => dispatch(fetchIndications()),
     addProtocol: (payload) => dispatch(addProtocol(payload)),
+    fetchHistory: (userId) => dispatch(fetchHistory(userId)),
     fetchSources: () => dispatch(fetchSources()),
     notifyEmptyRowRequiredError: (hasEmpty) => dispatch(emptyRowRequiredError(hasEmpty)),
     notifyValidationError: (hasError) => dispatch(validationError(hasError)),

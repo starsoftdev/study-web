@@ -14,3 +14,11 @@ export const ADD_PROTOCOL_ERROR                 = 'PatientDatabasePage/ADD_PROTO
 
 export const EMPTY_ROW_REQUIRED_ERROR           = 'PatientDatabasePage/EMPTY_ROW_REQUIRED_ERROR';
 export const VALIDATION_ERROR                   = 'PatientDatabasePage/VALIDATION_ERROR';
+
+export const FETCH_HISTORY                      = 'PatientDatabasePage/FETCH_HISTORY';
+export const FETCH_HISTORY_SUCCESS              = 'PatientDatabasePage/FETCH_HISTORY_SUCCESS';
+export const FETCH_HISTORY_ERROR                = 'PatientDatabasePage/FETCH_HISTORY_ERROR';
+
+export const REVERT_BULK_UPLOAD                 = 'PatientDatabasePage/REVERT_BULK_UPLOAD';
+export const REVERT_BULK_UPLOAD_SUCCESS         = 'PatientDatabasePage/REVERT_BULK_UPLOAD_SUCCESS';
+export const REVERT_BULK_UPLOAD_ERROR           = 'PatientDatabasePage/REVERT_BULK_UPLOAD_ERROR';
