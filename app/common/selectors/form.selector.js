@@ -41,6 +41,13 @@ export const selectSyncErrorBool = (formName) => createSelector(
   }
 );
 
+export const selectFormFieldNames = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.registeredFields`, []).map((item) => {
+    return item.name;
+  })
+);
+
 export const selectFormDidChange = (formName) => createSelector(
   selectFormDomain(),
   (substate) => {

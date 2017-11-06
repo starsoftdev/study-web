@@ -93,6 +93,9 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -196,6 +199,11 @@ const initialState = {
     deleting: false,
     error: false,
   },
+  studyLeadSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
   updatedStudyAd: null,
   removedStudyAd: null,
   levels: [],
@@ -216,6 +224,45 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
+
+    case FETCH_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: state.studyLeadSources.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              source_id: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId,
+              recruitmentPhone: item.recruitmentPhone,
+              messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+
     case FETCH_STUDY_INDICATION_TAG:
       return {
         ...state,
