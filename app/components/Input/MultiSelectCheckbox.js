@@ -125,11 +125,11 @@ export default class MultiSelectCheckbox extends Component {
 
     if (this.state.nameFilter) {
       options = _.filter(this.state.options, (o) => {
-        if (o.name && o.name.indexOf(this.state.nameFilter)) {
-          return false;
+        if (o.name && o.name.indexOf(this.state.nameFilter)){
+          return false
         }
-        return true;
-      });
+        return true
+      })
     }
 
     options.splice(0, 1);

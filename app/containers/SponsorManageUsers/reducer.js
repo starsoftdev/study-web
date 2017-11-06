@@ -68,15 +68,22 @@ function sponsorManageUsersReducer(state = initialState, action) {
       };
     case FETCH_MANAGE_SPONSOR_USERS_DATA_SUCCESS:
       studiesList = _.cloneDeep(action.payload.studiesList);
-      _.forEach(action.payload.studiesList, (item) => {
-        if (item.protocol) {
+      _.forEach(action.payload.studiesList, (item, index) => {
+        if (item.protocol){
           foundProtocolIndex = _.findIndex(protocols, (o) => (o.id === item.protocol.id));
           if (foundProtocolIndex === -1) {
-            protocols.push({ ...item.protocol, studyId: item.id });
+            protocols.push({...item.protocol, studyId: item.id});
           }
         }
+
+        /*_.forEach(item.studies, (study) => {
+          studiesList[index].sponsorUsers = [];
+          if (study.sponsorUsers && study.sponsorUsers.length > 0) {
+            studiesList[index].sponsorUsers = study.sponsorUsers;
+          }
+        });*/
       });
-      console.log(studiesList);
+      console.log(studiesList)
       return {
         ...state,
         protocols,
