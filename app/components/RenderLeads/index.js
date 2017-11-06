@@ -44,16 +44,25 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           let initObject = null;
 
           if (initialLeadSources && initialLeadSources.length > 0) {
-            initObject = _.find(initialLeadSources, (o) => (o.studySourceId === formValues.leadSource[index].studySourceId));
+            initObject = _.find(initialLeadSources, (o) => {
+              if (formValues.leadSource && formValues.leadSource[index]) {
+                return (o.studySourceId === formValues.leadSource[index].studySourceId);
+              } else {
+                return false;
+              }
+            });
           }
 
-          const messagingNumbersOptions = messagingNumbers.details.map(item => ({
-            value: item.id,
-            label: item.phone_number,
-          }));
+          let messagingNumbersOptions = [];
+          if (this.props.isAdmin) {
+            messagingNumbersOptions = messagingNumbers.details.map(item => ({
+              value: item.id,
+              label: item.phone_number,
+            }));
 
-          if (initObject && initObject.messagingNumber) {
-            messagingNumbersOptions.unshift(initObject.messagingNumber);
+            if (initObject && initObject.messagingNumber) {
+              messagingNumbersOptions.unshift(initObject.messagingNumber);
+            }
           }
 
           return (
