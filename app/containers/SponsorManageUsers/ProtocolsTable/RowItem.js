@@ -60,6 +60,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
 
   render() {
     const options = [];
+    console.log(333, this.props.protocols);
     _.forEach(this.props.protocols, (protocol) => {
       const value = (this.props.item.id === protocol.id);
       options.push({
@@ -85,6 +86,8 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         options[index].value = _.find(item.studies, (o) => (o.protocol_id === option.id));
       });
 
+      console.log(444, options);
+
       return (
         <ExpandedItem
           key={index}
@@ -109,6 +112,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     };
 
     const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
+    console.log(123, this.props.item)
     return (
       <tr>
         <td className="col1">
