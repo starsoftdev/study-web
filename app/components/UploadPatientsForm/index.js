@@ -14,22 +14,25 @@ import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
+import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
 import {
   selectIsFetchingProtocols,
   selectProtocols,
   selectExportPatientsStatus,
+  selectUploadHistory,
   // selectEmptyRowRequiredError
 } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 // import RenderPatientsList from './RenderPatientsList';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
-import { normalizePhoneForServer } from '../../common/helper/functions';
+import UploadHistoryList from './UploadHistoryList';
+// import { normalizePhoneForServer } from '../../common/helper/functions';
 import formValidator, { fields as formFields } from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
 
 const mapStateToProps = createStructuredSelector({
+  uploadHistory: selectUploadHistory(),
   currentUser: selectCurrentUser(),
   indications: selectIndications(),
   isFetchingProtocols: selectIsFetchingProtocols(formName),
@@ -47,6 +50,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearForm: () => dispatch(reset(formName)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
+  revertBulkUpload: (uploadId) => dispatch(revertBulkUpload(uploadId)),
 });
 
 @reduxForm({
@@ -60,6 +64,7 @@ export default class UploadPatientsForm extends React.Component {
     touchFields: React.PropTypes.func,
     formSyncErrors: React.PropTypes.object,
     addPatientStatus: React.PropTypes.object,
+    uploadHistory: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
@@ -78,6 +83,9 @@ export default class UploadPatientsForm extends React.Component {
     // emptyRowRequiredError: React.PropTypes.object,
     handleSubmit: React.PropTypes.func,
     blur: React.PropTypes.func,
+    setFileName: React.PropTypes.func,
+    revertBulkUpload: React.PropTypes.func,
+    fetchHistory: React.PropTypes.func,
     protocols: React.PropTypes.array,
   };
 
@@ -145,25 +153,27 @@ export default class UploadPatientsForm extends React.Component {
       },*/
     };
 
-    this.changeSiteLocation = this.changeSiteLocation.bind(this);
     // this.selectIndication = this.selectIndication.bind(this);
+    // this.mapTextAreaGroups = this.mapTextAreaGroups.bind(this);
+    // this.updateFields = this.updateFields.bind(this);
+    // this.renderGroupFields = this.renderGroupFields.bind(this);
+    // this.renderExampleGroupFields = this.renderExampleGroupFields.bind(this);
+    // this.updateCounters = this.updateCounters.bind(this);
+    // this.fixOffset = this.fixOffset.bind(this);
+    // this.checkSameNumbers = this.checkSameNumbers.bind(this);
+
+    this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
-    this.mapTextAreaGroups = this.mapTextAreaGroups.bind(this);
-    this.updateFields = this.updateFields.bind(this);
     this.addField = this.addField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
-    // this.renderGroupFields = this.renderGroupFields.bind(this);
-    // this.renderExampleGroupFields = this.renderExampleGroupFields.bind(this);
-    this.updateCounters = this.updateCounters.bind(this);
-    this.fixOffset = this.fixOffset.bind(this);
-    this.checkSameNumbers = this.checkSameNumbers.bind(this);
     this.handleFile = this.handleFile.bind(this);
     this.setRequiredValidationResult = this.setRequiredValidationResult.bind(this);
     this.setDuplicateValidationResult = this.setDuplicateValidationResult.bind(this);
     this.downloadExample = this.downloadExample.bind(this);
     this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
     this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+    this.revert = this.revert.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -171,11 +181,14 @@ export default class UploadPatientsForm extends React.Component {
       // isImporting,
       exportPatientsStatus,
       clearForm,
+      currentUser,
+      fetchHistory,
       // switchIsImporting
     } = this.props;
     // const scope = this;
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
+      fetchHistory(currentUser.id);
       clearForm();
 
       /* change('groupname', '');
@@ -207,7 +220,7 @@ export default class UploadPatientsForm extends React.Component {
     this.setState({ duplicateValidationResult });
   }
 
-  updateCounters() {
+  /* updateCounters() {
     const { fields } = this.state;
     const counters = {
       name: 0,
@@ -227,9 +240,9 @@ export default class UploadPatientsForm extends React.Component {
     });
 
     this.setState({ rowsCounts: counters });
-  }
+  }*/
 
-  checkSameNumbers(fields) {
+  /* checkSameNumbers(fields) {
     const duplicates = [];
     _.forEach(fields, (patient) => {
       const hasPhone = _.hasIn(patient, 'phone');
@@ -249,9 +262,9 @@ export default class UploadPatientsForm extends React.Component {
     });
 
     this.setState({ duplicates });
-  }
+  }*/
 
-  mapTextAreaGroups(event) {
+  /* mapTextAreaGroups(event) {
     const { fields, cachedColumns } = this.state;
     const scope = this;
     const pattern = /\r\n|\r|\n/g;
@@ -321,12 +334,12 @@ export default class UploadPatientsForm extends React.Component {
 
     // console.log('cloneFields', cloneFields);
     this.setState({ fields: cloneFields, cachedColumns: cloneCachedColumns }, () => {
-      scope.updateCounters();
-      scope.checkSameNumbers(cloneFields);
+      // scope.updateCounters();
+      // scope.checkSameNumbers(cloneFields);
     });
-  }
+  }*/
 
-  fixOffset(current, key) {
+  /* fixOffset(current, key) {
     const { prevItems, cachedColumns } = this.state;
     const scope = this;
     let offset = 0;
@@ -373,14 +386,14 @@ export default class UploadPatientsForm extends React.Component {
 
     if (offset) {
       this.setState({ prevItems: current }, () => {
-        scope.updateFields(null, false);
+        // scope.updateFields(null, false);
       });
     } else {
       this.setState({ prevItems: (isEmptyCurrent ? prevItems : current) });
     }
-  }
+  }*/
 
-  updateFields(index, allowUpdateFields = true) {
+  /* updateFields(index, allowUpdateFields = true) {
     const { change } = this.props;
     const { fields } = this.state;
     const scope = this;
@@ -466,7 +479,7 @@ export default class UploadPatientsForm extends React.Component {
         scope.checkSameNumbers(fields);
       });
     }
-  }
+  }*/
 
   switchPreview() {
     // const scope = this;
@@ -495,7 +508,7 @@ export default class UploadPatientsForm extends React.Component {
 
   changeField(value, name, index) {
     const fields = this.state.fields;
-    const scope = this;
+    // const scope = this;
     let val = value;
 
     if (val === '' && name !== 'phone') {
@@ -513,7 +526,7 @@ export default class UploadPatientsForm extends React.Component {
     });
 
     this.setState({ fields }, () => {
-      scope.updateFields(null);
+      // scope.updateFields(null);
     });
   }
 
@@ -577,7 +590,9 @@ export default class UploadPatientsForm extends React.Component {
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
-      scope.setState({ fileName: name, patients: json });
+      scope.setState({ fileName: name, patients: json }, () => {
+        scope.props.setFileName(name);
+      });
     };
 
     if (rABS) {
@@ -616,6 +631,11 @@ export default class UploadPatientsForm extends React.Component {
 
     /* the saveAs call downloads a file on the local machine */
     FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Upload_Patients_Template.xlsx');
+  }
+
+  revert(uploadId) {
+    const { revertBulkUpload } = this.props;
+    revertBulkUpload(uploadId);
   }
 
   /* renderGroupFields(names) {
@@ -686,6 +706,7 @@ export default class UploadPatientsForm extends React.Component {
       setPatients,
       handleSubmit,
       // emptyRowRequiredError,
+      exportPatientsStatus,
       fileInputRef,
       indications,
       isFetchingProtocols,
@@ -693,6 +714,7 @@ export default class UploadPatientsForm extends React.Component {
       sites,
       sources,
       isImporting,
+      uploadHistory,
       // change,
       // blur,
     } = this.props;
@@ -859,25 +881,25 @@ export default class UploadPatientsForm extends React.Component {
                   <td>Doe, John</td>
                   <td>johndoe@example.com</td>
                   <td>(111) 111-1111</td>
-                  <td className="dob">1/1/1111</td>
+                  <td>1/1/1111</td>
                   <td>Male</td>
-                  <td className="bmi">18.4</td>
+                  <td>18.4</td>
                 </tr>
                 <tr>
                   <td>Doe, Jane</td>
                   <td>janedoe@example.com</td>
                   <td>(555) 555-5555</td>
-                  <td className="dob">5/5/5555</td>
+                  <td>5/5/5555</td>
                   <td>Female</td>
-                  <td className="bmi">24.5</td>
+                  <td>24.5</td>
                 </tr>
                 <tr>
                   <td>Doe, Janie</td>
                   <td>janiedoe@example.com</td>
                   <td>(888) 888-8888</td>
-                  <td className="dob">8/8/8888</td>
+                  <td>8/8/8888</td>
                   <td>Female</td>
-                  <td className="bmi">29</td>
+                  <td>29</td>
                 </tr>
               </table>
             </div>
@@ -929,7 +951,7 @@ export default class UploadPatientsForm extends React.Component {
           updateFields={this.updateFields}
           blur={blur}
         />*/}
-        {(this.state.showPreview && !isImporting) &&
+        {(showPreview && !isImporting) &&
           <UploadPatientsPreviewForm
             setDuplicateValidationResult={this.setDuplicateValidationResult}
             setRequiredValidationResult={this.setRequiredValidationResult}
@@ -938,21 +960,18 @@ export default class UploadPatientsForm extends React.Component {
           />
         }
         {isImporting &&
-          <div className="import-progress">
-            <ProgressBar bsStyle="success" now={10} />
-            <div className="control">
-              <span className="title">Import of <b>{this.state.fileName}</b> in progress.</span>
-              <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />
+          <div>
+            <div className="import-progress">
+              <ProgressBar bsStyle="success" now={100} />
+              <div className="control">
+                <span className="title">Import of <b>{this.state.fileName}</b> {exportPatientsStatus.exporting ? 'in progress' : 'finished'}.</span>
+                {/* <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />*/}
+              </div>
             </div>
-          </div>
-        }
-        {isImporting &&
-          <div className="upload-history">
-            <div className="header">
-              <span className="title">Import history</span>
-              <span className="tip">Import sessions are kept for 90 days, but can only be deleted in the first 48 hours after upload. </span>
-            </div>
-            <div className="histoList"></div>
+            <UploadHistoryList
+              uploadHistory={uploadHistory}
+              revert={this.revert}
+            />
           </div>
         }
         <div className="text-right">

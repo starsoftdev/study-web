@@ -11,6 +11,8 @@ import {
   FETCH_FILTERED_PROTOCOLS,
   EXPORT_PATIENTS,
   ADD_PROTOCOL,
+  FETCH_HISTORY,
+  REVERT_BULK_UPLOAD,
 } from './constants';
 
 import {
@@ -21,18 +23,26 @@ import {
   // emptyRowRequiredError,
   addProtocolSucceess,
   addProtocolError,
+  historyFetched,
+  historyFetchingError,
+  revertBulkUploadSucceess,
+  revertBulkUploadError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
   const watcherA = yield fork(fetchFilteredProtocolsWatcher);
   const watcherB = yield fork(exportPatientsWatcher);
   const watcherC = yield fork(addProtocolWatcher);
+  const watcherD = yield fork(fetchHistoryWatcher);
+  const watcherE = yield fork(revertBulkUploadWatcher);
 
   yield take(LOCATION_CHANGE);
 
   yield cancel(watcherA);
   yield cancel(watcherB);
   yield cancel(watcherC);
+  yield cancel(watcherD);
+  yield cancel(watcherE);
 }
 
 // Bootstrap sagas
@@ -65,6 +75,44 @@ export function* exportPatientsWatcher() {
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
+    }
+  }
+}
+
+export function* fetchHistoryWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_HISTORY);
+
+    try {
+      const requestURL = `${API_URL}/uploadHistory/fetchHistory?userId=${userId}`;
+      const response = yield call(request, requestURL, {
+        method: 'GET',
+      });
+
+      yield put(historyFetched(response));
+    } catch (err) {
+      yield put(historyFetchingError(err));
+    }
+  }
+}
+
+export function* revertBulkUploadWatcher() {
+  while (true) {
+    const { uploadId } = yield take(REVERT_BULK_UPLOAD);
+
+    try {
+      const requestURL = `${API_URL}/patients/revertBulkUpload`;
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          uploadId,
+        }),
+      };
+      const response = yield call(request, requestURL, options);
+
+      yield put(revertBulkUploadSucceess(response));
+    } catch (err) {
+      yield put(revertBulkUploadError(err));
     }
   }
 }
