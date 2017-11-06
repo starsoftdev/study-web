@@ -51,6 +51,7 @@ import {
   FETCH_CAMPAIGNS_BY_STUDY,
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
+  EDIT_STUDY_LEAD_SOURCES,
 } from './AdminDashboard/constants';
 
 import {
@@ -105,6 +106,8 @@ import {
   fetchFive9ListError,
   removeStudyAdSuccess,
   removeStudyAdError,
+  editStudyLeadSourcesSuccess,
+  editStudyLeadSourcesError,
 } from './AdminDashboard/actions';
 
 import {
@@ -1231,6 +1234,34 @@ export function* deleteCampaignWorker(action) {
   }
 }
 
+export function* editStudyLeadSourcesWatcher() {
+  yield* takeLatest(EDIT_STUDY_LEAD_SOURCES, editStudyLeadSourcesWorker);
+}
+
+export function* editStudyLeadSourcesWorker(action) {
+  try {
+    console.log('sage', action);
+    const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({ leadSources: action.leadSources, callTracking: action.callTracking }),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(editStudyLeadSourcesSuccess(response));
+    } else {
+      yield put(editStudyLeadSourcesError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(editStudyLeadSourcesError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 
 let watcherD = false;
 
@@ -1269,6 +1300,7 @@ export function* homePageSaga() {
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
+  const editStudyLeadSourcesWatcher1 = yield fork(editStudyLeadSourcesWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1317,6 +1349,7 @@ export function* homePageSaga() {
     yield cancel(fetchCampaignsByStudyWatcher1);
     yield cancel(editCampaignWatcher1);
     yield cancel(deleteCampaignWatcher1);
+    yield cancel(editStudyLeadSourcesWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);
