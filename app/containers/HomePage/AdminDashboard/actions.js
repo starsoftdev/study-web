@@ -90,6 +90,9 @@ import {
   FETCH_FIVE_9_LIST,
   FETCH_FIVE_9_LIST_SUCCESS,
   FETCH_FIVE_9_LIST_ERROR,
+  EDIT_STUDY_LEAD_SOURCES,
+  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
+  EDIT_STUDY_LEAD_SOURCES_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -692,6 +695,29 @@ export function deleteCampaignSuccess(payload) {
 export function deleteCampaignError(payload) {
   return {
     type: DELETE_CAMPAIGN_ERROR,
+    payload,
+  };
+}
+
+export function editStudyLeadSources(studyId, leadSources, callTracking) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES,
+    studyId,
+    leadSources,
+    callTracking,
+  };
+}
+
+export function editStudyLeadSourcesSuccess(payload) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function editStudyLeadSourcesError(payload) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES_ERROR,
     payload,
   };
 }
