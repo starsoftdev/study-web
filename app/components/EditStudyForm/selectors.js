@@ -18,9 +18,13 @@ const selectEditStudyFormStudyAdValue = () => createSelector(
 
 const selectEditStudyFields = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'editStudy.registeredFields', []).map((item) => {
-    return item.name;
-  })
+  (substate) => {
+    const regFieldsArr = get(substate, 'editStudy.registeredFields', []);
+    console.log(regFieldsArr)
+    return regFieldsArr.map((item) => {
+      return item.name;
+    })
+  }
 );
 
 export default selectFormDomain;
