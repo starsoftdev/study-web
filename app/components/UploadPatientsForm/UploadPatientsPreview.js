@@ -151,18 +151,9 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
                 return (
                   <tr key={_.uniqueId()}>
                     {
-                      patientProps.map((value, propIndex) => {
-                        let className = '';
-
-                        if (propIndex === 3) {
-                          className = 'dob';
-                        }
-
-                        if (propIndex === 5) {
-                          className = 'bmi';
-                        }
+                      patientProps.map((value) => {
                         return (
-                          <td className={className} key={_.uniqueId()}>{value}</td>
+                          <td key={_.uniqueId()}>{value}</td>
                         );
                       })
                     }
@@ -204,8 +195,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
         <div className="title">
           <span className="head">Preview Upload Data</span>
           <span className="body">
-                Please validate the data based on the firs 3 rows of the upload file.
-              </span>
+            Please validate the data based on the firs 3 rows of the upload file.
+          </span>
         </div>
         {this.renderExampleTable()}
       </div>

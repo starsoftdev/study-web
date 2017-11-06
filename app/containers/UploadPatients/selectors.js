@@ -28,6 +28,16 @@ export const selectAddProtocolProcessStatus = () => createSelector(
   (subState) => subState.addProtocolProcess
 );
 
+export const selectUploadHistory = () => createSelector(
+  selectUploadPatientsPageDomain(),
+  (subState) => subState.uploadHistory
+);
+
+export const selectRevertBulkUploadProcess = () => createSelector(
+  selectUploadPatientsPageDomain(),
+  (subState) => subState.revertBulkUploadProcess
+);
+
 const selectFormDomain = () => state => state.form;
 
 export const selectProtocols = (formName) => createSelector(

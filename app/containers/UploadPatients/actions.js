@@ -15,6 +15,12 @@ import {
   ADD_PROTOCOL,
   ADD_PROTOCOL_SUCCESS,
   ADD_PROTOCOL_ERROR,
+  FETCH_HISTORY,
+  FETCH_HISTORY_SUCCESS,
+  FETCH_HISTORY_ERROR,
+  REVERT_BULK_UPLOAD,
+  REVERT_BULK_UPLOAD_SUCCESS,
+  REVERT_BULK_UPLOAD_ERROR,
 } from './constants';
 
 export function exportPatients(data) {
@@ -43,6 +49,47 @@ export function fetchFilteredProtcols(clientId, siteId) {
     type: FETCH_FILTERED_PROTOCOLS,
     clientId,
     siteId,
+  };
+}
+
+export function fetchHistory(userId) {
+  return {
+    type: FETCH_HISTORY,
+    userId,
+  };
+}
+
+export function historyFetched(payload) {
+  return {
+    type: FETCH_HISTORY_SUCCESS,
+    payload,
+  };
+}
+
+export function historyFetchingError(payload) {
+  return {
+    type: FETCH_HISTORY_ERROR,
+    payload,
+  };
+}
+
+export function revertBulkUpload(uploadId) {
+  return {
+    type: REVERT_BULK_UPLOAD,
+    uploadId,
+  };
+}
+
+export function revertBulkUploadSucceess() {
+  return {
+    type: REVERT_BULK_UPLOAD_SUCCESS,
+  };
+}
+
+export function revertBulkUploadError(payload) {
+  return {
+    type: REVERT_BULK_UPLOAD_ERROR,
+    payload,
   };
 }
 
