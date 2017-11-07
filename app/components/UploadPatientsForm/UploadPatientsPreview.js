@@ -116,7 +116,9 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     });
 
     if (missingColumnNames.length) {
-      this.setState({ missingColumnNames, missingKeys });
+      this.setState({ missingColumnNames, missingKeys }, () => {
+        console.log('validateRequiredKeys', missingColumnNames, missingKeys);
+      });
     } else {
       setRequiredValidationResult(true);
     }
