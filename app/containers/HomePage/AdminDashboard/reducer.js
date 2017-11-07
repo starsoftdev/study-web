@@ -244,8 +244,10 @@ export default function dashboardPageReducer(state = initialState, action) {
               source_id: { value: item.source_id, label: item.type },
               source_name: item.source_name,
               studySourceId: item.studySourceId,
+              landingPageId: item.landingPageId,
               recruitmentPhone: item.recruitmentPhone,
               messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
+              url: item.url,
             };
           }),
           fetching: false,

@@ -31,7 +31,7 @@ export default values => {
       // check for unique messagingNumber
       let isUnique = true;
       values.leadSource.forEach((leadInner, indexInner) => {
-        if (indexInner !== index && leadInner.messagingNumber && lead.messagingNumber && leadInner.messagingNumber.value === lead.messagingNumber.value) {
+        if (indexInner !== index && leadInner.messagingNumber && lead.messagingNumber && leadInner.messagingNumber.value && lead.messagingNumber.value && leadInner.messagingNumber.value === lead.messagingNumber.value) {
           isUnique = false;
         }
       });
