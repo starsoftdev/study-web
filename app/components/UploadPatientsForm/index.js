@@ -763,7 +763,56 @@ export default class UploadPatientsForm extends React.Component {
             2. Preview & Finish
           </span>
         </div>
-        {(!this.state.showPreview && !isImporting) &&
+        {(!showPreview && !isImporting) &&
+          <div className="instructions">
+            <span className="head">Upload Instructions</span>
+            <span className="body">
+                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+                Please format the first row of your colums with the proper column names
+                i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
+                <span className="download-template" onClick={this.downloadExample}>Download Template</span>
+              </span>
+            <div className="examples">
+              <span className="title">* Only the Phone field is required; all other fields are optional.</span>
+              {/* this.renderExampleGroupFields(formFields)*/}
+              <table className="example-table">
+                <tr>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>DOB</th>
+                  <th>Gender</th>
+                  <th>BMI</th>
+                </tr>
+                <tr>
+                  <td>Doe, John</td>
+                  <td>johndoe@example.com</td>
+                  <td>(111) 111-1111</td>
+                  <td>1/1/1111</td>
+                  <td>Male</td>
+                  <td>18.4</td>
+                </tr>
+                <tr>
+                  <td>Doe, Jane</td>
+                  <td>janedoe@example.com</td>
+                  <td>(555) 555-5555</td>
+                  <td>5/5/5555</td>
+                  <td>Female</td>
+                  <td>24.5</td>
+                </tr>
+                <tr>
+                  <td>Doe, Janie</td>
+                  <td>janiedoe@example.com</td>
+                  <td>(888) 888-8888</td>
+                  <td>8/8/8888</td>
+                  <td>Female</td>
+                  <td>29</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        }
+        {(!showPreview && !isImporting) &&
           <div
             className="drop-zone"
           >
@@ -859,59 +908,11 @@ export default class UploadPatientsForm extends React.Component {
             />
           </div>
         }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="instructions">
-            <span className="head">Upload Instructions</span>
-            <span className="body">
-              <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
-              Please format the first row of your colums with the proper column names
-              i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
-            </span>
-            <div className="examples">
-              <span className="title">* Only the Phone field is required; all other fields are optional.</span>
-              {/* this.renderExampleGroupFields(formFields)*/}
-              <table className="example-table">
-                <tr>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>DOB</th>
-                  <th>Gender</th>
-                  <th>BMI</th>
-                </tr>
-                <tr>
-                  <td>Doe, John</td>
-                  <td>johndoe@example.com</td>
-                  <td>(111) 111-1111</td>
-                  <td>1/1/1111</td>
-                  <td>Male</td>
-                  <td>18.4</td>
-                </tr>
-                <tr>
-                  <td>Doe, Jane</td>
-                  <td>janedoe@example.com</td>
-                  <td>(555) 555-5555</td>
-                  <td>5/5/5555</td>
-                  <td>Female</td>
-                  <td>24.5</td>
-                </tr>
-                <tr>
-                  <td>Doe, Janie</td>
-                  <td>janiedoe@example.com</td>
-                  <td>(888) 888-8888</td>
-                  <td>8/8/8888</td>
-                  <td>Female</td>
-                  <td>29</td>
-                </tr>
-              </table>
-            </div>
-            <span
-              className="download-template"
-              onClick={this.downloadExample}
-            >
-              Download Template
-            </span>
-          </div>
+        {(!showPreview && !isImporting) &&
+          <UploadHistoryList
+            uploadHistory={uploadHistory}
+            revert={this.revert}
+          />
         }
         {/*! this.state.showPreview &&
           <div className="column-groups">
@@ -962,23 +963,17 @@ export default class UploadPatientsForm extends React.Component {
           />
         }
         {isImporting &&
-          <div>
-            <div className="import-progress">
-              {/* <ProgressBar bsStyle="success" now={100} />*/}
-              <div className="control">
-                <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
-                {uploadResult !== null &&
-                  <span className="upload-result">
-                    {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
-                  </span>
-                }
-                {/* <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />*/}
-              </div>
+          <div className="import-progress">
+            {/* <ProgressBar bsStyle="success" now={100} />*/}
+            <div className="control">
+              <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+              {uploadResult !== null &&
+              <span className="upload-result">
+                      {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
+                    </span>
+              }
+              {/* <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />*/}
             </div>
-            <UploadHistoryList
-              uploadHistory={uploadHistory}
-              revert={this.revert}
-            />
           </div>
         }
         <div className="text-right">
