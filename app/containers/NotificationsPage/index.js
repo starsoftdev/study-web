@@ -48,7 +48,7 @@ export const getAvatarUrl = (notification) => {
     } else {
       url = require('../../assets/images/Default-User-Img.png');
     }
-  } else if ((event_log.eventType === 'earn-rewards' && data.type === 'enroll') || event_log.eventType === 'set-time-zone') {
+  } else if (event_log.eventType === 'earn-rewards' && data.type === 'enroll') {
     url = require('../../assets/images/site_location.png');
   }
 
