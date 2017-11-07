@@ -109,10 +109,6 @@ export const SAVE_USER                             = 'App/SAVE_USER';
 export const SAVE_USER_SUCCESS                     = 'App/SAVE_USER_SUCCESS';
 export const SAVE_USER_ERROR                       = 'App/SAVE_USER_ERROR';
 
-export const UPDATE_USER                           = 'App/UPDATE_USER';
-export const UPDATE_USER_SUCCESS                   = 'App/UPDATE_USER_SUCCESS';
-export const UPDATE_USER_ERROR                     = 'App/UPDATE_USER_ERROR';
-
 export const GET_CREDITS_PRICE                     = 'App/GET_CREDITS_PRICE';
 export const GET_CREDITS_PRICE_SUCCESS             = 'App/GET_CREDITS_PRICE_SUCCESS';
 export const GET_CREDITS_PRICE_ERROR               = 'App/GET_CREDITS_PRICE_ERROR ';
