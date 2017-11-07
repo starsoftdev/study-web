@@ -197,7 +197,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   setPatients(patients) {
-    console.log('setPatients: ', patients);
     this.setState({ patients });
   }
 
