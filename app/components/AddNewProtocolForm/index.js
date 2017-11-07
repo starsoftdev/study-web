@@ -121,6 +121,15 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               className="field"
             />
           </div>
+          <div className="field-row">
+            <strong className="label"><label>Sponsor Email</label></strong>
+            <Field
+              name="sponsorEmail"
+              component={Input}
+              type="email"
+              className="field"
+            />
+          </div>
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
