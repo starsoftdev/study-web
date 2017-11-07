@@ -101,7 +101,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Messaging Number #{(index + 1)}</label></strong>
+                    <strong className="label"><label>Messaging Number #{(index + 1)}</label></strong>
                     <Field
                       className="field"
                       name={`${lead}.messagingNumber`}
@@ -122,6 +122,19 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                     <strong className="label required"><label>Redirect Number #{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.recruitmentPhone`}
+                      component={Input}
+                      type="text"
+                      className="field"
+                    />
+                  </div>
+                )
+              }
+              {
+                showName && this.props.isAdmin && (
+                  <div className={classnames('field-row')}>
+                    <strong className="label"><label>Url #{(index + 1)}</label></strong>
+                    <Field
+                      name={`${lead}.url`}
                       component={Input}
                       type="text"
                       className="field"
