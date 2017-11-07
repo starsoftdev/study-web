@@ -914,13 +914,16 @@ export function* changeTemporaryPassword() {
 
 export function* fetchLanding() {
   while (true) {
-    const { studyId } = yield take(FETCH_LANDING);
+    const { studyId, url } = yield take(FETCH_LANDING);
 
     // put the fetching study action in case of a navigation action
     try {
       const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
       const response = yield call(request, requestURL, {
         method: 'GET',
+        query: {
+          url,
+        },
       });
       yield put(landingFetched(response));
     } catch (err) {
