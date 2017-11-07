@@ -46,7 +46,7 @@
     }
   }
 
-  .status {
+  .field-row.status {
     margin: 0 0 30px;
     text-align: center;
 
@@ -135,6 +135,10 @@
         tr {
           td, th {
             padding: 5px;
+
+            &.status {
+              text-transform: capitalize;
+            }
           }
         }
       }
