@@ -921,10 +921,11 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function fetchLanding(studyId) {
+export function fetchLanding(studyId, url) {
   return {
     type: FETCH_LANDING,
     studyId,
+    url,
   };
 }
 
