@@ -5,6 +5,8 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 // import { toastr } from 'react-redux-toastr';
 import { touch } from 'redux-form';
+import { actions as toastrActions } from 'react-redux-toastr';
+import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
@@ -18,6 +20,7 @@ import {
 } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus, selectRevertBulkUploadProcess } from './selectors';
+import { selectSocket } from '../../containers/GlobalNotifications/selectors';
 
 import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory } from './actions';
 
@@ -47,15 +50,19 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     touchFields: PropTypes.func,
     touchAddProtocolFields: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
-    notifyValidationError: React.PropTypes.func,
+    notifyValidationError: PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
     revertBulkUploadProcess: PropTypes.object,
+    socket: PropTypes.any,
+    toastrActions: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      uploadResult: null,
+      socketBinded: false,
       patients: [],
       showAddProtocolModal: false,
       fileName: null,
@@ -83,15 +90,25 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser } = this.props;
+    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
 
-
-    console.log('revertBulkUploadProcess', revertBulkUploadProcess);
     if (revertBulkUploadProcess.processing && !newProps.revertBulkUploadProcess.processing) {
       fetchHistory(currentUser.id);
+    }
+
+    if (socket && this.state.socketBinded === false) {
+      this.setState({ socketBinded: true }, () => {
+        socket.on('notifyUploadFinish', (data) => {
+          console.log('notifyUploadFinish', data);
+          this.setState({ uploadResult: data }, () => {
+            toastrActions.remove('loadingToasterForUploadPatients');
+            fetchHistory(currentUser.id);
+          });
+        });
+      });
     }
   }
 
@@ -263,7 +280,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   render() {
     const { indications, fullSiteLocations, fetchHistory } = this.props;
-    const { isImporting } = this.state;
+    const { isImporting, uploadResult } = this.state;
 
     return (
       <div className="container-fluid">
@@ -274,6 +291,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             isImporting={isImporting}
+            uploadResult={uploadResult}
             fetchHistory={fetchHistory}
             setPatients={this.setPatients}
             setFileName={this.setFileName}
@@ -302,6 +320,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 }
 
 const mapStateToProps = createStructuredSelector({
+  socket: selectSocket(),
   currentUser: selectCurrentUser(),
   sites: selectSiteLocations(),
   indications: selectIndications(),
@@ -314,6 +333,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    toastrActions: bindActionCreators(toastrActions, dispatch),
     touchFields: () => dispatch(touch(formName, ...fields)),
     touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
     fetchIndications: () => dispatch(fetchIndications()),

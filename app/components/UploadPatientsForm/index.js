@@ -9,7 +9,7 @@ import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import ProgressBar from 'react-bootstrap/lib/ProgressBar';
+// import ProgressBar from 'react-bootstrap/lib/ProgressBar';
 
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
@@ -66,6 +66,7 @@ export default class UploadPatientsForm extends React.Component {
     addPatientStatus: React.PropTypes.object,
     uploadHistory: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    uploadResult: React.PropTypes.object,
     change: React.PropTypes.func,
     fetchFilteredProtcols: React.PropTypes.func,
     showProtocolModal: React.PropTypes.func,
@@ -706,7 +707,7 @@ export default class UploadPatientsForm extends React.Component {
       setPatients,
       handleSubmit,
       // emptyRowRequiredError,
-      exportPatientsStatus,
+      // exportPatientsStatus,
       fileInputRef,
       indications,
       isFetchingProtocols,
@@ -715,6 +716,7 @@ export default class UploadPatientsForm extends React.Component {
       sources,
       isImporting,
       uploadHistory,
+      uploadResult,
       // change,
       // blur,
     } = this.props;
@@ -962,9 +964,14 @@ export default class UploadPatientsForm extends React.Component {
         {isImporting &&
           <div>
             <div className="import-progress">
-              <ProgressBar bsStyle="success" now={100} />
+              {/* <ProgressBar bsStyle="success" now={100} />*/}
               <div className="control">
-                <span className="title">Import of <b>{this.state.fileName}</b> {exportPatientsStatus.exporting ? 'in progress' : 'finished'}.</span>
+                <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+                {uploadResult !== null &&
+                  <span className="upload-result">
+                    {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
+                  </span>
+                }
                 {/* <input type="button" value="Cancel import" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />*/}
               </div>
             </div>
