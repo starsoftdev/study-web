@@ -46,7 +46,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
                   <td>{`${item.first_name} ${item.last_name}`}</td>
                   <td>{date.format('MM/DD/YY')}</td>
                   <td>{date.format('hh:mm A')}</td>
-                  <td>{item.status}</td>
+                  <td className="status">{item.status}</td>
                   <td>
                     <input
                       type="button"

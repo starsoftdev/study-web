@@ -5,6 +5,7 @@ import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 import { blur, change, Field, /* FieldArray, */reduxForm, reset, touch } from 'redux-form';
 // import classNames from 'classnames';
+import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -483,11 +484,14 @@ export default class UploadPatientsForm extends React.Component {
   }*/
 
   switchPreview() {
-    // const scope = this;
-    const { fields } = this.state;
+    const { fields, fileName } = this.state;
     const { isImporting, switchIsImporting, touchFields, formSyncErrors } = this.props;
 
     touchFields();
+
+    if (!fileName) {
+      toastr.error('', 'Error! Please upload an Excel file.');
+    }
 
     if (_.isEmpty(formSyncErrors)) {
       this.setState({ fields, showPreview: !this.state.showPreview }, () => {
@@ -977,7 +981,7 @@ export default class UploadPatientsForm extends React.Component {
           </div>
         }
         <div className="text-right">
-          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview} disabled={this.state.fileName === null}>Next</Button>}
+          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
           {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
           {(showPreview && !isImporting) && <Button type="submit" disabled={duplicateValidationResult !== true || requiredValidationResult !== true}>Submit</Button>}
         </div>
