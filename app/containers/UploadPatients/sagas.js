@@ -1,9 +1,11 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
+import React from 'react';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { reset } from 'redux-form';
-import { toastr } from 'react-redux-toastr';
+import { actions as toastrActions, toastr } from 'react-redux-toastr';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
@@ -64,8 +66,17 @@ export function* exportPatientsWatcher() {
         }),
       };
       const response = yield call(request, requestURL, options);
-
-      toastr.success('Export Patients', 'Success! You have uploaded your patients.');
+      const toastrOptions = {
+        id: 'loadingToasterForUploadPatients',
+        type: 'success',
+        message: 'Loading...',
+        options: {
+          timeOut: 0,
+          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+          showCloseButton: true,
+        },
+      };
+      yield put(toastrActions.add(toastrOptions));
       yield put(patientsExported(response));
       // yield put(emptyRowRequiredError(false));
     } catch (err) {
