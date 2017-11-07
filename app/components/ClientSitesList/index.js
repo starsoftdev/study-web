@@ -221,7 +221,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('timezone')} onClick={() => { this.clickSortHandler('timezone'); }}>
-                      <span>TIME ZONE</span>
+                      <span>TIMEZONE</span>
                       <i className="caret-arrow" />
                     </th>
                     <th></th>
