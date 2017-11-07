@@ -5,6 +5,7 @@ const schema = {
   indication_id: { presence: { message: '^You need to select indication' } },
   protocolNumber: { presence: true },
   sponsorName: { presence: true },
+  sponsorEmail: { email: true },
   recruitmentPhone: {
     presence: {
       message: '^Phone number cannot be blank',
