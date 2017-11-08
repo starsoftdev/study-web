@@ -13,7 +13,7 @@ describe('HomePage/reducer', () => {
       },
       patientMessages: {
         unreadTexts: 0,
-        emailsSent: 0,
+        unreadEmails: 0,
       },
       rewardsPoint: 0,
     };
@@ -37,12 +37,12 @@ describe('HomePage/reducer', () => {
   });
 
   it('should handle the fetchPatientMessagesSucceeded action correctly', () => {
-    const response = { unreadTexts: 1, emailsSent: 2 };
+    const response = { unreadTexts: 1, unreadEmails: 2 };
     const expectedResult = {
       ...state,
       patientMessages: {
         unreadTexts: 1,
-        emailsSent: 2,
+        unreadEmails: 2,
       },
     };
     expect(homePageReducer(state, fetchPatientMessagesSucceeded(response))).toEqual(expectedResult);
