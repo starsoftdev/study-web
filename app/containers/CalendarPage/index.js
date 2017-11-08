@@ -9,7 +9,6 @@ import { createStructuredSelector } from 'reselect';
 
 import { SchedulePatientModalType } from '../../common/constants';
 
-import ComingSoon from '../../components/ComingSoon/index';
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
 import EditScheduleModal from './components/EditScheduleModal';

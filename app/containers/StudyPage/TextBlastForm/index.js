@@ -92,7 +92,7 @@ class TextBlastForm extends React.Component {
 
   componentDidMount() {
     const { studyName } = this.props;
-    const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
+    const message = `<first_name>, please respond yes or no if you are interested in a research study for ${studyName}.`;
     this.props.initialize({
       message,
     });
