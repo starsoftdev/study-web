@@ -66,9 +66,8 @@ const initialState = {
   },
   patientMessagesCount: {
     unreadTexts: 0,
-    unreadEmails: 0,
-    total: 0,
-    overallTotal: 0,
+    emailsSent: 0,
+    textTotal: 0,
   },
   studies: {
     details: [],
@@ -172,9 +171,8 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         patientMessagesCount: {
           unreadTexts: payload.unreadTexts,
-          unreadEmails: payload.unreadEmails,
-          total: payload.total,
-          overallTotal: payload.overallTotal,
+          emailsSent: payload.emailsSent,
+          textTotal: payload.textTotal,
         },
       };
     case FETCH_PRINCIPAL_INVESTIGATOR_TOTALS_SUCCEESS:
@@ -192,9 +190,8 @@ export default function homePageReducer(state = initialState, action) {
         ...state,
         patientMessagesCount: {
           unreadTexts: newState.patientMessagesCount.unreadTexts,
-          unreadEmails: newState.patientMessagesCount.unreadEmails,
-          total: newState.patientMessagesCount.total + 1,
-          overallTotal: newState.patientMessagesCount.overallTotal + 1,
+          emailsSent: newState.patientMessagesCount.emailsSent,
+          textTotal: newState.patientMessagesCount.textTotal + 1,
         },
       };
     case RECEIVE_NOTIFICATION:
@@ -214,9 +211,8 @@ export default function homePageReducer(state = initialState, action) {
             ...state,
             patientMessagesCount: {
               unreadTexts: newState.patientMessagesCount.unreadTexts + 1,
-              unreadEmails: newState.patientMessagesCount.unreadEmails,
-              total: newState.patientMessagesCount.total + 1,
-              overallTotal: newState.patientMessagesCount.overallTotal + 1,
+              emailsSent: newState.patientMessagesCount.emailsSent,
+              textTotal: newState.patientMessagesCount.textTotal + 1,
             },
           };
           break;
@@ -645,9 +641,8 @@ export default function homePageReducer(state = initialState, action) {
         },
         patientMessagesCount: {
           unreadTexts: state.patientMessagesCount.unreadTexts + 1,
-          unreadEmails: state.patientMessagesCount.unreadEmails,
-          total: state.patientMessagesCount.total + 1,
-          overallTotal: state.patientMessagesCount.overallTotal + 1,
+          emailsSent: state.patientMessagesCount.emailsSent,
+          textTotal: state.patientMessagesCount.textTotal + 1,
         },
       };
 
@@ -668,9 +663,8 @@ export default function homePageReducer(state = initialState, action) {
           },
           patientMessagesCount: {
             unreadTexts: state.patientMessagesCount.unreadTexts - action.count,
-            unreadEmails: state.patientMessagesCount.unreadEmails,
-            total: state.patientMessagesCount.total,
-            overallTotal: state.patientMessagesCount.overallTotal,
+            emailsSent: state.patientMessagesCount.emailsSent,
+            textTotal: state.patientMessagesCount.textTotal,
           },
         };
       }
