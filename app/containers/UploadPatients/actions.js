@@ -30,10 +30,9 @@ export function exportPatients(data) {
   };
 }
 
-export function patientsExported(payload) {
+export function patientsExported() {
   return {
     type: EXPORT_PATIENTS_SUCCESS,
-    payload,
   };
 }
 
