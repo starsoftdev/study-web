@@ -41,9 +41,10 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
   componentWillMount() {
     const { patients } = this.props;
+    const firstPatients = _.slice(patients, 0, 3);
     this.clearInvalidKeys(patients);
-    this.validateDuplicateKeys(patients);
-    this.validateRequiredKeys(patients);
+    this.validateDuplicateKeys(firstPatients);
+    this.validateRequiredKeys(firstPatients);
   }
 
   clearInvalidKeys(patients) {
@@ -127,7 +128,14 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   renderExampleTable() {
     const { patients } = this.props;
     const { missingKeys } = this.state;
+    const firstPatients = _.slice(patients, 0, 3);
     const firstPatientKeys = _.keys(patients[0]);
+
+    if (missingKeys.length > 0) {
+      _.forEach(missingKeys, (key) => {
+        firstPatientKeys.push(key);
+      });
+    }
 
     return (
       <table className="example-table">
@@ -135,35 +143,31 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
           <tr key={_.uniqueId()}>
             {
               firstPatientKeys.map((key) => {
-                const index = _.findIndex(missingKeys, (k) => { return k.toLowerCase() === key.toLowerCase(); });
-                if (index === -1) {
-                  return (
-                    <th key={_.uniqueId()}>{key}</th>
-                  );
-                } else {
-                  return null;
-                }
+                return (
+                  <th key={_.uniqueId()}>{key}</th>
+                );
               })
             }
           </tr>
           {
-            patients.map((patient, patientIndex) => {
+            firstPatients.map((patient) => {
               const patientProps = _.map(patient);
-              if (patientIndex <= 2) {
-                return (
-                  <tr key={_.uniqueId()}>
-                    {
-                      patientProps.map((value) => {
-                        return (
-                          <td key={_.uniqueId()}>{value}</td>
-                        );
-                      })
-                    }
-                  </tr>
-                );
-              } else {
-                return null;
+              if (missingKeys.length > 0) {
+                _.forEach(missingKeys, () => {
+                  patientProps.push('');
+                });
               }
+              return (
+                <tr key={_.uniqueId()}>
+                  {
+                    patientProps.map((value) => {
+                      return (
+                        <td key={_.uniqueId()}>{value}</td>
+                      );
+                    })
+                  }
+                </tr>
+              );
             })
           }
         </tbody>

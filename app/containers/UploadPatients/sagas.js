@@ -20,9 +20,7 @@ import {
 import {
   filteredProtcolsFetched,
   filteredProtcolsFetchingError,
-  patientsExported,
   exportPatientsError,
-  // emptyRowRequiredError,
   addProtocolSucceess,
   addProtocolError,
   historyFetched,
@@ -65,7 +63,7 @@ export function* exportPatientsWatcher() {
           ...data,
         }),
       };
-      const response = yield call(request, requestURL, options);
+      yield call(request, requestURL, options);
       const toastrOptions = {
         id: 'loadingToasterForUploadPatients',
         type: 'success',
@@ -77,7 +75,6 @@ export function* exportPatientsWatcher() {
         },
       };
       yield put(toastrActions.add(toastrOptions));
-      yield put(patientsExported(response));
       // yield put(emptyRowRequiredError(false));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
