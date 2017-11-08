@@ -1211,7 +1211,6 @@ let watcherD = false;
 
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
-  // const watcherB = yield fork(fetchPatientMessagesWatcher);
   if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
   }
