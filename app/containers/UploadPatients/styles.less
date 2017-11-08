@@ -5,7 +5,8 @@
 
   .drop-zone {
     position: relative;
-    border: dashed 2px #ccc;
+    transition: all 0.25s ease;
+    border: solid 2px #00afef;
     padding: 20px;
     margin: 0 0 20px 0;
     text-align: center;
@@ -37,11 +38,11 @@
       }
     }
 
-    &:hover {
-      border: dotted 2px #ccc;
+    &:hover, &.drag-enter {
+      background-color: #00afef;
 
       .icon {
-        color: #76daff;
+        color: #ffffff;
       }
     }
   }
@@ -104,47 +105,6 @@
     }
   }
 
-  .upload-history {
-    margin: 0 0 20px;
-    padding: 15px;
-    border: 2px solid #f78e1e;
-    overflow: hidden;
-
-    .header {
-      font-size: 16px;
-
-      .title {
-        width: 100%;
-        display: inline-block;
-        font-weight: bold;
-      }
-
-      .tip {
-        width: 100%;
-        margin: 0 0 10px;
-        display: inline-block;
-      }
-    }
-
-    .history-list {
-      font-size: 16px;
-
-      .history-table {
-        width: 100%;
-
-        tr {
-          td, th {
-            padding: 5px;
-
-            &.status {
-              text-transform: capitalize;
-            }
-          }
-        }
-      }
-    }
-  }
-
   .tip {
     font-size: 16px;
     width: 100%;
@@ -159,6 +119,7 @@
     font-size: 16px;
 
     .head {
+      text-transform: uppercase;
       width: 100%;
       margin: 0 0 10px;
       display: inline-block;
@@ -219,61 +180,6 @@
         display: inline-block;
         margin: 0 0 10px;
       }
-
-      /*.column {
-        position: relative;
-        overflow: hidden;
-        float: left;
-        margin-right: 1%;
-
-        &.names {
-          width: 22%;
-          textarea {
-          }
-        }
-
-        &.emails {
-          width: 22%;
-          textarea {
-          }
-        }
-
-        &.phones {
-          width: 16%;
-        }
-
-        &.ages {
-          width: 9%;
-        }
-
-        &.genders {
-          width: 15%;
-        }
-
-        &.bmis {
-          width: 11%;
-          margin-right: 0;
-        }
-
-        .title {
-          width: 100%;
-          display: inline-block;
-          text-transform: uppercase;
-          margin: 0;
-        }
-
-        .group {
-          border: 2px solid;
-          padding: 10px;
-          border-radius: 3px;
-
-          .item {
-            width: 100%;
-            display: inline-block;
-            margin: 0;
-          }
-        }
-      }*/
     }
   }
 
@@ -628,6 +534,48 @@
 
       &.margin-right {
         margin-right: 12px;
+      }
+    }
+  }
+}
+
+.upload-history {
+  padding: 25px;
+  background: #fff;
+  border: 2px solid #f78e1e;
+  margin: 20px 0 0;
+  overflow: hidden;
+
+  .header {
+    font-size: 16px;
+
+    .title {
+      width: 100%;
+      display: inline-block;
+      font-weight: bold;
+    }
+
+    .tip {
+      width: 100%;
+      margin: 0 0 10px;
+      display: inline-block;
+    }
+  }
+
+  .history-list {
+    font-size: 16px;
+
+    .history-table {
+      width: 100%;
+
+      tr {
+        td, th {
+          padding: 5px;
+
+          &.status {
+            text-transform: capitalize;
+          }
+        }
       }
     }
   }
