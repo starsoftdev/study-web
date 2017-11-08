@@ -1211,7 +1211,7 @@ let watcherD = false;
 
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
-  const watcherB = yield fork(fetchPatientMessagesWatcher);
+  //const watcherB = yield fork(fetchPatientMessagesWatcher);
   if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
   }
@@ -1258,7 +1258,7 @@ export function* homePageSaga() {
   const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/app') {
     yield cancel(watcherA);
-    yield cancel(watcherB);
+    //yield cancel(watcherB);
     if (watcherD) {
       yield cancel(watcherD);
       watcherD = false;
