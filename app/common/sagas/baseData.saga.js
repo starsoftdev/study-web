@@ -38,6 +38,7 @@ import {
   DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
+  UPDATE_USER,
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
 
@@ -121,6 +122,8 @@ import {
   siteSavingError,
   userSaved,
   userSavingError,
+  updateUserSuccess,
+  updateUserError,
   getCreditsPriceSuccess,
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
@@ -183,6 +186,7 @@ export default function* baseDataSaga() {
   yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
+  yield fork(updateUserWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
@@ -784,6 +788,28 @@ export function* saveUserWatcher() {
     }
   }
 }
+
+export function* updateUserWatcher() {
+  while (true) {
+    const { id, data } = yield take(UPDATE_USER);
+    let requestURL = null;
+    let options = null;
+
+    try {
+      requestURL = `${API_URL}/users/${id}`;
+      options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      };
+
+      yield call(request, requestURL, options);
+      yield put(updateUserSuccess(data));
+    } catch (err) {
+      yield put(updateUserError(err));
+    }
+  }
+}
+
 
 export function* fetchCreditsPrice() {
   while (true) {
