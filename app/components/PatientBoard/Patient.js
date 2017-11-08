@@ -63,8 +63,7 @@ class Patient extends React.Component {
   }
 
   renderUnreadMessageCount() {
-    // const { unreadMessageCount } = this.props;
-    const unreadMessageCount = 2;
+    const { unreadMessageCount } = this.props;
     if (unreadMessageCount > 0) {
       return (
         <span className="counter-circle">{unreadMessageCount}</span>
@@ -92,7 +91,7 @@ class Patient extends React.Component {
     if ((patient.lastTextMessage && patient.lastTextMessage.dateCreated) || unreadMessageCount > 0) {
       return (
         <a
-          className="bottom"
+          className={classNames({ bottom: true, 'has-counter': unreadMessageCount > 0 })}
         >
           <div className="msg-alert">
             <div className="msg">

@@ -11,7 +11,6 @@ import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import {
   FETCH_PATIENT_SIGN_UPS,
-  FETCH_PATIENT_MESSAGES,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
   FETCH_STUDIES,
   FETCH_PROTOCOLS,
@@ -34,7 +33,7 @@ import {
   FETCH_TOTALS_DASHBOARD,
   FETCH_SITE_LOCATIONS,
   UPDATE_DASHBOARD_STUDY,
-  FETCH_ALL_CLIENT_USERS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
   FETCH_STUDY_CAMPAIGNS,
   CHANGE_STUDY_STATUS,
   UPDATE_LANDING_PAGE,
@@ -61,8 +60,8 @@ import {
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
   updateDashboardStudySuccess,
-  fetchAllClientUsersDashboardSuccess,
-  fetchAllClientUsersDashboardError,
+  fetchAllStudyEmailNotificationsSuccess,
+  fetchAllStudyEmailNotificationsError,
   fetchStudyCampaignsDashboardSuccess,
   fetchStudyCampaignsDashboardError,
   fetchCustomNotificationEmailsSuccess,
@@ -373,27 +372,6 @@ export function* fetchPrincipalInvestigatorTotalsWorker(action) {
       yield call(() => { location.href = '/login'; });
     }
   }
-}
-
-export function* fetchPatientMessagesWatcher() {
-  yield* takeLatest(FETCH_PATIENT_MESSAGES, fetchPatientMessagesWorker);
-}
-
-export function* fetchPatientMessagesWorker(action) { // eslint-disable-line no-unused-vars
-  // try {
-  //   const requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientMessageStats`;
-  //   const response = yield call(request, requestURL);
-  //
-  //   yield put(fetchPatientMessagesSucceeded(response));
-  // TODO re-enable patient message stat fetching
-  // yield put(fetchPatientMessagesSucceeded({ unreadTexts: 0, unreadEmails: 0, total: 0 }));
-  // } catch (err) {
-  //   const errorMessage = get(err, 'message', 'Something went wrong while fetching patient messages');
-  //   toastr.error('', errorMessage);
-  //   if (err.status === 401) {
-  //     yield call(() => { location.href = '/login'; });
-  //   }
-  // }
 }
 
 export function* fetchStudiesWatcher() {
@@ -872,25 +850,26 @@ export function* updateDashboardStudyWorker(action) {
 }
 
 export function* fetchAllClientUsersWatcher() {
-  yield* takeLatest(FETCH_ALL_CLIENT_USERS, fetchAllClientUsersWorker);
+  yield* takeLatest(FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS, fetchAllClientUsersWorker);
 }
 
 export function* fetchAllClientUsersWorker(action) {
   try {
-    const requestURL = `${API_URL}/sites/getSiteUsersAndAdmins`;
+    const requestURL = `${API_URL}/sites/getAllStudyNotificationEmails`;
 
     const params = {
       method: 'GET',
       query: {
         clientId: action.clientId,
         siteId: action.siteId,
+        studyId: action.studyId,
       },
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchAllClientUsersDashboardSuccess(response));
+    yield put(fetchAllStudyEmailNotificationsSuccess(response));
   } catch (err) {
-    yield put(fetchAllClientUsersDashboardError(err));
+    yield put(fetchAllStudyEmailNotificationsError(err));
     const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
     toastr.error('', errorMessage);
     if (err.status === 401) {
@@ -1232,7 +1211,6 @@ let watcherD = false;
 
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
-  const watcherB = yield fork(fetchPatientMessagesWatcher);
   if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
   }
@@ -1279,7 +1257,7 @@ export function* homePageSaga() {
   const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/app') {
     yield cancel(watcherA);
-    yield cancel(watcherB);
+    // yield cancel(watcherB);
     if (watcherD) {
       yield cancel(watcherD);
       watcherD = false;

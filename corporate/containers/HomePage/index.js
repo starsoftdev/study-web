@@ -62,9 +62,9 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     if (newProps.trials !== this.props.trials) {
       if (newProps.trials.details) {
         if (newProps.trials.details.length > 0) {
-          this.h3Text = `There are ${newProps.total} ${(newProps.total > 1) ? 'studies' : 'study'}`;
+          this.h3Text = `There ${newProps.total > 1 ? 'are' : 'is'} ${newProps.total} ${newProps.total > 1 ? 'studies' : 'study'}`;
           if (newProps.newList.postalCode) {
-            this.h3Text = `There are ${newProps.total} ${(newProps.total > 1) ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
+            this.h3Text = `There ${newProps.total > 1 ? 'are' : 'is'} ${newProps.total} ${newProps.total > 1 ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
           }
           scroller.scrollTo('scrollTarget', {
             duration: 800,
