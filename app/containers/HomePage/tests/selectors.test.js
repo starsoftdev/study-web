@@ -13,7 +13,7 @@ describe('HomePage/selectors', () => {
         },
         patientMessages: {
           unreadTexts: 0,
-          unreadEmails: 0,
+          emailsSent: 0,
         },
         rewardsPoint: 0,
       };
@@ -49,13 +49,13 @@ describe('HomePage/selectors', () => {
         homePage: {
           patientMessages: {
             unreadTexts: 1,
-            unreadEmails: 15,
+            emailsSent: 15,
           },
         },
       };
       expect(selectPatientMessagesSelector(mockedState)).toEqual({
         unreadTexts: 1,
-        unreadEmails: 15,
+        emailsSent: 15,
       });
     });
   });
