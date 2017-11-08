@@ -78,7 +78,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories, currentUser, fetchStudy } = this.props;
+    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories, currentUser, fetchStudy, study } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyMessage', (message) => {
@@ -107,7 +107,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
           // fetch the new text stats
           // TODO needs to take into account the stats are filtered based on campaign and source selected
-          fetchStudyTextNewStats(params.id);
+          if (study && study.id === socketMessage.study.id) {
+            fetchStudyTextNewStats(params.id);
+          }
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
               unreadMessageCount: (unreadMessageCount + 1),
