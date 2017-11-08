@@ -235,9 +235,9 @@ const initialState = {
       fetching: false,
       error: null,
       stats: {
-        emailsSent: 0,
         unreadText: 0,
-        textTotal: 0,
+        unreadEmails: 0,
+        total: 0,
       },
     },
     rewards: [],
@@ -860,8 +860,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent,
+            total: state.baseData.patientMessages.stats.total,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts,
           },
         },
@@ -887,8 +887,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
             unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - unreadCount) || 0,
           },
         },
@@ -962,8 +962,8 @@ export default function appReducer(state = initialState, action) {
           fetching: true,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
@@ -977,8 +977,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
@@ -992,8 +992,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
             unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + payload) || 0,
           },
         },
@@ -1007,8 +1007,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            total: state.baseData.patientMessages.stats.total || 0,
+            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
             unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - payload) || 0,
           },
         },
@@ -1022,9 +1022,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: payload,
           stats: {
-            textTotal: 0,
-            emailsSent: 0,
             unreadText: 0,
+            unreadEmails: 0,
+            total: 0,
           },
         },
       };
@@ -1038,9 +1038,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
-            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
-            unreadTexts: state.baseData.patientMessages.stats.unreadText || 0,
+            total: state.baseData.patientMessages.stats || 0,
+            unreadEmails: state.baseData.patientMessages.stats || 0,
+            unreadTexts: state.baseData.patientMessages.stats || 0,
           },
         },
       };
@@ -1050,8 +1050,8 @@ export default function appReducer(state = initialState, action) {
         patientMessages: {
           ...state.baseData.patientMessages,
           stats: {
-            textTotal: action.payload.textTotal || 0,
-            emailsSent: action.payload.emailsSent || 0,
+            total: action.payload.total || 0,
+            unreadEmails: action.payload.unreadEmails || 0,
             unreadTexts: action.payload.unreadTexts || 0,
           },
         },

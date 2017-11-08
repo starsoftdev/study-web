@@ -92,13 +92,13 @@ export class Dashboard extends React.Component {
             </div>
             <div className="textbox">
               <h2>PATIENT<br /> MESSAGES</h2>
-              <span className="counter">TOTAL {patientMessagesCount.textTotal}</span>
+              <span className="counter">TOTAL {patientMessagesCount.overallTotal}</span>
             </div>
           </div>
           <div className="box">
             <div className="col pull-left">
               <span className="sub-title">EMAIL<br /> SENT</span>
-              <strong className="number"><i className="icomoon-envelop" /> {patientMessagesCount.emailsSent}</strong>
+              <strong className="number"><i className="icomoon-envelop" /> {patientMessagesCount.unreadEmails}</strong>
             </div>
             <div className="col pull-right">
               <span className="sub-title">UNREAD<br /> TEXT</span>
