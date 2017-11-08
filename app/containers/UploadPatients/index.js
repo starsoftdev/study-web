@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
-// import { toastr } from 'react-redux-toastr';
-import { touch } from 'redux-form';
+import { touch, reset } from 'redux-form';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
@@ -22,7 +21,7 @@ import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus, selectRevertBulkUploadProcess } from './selectors';
 import { selectSocket } from '../../containers/GlobalNotifications/selectors';
 
-import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory } from './actions';
+import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory, patientsExported } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
@@ -34,6 +33,7 @@ const formName = 'UploadPatients.UploadPatientsForm';
 
 export class UploadPatientsPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    clearForm: PropTypes.func,
     fetchHistory: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchClientSites: PropTypes.func,
@@ -49,6 +49,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
     touchAddProtocolFields: PropTypes.func,
+    setPatientsExported: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
     notifyValidationError: PropTypes.func,
     formValues: PropTypes.object,
@@ -90,7 +91,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions } = this.props;
+    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions, clearForm, setPatientsExported } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
@@ -102,10 +103,11 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyUploadFinish', (data) => {
-          console.log('notifyUploadFinish', data);
           this.setState({ uploadResult: data }, () => {
             toastrActions.remove('loadingToasterForUploadPatients');
             fetchHistory(currentUser.id);
+            clearForm();
+            setPatientsExported();
           });
         });
       });
@@ -332,6 +334,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    setPatientsExported: () => dispatch(patientsExported()),
+    clearForm: () => dispatch(reset(formName)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
     touchFields: () => dispatch(touch(formName, ...fields)),
     touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
