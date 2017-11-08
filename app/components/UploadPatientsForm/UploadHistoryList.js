@@ -75,7 +75,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
       <div className="upload-history">
         <div className="header">
           <span className="title">Upload history</span>
-          <span className="tip">Upload sessions are kept for 90 days, but can only be deleted in the first 48 hours after upload. </span>
+          <span className="tip">Upload sessions are kept for 90 days, but can only be reverted in the first 48 hours after upload. </span>
         </div>
         <div className="history-list">
           {this.renderHistoryTable()}
