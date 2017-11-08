@@ -22,9 +22,10 @@ import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import GlobalNotifications from '../../containers/GlobalNotifications';
-import { fetchMeFromToken, changeTemporaryPassword } from './actions';
+import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions';
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,6 +33,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   static propTypes = {
     children: React.PropTypes.node,
     changePassword: React.PropTypes.func,
+    updateUser: React.PropTypes.func,
     currentUserRoleType: React.PropTypes.string,
     fetchMeFromToken: React.PropTypes.func.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
@@ -47,6 +49,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     this.state = {
       showChangePwdModal: false,
+      showSetTimeZoneModal: false,
     };
   }
 
@@ -66,6 +69,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (tempPassword) {
       this.setState({ showChangePwdModal: true });
+    }
+
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.userData.id) {
+      this.setState({ showSetTimeZoneModal: true });
+      this.props.updateUser(nextProps.userData.id, { needSetup: false });
+    } else {
+      this.setState({ showSetTimeZoneModal: false });
     }
 
     if (window.FS && nextProps.userData) {
@@ -132,6 +142,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           </main>
           <GlobalNotifications {...this.props} events={pageEvents} />
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
         </div>
       );
     }
@@ -143,6 +154,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           {React.Children.toArray(this.props.children)}
         </main>
         <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+        <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
       </div>
     );
   }
@@ -158,6 +170,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
+    updateUser: (id, values) => dispatch(updateUser(id, values)),
     fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
   };
 }
