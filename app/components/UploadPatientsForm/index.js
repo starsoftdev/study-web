@@ -9,15 +9,17 @@ import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
+import classNames from 'classnames';
+
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
+import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
 import UploadHistoryList from './UploadHistoryList';
+
 import formValidator, { fields as formFields } from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
@@ -59,7 +61,6 @@ export default class UploadPatientsForm extends Component {
     change: PropTypes.func,
     fetchFilteredProtcols: PropTypes.func,
     showProtocolModal: PropTypes.func,
-    fileInputRef: PropTypes.func.isRequired,
     exportPatientsStatus: PropTypes.any,
     indications: PropTypes.array,
     isFetchingProtocols: PropTypes.bool,
@@ -83,6 +84,7 @@ export default class UploadPatientsForm extends Component {
     this.state = {
       duplicateValidationResult: false,
       requiredValidationResult: false,
+      dragEnter: false,
       showPreview: false,
       isDragOver: false,
       siteLocation: null,
@@ -137,11 +139,11 @@ export default class UploadPatientsForm extends Component {
   }
 
   onDragEnterHandler() {
-    // ..
+    this.setState({ dragEnter: true });
   }
 
   onDragLeaveHandler() {
-    // ..
+    this.setState({ dragEnter: false });
   }
 
   setRequiredValidationResult(requiredValidationResult) {
@@ -277,7 +279,6 @@ export default class UploadPatientsForm extends Component {
     const {
       setPatients,
       handleSubmit,
-      fileInputRef,
       indications,
       isFetchingProtocols,
       protocols,
@@ -292,6 +293,7 @@ export default class UploadPatientsForm extends Component {
       patients,
       requiredValidationResult,
       duplicateValidationResult,
+      dragEnter,
     } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
@@ -315,194 +317,192 @@ export default class UploadPatientsForm extends Component {
     }));
 
     return (
-      <Form
-        className="upload-patients-form"
-        onSubmit={handleSubmit}
-      >
-        <div className="field-row status">
+      <div className="upload-patients-container">
+        <Form className="upload-patients-form" onSubmit={handleSubmit}>
+          <div className="field-row status">
           <span className="step-one">
             1. Upload Patients List
           </span>
-          <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
+            <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
             2. Preview & Finish
           </span>
-        </div>
-        {(!showPreview && !isImporting) &&
-          <div className="instructions">
-            <span className="head">Upload Instructions</span>
-            <span className="body">
-              <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
-                Please format the first row of your colums with the proper column names
-                i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
-                <span className="download-template" onClick={this.downloadExample}>Download Template</span>
-            </span>
-            <div className="examples">
-              <span className="title">* Only the Phone field is required; all other fields are optional.</span>
-              <table className="example-table">
-                <tr>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>DOB</th>
-                  <th>Gender</th>
-                  <th>BMI</th>
-                </tr>
-                <tr>
-                  <td>Doe, John</td>
-                  <td>johndoe@example.com</td>
-                  <td>(111) 111-1111</td>
-                  <td>1/1/1111</td>
-                  <td>Male</td>
-                  <td>18.4</td>
-                </tr>
-                <tr>
-                  <td>Doe, Jane</td>
-                  <td>janedoe@example.com</td>
-                  <td>(555) 555-5555</td>
-                  <td>5/5/5555</td>
-                  <td>Female</td>
-                  <td>24.5</td>
-                </tr>
-                <tr>
-                  <td>Doe, Janie</td>
-                  <td>janiedoe@example.com</td>
-                  <td>(888) 888-8888</td>
-                  <td>8/8/8888</td>
-                  <td>Female</td>
-                  <td>29</td>
-                </tr>
-              </table>
-            </div>
           </div>
-        }
-        {(!showPreview && !isImporting) &&
-          <div
-            className="drop-zone"
-          >
-            <input
-              type="file"
-              onChange={this.handleFile}
-              onDragEnter={this.onDragEnterHandler}
-              onDragLeave={this.onDragLeaveHandler}
-            />
-            <div className="icon">
-              <i className="icomoon-arrow_up_alt" />
-              <span className="text">Drag and drop <br /> file here</span>
+          {(!showPreview && !isImporting) &&
+            <div className="instructions">
+              <span className="head">Upload Instructions</span>
+              <span className="body">
+                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+                  Please format the first row of your colums with the proper column names
+                  i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
+                  <span className="download-template" onClick={this.downloadExample}>Download Template</span>
+              </span>
+              <div className="examples">
+                <span className="title">* Only the Phone field is required; all other fields are optional.</span>
+                <table className="example-table">
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>BMI</th>
+                  </tr>
+                  <tr>
+                    <td>Doe, John</td>
+                    <td>johndoe@example.com</td>
+                    <td>(111) 111-1111</td>
+                    <td>1/1/1111</td>
+                    <td>Male</td>
+                    <td>18.4</td>
+                  </tr>
+                  <tr>
+                    <td>Doe, Jane</td>
+                    <td>janedoe@example.com</td>
+                    <td>(555) 555-5555</td>
+                    <td>5/5/5555</td>
+                    <td>Female</td>
+                    <td>24.5</td>
+                  </tr>
+                  <tr>
+                    <td>Doe, Janie</td>
+                    <td>janiedoe@example.com</td>
+                    <td>(888) 888-8888</td>
+                    <td>8/8/8888</td>
+                    <td>Female</td>
+                    <td>29</td>
+                  </tr>
+                </table>
+              </div>
             </div>
-          </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label required">
-              <label>UPLOAD PATIENTS LIST</label></strong>
-            <div className="field">
-              <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
-              <Field
-                id="patients_list"
-                name="file"
-                inputRef={fileInputRef}
-                component={Input}
+          }
+          {(!showPreview && !isImporting) &&
+            <div
+              className={classNames('drop-zone', (dragEnter ? 'drag-enter' : ''))}
+            >
+              <input
                 type="file"
                 onChange={this.handleFile}
+                onDragEnter={this.onDragEnterHandler}
+                onDragLeave={this.onDragLeaveHandler}
               />
-              <strong className="label filename">
-                <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
-              </strong>
+              <div className="icon">
+                <i className="icomoon-arrow_up_alt" />
+                <span className="text">Drag and drop Excel<br /> file here</span>
+              </div>
             </div>
-          </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label required">
-              <label>Site Location</label>
-            </strong>
-            <Field
-              name="site"
-              component={ReactSelect}
-              className="field"
-              placeholder="Select Site Location"
-              options={siteOptions}
-              onChange={this.changeSiteLocation}
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>UPLOAD PATIENTS LIST</label></strong>
+              <div className="field">
+                <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
+                <Field
+                  id="patients_list"
+                  name="file"
+                  component={Input}
+                  type="file"
+                  onChange={this.handleFile}
+                />
+                <strong className="label filename">
+                  <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
+                </strong>
+              </div>
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Site Location</label>
+              </strong>
+              <Field
+                name="site"
+                component={ReactSelect}
+                className="field"
+                placeholder="Select Site Location"
+                options={siteOptions}
+                onChange={this.changeSiteLocation}
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Protocol</label>
+              </strong>
+              <Field
+                name="protocol"
+                component={ReactSelect}
+                placeholder="Select Protocol"
+                className="field"
+                options={protocolOptions}
+                disabled={isFetchingProtocols || !this.state.siteLocation}
+                onChange={this.selectProtocol}
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label">
+                <label>Indication</label>
+              </strong>
+              <Field
+                name="indication"
+                component={ReactSelect}
+                className="field"
+                placeholder="Select Indication"
+                options={indicationOptions}
+                disabled
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Source</label>
+              </strong>
+              <Field
+                name="source"
+                component={ReactSelect}
+                className="field"
+                placeholder="Select Source"
+                options={sourceOptions}
+              />
+            </div>
+          }
+          {(showPreview && !isImporting) &&
+            <UploadPatientsPreviewForm
+              setDuplicateValidationResult={this.setDuplicateValidationResult}
+              setRequiredValidationResult={this.setRequiredValidationResult}
+              setPatients={setPatients}
+              patients={patients}
             />
+          }
+          {isImporting &&
+            <div className="import-progress">
+              <div className="control">
+                <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+                {uploadResult !== null &&
+                <span className="upload-result">
+                  {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
+                </span>
+                }
+              </div>
+            </div>
+          }
+          <div className="text-right">
+            {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
+            {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
+            {(showPreview && !isImporting) && <Button type="submit" disabled={duplicateValidationResult !== true || requiredValidationResult !== true}>Submit</Button>}
           </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label required">
-              <label>Protocol</label>
-            </strong>
-            <Field
-              name="protocol"
-              component={ReactSelect}
-              placeholder="Select Protocol"
-              className="field"
-              options={protocolOptions}
-              disabled={isFetchingProtocols || !this.state.siteLocation}
-              onChange={this.selectProtocol}
-            />
-          </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label">
-              <label>Indication</label>
-            </strong>
-            <Field
-              name="indication"
-              component={ReactSelect}
-              className="field"
-              placeholder="Select Indication"
-              options={indicationOptions}
-              disabled
-            />
-          </div>
-        }
-        {(!this.state.showPreview && !isImporting) &&
-          <div className="field-row main">
-            <strong className="label required">
-              <label>Source</label>
-            </strong>
-            <Field
-              name="source"
-              component={ReactSelect}
-              className="field"
-              placeholder="Select Source"
-              options={sourceOptions}
-            />
-          </div>
-        }
+        </Form>
         {(!showPreview && !isImporting) &&
           <UploadHistoryList
             uploadHistory={uploadHistory}
             revert={this.revert}
           />
         }
-        {(showPreview && !isImporting) &&
-          <UploadPatientsPreviewForm
-            setDuplicateValidationResult={this.setDuplicateValidationResult}
-            setRequiredValidationResult={this.setRequiredValidationResult}
-            setPatients={setPatients}
-            patients={patients}
-          />
-        }
-        {isImporting &&
-          <div className="import-progress">
-            <div className="control">
-              <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
-              {uploadResult !== null &&
-              <span className="upload-result">
-                {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
-              </span>
-              }
-            </div>
-          </div>
-        }
-        <div className="text-right">
-          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
-          {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {(showPreview && !isImporting) && <Button type="submit" disabled={duplicateValidationResult !== true || requiredValidationResult !== true}>Submit</Button>}
-        </div>
-      </Form>
+      </div>
     );
   }
 }
