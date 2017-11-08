@@ -631,25 +631,25 @@ export default function homePageReducer(state = initialState, action) {
       foundStudy = _.find(studiesCopy, (o) => (o.studyId === action.studyId));
       if (foundStudy) {
         foundStudy.unreadMessageCount ++;
-        return {
-          ...state,
-          studies: {
-            details: studiesCopy,
-            fetching: false,
-            error: null,
-            total: state.studies.total || 0,
-            active: state.studies.active || 0,
-            inactive: state.studies.inactive || 0,
-          },
-          patientMessagesCount: {
-            unreadTexts: state.patientMessagesCount.unreadTexts + 1,
-            unreadEmails: state.patientMessagesCount.unreadEmails,
-            total: state.patientMessagesCount.total + 1,
-            overallTotal: state.patientMessagesCount.overallTotal + 1,
-          },
-        };
       }
-      return state;
+
+      return {
+        ...state,
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+          total: state.studies.total || 0,
+          active: state.studies.active || 0,
+          inactive: state.studies.inactive || 0,
+        },
+        patientMessagesCount: {
+          unreadTexts: state.patientMessagesCount.unreadTexts + 1,
+          unreadEmails: state.patientMessagesCount.unreadEmails,
+          total: state.patientMessagesCount.total + 1,
+          overallTotal: state.patientMessagesCount.overallTotal + 1,
+        },
+      };
 
     case SUBTRACT_STUDY_UNREAD_MESSAGES:
       studiesCopy = _.cloneDeep(state.studies.details);
