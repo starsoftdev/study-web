@@ -57,6 +57,19 @@ function globalNotificationsReducer(state = initialState, action) {
         .chain(state.notifications)
         .concat(action.payload)
         .uniqBy('id')
+        .filter(notif => {
+          // filtering notifications so those of type set-time-zone will only be displayed to the user in question
+          if (notif.event_log.eventType !== 'set-time-zone') {
+            return true;
+          }
+          try {
+            const notifData = JSON.parse(notif.event_log.eventData) || {};
+            return notifData.userId ? notifData.userId === action.userId : true;
+          } catch (err) {
+            console.log(err);
+            return true;
+          }
+        })
         .orderBy(['id'], ['desc'])
         .value();
 
