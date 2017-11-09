@@ -1,7 +1,6 @@
 import optimizely from 'optimizely-client-sdk';
 
-const PROJECT_ID = '9182536893';
-const PROJECT_JSON_URL = `https://cdn.optimizely.com/json/${PROJECT_ID}.json`;
+const PROJECT_JSON_URL = `https://cdn.optimizely.com/json/${OPTIMIZELY_PROJECT_ID}.json`;
 
 // Singleton instance of the optimizely object
 let optlyInstance;
