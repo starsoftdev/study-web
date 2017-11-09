@@ -308,6 +308,7 @@ export default function homePageReducer(state = initialState, action) {
         );
 
         studiesCollection[index].latestDateTo = latestDateTo.format();
+        studiesCollection[index].callTracking = payload.callTracking;
       }
 
       return {
@@ -517,6 +518,7 @@ export default function homePageReducer(state = initialState, action) {
       const study = _.find(studies, (o) => (o.studyId === payload.studyId));
       study.level_id = payload.newLevelId;
       study.patientQualificationSuite = payload.patientQualificationSuite;
+      study.callTracking = payload.callTracking;
       return {
         ...state,
         studies: {
