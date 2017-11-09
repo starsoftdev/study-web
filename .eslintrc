@@ -26,7 +26,8 @@
     "Raven": true,
     "SENTRY_DSN": true,
     "SITE_KEY": true,
-    "SOCKET_URL": true
+    "SOCKET_URL": true,
+    "OPTIMIZELY_PROJECT_ID": true
   },
   "rules": {
     "arrow-body-style": 0,
