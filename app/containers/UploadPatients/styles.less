@@ -544,40 +544,46 @@
 }
 
 .upload-history {
-  padding: 25px;
   background: #fff;
   border: 2px solid #f78e1e;
   margin: 20px 0 0;
   overflow: hidden;
 
-  .header {
-    font-size: 16px;
+  header {
+    color: #fff;
+    background: #f78e1e;
+    padding: 12px 16px 16px;
 
-    .title {
-      width: 100%;
-      display: inline-block;
-      font-weight: bold;
-    }
-
-    .tip {
-      width: 100%;
-      margin: 0 0 10px;
-      display: inline-block;
+    h2 {
+      font-size: 21px;
+      line-height: 1.25;
+      font-weight: 700;
+      margin: 0 10px 0 0;
+      text-transform: uppercase;
     }
   }
 
-  .history-list {
-    font-size: 16px;
+  .table {
 
-    .history-table {
-      width: 100%;
+    tbody {
 
       tr {
-        td, th {
-          padding: 5px;
 
-          &.status {
-            text-transform: capitalize;
+        &:hover {
+          font-weight: 600;
+        }
+      }
+    }
+
+    thead {
+
+      tr {
+
+        th {
+
+          &:hover {
+            color: inherit;
+            cursor: inherit;
           }
         }
       }
