@@ -218,15 +218,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.props.onHide(true);
   }
 
-  handleExposureChoose(e) {
+  handleExposureChoose(e, val) {
     this.setState({
-      exposureLevel: e,
+      exposureLevel: val,
     });
   }
 
-  handleLengthChoose(e) {
+  handleLengthChoose(e, val) {
     this.setState({
-      campaignLength: e,
+      campaignLength: val,
     });
   }
 
