@@ -400,7 +400,7 @@ export default class UploadPatientsForm extends Component {
               <strong className="label required">
                 <label>UPLOAD PATIENTS LIST</label></strong>
               <div className="field">
-                <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
+                <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-default upload-btn" />
                 <Field
                   id="patients_list"
                   name="file"
