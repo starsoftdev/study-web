@@ -27,8 +27,16 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
     if (uploadHistory.details.length > 0) {
       return (
-        <table className="history-table">
-          <tbody>
+        <table className="table">
+          <colgroup>
+            <col style={{ width: '42%' }} />
+            <col style={{ width: '13.2%' }} />
+            <col style={{ width: '12.5%' }} />
+            <col style={{ width: '12.2%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: 'auto' }} />
+          </colgroup>
+          <thead>
             <tr key={_.uniqueId()}>
               <th>File Name</th>
               <th>User</th>
@@ -37,6 +45,8 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
               <th>Status</th>
               <th></th>
             </tr>
+          </thead>
+          <tbody>
             {
             uploadHistory.details.map((item) => {
               const date = moment(item.date);
@@ -73,13 +83,11 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
   render() {
     return (
       <div className="upload-history">
-        <div className="header">
-          <span className="title">Upload history</span>
+        <header>
+          <h2>Upload history</h2>
           <span className="tip">Upload sessions are kept for 90 days, but can only be reverted in the first 48 hours after upload. </span>
-        </div>
-        <div className="history-list">
-          {this.renderHistoryTable()}
-        </div>
+        </header>
+        {this.renderHistoryTable()}
       </div>
     );
   }
