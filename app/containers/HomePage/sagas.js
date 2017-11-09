@@ -582,6 +582,7 @@ export function* renewStudyWorker(action) {
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
+      callTracking: formValues.callTracking,
     }));
     onClose();
   } catch (err) {
@@ -615,6 +616,7 @@ export function* upgradeStudyWorker(action) {
     toastr.success('Upgrade Study', 'The request has been submitted successfully');
     response.newLevelId = formValues.level;
     response.studyId = studyId;
+    response.callTracking = formValues.callTracking;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
