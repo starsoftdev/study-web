@@ -80,8 +80,8 @@ class PatientText extends React.Component {
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>
-          <div className={classNames('post-content', { error: textMessage.errorCode })}>
-            {(textMessage.errorCode) ?
+          <div className={classNames('post-content', { error: (textMessage.status === 'undelivered') })}>
+            {(textMessage.status === 'undelivered') ?
               <i className="icomoon-warning">!</i> : ''}
             <p>
               {textMessage.body}
@@ -95,7 +95,7 @@ class PatientText extends React.Component {
               <i className="icomoon-icon_trash" />
             </a>
           </div>
-          {(textMessage.errorCode) ?
+          {(textMessage.status === 'undelivered') ?
             <span className="error-message">
               Not Delivered
             </span> : ''}

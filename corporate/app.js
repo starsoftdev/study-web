@@ -3,6 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
+import mixpanel from 'mixpanel-browser';
 import { getItem, removeItem } from '../app/utils/localStorage';
 
 import configureStore from '../app/store';
@@ -101,5 +102,14 @@ const render = () => {
     document.getElementById('app')
   );
 };
+
+if (SENTRY_DSN) {
+  Raven.config(SENTRY_DSN).install();
+}
+
+if (MIXPANEL_TOKEN) {
+  mixpanel.init(MIXPANEL_TOKEN);
+}
+
 
 render();

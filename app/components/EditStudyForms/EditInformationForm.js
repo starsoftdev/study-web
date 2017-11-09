@@ -34,7 +34,7 @@ import {
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
   addTaggedIndicationForStudy,
-  fetchAllClientUsersDashboard,
+  fetchAllStudyEmailNotificationsDashboard,
   removeTaggedIndicationForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => ({
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
-  fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, siteId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId)),
   removeCustomEmailNotification: (id, email) => dispatch(removeCustomEmailNotification(id, email)),
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
@@ -87,7 +87,7 @@ export default class EditInformationForm extends React.Component {
     arrayPush: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     cro: PropTypes.array.isRequired,
-    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
+    fetchAllStudyEmailNotificationsDashboard: PropTypes.func.isRequired,
     formError: PropTypes.bool.isRequired,
     formValues: PropTypes.object,
     initialValues: PropTypes.object.isRequired,
@@ -215,8 +215,8 @@ export default class EditInformationForm extends React.Component {
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
-      const { change, fetchAllClientUsersDashboard } = this.props;
-      fetchAllClientUsersDashboard(foundSiteLocation.client_id, foundSiteLocation.id);
+      const { change, fetchAllStudyEmailNotificationsDashboard, initialFormValues } = this.props;
+      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, foundSiteLocation.id, initialFormValues.study_id);
 
       change('site_id', foundSiteLocation.id);
       change('site_city', foundSiteLocation.city);
@@ -770,6 +770,19 @@ export default class EditInformationForm extends React.Component {
                 </div>
               </div>
             }
+            <div className="field-row">
+              <strong className="label">
+                <label>SUVODA CODE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="suvoda_protocol_id"
+                  component={Input}
+                  placeholder=""
+                />
+              </div>
+            </div>
             <div className="field-row">
               <strong className="label">
                 <label htmlFor="new-patient-phone">DELETE PATIENT</label>

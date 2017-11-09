@@ -31,6 +31,16 @@ const patientTarget = {
       return;
     }
 
+    const patientDragSwitcher = (category, item, patientId) => {
+      if (category.name === 'Scheduled') {
+        // store the scheduled patient information temporarily since the user could cancel out of their category movement
+        // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
+        props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, category.id);
+      } else {
+        props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, category.id, item.id, patientId);
+      }
+    };
+
     // access the coordinates
     const clientOffset = monitor.getClientOffset();
     const el = document.elementFromPoint(clientOffset.x, clientOffset.y);
@@ -65,12 +75,10 @@ const patientTarget = {
       }
     }
 
-    if (props.category.name === 'Scheduled') {
-      // store the scheduled patient information temporarily since the user could cancel out of their category movement
-      // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
-      props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, props.category.id);
-    } else {
-      props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, props.category.id, item.id, patientId);
+    if (!props.study.suvodaProtocolId || props.study.suvodaProtocolId === '') {
+      patientDragSwitcher(props.category, item, patientId);
+    } else if (props.category.id !== 6 && props.category.id !== 7 && props.category.id !== 8 && item.patientCategoryId !== 6 && item.patientCategoryId !== 7 && item.patientCategoryId !== 8) {
+      patientDragSwitcher(props.category, item, patientId);
     }
   },
 };
@@ -89,6 +97,7 @@ const collect = (connect, monitor) => ({
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
+    study: React.PropTypes.object.isRequired,
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
     connectDropTarget: React.PropTypes.func.isRequired,
@@ -205,6 +214,7 @@ class PatientCategory extends React.Component {
 const mapStateToProps = createStructuredSelector({
   currentPatientId: Selector.selectCurrentPatientId(),
   currentSite: Selector.selectSite(),
+  study: Selector.selectStudy(),
   studyId: Selector.selectStudyId(),
   currentUser: selectCurrentUser(),
 });
