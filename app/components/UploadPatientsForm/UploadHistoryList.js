@@ -29,8 +29,8 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
       return (
         <table className="table">
           <colgroup>
-            <col style={{ width: '42%' }} />
-            <col style={{ width: '13.2%' }} />
+            <col style={{ width: '36%' }} />
+            <col style={{ width: '19.2%' }} />
             <col style={{ width: '12.5%' }} />
             <col style={{ width: '12.2%' }} />
             <col style={{ width: '10%' }} />
