@@ -7,11 +7,11 @@ import { blur, change, Field, reduxForm, touch } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import classNames from 'classnames';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
@@ -82,13 +82,14 @@ export default class UploadPatientsForm extends Component {
     super(props);
 
     this.state = {
-      duplicateValidationResult: false,
-      requiredValidationResult: false,
+      duplicateValidationResult: true,
+      requiredValidationResult: true,
       dragEnter: false,
       showPreview: false,
       isDragOver: false,
       siteLocation: null,
       fileName: null,
+      missingKeys: [],
       patients: [],
       fields: [],
       duplicates: [],
@@ -146,8 +147,9 @@ export default class UploadPatientsForm extends Component {
     this.setState({ dragEnter: false });
   }
 
-  setRequiredValidationResult(requiredValidationResult) {
-    this.setState({ requiredValidationResult });
+  setRequiredValidationResult(requiredValidationResult, missingKeys) {
+    console.log('setRequiredValidationResult', requiredValidationResult, missingKeys);
+    this.setState({ requiredValidationResult, missingKeys });
   }
 
   setDuplicateValidationResult(duplicateValidationResult) {
@@ -288,13 +290,7 @@ export default class UploadPatientsForm extends Component {
       uploadHistory,
       uploadResult,
     } = this.props;
-    const {
-      showPreview,
-      patients,
-      requiredValidationResult,
-      duplicateValidationResult,
-      dragEnter,
-    } = this.state;
+    const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
     const uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
@@ -315,12 +311,20 @@ export default class UploadPatientsForm extends Component {
       label: source.type,
       value: source.id,
     }));
+    let disabled = false;
+
+    if (!duplicateValidationResult || !requiredValidationResult) {
+      const index = _.findIndex(missingKeys, (k) => { return k.toLowerCase() === 'phone'; });
+      if (index !== -1) {
+        disabled = true;
+      }
+    }
 
     return (
       <div className="upload-patients-container">
         <Form className="upload-patients-form" onSubmit={handleSubmit}>
           <div className="field-row status">
-          <span className="step-one">
+            <span className="step-one">
             1. Upload Patients List
           </span>
             <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
@@ -493,7 +497,7 @@ export default class UploadPatientsForm extends Component {
           <div className="text-right">
             {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
             {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-            {(showPreview && !isImporting) && <Button type="submit" disabled={duplicateValidationResult !== true || requiredValidationResult !== true}>Submit</Button>}
+            {(showPreview && !isImporting) && <Button type="submit" disabled={disabled}>Submit</Button>}
           </div>
         </Form>
         {(!showPreview && !isImporting) &&
