@@ -120,7 +120,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const options = _.clone(params);
     options.patients = [];
 
-    this.setState({ isImporting : true }, () => {
+    this.setState({ isImporting : true, uploadResult: null }, () => {
       // swap out the "protocol" for the study_id for adding the patient (in reality, we're storing studyId in the protocol field,
       // since it's easier to transform and display this way while still displaying studies by protocol
       if (options.protocol) {
@@ -152,8 +152,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           });
         });
       }
-
-      console.log('onSubmitForm', options);
 
       exportPatients(options);
 
