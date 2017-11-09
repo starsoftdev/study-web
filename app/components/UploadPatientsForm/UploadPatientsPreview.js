@@ -6,6 +6,7 @@
 
 import React, { PropTypes } from 'react';
 import _ from 'lodash';
+import classNames from 'classnames';
 
 class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -95,8 +96,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
     if (duplicatedColumnNames.length) {
       this.setState({ duplicatedColumnNames });
-    } else {
-      setDuplicateValidationResult(true);
+      setDuplicateValidationResult(false);
     }
   }
 
@@ -118,10 +118,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
     if (missingColumnNames.length) {
       this.setState({ missingColumnNames, missingKeys }, () => {
-        console.log('validateRequiredKeys', missingColumnNames, missingKeys);
+        setRequiredValidationResult(false, missingKeys);
       });
-    } else {
-      setRequiredValidationResult(true);
     }
   }
 
@@ -176,13 +174,19 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   }
 
   renderErrorMessages(missingColumnNames) {
+    const { missingKeys } = this.state;
     return (
-      <div className="error-messages">
+      <div className="warning-messages">
         <ul>
           {
             missingColumnNames.map((message, index) => {
               return (
-                <li key={index}>{message}</li>
+                <li
+                  className={classNames((missingKeys[index] === 'Phone' ? 'error' : ''))}
+                  key={index}
+                >
+                  {message}
+                </li>
               );
             })
           }
