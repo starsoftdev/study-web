@@ -76,9 +76,15 @@ export default class EditScheduleModal extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
+      let timezone;
+      if (nextProps.currentUser.roleForClient.isAdmin) {
+        timezone = nextProps.currentUser.timezone;
+      } else {
+        timezone = nextProps.currentUser.roleForClient.site.timezone;
+      }
       const initialValues = {
-        date: moment(nextProps.selectedCellInfo.data.time).tz(nextProps.currentUser.timezone),
-        ...getTimeComponents(nextProps.selectedCellInfo.data.time, nextProps.currentUser.timezone),
+        date: moment(nextProps.selectedCellInfo.data.time).tz(timezone),
+        ...getTimeComponents(nextProps.selectedCellInfo.data.time, timezone),
         textReminder: nextProps.selectedCellInfo.data.textReminder,
         patient: {
           value: nextProps.selectedCellInfo.data.patient_id,

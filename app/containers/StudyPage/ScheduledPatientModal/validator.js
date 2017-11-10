@@ -1,17 +1,17 @@
 import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
-  hours: {
+  hour: {
     presence: {
-      message: '^Hours cannot be blank',
+      message: '^Hour cannot be blank',
     },
   },
-  minutes: {
+  minute: {
     presence: {
-      message: '^Minutes cannot be blank',
+      message: '^Minute cannot be blank',
     },
   },
-  amPm: {
+  period: {
     presence: {
       message: '^AM/PM cannot be blank',
     },
