@@ -117,6 +117,7 @@ module.exports = (options) => ({
       SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY ? JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITE_KEY): null,
       SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
       OPTIMIZELY_PROJECT_ID: process.env.OPTIMIZELY_PROJECT_ID ? JSON.stringify(process.env.OPTIMIZELY_PROJECT_ID) : null,
+      LOG_ROCKET: process.env.LOG_ROCKET ? JSON.stringify(process.env.LOG_ROCKET): null,
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),

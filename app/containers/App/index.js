@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
 import mixpanel from 'mixpanel-browser';
+import LogRocket from 'logrocket';
 
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
@@ -62,6 +63,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     if (MIXPANEL_TOKEN) {
       mixpanel.init(MIXPANEL_TOKEN);
     }
+    if (LOG_ROCKET) {
+      LogRocket.init(LOG_ROCKET);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -104,6 +108,15 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         userId: nextProps.userData.id,
       }, (tagsSent) => {
         console.log(2, tagsSent);
+      });
+    }
+
+    if (LOG_ROCKET && nextProps.userData) {
+      LogRocket.identify(`${nextProps.userData.id}`, {
+        name: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        // Add your own custom user variables here, ie:
+        subscriptionType: 'pro',
       });
     }
   }
