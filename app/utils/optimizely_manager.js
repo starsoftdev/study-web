@@ -37,13 +37,6 @@ function _getInstance(datafile) { // eslint-disable-line no-underscore-dangle
 }
 
 function getDatafile() {
-  // return request(PROJECT_JSON_URL, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Access-Control-Allow-Origin': '*',
-  //   },
-  // });
-
   return new Promise((resolve) => {
     fetch(PROJECT_JSON_URL, { mode: 'cors' })
       .then((response) => {
