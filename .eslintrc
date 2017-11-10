@@ -27,7 +27,8 @@
     "SENTRY_DSN": true,
     "SITE_KEY": true,
     "SOCKET_URL": true,
-    "OPTIMIZELY_PROJECT_ID": true
+    "OPTIMIZELY_PROJECT_ID": true,
+    "LOG_ROCKET": true
   },
   "rules": {
     "arrow-body-style": 0,
