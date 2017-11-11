@@ -68,7 +68,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
-                <strong className="label required"><label>Lead Source #{(index + 1)}</label></strong>
+                <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}><label>Lead Source #{(index + 1)}</label></strong>
                 <Field
                   name={`${lead}.source_id`}
                   component={ReactSelect}
