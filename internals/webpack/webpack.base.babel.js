@@ -4,6 +4,12 @@
 
 const path = require('path');
 const webpack = require('webpack');
+const URL = require('url').URL;
+let SENTRY_DSN = null
+if (process.env.SENTRY_DSN) {
+  const sentryUrl = new URL(process.env.SENTRY_DSN);
+  SENTRY_DSN = `${sentryUrl.protocol}//${sentryUrl.username}@${sentryUrl.hostname}${sentryUrl.pathname}`;
+}
 
 module.exports = (options) => ({
   entry: options.entry,
@@ -105,10 +111,11 @@ module.exports = (options) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
       API_URL: JSON.stringify(process.env.API_URL),
-      SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
-      MIXPANEL_TOKEN: JSON.stringify(process.env.MIXPANEL_TOKEN || false),
-      SITE_KEY: JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITE_KEY),
       DASHBOARD_TIMEZONE: JSON.stringify(process.env.DASHBOARD_TIMEZONE),
+      MIXPANEL_TOKEN: process.env.MIXPANEL_TOKEN ? JSON.stringify(process.env.MIXPANEL_TOKEN): null,
+      SENTRY_DSN: SENTRY_DSN ? JSON.stringify(SENTRY_DSN): null,
+      SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY ? JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITE_KEY): null,
+      SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
     }),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
   ]),

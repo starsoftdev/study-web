@@ -50,9 +50,9 @@ export const REMOVE_STUDY_AD_ERROR                      = 'DashboardPage/REMOVE_
 
 export const CLEAR_FILTERS                               = 'DashboardPage/CLEAR_FILTERS';
 
-export const FETCH_ALL_CLIENT_USERS                      = 'DashboardPage/FETCH_ALL_CLIENT_USERS';
-export const FETCH_ALL_CLIENT_USERS_SUCCESS              = 'DashboardPage/FETCH_ALL_CLIENT_USERS_SUCCESS';
-export const FETCH_ALL_CLIENT_USERS_ERROR                = 'DashboardPage/FETCH_ALL_CLIENT_USERS_ERROR';
+export const FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS         = 'DashboardPage/FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS';
+export const FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS = 'DashboardPage/FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS';
+export const FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR   = 'DashboardPage/FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR';
 
 export const FETCH_STUDY_CAMPAIGNS                       = 'DashboardPage/FETCH_STUDY_CAMPAIGNS';
 export const FETCH_STUDY_CAMPAIGNS_SUCCESS               = 'DashboardPage/FETCH_STUDY_CAMPAIGNS_SUCCESS';
