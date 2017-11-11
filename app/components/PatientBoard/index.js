@@ -172,11 +172,18 @@ class PatientBoard extends React.Component {
       return;
     }
 
-    const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().startOf('day');
+    let timezone;
+    if (currentUser.roleForClient.isAdmin) {
+      timezone = currentUser.timezone;
+    } else {
+      timezone = currentUser.roleForClient.site.timezone;
+    }
+
+    const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
 
-    const time = scheduledDate.hour(formValues.amPm === 'AM' ? formValues.hours % 12 : (formValues.hours % 12) + 12).minute(formValues.minutes);
+    const time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute).utc();
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;

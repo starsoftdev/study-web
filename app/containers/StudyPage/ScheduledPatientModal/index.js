@@ -13,6 +13,7 @@ import Input from '../../../components/Input/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
+import { selectCurrentUser } from '../../App/selectors';
 
 const fieldName = 'ScheduledPatientModal';
 
@@ -31,6 +32,16 @@ function numberSequenceCreator(start, end) {
   });
 }
 
+function getTimeComponents(strTime, timezone) {
+  const localTime = moment(strTime).tz(timezone);
+
+  return {
+    hour: (((localTime.hour() + 11) % 12) + 1).toString(),
+    minute: localTime.minute().toString(),
+    period: localTime.hour() >= 12 ? 'PM' : 'AM',
+  };
+}
+
 @reduxForm({
   form: fieldName,
   validate: validator,
@@ -40,6 +51,7 @@ class ScheduledPatientModal extends React.Component {
     onHide: React.PropTypes.func,
     show: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
+    currentUser: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     handleDateChange: React.PropTypes.func.isRequired,
     submittingSchedule: React.PropTypes.bool.isRequired,
@@ -50,7 +62,6 @@ class ScheduledPatientModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getTimeComponents = this.getTimeComponents.bind(this);
     this.navigateToday = this.navigateToday.bind(this);
     this.state = {
       date: moment(),
@@ -61,32 +72,28 @@ class ScheduledPatientModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentPatient } = nextProps;
+    const { currentPatient, currentUser } = nextProps;
     let initialValues = {};
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
         currentPatient.appointments && currentPatient.appointments.length > 0) {
       const { time, textReminder } = currentPatient.appointments[0];
+      let timezone;
+      if (currentUser.roleForClient.isAdmin) {
+        timezone = currentUser.timezone;
+      } else {
+        timezone = currentUser.roleForClient.site.timezone;
+      }
       initialValues = {
-        ...this.getTimeComponents(time),
+        ...getTimeComponents(time, timezone),
         textReminder,
       };
       this.props.setScheduledFormInitialized(true);
       this.setState({
-        date: moment(currentPatient.appointments[0].time).startOf('date'),
+        date: moment.tz(currentPatient.appointments[0].time, timezone).startOf('date'),
       });
       nextProps.initialize(initialValues);
     }
-  }
-
-  getTimeComponents(strTime) {
-    const localTime = moment(strTime);
-
-    return {
-      hours: (((localTime.hour() + 11) % 12) + 1).toString(),
-      minutes: localTime.minute().toString(),
-      amPm: localTime.hour() < 12 ? 'AM' : 'PM',
-    };
   }
 
   navigateToday() {
@@ -168,7 +175,7 @@ class ScheduledPatientModal extends React.Component {
                     <div className="col-holder row">
                       <div className="col-small pull-left hours">
                         <Field
-                          name="hours"
+                          name="hour"
                           placeholder="Hours"
                           options={hourOptions}
                           component={ReactSelect}
@@ -176,7 +183,7 @@ class ScheduledPatientModal extends React.Component {
                       </div>
                       <div className="col-small pull-left minutes">
                         <Field
-                          name="minutes"
+                          name="minute"
                           placeholder="Minutes"
                           options={minuteOptions}
                           component={ReactSelect}
@@ -184,7 +191,7 @@ class ScheduledPatientModal extends React.Component {
                       </div>
                       <div className="col-small pull-left time-mode">
                         <Field
-                          name="amPm"
+                          name="period"
                           placeholder="AM/PM"
                           options={periodOptions}
                           component={ReactSelect}
@@ -225,6 +232,7 @@ const periodOptions = [
 
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
+  currentUser: selectCurrentUser(),
   submittingSchedule: Selector.selectSubmittingSchedule(),
   scheduledFormInitialized: Selector.selectScheduledFormInitialized(),
 });
