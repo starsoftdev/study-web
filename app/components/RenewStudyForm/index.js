@@ -97,6 +97,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       const { change } = this.props;
       const { patientQualificationSuite } = this.state;
       change('addPatientQualificationSuite', patientQualificationSuite);
+      change('siteLocation', newProps.selectedStudy.siteName);
     }
 
     if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
@@ -330,6 +331,20 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                   <div className="holder-inner">
                     <div className="renew-study form-fields">
                       <div className="field-row">
+                        <strong className="label">
+                          <label>Site Location</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="siteLocation"
+                            component={Input}
+                            type="text"
+                            placeholder="Site Location"
+                            isDisabled
+                          />
+                        </div>
+                      </div>
+                      <div className="field-row">
                         <strong className="label required">
                           <label>EXPOSURE LEVEL</label>
                         </strong>
@@ -352,100 +367,100 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                           }
                         </div>
                       </div>
-                      <div className="field-row">
-                        <strong className="label required">
-                          <label>CAMPAIGN LENGTH</label>
-                        </strong>
-                        <div className="field">
-                          <Field
-                            name="campaignLength"
-                            component={ReactSelect}
-                            placeholder="Select Campaign Length"
-                            options={CAMPAIGN_LENGTH_LIST}
-                            onChange={this.handleLengthChoose}
-                          />
-                        </div>
+                    </div>
+                    <div className="field-row">
+                      <strong className="label required">
+                        <label>CAMPAIGN LENGTH</label>
+                      </strong>
+                      <div className="field">
+                        <Field
+                          name="campaignLength"
+                          component={ReactSelect}
+                          placeholder="Select Campaign Length"
+                          options={CAMPAIGN_LENGTH_LIST}
+                          onChange={this.handleLengthChoose}
+                        />
                       </div>
-                      <div className={classnames('field-row', { hidden: campaignLength !== 1 })}>
+                    </div>
+                    <div className={classnames('field-row', { hidden: campaignLength !== 1 })}>
+                      <strong className="label">
+                        <label>CONDENSE TO 2 WEEKS</label>
+                      </strong>
+                      <div className="field">
+                        <Field
+                          name="condenseTwoWeeks"
+                          component={Toggle}
+                          onChange={this.handleCondenseChoose}
+                        />
+                      </div>
+                    </div>
+                    <div className="field-row">
+                      <strong className="label"><label>Patient qualification <br />
+                        Suite: ${qualificationSuitePrice / 100}
+                      </label></strong>
+                      <div className="field">
+                        <Field
+                          name="addPatientQualificationSuite"
+                          component={Toggle}
+                          onChange={this.handleQualificationChoose}
+                        />
+                      </div>
+                    </div>
+                    {
+                      <div className="field-row">
                         <strong className="label">
-                          <label>CONDENSE TO 2 WEEKS</label>
+                          <label>CALL TRACKING: $247</label>
                         </strong>
                         <div className="field">
                           <Field
-                            name="condenseTwoWeeks"
+                            name="callTracking"
                             component={Toggle}
-                            onChange={this.handleCondenseChoose}
+                            disabled={this.state.isCallTrackingAlreadySet}
                           />
                         </div>
                       </div>
-                      <div className="field-row">
-                        <strong className="label"><label>Patient qualification <br />
-                          Suite: ${qualificationSuitePrice / 100}
-                        </label></strong>
-                        <div className="field">
-                          <Field
-                            name="addPatientQualificationSuite"
-                            component={Toggle}
-                            onChange={this.handleQualificationChoose}
-                          />
-                        </div>
+                    }
+                    {(callTracking && !this.state.isCallTrackingAlreadySet) &&
+                      <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                    }
+                    <div className="field-row">
+                      <strong className="label required">
+                        <label>START DATE</label>
+                      </strong>
+                      <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
+                        <Field
+                          name="startDate"
+                          component={DatePickerDisplay}
+                          className="form-control datepicker-input"
+                        />
                       </div>
-                      {
-                        <div className="field-row">
-                          <strong className="label">
-                            <label>CALL TRACKING: $247</label>
-                          </strong>
-                          <div className="field">
-                            <Field
-                              name="callTracking"
-                              component={Toggle}
-                              disabled={this.state.isCallTrackingAlreadySet}
-                            />
-                          </div>
-                        </div>
-                      }
-                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
-                        <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
-                      }
-                      <div className="field-row">
-                        <strong className="label required">
-                          <label>START DATE</label>
-                        </strong>
-                        <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
-                          <Field
-                            name="startDate"
-                            component={DatePickerDisplay}
-                            className="form-control datepicker-input"
-                          />
-                        </div>
-                      </div>
-                      <div className="field-row label-top">
-                        <strong className="label">
-                          <label>NOTES</label>
-                        </strong>
-                        <div className="field">
-                          <Field
-                            name="notes"
-                            component={Input}
-                            componentClass="textarea"
-                          />
-                        </div>
+                    </div>
+                    <div className="field-row label-top">
+                      <strong className="label">
+                        <label>NOTES</label>
+                      </strong>
+                      <div className="field">
+                        <Field
+                          name="notes"
+                          component={Input}
+                          componentClass="textarea"
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="pull-left col">
-                <ShoppingCartForm
-                  showCards
-                  noBorder
-                  addOns={addOns}
-                  manualDisableSubmit={this.props.manualDisableSubmit}
-                  submitting={this.props.manualDisableSubmit}
-                  validateAndSubmit={this.handleSubmit}
-                  showAddNewCard={this.handleNewModalOpen}
-                />
-              </div>
+            </div>
+            <div className="pull-left col">
+              <ShoppingCartForm
+                showCards
+                noBorder
+                addOns={addOns}
+                manualDisableSubmit={this.props.manualDisableSubmit}
+                submitting={this.props.manualDisableSubmit}
+                validateAndSubmit={this.handleSubmit}
+                showAddNewCard={this.handleNewModalOpen}
+              />
             </div>
           </Modal.Body>
         </Modal>
