@@ -20,7 +20,8 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched } from './actions';
+import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
@@ -53,6 +54,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
     toastrActions: React.PropTypes.object.isRequired,
+    clientOpenedStudyPage: React.PropTypes.func,
+    clientClosedStudyPage: React.PropTypes.func,
+    textStatsFetched: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -65,23 +69,36 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     super(props);
     this.state = {
       socketBinded: false,
+      isSubscribedToUpdateStats: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
     setStudyId(parseInt(params.id));
     fetchStudy(params.id);
     fetchPatientCategories(params.id);
     fetchSources();
+
+    if (socket && socket.connected) {
+      this.setState({ isSubscribedToUpdateStats: true }, () => {
+        clientOpenedStudyPage(params.id);
+      });
+    }
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchStudyTextNewStats, fetchPatientCategories, currentUser, fetchStudy, study } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, fetchStudy, clientOpenedStudyPage } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
-        socket.on('notifyMessage', (message) => {
+        socket.on('connect', () => {
+          this.setState({ isSubscribedToUpdateStats: true }, () => {
+            clientOpenedStudyPage(params.id);
+          });
+        });
+
+        socket.on('notifyStudyPageMessage', (message) => {
           let curCategoryId = null;
           let unreadMessageCount = 0;
           const socketMessage = message;
@@ -107,8 +124,27 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
           // fetch the new text stats
           // TODO needs to take into account the stats are filtered based on campaign and source selected
-          if (study && study.id === socketMessage.study.id) {
-            fetchStudyTextNewStats(params.id);
+          if (this.props.study && this.props.study.id === socketMessage.study.id) {
+            // check is patients is on the board
+            let needToUpdateMessageStats = false;
+            _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
+              _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
+                if (patient.id === socketMessage.patient_id) {
+                  needToUpdateMessageStats = true;
+                  return false;
+                }
+              });
+              if (needToUpdateMessageStats) {
+                return false;
+              }
+            });
+            if (needToUpdateMessageStats) {
+              if (socketMessage.twilioTextMessage.direction !== 'inbound') {
+                this.props.textStatsFetched({ total:(this.props.stats.texts + 1), sent:(this.props.stats.textsSent + 1), received:this.props.stats.textsReceived });
+              } else {
+                this.props.textStatsFetched({ total:(this.props.stats.texts + 1), sent:this.props.stats.textsSent, received:(this.props.stats.textsReceived + 1) });
+              }
+            }
           }
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
@@ -140,9 +176,23 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       });
     }
 
+    if (socket && this.state.isSubscribedToUpdateStats === false) {
+      this.setState({ isSubscribedToUpdateStats: true }, () => {
+        clientOpenedStudyPage(params.id);
+      });
+    }
+
     if (params.id !== newProps.params.id) {
       setStudyId(parseInt(newProps.params.id));
       fetchPatientCategories(newProps.params.id);
+    }
+  }
+
+  componentWillUnmount() {
+    const { params, socket, clientClosedStudyPage } = this.props;
+
+    if (socket && socket.connected) {
+      clientClosedStudyPage(params.id);
     }
   }
 
@@ -256,6 +306,9 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     fetchStudyTextNewStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyTextNewStats(studyId, campaignId, sourceId)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
+    clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
+    clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
+    textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
   };
 }
 
