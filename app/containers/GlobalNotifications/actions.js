@@ -111,12 +111,13 @@ export function fetchNotifications(userId, limit, offset) {
   };
 }
 
-export function fetchNotificationsSucceeded(payload, hasMoreItems, page) {
+export function fetchNotificationsSucceeded(payload, hasMoreItems, page, userId) {
   return {
     type: FETCH_NOTIFICATIONS_SUCCESS,
     payload,
     hasMoreItems,
     page,
+    userId,
   };
 }
 

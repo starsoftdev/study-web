@@ -3,7 +3,6 @@
  */
 
 import React, { PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Collapse from 'react-bootstrap/lib/Collapse';
@@ -14,7 +13,7 @@ import {
   selectTaggedIndicationsForStudy,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
-  fetchAllClientUsersDashboard,
+  fetchAllStudyEmailNotificationsDashboard,
   fetchCustomNotificationEmails,
   fetchMessagingNumbersDashboard,
   fetchTaggedIndicationsForStudy,
@@ -29,7 +28,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, siteId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId)),
   fetchCustomNotificationEmails: (studyId) => dispatch(fetchCustomNotificationEmails(studyId)),
   fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
   fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
@@ -41,7 +40,7 @@ export default class EditInformationModal extends React.Component {
     allClientUsers: PropTypes.object.isRequired,
     addEmailNotificationClick: PropTypes.func.isRequired,
     customNotificationEmails: PropTypes.object.isRequired,
-    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
+    fetchAllStudyEmailNotificationsDashboard: PropTypes.func.isRequired,
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
     fetchTaggedIndicationsForStudy: PropTypes.func.isRequired,
@@ -74,17 +73,14 @@ export default class EditInformationModal extends React.Component {
         let isAllChecked = true;
         for (const item of nextProps.allClientUsers.details) {
           // compare and expand the details for the list of user ids in the notification array (this is because we're getting user IDs by custom SQL in the request)
-          const emailNotification = _.find(study.emailNotifications, (notification) => (
-            notification === item.user_id
-          ));
-          if (!emailNotification) {
+          if (!item.isChecked) {
             isAllChecked = false;
           }
           // set internal state to hold the value for the fields without triggering component updates
           this.emailNotificationFields.push({
             email: item.email,
             userId: item.user_id,
-            isChecked: !!emailNotification,
+            isChecked: item.isChecked,
           });
         }
         // set internal state to hold the value for the field boolean without triggering component updates
@@ -113,9 +109,9 @@ export default class EditInformationModal extends React.Component {
           value: item.indication_id,
         }));
       } else if (!openModal && nextProps.openModal) {
-        const { fetchAllClientUsersDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;
+        const { fetchAllStudyEmailNotificationsDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;
         // fetch more information about the users, the tagged indications, and the messaging numbers
-        fetchAllClientUsersDashboard(study.client_id, study.site_id);
+        fetchAllStudyEmailNotificationsDashboard(study.client_id, study.site_id, study.study_id);
         fetchCustomNotificationEmails(study.study_id);
         fetchMessagingNumbersDashboard();
         fetchTaggedIndicationsForStudy(study.study_id);

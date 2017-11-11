@@ -1083,6 +1083,12 @@ th, .th {
     width: 52%;
   }
 
+  .has-error + .lfilename {
+    .filename {
+      color: red;
+    }
+  }
+
   .label-top {
     > * {
       vertical-align: top !important;
@@ -5084,7 +5090,7 @@ div[data-percentage],
         }
         &.patient-selected,
         &:hover {
-          a.top {
+          a {
             color: #fff;
             background: #00afef;
             &:before {
@@ -5092,16 +5098,28 @@ div[data-percentage],
             }
             time {
               color: #fff;
-              display: none;
             }
           }
-          a.bottom {
+          
+          a.has-counter {
+            background: #fff;
+
+            time {
+              display: none;
+            }
+
             .btn-reply {
               display: block;
             }
             .msg, time
             {
               display: none;
+            }
+            .counter-circle  {
+              display: none;
+            }
+            .msg-alert {
+              border-top: solid 2px #fff;
             }
           }
         }
@@ -5140,6 +5158,7 @@ div[data-percentage],
       }
       &.bottom {
         padding-top: 0;
+        min-height: 64px;
       }
     }
     .phone,
@@ -5216,9 +5235,10 @@ div[data-percentage],
       color: #9c6;
       border-color: #9c6;
       background: #fff;
-      &:hover {
+      &:focus, &:active:focus, &:hover {
         background: #9c6;
         color: #fff;
+        border-color: #9c6;
       }
     }
   }
