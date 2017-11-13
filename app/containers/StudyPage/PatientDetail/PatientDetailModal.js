@@ -166,7 +166,7 @@ export class PatientDetailModal extends React.Component {
           <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
             <span className="date">{moment.tz(currentPatient.appointments[0].time, timezone).format('MM/DD/YY')}</span>
             <span> at </span>
-            <span className="time">{moment.tz(currentPatient.appointments[0].time, timezone).format('hh:mm A')} </span>
+            <span className="time">{moment.tz(currentPatient.appointments[0].time, timezone).format('hh:mm A (z)')} </span>
           </a>
         );
       }
