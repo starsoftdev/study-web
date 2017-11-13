@@ -173,21 +173,41 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     );
   }
 
-  renderErrorMessages(missingColumnNames) {
+  renderValidationMessages(missingColumnNames) {
     const { missingKeys } = this.state;
+    let requiredError = false;
+    let requiredIndex = null;
+
+    _.forEach(missingKeys, (key, index) => {
+      if (key.toLowerCase() === 'phone') {
+        requiredError = true;
+        requiredIndex = index;
+      }
+    });
+
     return (
-      <div className="warning-messages">
+      <div
+        className={classNames('validation-messages', (requiredError ? 'error' : 'warning'))}
+      >
+        {!requiredError &&
+          <span className={classNames('heading', (requiredError ? 'error' : 'warning'))}>
+            Missing column names (not required). You can still continue with uploading the file.
+          </span>
+        }
         <ul>
           {
             missingColumnNames.map((message, index) => {
-              return (
-                <li
-                  className={classNames((missingKeys[index] === 'Phone' ? 'error' : ''))}
-                  key={index}
-                >
-                  {message}
-                </li>
-              );
+              console.log(message, index);
+              if (requiredIndex === null || requiredIndex === index) {
+                return (
+                  <li
+                    className={classNames((missingKeys[index] === 'Phone' ? 'error' : ''))}
+                    key={index}
+                  >
+                    {(!requiredError) ? message : `${message} This is a required field.`}
+                  </li>
+                );
+              }
             })
           }
         </ul>
@@ -201,14 +221,15 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
     return (
       <div className="preview">
-        {(missingColumnNames.length > 0 || duplicatedColumnNames.length > 0) && this.renderErrorMessages(errorMessages)}
+        {(missingColumnNames.length > 0 || duplicatedColumnNames.length > 0) && this.renderValidationMessages(errorMessages)}
         <div className="title">
           <span className="head">Preview Upload Data</span>
           <span className="body">
-            Please validate the data based on the firs 3 rows of the upload file.
+            Please confirm that the information below is correct.
           </span>
         </div>
         {this.renderExampleTable()}
+        <span className="tip">The example above are a representation of your upload.</span>
       </div>
     );
   }
