@@ -113,8 +113,16 @@ class ScheduledPatientModal extends React.Component {
   }
 
   render() {
-    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule, currentUser } = this.props;
+    let timezone;
+    if (currentUser.roleForClient.isAdmin) {
+      timezone = currentUser.timezone;
+    } else {
+      timezone = currentUser.roleForClient.site.timezone;
+    }
+
     if (currentPatient) {
+      console.log('current patient', currentPatient);
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
@@ -169,7 +177,7 @@ class ScheduledPatientModal extends React.Component {
                 </div>
                 <div className="field-row time-field-row">
                   <strong className="label required">
-                    <label>TIME</label>
+                    <label>TIME {`(${moment.tz(timezone).format('z')})`}</label>
                   </strong>
                   <div className="field time-field">
                     <div className="col-holder row">
