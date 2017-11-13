@@ -6,7 +6,7 @@
   .drop-zone {
     position: relative;
     transition: all 0.25s ease;
-    border: solid 2px #00afef;
+    border: dashed 2px #00afef;
     padding: 20px;
     margin: 0 0 20px 0;
     text-align: center;
@@ -202,6 +202,12 @@
       }
     }
 
+    .tip {
+      width: 100%;
+      margin: 10px 0 0;
+      display: inline-block;
+    }
+
     .example-table {
       width: 100%;
       font-size: 14px;
@@ -228,13 +234,36 @@
       }
     }
 
-    .warning-messages {
+    .validation-messages {
       margin: 0 0 20px;
       padding: 15px;
-      border: 2px solid #ffcc22;
-      background-color: #fcf8e3;
       overflow: hidden;
 
+      &.warning {
+        border: 2px solid #ffcc22;
+        background-color: #fcf8e3;
+      }
+
+      &.error {
+        border: 2px solid #de6062;
+        background-color: #f2dede;
+
+        ul {
+          padding: 0;
+        }
+      }
+
+      .heading {
+
+        &.warning {
+          margin: 0 0 10px;
+          font-size: 16px;
+          font-weight: bold;
+          display: inline-block;
+          color: #8a6d3b;
+          width: 100%;
+        }
+      }
 
       ul {
         padding: 0 20px;
@@ -245,6 +274,7 @@
           color: #8a6d3b;
 
           &.error {
+            list-style-type: none;
             color: #de5b5b;
           }
         }
