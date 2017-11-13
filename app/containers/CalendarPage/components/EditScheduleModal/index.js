@@ -146,7 +146,14 @@ export default class EditScheduleModal extends Component {
       hourOptions,
       minuteOptions,
       periodOptions,
+      currentUser,
     } = this.props;
+    let timezone;
+    if (currentUser.roleForClient.isAdmin) {
+      timezone = currentUser.timezone;
+    } else {
+      timezone = currentUser.roleForClient.site.timezone;
+    }
 
     if (modalType === SchedulePatientModalType.UPDATE) {
       const currentDate = moment();
@@ -182,7 +189,7 @@ export default class EditScheduleModal extends Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
+                  <strong className="label required"><label htmlFor="patient-time-edit">Time {`(${moment.tz(this.state.initDate, timezone).format('z')})`}</label></strong>
                   <div className="field">
                     <div className="col-holder row">
                       <div className="col pull-left hours">

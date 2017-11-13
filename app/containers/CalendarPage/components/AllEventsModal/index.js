@@ -22,7 +22,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
       return false;
     }], [dir]);
   }
-
+  console.log('events', sorted);
   return (
     <Modal dialogComponentClass={CenteredModal} show={visible} onHide={handleCloseModal} id="all-patients-modal">
       <Modal.Header>
@@ -47,7 +47,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
                     <li key={index}>
                       <a className="btn btn-gray-outline lightbox-opener">
                         <span className="patient-name">{`${event.data.patient.firstName ? event.data.patient.firstName : ''} ${event.data.patient.lastName ? event.data.patient.lastName : ''}`}</span>
-                        <span className="time">{moment(event.data.time).format('h:mm A')}</span>
+                        <span className="time">{event.data.time.format('h:mm A (z)')}</span>
                         <span
                           className="btn btn-primary"
                           onClick={() => {
