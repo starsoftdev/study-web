@@ -197,7 +197,6 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
         <ul>
           {
             missingColumnNames.map((message, index) => {
-              console.log(message, index);
               if (requiredIndex === null || requiredIndex === index) {
                 return (
                   <li
@@ -207,6 +206,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
                     {(!requiredError) ? message : `${message} This is a required field.`}
                   </li>
                 );
+              } else {
+                return null;
               }
             })
           }
