@@ -80,9 +80,7 @@ class PatientText extends React.Component {
           <div className="img-holder">
             {this.renderProfileImage()}
           </div>
-          <div className={classNames('post-content', { error: (textMessage.status === 'undelivered') })}>
-            {(textMessage.status === 'undelivered') ?
-              <i className="icomoon-warning">!</i> : ''}
+          <div className="post-content">
             <p>
               {textMessage.body}
               {addon}
@@ -95,10 +93,6 @@ class PatientText extends React.Component {
               <i className="icomoon-icon_trash" />
             </a>
           </div>
-          {(textMessage.status === 'undelivered') ?
-            <span className="error-message">
-              Not Delivered
-            </span> : ''}
           {this.renderTextMessageOriginUser()}
           <time dateTime={textMessage.dateCreated}>
             {moment.tz(textMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}
