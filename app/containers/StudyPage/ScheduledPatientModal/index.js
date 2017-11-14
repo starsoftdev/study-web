@@ -117,15 +117,15 @@ class ScheduledPatientModal extends React.Component {
   render() {
     const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule, currentUser, sites } = this.props;
 
-    const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
-    let timezone;
-    if (currentUser.roleForClient.isAdmin) {
-      timezone = patientSite ? patientSite.timezone : currentUser.timezone;
-    } else {
-      timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
-    }
-
     if (currentPatient) {
+      const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
+      let timezone;
+      if (currentUser.roleForClient.isAdmin) {
+        timezone = patientSite ? patientSite.timezone : currentUser.timezone;
+      } else {
+        timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
+      }
+
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
