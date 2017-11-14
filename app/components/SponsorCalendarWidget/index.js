@@ -6,6 +6,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import moment from 'moment-timezone';
 import classnames from 'classnames';
+import _ from 'lodash';
 import 'react-big-calendar/lib/less/styles.less';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -71,10 +72,8 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-      
       const site = _.find(sites, item => item.id === s.site_id);
       const timezone = site.timezone || currentUser.timezone;
-        
       const result = {
         data: s,
         start: browserTime,
