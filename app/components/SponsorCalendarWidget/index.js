@@ -15,6 +15,7 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    sites: PropTypes.array,
     protocols: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
@@ -55,14 +56,14 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, sponsorSchedules, protocols } = this.props;
+    const { currentUser, sponsorSchedules, protocols, sites } = this.props;
     const eventsList = [];
     let currDate = null;
     let counter = 0;
 
     for (const s of sponsorSchedules) {
       let isFindProtocol = false;
-      const localTime = moment(s.time);
+      const localTime = s.time;
       const browserTime = moment()
         .year(localTime.year())
         .month(localTime.month())
@@ -70,7 +71,10 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-
+      
+      const site = _.find(sites, item => item.id === s.site_id);
+      const timezone = site.timezone || currentUser.timezone;
+        
       const result = {
         data: s,
         start: browserTime,
@@ -94,7 +98,7 @@ class CalendarWidget extends React.Component {
       result.numberName = `Patient #${counter}`;
       if (s.principalInvestigator) {
         result.tooltipTitle = (<div>
-          {s.principalInvestigator}<br />Patient #{counter} {s.time.format('h:mm A (z)')}
+          {s.principalInvestigator}<br />Patient #{counter} {timezone.tz(s.time, timezone).format('h:mm A (z)')}
         </div>);
       }
       currDate = moment(s.time).startOf('date').date();
