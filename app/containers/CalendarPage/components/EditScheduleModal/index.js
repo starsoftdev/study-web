@@ -78,10 +78,11 @@ export default class EditScheduleModal extends Component {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
       let timezone;
       if (nextProps.currentUser.roleForClient.isAdmin) {
-        timezone = nextProps.currentUser.timezone;
+        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.timezone;
       } else {
-        timezone = nextProps.currentUser.roleForClient.site.timezone;
+        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.roleForClient.site.timezone;
       }
+
       const initialValues = {
         date: moment(nextProps.selectedCellInfo.data.time).tz(timezone),
         ...getTimeComponents(nextProps.selectedCellInfo.data.time, timezone),
@@ -146,7 +147,14 @@ export default class EditScheduleModal extends Component {
       hourOptions,
       minuteOptions,
       periodOptions,
+      currentUser,
     } = this.props;
+    let timezone;
+    if (currentUser.roleForClient.isAdmin) {
+      timezone = selectedCellInfo.timezone || currentUser.timezone;
+    } else {
+      timezone = selectedCellInfo.timezone || currentUser.roleForClient.site.timezone;
+    }
 
     if (modalType === SchedulePatientModalType.UPDATE) {
       const currentDate = moment();
@@ -182,7 +190,7 @@ export default class EditScheduleModal extends Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <strong className="label required"><label htmlFor="patient-time-edit">Time</label></strong>
+                  <strong className="label required"><label htmlFor="patient-time-edit">Time {`(${moment.tz(this.state.initDate, timezone).format('z')})`}</label></strong>
                   <div className="field">
                     <div className="col-holder row">
                       <div className="col pull-left hours">

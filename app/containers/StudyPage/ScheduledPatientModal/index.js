@@ -13,7 +13,7 @@ import Input from '../../../components/Input/index';
 import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
-import { selectCurrentUser } from '../../App/selectors';
+import { selectCurrentUser, selectSites } from '../../App/selectors';
 
 const fieldName = 'ScheduledPatientModal';
 
@@ -51,6 +51,7 @@ class ScheduledPatientModal extends React.Component {
     onHide: React.PropTypes.func,
     show: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
+    sites: React.PropTypes.array,
     currentUser: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     handleDateChange: React.PropTypes.func.isRequired,
@@ -72,17 +73,18 @@ class ScheduledPatientModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentPatient, currentUser } = nextProps;
+    const { currentPatient, currentUser, sites } = nextProps;
     let initialValues = {};
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
         currentPatient.appointments && currentPatient.appointments.length > 0) {
       const { time, textReminder } = currentPatient.appointments[0];
+      const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
       let timezone;
       if (currentUser.roleForClient.isAdmin) {
-        timezone = currentUser.timezone;
+        timezone = patientSite ? patientSite.timezone : currentUser.timezone;
       } else {
-        timezone = currentUser.roleForClient.site.timezone;
+        timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
       }
       initialValues = {
         ...getTimeComponents(time, timezone),
@@ -113,7 +115,16 @@ class ScheduledPatientModal extends React.Component {
   }
 
   render() {
-    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule, currentUser, sites } = this.props;
+
+    const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
+    let timezone;
+    if (currentUser.roleForClient.isAdmin) {
+      timezone = patientSite ? patientSite.timezone : currentUser.timezone;
+    } else {
+      timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
+    }
+
     if (currentPatient) {
       return (
         <Modal
@@ -169,7 +180,7 @@ class ScheduledPatientModal extends React.Component {
                 </div>
                 <div className="field-row time-field-row">
                   <strong className="label required">
-                    <label>TIME</label>
+                    <label>TIME {`(${moment.tz(timezone).format('z')})`}</label>
                   </strong>
                   <div className="field time-field">
                     <div className="col-holder row">
@@ -233,6 +244,7 @@ const periodOptions = [
 const mapStateToProps = createStructuredSelector({
   currentPatient: Selector.selectCurrentPatient(),
   currentUser: selectCurrentUser(),
+  sites: selectSites(),
   submittingSchedule: Selector.selectSubmittingSchedule(),
   scheduledFormInitialized: Selector.selectScheduledFormInitialized(),
 });
