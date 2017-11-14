@@ -5,11 +5,8 @@ import moment from 'moment-timezone';
 class EmailSectionList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     switchCompose: React.PropTypes.func.isRequired,
-    fetchEmails: React.PropTypes.func.isRequired,
     emails: React.PropTypes.object,
     active: React.PropTypes.any,
-    studyId: React.PropTypes.any,
-    currentPatient: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -22,13 +19,6 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
       preview: false,
       selected: {},
     };
-  }
-
-  componentDidMount() {
-    const { fetchEmails, studyId, currentPatient } = this.props;
-    if (currentPatient.id) {
-      fetchEmails(studyId, currentPatient.id);
-    }
   }
 
   disablePreview() {
