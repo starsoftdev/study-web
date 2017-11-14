@@ -164,14 +164,14 @@ export default class UploadPatientsForm extends Component {
 
     if (!fileName) {
       toastr.error('', 'Error! Please upload an Excel file.');
-    }
-
-    if (_.isEmpty(formSyncErrors)) {
-      this.setState({ fields, showPreview: !this.state.showPreview }, () => {
-        if (isImporting) {
-          switchIsImporting();
-        }
-      });
+    } else {
+      if (_.isEmpty(formSyncErrors)) {
+        this.setState({ fields, showPreview: !this.state.showPreview }, () => {
+          if (isImporting) {
+            switchIsImporting();
+          }
+        });
+      }
     }
   }
 
