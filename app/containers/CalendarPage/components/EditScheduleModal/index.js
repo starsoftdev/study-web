@@ -78,10 +78,11 @@ export default class EditScheduleModal extends Component {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
       let timezone;
       if (nextProps.currentUser.roleForClient.isAdmin) {
-        timezone = nextProps.currentUser.timezone;
+        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.timezone;
       } else {
-        timezone = nextProps.currentUser.roleForClient.site.timezone;
+        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.roleForClient.site.timezone;
       }
+
       const initialValues = {
         date: moment(nextProps.selectedCellInfo.data.time).tz(timezone),
         ...getTimeComponents(nextProps.selectedCellInfo.data.time, timezone),
@@ -150,9 +151,9 @@ export default class EditScheduleModal extends Component {
     } = this.props;
     let timezone;
     if (currentUser.roleForClient.isAdmin) {
-      timezone = currentUser.timezone;
+      timezone = selectedCellInfo.timezone || currentUser.timezone;
     } else {
-      timezone = currentUser.roleForClient.site.timezone;
+      timezone = selectedCellInfo.timezone || currentUser.roleForClient.site.timezone;
     }
 
     if (modalType === SchedulePatientModalType.UPDATE) {
