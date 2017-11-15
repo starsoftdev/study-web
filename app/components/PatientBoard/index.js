@@ -32,7 +32,7 @@ import {
   submitSchedule,
   updatePatientSuccess,
 } from '../../containers/StudyPage/actions';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../containers/App/actions';
 import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/StudyPage/selectors';
@@ -64,6 +64,7 @@ class PatientBoard extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object.isRequired,
     touchSchedulePatientModal: React.PropTypes.func.isRequired,
+    sites: React.PropTypes.array,
     submitSchedule: React.PropTypes.func.isRequired,
     schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
@@ -165,25 +166,26 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, sites, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
       return;
     }
 
+    const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
     let timezone;
     if (currentUser.roleForClient.isAdmin) {
-      timezone = currentUser.timezone;
+      timezone = patientSite ? patientSite.timezone : currentUser.timezone;
     } else {
-      timezone = currentUser.roleForClient.site.timezone;
+      timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
     }
 
     const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
 
-    const time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute).utc();
+    let time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute).utc();
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
@@ -297,6 +299,7 @@ const mapStateToProps = createStructuredSelector({
   openScheduledModal: Selector.selectOpenScheduledModal(),
   schedulePatientFormValues: Selector.selectSchedulePatientFormValues(),
   schedulePatientFormErrors: Selector.selectSchedulePatientFormErrors(),
+  sites: selectSites(),
   studyId: Selector.selectStudyId(),
   selectedDate: Selector.selectSelectedDate(),
   currentUser: selectCurrentUser(),
