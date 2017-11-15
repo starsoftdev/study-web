@@ -185,7 +185,7 @@ class PatientBoard extends React.Component {
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
 
-    let time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute).utc();
+    const time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute).utc();
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
