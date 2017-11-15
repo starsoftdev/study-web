@@ -61,6 +61,7 @@ class CalendarWidget extends React.Component {
     const eventsList = [];
     let currDate = null;
     let counter = 0;
+    const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
 
     for (const s of sponsorSchedules) {
       let isFindProtocol = false;
@@ -125,7 +126,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={currentUser.timezone}
+          timezone={calendarTimezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
