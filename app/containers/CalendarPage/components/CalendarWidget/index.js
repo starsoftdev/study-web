@@ -60,6 +60,7 @@ class CalendarWidget extends React.Component {
 
   render() {
     const { currentUser, schedules, sites } = this.props;
+    const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
     const eventsList = schedules.map(s => {
       const localTime = s.time;
       const browserTime = moment()
@@ -97,7 +98,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={currentUser ? currentUser.timezone : null}
+          timezone={calendarTimezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
