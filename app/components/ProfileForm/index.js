@@ -6,17 +6,15 @@
 
 import 'blueimp-canvas-to-blob';
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import _ from 'lodash';
-import moment from 'moment-timezone';
 import Input from '../../components/Input';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
-import ReactSelect from '../../components/Input/ReactSelect';
 import ProfileImageForm from '../../components/ProfileImageForm';
 import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import CenteredModal from '../../components/CenteredModal/index';
 import { formatTimezone } from '../../utils/time';
+import FormGeosuggest from '../../components/Input/Geosuggest';
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -29,6 +27,11 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     me: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     changeUsersTimezone: React.PropTypes.func,
+    getTimezone: React.PropTypes.func,
+    timezone: React.PropTypes.string,
+    handleSubmit: React.PropTypes.func,
+    dispatch: React.PropTypes.func,
+    initialValues: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -38,7 +41,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.openProfileImageModal = this.openProfileImageModal.bind(this);
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
-    this.onChangeTimezone = this.onChangeTimezone.bind(this);
+    this.onSuggestSelect = this.onSuggestSelect.bind(this);
 
     this.state = {
       passwordResetModalOpen: false,
@@ -47,13 +50,22 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
+    const { timezone, dispatch } = this.props;
+
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
     }
+    if (newProps.timezone && newProps.timezone !== timezone) {
+      dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone)));
+    }
   }
 
-  onChangeTimezone(value) {
-    this.props.changeUsersTimezone(this.props.currentUser.id, value);
+  onSuggestSelect(e) {
+    const { getTimezone, dispatch } = this.props;
+    if (e.location) {
+      getTimezone(e.location.lat, e.location.lng);
+    }
+    dispatch(change('profile', 'address', e.label));
   }
 
   openResetPasswordModal() {
@@ -86,13 +98,9 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         user_id: currentUser.id,
       },
     };
-    const timezoneOptions = _.map(_.filter(moment.tz.names(), (t => t.split('/').length === 2)), t => {
-      const timezone = formatTimezone(t);
-      return { label: timezone, value: t };
-    });
 
     return (
-      <form>
+      <form onSubmit={this.props.handleSubmit}>
         <div className="field-row label-top file-img active">
           <strong className="label"><label htmlFor="profile-img">PROFILE IMAGE</label></strong>
           <div className="field">
@@ -148,24 +156,42 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             isDisabled
           />
         </div>
+        <div className="field-row fs-hide">
+          <strong className="label"><label>Address</label></strong>
+          <div className="field">
+            <Field
+              name="address"
+              component={FormGeosuggest}
+              refObj={(el) => { this.geoSuggest = el; }}
+              onSuggestSelect={this.onSuggestSelect}
+              initialValue={(this.props.initialValues.address || '')}
+              placeholder=""
+            />
+          </div>
+        </div>
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
-            <div className="field-row">
-              <strong className="label"><label>Time Zone</label></strong>
+          <div className="field-row">
+            <strong className="label required"><label>Time Zone</label></strong>
+            <div className="field">
               <Field
                 name="timezone"
-                component={ReactSelect}
-                placeholder="Select Timezone"
-                options={timezoneOptions}
-                className="field"
-                onChange={this.onChangeTimezone}
-                clearable={false}
+                placeholder="Timezone"
+                component={Input}
+                type="text"
+                isDisabled
               />
             </div>
+          </div>
         }
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
           <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+        </div>
+        <div className="btn-block text-right">
+          <button type="submit" className="btn btn-default btn-add-row">
+            <span>Update</span>
+          </button>
         </div>
         <Modal
           className="profile-page-modal"
