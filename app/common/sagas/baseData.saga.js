@@ -849,12 +849,12 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, timezone, address } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
       const params = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone: payload }),
+        body: JSON.stringify({ timezone, address }),
       };
       const response = yield call(request, requestURL, params);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
