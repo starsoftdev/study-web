@@ -98,9 +98,7 @@ class CalendarWidget extends React.Component {
       result.tooltipTitle = result.title;
       result.numberName = `Patient #${counter}`;
       if (s.principalInvestigator) {
-        result.tooltipTitle = (<div>
-          {s.principalInvestigator}<br />          Patient #{counter} {timezone.tz(s.time, timezone).format('h:mm A (z)')}
-        </div>);
+        result.tooltipTitle = (<div>{s.principalInvestigator}<br /> Patient #{counter} {moment.tz(s.time, timezone).format('h:mm A (z)')}</div>);
       }
       currDate = moment(s.time).startOf('date').date();
 
