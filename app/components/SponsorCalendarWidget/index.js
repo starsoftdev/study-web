@@ -16,6 +16,7 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    currentSite: PropTypes.object,
     sites: PropTypes.array,
     protocols: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
@@ -57,7 +58,7 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, sponsorSchedules, protocols, sites } = this.props;
+    const { currentUser, currentSite, sponsorSchedules, protocols, sites } = this.props;
     const eventsList = [];
     let currDate = null;
     let counter = 0;
@@ -74,7 +75,7 @@ class CalendarWidget extends React.Component {
         .minute(localTime.minute())
         .seconds(0);
       const site = _.find(sites, item => item.id === s.site_id);
-      const timezone = site.timezone || currentUser.timezone;
+      const timezone = site ? site.timezone : calendarTimezone;
       const result = {
         data: s,
         start: browserTime,
@@ -98,7 +99,7 @@ class CalendarWidget extends React.Component {
       result.numberName = `Patient #${counter}`;
       if (s.principalInvestigator) {
         result.tooltipTitle = (<div>
-          {s.principalInvestigator}<br />Patient #{counter} {timezone.tz(s.time, timezone).format('h:mm A (z)')}
+          {s.principalInvestigator}<br />          Patient #{counter} {timezone.tz(s.time, timezone).format('h:mm A (z)')}
         </div>);
       }
       currDate = moment(s.time).startOf('date').date();
@@ -126,7 +127,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={calendarTimezone}
+          timezone={currentSite ? currentSite.timezone : calendarTimezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
