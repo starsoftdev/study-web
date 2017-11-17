@@ -614,7 +614,7 @@ function patients(state, currentPatientId, action) {
               ...patient.notes,
               {
                 ...action.payload,
-                user: action.currentUser,
+                user: action.currentUser.isProxy ? { ...action.currentUser, firstName: 'StudyKiK', lastName: '' } : action.currentUser,
               },
             ],
           };
