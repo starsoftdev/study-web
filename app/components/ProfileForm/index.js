@@ -5,6 +5,8 @@
 */
 
 import 'blueimp-canvas-to-blob';
+import moment from 'moment-timezone';
+import classNames from 'classnames';
 import React from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
@@ -57,6 +59,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     }
     if (newProps.timezone && newProps.timezone !== timezone) {
       dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone)));
+      dispatch(change('profile', 'timezoneUnparsed', newProps.timezone));
     }
   }
 
@@ -98,6 +101,13 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         user_id: currentUser.id,
       },
     };
+
+    let isDst = false;
+    if (this.props.formValues && this.props.formValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.formValues.timezoneUnparsed).isDST();
+    } else if (this.props.initialValues && this.props.initialValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.initialValues.timezoneUnparsed).isDST();
+    }
 
     return (
       <form onSubmit={this.props.handleSubmit}>
@@ -171,7 +181,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
-          <div className="field-row">
+          <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
             <strong className="label required"><label>Time Zone</label></strong>
             <div className="field">
               <Field
@@ -182,6 +192,13 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
                 isDisabled
               />
             </div>
+          </div>
+        }
+        {
+          (isDst === true) &&
+          <div className="field-row">
+            <strong className="label"><label>&nbsp;</label></strong>
+            <div className="field dst-label">This time zone currently observes daylight savings.</div>
           </div>
         }
         <div className="field-row">
