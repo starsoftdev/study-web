@@ -14,7 +14,7 @@ import { selectChangePasswordResult, selectOtherUser, selectProfileFormValues } 
 import { selectCurrentUser, selectUserRoleType, selectTimezone } from '../../containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
 import { changeUsersTimezone, getTimezone } from '../../containers/App/actions';
-import { parseTimezone, formatTimezone } from '../../utils/time';
+import { formatTimezone } from '../../utils/time';
 
 export class ProfilePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -49,7 +49,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
   }
 
   updateUsersTimezone(values) {
-    this.props.changeUsersTimezone(this.props.currentUser.id, parseTimezone(values.timezone), values.address);
+    this.props.changeUsersTimezone(this.props.currentUser.id, values.timezoneUnparsed, values.address);
   }
 
   render() {
@@ -68,6 +68,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
                   initialValues: {
                     ...(me ? this.props.currentUser : this.props.otherUser.info),
                     timezone: formatTimezone((me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone)),
+                    timezoneUnparsed: (me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone),
                   },
                 };
 
