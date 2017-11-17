@@ -477,6 +477,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                  include: 'roleForClient',
                 },
               },
             ],
