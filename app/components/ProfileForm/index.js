@@ -5,6 +5,7 @@
 */
 
 import 'blueimp-canvas-to-blob';
+import _ from 'lodash';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import React from 'react';
@@ -17,6 +18,33 @@ import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import CenteredModal from '../../components/CenteredModal/index';
 import { formatTimezone } from '../../utils/time';
 import FormGeosuggest from '../../components/Input/Geosuggest';
+
+const toShortCode = country => {
+  switch (country) {
+    case 'United States':
+      return 'us';
+    case 'United Kingdom':
+      return 'uk';
+    case 'Brazil':
+      return 'br';
+    case 'France':
+      return 'fr';
+    case 'Germany':
+      return 'de';
+    case 'Italy':
+      return 'it';
+    case 'Czech Republic':
+      return 'cz';
+    case 'Japan':
+      return 'jp';
+    case 'Poland':
+      return 'pl';
+    case 'Canada':
+      return 'ca';
+    default:
+      return 'us';
+  }
+};
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -52,23 +80,84 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
-    const { timezone, dispatch } = this.props;
+    const { timezone, dispatch, formValues } = this.props;
 
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
     }
     if (newProps.timezone && newProps.timezone !== timezone) {
-      dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone)));
+      dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone, formValues.city)));
       dispatch(change('profile', 'timezoneUnparsed', newProps.timezone));
     }
   }
 
   onSuggestSelect(e) {
     const { getTimezone, dispatch } = this.props;
+    let city = '';
+    let state = '';
+    let countryCode = '';
+    let postalCode = '';
+    let streetNmber = '';
+    let route = '';
     if (e.location) {
       getTimezone(e.location.lat, e.location.lng);
     }
     dispatch(change('profile', 'address', e.label));
+
+    if (e.gmaps && e.gmaps.address_components) {
+      const addressComponents = e.gmaps.address_components;
+
+      for (const val of addressComponents) {
+        if (!city) {
+          city = _.find(val.types, (o) => (o === 'locality'));
+          const city2 = _.find(val.types, (o) => (o === 'administrative_area_level_2'));
+          if (city) {
+            dispatch(change('profile', 'city', val.long_name));
+          } else if (city2) {
+            dispatch(change('profile', 'city', val.long_name));
+          }
+        }
+        if (!state) {
+          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
+          if (state) {
+            dispatch(change('profile', 'state', val.short_name));
+          }
+        }
+        if (!countryCode) {
+          countryCode = _.find(val.types, (o) => (o === 'country'));
+          if (state) {
+            dispatch(change('profile', 'countryCode', val.short_name));
+          }
+        }
+        if (!postalCode) {
+          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
+          if (postalCode) {
+            dispatch(change('profile', 'zip', val.long_name));
+          }
+        }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.long_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.long_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+        }
+      }
+    } else {
+      const addressArr = e.label.split(',');
+      if (addressArr[1]) {
+        dispatch(change('profile', 'city', addressArr[1]));
+      }
+      if (addressArr[2]) {
+        dispatch(change('profile', 'state', addressArr[2]));
+      }
+      if (addressArr[3]) {
+        dispatch(change('profile', 'countryCode', toShortCode(addressArr[3])));
+      }
+      this.geoSuggest.update(`${addressArr[0]}`);
+    }
   }
 
   openResetPasswordModal() {
