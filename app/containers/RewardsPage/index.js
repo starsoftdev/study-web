@@ -30,6 +30,7 @@ import { selectSiteLocation } from '../../components/RewardForm/selectors';
 import { selectPaginationOptions } from './selectors';
 import { pickReward, setActiveSort } from '../../containers/RewardsPage/actions';
 import RewardModal from '../../components/RewardModal';
+import EmailTutorialModal from '../../components/EmailTutorialModal';
 import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
 
@@ -162,7 +163,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
             <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => (redeemable ? this.openRewardModal() : null)} />
-            <RewardModal
+            <EmailTutorialModal
               currentUser={currentUser}
               siteLocations={redeemableSiteLocations}
               showModal={this.state.rewardModalOpen}
