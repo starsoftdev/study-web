@@ -152,6 +152,7 @@
     "offline-plugin": "3.4.2",
     "optimizely-client-sdk": "^1.5.1",
     "postcss-loader": "0.9.1",
+    "pug": "^2.0.0-rc.4",
     "react": "15.4.2",
     "react-addons-shallow-compare": "^15.4.1",
     "react-addons-update": "15.3.0",
