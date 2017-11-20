@@ -866,7 +866,7 @@ export function* changeUsersTimezoneWatcher() {
       const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
-      yield put(changeUsersTimezoneSuccess(response.timezone));
+      yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
       toastr.error('', errorMessage);
