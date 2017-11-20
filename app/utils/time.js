@@ -11,7 +11,7 @@ export function formatTimezone(timezone, city) {
 
   if (moment().tz(timezone).isValid) {
     const zoneAbb = moment().tz(timezone).zoneAbbr();
-    return `(${zoneAbb}) ${city}`;
+    return `(${zoneAbb}) ${city || ''}`;
   }
 
   return '(UTC-04) New York, America';
