@@ -196,7 +196,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
     if (selectedSiteDetailsForForm) {
       selectedSiteDetailsForForm.timezoneUnparsed = selectedSiteDetailsForForm.timezoneUnparsed ? selectedSiteDetailsForForm.timezoneUnparsed : selectedSiteDetailsForForm.timezone;
-      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone);
+      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone, selectedSiteDetailsForForm.city);
       selectedSiteDetailsForForm.phoneNumber = normalizePhoneDisplay(selectedSiteDetailsForForm.phoneNumber);
     }
 

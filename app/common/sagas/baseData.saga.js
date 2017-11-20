@@ -856,14 +856,14 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, timezone, address } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
-      const params = {
+      const reqParams = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone, address }),
+        body: JSON.stringify(params),
       };
-      const response = yield call(request, requestURL, params);
+      const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response.timezone));
