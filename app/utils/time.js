@@ -4,15 +4,13 @@ export function getUTCTime(localTime, timezone) {
   return moment.tz(localTime, timezone).utc();
 }
 
-export function formatTimezone(timezone) {
+export function formatTimezone(timezone, city) {
   if (timezone.indexOf('(UTC') > -1) {
     return timezone;
   }
 
   if (moment().tz(timezone).isValid) {
     const zoneAbb = moment().tz(timezone).zoneAbbr();
-    const parts = timezone.split('/');
-    const city = parts.length > 1 ? parts[1].replace('_', ' ') : '';
     return `(${zoneAbb}) ${city}`;
   }
 

@@ -49,7 +49,13 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
   }
 
   updateUsersTimezone(values) {
-    this.props.changeUsersTimezone(this.props.currentUser.id, values.timezoneUnparsed, values.address);
+    this.props.changeUsersTimezone(this.props.currentUser.id, {
+      city: values.city,
+      timezone: values.timezoneUnparsed,
+      address: values.address,
+      countryCode: values.countryCode,
+      zip: values.zip,
+    });
   }
 
   render() {
@@ -67,7 +73,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
                 const initialValues = {
                   initialValues: {
                     ...(me ? this.props.currentUser : this.props.otherUser.info),
-                    timezone: formatTimezone((me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone)),
+                    timezone: formatTimezone((me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone), (me ? this.props.currentUser.city : this.props.otherUser.info.city)),
                     timezoneUnparsed: (me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone),
                   },
                 };
@@ -109,7 +115,7 @@ function mapDispatchToProps(dispatch) {
     changePassword: (values) => dispatch(changePassword(values)),
     changeImage: (values) => dispatch(changeImage(values)),
     fetchOtherUser: (userId) => dispatch(fetchOtherUser(userId)),
-    changeUsersTimezone: (userId, timezone, address) => dispatch(changeUsersTimezone(userId, timezone, address)),
+    changeUsersTimezone: (userId, params) => dispatch(changeUsersTimezone(userId, params)),
     getTimezone: (lat, lng) => dispatch(getTimezone(lat, lng)),
   };
 }

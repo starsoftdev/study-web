@@ -127,7 +127,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{`${addressArr[0] || ''}`}<br />{`${city || ''}`}{`${city && state ? ',' : ''}`} {`${state || ''}`} {`${zip || ''}`}</span>
         </td>
         <td className="timezone">
-          <span>{formatTimezone(timezone)}</span>
+          <span>{formatTimezone(timezone, city)}</span>
         </td>
         {this.renderSiteUsers()}
         <td className="action">

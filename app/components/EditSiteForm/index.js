@@ -80,10 +80,10 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   componentWillReceiveProps(newProps) {
-    const { change, timezone } = this.props;
+    const { change, timezone, formValues } = this.props;
     if (newProps.timezone && newProps.timezone !== timezone) {
       console.log('new timzone', newProps.timezone);
-      change('timezone', formatTimezone(newProps.timezone));
+      change('timezone', formatTimezone(newProps.timezone, formValues.city));
       change('timezoneUnparsed', newProps.timezone);
     }
   }
@@ -168,13 +168,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     const { handleSubmit, isEdit, initialValues, savedSite } = this.props;
     let isDst = false;
     if (this.props.formValues && this.props.formValues.timezoneUnparsed) {
-      console.log(1, this.props.formValues.timezoneUnparsed);
       isDst = moment().tz(this.props.formValues.timezoneUnparsed).isDST();
-      console.log(2);
     } else if (this.props.initialValues && this.props.initialValues.timezoneUnparsed) {
-      console.log(3);
       isDst = moment().tz(this.props.initialValues.timezoneUnparsed).isDST();
-      console.log(4);
     }
     return (
       <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>

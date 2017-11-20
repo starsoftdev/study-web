@@ -921,12 +921,11 @@ export function fetchIndicationLevelPriceError(payload) {
   };
 }
 
-export function changeUsersTimezone(userId, timezone, address) {
+export function changeUsersTimezone(userId, params) {
   return {
     type: CHANGE_USERS_TIMEZONE,
     userId,
-    timezone,
-    address,
+    params,
   };
 }
 
