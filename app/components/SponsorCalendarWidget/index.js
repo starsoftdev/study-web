@@ -74,7 +74,8 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-      const site = _.find(sites, item => item.id === s.site_id);
+      
+      const site = _.find(sites.details, item => item.site_id === s.siteLocation);
       const timezone = site ? site.timezone : calendarTimezone;
       const result = {
         data: s,
@@ -94,7 +95,7 @@ class CalendarWidget extends React.Component {
         }
       }
 
-      result.title = `Patient #${counter} ${s.time.format('h:mm A (z)')}`;
+      result.title = `Patient #${counter} ${moment.tz(s.time, timezone).format('h:mm A (z)')}`;
       result.tooltipTitle = result.title;
       result.numberName = `Patient #${counter}`;
       if (s.principalInvestigator) {
