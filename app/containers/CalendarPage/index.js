@@ -507,7 +507,7 @@ export default class CalendarPage extends React.Component {
                 />
                 <SponsorCalendarWidget
                   currentUser={currentUser}
-                  sites={sites}
+                  sites={sponsorSites}
                   currentSite={currentSite}
                   protocols={sponsorProtocols.details}
                   sponsorSchedules={this.state.filteredSponsorSchedules}
