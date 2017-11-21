@@ -19,7 +19,6 @@ import {
   FETCH_HISTORY_SUCCESS,
   FETCH_HISTORY_ERROR,
   REVERT_BULK_UPLOAD,
-  REVERT_BULK_UPLOAD_SUCCESS,
   REVERT_BULK_UPLOAD_ERROR,
 } from './constants';
 
@@ -76,12 +75,6 @@ export function revertBulkUpload(uploadId) {
   return {
     type: REVERT_BULK_UPLOAD,
     uploadId,
-  };
-}
-
-export function revertBulkUploadSucceess() {
-  return {
-    type: REVERT_BULK_UPLOAD_SUCCESS,
   };
 }
 
