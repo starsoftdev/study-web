@@ -20,5 +20,4 @@ export const FETCH_HISTORY_SUCCESS              = 'PatientDatabasePage/FETCH_HIS
 export const FETCH_HISTORY_ERROR                = 'PatientDatabasePage/FETCH_HISTORY_ERROR';
 
 export const REVERT_BULK_UPLOAD                 = 'PatientDatabasePage/REVERT_BULK_UPLOAD';
-export const REVERT_BULK_UPLOAD_SUCCESS         = 'PatientDatabasePage/REVERT_BULK_UPLOAD_SUCCESS';
 export const REVERT_BULK_UPLOAD_ERROR           = 'PatientDatabasePage/REVERT_BULK_UPLOAD_ERROR';
