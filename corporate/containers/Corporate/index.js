@@ -25,7 +25,7 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
 
   componentWillMount() {
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(false);
   }
 
   componentWillReceiveProps() {}
@@ -65,7 +65,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
     logout: () => dispatch(logout()),
   };
 }

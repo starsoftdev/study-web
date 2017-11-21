@@ -18,7 +18,6 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
-import FormGeosuggest from '../../components/Input/Geosuggest';
 import {
   removeCustomEmailNotification,
 } from '../../containers/App/actions';
@@ -34,7 +33,7 @@ import {
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import {
   addTaggedIndicationForStudy,
-  fetchAllClientUsersDashboard,
+  fetchAllStudyEmailNotificationsDashboard,
   removeTaggedIndicationForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
@@ -64,7 +63,7 @@ const mapDispatchToProps = (dispatch) => ({
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
-  fetchAllClientUsersDashboard: (clientId, siteId) => dispatch(fetchAllClientUsersDashboard(clientId, siteId)),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, siteId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId)),
   removeCustomEmailNotification: (id, email) => dispatch(removeCustomEmailNotification(id, email)),
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
@@ -87,7 +86,7 @@ export default class EditInformationForm extends React.Component {
     arrayPush: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
     cro: PropTypes.array.isRequired,
-    fetchAllClientUsersDashboard: PropTypes.func.isRequired,
+    fetchAllStudyEmailNotificationsDashboard: PropTypes.func.isRequired,
     formError: PropTypes.bool.isRequired,
     formValues: PropTypes.object,
     initialValues: PropTypes.object.isRequired,
@@ -125,7 +124,6 @@ export default class EditInformationForm extends React.Component {
       showIndicationPopover: false,
     };
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
-    this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -133,70 +131,6 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-  }
-
-  onSuggestSelect(e) {
-    let city = '';
-    let state = '';
-    let postalCode = '';
-    let streetNmber = '';
-    let countryCode = '';
-    let route = '';
-    const { change } = this.props;
-    if (e.gmaps && e.gmaps.address_components) {
-      const addressComponents = e.gmaps.address_components;
-
-      for (const val of addressComponents) {
-        if (!city) {
-          city = _.find(val.types, (o) => (o === 'locality'));
-          if (city) {
-            change('site_city', val.long_name);
-          }
-        }
-        if (!state) {
-          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
-          if (state) {
-            change('site_state', val.short_name);
-          }
-        }
-        if (!countryCode) {
-          countryCode = _.find(val.types, (o) => (o === 'country'));
-          if (countryCode) {
-            change('site_country_code', val.short_name);
-          }
-        }
-        if (!postalCode) {
-          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
-          if (postalCode) {
-            change('site_zip', val.long_name);
-          }
-        }
-        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
-          streetNmber = val.long_name;
-        }
-        if (!route && _.find(val.types, (o) => (o === 'route'))) {
-          route = val.long_name;
-        }
-        if (streetNmber && route) {
-          this.geoSuggest.update(`${streetNmber} ${route}`);
-        } else {
-          const addressArr = e.label.split(',');
-          this.geoSuggest.update(`${addressArr[0]}`);
-        }
-      }
-    } else {
-      const addressArr = e.label.split(',');
-      if (addressArr[1]) {
-        change('site_city', addressArr[1]);
-      }
-      if (addressArr[2]) {
-        change('site_state', addressArr[2]);
-      }
-      if (addressArr[3]) {
-        change('site_country_code', addressArr[3]);
-      }
-      this.geoSuggest.update(`${addressArr[0]}`);
-    }
   }
 
   onPhoneBlur(event) {
@@ -215,8 +149,8 @@ export default class EditInformationForm extends React.Component {
   siteLocationChanged(e) {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
-      const { change, fetchAllClientUsersDashboard } = this.props;
-      fetchAllClientUsersDashboard(foundSiteLocation.client_id, foundSiteLocation.id);
+      const { change, fetchAllStudyEmailNotificationsDashboard, initialFormValues } = this.props;
+      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, foundSiteLocation.id, initialFormValues.study_id);
 
       change('site_id', foundSiteLocation.id);
       change('site_city', foundSiteLocation.city);
@@ -470,14 +404,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
+                  type="text"
                   name="site_address"
-                  component={FormGeosuggest}
+                  component={Input}
                   initialValue={initialFormValues.site_address}
-                  refObj={(el) => {
-                    this.geoSuggest = el;
-                  }}
-                  onSuggestSelect={this.onSuggestSelect}
-                  placeholder=""
+                  isDisabled
                 />
               </div>
             </div>
@@ -770,6 +701,19 @@ export default class EditInformationForm extends React.Component {
                 </div>
               </div>
             }
+            <div className="field-row">
+              <strong className="label">
+                <label>SUVODA CODE</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="suvoda_protocol_id"
+                  component={Input}
+                  placeholder=""
+                />
+              </div>
+            </div>
             <div className="field-row">
               <strong className="label">
                 <label htmlFor="new-patient-phone">DELETE PATIENT</label>

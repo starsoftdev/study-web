@@ -81,7 +81,7 @@ export function* authorize(data) {
     toastr.success('', 'Login successful!');
 
     // fetch details of authenticated user
-    yield put(fetchMeFromToken());
+    yield put(fetchMeFromToken(true));
 
     // return the response from the generator task
     return response;
@@ -171,7 +171,7 @@ export function* setNewPassword() {
         const requestURL = `${API_URL}/users/reset-password`;
         const { password } = yield call(request, requestURL, params);
         yield put(newPasswordReceived(password));
-        toastr.success('', 'Success! Your password has been reset, check your inbox.');
+        toastr.success('', 'Success! Your password has been reset.');
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         toastr.error('', errorMessage);
