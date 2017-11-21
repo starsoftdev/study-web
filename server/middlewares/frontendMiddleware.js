@@ -70,6 +70,8 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       const locals = getLandingPageLocals(landing);
       const ssrContent = pug.compileFile(viewPath)(locals);
 
+      const facebookDescription = `Interested in a ${locals.landing.studyName.replace(/study/gi, 'Research Study')}? Click this Link and Sign Up for more information. Your local research site will call you with more information.`;
+
       // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
       const result = templateStr      // If there are no needs for SSR for SEO purpose, just comment out below line and just keep medias tags as SSR.
         .replace('<div id="app"></div>', ssrContent)
@@ -79,7 +81,7 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
         )
         .replace(
           '<meta property="og:description" content="StudyKIK">',
-          `<meta property="og:description" content="${locals.landing.studyName}">`
+          `<meta property="og:description" content="${facebookDescription}">`
         )
         .replace(
           '<meta property="og:image" content="">',
