@@ -27,7 +27,6 @@ import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
 import SetTimeZoneModal from '../../components/SetTimeZoneModal';
-import EmailTutorialModal from '../../components/EmailTutorialModal';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -48,11 +47,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     super(props);
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.changePassword = this.props.changePassword.bind(this);
-    this.handleCloseEmailModal = this.handleCloseEmailModal.bind(this);
+
     this.state = {
       showChangePwdModal: false,
       showSetTimeZoneModal: false,
-      showEmailTutorialModal: false,
     };
   }
 
@@ -82,12 +80,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.props.updateUser(nextProps.userData.id, { needSetup: false });
     } else {
       this.setState({ showSetTimeZoneModal: false });
-    }
-
-    if (nextProps.userData && nextProps.userData.needEmailCreditTutorial && nextProps.userData.id) {
-      this.setState({ showEmailTutorialModal: true });
-    } else {
-      this.setState({ showEmailTutorialModal: false });
     }
 
     if (window.FS && nextProps.userData) {
@@ -137,11 +129,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.props.changePassword(params);
   }
 
-  handleCloseEmailModal() {
-    this.setState({ showEmailTutorialModal: false });
-    this.props.updateUser(this.props.userData.id, { needEmailCreditTutorial: false });
-  }
-
   render() {
     const { isLoggedIn, userData, pageEvents, currentUserRoleType } = this.props;
 
@@ -178,10 +165,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           <GlobalNotifications {...this.props} events={pageEvents} />
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
           <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
-          <EmailTutorialModal
-            showModal={this.state.showEmailTutorialModal}
-            closeModal={this.handleCloseEmailModal}
-          />
         </div>
       );
     }
@@ -194,10 +177,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         </main>
         <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
         <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
-        <EmailTutorialModal
-          showModal={this.state.showEmailTutorialModal}
-          closeModal={this.handleCloseEmailModal}
-        />
       </div>
     );
   }
