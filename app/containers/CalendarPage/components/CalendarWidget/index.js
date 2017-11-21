@@ -6,6 +6,7 @@ import moment from 'moment-timezone';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import classnames from 'classnames';
+import _ from 'lodash';
 
 import 'react-big-calendar/lib/less/styles.less';
 
@@ -18,6 +19,8 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    currentSite: PropTypes.object,
+    sites: PropTypes.array,
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
@@ -57,8 +60,8 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, schedules } = this.props;
-
+    const { currentUser, currentSite, schedules, sites } = this.props;
+    const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
     const eventsList = schedules.map(s => {
       const localTime = s.time;
       const browserTime = moment()
@@ -68,10 +71,11 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-
+      const site = _.find(sites, item => item.id === s.site_id);
+      const timezone = site ? site.timezone : calendarTimezone;
       return {
         data: s,
-        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${localTime.format('h:mm A')}`,
+        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format('h:mm A (z)')}`,
         start: browserTime,
         end: browserTime,
       };
@@ -95,7 +99,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={currentUser.timezone}
+          timezone={currentSite ? currentSite.timezone : calendarTimezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
@@ -113,7 +117,9 @@ class CalendarWidget extends React.Component {
             this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: date });
           }}
           onSelectEvent={(event) => {
-            this.props.handleOpenModal(SchedulePatientModalType.UPDATE, event);
+            const site = _.find(sites, item => item.id === event.data.site_id);
+            const timezone = site.timezone || currentUser.timezone;
+            this.props.handleOpenModal(SchedulePatientModalType.UPDATE, { ...event, timezone });
           }}
           onShowMore={(events, date) => {
             this.props.handleShowAll(true, events, date);
