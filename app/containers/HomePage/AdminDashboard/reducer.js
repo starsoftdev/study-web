@@ -25,9 +25,9 @@ import {
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
-  FETCH_ALL_CLIENT_USERS,
-  FETCH_ALL_CLIENT_USERS_SUCCESS,
-  FETCH_ALL_CLIENT_USERS_ERROR,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
   FETCH_STUDY_CAMPAIGNS,
   FETCH_STUDY_CAMPAIGNS_ERROR,
   FETCH_STUDY_CAMPAIGNS_SUCCESS,
@@ -621,7 +621,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     }
-    case FETCH_ALL_CLIENT_USERS:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS:
       return {
         ...state,
         allClientUsers: {
@@ -630,7 +630,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_ALL_CLIENT_USERS_SUCCESS:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS:
       return {
         ...state,
         allClientUsers: {
@@ -639,7 +639,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_ALL_CLIENT_USERS_ERROR:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR:
       return {
         ...state,
         allClientUsers: {
@@ -1025,6 +1025,7 @@ export default function dashboardPageReducer(state = initialState, action) {
             level_id: action.payload.levelId,
             level_name: action.campaignInfo.levelName,
             custom_patient_goal: action.payload.customPatientGoal,
+            five_9_value: action.payload.five9value,
           };
         } else {
           return study;

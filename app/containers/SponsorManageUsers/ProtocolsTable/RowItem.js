@@ -109,7 +109,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     };
 
     const isAllowToEdit = (this.props.currentUser.roleForSponsor.name === 'Super Admin' || this.props.currentUser.roleForSponsor.name === 'Admin');
-
     return (
       <tr>
         <td className="col1">

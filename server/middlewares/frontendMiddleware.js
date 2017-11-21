@@ -3,6 +3,22 @@ const express = require('express');
 const path = require('path');
 const request = require('request');
 const compression = require('compression');
+const pug = require('pug');
+const Promise = require('bluebird');
+const PagesService = require('../services/pages.service');
+const getLandingPageLocals = require('../views/landing-page.locals');
+
+const readFile = (fs, filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, file) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(file);
+      }
+    });
+  });
+};
 
 const logView = (req) => {
   const partsArr = req.url.split('-');
@@ -36,6 +52,51 @@ const logView = (req) => {
   }
 };
 
+/**
+ * Making specific routes to be rendered on server.
+ *
+ * @param {Object} app Express server app instance
+ * @param {Object} fs File system utility
+ * @param {String} templatePath Path to React HTML template
+ */
+const reserveSsrRoutes = (app, fs, templatePath) => {
+  app.get('/:landingId([0-9]+)-*/', async (req, res) => {
+    try {
+      const landingId = req.params.landingId;
+      const landing = await PagesService.fetchLanding(landingId);
+      const file = await readFile(fs, templatePath);
+      const templateStr = file.toString();
+      const viewPath = path.join(__dirname, '../views/landing-page.pug');
+      const locals = getLandingPageLocals(landing);
+      const ssrContent = pug.compileFile(viewPath)(locals);
+
+      // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
+      const result = templateStr      // If there are no needs for SSR for SEO purpose, just comment out below line and just keep medias tags as SSR.
+        .replace('<div id="app"></div>', ssrContent)
+        .replace(
+          '<meta property="og:title" content="StudyKIK">',
+          `<meta property="og:title" content="${locals.title}">`
+        )
+        .replace(
+          '<meta property="og:description" content="StudyKIK">',
+          `<meta property="og:description" content="${locals.landing.studyName}">`
+        )
+        .replace(
+          '<meta property="og:image" content="">',
+          `<meta property="og:image" content="${locals.imgSrc || ''}">`
+        )
+        .replace(
+          '<meta property="og:url" content="">',
+          `<meta property="og:url" content="${req.url}">`
+        );
+      res.send(result);
+    } catch (e) {
+      res.send(e.message);
+    }
+  });
+};
+
+
 const addDevMiddlewares = (app, webpackConfig) => {
 // Dev middleware
   const webpack = require('webpack');
@@ -63,6 +124,10 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.get('/lv14', (req, res) => res.redirect(301, 'https://studykik.com/4001200-lv14'));
 
+  app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
+
+  app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   app.get('/app*', (req, res) => {
@@ -82,6 +147,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.get('/loaderio-446030d79af6fc10143acfa9b2f0613f', (req, res) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
+
+  reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
     logView(req);
@@ -114,6 +181,10 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/lv14', (req, res) => res.redirect(301, 'https://studykik.com/4001200-lv14'));
 
+  app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
+
+  app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   // for loader.io verification
@@ -123,6 +194,8 @@ const addProdMiddlewares = (app, options) => {
   app.get('/loaderio-446030d79af6fc10143acfa9b2f0613f', (req, res) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
+
+  reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
     logView(req);

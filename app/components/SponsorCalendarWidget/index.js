@@ -6,6 +6,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import moment from 'moment-timezone';
 import classnames from 'classnames';
+import _ from 'lodash';
 import 'react-big-calendar/lib/less/styles.less';
 
 // Setup the localizer by providing the moment (or globalize) Object
@@ -15,6 +16,8 @@ Calendar.momentLocalizer(moment); // or globalizeLocalizer
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
+    currentSite: PropTypes.object,
+    sites: PropTypes.object,
     protocols: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
@@ -55,14 +58,15 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, sponsorSchedules, protocols } = this.props;
+    const { currentUser, currentSite, sponsorSchedules, protocols, sites } = this.props;
     const eventsList = [];
     let currDate = null;
     let counter = 0;
+    const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
 
     for (const s of sponsorSchedules) {
       let isFindProtocol = false;
-      const localTime = moment(s.time);
+      const localTime = s.time;
       const browserTime = moment()
         .year(localTime.year())
         .month(localTime.month())
@@ -70,7 +74,8 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-
+      const site = _.find(sites.details, item => item.site_id === s.siteLocation);
+      const timezone = site ? site.timezone : calendarTimezone;
       const result = {
         data: s,
         start: browserTime,
@@ -89,13 +94,11 @@ class CalendarWidget extends React.Component {
         }
       }
 
-      result.title = `Patient #${counter} ${moment(s.time).format('h:mm A')}`;
+      result.title = `Patient #${counter} ${moment.tz(s.time, timezone).format('h:mm A (z)')}`;
       result.tooltipTitle = result.title;
       result.numberName = `Patient #${counter}`;
       if (s.principalInvestigator) {
-        result.tooltipTitle = (<div>
-          {s.principalInvestigator}<br />Patient #{counter} {moment(s.time).format('h:mm A')}
-        </div>);
+        result.tooltipTitle = (<div>{s.principalInvestigator}<br /> Patient #{counter} {moment.tz(s.time, timezone).format('h:mm A (z)')}</div>);
       }
       currDate = moment(s.time).startOf('date').date();
 
@@ -122,7 +125,7 @@ class CalendarWidget extends React.Component {
           events={eventsList}
           defaultDate={this.currentDate}
           culture="en"
-          timezone={currentUser.timezone}
+          timezone={currentSite ? currentSite.timezone : calendarTimezone}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
