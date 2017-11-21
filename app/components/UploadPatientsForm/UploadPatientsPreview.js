@@ -230,7 +230,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
           </span>
         </div>
         {this.renderExampleTable()}
-        <span className="tip">The example above are a representation of your upload.</span>
+        <span className="tip">The examples above are a representation of your upload.</span>
       </div>
     );
   }
