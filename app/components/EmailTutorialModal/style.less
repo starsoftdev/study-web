@@ -17,10 +17,54 @@
     overflow-y: auto;
     overflow-x: hidden;
     align-items: center;
-    display: flex;
     margin: 10px 2px !important;
     img {
       width: 100%;
     }
+  }
+
+  .dotnav {
+    position: relative;
+    padding: 10px 40px;
+  }
+  
+  .dotnav-dots {
+    display: flex;
+    justify-content: center;
+    width: 53px;
+  }
+  
+  .dotnav-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    padding: 5px;
+    cursor: pointer;
+    list-style: none;
+  }
+  
+  .dotnav-dot::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: darken(#999, 10%);
+    transition: box-shadow 0.5s;
+  }
+  
+  .dotnav-dot:hover::after,
+  .dotnav-dot:focus::after {
+    background-color: #00afef;
+  }
+  
+  .dotnav-dot_active {
+    cursor: default;
+  }
+  
+  .dotnav-dot_active::after,
+  .dotnav-dot_active:hover::after,
+  .dotnav-dot_active:focus::after {
+    background-color: #00afef;
   }
 }
