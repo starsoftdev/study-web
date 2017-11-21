@@ -20,6 +20,7 @@ import {
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus, selectRevertBulkUploadProcess } from './selectors';
 import { selectSocket } from '../../containers/GlobalNotifications/selectors';
+import { subscribeToRevertProgressSocket } from '../../containers/GlobalNotifications/actions';
 
 import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory, patientsExported } from './actions';
 
@@ -51,6 +52,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     touchAddProtocolFields: PropTypes.func,
     setPatientsExported: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
+    subscribeToRevertProgressSocket: PropTypes.func,
     notifyValidationError: PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
@@ -91,7 +93,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions, clearForm, setPatientsExported } = this.props;
+    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions, clearForm, setPatientsExported, subscribeToRevertProgressSocket } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
@@ -108,6 +110,18 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             fetchHistory(currentUser.id);
             clearForm();
             setPatientsExported();
+          });
+        });
+
+        socket.on('revertInitiated', (data) => {
+          console.log('revertInitiated', data);
+          subscribeToRevertProgressSocket(data.bulkUploadId, data.jobId, (err, data) => {
+            console.log(err, data);
+            if (err) {
+              console.error(err);
+            } else {
+              console.log('data', data);
+            }
           });
         });
       });
@@ -345,6 +359,7 @@ function mapDispatchToProps(dispatch) {
     notifyValidationError: (hasError) => dispatch(validationError(hasError)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
+    subscribeToRevertProgressSocket: (bulkUploadId, jobId, cb) => dispatch(subscribeToRevertProgressSocket(bulkUploadId, jobId, cb)),
   };
 }
 

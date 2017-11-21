@@ -22,6 +22,8 @@ import {
   SEND_STUDY_PATIENT_MESSAGES,
   SET_PROCESSING_STATUS,
   MARK_NOTIFICATIONS_READ,
+  SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
+  UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -145,5 +147,22 @@ export function markNotificationsRead(userId) {
   return {
     type: MARK_NOTIFICATIONS_READ,
     userId,
+  };
+}
+
+export function subscribeToRevertProgressSocket(bulkUploadId, jobId, cb) {
+  return {
+    type: SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
+    bulkUploadId,
+    jobId,
+    cb,
+  };
+}
+
+export function unsubscribeFromRevertProgressSocket(socketId, cb) {
+  return {
+    type: UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
+    socketId,
+    cb,
   };
 }
