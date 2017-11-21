@@ -159,10 +159,10 @@ export function subscribeToRevertProgressSocket(bulkUploadId, jobId, cb) {
   };
 }
 
-export function unsubscribeFromRevertProgressSocket(socketId, cb) {
+export function unsubscribeFromRevertProgressSocket(jobId, cb) {
   return {
     type: UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
-    socketId,
+    jobId,
     cb,
   };
 }

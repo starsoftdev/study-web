@@ -25,7 +25,6 @@ import {
   addProtocolError,
   historyFetched,
   historyFetchingError,
-  revertBulkUploadSucceess,
   revertBulkUploadError,
 } from './actions';
 
@@ -116,9 +115,18 @@ export function* revertBulkUploadWatcher() {
           uploadId,
         }),
       };
-      const response = yield call(request, requestURL, options);
-
-      yield put(revertBulkUploadSucceess(response));
+      yield call(request, requestURL, options);
+      const toastrOptions = {
+        id: 'processToasterForRevertingPatients',
+        type: 'success',
+        message: 'Reverting...',
+        options: {
+          timeOut: 0,
+          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+          showCloseButton: true,
+        },
+      };
+      yield put(toastrActions.add(toastrOptions));
     } catch (err) {
       yield put(revertBulkUploadError(err));
     }

@@ -9,7 +9,6 @@ import {
   FETCH_HISTORY_SUCCESS,
   FETCH_HISTORY_ERROR,
   REVERT_BULK_UPLOAD,
-  REVERT_BULK_UPLOAD_SUCCESS,
   REVERT_BULK_UPLOAD_ERROR,
 } from './constants';
 
@@ -22,10 +21,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  revertBulkUploadProcess:{
-    processing: false,
-    error: null,
-  },
+  revertBulkUploadError: null,
   uploadHistory:{
     details: [],
     fetching: false,
@@ -118,21 +114,10 @@ export default function uploadPatientsPageReducer(state = initialState, action) 
           error: null,
         },
       };
-    case REVERT_BULK_UPLOAD_SUCCESS:
-      return {
-        ...state,
-        revertBulkUploadProcess:{
-          processing: false,
-          error: null,
-        },
-      };
     case REVERT_BULK_UPLOAD_ERROR:
       return {
         ...state,
-        revertBulkUploadProcess:{
-          processing: false,
-          error: action.payload,
-        },
+        revertBulkUploadProcess: action.payload,
       };
     default:
       return state;

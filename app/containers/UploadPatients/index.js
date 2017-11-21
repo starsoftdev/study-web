@@ -18,9 +18,9 @@ import {
   selectClientSites,
 } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
-import { selectAddProtocolProcessStatus, selectRevertBulkUploadProcess } from './selectors';
+import { selectAddProtocolProcessStatus } from './selectors';
 import { selectSocket } from '../../containers/GlobalNotifications/selectors';
-import { subscribeToRevertProgressSocket } from '../../containers/GlobalNotifications/actions';
+import { subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket } from '../../containers/GlobalNotifications/actions';
 
 import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory, patientsExported } from './actions';
 
@@ -53,10 +53,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     setPatientsExported: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
     subscribeToRevertProgressSocket: PropTypes.func,
+    unsubscribeFromRevertProgressSocket: PropTypes.func,
     notifyValidationError: PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
-    revertBulkUploadProcess: PropTypes.object,
     socket: PropTypes.any,
     toastrActions: PropTypes.object.isRequired,
   };
@@ -70,6 +70,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       showAddProtocolModal: false,
       fileName: null,
       isImporting: false,
+      socketId: null,
+      jobId: null,
+      revertProgress: 0,
     };
 
 
@@ -93,13 +96,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(newProps) {
-    const { addProtocolProcess, revertBulkUploadProcess, fetchHistory, currentUser, socket, toastrActions, clearForm, setPatientsExported, subscribeToRevertProgressSocket } = this.props;
+    const { addProtocolProcess, fetchHistory, currentUser,
+      socket, toastrActions, clearForm, setPatientsExported, subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
-    }
-
-    if (revertBulkUploadProcess.processing && !newProps.revertBulkUploadProcess.processing) {
-      fetchHistory(currentUser.id);
     }
 
     if (socket && this.state.socketBinded === false) {
@@ -114,15 +114,28 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         });
 
         socket.on('revertInitiated', (data) => {
-          console.log('revertInitiated', data);
-          subscribeToRevertProgressSocket(data.bulkUploadId, data.jobId, (err, data) => {
-            console.log(err, data);
-            if (err) {
-              console.error(err);
-            } else {
-              console.log('data', data);
+          subscribeToRevertProgressSocket(data.bulkUploadId, data.jobId, (err, result) => {
+            if (!err && result.success) {
+              this.setState({ socketId: result.data.socketId, jobId: result.data.jobId });
             }
           });
+        });
+
+        socket.on('revertProgressNotification', (data) => {
+          if (parseInt(this.state.jobId) === data.jobId) {
+            this.setState({ revertProgress: data.percents }, () => {
+              if (this.state.revertProgress === 100) {
+                unsubscribeFromRevertProgressSocket(data.jobId, (err, result) => {
+                  if (!err && result.success) {
+                    this.setState({ socketId: null, jobId: null, revertProgress: 0 }, () => {
+                      toastrActions.remove('processToasterForRevertingPatients');
+                      fetchHistory(currentUser.id);
+                    });
+                  }
+                });
+              }
+            });
+          }
         });
       });
     }
@@ -341,7 +354,6 @@ const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   fullSiteLocations : selectClientSites(),
   addProtocolProcess: selectAddProtocolProcessStatus(),
-  revertBulkUploadProcess: selectRevertBulkUploadProcess(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -360,6 +372,7 @@ function mapDispatchToProps(dispatch) {
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
     subscribeToRevertProgressSocket: (bulkUploadId, jobId, cb) => dispatch(subscribeToRevertProgressSocket(bulkUploadId, jobId, cb)),
+    unsubscribeFromRevertProgressSocket: (jobId, cb) => dispatch(unsubscribeFromRevertProgressSocket(jobId, cb)),
   };
 }
 

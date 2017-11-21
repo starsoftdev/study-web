@@ -110,13 +110,13 @@ export function* subscribeToRevertProgressSocket() {
 
 export function* unsubscribeFromRevertProgressSocket() {
   while (true) {
-    const { socketId, cb } = yield take(UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET);
+    const { jobId, cb } = yield take(UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET);
     try {
       socket.emit(
         'unsubscribeFromRevertProgressSocket',
         {
           user: props.currentUser,
-          socketId,
+          jobId,
         },
         (err, data) => {
           cb(err, data);
