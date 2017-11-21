@@ -74,7 +74,6 @@ class CalendarWidget extends React.Component {
         .hour(localTime.hour())
         .minute(localTime.minute())
         .seconds(0);
-      
       const site = _.find(sites.details, item => item.site_id === s.siteLocation);
       const timezone = site ? site.timezone : calendarTimezone;
       const result = {
