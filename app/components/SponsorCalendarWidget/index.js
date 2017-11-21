@@ -17,7 +17,7 @@ class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
     currentSite: PropTypes.object,
-    sites: PropTypes.array,
+    sites: PropTypes.object,
     protocols: PropTypes.array.isRequired,
     sponsorSchedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
