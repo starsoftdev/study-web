@@ -109,6 +109,10 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
 
+  UPDATE_USER,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
+
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
@@ -205,9 +209,10 @@ import {
 // ///////////////////////////////////////////
 // auth related action creators
 // ///////////////////////////////////////////
-export function fetchMeFromToken() {
+export function fetchMeFromToken(redirect) {
   return {
     type: FETCH_ME_FROM_TOKEN,
+    redirect,
   };
 }
 
@@ -852,6 +857,28 @@ export function userSavingError(payload) {
   };
 }
 
+export function updateUser(id, data) {
+  return {
+    type: UPDATE_USER,
+    id,
+    data,
+  };
+}
+
+export function updateUserSuccess(payload) {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function updateUserError(payload) {
+  return {
+    type: UPDATE_USER_ERROR,
+    payload,
+  };
+}
+
 export function getCreditsPrice() {
   return {
     type: GET_CREDITS_PRICE,
@@ -894,11 +921,11 @@ export function fetchIndicationLevelPriceError(payload) {
   };
 }
 
-export function changeUsersTimezone(userId, payload) {
+export function changeUsersTimezone(userId, params) {
   return {
     type: CHANGE_USERS_TIMEZONE,
     userId,
-    payload,
+    params,
   };
 }
 

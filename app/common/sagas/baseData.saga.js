@@ -38,6 +38,7 @@ import {
   DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
+  UPDATE_USER,
   GET_CREDITS_PRICE,
   FETCH_INDICATION_LEVEL_PRICE,
 
@@ -121,6 +122,8 @@ import {
   siteSavingError,
   userSaved,
   userSavingError,
+  updateUserSuccess,
+  updateUserError,
   getCreditsPriceSuccess,
   getCreditsPriceError,
   fetchIndicationLevelPriceSuccess,
@@ -183,6 +186,7 @@ export default function* baseDataSaga() {
   yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
+  yield fork(updateUserWatcher);
   yield fork(fetchCreditsPrice);
   yield fork(fetchIndicationLevelPriceWatcher);
   yield fork(changeUsersTimezoneWatcher);
@@ -579,7 +583,14 @@ export function* fetchPatientMessageUnreadCountWatcher() {
     const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
     try {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
+      const params = {
+        method: 'GET',
+        query: {
+          userId: currentUser.id,
+        },
+      };
+
+      const response = yield call(request, requestURL, params);
       yield put(patientMessageUnreadCountFetched(response));
       yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
@@ -785,6 +796,28 @@ export function* saveUserWatcher() {
   }
 }
 
+export function* updateUserWatcher() {
+  while (true) {
+    const { id, data } = yield take(UPDATE_USER);
+    let requestURL = null;
+    let options = null;
+
+    try {
+      requestURL = `${API_URL}/users/${id}`;
+      options = {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      };
+
+      yield call(request, requestURL, options);
+      yield put(updateUserSuccess(data));
+    } catch (err) {
+      yield put(updateUserError(err));
+    }
+  }
+}
+
+
 export function* fetchCreditsPrice() {
   while (true) {
     yield take(GET_CREDITS_PRICE);
@@ -823,17 +856,17 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
-      const params = {
+      const reqParams = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone: payload }),
+        body: JSON.stringify(params),
       };
-      const response = yield call(request, requestURL, params);
+      const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
-      yield put(changeUsersTimezoneSuccess(response.timezone));
+      yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
       toastr.error('', errorMessage);

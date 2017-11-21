@@ -16,15 +16,17 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
 import mixpanel from 'mixpanel-browser';
+import LogRocket from 'logrocket';
 
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import GlobalNotifications from '../../containers/GlobalNotifications';
-import { fetchMeFromToken, changeTemporaryPassword } from './actions';
+import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions';
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,6 +34,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   static propTypes = {
     children: React.PropTypes.node,
     changePassword: React.PropTypes.func,
+    updateUser: React.PropTypes.func,
     currentUserRoleType: React.PropTypes.string,
     fetchMeFromToken: React.PropTypes.func.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
@@ -47,17 +50,21 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     this.state = {
       showChangePwdModal: false,
+      showSetTimeZoneModal: false,
     };
   }
 
   componentWillMount() {
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(true);
   }
 
   componentDidMount() {
     if (MIXPANEL_TOKEN) {
       mixpanel.init(MIXPANEL_TOKEN);
+    }
+    if (LOG_ROCKET) {
+      LogRocket.init(LOG_ROCKET);
     }
   }
 
@@ -66,6 +73,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (tempPassword) {
       this.setState({ showChangePwdModal: true });
+    }
+
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.userData.id) {
+      this.setState({ showSetTimeZoneModal: true });
+      this.props.updateUser(nextProps.userData.id, { needSetup: false });
+    } else {
+      this.setState({ showSetTimeZoneModal: false });
     }
 
     if (window.FS && nextProps.userData) {
@@ -86,6 +100,24 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.set({ page: nextProps.location.pathname });
         ReactGA.pageview(nextProps.location.pathname);
       }
+    }
+
+    console.log(1, window.OneSignal);
+    if (window.OneSignal && nextProps.userData) {
+      window.OneSignal.sendTags({
+        userId: nextProps.userData.id,
+      }, (tagsSent) => {
+        console.log(2, tagsSent);
+      });
+    }
+
+    if (LOG_ROCKET && nextProps.userData) {
+      LogRocket.identify(`${nextProps.userData.id}`, {
+        name: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        // Add your own custom user variables here, ie:
+        subscriptionType: 'pro',
+      });
     }
   }
 
@@ -132,6 +164,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           </main>
           <GlobalNotifications {...this.props} events={pageEvents} />
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
         </div>
       );
     }
@@ -143,6 +176,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           {React.Children.toArray(this.props.children)}
         </main>
         <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+        <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
       </div>
     );
   }
@@ -158,7 +192,8 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    updateUser: (id, values) => dispatch(updateUser(id, values)),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
   };
 }
 
