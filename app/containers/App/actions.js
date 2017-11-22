@@ -109,6 +109,10 @@ import {
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
 
+  UPDATE_USER,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
+
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
   GET_CREDITS_PRICE_ERROR,
@@ -849,6 +853,28 @@ export function userSaved(siteId, payload, messageHeader) {
 export function userSavingError(payload) {
   return {
     type: SAVE_USER_ERROR,
+    payload,
+  };
+}
+
+export function updateUser(id, data) {
+  return {
+    type: UPDATE_USER,
+    id,
+    data,
+  };
+}
+
+export function updateUserSuccess(payload) {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function updateUserError(payload) {
+  return {
+    type: UPDATE_USER_ERROR,
     payload,
   };
 }
