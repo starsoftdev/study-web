@@ -39,6 +39,7 @@ class EmailTutorialModal extends React.Component { // eslint-disable-line react/
   render() {
     const { step } = this.state;
     const handleNext = () => {
+      this.imageArea.scrollTop = 0;
       if (step < this.images.length - 1) {
         this.setState({ step: Math.min(this.images.length - 1, step + 1) });
       } else {
@@ -47,6 +48,7 @@ class EmailTutorialModal extends React.Component { // eslint-disable-line react/
     };
 
     const handlePrev = () => {
+      this.imageArea.scrollTop = 0;
       this.setState({ step: Math.max(0, step - 1) });
     };
 
@@ -64,11 +66,11 @@ class EmailTutorialModal extends React.Component { // eslint-disable-line react/
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <div className="image-area">
+            <div className="image-area" ref={ref => this.imageArea = ref}>
               <img src={this.images[this.state.step]} alt="" />
             </div>
           </div>
-          <div className="form-lightbox">
+          <div className="nav">
             <div className="row">
               <div className="col-xs-4 text-left">
                 { step > 0 && <a className="lightbox-close btn btn-gray-outline" onClick={handlePrev}>Previous</a> }
