@@ -5,18 +5,46 @@
 */
 
 import 'blueimp-canvas-to-blob';
-import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { Modal } from 'react-bootstrap';
 import _ from 'lodash';
 import moment from 'moment-timezone';
+import classNames from 'classnames';
+import React from 'react';
+import { Field, reduxForm, change } from 'redux-form';
+import { Modal } from 'react-bootstrap';
 import Input from '../../components/Input';
 import ChangePasswordForm from '../../components/ChangePasswordForm';
-import ReactSelect from '../../components/Input/ReactSelect';
 import ProfileImageForm from '../../components/ProfileImageForm';
 import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import CenteredModal from '../../components/CenteredModal/index';
 import { formatTimezone } from '../../utils/time';
+import FormGeosuggest from '../../components/Input/Geosuggest';
+
+const toShortCode = country => {
+  switch (country) {
+    case 'United States':
+      return 'us';
+    case 'United Kingdom':
+      return 'uk';
+    case 'Brazil':
+      return 'br';
+    case 'France':
+      return 'fr';
+    case 'Germany':
+      return 'de';
+    case 'Italy':
+      return 'it';
+    case 'Czech Republic':
+      return 'cz';
+    case 'Japan':
+      return 'jp';
+    case 'Poland':
+      return 'pl';
+    case 'Canada':
+      return 'ca';
+    default:
+      return 'us';
+  }
+};
 
 @reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -29,6 +57,11 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     me: React.PropTypes.bool,
     formValues: React.PropTypes.object,
     changeUsersTimezone: React.PropTypes.func,
+    getTimezone: React.PropTypes.func,
+    timezone: React.PropTypes.string,
+    handleSubmit: React.PropTypes.func,
+    dispatch: React.PropTypes.func,
+    initialValues: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -38,7 +71,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     this.openProfileImageModal = this.openProfileImageModal.bind(this);
     this.closeProfileImageModal = this.closeProfileImageModal.bind(this);
     this.uploadImage = this.uploadImage.bind(this);
-    this.onChangeTimezone = this.onChangeTimezone.bind(this);
+    this.onSuggestSelect = this.onSuggestSelect.bind(this);
 
     this.state = {
       passwordResetModalOpen: false,
@@ -47,13 +80,84 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
+    const { timezone, dispatch, formValues } = this.props;
+
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
     }
+    if (newProps.timezone && newProps.timezone !== timezone) {
+      dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone, formValues.city)));
+      dispatch(change('profile', 'timezoneUnparsed', newProps.timezone));
+    }
   }
 
-  onChangeTimezone(value) {
-    this.props.changeUsersTimezone(this.props.currentUser.id, value);
+  onSuggestSelect(e) {
+    const { getTimezone, dispatch } = this.props;
+    let city = '';
+    let state = '';
+    let countryCode = '';
+    let postalCode = '';
+    let streetNmber = '';
+    let route = '';
+    if (e.location) {
+      getTimezone(e.location.lat, e.location.lng);
+    }
+    dispatch(change('profile', 'address', e.label));
+
+    if (e.gmaps && e.gmaps.address_components) {
+      const addressComponents = e.gmaps.address_components;
+
+      for (const val of addressComponents) {
+        if (!city) {
+          city = _.find(val.types, (o) => (o === 'locality'));
+          const city2 = _.find(val.types, (o) => (o === 'administrative_area_level_2'));
+          if (city) {
+            dispatch(change('profile', 'city', val.long_name));
+          } else if (city2) {
+            dispatch(change('profile', 'city', val.long_name));
+          }
+        }
+        if (!state) {
+          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
+          if (state) {
+            dispatch(change('profile', 'state', val.short_name));
+          }
+        }
+        if (!countryCode) {
+          countryCode = _.find(val.types, (o) => (o === 'country'));
+          if (state) {
+            dispatch(change('profile', 'countryCode', val.short_name));
+          }
+        }
+        if (!postalCode) {
+          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
+          if (postalCode) {
+            dispatch(change('profile', 'zip', val.long_name));
+          }
+        }
+        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
+          streetNmber = val.long_name;
+        }
+        if (!route && _.find(val.types, (o) => (o === 'route'))) {
+          route = val.long_name;
+        }
+        if (streetNmber && route) {
+          this.geoSuggest.update(`${streetNmber} ${route}`);
+        }
+      }
+    } else {
+      const addressArr = e.label.split(',');
+      if (addressArr[1]) {
+        dispatch(change('profile', 'city', addressArr[1]));
+      }
+      if (addressArr[2]) {
+        dispatch(change('profile', 'state', addressArr[2]));
+      }
+      if (addressArr[3]) {
+        dispatch(change('profile', 'countryCode', toShortCode(addressArr[3])));
+      }
+      this.geoSuggest.update(`${addressArr[0]}`);
+    }
   }
 
   openResetPasswordModal() {
@@ -86,13 +190,16 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         user_id: currentUser.id,
       },
     };
-    const timezoneOptions = _.map(_.filter(moment.tz.names(), (t => t.split('/').length === 2)), t => {
-      const timezone = formatTimezone(t);
-      return { label: timezone, value: t };
-    });
+
+    let isDst = false;
+    if (this.props.formValues && this.props.formValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.formValues.timezoneUnparsed).isDST();
+    } else if (this.props.initialValues && this.props.initialValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.initialValues.timezoneUnparsed).isDST();
+    }
 
     return (
-      <form>
+      <form onSubmit={this.props.handleSubmit}>
         <div className="field-row label-top file-img active">
           <strong className="label"><label htmlFor="profile-img">PROFILE IMAGE</label></strong>
           <div className="field">
@@ -148,24 +255,49 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             isDisabled
           />
         </div>
+        <div className="field-row fs-hide">
+          <strong className="label"><label>Address</label></strong>
+          <div className="field">
+            <Field
+              name="address"
+              component={FormGeosuggest}
+              refObj={(el) => { this.geoSuggest = el; }}
+              onSuggestSelect={this.onSuggestSelect}
+              initialValue={(this.props.initialValues.address || '')}
+              placeholder=""
+            />
+          </div>
+        </div>
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
-            <div className="field-row">
-              <strong className="label"><label>Time Zone</label></strong>
+          <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
+            <strong className="label required"><label>Time Zone</label></strong>
+            <div className="field">
               <Field
                 name="timezone"
-                component={ReactSelect}
-                placeholder="Select Timezone"
-                options={timezoneOptions}
-                className="field"
-                onChange={this.onChangeTimezone}
-                clearable={false}
+                placeholder="Timezone"
+                component={Input}
+                type="text"
+                isDisabled
               />
             </div>
+          </div>
+        }
+        {
+          (isDst === true) &&
+          <div className="field-row">
+            <strong className="label"><label>&nbsp;</label></strong>
+            <div className="field dst-label">This time zone currently observes daylight savings.</div>
+          </div>
         }
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
           <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+        </div>
+        <div className="btn-block text-right">
+          <button type="submit" className="btn btn-default btn-add-row">
+            <span>Update</span>
+          </button>
         </div>
         <Modal
           className="profile-page-modal"

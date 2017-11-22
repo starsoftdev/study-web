@@ -9,9 +9,6 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import {
   fetchPatientSignUpsWatcher,
   fetchPatientSignUpsWorker,
-  fetchPatientMessagesWatcher,
-  fetchPatientMessagesWorker,
-  fetchRewardsPointWatcher,
   homePageSaga,
 } from '../sagas';
 
@@ -21,7 +18,6 @@ import {
 
 import {
   FETCH_PATIENT_SIGN_UPS,
-  FETCH_PATIENT_MESSAGES,
 } from '../constants';
 
 import request from '../../../utils/request';
@@ -77,30 +73,6 @@ describe('HomePage/sagas', () => {
     });
   });
 
-  describe('fetchPatientMessagesWatcher Saga', () => {
-    const iterator = fetchPatientMessagesWatcher();
-    let actualYield;
-    let expectedYield;
-
-    it('should watch for FETCH_PATIENT_MESSAGES action', () => {
-      actualYield = iterator.next().value;
-      expectedYield = take(FETCH_PATIENT_MESSAGES);
-      expect(actualYield).toEqual(expectedYield);
-    });
-
-    it('should invoke fetchPatientMessagesWorker saga on actions', () => {
-      // @ref http://yelouafi.github.io/redux-saga/docs/advanced/Concurrency.html
-      actualYield = iterator.next(put(FETCH_PATIENT_MESSAGES)).value;
-      expectedYield = fork(fetchPatientMessagesWorker, put(FETCH_PATIENT_MESSAGES));
-      expect(actualYield).toEqual(expectedYield);
-
-      // @ref https://jsfiddle.net/npbee/Lqreq12b/2/
-      // actualYield = iterator.next().value;
-      // expectedYield = take(FETCH_COMPANY_TYPES);
-      // expect(actualYield).toEqual(expectedYield);
-    });
-  });
-
   describe('homePageSaga', () => {
     const mainSaga = homePageSaga();
 
@@ -111,10 +83,6 @@ describe('HomePage/sagas', () => {
     it('should asyncronously fork 3 watchers saga', () => {
       forkDescriptorA = mainSaga.next();
       expect(forkDescriptorA.value).toEqual(fork(fetchPatientSignUpsWatcher));
-      forkDescriptorB = mainSaga.next();
-      expect(forkDescriptorB.value).toEqual(fork(fetchPatientMessagesWatcher));
-      forkDescriptorC = mainSaga.next();
-      expect(forkDescriptorC.value).toEqual(fork(fetchRewardsPointWatcher));
     });
 
     it('should yield until LOCATION_CHANGE action', () => {
