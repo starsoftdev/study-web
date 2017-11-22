@@ -14,7 +14,7 @@ import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,
 import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
-import { formatTimezone, parseTimezone } from '../../utils/time';
+import { formatTimezone } from '../../utils/time';
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
@@ -143,7 +143,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   updateSite(siteData) {
     const { currentUserClientId, selectedSite } = this.props;
     const params = siteData;
-    params.timezone = parseTimezone(siteData.timezone);
+    params.timezone = siteData.timezoneUnparsed;
     params.phoneNumber = normalizePhoneForServer(params.phoneNumber);
 
     this.props.saveSite(currentUserClientId, selectedSite.details.id, params);
@@ -195,7 +195,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
     const editUserModalShown = this.editUserModalShouldBeShown();
 
     if (selectedSiteDetailsForForm) {
-      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone);
+      selectedSiteDetailsForForm.timezoneUnparsed = selectedSiteDetailsForForm.timezoneUnparsed ? selectedSiteDetailsForForm.timezoneUnparsed : selectedSiteDetailsForForm.timezone;
+      selectedSiteDetailsForForm.timezone = formatTimezone(selectedSiteDetailsForForm.timezone, selectedSiteDetailsForForm.city);
       selectedSiteDetailsForForm.phoneNumber = normalizePhoneDisplay(selectedSiteDetailsForForm.phoneNumber);
     }
 

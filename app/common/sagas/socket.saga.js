@@ -23,6 +23,8 @@ import {
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
   MARK_NOTIFICATIONS_READ,
+  CLIENT_OPENED_STUDY_PAGE,
+  CLIENT_CLOSED_STUDY_PAGE,
 } from '../../containers/GlobalNotifications/constants';
 
 let props = null;
@@ -40,6 +42,8 @@ export function* GlobalNotificationsSaga() {
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
   yield fork(markNotificationsReadWorker);
+  yield fork(clientOpenedStudyPage);
+  yield fork(clientClosedStudyPage);
 }
 
 export function* setSocketConnection() {
@@ -204,6 +208,30 @@ export function* markNotificationsReadWorker() {
       yield call(request, requestURL, params);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong marking notifications read');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* clientOpenedStudyPage() {
+  while (true) {
+    const { studyId } = yield take(CLIENT_OPENED_STUDY_PAGE);
+    try {
+      socket.emit('clientOpenedStudyPage', { studyId }, () => {});
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* clientClosedStudyPage() {
+  while (true) {
+    const { studyId } = yield take(CLIENT_CLOSED_STUDY_PAGE);
+    try {
+      socket.emit('clientClosedStudyPage', { studyId }, () => {});
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
       toastr.error('', errorMessage);
     }
   }

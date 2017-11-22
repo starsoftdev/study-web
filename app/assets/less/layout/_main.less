@@ -12,6 +12,14 @@
   }
 }
 
+.field-before-dst-label{
+  margin-bottom: 5px !important;
+}
+.dst-label{
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+
 .disabled-li {
   background-color: lightgray;
   cursor: not-allowed;
@@ -1081,6 +1089,12 @@ th, .th {
 
   .lfilename {
     width: 52%;
+  }
+
+  .has-error + .lfilename {
+    .filename {
+      color: red;
+    }
   }
 
   .label-top {

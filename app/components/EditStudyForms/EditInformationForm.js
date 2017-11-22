@@ -18,7 +18,6 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
-import FormGeosuggest from '../../components/Input/Geosuggest';
 import {
   removeCustomEmailNotification,
 } from '../../containers/App/actions';
@@ -125,7 +124,6 @@ export default class EditInformationForm extends React.Component {
       showIndicationPopover: false,
     };
     this.siteLocationChanged = this.siteLocationChanged.bind(this);
-    this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.toggleIndicationPopover = this.toggleIndicationPopover.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -133,70 +131,6 @@ export default class EditInformationForm extends React.Component {
   }
 
   componentWillMount() {
-  }
-
-  onSuggestSelect(e) {
-    let city = '';
-    let state = '';
-    let postalCode = '';
-    let streetNmber = '';
-    let countryCode = '';
-    let route = '';
-    const { change } = this.props;
-    if (e.gmaps && e.gmaps.address_components) {
-      const addressComponents = e.gmaps.address_components;
-
-      for (const val of addressComponents) {
-        if (!city) {
-          city = _.find(val.types, (o) => (o === 'locality'));
-          if (city) {
-            change('site_city', val.long_name);
-          }
-        }
-        if (!state) {
-          state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
-          if (state) {
-            change('site_state', val.short_name);
-          }
-        }
-        if (!countryCode) {
-          countryCode = _.find(val.types, (o) => (o === 'country'));
-          if (countryCode) {
-            change('site_country_code', val.short_name);
-          }
-        }
-        if (!postalCode) {
-          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
-          if (postalCode) {
-            change('site_zip', val.long_name);
-          }
-        }
-        if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
-          streetNmber = val.long_name;
-        }
-        if (!route && _.find(val.types, (o) => (o === 'route'))) {
-          route = val.long_name;
-        }
-        if (streetNmber && route) {
-          this.geoSuggest.update(`${streetNmber} ${route}`);
-        } else {
-          const addressArr = e.label.split(',');
-          this.geoSuggest.update(`${addressArr[0]}`);
-        }
-      }
-    } else {
-      const addressArr = e.label.split(',');
-      if (addressArr[1]) {
-        change('site_city', addressArr[1]);
-      }
-      if (addressArr[2]) {
-        change('site_state', addressArr[2]);
-      }
-      if (addressArr[3]) {
-        change('site_country_code', addressArr[3]);
-      }
-      this.geoSuggest.update(`${addressArr[0]}`);
-    }
   }
 
   onPhoneBlur(event) {
@@ -470,14 +404,11 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
+                  type="text"
                   name="site_address"
-                  component={FormGeosuggest}
+                  component={Input}
                   initialValue={initialFormValues.site_address}
-                  refObj={(el) => {
-                    this.geoSuggest = el;
-                  }}
-                  onSuggestSelect={this.onSuggestSelect}
-                  placeholder=""
+                  isDisabled
                 />
               </div>
             </div>

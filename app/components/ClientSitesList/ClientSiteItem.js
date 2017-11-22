@@ -5,6 +5,7 @@ import { selectClientRoles, selectSelectedSite, selectSelectedUser } from '../..
 import { fetchSite, fetchUser } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { formatTimezone } from '../../utils/time';
 
 class ClientSiteItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -126,7 +127,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <span>{`${addressArr[0] || ''}`}<br />{`${city || ''}`}{`${city && state ? ',' : ''}`} {`${state || ''}`} {`${zip || ''}`}</span>
         </td>
         <td className="timezone">
-          <span>{timezone.replace(/_/g, ' ')}</span>
+          <span>{formatTimezone(timezone, city)}</span>
         </td>
         {this.renderSiteUsers()}
         <td className="action">

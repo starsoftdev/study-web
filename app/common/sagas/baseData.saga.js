@@ -823,17 +823,17 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
-      const params = {
+      const reqParams = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone: payload }),
+        body: JSON.stringify(params),
       };
-      const response = yield call(request, requestURL, params);
+      const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
-      yield put(changeUsersTimezoneSuccess(response.timezone));
+      yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
       toastr.error('', errorMessage);
