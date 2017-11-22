@@ -178,10 +178,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           <GlobalNotifications {...this.props} events={pageEvents} />
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
           <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
-          <EmailTutorialModal
-            showModal={this.state.showEmailTutorialModal}
-            closeModal={this.handleCloseEmailModal}
-          />
+          {
+            currentUserRoleType === 'client' &&
+              <EmailTutorialModal
+                showModal={this.state.showEmailTutorialModal}
+                closeModal={this.handleCloseEmailModal}
+              />
+          }
         </div>
       );
     }
@@ -194,10 +197,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         </main>
         <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
         <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
-        <EmailTutorialModal
-          showModal={this.state.showEmailTutorialModal}
-          closeModal={this.handleCloseEmailModal}
-        />
       </div>
     );
   }
