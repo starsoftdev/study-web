@@ -23,3 +23,6 @@ export const FETCH_UNREAD_NOTIFICATIONS_COUNT = 'app/GlobalNotifications/FETCH_U
 export const FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS = 'app/GlobalNotifications/FETCH_UNREAD_NOTIFICATIONS_COUNT_SUCCESS';
 export const RECEIVE_NOTIFICATION = 'app/GlobalNotifications/RECEIVE_NOTIFICATION';
 export const MARK_NOTIFICATIONS_READ = 'app/GlobalNotifications/MARK_NOTIFICATIONS_READ';
+
+export const CLIENT_OPENED_STUDY_PAGE = 'app/GlobalNotifications/CLIENT_OPENED_STUDY_PAGE';
+export const CLIENT_CLOSED_STUDY_PAGE = 'app/GlobalNotifications/CLIENT_CLOSED_STUDY_PAGE';

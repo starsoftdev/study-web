@@ -19,10 +19,11 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
     active: React.PropTypes.any,
     submitEmailBlast: React.PropTypes.func.isRequired,
     switchCompose: React.PropTypes.func.isRequired,
+    noBackBtn: React.PropTypes.bool,
   };
 
   render() {
-    const { active, submitEmailBlast, switchCompose } = this.props;
+    const { active, submitEmailBlast, switchCompose, noBackBtn } = this.props;
     return (
       <Form onSubmit={submitEmailBlast} className={classNames('item emails-info', { active })}>
         <div className="emails-info-holder">
@@ -56,7 +57,9 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
           />
         </div>
         <div className="textarea">
-          <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
+          {!noBackBtn &&
+            <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
+          }
           <input type="submit" value="Send" className="btn btn-default right" />
         </div>
       </Form>

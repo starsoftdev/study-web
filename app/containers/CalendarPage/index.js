@@ -437,6 +437,7 @@ export default class CalendarPage extends React.Component {
               />
               <CalendarWidget
                 currentUser={currentUser}
+                sites={sites}
                 currentSite={currentSite}
                 schedules={this.state.filteredSchedules}
                 handleOpenModal={this.handleModalVisibility}
@@ -506,6 +507,8 @@ export default class CalendarPage extends React.Component {
                 />
                 <SponsorCalendarWidget
                   currentUser={currentUser}
+                  sites={sponsorSites}
+                  currentSite={currentSite}
                   protocols={sponsorProtocols.details}
                   sponsorSchedules={this.state.filteredSponsorSchedules}
                   handleOpenModal={this.handleModalVisibility}

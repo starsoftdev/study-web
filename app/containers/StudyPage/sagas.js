@@ -230,8 +230,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 //     const response = yield call(request, requestURL, options);
 //     yield put(textStatsFetched(response));
 //   } catch (e) {
-//     const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-//     toastr.error('', errorMessage);
+//     toastr.error('', 'Error! Text stats has been disabled.');
 //     if (e.status === 401) {
 //       yield call(() => { location.href = '/login'; });
 //     }
@@ -476,6 +475,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                  include: 'roleForClient',
                 },
               },
             ],
