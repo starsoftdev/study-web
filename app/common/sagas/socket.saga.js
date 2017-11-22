@@ -179,7 +179,7 @@ export function* fetchNotifications(action) {
     if (response.length < 10) {
       hasMore = false;
     }
-    yield put(fetchNotificationsSucceeded(response, hasMore, page, userId));
+    yield put(fetchNotificationsSucceeded(response, hasMore, page));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
     toastr.error('', errorMessage);
