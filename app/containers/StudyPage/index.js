@@ -168,11 +168,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           }
         });
 
-        socket.on('notifyLandingPageViewChanged', (data) => {
-          if (data.studyId === parseInt(params.id)) {
-            fetchStudy(params.id);
-          }
-        });
+        // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
+        // socket.on('notifyLandingPageViewChanged', (data) => {
+        //   if (data.studyId === parseInt(params.id)) {
+        //     fetchStudy(params.id);
+        //   }
+        // });
       });
     }
 
