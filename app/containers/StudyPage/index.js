@@ -169,6 +169,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         });
 
         // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
+        // commented out because of KIK-3053, remove this when that is finished
         // socket.on('notifyLandingPageViewChanged', (data) => {
         //   if (data.studyId === parseInt(params.id)) {
         //     fetchStudy(params.id);
