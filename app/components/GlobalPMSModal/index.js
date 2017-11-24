@@ -42,7 +42,7 @@ import {
   fetchPatientMessages,
   markAsReadPatientMessages,
   updateSitePatients,
-  fetchClientCredits,
+  clientCreditsFetched,
   addMessagesCountStat,
 } from '../../containers/App/actions';
 import {
@@ -76,7 +76,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     markAsReadPatientMessages: React.PropTypes.func,
     setChatTextValue: React.PropTypes.func,
     clientCredits: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
+    clientCreditsFetched: React.PropTypes.func,
     handleSubmit: React.PropTypes.func,
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
@@ -115,7 +115,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.props.socket.on('notifyMessage', (newMessage) => {
         const socketMessage = newMessage;
         if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
-          // this.props.fetchClientCredits(currentUser.id);
+          this.props.clientCreditsFetched({ customerCredits: { customerCredits: newMessage.customerCredits } });
           if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
             this.props.addMessagesCountStat(1);
@@ -407,7 +407,7 @@ function mapDispatchToProps(dispatch) {
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+    clientCreditsFetched: (payload) => dispatch(clientCreditsFetched(payload)),
     change: (field, value) => dispatch(change('globalPMS', field, value)),
     incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
     addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
