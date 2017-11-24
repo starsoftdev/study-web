@@ -67,7 +67,7 @@ class TextSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser } = newProps;
+    // const { currentUser } = newProps;
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
@@ -86,7 +86,7 @@ class TextSection extends React.Component {
           this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
           });
-          this.props.fetchClientCredits(currentUser.id);
+          // this.props.fetchClientCredits(currentUser.id);
         }
       });
       this.setState({ socketBinded: true });
