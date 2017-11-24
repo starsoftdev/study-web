@@ -124,10 +124,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     console.log(1, window.OneSignal);
     if (window.OneSignal && nextProps.userData) {
-      window.OneSignal.sendTags({
-        userId: nextProps.userData.id,
-      }, (tagsSent) => {
-        console.log(2, tagsSent);
+      window.OneSignal.push(() => {
+        window.OneSignal.sendTags({
+          userId: nextProps.userData.id,
+        }, (tagsSent) => {
+          console.log(2, tagsSent);
+        });
       });
     }
 
