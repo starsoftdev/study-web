@@ -76,7 +76,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
         socket.on('notifyChangePoints', (clientId, newCreditsAmount) => {
           console.log('clientId', clientId, newCreditsAmount);
           if (currentUser.roleForClient && currentUser.roleForClient.client_id === clientId) {
-            this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount }});
+            this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount } });
           }
         });
       });
