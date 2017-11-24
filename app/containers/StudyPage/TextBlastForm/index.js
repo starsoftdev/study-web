@@ -204,7 +204,7 @@ class TextBlastForm extends React.Component {
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, currentUser, (err, data) => {
         onClose(err, data);
-        this.props.fetchClientCredits(currentUser.id);
+        // this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
       toastr.error('', formSyncErrors.message);
