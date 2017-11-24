@@ -96,9 +96,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showChangePwdModal: true });
     }
 
-    if (nextProps.userData && nextProps.userData.needSetup && nextProps.userData.id) {
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
       this.setState({ showSetTimeZoneModal: true });
-      this.props.updateUser(nextProps.userData.id, { needSetup: false });
     } else {
       this.setState({ showSetTimeZoneModal: false });
     }
