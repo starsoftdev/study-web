@@ -89,7 +89,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, fetchStudy, clientOpenedStudyPage } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -168,11 +168,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           }
         });
 
-        socket.on('notifyLandingPageViewChanged', (data) => {
-          if (data.studyId === parseInt(params.id)) {
-            fetchStudy(params.id);
-          }
-        });
+        // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
+        // commented out because of KIK-3053, remove this when that is finished
+        // socket.on('notifyLandingPageViewChanged', (data) => {
+        //   if (data.studyId === parseInt(params.id)) {
+        //     fetchStudy(params.id);
+        //   }
+        // });
       });
     }
 
