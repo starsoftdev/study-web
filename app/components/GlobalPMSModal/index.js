@@ -115,7 +115,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.props.socket.on('notifyMessage', (newMessage) => {
         const socketMessage = newMessage;
         if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
-          this.props.fetchClientCredits(currentUser.id);
+          // this.props.fetchClientCredits(currentUser.id);
           if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
             this.props.addMessagesCountStat(1);
