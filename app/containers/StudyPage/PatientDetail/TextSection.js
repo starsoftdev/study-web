@@ -11,7 +11,7 @@ import { toastr } from 'react-redux-toastr';
 import Button from 'react-bootstrap/lib/Button';
 import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
-import { fetchClientCredits, markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import * as Selector from '../selectors';
 
 import {
@@ -43,7 +43,6 @@ class TextSection extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
-    fetchClientCredits: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
@@ -78,7 +77,6 @@ class TextSection extends React.Component {
 
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        console.log('notifyMessage', newMessage);
         this.initStudyPatientMessagesFetch(newProps);
         if (this.props.active && newMessage) {
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
@@ -87,7 +85,6 @@ class TextSection extends React.Component {
           this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
           });
-          // this.props.fetchClientCredits(currentUser.id);
         }
       });
       this.setState({ socketBinded: true });
@@ -273,7 +270,6 @@ const mapDispatchToProps = (dispatch) => ({
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
