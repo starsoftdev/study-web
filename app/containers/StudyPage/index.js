@@ -89,7 +89,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, fetchStudy, clientOpenedStudyPage } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
