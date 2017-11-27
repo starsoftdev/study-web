@@ -128,7 +128,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
                 unsubscribeFromRevertProgressSocket(data.jobId, (err, result) => {
                   if (!err && result.success) {
                     this.setState({ socketId: null, jobId: null, revertProgress: 0 }, () => {
-                      toastrActions.remove('processToasterForRevertingPatients');
+                      // toastrActions.remove('processToasterForRevertingPatients');
                       fetchHistory(currentUser.id);
                     });
                   }
@@ -306,7 +306,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   render() {
     const { indications, fullSiteLocations, fetchHistory } = this.props;
-    const { isImporting, uploadResult } = this.state;
+    const { isImporting, uploadResult, revertProgress } = this.state;
 
     return (
       <div className="container-fluid">
@@ -316,6 +316,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
           <UploadPatientsForm
             onSubmit={this.onSubmitForm}
+            revertProgress={revertProgress}
             isImporting={isImporting}
             uploadResult={uploadResult}
             fetchHistory={fetchHistory}

@@ -9,12 +9,14 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 
 import Modal from 'react-bootstrap/lib/Modal';
+import { ProgressBar } from 'react-bootstrap';
 import CenteredModal from '../../components/CenteredModal/index';
 
 class UploadHistoryList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     uploadHistory: PropTypes.object,
+    revertProgress: PropTypes.any,
     revert: PropTypes.func,
   };
 
@@ -23,6 +25,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
     this.state = {
       showConfirmRevertModal: false,
       selectedHistoryItem: null,
+      revertProgress: 0,
     };
 
     this.renderHistoryTable = this.renderHistoryTable.bind(this);
@@ -30,8 +33,19 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
     this.confirmRevert = this.confirmRevert.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.revertProgress) {
+      this.setState({ revertProgress: newProps.revertProgress });
+
+      if (newProps.revertProgress === 100) {
+        setTimeout(() => {
+          this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: null, revertProgress: 0 });
+        }, 2000);
+      }
+    }
+  }
+
   switchShowConfirmRevertModal(item) {
-    console.log(item);
     this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: item });
   }
 
@@ -41,7 +55,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
     if (selectedHistoryItem) {
       revert(selectedHistoryItem.bulk_upload_id);
-      this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: null });
+      this.setState({ revertStarted: true });
     }
   }
 
@@ -119,14 +133,17 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
           </Modal.Header>
           <Modal.Body>
             <div className="confirm-modal-container">
-              <span className="confirm-text">
-                {'Are you sure you want to revert the data imported from'}
-                <br />
-                {`${(this.state.selectedHistoryItem) ? this.state.selectedHistoryItem.name : ''}?`}
-              </span>
+              {!this.state.revertStarted &&
+                <span className="confirm-text">
+                  {'Are you sure you want to revert the data imported from'}
+                  <br />
+                  {`${(this.state.selectedHistoryItem) ? this.state.selectedHistoryItem.name : ''}?`}
+                </span>
+              }
+              {this.state.revertStarted && <ProgressBar striped bsStyle="warning" now={this.state.revertProgress} />}
               <div className="btn-block text-center">
                 <input type="button" value="cancel" className="btn btn-gray-outline margin-right" onClick={() => { this.switchShowConfirmRevertModal(null); }} />
-                <input type="button" value="submit" className="btn btn-default" onClick={this.confirmRevert} />
+                <input type="button" value="submit" className="btn btn-default" disabled={this.state.revertStarted} onClick={this.confirmRevert} />
               </div>
             </div>
           </Modal.Body>
