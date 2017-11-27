@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
+// import { ProgressBar } from 'react-bootstrap';
 import { blur, change, Field, reduxForm, touch } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
@@ -52,6 +53,7 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class UploadPatientsForm extends Component {
   static propTypes = {
+    revertProgress: PropTypes.any,
     touchFields: PropTypes.func,
     formSyncErrors: PropTypes.object,
     addPatientStatus: PropTypes.object,
@@ -483,6 +485,7 @@ export default class UploadPatientsForm extends Component {
           {isImporting &&
             <div className="import-progress">
               <div className="control">
+                {/* {uploadResult !== null && <ProgressBar striped bsStyle="success" now={40} />}*/}
                 <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
                 {uploadResult !== null &&
                 <span className="upload-result">
@@ -500,6 +503,7 @@ export default class UploadPatientsForm extends Component {
         </Form>
         {(!showPreview && !isImporting) &&
           <UploadHistoryList
+            revertProgress={this.props.revertProgress}
             uploadHistory={uploadHistory}
             revert={this.revert}
           />
