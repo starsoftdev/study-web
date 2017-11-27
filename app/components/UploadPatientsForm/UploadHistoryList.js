@@ -140,7 +140,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
                   {`${(this.state.selectedHistoryItem) ? this.state.selectedHistoryItem.name : ''}?`}
                 </span>
               }
-              {this.state.revertStarted && <ProgressBar striped bsStyle="warning" now={this.state.revertProgress} />}
+              {this.state.revertStarted && <ProgressBar bsStyle="warning" now={this.state.revertProgress} />}
               <div className="btn-block text-center">
                 <input type="button" value="cancel" className="btn btn-gray-outline margin-right" onClick={() => { this.switchShowConfirmRevertModal(null); }} />
                 <input type="button" value="submit" className="btn btn-default" disabled={this.state.revertStarted} onClick={this.confirmRevert} />
