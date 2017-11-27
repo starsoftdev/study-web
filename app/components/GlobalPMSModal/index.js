@@ -135,7 +135,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
-      this.props.fetchSitePatients(currentUser.id);
+      this.props.fetchSitePatients(currentUser.id, 0, 10);
     }
 
     if (currentUser && currentUser.roleForClient) {
@@ -184,20 +184,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
   }
 
-  handleKeyPress(e) {
-    let value;
-    if (e && e.target) {
-      value = e.target.value;
-    } else {
-      value = e;
-    }
-
+  handleKeyPress() {
     if (this.state.searchTimer) {
       clearTimeout(this.state.searchTimer);
       this.setState({ searchTimer: null });
     }
     const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10, value);
+      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10);
     }, 500);
     this.setState({ searchTimer: timerH });
   }
@@ -207,6 +200,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   loadItems() {
+    if (this.props.sitePatients.fetching) {
+      return;
+    }
+
     const limit = 10;
     const offset = this.props.globalPMSPaginationOptions.page * 10;
     this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
@@ -214,7 +211,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages, sites, currentUser } = this.props;
-    const { siteLocation } = this.state;
     const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
 
@@ -240,10 +236,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         sitePatientArray.push(item);
       }
     });
-    let filteredPatients = sitePatients.details;
-    if (siteLocation && siteLocation !== '0') {
-      filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
-    }
+    const filteredPatients = sitePatients.details;
+    // if (siteLocation && siteLocation !== '0') {
+    //   filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
+    // }
 
     const sitePatientsListContents = filteredPatients.map((item, index) => {
       const firstname = item.first_name ? item.first_name.toUpperCase() : '';
@@ -399,7 +395,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (userId, offset, limit, search) => dispatch(fetchSitePatients(userId, offset, limit, search)),
+    fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),
