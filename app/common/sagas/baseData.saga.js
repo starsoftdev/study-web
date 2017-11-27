@@ -517,7 +517,7 @@ export function* fetchSitePatientsWatcher() {
     try {
       const requestURL = `${API_URL}/patients/patientsForUser`;
       let query = {};
-      if (formValues && formValues.name) {
+      if (formValues) {
         query = {
           userId,
           limit: limit || 10,
