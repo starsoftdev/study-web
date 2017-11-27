@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, put, fork, select } from 'redux-saga/effects';
+import { take, call, put, fork } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
@@ -72,10 +72,6 @@ import {
   SUBMIT_TO_CLIENT_PORTAL,
   SUBMIT_TO_SPONSOR_PORTAL,
 } from '../../containers/DashboardPortalsPage/constants';
-
-import {
-  selectGlobalPMSFormValues,
-} from '../../components/GlobalPMSModal/selectors';
 
 import {
   indicationsFetched,
@@ -512,23 +508,11 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset } = yield takeLatest(FETCH_SITE_PATIENTS);
-    const formValues = yield select(selectGlobalPMSFormValues());
+    const { userId, limit, offset, search } = yield take(FETCH_SITE_PATIENTS);
 
     try {
-      const requestURL = `${API_URL}/patients/patientsForUser`;
-      const params = {
-        method: 'GET',
-        query: {
-          userId,
-          limit: limit || 10,
-          offset: offset || 0,
-          search: formValues.name,
-          siteId: formValues.siteLocation,
-        },
-      };
-
-      const response = yield call(request, requestURL, params);
+      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}&limit=${limit || 10}&offset=${offset || 0}&search=${search || ''}`;
+      const response = yield call(request, requestURL);
 
       let hasMore = true;
       const page = ((offset || 0) / 10) + 1;
