@@ -116,7 +116,7 @@ export function* revertBulkUploadWatcher() {
         }),
       };
       yield call(request, requestURL, options);
-      const toastrOptions = {
+      /* const toastrOptions = {
         id: 'processToasterForRevertingPatients',
         type: 'success',
         message: 'Reverting...',
@@ -126,7 +126,7 @@ export function* revertBulkUploadWatcher() {
           showCloseButton: true,
         },
       };
-      yield put(toastrActions.add(toastrOptions));
+      yield put(toastrActions.add(toastrOptions));*/
     } catch (err) {
       yield put(revertBulkUploadError(err));
     }
