@@ -512,20 +512,29 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset } = yield takeLatest(FETCH_SITE_PATIENTS);
+    const { userId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
     const formValues = yield select(selectGlobalPMSFormValues());
-
     try {
       const requestURL = `${API_URL}/patients/patientsForUser`;
-      const params = {
-        method: 'GET',
-        query: {
+      let query = {};
+      if (formValues && formValues.name) {
+        query = {
           userId,
           limit: limit || 10,
           offset: offset || 0,
           search: formValues.name,
           siteId: formValues.siteLocation,
-        },
+        };
+      } else {
+        query = {
+          userId,
+          limit: limit || 10,
+          offset: offset || 0,
+        };
+      }
+      const params = {
+        method: 'GET',
+        query,
       };
 
       const response = yield call(request, requestURL, params);
