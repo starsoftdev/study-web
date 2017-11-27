@@ -485,7 +485,7 @@ export default class UploadPatientsForm extends Component {
           {isImporting &&
             <div className="import-progress">
               <div className="control">
-                {/* {uploadResult !== null && <ProgressBar striped bsStyle="success" now={40} />}*/}
+                {/* {uploadResult !== null && <ProgressBar bsStyle="success" now={40} />}*/}
                 <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
                 {uploadResult !== null &&
                 <span className="upload-result">
