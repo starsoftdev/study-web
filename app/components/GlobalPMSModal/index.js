@@ -9,7 +9,7 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { map, find } from 'lodash';
+import { filter, map, find } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
