@@ -172,6 +172,19 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.setState({ showIdleModal: false });
   }
 
+  renderEmailTutorial() {
+    const { currentUserRoleType } = this.props;
+    if (currentUserRoleType === 'client') {
+      return (
+        <EmailTutorialModal
+          showModal={this.state.showEmailTutorialModal}
+          closeModal={this.handleCloseEmailModal}
+        />
+      );
+    }
+    return null;
+  }
+
   render() {
     const { isLoggedIn, userData, pageEvents, currentUserRoleType } = this.props;
 
@@ -218,10 +231,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
             <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
-            <EmailTutorialModal
-              showModal={this.state.showEmailTutorialModal}
-              closeModal={this.handleCloseEmailModal}
-            />
+            {this.renderEmailTutorial()}
           </div>
         </IdleTimer>
       );
