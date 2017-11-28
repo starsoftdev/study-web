@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
-// import { ProgressBar } from 'react-bootstrap';
+import { ProgressBar } from 'react-bootstrap';
 import { blur, change, Field, reduxForm, touch } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
@@ -53,6 +53,7 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class UploadPatientsForm extends Component {
   static propTypes = {
+    uploadProgress: PropTypes.any,
     revertProgress: PropTypes.any,
     touchFields: PropTypes.func,
     formSyncErrors: PropTypes.object,
@@ -485,7 +486,7 @@ export default class UploadPatientsForm extends Component {
           {isImporting &&
             <div className="import-progress">
               <div className="control">
-                {/* {uploadResult !== null && <ProgressBar bsStyle="success" now={40} />}*/}
+                <ProgressBar bsStyle="success" now={this.props.uploadProgress} />
                 <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
                 {uploadResult !== null &&
                 <span className="upload-result">

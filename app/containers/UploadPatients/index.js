@@ -4,8 +4,6 @@ import Helmet from 'react-helmet';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 import { touch, reset } from 'redux-form';
-import { actions as toastrActions } from 'react-redux-toastr';
-import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
@@ -20,7 +18,12 @@ import {
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus } from './selectors';
 import { selectSocket } from '../../containers/GlobalNotifications/selectors';
-import { subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket } from '../../containers/GlobalNotifications/actions';
+import {
+  subscribeToUploadProgressSocket,
+  unsubscribeFromUploadProgressSocket,
+  subscribeToRevertProgressSocket,
+  unsubscribeFromRevertProgressSocket,
+} from '../../containers/GlobalNotifications/actions';
 
 import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory, patientsExported } from './actions';
 
@@ -52,13 +55,14 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     touchAddProtocolFields: PropTypes.func,
     setPatientsExported: PropTypes.func,
     notifyEmptyRowRequiredError: PropTypes.func,
+    subscribeToUploadProgressSocket: PropTypes.func,
+    unsubscribeFromUploadProgressSocket: PropTypes.func,
     subscribeToRevertProgressSocket: PropTypes.func,
     unsubscribeFromRevertProgressSocket: PropTypes.func,
     notifyValidationError: PropTypes.func,
     formValues: PropTypes.object,
     addProtocolProcess: PropTypes.object,
     socket: PropTypes.any,
-    toastrActions: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -72,6 +76,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       isImporting: false,
       socketId: null,
       jobId: null,
+      uploadProgress: 0,
       revertProgress: 0,
     };
 
@@ -97,20 +102,42 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   componentWillReceiveProps(newProps) {
     const { addProtocolProcess, fetchHistory, currentUser,
-      socket, toastrActions, clearForm, setPatientsExported, subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket } = this.props;
+      socket, clearForm, setPatientsExported, subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket,
+      subscribeToUploadProgressSocket, unsubscribeFromUploadProgressSocket } = this.props;
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
 
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
-        socket.on('notifyUploadFinish', (data) => {
-          this.setState({ uploadResult: data }, () => {
-            toastrActions.remove('loadingToasterForUploadPatients');
-            fetchHistory(currentUser.id);
-            clearForm();
-            setPatientsExported();
+        socket.on('uploadInitiated', (data) => {
+          console.log('uploadInitiated', data);
+          subscribeToUploadProgressSocket(data.bulkUploadId, data.jobId, (err, result) => {
+            console.log('subscribeToUploadProgressSocket', err, result);
+            if (!err && result.success) {
+              this.setState({ socketId: result.data.socketId, jobId: result.data.jobId });
+            }
           });
+        });
+
+        socket.on('uploadProgressNotification', (data) => {
+          if (parseInt(this.state.jobId) === data.jobId) {
+            this.setState({ uploadResult: data.res, uploadProgress: data.percents }, () => {
+              console.log('uploadProgressNotification', data, this.state.uploadProgress);
+              if (this.state.uploadProgress === 100) {
+                unsubscribeFromUploadProgressSocket(data.jobId, (err, result) => {
+                  console.log('unsubscribeFromUploadProgressSocket', err, result);
+                  if (!err && result.success) {
+                    this.setState({ socketId: null, jobId: null }, () => {
+                      fetchHistory(currentUser.id);
+                      clearForm();
+                      setPatientsExported();
+                    });
+                  }
+                });
+              }
+            });
+          }
         });
 
         socket.on('revertInitiated', (data) => {
@@ -128,7 +155,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
                 unsubscribeFromRevertProgressSocket(data.jobId, (err, result) => {
                   if (!err && result.success) {
                     this.setState({ socketId: null, jobId: null, revertProgress: 0 }, () => {
-                      // toastrActions.remove('processToasterForRevertingPatients');
                       fetchHistory(currentUser.id);
                     });
                   }
@@ -301,12 +327,12 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
   switchIsImporting() {
     const { isImporting } = this.state;
-    this.setState({ isImporting: !isImporting });
+    this.setState({ isImporting: !isImporting, uploadProgress: 0 });
   }
 
   render() {
     const { indications, fullSiteLocations, fetchHistory } = this.props;
-    const { isImporting, uploadResult, revertProgress } = this.state;
+    const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
     return (
       <div className="container-fluid">
@@ -317,6 +343,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
           <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             revertProgress={revertProgress}
+            uploadProgress={uploadProgress}
             isImporting={isImporting}
             uploadResult={uploadResult}
             fetchHistory={fetchHistory}
@@ -361,7 +388,6 @@ function mapDispatchToProps(dispatch) {
   return {
     setPatientsExported: () => dispatch(patientsExported()),
     clearForm: () => dispatch(reset(formName)),
-    toastrActions: bindActionCreators(toastrActions, dispatch),
     touchFields: () => dispatch(touch(formName, ...fields)),
     touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
     fetchIndications: () => dispatch(fetchIndications()),
@@ -372,6 +398,8 @@ function mapDispatchToProps(dispatch) {
     notifyValidationError: (hasError) => dispatch(validationError(hasError)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     exportPatients: (params) => dispatch(exportPatients(params)),
+    subscribeToUploadProgressSocket: (bulkUploadId, jobId, cb) => dispatch(subscribeToUploadProgressSocket(bulkUploadId, jobId, cb)),
+    unsubscribeFromUploadProgressSocket: (jobId, cb) => dispatch(unsubscribeFromUploadProgressSocket(jobId, cb)),
     subscribeToRevertProgressSocket: (bulkUploadId, jobId, cb) => dispatch(subscribeToRevertProgressSocket(bulkUploadId, jobId, cb)),
     unsubscribeFromRevertProgressSocket: (jobId, cb) => dispatch(unsubscribeFromRevertProgressSocket(jobId, cb)),
   };
