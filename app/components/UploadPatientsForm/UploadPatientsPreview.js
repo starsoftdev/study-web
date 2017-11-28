@@ -21,6 +21,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     super(props);
     this.state = {
       patients: [],
+      parseError: false,
       missingColumnNames: [],
       duplicatedColumnNames: [],
       missingKeys: [],
@@ -107,19 +108,23 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     const missingKeys = [];
     const firstPatientKeys = _.keys(patients[0]);
 
-    _.forEach(validKeys, (key) => {
-      const index = _.findIndex(firstPatientKeys, (k) => { return k.toLowerCase() === key.toLowerCase(); });
+    if (firstPatientKeys.length) {
+      _.forEach(validKeys, (key) => {
+        const index = _.findIndex(firstPatientKeys, (k) => { return k.toLowerCase() === key.toLowerCase(); });
 
-      if (index === -1) {
-        missingColumnNames.push(`"${key}" column name is missing.`);
-        missingKeys.push(key);
-      }
-    });
-
-    if (missingColumnNames.length) {
-      this.setState({ missingColumnNames, missingKeys }, () => {
-        setRequiredValidationResult(false, missingKeys);
+        if (index === -1) {
+          missingColumnNames.push(`"${key}" column name is missing.`);
+          missingKeys.push(key);
+        }
       });
+
+      if (missingColumnNames.length) {
+        this.setState({ missingColumnNames, missingKeys }, () => {
+          setRequiredValidationResult(false, missingKeys);
+        });
+      }
+    } else {
+      this.setState({ parseError: true });
     }
   }
 
@@ -217,8 +222,21 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   }
 
   render() {
-    const { missingColumnNames, duplicatedColumnNames } = this.state;
+    const { missingColumnNames, duplicatedColumnNames, parseError } = this.state;
     const errorMessages = _.union(missingColumnNames, duplicatedColumnNames);
+
+    if (parseError) {
+      return (
+        <div className="preview">
+          <div className="validation-messages error">
+
+            <span className="heading error">
+              Critical error when parse table.
+            </span>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="preview">
