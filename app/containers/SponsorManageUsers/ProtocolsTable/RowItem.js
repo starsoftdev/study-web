@@ -82,7 +82,9 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
       }
 
       _.forEach(options, (option, index) => {
-        options[index].value = _.find(item.studies, (o) => (o.protocol_id === option.id));
+        if (item.user.roleForSponsor && item.user.roleForSponsor.protocols) {
+          options[index].value = _.find(item.user.roleForSponsor.protocols, (o) => (o.id === option.id));
+        }
       });
 
       return (

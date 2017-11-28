@@ -16,7 +16,6 @@ import Input from '../Input/index';
 import * as Selector from '../../containers/StudyPage/selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitEmailBlast } from '../../containers/StudyPage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
-import { fetchClientCredits } from '../../containers/App/actions';
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
@@ -37,7 +36,6 @@ const mapDispatchToProps = (dispatch) => ({
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
   submitEmailBlast: (patients, message, from, subject, clientRoleId, onClose) => dispatch(submitEmailBlast(patients, message, from, subject, clientRoleId, onClose)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
 @reduxForm({
@@ -49,7 +47,6 @@ class EmailBlastForm extends React.Component {
   static propTypes = {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
