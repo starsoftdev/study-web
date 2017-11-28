@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
 import { touch } from 'redux-form';
-import _  from 'lodash';
+import _ from 'lodash';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { selectValues } from '../../common/selectors/form.selector';
