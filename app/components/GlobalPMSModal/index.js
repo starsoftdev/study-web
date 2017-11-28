@@ -9,7 +9,7 @@ import Sound from 'react-sound';
 import { connect } from 'react-redux';
 import { change, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import { filter, map, find } from 'lodash';
+import { map, find } from 'lodash';
 import { Link } from 'react-router';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
@@ -42,7 +42,7 @@ import {
   fetchPatientMessages,
   markAsReadPatientMessages,
   updateSitePatients,
-  fetchClientCredits,
+  clientCreditsFetched,
   addMessagesCountStat,
 } from '../../containers/App/actions';
 import {
@@ -76,7 +76,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     markAsReadPatientMessages: React.PropTypes.func,
     setChatTextValue: React.PropTypes.func,
     clientCredits: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
+    clientCreditsFetched: React.PropTypes.func,
     handleSubmit: React.PropTypes.func,
     hasError: React.PropTypes.bool,
     formValues: React.PropTypes.object,
@@ -115,7 +115,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.props.socket.on('notifyMessage', (newMessage) => {
         const socketMessage = newMessage;
         if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
-          this.props.fetchClientCredits(currentUser.id);
+          this.props.clientCreditsFetched({ customerCredits: { customerCredits: newMessage.customerCredits } });
           if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
             this.props.addMessagesCountStat(1);
@@ -135,7 +135,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
-      this.props.fetchSitePatients(currentUser.id);
+      this.props.fetchSitePatients(currentUser.id, 0, 10);
     }
 
     if (currentUser && currentUser.roleForClient) {
@@ -184,20 +184,13 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
   }
 
-  handleKeyPress(e) {
-    let value;
-    if (e && e.target) {
-      value = e.target.value;
-    } else {
-      value = e;
-    }
-
+  handleKeyPress() {
     if (this.state.searchTimer) {
       clearTimeout(this.state.searchTimer);
       this.setState({ searchTimer: null });
     }
     const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10, value);
+      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10);
     }, 500);
     this.setState({ searchTimer: timerH });
   }
@@ -207,6 +200,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   loadItems() {
+    if (this.props.sitePatients.fetching) {
+      return;
+    }
+
     const limit = 10;
     const offset = this.props.globalPMSPaginationOptions.page * 10;
     this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
@@ -214,7 +211,6 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
   render() {
     const { sitePatients, patientMessages, sendStudyPatientMessages, sites, currentUser } = this.props;
-    const { siteLocation } = this.state;
     const clientCredits = this.props.clientCredits;
     const sitePatientArray = [];
 
@@ -240,10 +236,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         sitePatientArray.push(item);
       }
     });
-    let filteredPatients = sitePatients.details;
-    if (siteLocation && siteLocation !== '0') {
-      filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
-    }
+    const filteredPatients = sitePatients.details;
+    // if (siteLocation && siteLocation !== '0') {
+    //   filteredPatients = filter(sitePatients.details, item => item.site_id === parseInt(siteLocation));
+    // }
 
     const sitePatientsListContents = filteredPatients.map((item, index) => {
       const firstname = item.first_name ? item.first_name.toUpperCase() : '';
@@ -399,7 +395,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (userId, offset, limit, search) => dispatch(fetchSitePatients(userId, offset, limit, search)),
+    fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),
@@ -407,7 +403,7 @@ function mapDispatchToProps(dispatch) {
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setChatTextValue: (value) => dispatch(change('chatPatient', 'body', value)),
-    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+    clientCreditsFetched: (payload) => dispatch(clientCreditsFetched(payload)),
     change: (field, value) => dispatch(change('globalPMS', field, value)),
     incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
     addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
