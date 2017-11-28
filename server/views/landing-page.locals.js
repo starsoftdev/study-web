@@ -8,7 +8,7 @@ module.exports = (landing) => {
   const cityAndState = (city && state) ? ` ${city}, ${state}` : '';
   const location = landing.locationMask ? ` ${landing.locationMask}` : cityAndState;
   const indication = landing.indication;
-  const title = (landing.title) ? landing.title : indication;
+  const title = (landing.title) ? landing.title : landing.studyName;
   const fullNamePlaceholder = (landing.fullNamePlaceholder) ? landing.fullNamePlaceholder : '* Full Name';
   const emailPlaceholder = (landing.emailPlaceholder) ? landing.emailPlaceholder : '* Email';
   const phonePlaceholder = (landing.phonePlaceholder) ? landing.phonePlaceholder : '* Mobile Phone';

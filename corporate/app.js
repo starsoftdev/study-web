@@ -75,6 +75,7 @@ const routes = {
     { path: '/it/indication/:indication', component: Indication },
     { path: '/pl/indication/:indication', component: Indication },
     { path: '/uk/indication/:indication', component: Indication },
+    { path: '/hu/indication/:indication', component: Indication },
     { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
@@ -87,6 +88,7 @@ const routes = {
     { path: '/it', component: Home },
     { path: '/pl', component: Home },
     { path: '/uk', component: Home },
+    { path: '/hu', component: Home },
     { path: '*', component: NotFound },
   ],
 };
