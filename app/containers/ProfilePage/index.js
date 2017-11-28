@@ -55,7 +55,6 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
       address: values.address,
       countryCode: values.countryCode,
       zip: values.zip,
-      needSetup: false,
     });
   }
 
