@@ -58,3 +58,6 @@ export const GET_TOTAL_PATIENTS_COUNT           = 'PatientDatabasePage/GET_TOTAL
 export const GET_TOTAL_PATIENTS_COUNT_SUCCESS   = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_SUCCESS';
 export const GET_TOTAL_PATIENTS_COUNT_ERROR     = 'PatientDatabasePage/GET_TOTAL_PATIENTS_COUNT_ERROR';
 export const SUBMIT_EMAIL_BLAST                 = 'StudyPage/SUBMIT_EMAIL_BLAST';
+export const ADD_PROTOCOL                       = 'PatientDatabasePage/ADD_PROTOCOL';
+export const ADD_PROTOCOL_SUCCESS               = 'PatientDatabasePage/ADD_PROTOCOL_SUCCESS';
+export const ADD_PROTOCOL_ERROR                 = 'StudyPage/ADD_PROTOCOL_ERROR';

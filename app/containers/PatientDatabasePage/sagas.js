@@ -3,6 +3,7 @@
 import React from 'react';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { reset } from 'redux-form';
 import { actions as toastrActions, toastr } from 'react-redux-toastr';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
@@ -24,6 +25,7 @@ import {
   SUBMIT_EMAIL_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
+  ADD_PROTOCOL,
 } from './constants';
 
 import {
@@ -43,6 +45,8 @@ import {
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
+  addProtocolSucceess,
+  addProtocolError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -58,6 +62,7 @@ export function* patientDatabasePageSaga() {
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
   const watcherL = yield fork(getTotalPatientsCountWatcher);
+  const watcherM = yield fork(addProtocolWatcher);
   const watcherZ = yield fork(submitEmailBlast);
 
   yield take(LOCATION_CHANGE);
@@ -76,6 +81,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherJ);
   yield cancel(watcherK);
   yield cancel(watcherL);
+  yield cancel(watcherM);
   yield cancel(watcherZ);
 }
 
@@ -606,6 +612,33 @@ function* submitAddPatient() {
       toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* addProtocolWatcher() {
+  while (true) {
+    const { payload } = yield take(ADD_PROTOCOL);
+    try {
+      const requestURL = `${API_URL}/studies/addProtocol`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const response = yield call(request, requestURL, params);
+
+      toastr.success('Add Protocol', 'The request has been submitted successfully');
+      yield put(addProtocolSucceess(response));
+
+      yield put(reset('addProtocol'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      toastr.error('', errorMessage);
+      yield put(addProtocolError(err));
+      // if returns forbidden we remove the token from local storage
+      if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }
