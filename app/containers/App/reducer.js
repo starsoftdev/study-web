@@ -1470,7 +1470,7 @@ export default function appReducer(state = initialState, action) {
 
       resultState = {
         ...state,
-        userData: { ...state.userData, timezone: payload.timezone, city: payload.city, address: payload.address },
+        userData: { ...state.userData, timezone: payload.timezone, city: payload.city, address: payload.address, needSetup: payload.needSetup },
         baseData: {
           ...state.baseData,
           ...baseDataInnerState,
