@@ -232,7 +232,8 @@ function* fetchStudyTextStats(action) {
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
-    toastr.error('', 'Error! Text stats has been disabled.');
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
+    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
