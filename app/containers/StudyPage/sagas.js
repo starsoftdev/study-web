@@ -36,6 +36,7 @@ GENERATE_PATIENT_REFERRAL,
 DOWNLOAD_PATIENT_REFERRAL,
 SUBMIT_EMAIL,
 FETCH_EMAILS,
+FETCH_STUDY_NEW_TEXTS,
 } from './constants';
 
 import {
@@ -46,6 +47,7 @@ import {
   patientCategoriesFetched,
   patientsFetched,
   patientsFetchedError,
+  textStatsFetched,
   patientDetailsFetched,
   patientsExported,
   protocolFetched,
@@ -205,37 +207,36 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 //   }
 // }
 
-// function* fetchStudyTextStats(action) {
-//   const authToken = getItem('auth_token');
-//   if (!authToken) {
-//     return;
-//   }
-//   // listen for the latest FETCH_STUDY action
-//   const { studyId, campaignId, sourceId } = action;
-//
-//   try {
-//     const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
-//     const options = {
-//       method: 'GET',
-//     };
-//     if (campaignId || sourceId) {
-//       options.query = {};
-//     }
-//     if (campaignId) {
-//       options.query.campaignId = campaignId;
-//     }
-//     if (sourceId) {
-//       options.query.sourceId = sourceId;
-//     }
-//     const response = yield call(request, requestURL, options);
-//     yield put(textStatsFetched(response));
-//   } catch (e) {
-//     toastr.error('', 'Error! Text stats has been disabled.');
-//     if (e.status === 401) {
-//       yield call(() => { location.href = '/login'; });
-//     }
-//   }
-// }
+function* fetchStudyTextStats(action) {
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId, sourceId } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+    const options = {
+      method: 'GET',
+    };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
+    const response = yield call(request, requestURL, options);
+    yield put(textStatsFetched(response));
+  } catch (e) {
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
 
 function* fetchPatientCategories() {
   const authToken = getItem('auth_token');
@@ -1036,9 +1037,9 @@ export function* fetchStudySaga() {
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
     const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
-    // const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
-    // watch for socket.io or filtering actions that will refresh the text message stats
-    // const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
+    // watch for filtering actions that will refresh the text message stats
+    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -1066,8 +1067,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherD);
-    // yield cancel(watcherE);
-    // yield cancel(refreshTextStatsWatcher);
+    yield cancel(watcherE);
+    yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
