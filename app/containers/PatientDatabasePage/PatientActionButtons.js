@@ -7,40 +7,62 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
+import { touch } from 'redux-form';
+import _  from 'lodash';
 
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { selectValues } from '../../common/selectors/form.selector';
 import CenteredModal from '../../components/CenteredModal/index';
-import { selectImportPatientsStatus } from '../../containers/PatientDatabasePage/selectors';
-import { selectCurrentUserClientId } from '../App/selectors';
+import { selectImportPatientsStatus, selectAddProtocolProcessStatus } from '../../containers/PatientDatabasePage/selectors';
+import { addProtocol } from '../../containers/PatientDatabasePage/actions';
+import { selectCurrentUserClientId, selectIndications, selectClientSites, selectCurrentUser } from '../App/selectors';
 import AlertModal from '../../components/AlertModal';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 import TextEmailBlastModal from '../../containers/PatientDatabasePage/TextEmailBlastModal';
 import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index';
 import EmailBlastModal from '../../components/PatientDatabaseEmailBlastModal/index';
+import NewProtocolForm from '../../components/AddNewProtocolForm/index';
+import { addProtocolFields } from '../../components/AddNewProtocolForm/validator';
 
 const formName = 'PatientDatabase.TextBlastModal';
 const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  indications: selectIndications(),
+  fullSiteLocations : selectClientSites(),
   clientId: selectCurrentUserClientId(),
   formValues: selectValues(formName),
   importPatientsStatus: selectImportPatientsStatus(),
+  addProtocolProcess: selectAddProtocolProcessStatus(),
 });
 
-const mapDispatchToProps = () => ({
-});
+function mapDispatchToProps(dispatch) {
+  return {
+    addProtocol: (payload) => dispatch(addProtocol(payload)),
+    touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
+  };
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class PatientActionButtons extends React.Component {
   static propTypes = {
+    touchAddProtocolFields: React.PropTypes.func,
+    addProtocol: React.PropTypes.func,
+    indications: React.PropTypes.array.isRequired,
+    fullSiteLocations: React.PropTypes.object,
+    currentUser: React.PropTypes.object,
+    addProtocolProcess: React.PropTypes.object,
     clientId: React.PropTypes.number,
     formValues: React.PropTypes.object,
     importPatientsStatus: React.PropTypes.object,
     paginationOptions: React.PropTypes.object,
     searchPatients: React.PropTypes.func,
+    showAddProtocolModal: React.PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      showAddProtocolModal: false,
       showImportPatientsModal: false,
       showAddPatientModal: false,
       showTextEmailBlastModal: false,
@@ -59,6 +81,14 @@ export default class PatientActionButtons extends React.Component {
     this.closeEmailBlastModal = this.closeEmailBlastModal.bind(this);
     this.download = this.download.bind(this);
     this.renderUpload = this.renderUpload.bind(this);
+    this.addProtocol = this.addProtocol.bind(this);
+    this.toggleAddProtocolModal = this.toggleAddProtocolModal.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== this.props.addProtocolProcess.fetching) {
+      this.toggleAddProtocolModal();
+    }
   }
 
   toggleImportPatientsModal() {
@@ -72,6 +102,36 @@ export default class PatientActionButtons extends React.Component {
       showImportPatientsModal: !this.state.showImportPatientsModal,
       showAddPatientModal: !this.state.showAddPatientModal,
     });
+  }
+
+  toggleAddProtocolModal() {
+    this.setState({
+      showAddProtocolModal: !this.state.showAddProtocolModal,
+      showAddPatientModal: !this.state.showAddPatientModal,
+    });
+  }
+
+  addProtocol(err, data) {
+    const { fullSiteLocations, indications, currentUser, addProtocol, touchAddProtocolFields } = this.props;
+    if (!err) {
+      const siteLocation = _.find(fullSiteLocations.details, { id: data.siteLocation });
+      const indication = _.find(indications, { id: data.indication_id });
+
+      const params = {
+        ...data,
+        siteLocationName: siteLocation.name,
+        indicationName: indication.name,
+        user_id: currentUser.id,
+        currentUser,
+        client_id: currentUser.roleForClient.client_id,
+        stripeCustomerId: currentUser.roleForClient.client.stripeCustomerId,
+      };
+      params.recruitmentPhone = normalizePhoneForServer(data.recruitmentPhone);
+      addProtocol(params);
+    } else {
+      console.log('addProtocol', err, data);
+      touchAddProtocolFields();
+    }
   }
 
   closeAddPatientModal() {
@@ -165,6 +225,7 @@ export default class PatientActionButtons extends React.Component {
   }
 
   render() {
+    const { indications, fullSiteLocations } = this.props;
     const isPatientSelected = (this.props.formValues.patients && this.props.formValues.patients.length > 0);
     return (
       <div>
@@ -234,7 +295,22 @@ export default class PatientActionButtons extends React.Component {
             </a>
           </Modal.Header>
           <Modal.Body>
-            <AddPatientForm onClose={this.closeAddPatientModal} />
+            <AddPatientForm onClose={this.closeAddPatientModal} switchShowAddProtocolModal={this.toggleAddProtocolModal} />
+          </Modal.Body>
+        </Modal>
+        <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.toggleAddProtocolModal}>
+          <Modal.Header>
+            <Modal.Title>ADD NEW PROTOCOL</Modal.Title>
+            <a className="lightbox-close close" onClick={this.toggleAddProtocolModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <NewProtocolForm
+              onSubmit={this.addProtocol}
+              fullSiteLocations={fullSiteLocations}
+              indications={indications}
+            />
           </Modal.Body>
         </Modal>
       </div>

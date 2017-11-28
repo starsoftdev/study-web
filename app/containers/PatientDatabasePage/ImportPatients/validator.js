@@ -22,8 +22,11 @@ const schema = {
       message: '^Invalid Email domain',
     },
   },
-  indication: {
+  protocol: {
     presence: true,
+  },
+  indication: {
+    presence: false,
   },
   phone: {
     presence: {
