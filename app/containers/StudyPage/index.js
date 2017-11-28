@@ -20,7 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched, movePatientBetweenCategoriesSuccess } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
@@ -57,6 +57,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
     textStatsFetched: React.PropTypes.func,
+    movePatientBetweenCategoriesSuccess: PropTypes.func,
   };
 
   static defaultProps = {
@@ -69,9 +70,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     super(props);
     this.state = {
       socketBinded: false,
+      cancelSocketUpdate: false,
       isSubscribedToUpdateStats: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onPatientDragged = this.onPatientDragged.bind(this);
   }
 
   componentWillMount() {
@@ -89,13 +92,21 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage, movePatientBetweenCategoriesSuccess } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
           this.setState({ isSubscribedToUpdateStats: true }, () => {
             clientOpenedStudyPage(params.id);
           });
+        });
+
+        socket.on('notifyStudyPatientCategoryChanged', (data) => {
+          if (!this.state.cancelSocketUpdate) {
+            movePatientBetweenCategoriesSuccess(data.oldPatientCategory, data.newPatientCategory, 1, data.patientId, moment().toISOString());
+          }
+
+          this.setState({ cancelSocketUpdate: false });
         });
 
         socket.on('notifyStudyPageMessage', (message) => {
@@ -198,6 +209,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
+  onPatientDragged() {
+    this.setState({ cancelSocketUpdate: true });
+  }
+
   handleSubmit(searchFilter) {
     const { params: { id } } = this.props;
     this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId);
@@ -268,6 +283,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           />
           <StudyStats stats={stats} />
           <PatientBoard
+            onPatientDragged={this.onPatientDragged}
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
             site={site}
@@ -311,6 +327,7 @@ function mapDispatchToProps(dispatch) {
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    movePatientBetweenCategoriesSuccess: (fromCategoryId, toCategoryId, orderNumber, patientId, updatedAt) => dispatch(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, orderNumber, patientId, updatedAt)),
   };
 }
 
