@@ -379,15 +379,12 @@ export function updateSelectAll(value) {
   };
 }
 
-export function submitEmailBlast(filter, uncheckedPatients, message, from, subject, clientRoleId, onClose) {
+export function submitEmailBlast(formValues, clientRoleId, currentUser, onClose) {
   return {
     type: SUBMIT_EMAIL_BLAST,
-    filter,
-    uncheckedPatients,
-    message,
-    from,
-    subject,
+    formValues,
     clientRoleId,
+    currentUser,
     onClose,
   };
 }
