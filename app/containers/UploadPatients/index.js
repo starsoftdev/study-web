@@ -111,9 +111,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('uploadInitiated', (data) => {
-          console.log('uploadInitiated', data);
           subscribeToUploadProgressSocket(data.bulkUploadId, data.jobId, (err, result) => {
-            console.log('subscribeToUploadProgressSocket', err, result);
             if (!err && result.success) {
               this.setState({ socketId: result.data.socketId, jobId: result.data.jobId });
             }
@@ -123,10 +121,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         socket.on('uploadProgressNotification', (data) => {
           if (parseInt(this.state.jobId) === data.jobId) {
             this.setState({ uploadResult: data.res, uploadProgress: data.percents }, () => {
-              console.log('uploadProgressNotification', data, this.state.uploadProgress);
               if (this.state.uploadProgress === 100) {
                 unsubscribeFromUploadProgressSocket(data.jobId, (err, result) => {
-                  console.log('unsubscribeFromUploadProgressSocket', err, result);
                   if (!err && result.success) {
                     this.setState({ socketId: null, jobId: null }, () => {
                       fetchHistory(currentUser.id);
