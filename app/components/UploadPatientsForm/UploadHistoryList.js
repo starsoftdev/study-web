@@ -39,14 +39,16 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
       if (newProps.revertProgress === 100) {
         setTimeout(() => {
-          this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: null, revertProgress: 0 });
+          if (this.state.showConfirmRevertModal) {
+            this.setState({ showConfirmRevertModal: false, selectedHistoryItem: null, revertProgress: 0 });
+          }
         }, 2000);
       }
     }
   }
 
   switchShowConfirmRevertModal(item) {
-    this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: item });
+    this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: item, revertProgress: 0 });
   }
 
   confirmRevert() {
