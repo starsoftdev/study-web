@@ -15,7 +15,7 @@ import NotificationBox from './NotificationBox';
 import AvatarMenu from './AvatarMenu';
 import HelpMenu from './HelpMenu';
 
-import { fetchClientCredits, fetchPatientMessageUnreadCount, fetchSitePatients } from '../../containers/App/actions';
+import { fetchClientCredits, clientCreditsFetched, fetchPatientMessageUnreadCount, fetchSitePatients } from '../../containers/App/actions';
 import {
   selectCurrentUser,
   selectCurrentUserClientId,
@@ -36,6 +36,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     currentUserClientId: PropTypes.number,
     fetchSitePatients: React.PropTypes.func,
     fetchClientCredits: React.PropTypes.func,
+    clientCreditsFetched: React.PropTypes.func,
     fetchPatientMessageUnreadCount: PropTypes.func,
     logout: React.PropTypes.func,
     sitePatients: React.PropTypes.object,
@@ -72,9 +73,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
-        socket.on('notifyChangePoints', (clientId) => {
+        socket.on('notifyChangePoints', (clientId, newCreditsAmount) => {
           if (currentUser.roleForClient && currentUser.roleForClient.client_id === clientId) {
-            this.props.fetchClientCredits(currentUser.id);
+            this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount } });
           }
         });
       });
@@ -264,6 +265,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  clientCreditsFetched: (payload) => dispatch(clientCreditsFetched(payload)),
   logout: () => dispatch(logout()),
   fetchPatientMessageUnreadCount: (currentUser) => dispatch(fetchPatientMessageUnreadCount(currentUser)),
 });

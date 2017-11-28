@@ -625,7 +625,7 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         allClientUsers: {
-          details: [],
+          details: state.allClientUsers.details,
           fetching: true,
           error: null,
         },
@@ -634,7 +634,7 @@ export default function dashboardPageReducer(state = initialState, action) {
       return {
         ...state,
         allClientUsers: {
-          details: action.payload,
+          details: action.payload.map(e => (e.isChecked ? e : state.allClientUsers.details.find((el) => (el.user_id === e.user_id && el.isChecked)) || e)),
           fetching: false,
           error: null,
         },
