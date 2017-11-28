@@ -105,3 +105,8 @@ export const selectIsFetchingProtocols = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.protocols.fetching`, false)
 );
+
+export const selectAddProtocolProcessStatus = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (subState) => subState.addProtocolProcess
+);
