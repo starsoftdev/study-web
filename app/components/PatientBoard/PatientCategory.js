@@ -32,6 +32,7 @@ const patientTarget = {
     }
 
     const patientDragSwitcher = (category, item, patientId) => {
+      props.onPatientDragged();
       if (category.name === 'Scheduled') {
         // store the scheduled patient information temporarily since the user could cancel out of their category movement
         // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
@@ -161,6 +162,8 @@ class PatientCategory extends React.Component {
 
       // sort the patients into the categories
       const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
+
+      console.log('sorted', sorted);
 
       return (
         <div className="slide">
