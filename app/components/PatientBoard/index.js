@@ -75,6 +75,7 @@ class PatientBoard extends React.Component {
     ePMS: React.PropTypes.bool,
     fetchingPatients: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
+    onPatientDragged: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -93,6 +94,7 @@ class PatientBoard extends React.Component {
     this.resetFormsValues = this.resetFormsValues.bind(this);
     this.onPatientScheduleSubmit = this.onPatientScheduleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.onPatientDragged = this.onPatientDragged.bind(this);
   }
 
   componentDidMount() {
@@ -118,6 +120,11 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
+  }
+
+  onPatientDragged() {
+    const { onPatientDragged } = this.props;
+    onPatientDragged();
   }
 
   onPatientDraggedToScheduled(patientId, patientCategoryId, scheduledCategoryId) {
@@ -273,7 +280,14 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+                <PatientCategory
+                  key={patientCategory.id}
+                  category={patientCategory}
+                  onPatientClick={this.onPatientClick}
+                  onPatientTextClick={this.onPatientTextClick}
+                  onPatientDragged={this.onPatientDragged}
+                  onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
+                />
               ))}
             </ul>
           </nav>
