@@ -236,7 +236,7 @@ export class ReportViewTable extends React.Component {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th onClick={this.sortBy} data-sort="credits" className={`messaging_credit th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>MESSAGING CREDITS <i className="caret-arrow" /></th>
+                      <th onClick={this.sortBy} data-sort="credits" className={`messaging_credit th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT CREDITS <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
