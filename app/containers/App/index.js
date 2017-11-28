@@ -76,6 +76,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showChangePwdModal: true });
     }
 
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
+      this.setState({ showSetTimeZoneModal: true });
+    } else {
+      this.setState({ showSetTimeZoneModal: false });
+    }
+
     if (nextProps.userData && nextProps.userData.needEmailCreditTutorial && nextProps.userData.id) {
       this.setState({ showEmailTutorialModal: true });
     } else {
