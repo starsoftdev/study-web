@@ -45,6 +45,9 @@ import {
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
   SUBMIT_EMAIL_BLAST,
+  ADD_PROTOCOL,
+  ADD_PROTOCOL_SUCCESS,
+  ADD_PROTOCOL_ERROR,
 } from './constants';
 
 export function fetchPatients(clientId, searchParams = {}, patients = {}, searchFilter = {}, isExport = false) {
@@ -386,5 +389,26 @@ export function submitEmailBlast(filter, uncheckedPatients, message, from, subje
     subject,
     clientRoleId,
     onClose,
+  };
+}
+
+export function addProtocol(payload) {
+  return {
+    type: ADD_PROTOCOL,
+    payload,
+  };
+}
+
+export function addProtocolSucceess(payload) {
+  return {
+    type: ADD_PROTOCOL_SUCCESS,
+    payload,
+  };
+}
+
+export function addProtocolError(payload) {
+  return {
+    type: ADD_PROTOCOL_ERROR,
+    payload,
   };
 }
