@@ -9,7 +9,6 @@ import {
 } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
-import moment from 'moment-timezone';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
@@ -60,7 +59,6 @@ export default function* loginSaga() {
       // remove jwt token from localstorage
       yield call(removeItem, 'auth_token');
       yield call(removeItem, 'user_id');
-      yield call(removeItem, 'auth_time');
     }
   }
 }
@@ -76,7 +74,6 @@ export function* authorize(data) {
     // store auth token to localstorage
     yield call(setItem, 'auth_token', response.id);
     yield call(setItem, 'user_id', response.userId);
-    yield call(setItem, 'auth_time', moment().valueOf());
     // yield call(setItem, 'auth_token_ttl', response.ttl);
     yield put(setAuthState(true));
 
@@ -132,7 +129,6 @@ export function* logout() {
 
     yield call(removeItem, 'auth_token');
     yield call(removeItem, 'user_id');
-    yield call(removeItem, 'auth_time');
   } catch (err) {
     // yield put()
   }
