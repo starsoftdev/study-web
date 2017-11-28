@@ -86,18 +86,21 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
           <tbody>
             {
             uploadHistory.details.map((item) => {
-              const date = moment(item.date);
+              const createdDate = moment(item.date);
+              const currentDate = moment();
+              const revertAvailable = createdDate.isBefore(currentDate.subtract(2, 'days'), 'day');
+
               return (
                 <tr key={_.uniqueId()}>
                   <td>{item.name}</td>
                   <td>{`${item.first_name} ${item.last_name}`}</td>
-                  <td>{date.format('MM/DD/YY')}</td>
-                  <td>{date.format('hh:mm A')}</td>
+                  <td>{createdDate.format('MM/DD/YY')}</td>
+                  <td>{createdDate.format('hh:mm A')}</td>
                   <td className="status">{item.status}</td>
                   <td>
                     <input
                       type="button"
-                      disabled={item.status === 'reverted'}
+                      disabled={(item.status === 'reverted') || revertAvailable}
                       value="Revert"
                       className="btn btn-gray-outline margin-right"
                       onClick={() => { this.switchShowConfirmRevertModal(item); }}
