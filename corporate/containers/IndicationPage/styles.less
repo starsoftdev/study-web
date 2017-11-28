@@ -236,9 +236,21 @@ div.toggle.has-error > div:first-child {
   }
 }
 
-.form-find-studies{
+.form-find-studies {
   position: relative;
   z-index: 2;
+  .country-code {
+    .Select.form-control {
+      &.has-value {
+        .Select-control {
+          .Select-clear-zone {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  
 }
 
 .post {
