@@ -60,6 +60,9 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
 
   render() {
     const me = this.props.params.userId === 'me';
+    const { currentUser, otherUser } = this.props;
+    const initialTimezoneValue = currentUser.address ? formatTimezone((me ? currentUser.timezone : otherUser.info.timezone),
+      (me ? currentUser.city : otherUser.info.city)) : '';
 
     return (
       <div className="container-fluid">
@@ -72,18 +75,18 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
               {(() => {
                 const initialValues = {
                   initialValues: {
-                    ...(me ? this.props.currentUser : this.props.otherUser.info),
-                    timezone: formatTimezone((me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone), (me ? this.props.currentUser.city : this.props.otherUser.info.city)),
-                    timezoneUnparsed: (me ? this.props.currentUser.timezone : this.props.otherUser.info.timezone),
+                    ...(me ? currentUser : otherUser.info),
+                    timezone: initialTimezoneValue,
+                    timezoneUnparsed: (me ? currentUser.timezone : otherUser.info.timezone),
                   },
                 };
 
-                return (me || this.props.otherUser.info) && <ProfileForm
+                return (me || otherUser.info) && <ProfileForm
                   {...initialValues}
                   changePasswordResult={this.props.changePasswordResult}
                   changePassword={this.changePassword}
                   changeImage={this.changeImage}
-                  currentUser={me ? this.props.currentUser : this.props.otherUser.info}
+                  currentUser={me ? currentUser : otherUser.info}
                   userRoleType={this.props.userRoleType}
                   me={me}
                   formValues={this.props.formValues}
