@@ -16,7 +16,6 @@ import ChangePasswordForm from '../../components/ChangePasswordForm';
 import ProfileImageForm from '../../components/ProfileImageForm';
 import defaultImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import CenteredModal from '../../components/CenteredModal/index';
-import profileFormValidator from './validator';
 import { formatTimezone } from '../../utils/time';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 
@@ -47,7 +46,7 @@ const toShortCode = country => {
   }
 };
 
-@reduxForm({ form: 'profile', validate: profileFormValidator })
+@reduxForm({ form: 'profile' })
 class ProfileForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: React.PropTypes.object,
@@ -81,7 +80,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
-    const { timezone, dispatch, formValues, initialValues } = this.props;
+    const { timezone, dispatch, formValues } = this.props;
 
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
       this.closeResetPasswordModal();
@@ -89,9 +88,6 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     if (newProps.timezone && newProps.timezone !== timezone) {
       dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone, formValues.city)));
       dispatch(change('profile', 'timezoneUnparsed', newProps.timezone));
-    }
-    if (initialValues && !initialValues.address) {
-      this.props.initialValues.timezone = '';
     }
   }
 
@@ -260,7 +256,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           />
         </div>
         <div className="field-row fs-hide">
-          <strong className="label required"><label>Address</label></strong>
+          <strong className="label"><label>Address</label></strong>
           <div className="field">
             <Field
               name="address"
@@ -279,6 +275,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             <div className="field">
               <Field
                 name="timezone"
+                placeholder="Timezone"
                 component={Input}
                 type="text"
                 isDisabled
