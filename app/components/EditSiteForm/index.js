@@ -41,8 +41,6 @@ const toShortCode = country => {
       return 'fr';
     case 'Germany':
       return 'de';
-    case 'Hungary':
-      return 'hu';
     case 'Italy':
       return 'it';
     case 'Czech Republic':
