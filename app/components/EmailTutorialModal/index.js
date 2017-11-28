@@ -6,6 +6,8 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
+import classnames from 'classnames';
+import _ from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import img1 from '../../assets/images/email_tutorial_1.png';
@@ -56,15 +58,11 @@ class EmailTutorialModal extends React.Component { // eslint-disable-line react/
         id="email-tutorial-modal"
         dialogComponentClass={CenteredModal}
         show={this.props.showModal}
-        onHide={this.props.closeModal}
         backdrop
         keyboard
       >
         <Modal.Header>
           <Modal.Title>Email Tutorial</Modal.Title>
-          <a className="lightbox-close close" onClick={this.props.closeModal}>
-            <i className="icomoon-icon_close" />
-          </a>
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
@@ -74,11 +72,19 @@ class EmailTutorialModal extends React.Component { // eslint-disable-line react/
           </div>
           <div className="nav">
             <div className="row">
-              <div className="col-xs-6 text-left">
-                { step > 0 && <a className="lightbox-close btn btn-primary" onClick={handlePrev}>Previous</a> }
+              <div className="col-xs-4 text-left">
+                { step > 0 && <a className="lightbox-close btn btn-gray-outline" onClick={handlePrev}>Previous</a> }
               </div>
-              <div className="col-xs-6 text-right">
-                { step < this.images.length - 1 && <a className="lightbox-close btn btn-primary" onClick={handleNext}>Next</a> }
+              <div className="col-xs-4 text-center dotnav">
+                <ul className="dotnav-dots">
+                  {
+                    _.map(this.images, (v, i) => (<li key={i} className={classnames('dotnav-dot', { 'dotnav-dot_active': step === i })}></li>)
+                    )
+                  }
+                </ul>
+              </div>
+              <div className="col-xs-4 text-right">
+                <a className="lightbox-close btn btn-primary" onClick={handleNext}>{ step < this.images.length - 1 ? 'Next' : 'Finish'}</a>
               </div>
             </div>
           </div>
