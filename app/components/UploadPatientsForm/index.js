@@ -220,8 +220,8 @@ export default class UploadPatientsForm extends Component {
     const f = files[0];
     const name = f ? f.name : '';
     const reader = new FileReader();
-    console.log('f', f);
-    console.log('name', name);
+    // console.log('f', f);
+    // console.log('name', name);
     reader.onload = function (e) {
       let data = e.target.result;
       if (!rABS) data = new Uint8Array(data);
@@ -229,9 +229,15 @@ export default class UploadPatientsForm extends Component {
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
-      scope.setState({ fileName: name, patients: json }, () => {
-        scope.props.setFileName(name);
-      });
+      if (json.length >= 20000) {
+        toastr.error('', 'Error! Too many records.');
+      } else if (f.size >= 51200000) {
+        toastr.error('', 'Error! More than 50MB.');
+      } else {
+        scope.setState({ fileName: name, patients: json }, () => {
+          scope.props.setFileName(name);
+        });
+      }
     };
 
     if (rABS) {
