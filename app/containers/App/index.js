@@ -30,6 +30,7 @@ import { logout } from '../../containers/LoginPage/actions';
 import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions';
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
 import EmailTutorialModal from '../../components/EmailTutorialModal';
 import IdleModal from '../../components/IdleModal';
 
@@ -61,6 +62,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       forceLogout: 36000000, // 10 hours in milliseconds
       timeout: 7200000, // 2 hours in milliseconds
       showChangePwdModal: false,
+      showSetTimeZoneModal: false,
       showEmailTutorialModal: false,
       showIdleModal: false,
     };
@@ -100,6 +102,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
       this.setState({ showSetTimeZoneModal: true });
+      this.props.updateUser(nextProps.userData.id, { needSetup: false });
     } else {
       this.setState({ showSetTimeZoneModal: false });
     }
@@ -242,6 +245,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             {React.Children.toArray(this.props.children)}
           </main>
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
