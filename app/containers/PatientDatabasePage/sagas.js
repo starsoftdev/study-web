@@ -518,7 +518,7 @@ function* submitTextBlast() {
 function* submitEmailBlast() {
   while (true) {
     // listen for the SUBMIT_EMAIL_BLAST action
-    const { filter, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+    const { formValues, clientRoleId, currentUser, onClose } = yield take(SUBMIT_EMAIL_BLAST);
 
     const authToken = getItem('auth_token');
     if (!authToken) {
@@ -528,16 +528,41 @@ function* submitEmailBlast() {
     try {
       const requestURL = `${API_URL}/emails/addBlastEmails`;
 
+      let reqParams = {};
+      if (!formValues.selectAllUncheckedManually) {
+        reqParams = {
+          selectAll: true,
+          message: formValues.message,
+          from: formValues.email,
+          subject: formValues.subject,
+          clientRoleId,
+          patientsIDs: [],
+          queryParams: {
+            ...formValues.queryParams,
+            filter: {
+              ...formValues.queryParams.filter,
+              limit: null,
+              offset: null,
+            },
+          },
+        };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
+      } else {
+        reqParams = {
+          patientsIDs: formValues.patients.map(patient => patient.id),
+          message: formValues.message,
+          from: formValues.email,
+          subject: formValues.subject,
+          clientRoleId,
+        };
+      }
+      reqParams.currentUser = currentUser;
+
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify({
-          filter,
-          uncheckedPatients,
-          from,
-          subject,
-          clientRoleId,
-          message,
-        }),
+        body: JSON.stringify(reqParams),
       });
       onClose();
       toastr.success('', 'Success! Your email blast have been sent.');
