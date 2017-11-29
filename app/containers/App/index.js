@@ -20,6 +20,7 @@ import IdleTimer from 'react-idle-timer';
 import LogRocket from 'logrocket';
 import moment from 'moment-timezone';
 
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
