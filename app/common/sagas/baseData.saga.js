@@ -608,7 +608,13 @@ export function* fetchPatientMessageUnreadCountWatcher() {
     const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
     try {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
+      const params = {
+        method: 'GET',
+        query: {
+          userId: currentUser.id,
+        },
+      };
+      const response = yield call(request, requestURL, params);
       yield put(patientMessageUnreadCountFetched(response));
       yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
