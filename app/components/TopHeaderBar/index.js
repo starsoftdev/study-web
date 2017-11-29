@@ -78,6 +78,14 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount } });
           }
         });
+        socket.on('notifyEmailSent', (params) => {
+          if (currentUser.roleForClient && params.clientId && currentUser.roleForClient.client_id === params.clientId) {
+            const emailCredits = (this.props.clientCredits.details.emailCredits) ? this.props.clientCredits.details.emailCredits : 0;
+            if (emailCredits > 0) {
+              this.props.clientCreditsFetched({ customerCredits: { emailCredits: (emailCredits - 1) } });
+            }
+          }
+        });
       });
     }
   }
