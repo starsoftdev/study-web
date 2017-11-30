@@ -232,7 +232,6 @@ function* fetchStudyTextStats(action) {
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
-    toastr.error('', 'Error! Text stats has been disabled.');
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -477,6 +476,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                  include: 'roleForClient',
                 },
               },
             ],
@@ -1038,7 +1038,7 @@ export function* fetchStudySaga() {
     const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
-    // watch for socket.io or filtering actions that will refresh the text message stats
+    // watch for filtering actions that will refresh the text message stats
     const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
