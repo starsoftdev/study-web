@@ -576,13 +576,12 @@ export function clientCreditsFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId, offset, limit, search) {
+export function fetchSitePatients(userId, offset, limit) {
   return {
     type: FETCH_SITE_PATIENTS,
     userId,
     offset,
     limit,
-    search,
   };
 }
 
@@ -925,11 +924,11 @@ export function fetchIndicationLevelPriceError(payload) {
   };
 }
 
-export function changeUsersTimezone(userId, payload) {
+export function changeUsersTimezone(userId, params) {
   return {
     type: CHANGE_USERS_TIMEZONE,
     userId,
-    payload,
+    params,
   };
 }
 

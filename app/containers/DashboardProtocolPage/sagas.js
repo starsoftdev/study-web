@@ -130,7 +130,7 @@ export function* deleteProtocolWorker(action) {
 
     yield put(deleteProtocolSuccess({ id: action.payload }));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while deleting protocols');
+    const errorMessage = 'Error! Sponsor user is associated to this protocol.';
     toastr.error('', errorMessage);
     yield put(deleteProtocolError(err));
   }

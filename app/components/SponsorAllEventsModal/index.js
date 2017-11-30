@@ -63,7 +63,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, pagin
                       <a className="btn btn-gray-outline lightbox-opener">
                         <span className="principal-investigator">{event.data.principalInvestigator || 'N/A'}</span>
                         <span className="patient-name">{event.numberName}</span>
-                        <span className="time">{moment(event.data.time).format('h:mm A')}</span>
+                        <span className="time">{event.data.time.format('h:mm A (z)')}</span>
                       </a>
                     </li>
                   ))

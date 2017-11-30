@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, put, fork } from 'redux-saga/effects';
+import { take, call, put, fork, select } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
@@ -73,6 +73,10 @@ import {
   SUBMIT_TO_CLIENT_PORTAL,
   SUBMIT_TO_SPONSOR_PORTAL,
 } from '../../containers/DashboardPortalsPage/constants';
+
+import {
+  selectGlobalPMSFormValues,
+} from '../../components/GlobalPMSModal/selectors';
 
 import {
   indicationsFetched,
@@ -512,11 +516,32 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset, search } = yield take(FETCH_SITE_PATIENTS);
-
+    const { userId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
+    const formValues = yield select(selectGlobalPMSFormValues());
     try {
-      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}&limit=${limit || 10}&offset=${offset || 0}&search=${search || ''}`;
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/patients/patientsForUser`;
+      let query = {};
+      if (formValues) {
+        query = {
+          userId,
+          limit: limit || 10,
+          offset: offset || 0,
+          search: formValues.name,
+          siteId: formValues.siteLocation,
+        };
+      } else {
+        query = {
+          userId,
+          limit: limit || 10,
+          offset: offset || 0,
+        };
+      }
+      const params = {
+        method: 'GET',
+        query,
+      };
+
+      const response = yield call(request, requestURL, params);
 
       let hasMore = true;
       const page = ((offset || 0) / 10) + 1;
@@ -587,7 +612,14 @@ export function* fetchPatientMessageUnreadCountWatcher() {
     const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
     try {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
+      const params = {
+        method: 'GET',
+        query: {
+          userId: currentUser.id,
+        },
+      };
+
+      const response = yield call(request, requestURL, params);
       yield put(patientMessageUnreadCountFetched(response));
       yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
@@ -853,17 +885,17 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
-      const params = {
+      const reqParams = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone: payload }),
+        body: JSON.stringify(params),
       };
-      const response = yield call(request, requestURL, params);
+      const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
-      yield put(changeUsersTimezoneSuccess(response.timezone));
+      yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
       toastr.error('', errorMessage);

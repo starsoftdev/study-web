@@ -30,6 +30,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     touchFields: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
     loginPassword: React.PropTypes.string,
+    newUser: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -90,7 +91,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { submitting, loginError, loginPassword } = this.props;
+    const { submitting, loginError, loginPassword, newUser } = this.props;
     const code = loginError ? loginError.code : null;
 
     return (
@@ -126,7 +127,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           </Alert>
         }
         {loginPassword &&
-          <p>Your new password is: <span id="new_password">{loginPassword}</span></p>
+          <p>Your {newUser ? '' : 'new'} password is: <span id="new_password">{loginPassword}</span></p>
         }
         <Field
           name="email"
