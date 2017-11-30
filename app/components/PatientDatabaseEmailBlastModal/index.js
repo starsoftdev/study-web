@@ -85,7 +85,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     event.preventDefault();
     const { formSyncErrors, formValues, submitEmailBlast, currentUser } = this.props;
     if (_.isEmpty(formSyncErrors)) {
-      submitEmailBlast(formValues.queryParams.filter, formValues.uncheckedPatients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, this.onClose);
+      submitEmailBlast(formValues, currentUser.roleForClient.id, currentUser, this.onClose);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
     } else if (formSyncErrors.email) {
@@ -197,7 +197,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (field, value) => dispatch(change(formName, field, value)),
-    submitEmailBlast: (patients, uncheckedPatients, message, from, subject, clientRoleId, onClose) => dispatch(submitEmailBlast(patients, uncheckedPatients, message, from, subject, clientRoleId, onClose)),
+    submitEmailBlast: (formValues, clientRoleId, currentUser, onClose) => dispatch(submitEmailBlast(formValues, clientRoleId, currentUser, onClose)),
   };
 }
 
