@@ -111,8 +111,13 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
         </td>
         <td>{item.views_count || 0}</td>
         <td>{0}</td>
-        <td><a href="#popup-rewards-list" className="lightbox-opener">{item.reward_balance || 0}</a></td>
-        <td><a href="#popup-credits-list" className="lightbox-opener">{item.customer_credits || 0}</a></td>
+        <td>{item.reward_balance || 0}</td>
+        <td>
+          <ul className="list-unstyled">
+            <li className="sent">Text: {item.customer_credits || 0}</li>
+            <li className="sent">Email: {item.emailCredits || 0}</li>
+          </ul>
+        </td>
         <td>
           <ul className="list-unstyled">
             <li className="sent">Text Sent: <a href="#popup-text-sent-list" className="lightbox-opener">{item.outbound_text}</a></li>
