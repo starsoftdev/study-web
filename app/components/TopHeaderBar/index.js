@@ -125,8 +125,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    }
-    if (userRoleType === 'client') {
       const credits = this.props.clientCredits.details.customerCredits || 0;
       const emailCredits = this.props.clientCredits.details.emailCredits || 0;
 
@@ -208,20 +206,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </Link>
           </h1>
 
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="notifications pull-left open-close">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <i className="icomoon-bell" />
-              </a>
-            </div>
-          </OverlayTrigger>
+          <NotificationBox currentUser={this.props.currentUser} />
 
           <OverlayTrigger
             placement="bottom"
