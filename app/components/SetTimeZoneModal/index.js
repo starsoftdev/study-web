@@ -34,10 +34,10 @@ class SetTimeZoneModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <img alt="" src={timezoneDemoUrl} style={{ width: '100%' }} />
-          <p>Before getting started, please click below to set your default time zone by entering your address.
-            This is very important to make sure all notifications are received at the correct times.</p>
+          <p>Please click below to set your time zone by entering your city or address.
+            This will make sure all patient notifications are timestamped in your time zone.</p>
           <div>
-            <Link className="btn btn-default" to="/app/me/profile">OK</Link>
+            <Link className="btn btn-default" to="/app/me/profile">Get Started</Link>
           </div>
         </Modal.Body>
       </Modal>
