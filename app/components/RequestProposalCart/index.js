@@ -33,6 +33,7 @@ import {
   selectCoupon,
   selectFormSubmissionStatus,
   selectIndicationLevelPrice,
+  selectRegisteredFields,
 } from '../../containers/RequestProposalPage/selectors';
 
 import { fetchIndicationLevelPrice } from '../../containers/App/actions';
@@ -53,6 +54,7 @@ export class RequestProposalCart extends Component {
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     clearCoupon: PropTypes.func,
+    newProposalFields: PropTypes.array,
   }
 
   constructor(props) {
@@ -101,7 +103,7 @@ export class RequestProposalCart extends Component {
 
   onSubmitForm() {
     if (this.props.hasError) {
-      this.props.touchRequestProposal();
+      this.props.touchRequestProposal(this.props.newProposalFields);
       return;
     }
 
@@ -121,6 +123,10 @@ export class RequestProposalCart extends Component {
 
     if (formValues.patientQualificationSuite) {
       total += QUALIFICATION_SUITE_PRICE * months.value;
+    }
+
+    if (formValues.callTracking) {
+      total += CALL_TRACKING_PRICE;
     }
 
     const newFormValues = formValues;
@@ -359,6 +365,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectProposalFormValues(),
   indicationLevelPrice: selectIndicationLevelPrice(),
   formSubmissionStatus: selectFormSubmissionStatus(),
+  newProposalFields: selectRegisteredFields(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -367,7 +374,7 @@ function mapDispatchToProps(dispatch) {
     clearCoupon: () => dispatch(clearCoupon()),
     onSubmitForm: (values) => dispatch(submitForm(values)),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
-    touchRequestProposal: () => dispatch(touch('requestProposal', ...fields)),
+    touchRequestProposal: (fields) => dispatch(touch('requestProposal', ...fields)),
   };
 }
 
