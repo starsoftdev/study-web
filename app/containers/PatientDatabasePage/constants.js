@@ -26,6 +26,7 @@ export const UPDATE_PATIENT_INDICATION          = 'PatientDatabasePage/UPDATE_PA
 export const SAVE_PATIENT                       = 'PatientDatabasePage/SAVE_PATIENT';
 export const SAVE_PATIENT_SUCCESS               = 'PatientDatabasePage/SAVE_PATIENT_SUCCESS';
 export const SAVE_PATIENT_ERROR                 = 'PatientDatabasePage/SAVE_PATIENT_ERROR';
+export const SAVE_PATIENT_LOCKED                = 'PatientDatabasePage/SAVE_PATIENT_LOCKED';
 
 export const INIT_CHAT                          = 'PatientDatabasePage/INIT_CHAT';
 export const DISABLE_CHAT                       = 'PatientDatabasePage/DISABLE_CHAT';
