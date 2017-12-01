@@ -230,7 +230,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             </main>
             <GlobalNotifications {...this.props} events={pageEvents} />
             <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
             {this.renderEmailTutorial()}
           </div>
@@ -254,7 +254,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             {React.Children.toArray(this.props.children)}
           </main>
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
