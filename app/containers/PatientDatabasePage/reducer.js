@@ -18,6 +18,7 @@ import {
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
+  SAVE_PATIENT_LOCKED,
 
   INIT_CHAT,
   DISABLE_CHAT,
@@ -355,6 +356,15 @@ export default function patientDatabasePageReducer(state = initialState, action)
         selectedPatient: {
           details: null,
           fetching: false,
+          error: null,
+        },
+      };
+    case SAVE_PATIENT_LOCKED:
+      return {
+        ...state,
+        savedPatient: {
+          details: null,
+          saving: false,
           error: null,
         },
       };
