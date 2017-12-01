@@ -632,7 +632,7 @@ function* submitMovePatientBetweenCategories() {
     try {
       yield put(movePatientBetweenCategoriesLoading());
       const requestURL = `${API_URL}/patients/updateCategory`;
-      const response = yield call(request, requestURL, {
+      yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
           studyId,
@@ -641,12 +641,7 @@ function* submitMovePatientBetweenCategories() {
           afterPatientId,
         }),
       });
-
-      if (response.result && response.result === 'failure') {
-        yield put(movePatientBetweenCategoriesFailed());
-      } else {
-        yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, 1, patientId, moment().toISOString()));
-      }
+      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId, 1, patientId, moment().toISOString()));
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while adding the patient indication. Please try again later.');
       toastr.error('', errorMessage);
