@@ -24,6 +24,7 @@ class SetTimeZoneModal extends React.Component {
           <Modal.Title>Welcome to Your MyStudyKIK Portal!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <img alt="" src="/timezone-demo.gif" style={{ width: '100%' }} />
           <p>Before getting started, please click below to set your default time zone by entering your address.
             This is very important to make sure all notifications are received at the correct times.</p>
           <div>
