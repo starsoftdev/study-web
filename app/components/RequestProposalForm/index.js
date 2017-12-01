@@ -253,7 +253,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
             />
           </div>
 
-          {false &&
+          {
             <div className="tracking-source">
               <div className="field-row">
                 <strong className="label"><label>CALL TRACKING: $247</label></strong>
@@ -267,7 +267,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           }
 
           {callTracking &&
-            <FieldArray name="leads" component={RenderLeads} />
+            <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} />
           }
 
           <div className="field-row">
