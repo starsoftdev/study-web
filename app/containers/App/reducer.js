@@ -940,7 +940,11 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS_SUCCESS:
       baseDataInnerState = {
         clientCredits: {
-          details: payload.customerCredits,
+          details: {
+            customerCredits: state.baseData.clientCredits.details.customerCredits,
+            emailCredits: state.baseData.clientCredits.details.emailCredits,
+            ...payload.customerCredits,
+          },
           fetching: false,
           error: null,
         },
