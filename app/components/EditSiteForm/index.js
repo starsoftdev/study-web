@@ -127,11 +127,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
             change('state', val.short_name);
+          } else {
+            change('state', '');
           }
         }
         if (!countryCode) {
           countryCode = _.find(val.types, (o) => (o === 'country'));
-          if (state) {
+          if (countryCode) {
             change('countryCode', val.short_name);
           }
         }
@@ -158,6 +160,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       }
       if (addressArr[2]) {
         change('state', addressArr[2]);
+      } else {
+        change('state', '');
       }
       if (addressArr[3]) {
         change('countryCode', toShortCode(addressArr[3]));
