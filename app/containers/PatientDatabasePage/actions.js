@@ -24,7 +24,6 @@ import {
   SAVE_PATIENT,
   SAVE_PATIENT_SUCCESS,
   SAVE_PATIENT_ERROR,
-  SAVE_PATIENT_LOCKED,
   INIT_CHAT,
   DISABLE_CHAT,
   ADD_PATIENTS_TO_TEXT_BLAST,
@@ -241,12 +240,6 @@ export function savePatient(clientRoleId, id, data) {
     clientRoleId,
     id,
     data,
-  };
-}
-
-export function savePatientLocked() {
-  return {
-    type: SAVE_PATIENT_LOCKED,
   };
 }
 

@@ -41,7 +41,6 @@ import {
   patientFetchingError,
   patientSaved,
   patientSavingError,
-  savePatientLocked,
   // downloadComplete,
   submitAddPatientSuccess,
   submitAddPatientFailure,
@@ -450,11 +449,7 @@ export function* savePatientWatcher() {
       const response = yield call(request, requestURL, options);
 
       toastr.success('Save Patient', 'Patient saved successfully!');
-      if (response.result && response.result === 'failure') {
-        yield put(savePatientLocked(response));
-      } else {
-        yield put(patientSaved(response));
-      }
+      yield put(patientSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);
