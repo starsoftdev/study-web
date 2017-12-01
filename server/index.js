@@ -20,8 +20,8 @@ app.use(helmet());
 const corsOptions = {
   credentials: true,
   maxAge: 86400000,
+  origin: '*',
 };
-corsOptions.origin = '*';
 app.use(cors(corsOptions));
 
 app.use(express.static('public'));

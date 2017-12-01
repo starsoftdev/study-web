@@ -36,6 +36,10 @@ import {
   GET_TOTAL_PATIENTS_COUNT,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
+
+  ADD_PROTOCOL,
+  ADD_PROTOCOL_SUCCESS,
+  ADD_PROTOCOL_ERROR,
 } from './constants';
 
 const initialState = {
@@ -80,6 +84,11 @@ const initialState = {
   },
   addPatientStatus:{
     adding: false,
+  },
+  addProtocolProcess:{
+    details: [],
+    fetching: false,
+    error: null,
   },
 };
 
@@ -406,6 +415,33 @@ export default function patientDatabasePageReducer(state = initialState, action)
           totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
+        },
+      };
+    case ADD_PROTOCOL:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case ADD_PROTOCOL_SUCCESS:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case ADD_PROTOCOL_ERROR:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:
