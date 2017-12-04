@@ -145,7 +145,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, clientSites, change, resetChangeAddState, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications } = this.props;
+    const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications } = this.props;
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
       const fields = [];
       let currentStudy = null;
