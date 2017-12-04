@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchSources } from '../../containers/App/actions';
+import { fetchSources, fetchStudyLeadSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../containers/NotFoundPage/index';
@@ -48,7 +48,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     stats: PropTypes.object,
     socket: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
-    fetchSources: PropTypes.func,
+    fetchSources: React.PropTypes.func,
+    fetchStudyLeadSources: PropTypes.func,
     sitePatients: React.PropTypes.object,
     fetchStudyTextNewStats: React.PropTypes.func,
     fetchingPatientsError: PropTypes.object,
@@ -57,6 +58,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
     textStatsFetched: React.PropTypes.func,
+    studyLeadSources: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -75,11 +77,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage, fetchStudyLeadSources } = this.props;
     setStudyId(parseInt(params.id));
     fetchStudy(params.id);
     fetchPatientCategories(params.id);
     fetchSources();
+    fetchStudyLeadSources(params.id);
 
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
@@ -265,6 +268,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             ePMS={ePMS}
             studyName={studyName}
             fetchStudyTextNewStats={this.props.fetchStudyTextNewStats}
+            studyLeadSources={this.props.studyLeadSources}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -295,6 +299,7 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
+  studyLeadSources: Selector.selectStudyLeadSources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -311,6 +316,7 @@ function mapDispatchToProps(dispatch) {
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
   };
 }
 

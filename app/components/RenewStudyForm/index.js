@@ -450,17 +450,17 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="pull-left col">
-              <ShoppingCartForm
-                showCards
-                noBorder
-                addOns={addOns}
-                manualDisableSubmit={this.props.manualDisableSubmit}
-                submitting={this.props.manualDisableSubmit}
-                validateAndSubmit={this.handleSubmit}
-                showAddNewCard={this.handleNewModalOpen}
-              />
+              <div className="pull-left col">
+                <ShoppingCartForm
+                  showCards
+                  noBorder
+                  addOns={addOns}
+                  manualDisableSubmit={this.props.manualDisableSubmit}
+                  submitting={this.props.manualDisableSubmit}
+                  validateAndSubmit={this.handleSubmit}
+                  showAddNewCard={this.handleNewModalOpen}
+                />
+              </div>
             </div>
           </Modal.Body>
         </Modal>
