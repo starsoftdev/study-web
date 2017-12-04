@@ -65,6 +65,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             }
           }
 
+          const disableDeleteFirstItem = (this.props.isAdmin && index === 0)
+
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
@@ -78,7 +80,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
-                {(!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) &&
+                {((!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) && !disableDeleteFirstItem) &&
                 <div className="link-delete" onClick={() => fields.remove(index)}>
                   <i className="icomoon-icon_trash" />
                 </div>
@@ -119,9 +121,9 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Redirect Number #{(index + 1)}</label></strong>
+                    <strong className="label required"><label>Google Url #{(index + 1)}</label></strong>
                     <Field
-                      name={`${lead}.recruitmentPhone`}
+                      name={`${lead}.googleUrl`}
                       component={Input}
                       type="text"
                       className="field"
