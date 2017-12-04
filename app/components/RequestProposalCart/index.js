@@ -22,7 +22,6 @@ import {
   selectProposalFormValues,
   selectProposalFormError,
 } from '../../components/RequestProposalForm/selectors';
-import { fields } from '../../components/RequestProposalForm/validator';
 import {
   selectLevels,
 } from '../../containers/App/selectors';
