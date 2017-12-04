@@ -711,7 +711,6 @@ export default function homePageReducer(state = initialState, action) {
       };
 
     case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
-      console.log('test1', action);
       return {
         ...state,
         studyLeadSources: {

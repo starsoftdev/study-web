@@ -9,6 +9,7 @@ import { Debounce } from 'react-throttle';
 import Button from 'react-bootstrap/lib/Button';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
+import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 import StudyActionButtons from './StudyActionButtons';
 
 import { fetchPatients } from './actions';
@@ -31,6 +32,7 @@ class FilterStudyPatientsForm extends Component {
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
     fetchStudyTextNewStats: PropTypes.func,
+    studyLeadSources: PropTypes.object,
   };
   static defaultProps = {
     submitting: false,
@@ -113,6 +115,28 @@ class FilterStudyPatientsForm extends Component {
       ePMS,
       studyName,
     } = this.props;
+    console.log(123, this.props.studyLeadSources)
+    const itemTemplate = (controlSelectedValue) => (
+      <div key={controlSelectedValue.value}>
+        {controlSelectedValue.label}
+        <i className="close-icon icomoon-icon_close" />
+      </div>
+    );
+
+    const selectedItemsTemplate = (controlSelectedValue) => (
+      <div>
+        {controlSelectedValue.length} item(s) selected
+      </div>
+    );
+    const sourceMapped = this.props.studyLeadSources.details.map((item) => {
+      return {
+        ...item,
+        group: item.source_id.label,
+        id: item.studySourceId,
+        label: `${item.source_id.label} ${item.source_name}`,
+      }
+    })
+    console.log(321, sourceMapped)
     /* changing the source for display purposes only */
     return (
       <form className="form-search clearfix" onSubmit={this.onSubmit}>
@@ -154,18 +178,25 @@ class FilterStudyPatientsForm extends Component {
               options={campaignOptions}
               disabled={submitting || loading}
               placeholder="Select Campaign"
-              onChange={(event) => this.searchPatient(event, 'campaign')}
+              onChange={(event, val) => this.searchPatient(val, 'campaign')}
             />
           </div>
           <div className="custom-select pull-left no-right-padding">
             <Field
               name="source"
-              component={ReactSelect}
-              className="field"
-              options={sourceOptions}
-              disabled={submitting || loading || !this.state.campaign}
+              component={ReactMultiSelect}
               placeholder="Select Source"
-              onChange={event => this.searchPatient(event, 'source')}
+              searchPlaceholder="Search"
+              searchable
+              optionLabelKey="label"
+              includeAllOption={false}
+              multiple
+              onChange={(e, val) => this.searchPatient(val, 'source')}
+              customOptionTemplateFunction={itemTemplate}
+              customSelectedValueTemplateFunction={selectedItemsTemplate}
+              dataSource={sourceMapped}
+              customSearchIconClass="icomoon-icon_search2"
+              groupBy="group"
             />
           </div>
         </div>
