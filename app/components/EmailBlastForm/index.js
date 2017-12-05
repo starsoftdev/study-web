@@ -16,7 +16,7 @@ import Input from '../Input/index';
 import * as Selector from '../../containers/StudyPage/selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitEmailBlast } from '../../containers/StudyPage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
-import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSources, selectClientCredits } from '../../containers/App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -27,6 +27,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: Selector.selectPatientCategories(),
   sources: selectSources(),
   studyId: Selector.selectStudyId(),
+  clientCredits: selectClientCredits(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -61,6 +62,7 @@ class EmailBlastForm extends React.Component {
     campaign: React.PropTypes.number,
     studyName: React.PropTypes.string,
     initialize: React.PropTypes.func,
+    clientCredits: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -175,8 +177,19 @@ class EmailBlastForm extends React.Component {
 
   submitEmailBlast(event) {
     event.preventDefault();
-    const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose } = this.props;
-    if (_.isEmpty(formSyncErrors)) {
+    const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose, clientCredits } = this.props;
+    const emailCredits = clientCredits.details.emailCredits;
+
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
+
+    if (newPatientsArr.length > emailCredits) {
+      toastr.error('Error!', 'You do not have enough email credits. Please add more credits.');
+    } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
