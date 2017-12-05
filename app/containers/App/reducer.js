@@ -517,17 +517,17 @@ export default function appReducer(state = initialState, action) {
       const levels = payload.map(l => {
         switch (l.name) {
           case 'Ruby':
-            return { ...l, price: 5297, posts: 108, texts: 400 };
+            return { ...l, price: 5297, posts: 108, texts: 400, emailCredits: 200 };
           case 'Diamond':
-            return { ...l, price: 3297, posts: 64, texts: 300 };
+            return { ...l, price: 3297, posts: 64, texts: 300, emailCredits: 150 };
           case 'Platinum':
-            return { ...l, price: 1797, posts: 32, texts: 200 };
+            return { ...l, price: 1797, posts: 32, texts: 200, emailCredits: 100 };
           case 'Gold':
-            return { ...l, price: 797, posts: 10, texts: 50 };
+            return { ...l, price: 797, posts: 10, texts: 50, emailCredits: 25 };
           case 'Silver':
-            return { ...l, price: 297, posts: 3, texts: 15 };
+            return { ...l, price: 297, posts: 3, texts: 15, emailCredits: 7 };
           case 'Bronze':
-            return { ...l, price: 97, posts: 1, texts: 5 };
+            return { ...l, price: 97, posts: 1, texts: 5, emailCredits: 2 };
           default:
             return l;
         }
@@ -940,7 +940,11 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS_SUCCESS:
       baseDataInnerState = {
         clientCredits: {
-          details: payload.customerCredits,
+          details: {
+            customerCredits: state.baseData.clientCredits.details.customerCredits,
+            emailCredits: state.baseData.clientCredits.details.emailCredits,
+            ...payload.customerCredits,
+          },
           fetching: false,
           error: null,
         },

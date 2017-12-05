@@ -74,9 +74,16 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyChangePoints', (clientId, newCreditsAmount) => {
-          console.log('clientId', clientId, newCreditsAmount);
           if (currentUser.roleForClient && currentUser.roleForClient.client_id === clientId) {
             this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount } });
+          }
+        });
+        socket.on('notifyEmailSent', (params) => {
+          if (currentUser.roleForClient && params.clientId && currentUser.roleForClient.client_id === params.clientId) {
+            const emailCredits = (this.props.clientCredits.details.emailCredits) ? this.props.clientCredits.details.emailCredits : 0;
+            if (emailCredits > 0) {
+              this.props.clientCreditsFetched({ customerCredits: { emailCredits: (emailCredits - 1) } });
+            }
           }
         });
       });
@@ -118,9 +125,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    }
-    if (userRoleType === 'client') {
       const credits = this.props.clientCredits.details.customerCredits || 0;
+      const emailCredits = this.props.clientCredits.details.emailCredits || 0;
+
       return (
         <header id="header">
           <div className="container-fluid">
@@ -163,8 +170,13 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </a>
 
             <div className="get-credits pull-left">
-              <span>{credits} Messaging Credits</span>
-              <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              <div>
+                <div>{credits} Text Credits</div>
+                <div>{emailCredits} Email Credits</div>
+              </div>
+              <div>
+                <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+              </div>
             </div>
 
             <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} userRoleType={userRoleType} />
@@ -194,20 +206,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </Link>
           </h1>
 
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="notifications pull-left open-close">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <i className="icomoon-bell" />
-              </a>
-            </div>
-          </OverlayTrigger>
+          <NotificationBox currentUser={this.props.currentUser} />
 
           <OverlayTrigger
             placement="bottom"
