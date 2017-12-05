@@ -34,3 +34,4 @@ script:
 notifications:
   slack: studykik:nxDZXJcNFYdWoXibXQ9T0013
 after_success: 'npm run coveralls'
+skip_cleanup: true
