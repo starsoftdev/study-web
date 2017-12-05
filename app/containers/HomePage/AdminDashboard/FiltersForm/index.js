@@ -124,25 +124,27 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
       });
     });
 
-    let siteNamesOptions = [];
-    _.forEach(this.props.siteLocations, (item, key) => {
-      siteNamesOptions.push({
-        id: (key + 1),
-        value: item.id,
-        label: item.id.toString(),
-      });
-    });
-    siteNamesOptions = _.orderBy(siteNamesOptions, 'label');
+    const siteNamesOptions = [];
+    // TODO KIK-3107 and KIK-3108 disable site location search until performance improves
+    // _.forEach(this.props.siteLocations, (item, key) => {
+    //   siteNamesOptions.push({
+    //     id: (key + 1),
+    //     value: item.id,
+    //     label: item.id.toString(),
+    //   });
+    // });
+    // siteNamesOptions = _.orderBy(siteNamesOptions, 'label');
 
-    let siteLocationsOptions = [];
-    _.forEach(this.props.siteLocations, (item, key) => {
-      siteLocationsOptions.push({
-        id: (key + 1),
-        value: item.id,
-        label: item.location,
-      });
-    });
-    siteLocationsOptions = _.orderBy(siteLocationsOptions, 'label');
+    const siteLocationsOptions = [];
+    // TODO KIK-3107 and KIK-3108 disable site location search until performance improves
+    // _.forEach(this.props.siteLocations, (item, key) => {
+    //   siteLocationsOptions.push({
+    //     id: (key + 1),
+    //     value: item.id,
+    //     label: item.location,
+    //   });
+    // });
+    // siteLocationsOptions = _.orderBy(siteLocationsOptions, 'label');
 
     let indicationsOptions = [];
     _.forEach(this.props.indications, (item, key) => {
@@ -311,6 +313,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               dataSource={siteLocationsOptions}
               initialValue={initialValues.siteLocation}
               customSearchIconClass="icomoon-icon_search2"
+              disabled
             />
           </div>
 
@@ -329,6 +332,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               dataSource={siteNamesOptions}
               initialValue={initialValues.siteNumber}
               customSearchIconClass="icomoon-icon_search2"
+              disabled
             />
           </div>
 

@@ -30,7 +30,9 @@ import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
 import SetTimeZoneModal from '../../components/SetTimeZoneModal';
+import EmailTutorialModal from '../../components/EmailTutorialModal';
 import IdleModal from '../../components/IdleModal';
+
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -54,12 +56,13 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.idleHandler = this.idleHandler.bind(this);
     this.stayLoggedIn = this.stayLoggedIn.bind(this);
     this.changePassword = this.props.changePassword.bind(this);
-
+    this.handleCloseEmailModal = this.handleCloseEmailModal.bind(this);
     this.state = {
       forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
       timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
       showChangePwdModal: false,
       showSetTimeZoneModal: false,
+      showEmailTutorialModal: false,
       showIdleModal: false,
     };
   }
@@ -102,6 +105,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showSetTimeZoneModal: false });
     }
 
+    if (nextProps.userData && nextProps.userData.needEmailCreditTutorial && nextProps.userData.id) {
+      this.setState({ showEmailTutorialModal: true });
+    } else {
+      this.setState({ showEmailTutorialModal: false });
+    }
+
     if (window.FS && nextProps.userData) {
       window.FS.identify(nextProps.userData.id, {
         displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
@@ -122,17 +131,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       }
     }
 
-    console.log(1, window.OneSignal);
-    if (window.OneSignal && nextProps.userData) {
-      window.OneSignal.push(() => {
-        window.OneSignal.sendTags({
-          userId: nextProps.userData.id,
-        }, (tagsSent) => {
-          console.log(2, tagsSent);
-        });
-      });
-    }
-
     if (LOG_ROCKET && nextProps.userData) {
       LogRocket.identify(`${nextProps.userData.id}`, {
         name: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
@@ -151,12 +149,30 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.props.changePassword(params);
   }
 
+  handleCloseEmailModal() {
+    this.setState({ showEmailTutorialModal: false });
+    this.props.updateUser(this.props.userData.id, { needEmailCreditTutorial: false });
+  }
+
   idleHandler() { // eslint-disable-line react/prefer-stateless-function
     this.setState({ showIdleModal: true });
   }
 
   stayLoggedIn() { // eslint-disable-line react/prefer-stateless-function
     this.setState({ showIdleModal: false });
+  }
+
+  renderEmailTutorial() {
+    const { currentUserRoleType } = this.props;
+    if (currentUserRoleType === 'client') {
+      return (
+        <EmailTutorialModal
+          showModal={this.state.showEmailTutorialModal}
+          closeModal={this.handleCloseEmailModal}
+        />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -203,8 +219,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             </main>
             <GlobalNotifications {...this.props} events={pageEvents} />
             <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
+            {this.renderEmailTutorial()}
           </div>
         </IdleTimer>
       );
@@ -226,7 +243,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             {React.Children.toArray(this.props.children)}
           </main>
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
