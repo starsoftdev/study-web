@@ -56,8 +56,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.changePassword = this.props.changePassword.bind(this);
 
     this.state = {
-      forceLogout: 36000000, // 10 hours in milliseconds
-      timeout: 7200000, // 2 hours in milliseconds
+      forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
+      timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
       showChangePwdModal: false,
       showSetTimeZoneModal: false,
       showIdleModal: false,
