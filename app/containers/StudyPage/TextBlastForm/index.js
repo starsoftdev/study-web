@@ -16,7 +16,6 @@ import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { fetchClientCredits } from '../../App/actions';
 import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
@@ -39,7 +38,6 @@ const mapDispatchToProps = (dispatch) => ({
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
   submitTextBlast: (patients, message, clientRoleId, studyId, siteName, currentUser, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, studyId, siteName, currentUser, onClose)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
 @reduxForm({
@@ -52,7 +50,6 @@ class TextBlastForm extends React.Component {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -204,7 +201,6 @@ class TextBlastForm extends React.Component {
     if (!formSyncErrors.message && !formSyncErrors.patients) {
       submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, currentUser, (err, data) => {
         onClose(err, data);
-        this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
       toastr.error('', formSyncErrors.message);

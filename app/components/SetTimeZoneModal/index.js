@@ -8,10 +8,19 @@ import CenteredModal from '../../components/CenteredModal';
 class SetTimeZoneModal extends React.Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
+    currentUserRoleType: React.PropTypes.string.isRequired,
   };
 
   render() {
-    const { show } = this.props;
+    const { show, currentUserRoleType } = this.props;
+    let timezoneDemoUrl;
+    if (currentUserRoleType === 'client') {
+      timezoneDemoUrl = '/timezone-demo.gif';
+    } else if (currentUserRoleType === 'sponsor') {
+      timezoneDemoUrl = '/sponsor-timezone-demo.gif';
+    } else {
+      timezoneDemoUrl = '/dashboard-timezone-demo.gif';
+    }
     return (
       <Modal
         className="set-timezone-modal"
@@ -24,10 +33,11 @@ class SetTimeZoneModal extends React.Component {
           <Modal.Title>Welcome to Your MyStudyKIK Portal!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Before getting started, please click below to set your default time zone by entering your address.
-            This is very important to make sure all notifications are received at the correct times.</p>
+          <img alt="" src={timezoneDemoUrl} style={{ width: '100%' }} />
+          <p>Please click below to set your time zone by entering your city or address.
+            This will make sure all patient notifications are timestamped in your time zone.</p>
           <div>
-            <Link className="btn btn-default" to="/app/me/profile">OK</Link>
+            <Link className="btn btn-default" to="/app/me/profile">Get Started</Link>
           </div>
         </Modal.Body>
       </Modal>
