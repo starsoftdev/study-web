@@ -24,8 +24,6 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(express.static('public'));
-
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
   outputPath: resolve(process.cwd(), 'build'),
