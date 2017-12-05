@@ -131,17 +131,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       }
     }
 
-    console.log(1, window.OneSignal);
-    if (window.OneSignal && nextProps.userData) {
-      window.OneSignal.push(() => {
-        window.OneSignal.sendTags({
-          userId: nextProps.userData.id,
-        }, (tagsSent) => {
-          console.log(2, tagsSent);
-        });
-      });
-    }
-
     if (LOG_ROCKET && nextProps.userData) {
       LogRocket.identify(`${nextProps.userData.id}`, {
         name: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
