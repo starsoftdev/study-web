@@ -7,9 +7,7 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import ReactTooltip from 'react-tooltip';
 import InfiniteScroll from 'react-infinite-scroller';
 import classNames from 'classnames';
-import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { selectChangeProtocolStatusProcess } from '../../containers/ReportViewPage/selectors';
 
 @reduxForm({ form: 'reportListForm' })
 
@@ -21,8 +19,6 @@ export class ReportViewTable extends React.Component {
     sortReportsSuccess: PropTypes.func,
     paginationOptions: PropTypes.object,
     formTableValues: PropTypes.object,
-    changeProtocolStatus: PropTypes.func,
-    changeProtocolStatusProcess: PropTypes.object,
     currentUser: PropTypes.object,
     totals: PropTypes.object,
     loadReports: PropTypes.func,
@@ -45,7 +41,6 @@ export class ReportViewTable extends React.Component {
 
     this.mouseOverRow = this.mouseOverRow.bind(this);
     this.mouseOutRow = this.mouseOutRow.bind(this);
-    this.changeStatus = this.changeStatus.bind(this);
 
     this.loadItems = this.loadItems.bind(this);
   }
@@ -103,12 +98,6 @@ export class ReportViewTable extends React.Component {
     this.setState({ hoveredRowIndex: null });
   }
 
-  changeStatus(status, studyId) {
-    if (!this.props.changeProtocolStatusProcess.saving) {
-      this.props.changeProtocolStatus({ status, studyId });
-    }
-  }
-
   loadItems() {
     if (!this.props.reportsList.fetching) {
       this.props.loadReports(false);
@@ -144,14 +133,7 @@ export class ReportViewTable extends React.Component {
           </td>
           <td>{item.level}</td>
           <td>
-            <div className="relative-element">
-              <Toggle
-                name={`status_${item.site_id}_${item.study_id}`}
-                meta={{ touched:false, error:false, active:false }}
-                input={{ value: item.is_active, onChange: (value) => { this.changeStatus(value, item.study_id); } }}
-                disabled
-              />
-            </div>
+            <span className={item.is_active ? 'button on' : 'button off'}>{item.is_active ? 'ON' : 'OFF'}</span>
           </td>
         </tr>
       );
@@ -175,10 +157,6 @@ export class ReportViewTable extends React.Component {
 
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
-          <td className="messaging_credit">
-            <span className="number">{item.customer_credits || 0}</span>
-            <a disabled className="btn lightbox-opener btn-plus">+</a>
-          </td>
           <td className="level_date_from">{item.levelDateFrom}</td>
           <td className="level_date_to">{item.levelDateTo}</td>
           <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
@@ -218,8 +196,8 @@ export class ReportViewTable extends React.Component {
                 <thead>
                   <tr>
                     <th className="default-cursor">#<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>EXPOSURE LEVEL <i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PI <i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>LISTING <i className="caret-arrow" /></th>
                     <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
@@ -236,7 +214,6 @@ export class ReportViewTable extends React.Component {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th onClick={this.sortBy} data-sort="credits" className={`messaging_credit th ${(this.props.paginationOptions.activeSort === 'credits') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT CREDITS <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
@@ -323,7 +300,6 @@ export class ReportViewTable extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  changeProtocolStatusProcess: selectChangeProtocolStatusProcess(),
 });
 const mapDispatchToProps = {};
 
