@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
 import Remarkable from 'remarkable';
-import Scroll from 'react-scroll';
+import * as Scroll from 'react-scroll';
 import SocialArea from '../SocialArea';
 
 const scroll = Scroll.animateScroll;
