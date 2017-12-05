@@ -207,37 +207,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           </h1>
 
           <NotificationBox currentUser={this.props.currentUser} />
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="emails pull-left">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <i className="icomoon-envelop" />
-                <span className="counter">1</span>
-              </a>
-            </div>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="open-close help-drop pull-left">
-              <a
-                className="link-help pull-left opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                ?
-              </a>
-            </div>
-          </OverlayTrigger>
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
         </div>
       </header>
