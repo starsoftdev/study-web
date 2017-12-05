@@ -20,7 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched, deletePatientSuccess } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
@@ -57,6 +57,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
     textStatsFetched: React.PropTypes.func,
+    deletePatientSuccess: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -96,6 +97,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           this.setState({ isSubscribedToUpdateStats: true }, () => {
             clientOpenedStudyPage(params.id);
           });
+        });
+
+        socket.on('notifyPatientRemovedFromStudy', (params) => {
+          if (params.studyId && params.patientId && this.props.study && this.props.study.id === params.studyId) {
+            this.props.deletePatientSuccess(params.patientId);
+          }
         });
 
         socket.on('notifyStudyPageMessage', (message) => {
@@ -311,6 +318,7 @@ function mapDispatchToProps(dispatch) {
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    deletePatientSuccess: (payload) => dispatch(deletePatientSuccess(payload)),
   };
 }
 
