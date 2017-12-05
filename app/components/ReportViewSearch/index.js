@@ -212,12 +212,6 @@ export class ReportViewSearch extends React.Component {
             <a className="btn btn-primary lightbox-opener" onClick={this.download}><i className="icon-icon_download" /> download</a>
           </div>
           <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener"><i className="icon-icon_creditcard" /> add credits</a>
-          </div>
-          <div className="col pull-right">
-            <a disabled className="btn btn-primary lightbox-opener">+ add site</a>
-          </div>
-          <div className="col pull-right">
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
           </div>
         </div>
