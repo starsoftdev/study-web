@@ -107,8 +107,11 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
     const missingColumnNames = [];
     const missingKeys = [];
     const firstPatientKeys = _.keys(patients[0]);
+    const firstPatients = _.slice(patients, 0, 3);
 
-    if (firstPatientKeys.length) {
+    if (!firstPatientKeys.length && firstPatients.length) {
+      this.setState({ parseError: true });
+    } else {
       _.forEach(validKeys, (key) => {
         const index = _.findIndex(firstPatientKeys, (k) => { return k.toLowerCase() === key.toLowerCase(); });
 
@@ -117,14 +120,11 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
           missingKeys.push(key);
         }
       });
-
       if (missingColumnNames.length) {
         this.setState({ missingColumnNames, missingKeys }, () => {
           setRequiredValidationResult(false, missingKeys);
         });
       }
-    } else {
-      this.setState({ parseError: true });
     }
   }
 

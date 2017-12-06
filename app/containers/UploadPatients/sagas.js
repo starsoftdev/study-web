@@ -111,7 +111,6 @@ export function* revertBulkUploadWatcher() {
 export function* addProtocolWatcher() {
   while (true) {
     const { payload } = yield take(ADD_PROTOCOL);
-    console.log('addProtocolWatcher', payload);
     try {
       const requestURL = `${API_URL}/studies/addProtocol`;
       const params = {
