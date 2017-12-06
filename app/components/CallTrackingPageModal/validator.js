@@ -1,5 +1,3 @@
-import { validate } from 'validate.js';
-
 export default values => {
   const leadSourceErrors = [];
 

@@ -65,7 +65,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             }
           }
 
-          const disableDeleteFirstItem = (this.props.isAdmin && index === 0)
+          const disableDeleteFirstItem = (this.props.isAdmin && index === 0);
 
           return (
             <div className="lead-item" key={index}>
@@ -114,6 +114,20 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                       objectValue
                       options={messagingNumbersOptions}
                       customSearchIconClass="icomoon-icon_search2"
+                    />
+                  </div>
+                )
+              }
+              {
+                showName && this.props.isAdmin && (
+                  <div className={classnames('field-row')}>
+                    <strong className="label required"><label>Redirect Number #{(index + 1)}</label></strong>
+                    <Field
+                      name={`${lead}.recruitmentPhone`}
+                      component={Input}
+                      type="text"
+                      className="field"
+                      isDisabled
                     />
                   </div>
                 )

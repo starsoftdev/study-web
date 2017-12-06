@@ -247,6 +247,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               landingPageId: item.landingPageId,
               recruitmentPhone: item.recruitmentPhone,
               messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
+              googleUrl: item.googleUrl,
               url: item.url,
             };
           }),
