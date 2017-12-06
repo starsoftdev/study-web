@@ -131,7 +131,7 @@ export default class UploadPatientsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, isImporting, switchIsImporting, addProtocolProcess, currentUser, fetchFilteredProtcols } = this.props;
+    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols } = this.props;
     const { currentStudy, siteLocation } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
@@ -143,7 +143,6 @@ export default class UploadPatientsForm extends Component {
         this.setState({ fields: [], showPreview: false, fileName: null, currentStudy: null }, () => {
           if (isImporting) {
             location.href = `/app/study/${currentStudy}`;
-            switchIsImporting();
           }
         });
       }, 2000);
