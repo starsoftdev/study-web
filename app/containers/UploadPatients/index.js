@@ -104,6 +104,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { addProtocolProcess, fetchHistory, currentUser,
       socket, clearForm, setPatientsExported, subscribeToRevertProgressSocket, unsubscribeFromRevertProgressSocket,
       subscribeToUploadProgressSocket, unsubscribeFromUploadProgressSocket } = this.props;
+
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.switchShowAddProtocolModal();
     }
@@ -327,7 +328,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { indications, fullSiteLocations, fetchHistory } = this.props;
+    const { indications, fullSiteLocations, fetchHistory, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
     return (
@@ -343,6 +344,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             isImporting={isImporting}
             uploadResult={uploadResult}
             fetchHistory={fetchHistory}
+            addProtocolProcess={addProtocolProcess}
             setPatients={this.setPatients}
             setFileName={this.setFileName}
             switchIsImporting={this.switchIsImporting}
