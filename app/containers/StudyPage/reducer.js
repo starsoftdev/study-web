@@ -63,8 +63,8 @@ import {
 import {
   FETCH_STUDY_LEAD_SOURCES,
   FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR
-} from '../App/constants'
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
+} from '../App/constants';
 
 const initialState = {
   stats: {},
@@ -95,7 +95,7 @@ const initialState = {
     details: [],
     fetching: false,
     error: null,
-  }
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -109,7 +109,7 @@ function studyPageReducer(state = initialState, action) {
           details: state.studyLeadSources.details,
           fetching: true,
           error: null,
-        }
+        },
       };
 
     case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
@@ -120,12 +120,12 @@ function studyPageReducer(state = initialState, action) {
             return {
               source_id: { value: item.source_id, label: item.type },
               source_name: item.source_name,
-              studySourceId: item.studySourceId
+              studySourceId: item.studySourceId,
             };
           }),
           fetching: false,
           error: null,
-        }
+        },
       };
 
     case FETCH_STUDY_LEAD_SOURCES_ERROR:
@@ -135,7 +135,7 @@ function studyPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
-        }
+        },
       };
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
