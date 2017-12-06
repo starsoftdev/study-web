@@ -7,6 +7,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import _ from 'lodash';
+import { toastr } from 'react-redux-toastr';
 
 import Modal from 'react-bootstrap/lib/Modal';
 import { ProgressBar } from 'react-bootstrap';
@@ -47,6 +48,14 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.revertProgress === 0 && prevState.revertProgress === 100) {
+      setTimeout(() => {
+        toastr.success('', 'Success! File has been reverted.');
+      }, 1000);
+    }
+  }
+
   switchShowConfirmRevertModal(item) {
     this.setState({ showConfirmRevertModal: !this.state.showConfirmRevertModal, selectedHistoryItem: item, revertProgress: 0 });
   }
@@ -63,8 +72,13 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
   renderHistoryTable() {
     const { uploadHistory } = this.props;
+    const getLastItem = (item) => {
+      return moment(item.date);
+    };
 
     if (uploadHistory.details.length > 0) {
+      // sort the history items
+      const sorted = _.orderBy(uploadHistory.details, (item) => getLastItem(item), 'desc');
       return (
         <table className="table">
           <colgroup>
@@ -87,31 +101,31 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
           </thead>
           <tbody>
             {
-            uploadHistory.details.map((item) => {
-              const createdDate = moment(item.date);
-              const currentDate = moment();
-              const revertAvailable = createdDate.isBefore(currentDate.subtract(2, 'days'), 'day');
+              sorted.map((item) => {
+                const createdDate = moment(item.date);
+                const currentDate = moment();
+                const revertAvailable = createdDate.isBefore(currentDate.subtract(2, 'days'), 'day');
 
-              return (
-                <tr key={_.uniqueId()}>
-                  <td>{item.name}</td>
-                  <td>{`${item.first_name} ${item.last_name}`}</td>
-                  <td>{createdDate.format('MM/DD/YY')}</td>
-                  <td>{createdDate.format('hh:mm A')}</td>
-                  <td className="status">{item.status}</td>
-                  <td>
-                    <input
-                      type="button"
-                      disabled={(item.status === 'reverted') || revertAvailable}
-                      value="Revert"
-                      className="btn btn-gray-outline margin-right"
-                      onClick={() => { this.switchShowConfirmRevertModal(item); }}
-                    />
-                  </td>
-                </tr>
-              );
-            })
-          }
+                return (
+                  <tr key={_.uniqueId()}>
+                    <td>{item.name}</td>
+                    <td>{`${item.first_name} ${item.last_name}`}</td>
+                    <td>{createdDate.format('MM/DD/YY')}</td>
+                    <td>{createdDate.format('hh:mm A')}</td>
+                    <td className="status">{item.status}</td>
+                    <td>
+                      <input
+                        type="button"
+                        disabled={(item.status === 'reverted') || revertAvailable}
+                        value="Revert"
+                        className="btn btn-gray-outline margin-right"
+                        onClick={() => { this.switchShowConfirmRevertModal(item); }}
+                      />
+                    </td>
+                  </tr>
+                );
+              })
+            }
           </tbody>
         </table>
       );

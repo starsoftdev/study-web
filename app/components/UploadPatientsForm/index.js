@@ -53,6 +53,7 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 export default class UploadPatientsForm extends Component {
   static propTypes = {
+    addProtocolProcess: PropTypes.object,
     uploadProgress: PropTypes.any,
     revertProgress: PropTypes.any,
     touchFields: PropTypes.func,
@@ -92,6 +93,7 @@ export default class UploadPatientsForm extends Component {
       isDragOver: false,
       siteLocation: null,
       fileName: null,
+      currentStudy: null,
       missingKeys: [],
       patients: [],
       fields: [],
@@ -129,12 +131,18 @@ export default class UploadPatientsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, isImporting, switchIsImporting } = this.props;
+    const { exportPatientsStatus, isImporting, switchIsImporting, addProtocolProcess, currentUser, fetchFilteredProtcols } = this.props;
+    const { currentStudy, siteLocation } = this.state;
+
+    if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
+      fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
+    }
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
       setTimeout(() => {
-        this.setState({ fields: [], showPreview: false, fileName: null }, () => {
+        this.setState({ fields: [], showPreview: false, fileName: null, currentStudy: null }, () => {
           if (isImporting) {
+            location.href = `/app/study/${currentStudy}`;
             switchIsImporting();
           }
         });
@@ -206,8 +214,10 @@ export default class UploadPatientsForm extends Component {
       change('indication', null);
       showProtocolModal();
     } else {
-      const protocol = _.find(protocols, { studyId });
-      change('indication', protocol.indicationId);
+      this.setState({ currentStudy: studyId }, () => {
+        const protocol = _.find(protocols, { studyId });
+        change('indication', protocol.indicationId);
+      });
     }
   }
 
@@ -416,7 +426,7 @@ export default class UploadPatientsForm extends Component {
                   onChange={this.handleFile}
                 />
                 <strong className="label filename">
-                  <label className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</label>
+                  <span className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</span>
                 </strong>
               </div>
             </div>
