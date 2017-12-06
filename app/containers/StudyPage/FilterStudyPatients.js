@@ -105,7 +105,6 @@ class FilterStudyPatientsForm extends Component {
   render() {
     const {
       campaignOptions,
-      sourceOptions,
       submitting,
       loading,
       studyId,
@@ -115,7 +114,7 @@ class FilterStudyPatientsForm extends Component {
       ePMS,
       studyName,
     } = this.props;
-    console.log(123, this.props.studyLeadSources)
+    console.log(123, this.props.studyLeadSources);
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
@@ -134,9 +133,9 @@ class FilterStudyPatientsForm extends Component {
         group: item.source_id.label,
         id: item.studySourceId,
         label: `${item.source_id.label} ${item.source_name}`,
-      }
-    })
-    console.log(321, sourceMapped)
+      };
+    });
+    console.log(321, sourceMapped);
     /* changing the source for display purposes only */
     return (
       <form className="form-search clearfix" onSubmit={this.onSubmit}>

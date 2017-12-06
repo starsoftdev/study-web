@@ -94,6 +94,8 @@ export class CallTrackingPageModal extends React.Component {
       return;
     }
 
+    console.log(322, formValues.leadSource);
+
     this.props.editStudyLeadSources(study.study_id, formValues.leadSource, formValues.callTracking);
   }
 
