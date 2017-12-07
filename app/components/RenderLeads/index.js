@@ -22,6 +22,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     meta: PropTypes.object,
     disableDelete: PropTypes.bool,
     isAdmin: PropTypes.bool,
+    isClientEditForm: PropTypes.bool,
     messagingNumbers: PropTypes.object,
     initialLeadSources: PropTypes.array,
   };
@@ -41,6 +42,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
       <div className="leads-list">
         {fields.map((lead, index) => {
           const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source_id !== 'undefined' && formValues.leadSource[index].source_id;
+          let landingHref = null;
+          if (formValues.leadSource && formValues.leadSource[index]) {
+            landingHref = formValues.leadSource[index].url ? `/${formValues.leadSource[index].studyId}-${formValues.leadSource[index].url.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].googleUrl) ? `?utm=${formValues.leadSource[index].googleUrl}` : ''}` : '';
+          }
           let initObject = null;
 
           if (initialLeadSources && initialLeadSources.length > 0) {
@@ -67,6 +72,15 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
           const disableDeleteFirstItem = (this.props.isAdmin && index === 0);
 
+          const urlLink = landingHref ? <a href={landingHref} className="landig-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
+          const googleUrlLink = landingHref ? <a href={landingHref} className="landig-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
+
+          const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
+          const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
+
+          console.log(123, needToShowMessagingNumber, needToShowGoogleUrl);
+          console.log(322, needToShowMessagingNumber, needToShowGoogleUrl);
+
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
@@ -81,9 +95,9 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
                 {((!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) && !disableDeleteFirstItem) &&
-                <div className="link-delete" onClick={() => fields.remove(index)}>
-                  <i className="icomoon-icon_trash" />
-                </div>
+                  <div className="link-delete" onClick={() => fields.remove(index)}>
+                    <i className="icomoon-icon_trash" />
+                  </div>
                 }
               </div>
               {
@@ -121,7 +135,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Redirect Number #{(index + 1)}</label></strong>
+                    <strong className="label"><label>Redirect Number #{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.recruitmentPhone`}
                       component={Input}
@@ -135,9 +149,9 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Google Url #{(index + 1)}</label></strong>
+                    <strong className="label"><label>{urlLink}</label></strong>
                     <Field
-                      name={`${lead}.googleUrl`}
+                      name={`${lead}.url`}
                       component={Input}
                       type="text"
                       className="field"
@@ -145,15 +159,31 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   </div>
                 )
               }
+
               {
-                showName && this.props.isAdmin && (
+                showName && needToShowMessagingNumber && (
                   <div className={classnames('field-row')}>
-                    <strong className="label"><label>Url #{(index + 1)}</label></strong>
+                    <strong className="label"><label>Messaging Number #{(index + 1)}</label></strong>
                     <Field
-                      name={`${lead}.url`}
+                      name={`${lead}.messagingNumber`}
                       component={Input}
                       type="text"
-                      className="field"
+                      className="field special-cursor-text"
+                      isDisabled
+                    />
+                  </div>
+                )
+              }
+              {
+                showName && (this.props.isAdmin || needToShowGoogleUrl) && (
+                  <div className={classnames('field-row')}>
+                    <strong className="label"><label>{googleUrlLink}</label></strong>
+                    <Field
+                      name={`${lead}.googleUrl`}
+                      component={Input}
+                      type="text"
+                      className="field special-cursor-text"
+                      isDisabled={needToShowGoogleUrl}
                     />
                   </div>
                 )

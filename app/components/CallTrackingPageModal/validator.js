@@ -14,18 +14,26 @@ export default values => {
 
       // check for unique messagingNumber
       let isUnique = true;
+      let isGoogleUrlUnique = true;
       values.leadSource.forEach((leadInner, indexInner) => {
         if (indexInner !== index && leadInner.messagingNumber && lead.messagingNumber && leadInner.messagingNumber.value && lead.messagingNumber.value && leadInner.messagingNumber.value === lead.messagingNumber.value) {
           isUnique = false;
         }
+        if (indexInner !== index && leadInner.googleUrl && lead.googleUrl && leadInner.googleUrl === lead.googleUrl) {
+          isGoogleUrlUnique = false;
+        }
       });
       let messagingNumberErrors = null;
+      let googleUrlErrors = null;
       if (!isUnique) {
         messagingNumberErrors = { messagingNumber : ['Messaging Number should be unique'] };
       }
+      if (!isGoogleUrlUnique) {
+        googleUrlErrors = { googleUrl : ['Google Url should be unique'] };
+      }
 
-      if (!lead.source_id || !lead.source_name || messagingNumberErrors) {
-        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors };
+      if (!lead.source_id || !lead.source_name || messagingNumberErrors || googleUrlErrors) {
+        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors };
       }
     });
   }
