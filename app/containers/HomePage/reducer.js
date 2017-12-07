@@ -718,7 +718,11 @@ export default function homePageReducer(state = initialState, action) {
             return {
               source_id: { value: item.source_id, label: item.type },
               source_name: item.source_name,
-              studySourceId: item.studySourceId
+              studySourceId: item.studySourceId,
+              messagingNumber: item.phoneNumber,
+              googleUrl: item.googleUrl,
+              url: item.url,
+              studyId: item.studyId,
             };
           }),
           fetching: false,

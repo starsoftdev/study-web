@@ -249,6 +249,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
               googleUrl: item.googleUrl,
               url: item.url,
+              studyId: item.studyId,
             };
           }),
           fetching: false,

@@ -508,7 +508,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                       </div>
 
                       {this.state.callTracking &&
-                        <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} disableDelete />
+                        <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} disableDelete isClientEditForm />
                       }
 
                       <div className="clearfix">
