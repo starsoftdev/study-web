@@ -68,7 +68,10 @@ class FilterStudyPatientsForm extends Component {
   searchPatient(event, type) {
     const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
-    let newSource = source;
+
+    let newSource = null;
+    // let newSource = source; //TODO: implement API to filter by study_source
+
     /* nulling the values if all is selected */
     if (campaign === -1) {
       newCampaign = null;
@@ -80,13 +83,14 @@ class FilterStudyPatientsForm extends Component {
       fetchPatients(studyId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
       /* -1 means all was selected */
-      if (event === -1) {
+      // TODO: implement API first
+      /* if (event === -1) {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyTextNewStats(studyId, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
         fetchStudyTextNewStats(studyId, newCampaign, event);
-      }
+      }*/
     } else {
       /* -1 means all was selected */
       this.setState({
