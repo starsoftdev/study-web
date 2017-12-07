@@ -1061,7 +1061,7 @@ export function* fetchStudySaga() {
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmails);
     const deletePatientWatcher = yield fork(deletePatient);
-    const callStatsWatcher = yield fork(fetchStudyCallStats);
+    const callStatsWatcher = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
