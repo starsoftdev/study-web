@@ -25,7 +25,7 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - npm install --only=dev
 install:
-  - npm run build:clean && travis_wait 12 cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js -p
+  - npm run build
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
