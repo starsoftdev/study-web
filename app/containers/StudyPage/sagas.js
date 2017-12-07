@@ -71,6 +71,7 @@ import {
   submitEmailSuccess,
   emailsFetched,
   emailsFetchError,
+  callStatsFetched,
 } from './actions';
 
 // Bootstrap sagas
@@ -180,32 +181,32 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 }
 
 // TODO re-enable when optimized for high traffic
-// function* fetchStudyCallStats(action) {
-//   const authToken = getItem('auth_token');
-//   if (!authToken) {
-//     return;
-//   }
-//
-//   // listen for the latest FETCH_STUDY action
-//   const { studyId, campaignId } = action;
-//
-//   try {
-//     let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
-//     if (campaignId) {
-//       requestURL += `?campaignId=${campaignId}`;
-//     }
-//     const response = yield call(request, requestURL, {
-//       method: 'GET',
-//     });
-//     yield put(callStatsFetched(response));
-//   } catch (e) {
-//     const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
-//     toastr.error('', errorMessage);
-//     if (e.status === 401) {
-//       yield call(() => { location.href = '/login'; });
-//     }
-//   }
-// }
+function* fetchStudyCallStats(action) {
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
+
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId } = action;
+
+  try {
+    let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    if (campaignId) {
+      requestURL += `?campaignId=${campaignId}`;
+    }
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(callStatsFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
+    toastr.error('', errorMessage);
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
 
 function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
@@ -1060,6 +1061,7 @@ export function* fetchStudySaga() {
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmails);
     const deletePatientWatcher = yield fork(deletePatient);
+    const callStatsWatcher = yield fork(fetchStudyCallStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
@@ -1087,6 +1089,7 @@ export function* fetchStudySaga() {
     yield cancel(deletePatientWatcher);
     yield cancel(watcherEmail);
     yield cancel(watcherEmailsFetch);
+    yield cancel(callStatsWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
