@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
 import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
@@ -157,6 +156,12 @@ class TextSection extends React.Component {
     });
   }
 
+  checkForValidPhone = (notValidPhone) => {
+    if (notValidPhone) {
+      toastr.error('Error!', 'The phone field is empty.');
+    }
+  }
+
   renderText() {
     const { currentUser, currentPatient, site } = this.props;
     const { twilioMessages } = this.state;
@@ -230,11 +235,6 @@ class TextSection extends React.Component {
     );
   }
 
-  checkForValidPhone = (notValidPhone) => {
-    if (notValidPhone) {
-      toastr.error('Error!', 'The phone field is empty.');
-    }
-  }
   render() {
     const { currentPatient, active, ePMS } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
