@@ -17,7 +17,7 @@ import CenteredModal from '../CenteredModal/index';
 import Input from '../Input/index';
 import { submitEmailBlast } from '../../containers/PatientDatabasePage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectClientCredits } from '../../containers/App/selectors';
 import { selectPatients, selectTotalPatients } from '../../containers/PatientDatabasePage/selectors';
 
 const formName = 'PatientDatabase.EmailBlastModal';
@@ -40,6 +40,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     submitEmailBlast: React.PropTypes.func.isRequired,
     patients: React.PropTypes.object,
     totalPatients: React.PropTypes.number,
+    clientCredits: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -83,8 +84,11 @@ class PatientDatabaseEmailBlastModal extends React.Component {
 
   submitEmailBlast(event) {
     event.preventDefault();
-    const { formSyncErrors, formValues, submitEmailBlast, currentUser } = this.props;
-    if (_.isEmpty(formSyncErrors)) {
+    const { formSyncErrors, formValues, submitEmailBlast, currentUser, clientCredits } = this.props;
+    const emailCredits = clientCredits.details.emailCredits;
+    if (this.state.total > emailCredits) {
+      toastr.error('Error!', 'You do not have enough email credits. Please add more credits.');
+    } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues, currentUser.roleForClient.id, currentUser, this.onClose);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
@@ -192,6 +196,7 @@ const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   currentUser: selectCurrentUser(),
   totalPatients: selectTotalPatients(),
+  clientCredits: selectClientCredits(),
 });
 
 function mapDispatchToProps(dispatch) {
