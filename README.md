@@ -12,6 +12,8 @@ SOCKET_URL=http://localhost:3000
 HTTP=true
 GOOGLE_RECAPTCHA_SITE_KEY=(your Google Recaptcha Site Key)
 DASHBOARD_TIMEZONE=America/Los_Angeles
+FORCE_LOGOUT=(should be 10 hours in milliseconds)
+IDLE_TIMEOUT=(should be 2 hours in milliseconds)
 ```
 If you like inline source maps, and debugging anywhere in the app with Chrome Dev Tools, enter this line into the .env file as well:
 ```

@@ -58,8 +58,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.changePassword = this.props.changePassword.bind(this);
     this.handleCloseEmailModal = this.handleCloseEmailModal.bind(this);
     this.state = {
-      forceLogout: 36000000, // 10 hours in milliseconds
-      timeout: 7200000, // 2 hours in milliseconds
+      forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
+      timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
       showChangePwdModal: false,
       showSetTimeZoneModal: false,
       showEmailTutorialModal: false,
@@ -129,17 +129,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.set({ page: nextProps.location.pathname });
         ReactGA.pageview(nextProps.location.pathname);
       }
-    }
-
-    console.log(1, window.OneSignal);
-    if (window.OneSignal && nextProps.userData) {
-      window.OneSignal.push(() => {
-        window.OneSignal.sendTags({
-          userId: nextProps.userData.id,
-        }, (tagsSent) => {
-          console.log(2, tagsSent);
-        });
-      });
     }
 
     if (LOG_ROCKET && nextProps.userData) {
@@ -230,7 +219,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             </main>
             <GlobalNotifications {...this.props} events={pageEvents} />
             <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
             {this.renderEmailTutorial()}
           </div>
@@ -254,7 +243,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             {React.Children.toArray(this.props.children)}
           </main>
           <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
