@@ -125,8 +125,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    }
-    if (userRoleType === 'client') {
       const credits = this.props.clientCredits.details.customerCredits || 0;
       const emailCredits = this.props.clientCredits.details.emailCredits || 0;
 
@@ -208,51 +206,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
             </Link>
           </h1>
 
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="notifications pull-left open-close">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <i className="icomoon-bell" />
-              </a>
-            </div>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="emails pull-left">
-              <a
-                className="opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                <i className="icomoon-envelop" />
-                <span className="counter">1</span>
-              </a>
-            </div>
-          </OverlayTrigger>
-
-          <OverlayTrigger
-            placement="bottom"
-            overlay={tooltip}
-          >
-            <div className="open-close help-drop pull-left">
-              <a
-                className="link-help pull-left opener"
-                data-toggle="tooltip"
-                data-placement="bottom"
-              >
-                ?
-              </a>
-            </div>
-          </OverlayTrigger>
+          <NotificationBox currentUser={this.props.currentUser} />
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
         </div>
       </header>

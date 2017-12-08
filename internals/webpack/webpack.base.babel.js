@@ -111,6 +111,8 @@ module.exports = (options) => ({
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
       API_URL: JSON.stringify(process.env.API_URL),
+      FORCE_LOGOUT: process.env.FORCE_LOGOUT ? JSON.stringify(process.env.FORCE_LOGOUT) : 36000000,
+      IDLE_TIMEOUT: process.env.IDLE_TIMEOUT ? JSON.stringify(process.env.IDLE_TIMEOUT) : 7200000,
       DASHBOARD_TIMEZONE: JSON.stringify(process.env.DASHBOARD_TIMEZONE),
       MIXPANEL_TOKEN: process.env.MIXPANEL_TOKEN ? JSON.stringify(process.env.MIXPANEL_TOKEN): null,
       SENTRY_DSN: SENTRY_DSN ? JSON.stringify(SENTRY_DSN): null,

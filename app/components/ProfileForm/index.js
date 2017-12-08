@@ -277,7 +277,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
           <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
-            <strong className="label required"><label>Time Zone</label></strong>
+            <strong className="label"><label>Time Zone</label></strong>
             <div className="field">
               <Field
                 name="timezone"
