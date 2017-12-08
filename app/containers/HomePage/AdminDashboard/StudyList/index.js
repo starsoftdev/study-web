@@ -350,18 +350,18 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  campaignChanged(e) {
+  campaignChanged(e, val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('campaign', e);
+    setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'campaign');
+    fetchStudiesAccordingToFilters(val, 'campaign');
   }
 
-  sourceChanged(e) {
+  sourceChanged(e, val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('source', e);
+    setFilterFormValues('source', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'source');
+    fetchStudiesAccordingToFilters(val, 'source');
   }
 
   addEmailNotificationClick(custom = false) {
