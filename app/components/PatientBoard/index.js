@@ -12,7 +12,7 @@ import { push } from 'react-router-redux';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
-import Scroll from 'react-scroll';
+import * as Scroll from 'react-scroll';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
 import LoadingSpinner from '../../components/LoadingSpinner';

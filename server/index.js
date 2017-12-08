@@ -20,11 +20,9 @@ app.use(helmet());
 const corsOptions = {
   credentials: true,
   maxAge: 86400000,
+  origin: '*',
 };
-corsOptions.origin = '*';
 app.use(cors(corsOptions));
-
-app.use(express.static('public'));
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
