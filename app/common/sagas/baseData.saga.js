@@ -618,7 +618,6 @@ export function* fetchPatientMessageUnreadCountWatcher() {
           userId: currentUser.id,
         },
       };
-
       const response = yield call(request, requestURL, params);
       yield put(patientMessageUnreadCountFetched(response));
       yield put(fetchPatientMessagesSucceeded(response));
