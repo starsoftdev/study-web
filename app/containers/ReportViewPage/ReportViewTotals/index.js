@@ -13,7 +13,6 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   render() {
     const totals = {
       count_total: 0,
-      count_contacted: 0,
       count_not_contacted: this.props.totals.details.count_not_contacted ? parseInt(this.props.totals.details.count_not_contacted) : 0,
       dnq: this.props.totals.details.dnq ? parseInt(this.props.totals.details.dnq) : 0,
       action_needed: this.props.totals.details.action_needed ? parseInt(this.props.totals.details.action_needed) : 0,
@@ -25,7 +24,6 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     };
 
     totals.count_total = (totals.count_not_contacted + totals.dnq + totals.action_needed + totals.scheduled + totals.consented + totals.screen_failed + totals.randomized + totals.call_attempted);
-    totals.count_contacted = (totals.dnq + totals.action_needed + totals.scheduled + totals.consented + totals.screen_failed + totals.randomized + totals.call_attempted);
 
     const percentage = this.props.getPercentageObject(totals);
 
@@ -34,10 +32,6 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         <li>
           <strong className="heading"><span>REFERRALS</span></strong>
           <strong className="number"><span>{totals.count_total}</span></strong>
-        </li>
-        <li>
-          <strong className="heading"><span>CONTACTED</span></strong>
-          <strong className="number"><span>{totals.count_contacted}<span className="small">{`(${percentage.count_contacted_p}%)`}</span></span></strong>
         </li>
         <li>
           <strong className="heading"><span>NOT<br /> CONTACTED</span></strong>
@@ -52,7 +46,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="number pointer"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
         </li>
         <li>
-          <strong className="heading"><span>ACTION NEEDED</span></strong>
+          <strong className="heading"><span>PRESCREENED</span></strong>
           <strong className="number"><span>{totals.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></strong>
         </li>
         <li>
