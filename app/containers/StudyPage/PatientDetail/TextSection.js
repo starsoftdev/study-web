@@ -230,6 +230,11 @@ class TextSection extends React.Component {
     );
   }
 
+  checkForValidPhone = (notValidPhone) => {
+    if (notValidPhone) {
+      toastr.error('Error!', 'The phone field is empty.');
+    }
+  }
   render() {
     const { currentPatient, active, ePMS } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
@@ -237,6 +242,8 @@ class TextSection extends React.Component {
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
     this.scrollElement();
+    const notValidPhone = !currentPatient.phone;
+
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
@@ -245,12 +252,15 @@ class TextSection extends React.Component {
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
-          <Button
-            disabled={disabled || unsubscribed || !ePMS}
-            onClick={this.submitText}
-          >
-            Send
-          </Button>
+          <div onClick={() => this.checkForValidPhone(notValidPhone)}>
+            <div
+              className="btn btn-default lightbox-opener pull-right"
+              onClick={(e) => (disabled || unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
+              disabled={disabled || !ePMS || unsubscribed || notValidPhone}
+            >
+              Send
+            </div>
+          </div>
         </div>
       </div>
     );
