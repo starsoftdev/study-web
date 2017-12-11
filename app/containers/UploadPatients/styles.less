@@ -640,19 +640,43 @@
 }
 
 .confirm-modal-container {
-  margin: 25px;
-  min-height: 200px;
   overflow: hidden;
-  position: relative;
 
-  .confirm-text {
-    margin: 35px 0 0;
-    display: inline-block;
+  .main-block {
+
+    &.text {
+      height: 200px;
+      line-height: 200px;
+      float: left;
+      width: 100%;
+      padding: 0 25px;
+    }
+
+    &.bar {
+      height: 200px;
+      line-height: 200px;
+      text-align: center;
+      padding: 0 25px;
+    }
+
+    .progress {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+      width: 100%;
+      margin: 0;
+    }
+
+    .confirm-text {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+    }
   }
 
   .btn-block {
-    position: absolute;
-    bottom: 0;
+    margin: 0 0 25px;
+    float: left;
 
     input {
 
