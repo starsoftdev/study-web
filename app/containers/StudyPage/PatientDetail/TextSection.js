@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
+import Button from 'react-bootstrap/lib/Button';
 import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
