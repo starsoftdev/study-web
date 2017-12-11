@@ -36,23 +36,18 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
   componentWillReceiveProps(newProps) {
     if (newProps.revertProgress) {
-      this.setState({ revertProgress: newProps.revertProgress });
+      this.setState({ revertProgress: newProps.revertProgress }, () => {
+        if (newProps.revertProgress === 100) {
 
-      if (newProps.revertProgress === 100) {
-        setTimeout(() => {
-          if (this.state.showConfirmRevertModal) {
-            this.setState({ showConfirmRevertModal: false, selectedHistoryItem: null, revertProgress: 0 });
-          }
-        }, 2000);
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.revertProgress === 0 && prevState.revertProgress === 100) {
-      setTimeout(() => {
-        toastr.success('', 'Success! File has been reverted.');
-      }, 1000);
+          setTimeout(() => {
+            if (this.state.showConfirmRevertModal) {
+              this.setState({ showConfirmRevertModal: false, selectedHistoryItem: null, revertProgress: 0 }, () => {
+                toastr.success('', 'Success! File has been reverted.');
+              });
+            }
+          }, 1000);
+        }
+      });
     }
   }
 
@@ -153,13 +148,19 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
           <Modal.Body>
             <div className="confirm-modal-container">
               {!this.state.revertStarted &&
-                <span className="confirm-text">
-                  {'Are you sure you want to revert the data imported from'}
-                  <br />
-                  {`${(this.state.selectedHistoryItem) ? this.state.selectedHistoryItem.name : ''}?`}
-                </span>
+                <div className="main-block text">
+                  <span className="confirm-text">
+                    {'Are you sure you want to revert the data imported from'}
+                    <br />
+                    {`${(this.state.selectedHistoryItem) ? this.state.selectedHistoryItem.name : ''}?`}
+                  </span>
+                </div>
               }
-              {this.state.revertStarted && <ProgressBar bsStyle="warning" now={this.state.revertProgress} />}
+              {this.state.revertStarted &&
+                <div className="main-block bar">
+                  <ProgressBar bsStyle="warning" now={this.state.revertProgress} />
+                </div>
+              }
               <div className="btn-block text-center">
                 <input type="button" value="cancel" className="btn btn-gray-outline margin-right" onClick={() => { this.switchShowConfirmRevertModal(null); }} />
                 <input type="button" value="submit" className="btn btn-default" disabled={this.state.revertStarted} onClick={this.confirmRevert} />
