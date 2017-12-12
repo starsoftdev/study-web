@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 
 import {
   FETCH_NOTE,
@@ -245,7 +246,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               source_name: item.source_name,
               studySourceId: item.studySourceId,
               landingPageId: item.landingPageId,
-              recruitmentPhone: item.recruitmentPhone,
+              recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
               messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
               googleUrl: item.googleUrl,
               url: item.url,

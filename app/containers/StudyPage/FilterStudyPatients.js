@@ -69,8 +69,7 @@ class FilterStudyPatientsForm extends Component {
     const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
-    let newSource = null;
-    // let newSource = source; //TODO: implement API to filter by study_source
+    let newSource = source;
 
     /* nulling the values if all is selected */
     if (campaign === -1) {
@@ -83,14 +82,13 @@ class FilterStudyPatientsForm extends Component {
       fetchPatients(studyId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
       /* -1 means all was selected */
-      // TODO: implement API first
-      /* if (event === -1) {
+      if (event === -1) {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyTextNewStats(studyId, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
         fetchStudyTextNewStats(studyId, newCampaign, event);
-      }*/
+      }
     } else {
       /* -1 means all was selected */
       this.setState({
@@ -118,7 +116,6 @@ class FilterStudyPatientsForm extends Component {
       ePMS,
       studyName,
     } = this.props;
-    console.log(123, this.props.studyLeadSources);
     const itemTemplate = (controlSelectedValue) => (
       <div key={controlSelectedValue.value}>
         {controlSelectedValue.label}
@@ -136,10 +133,9 @@ class FilterStudyPatientsForm extends Component {
         ...item,
         group: item.source_id.label,
         id: item.studySourceId,
-        label: `${item.source_id.label} ${item.source_name}`,
+        label: `${item.source_id.label} ${item.source_name || ''}`,
       };
     });
-    console.log(321, sourceMapped);
     /* changing the source for display purposes only */
     return (
       <form className="form-search clearfix" onSubmit={this.onSubmit}>
