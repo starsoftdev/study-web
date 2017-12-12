@@ -71,6 +71,7 @@ import {
   submitEmailSuccess,
   emailsFetched,
   emailsFetchError,
+  fetchEmails,
 } from './actions';
 
 // Bootstrap sagas
@@ -770,6 +771,7 @@ function* submitEmail() {
         }),
       });
       yield put(submitEmailSuccess(response));
+      yield put(fetchEmails(studyId, patientId));
       toastr.success('', 'Success! Your email have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
@@ -781,7 +783,7 @@ function* submitEmail() {
   }
 }
 
-function* fetchEmails() {
+function* fetchEmailsWatcher() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
     const { studyId, patientId } = yield take(FETCH_EMAILS);
@@ -1060,7 +1062,7 @@ export function* fetchStudySaga() {
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
     const watcherEmail = yield fork(submitEmail);
-    const watcherEmailsFetch = yield fork(fetchEmails);
+    const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);

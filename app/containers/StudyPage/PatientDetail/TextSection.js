@@ -132,6 +132,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    if (clientCredits === 0 || clientCredits === null) {
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      return;
+    }
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -255,7 +260,7 @@ class TextSection extends React.Component {
           <div onClick={() => this.checkForValidPhone(notValidPhone)}>
             <div
               className="btn btn-default lightbox-opener pull-right"
-              onClick={(e) => (disabled || unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
               disabled={disabled || !ePMS || unsubscribed || notValidPhone}
             >
               Send
