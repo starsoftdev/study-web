@@ -162,7 +162,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceId = sourceId;
+      options.query.sourceIds = JSON.stringify(sourceId);
     }
     if (text) {
       options.query.text = text;
@@ -227,7 +227,7 @@ function* fetchStudyTextStats(action) {
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceId = sourceId;
+      options.query.sourceIds = JSON.stringify(sourceId);
     }
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
@@ -424,7 +424,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
       queryParams.campaignId = campaignId;
     }
     if (sourceId) {
-      queryParams.sourceId = sourceId;
+      queryParams.sourceIds = JSON.stringify(sourceId);
     }
     if (text) {
       queryParams.text = text;

@@ -72,14 +72,11 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
           const disableDeleteFirstItem = (this.props.isAdmin && index === 0);
 
-          const urlLink = landingHref ? <a href={landingHref} className="landig-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
-          const googleUrlLink = landingHref ? <a href={landingHref} className="landig-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
+          const urlLink = landingHref ? <a href={landingHref} className="landig-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
+          const googleUrlLink = landingHref ? <a href={landingHref} className="landig-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
-
-          console.log(123, needToShowMessagingNumber, needToShowGoogleUrl);
-          console.log(322, needToShowMessagingNumber, needToShowGoogleUrl);
 
           return (
             <div className="lead-item" key={index}>
