@@ -178,7 +178,6 @@ class EmailBlastForm extends React.Component {
   submitEmailBlast(event) {
     event.preventDefault();
     const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose, clientCredits } = this.props;
-    const emailCredits = clientCredits.details.emailCredits;
 
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
@@ -187,8 +186,8 @@ class EmailBlastForm extends React.Component {
       ));
     }
 
-    if (newPatientsArr.length > emailCredits) {
-      toastr.error('Error!', 'You do not have enough email credits. Please add more credits.');
+    if (newPatientsArr.length > clientCredits.details.emailCredits) {
+      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
     } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
@@ -287,14 +286,14 @@ class EmailBlastForm extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, formValues } = this.props;
+    const { patientCategories, sources, formValues, clientCredits } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
         formValues.filteredPatientSearchValues.indexOf(v) !== -1
       ));
     }
-    const disabled = (newPatientsArr.length === 0);
+    const disabled = (newPatientsArr.length === 0 || newPatientsArr.length > clientCredits.details.emailCredits);
     return (
       <Form
         className="text-email-blast-form"
@@ -406,12 +405,13 @@ class EmailBlastForm extends React.Component {
                 style={{ height: '350px' }}
               />
               <div className="footer">
-                <input
+                <div
                   className="btn btn-default lightbox-opener pull-right"
-                  value="Send"
-                  type="submit"
+                  onClick={(e) => this.submitEmailBlast(e)}
                   disabled={disabled}
-                />
+                >
+                  Send
+                </div>
               </div>
             </div>
           </div>
