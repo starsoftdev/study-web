@@ -116,7 +116,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
 
   render() {
     const { show, className, clientCredits } = this.props;
-    const disabled = (this.state.total > clientCredits.details.emailCredits)
+    const disabled = (this.state.total > clientCredits.details.emailCredits);
 
     return (
       <Modal
