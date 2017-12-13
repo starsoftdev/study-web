@@ -193,8 +193,8 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
 
     if (patients.length === 0) {
       return (
-        <div className='validation-messages error'>
-          <span className='heading error'>
+        <div className="validation-messages error">
+          <span className="heading error">
             The file must contain at least one row.
           </span>
         </div>
