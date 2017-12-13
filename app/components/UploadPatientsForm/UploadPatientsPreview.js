@@ -179,6 +179,7 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
   }
 
   renderValidationMessages(missingColumnNames) {
+    const { patients } = this.props;
     const { missingKeys } = this.state;
     let requiredError = false;
     let requiredIndex = null;
@@ -189,6 +190,16 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
         requiredIndex = index;
       }
     });
+
+    if (patients.length === 0) {
+      return (
+        <div className='validation-messages error'>
+          <span className='heading error'>
+            The file must contain at least one row.
+          </span>
+        </div>
+      );
+    }
 
     return (
       <div
@@ -229,7 +240,6 @@ class UploadPatientsPreviewForm extends React.Component { // eslint-disable-line
       return (
         <div className="preview">
           <div className="validation-messages error">
-
             <span className="heading error">
               Critical error when parse table.
             </span>
