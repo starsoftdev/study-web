@@ -40,7 +40,7 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
         if (newProps.revertProgress === 100) {
           setTimeout(() => {
             if (this.state.showConfirmRevertModal) {
-              this.setState({ showConfirmRevertModal: false, selectedHistoryItem: null, revertProgress: 0 }, () => {
+              this.setState({ showConfirmRevertModal: false, selectedHistoryItem: null, revertProgress: 0, revertStarted: false }, () => {
                 toastr.success('', 'Success! File has been reverted.');
               });
             }
