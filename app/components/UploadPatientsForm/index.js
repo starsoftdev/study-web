@@ -127,6 +127,7 @@ export default class UploadPatientsForm extends Component {
     this.downloadExample = this.downloadExample.bind(this);
     this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
     this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+    this.clearEmptySheet = this.clearEmptySheet.bind(this);
     this.revert = this.revert.bind(this);
   }
 
@@ -158,7 +159,6 @@ export default class UploadPatientsForm extends Component {
   }
 
   setRequiredValidationResult(requiredValidationResult, missingKeys) {
-    console.log('setRequiredValidationResult', requiredValidationResult, missingKeys);
     this.setState({ requiredValidationResult, missingKeys });
   }
 
@@ -220,6 +220,24 @@ export default class UploadPatientsForm extends Component {
     }
   }
 
+  clearEmptySheet(json) {
+    const validPatients = [];
+    _.forEach(json, (patient) => {
+      let hasValues = false;
+      _.forEach(patient, (prop, propKey) => {
+        if (patient[propKey]) {
+          hasValues = true;
+        }
+      });
+
+      if (hasValues) {
+        validPatients.push(patient);
+      }
+    });
+
+    return validPatients;
+  }
+
   handleFile(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -243,7 +261,13 @@ export default class UploadPatientsForm extends Component {
       } else if (f.size >= 51200000) {
         toastr.error('', 'Error! More than 50MB.');
       } else {
-        scope.setState({ fileName: name, patients: json }, () => {
+        const patients = scope.clearEmptySheet(json);
+        scope.setState({
+          duplicateValidationResult: false,
+          requiredValidationResult: false,
+          fileName: name,
+          patients,
+        }, () => {
           scope.props.setFileName(name);
         });
       }
@@ -502,17 +526,19 @@ export default class UploadPatientsForm extends Component {
             <div className="import-progress">
               <div className="control">
                 <ProgressBar bsStyle="success" now={this.props.uploadProgress} />
-                <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+                {uploadResult === null &&
+                  <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+                }
                 {uploadResult !== null &&
-                <span className="upload-result">
-                  {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
-                </span>
+                  <span className="upload-result">
+                    {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
+                  </span>
                 }
               </div>
             </div>
           }
           <div className="text-right">
-            {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
+            {(!showPreview && !isImporting) && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
             {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
             {(showPreview && !isImporting) && <Button type="submit" disabled={disabled}>Submit</Button>}
           </div>
