@@ -263,12 +263,14 @@ export default class UploadPatientsForm extends Component {
       } else {
         const patients = scope.clearEmptySheet(json);
         scope.setState({
+          missingKeys: [],
           duplicateValidationResult: false,
           requiredValidationResult: false,
           fileName: name,
           patients,
         }, () => {
           scope.props.setFileName(name);
+          scope.props.setPatients(patients);
         });
       }
     };
