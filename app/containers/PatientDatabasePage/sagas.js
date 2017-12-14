@@ -481,7 +481,7 @@ function* submitTextBlast() {
           selectAll: true,
           message: formValues.message,
           clientRoleId,
-          patientsIDs: [],
+          patientsIDs: formValues.patients.map(patient => patient.id),
           queryParams: {
             ...formValues.queryParams,
             filter: {
@@ -491,9 +491,6 @@ function* submitTextBlast() {
             },
           },
         };
-        if (formValues.uncheckedPatients.length > 0) {
-          reqParams.excludePatients = formValues.uncheckedPatients;
-        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
@@ -539,7 +536,7 @@ function* submitEmailBlast() {
           from: formValues.email,
           subject: formValues.subject,
           clientRoleId,
-          patientsIDs: [],
+          patientsIDs: formValues.patients.map(patient => patient.id),
           queryParams: {
             ...formValues.queryParams,
             filter: {
@@ -549,9 +546,6 @@ function* submitEmailBlast() {
             },
           },
         };
-        if (formValues.uncheckedPatients.length > 0) {
-          reqParams.excludePatients = formValues.uncheckedPatients;
-        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
