@@ -55,11 +55,17 @@ class PatientDatabaseEmailBlastModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { formValues } = newProps;
-
-    if (formValues && formValues.patients) {
-      this.setState({ total: formValues.patients.length });
+    const { formValues, patients, totalPatients } = newProps;
+    let total = 0;
+    if (patients.total === null) {
+      total = totalPatients;
+    } else if (!formValues.selectAllUncheckedManually && formValues.patients && formValues.patients.length > 0) {
+      total = patients.total - ((formValues.uncheckedPatients && formValues.uncheckedPatients.length > 0) ? formValues.uncheckedPatients.length : 0);
+    } else if ((formValues.patients && formValues.patients.length > 0) || (formValues.patients && formValues.patients.length === 0 && formValues.uncheckedPatients.length > 0)) {
+      total = formValues.patients.length;
     }
+
+    this.setState({ total });
   }
 
   onHide() {
