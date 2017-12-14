@@ -208,6 +208,9 @@ export function* fetchPatientsWatcher() {
             gender: searchParams.gender,
           });
         }
+        if (searchParams.ids) {
+          filterObj.ids = searchParams.ids;
+        }
       }
 
       const queryParams = {
