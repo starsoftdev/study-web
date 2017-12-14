@@ -116,10 +116,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
-  const publicPath = webpackConfig.output.publicPath || '/';
   const serverPublicPath = webpackConfig.output.serverPublicPath || path.resolve(process.cwd(), 'public');
-
-  app.use(publicPath, express.static(serverPublicPath));
+  app.use('/images', express.static(serverPublicPath));
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
@@ -173,13 +171,15 @@ const addDevMiddlewares = (app, webpackConfig) => {
 const addProdMiddlewares = (app, options) => {
   const publicPath = options.publicPath || '/';
   const outputPath = options.outputPath || path.resolve(process.cwd(), 'build');
-  const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
 
   // compression middleware compresses your server responses which makes them
   // smaller (applies also to assets). You can read more about that technique
   // and other good practices on official Express.js docs http://mxs.is/googmy
   app.use(compression());
-  app.use(publicPath, express.static(serverPublicPath));
+  app.use(publicPath, express.static(outputPath));
+
+  const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 
