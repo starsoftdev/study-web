@@ -189,13 +189,18 @@ export default class PatientActionButtons extends React.Component {
   }
 
   download() {
-    const patientsIdsToUse = _.map(this.props.textBlastFormValues.patients, patient => (patient.id));
+    const patientsIDs = _.map(this.props.textBlastFormValues.patients, patient => (patient.id));
     if (!this.props.formValues.patients || this.props.formValues.patients.length === 0) {
       this.setState({
         showAlertModal: true,
       });
     } else {
-      this.props.searchPatients({ ...this.props.paginationOptions.prevSearchFilter, ids: patientsIdsToUse }, true, true);
+      this.props.searchPatients({
+        ...this.props.paginationOptions.prevSearchFilter,
+        patientsIDs,
+        selectAllUncheckedManually: this.props.textBlastFormValues.selectAllUncheckedManually,
+        uncheckedPatients: this.props.textBlastFormValues.uncheckedPatients,
+      }, true, true);
     }
   }
 

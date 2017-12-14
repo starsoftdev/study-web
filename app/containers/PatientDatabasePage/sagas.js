@@ -208,8 +208,12 @@ export function* fetchPatientsWatcher() {
             gender: searchParams.gender,
           });
         }
-        if (searchParams.ids) {
-          filterObj.ids = searchParams.ids;
+        if (isExport) {
+          if (searchParams.selectAllUncheckedManually) {
+            filterObj.patientsIDs = searchParams.patientsIDs;
+          } else if (searchParams.uncheckedPatients.length > 0) {
+            filterObj.excludePatients = searchParams.uncheckedPatients;
+          }
         }
       }
 
@@ -481,7 +485,7 @@ function* submitTextBlast() {
           selectAll: true,
           message: formValues.message,
           clientRoleId,
-          patientsIDs: formValues.patients.map(patient => patient.id),
+          patientsIDs: [],
           queryParams: {
             ...formValues.queryParams,
             filter: {
@@ -491,6 +495,9 @@ function* submitTextBlast() {
             },
           },
         };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
@@ -536,7 +543,7 @@ function* submitEmailBlast() {
           from: formValues.email,
           subject: formValues.subject,
           clientRoleId,
-          patientsIDs: formValues.patients.map(patient => patient.id),
+          patientsIDs: [],
           queryParams: {
             ...formValues.queryParams,
             filter: {
@@ -546,6 +553,9 @@ function* submitEmailBlast() {
             },
           },
         };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
       } else {
         reqParams = {
           patientsIDs: formValues.patients.map(patient => patient.id),
