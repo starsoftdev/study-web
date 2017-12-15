@@ -227,8 +227,6 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       }
     }
 
-    console.log('site', siteOptions);
-
     return (
       <div className="sites-users-page">
         <div className="container-fluid">
