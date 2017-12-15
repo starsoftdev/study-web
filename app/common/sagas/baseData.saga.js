@@ -35,7 +35,6 @@ import {
   FETCH_SITE,
   FETCH_USER,
   DELETE_USER,
-  DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
   UPDATE_USER,
@@ -120,8 +119,6 @@ import {
   userFetchingError,
   userDeleted,
   userDeletingError,
-  clientRoleDeleted,
-  clientRoleDeletingError,
   siteSaved,
   siteSavingError,
   userSaved,
@@ -187,7 +184,6 @@ export default function* baseDataSaga() {
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
   yield fork(deleteUserWatcher);
-  yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
   yield fork(updateUserWatcher);
@@ -709,30 +705,6 @@ export function* deleteUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);
       yield put(userDeletingError(err));
-    }
-  }
-}
-
-export function* deleteClientRoleWatcher() {
-  while (true) {
-    const { id } = yield take(DELETE_CLIENT_ROLE);
-
-    try {
-      const requestURL = `${API_URL}/clientRoles/${id}`;
-      const options = {
-        method: 'DELETE',
-        body: JSON.stringify({
-          id,
-        }),
-      };
-      const response = yield call(request, requestURL, options);
-
-      toastr.success('Delete Client Role', 'Client Role deleted successfully!');
-      yield put(clientRoleDeleted(id, response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      toastr.error('', errorMessage);
-      yield put(clientRoleDeletingError(err));
     }
   }
 }

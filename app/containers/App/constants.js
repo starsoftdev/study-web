@@ -97,10 +97,6 @@ export const DELETE_USER                           = 'App/DELETE_USER';
 export const DELETE_USER_SUCCESS                   = 'App/DELETE_USER_SUCCESS';
 export const DELETE_USER_ERROR                     = 'App/DELETE_USER_ERROR';
 
-export const DELETE_CLIENT_ROLE                    = 'App/DELETE_CLIENT_ROLE';
-export const DELETE_CLIENT_ROLE_SUCCESS            = 'App/DELETE_CLIENT_ROLE_SUCCESS';
-export const DELETE_CLIENT_ROLE_ERROR              = 'App/DELETE_CLIENT_ROLE_ERROR';
-
 export const SAVE_SITE                             = 'App/SAVE_SITE';
 export const SAVE_SITE_SUCCESS                     = 'App/SAVE_SITE_SUCCESS';
 export const SAVE_SITE_ERROR                       = 'App/SAVE_SITE_ERROR';
