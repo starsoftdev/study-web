@@ -89,10 +89,6 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
 
-  DELETE_CLIENT_ROLE,
-  DELETE_CLIENT_ROLE_SUCCESS,
-  DELETE_CLIENT_ROLE_ERROR,
-
   SAVE_SITE,
   SAVE_SITE_SUCCESS,
   SAVE_SITE_ERROR,
@@ -216,11 +212,6 @@ const initialState = {
       adding: false,
       error: null,
     },
-    clientSites: {
-      details: [],
-      fetching: false,
-      error: null,
-    },
     sitePatients: {
       details: [],
       fetching: false,
@@ -304,10 +295,8 @@ const initialState = {
 };
 
 export default function appReducer(state = initialState, action) {
-  const { payload } = action;
   let foundIndex = -1;
   const cardsCollection = cloneDeep(state.baseData.cards.details);
-  const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
   const sitesCopy = map(state.baseData.sites.details, cloneDeep);
   const patientsCopy = cloneDeep(state.baseData.sitePatients.details);
@@ -324,7 +313,7 @@ export default function appReducer(state = initialState, action) {
     case SET_AUTH_STATE:
       resultState = {
         ...state,
-        loggedIn: payload.newAuthState,
+        loggedIn: action.payload.newAuthState,
       };
       break;
     case LOGIN_ERROR:
@@ -334,12 +323,12 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SET_USER_DATA:
-      if (payload.userData) {
-        if (payload.userData.roleForSponsor) {
+      if (action.payload.userData) {
+        if (action.payload.userData.roleForSponsor) {
           userRoleType = 'sponsor';
-        } else if (payload.userData.roleForClient) {
+        } else if (action.payload.userData.roleForClient) {
           userRoleType = 'client';
-        } else if (payload.userData.roles && payload.userData.roles.length > 0) {
+        } else if (action.payload.userData.roles && action.payload.userData.roles.length > 0) {
           userRoleType = 'dashboard';
         } else {
           userRoleType = '';
@@ -347,14 +336,14 @@ export default function appReducer(state = initialState, action) {
       }
       resultState = {
         ...state,
-        userData: payload.userData,
+        userData: action.payload.userData,
         userRoleType,
       };
       break;
     case CHANGE_IMAGE_SUCCESS:
       resultState = {
         ...state,
-        userData: { ...state.userData, profileImageURL: payload.profileImageURL },
+        userData: { ...state.userData, profileImageURL: action.payload.profileImageURL },
       };
       break;
     case FETCH_EVENTS:
@@ -428,15 +417,15 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case CLINICAL_TRIALS_SEARCH_SUCCESS:
-      const trialsCollection = concat(state.baseData.trials.details, payload.data);
+      const trialsCollection = concat(state.baseData.trials.details, action.payload.data);
       if (trialsCollection && trialsCollection[0] === null) {
         trialsCollection.splice(0, 1);
       }
       baseDataInnerState = {
         trials: {
           details: trialsCollection,
-          total: payload.total,
-          wrongPostalCode: payload.wrongPostalCode,
+          total: action.payload.total,
+          wrongPostalCode: action.payload.wrongPostalCode,
           fetching: false,
           error: null,
         },
@@ -514,7 +503,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case FETCH_LEVELS_SUCCESS: {
-      const levels = payload.map(l => {
+      const levels = action.payload.map(l => {
         switch (l.name) {
           case 'Ruby':
             return { ...l, price: 5297, posts: 108, texts: 400, emailCredits: 200 };
@@ -706,7 +695,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case DELETE_CARD_SUCCESS:
-      remove(cardsCollection.data, { id: payload.id });
+      remove(cardsCollection.data, { id: action.payload.id });
       baseDataInnerState = {
         cards: {
           details: cardsCollection,
@@ -943,7 +932,7 @@ export default function appReducer(state = initialState, action) {
           details: {
             customerCredits: state.baseData.clientCredits.details.customerCredits,
             emailCredits: state.baseData.clientCredits.details.emailCredits,
-            ...payload.customerCredits,
+            ...action.payload.customerCredits,
           },
           fetching: false,
           error: null,
@@ -1196,16 +1185,16 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case DELETE_USER_SUCCESS:
-      forEach(clientSitesCollection, item => {
+      forEach(sitesCopy, item => {
         forEach(item.roles, role => {
-          if (role.user.id === payload.id) {
+          if (role.user_id === action.payload.id) {
             temRoleID = role.id;
             return false;
           }
           return true;
         });
       });
-      forEach(clientSitesCollection, item => {
+      forEach(sitesCopy, item => {
         if (remove(item.roles, { id: temRoleID }).length > 0) {
           return false;
         }
@@ -1213,7 +1202,7 @@ export default function appReducer(state = initialState, action) {
       });
 
       forEach(clientRolesCollection, item => {
-        if (item.user.id === payload.id) {
+        if (item.user_id === action.payload.id) {
           temRoleID = item.id;
           return false;
         }
@@ -1227,8 +1216,8 @@ export default function appReducer(state = initialState, action) {
           deleting: false,
           error: null,
         },
-        clientSites: {
-          details: clientSitesCollection,
+        sites: {
+          details: sitesCopy,
           fetching: false,
           error: null,
         },
@@ -1258,50 +1247,6 @@ export default function appReducer(state = initialState, action) {
         },
       };
       break;
-    case DELETE_CLIENT_ROLE:
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: null,
-          deleting: true,
-          error: null,
-        },
-      };
-      break;
-
-    case DELETE_CLIENT_ROLE_SUCCESS:
-      remove(clientRolesCollection, { id: payload.id });
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: payload,
-          deleting: false,
-          error: null,
-        },
-        clientRoles: {
-          details: clientRolesCollection,
-          fetching: false,
-          error: null,
-        },
-        selectedUser: {
-          details: null,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    case DELETE_CLIENT_ROLE_ERROR:
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: null,
-          deleting: false,
-          error: payload,
-        },
-        selectedUser: {
-          details: null,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
     case SAVE_SITE:
       baseDataInnerState = {
         savedSite: {
@@ -1312,11 +1257,14 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_SITE_SUCCESS:
-      foundIndex = findIndex(sitesCopy, { id: payload.id });
-      if (!payload.roles) {
+      foundIndex = findIndex(sitesCopy, { id: action.payload.id });
+      const payload = {
+        ...action.payload,
+      };
+      if (!action.payload.roles) {
         payload.roles = [];
       }
-      if (foundIndex < 0) {
+      if (foundIndex === -1) {
         sitesCopy.push(payload);
       } else {
         payload.roles = sitesCopy[foundIndex].roles;
@@ -1364,9 +1312,9 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
-      if (payload.userType === 'admin') {
-        forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
+      if (action.payload.userType === 'admin') {
+        forEach(sitesCopy, item => {
+          foundIndex = findIndex(item.roles, { id: action.payload.userResultData.id });
           if (foundIndex > -1) {
             item.roles.splice(foundIndex, 1);
             foundIndex = -1;
@@ -1374,45 +1322,44 @@ export default function appReducer(state = initialState, action) {
           }
           return true;
         });
-      } else if (payload.userType === 'nonAdmin') {
-        forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
-          if (foundIndex > -1) {
-            if (item.id === payload.userResultData.siteId) {
-              item.roles[foundIndex].user = payload.userResultData.user; // eslint-disable-line
+      } else if (action.payload.userType === 'nonAdmin') {
+        forEach(sitesCopy, item => {
+          if (item.id === action.payload.userResultData.siteId) {
+            foundIndex = findIndex(item.roles, { id: action.payload.userResultData.id });
+            if (foundIndex !== -1) {
+              item.roles[foundIndex].user = action.payload.userResultData.user; // eslint-disable-line
             } else {
               item.roles.splice(foundIndex, 1);
-              foundIndex = -1;
             }
             return false;
           }
           return true;
         });
         if (foundIndex < 0) {
-          foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+          foundIndex = findIndex(sitesCopy, { id: action.payload.userResultData.siteId });
           if (foundIndex > -1) {
-            clientSitesCollection[foundIndex].roles.push(payload.userResultData);
+            sitesCopy[foundIndex].roles.push(action.payload.userResultData);
           }
         }
       }
-      foundIndex = findIndex(clientRolesCollection, (item) => (item.user_id === payload.userResultData.user.id));
-      if (payload.userType === 'admin') {
+      foundIndex = findIndex(clientRolesCollection, (item) => (item.user_id === action.payload.userResultData.user.id));
+      if (action.payload.userType === 'admin') {
         if (foundIndex < 0) {
-          clientRolesCollection.push(payload.userResultData);
+          clientRolesCollection.push(action.payload.userResultData);
         } else {
-          clientRolesCollection[foundIndex] = payload.userResultData;
+          clientRolesCollection[foundIndex] = action.payload.userResultData;
         }
-      } else if (payload.userType === 'nonAdmin') {
+      } else if (action.payload.userType === 'nonAdmin') {
         if (foundIndex > -1) {
-          clientRolesCollection[foundIndex] = payload.userResultData;
+          clientRolesCollection[foundIndex] = action.payload.userResultData;
         }
       }
-      // if (payload.userResultData.header === 'Add User') {
-      //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
-      //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
-      //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+      // if (action.payload.userResultData.header === 'Add User') {
+      //   // if (action.payload.userResultData.siteId && action.payload.userResultData.siteId !== '0') {
+      //   //   foundIndex = findIndex(sitesCopy, { id: action.payload.userResultData.siteId });
+      //   //   sitesCopy[foundIndex].roles.push(action.payload.userResultData.user);
       //   // } else {
-      //   clientRolesCollection.push(payload.userResultData);
+      //   clientRolesCollection.push(action.payload.userResultData);
       //   // }
       // }
 
@@ -1422,8 +1369,8 @@ export default function appReducer(state = initialState, action) {
           saving: false,
           error: null,
         },
-        clientSites: {
-          details: clientSitesCollection,
+        sites: {
+          details: sitesCopy,
           fetching: false,
           error: null,
         },
@@ -1474,7 +1421,13 @@ export default function appReducer(state = initialState, action) {
 
       resultState = {
         ...state,
-        userData: { ...state.userData, timezone: payload.timezone, city: payload.city, address: payload.address, needSetup: payload.needSetup },
+        userData: {
+          ...state.userData,
+          timezone: action.payload.timezone,
+          city: action.payload.city,
+          address: action.payload.address,
+          needSetup: action.payload.needSetup,
+        },
         baseData: {
           ...state.baseData,
           ...baseDataInnerState,
@@ -1501,7 +1454,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_TIMEZONE_SUCCESS:
       baseDataInnerState = {
-        timezone: payload.timezone,
+        timezone: action.payload.timezone,
       };
       break;
     case GET_TIMEZONE_ERROR:

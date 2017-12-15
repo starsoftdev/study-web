@@ -15,11 +15,12 @@ import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
 import { formatTimezone } from '../../utils/time';
+
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: PropTypes.number,
     currentUser: PropTypes.object,
-    clientSites: PropTypes.object,
+    sites: PropTypes.object,
     selectedSite: PropTypes.object,
     selectedSiteDetailsForForm: PropTypes.object,
     selectedUser: PropTypes.object,
@@ -79,8 +80,8 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
   }
 
   getSortedClientSites() {
-    const { clientSites } = this.props;
-    const listItems = cloneDeep(clientSites.details);
+    const { sites } = this.props;
+    const listItems = cloneDeep(sites.details);
 
     if (!this.state.sortBy) {
       return listItems;
@@ -282,7 +283,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
 
 const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
-  clientSites: selectClientSites(),
+  sites: selectClientSites(),
   selectedSite: selectSelectedSite(),
   selectedSiteDetailsForForm: selectSelectedSiteDetailsForForm(),
   selectedUser: selectSelectedUser(),
