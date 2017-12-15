@@ -319,7 +319,7 @@ export default function appReducer(state = initialState, action) {
     case LOGIN_ERROR:
       resultState = {
         ...state,
-        loginError: payload,
+        loginError: action.payload,
       };
       break;
     case SET_USER_DATA:
@@ -349,18 +349,18 @@ export default function appReducer(state = initialState, action) {
     case FETCH_EVENTS:
       resultState = {
         ...state,
-        pageEvents: payload,
+        pageEvents: action.payload,
       };
       break;
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
-        indications: payload,
+        indications: action.payload,
       };
       break;
     case SORT_SUCCESS:
       baseDataInnerState = {
         studies: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -379,7 +379,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_LANDING_SUCCESS:
       baseDataInnerState = {
         landing: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -390,7 +390,7 @@ export default function appReducer(state = initialState, action) {
         landing: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -444,12 +444,12 @@ export default function appReducer(state = initialState, action) {
       break;
     case PATIENT_SUBSCRIBED:
       baseDataInnerState = {
-        subscribedFromLanding: payload,
+        subscribedFromLanding: action.payload,
       };
       break;
     case FIND_OUT_PATIENTS_POSTED:
       baseDataInnerState = {
-        findOutPosted: payload,
+        findOutPosted: action.payload,
       };
       break;
     case LIST_SITE_NOW_SUCCESS:
@@ -494,12 +494,12 @@ export default function appReducer(state = initialState, action) {
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
       baseDataInnerState = {
-        subscriptionError: payload,
+        subscriptionError: action.payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:
       baseDataInnerState = {
-        sources: payload,
+        sources: action.payload,
       };
       break;
     case FETCH_LEVELS_SUCCESS: {
@@ -538,7 +538,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_COUPON_SUCCESS:
       baseDataInnerState = {
         coupon: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -549,7 +549,7 @@ export default function appReducer(state = initialState, action) {
         coupon: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -569,7 +569,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_REWARDS_SUCCESS:
       baseDataInnerState = {
-        rewards: payload,
+        rewards: action.payload,
       };
       break;
     case FETCH_REWARDS_ERROR:
@@ -582,13 +582,13 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
-          [siteId || 0]: payload,
+          [siteId || 0]: action.payload,
         },
       };
       break;
     }
     case REDEEM_SUCCESS: {
-      const { siteId, balance, points } = payload;
+      const { siteId, balance, points } = action.payload;
       baseDataInnerState = {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
@@ -610,7 +610,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PROTOCOLS_SUCCESS:
       baseDataInnerState = {
         protocols: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -621,7 +621,7 @@ export default function appReducer(state = initialState, action) {
         protocols: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -637,7 +637,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CARDS_SUCCESS:
       baseDataInnerState = {
         cards: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -648,7 +648,7 @@ export default function appReducer(state = initialState, action) {
         cards: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -662,7 +662,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_CARD_SUCCESS:
-      cardsCollection.data.push(payload);
+      cardsCollection.data.push(action.payload);
       baseDataInnerState = {
         cards: {
           details: cardsCollection,
@@ -670,7 +670,7 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
         savedCard: {
-          details: payload,
+          details: action.payload,
           saving: false,
           error: null,
         },
@@ -681,7 +681,7 @@ export default function appReducer(state = initialState, action) {
         savedCard: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -703,7 +703,7 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
         deletedCard: {
-          details: payload,
+          details: action.payload,
           deleting: false,
           error: null,
         },
@@ -714,7 +714,7 @@ export default function appReducer(state = initialState, action) {
         deletedCard: {
           details: null,
           deleting: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -728,10 +728,10 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case ADD_CREDITS_SUCCESS:
-      cardsCollection.data.push(payload);
+      cardsCollection.data.push(action.payload);
       baseDataInnerState = {
         addCredits: {
-          details: payload,
+          details: action.payload,
           adding: false,
           error: null,
         },
@@ -742,7 +742,7 @@ export default function appReducer(state = initialState, action) {
         addCredits: {
           details: null,
           adding: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -758,7 +758,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_SITES_SUCCESS:
       baseDataInnerState = {
         sites: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -769,7 +769,7 @@ export default function appReducer(state = initialState, action) {
         sites: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -788,9 +788,9 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
       if (action.page === 1) {
-        newPatientsList = payload;
+        newPatientsList = action.payload;
       } else {
-        newPatientsList = patientsCopy.concat(payload);
+        newPatientsList = patientsCopy.concat(action.payload);
       }
       baseDataInnerState = {
         sitePatients: {
@@ -809,7 +809,7 @@ export default function appReducer(state = initialState, action) {
         sitePatients: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -887,7 +887,7 @@ export default function appReducer(state = initialState, action) {
     case GET_CNS_INFO_SUCCESS:
       baseDataInnerState = {
         cnsInfo: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -913,7 +913,7 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         cnsSubmitProcess: {
           submitting: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -944,7 +944,7 @@ export default function appReducer(state = initialState, action) {
         clientCredits: {
           details: state.baseData.clientCredits.details,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -967,7 +967,7 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         patientMessages: {
           ...state.baseData.patientMessages,
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
           stats: {
@@ -988,7 +988,7 @@ export default function appReducer(state = initialState, action) {
           stats: {
             textTotal: state.baseData.patientMessages.stats.textTotal || 0,
             emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
-            unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + payload) || 0,
+            unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + action.payload) || 0,
           },
         },
       };
@@ -1003,7 +1003,7 @@ export default function appReducer(state = initialState, action) {
           stats: {
             textTotal: state.baseData.patientMessages.stats.textTotal || 0,
             emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
-            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - payload) || 0,
+            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - action.payload) || 0,
           },
         },
       };
@@ -1014,7 +1014,7 @@ export default function appReducer(state = initialState, action) {
           ...state.baseData.patientMessages,
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
           stats: {
             textTotal: 0,
             emailsSent: 0,
@@ -1086,7 +1086,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_ROLES_SUCCESS:
       baseDataInnerState = {
         clientRoles: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1097,7 +1097,7 @@ export default function appReducer(state = initialState, action) {
         clientRoles: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1114,7 +1114,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_SITE_SUCCESS:
       baseDataInnerState = {
         selectedSite: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1125,7 +1125,7 @@ export default function appReducer(state = initialState, action) {
         selectedSite: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1142,7 +1142,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_USER_SUCCESS:
       baseDataInnerState = {
         selectedUser: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1153,7 +1153,7 @@ export default function appReducer(state = initialState, action) {
         selectedUser: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1195,10 +1195,7 @@ export default function appReducer(state = initialState, action) {
         });
       });
       forEach(sitesCopy, item => {
-        if (remove(item.roles, { id: temRoleID }).length > 0) {
-          return false;
-        }
-        return true;
+        return remove(item.roles, { id: temRoleID }).length <= 0;
       });
 
       forEach(clientRolesCollection, item => {
@@ -1212,7 +1209,7 @@ export default function appReducer(state = initialState, action) {
 
       baseDataInnerState = {
         deletedUser: {
-          details: payload,
+          details: action.payload,
           deleting: false,
           error: null,
         },
@@ -1238,7 +1235,7 @@ export default function appReducer(state = initialState, action) {
         deletedUser: {
           details: null,
           deleting: false,
-          error: payload,
+          error: action.payload,
         },
         selectedUser: {
           details: null,
@@ -1293,7 +1290,7 @@ export default function appReducer(state = initialState, action) {
         savedSite: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
         selectedSite: {
           details: null,
@@ -1365,7 +1362,7 @@ export default function appReducer(state = initialState, action) {
 
       baseDataInnerState = {
         savedUser: {
-          details: payload,
+          details: action.payload,
           saving: false,
           error: null,
         },
@@ -1391,7 +1388,7 @@ export default function appReducer(state = initialState, action) {
         savedUser: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
         selectedUser: {
           details: null,
@@ -1402,7 +1399,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_CREDITS_PRICE_SUCCESS:
       baseDataInnerState = {
-        creditsPrice: payload,
+        creditsPrice: action.payload,
       };
       break;
     case CHANGE_USERS_TIMEZONE:
@@ -1437,7 +1434,7 @@ export default function appReducer(state = initialState, action) {
     case UPDATE_USER_SUCCESS:
       resultState = {
         ...state,
-        userData: Object.assign(state.userData, payload),
+        userData: Object.assign(state.userData, action.payload),
       };
       break;
     case CHANGE_USERS_TIMEZONE_ERROR:
