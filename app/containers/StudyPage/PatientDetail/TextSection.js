@@ -58,6 +58,7 @@ class TextSection extends React.Component {
 
     this.state = {
       maxCharacters: 160,
+      patientToFetchMessages: null,
       enteredCharactersLength: 0,
       twilioMessages : [],
       socketBinded: false,
@@ -71,13 +72,17 @@ class TextSection extends React.Component {
     }
 
     if (newProps.active && newProps.currentPatient) {
-      this.initStudyPatientMessagesFetch(newProps);
+      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(newProps)
+      })
     }
 
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        this.initStudyPatientMessagesFetch(newProps);
-        if (this.props.active && newMessage) {
+        if (this.props.active && newMessage && this.props.currentPatient) {
+          this.setState({ patientToFetchMessages: this.props.currentPatient.id }, () => {
+            this.initStudyPatientMessagesFetch(this.props)
+          })
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
@@ -100,7 +105,7 @@ class TextSection extends React.Component {
         patientId: props.currentPatient.id,
         cb: (err, data) => {
           if (!err) {
-            if (this.state.twilioMessages !== data.messages) {
+            if (this.state.patientToFetchMessages === props.currentPatient.id) {
               this.setState({ twilioMessages: data.messages });
             }
           } else {
