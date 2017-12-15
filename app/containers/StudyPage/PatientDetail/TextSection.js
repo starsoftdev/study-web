@@ -73,16 +73,16 @@ class TextSection extends React.Component {
 
     if (newProps.active && newProps.currentPatient) {
       this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
-        this.initStudyPatientMessagesFetch(newProps)
-      })
+        this.initStudyPatientMessagesFetch(newProps);
+      });
     }
 
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         if (this.props.active && newMessage && this.props.currentPatient) {
           this.setState({ patientToFetchMessages: this.props.currentPatient.id }, () => {
-            this.initStudyPatientMessagesFetch(this.props)
-          })
+            this.initStudyPatientMessagesFetch(this.props);
+          });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
