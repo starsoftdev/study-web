@@ -97,10 +97,6 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
 
-  DELETE_CLIENT_ROLE,
-  DELETE_CLIENT_ROLE_SUCCESS,
-  DELETE_CLIENT_ROLE_ERROR,
-
   SAVE_SITE,
   SAVE_SITE_SUCCESS,
   SAVE_SITE_ERROR,
@@ -770,30 +766,6 @@ export function userDeleted(id, payload) {
 export function userDeletingError(payload) {
   return {
     type: DELETE_USER_ERROR,
-    payload,
-  };
-}
-
-export function deleteClientRole(id) {
-  return {
-    type: DELETE_CLIENT_ROLE,
-    id,
-  };
-}
-
-export function clientRoleDeleted(id, payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_SUCCESS,
-    payload: {
-      ...payload,
-      id,
-    },
-  };
-}
-
-export function clientRoleDeletingError(payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_ERROR,
     payload,
   };
 }
