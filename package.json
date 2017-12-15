@@ -38,7 +38,7 @@
     "start": "cross-env NODE_ENV=development node server",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start:prod": "npm run build && cross-env NODE_ENV=production node server",
-    "pretest": "npm run test:clean && npm run lint",
+    "pretest": "npm run test:clean",
     "test:clean": "rimraf ./coverage",
     "test#disabled": "karma start internals/testing/karma.conf.js --single-run",
     "test:watch": "npm run test --auto-watch --no-single-run",

@@ -55,6 +55,7 @@ export default class PatientActionButtons extends React.Component {
     formValues: React.PropTypes.object,
     importPatientsStatus: React.PropTypes.object,
     paginationOptions: React.PropTypes.object,
+    textBlastFormValues: React.PropTypes.object,
     searchPatients: React.PropTypes.func,
     showAddProtocolModal: React.PropTypes.bool,
   };
@@ -188,12 +189,18 @@ export default class PatientActionButtons extends React.Component {
   }
 
   download() {
+    const patientsIDs = _.map(this.props.textBlastFormValues.patients, patient => (patient.id));
     if (!this.props.formValues.patients || this.props.formValues.patients.length === 0) {
       this.setState({
         showAlertModal: true,
       });
     } else {
-      this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
+      this.props.searchPatients({
+        ...this.props.paginationOptions.prevSearchFilter,
+        patientsIDs,
+        selectAllUncheckedManually: this.props.textBlastFormValues.selectAllUncheckedManually,
+        uncheckedPatients: this.props.textBlastFormValues.uncheckedPatients,
+      }, true, true);
     }
   }
 

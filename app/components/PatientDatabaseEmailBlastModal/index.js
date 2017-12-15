@@ -87,7 +87,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     const { formSyncErrors, formValues, submitEmailBlast, currentUser, clientCredits } = this.props;
     const emailCredits = clientCredits.details.emailCredits;
     if (this.state.total > emailCredits) {
-      toastr.error('Error!', 'You do not have enough email credits. Please add more credits.');
+      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
     } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues, currentUser.roleForClient.id, currentUser, this.onClose);
     } else if (formSyncErrors.patients) {
@@ -115,7 +115,8 @@ class PatientDatabaseEmailBlastModal extends React.Component {
   }
 
   render() {
-    const { show, className } = this.props;
+    const { show, className, clientCredits } = this.props;
+    const disabled = (this.state.total > clientCredits.details.emailCredits);
 
     return (
       <Modal
@@ -174,11 +175,13 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     placeholder="Type a message..."
                   />
                   <div className="footer">
-                    <input
+                    <div
                       className="btn btn-default lightbox-opener pull-right"
-                      value="Send"
-                      type="submit"
-                    />
+                      onClick={(e) => this.submitEmailBlast(e)}
+                      disabled={disabled}
+                    >
+                      Send
+                    </div>
                   </div>
                 </div>
               </div>
