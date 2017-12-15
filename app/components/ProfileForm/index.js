@@ -261,19 +261,22 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
             isDisabled
           />
         </div>
-        <div className="field-row fs-hide">
-          <strong className="label required"><label>Address</label></strong>
-          <div className="field">
-            <Field
-              name="address"
-              component={FormGeosuggest}
-              refObj={(el) => { this.geoSuggest = el; }}
-              onSuggestSelect={this.onSuggestSelect}
-              initialValue={(this.props.initialValues.address || '')}
-              placeholder=""
-            />
+        {
+          !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
+          <div className="field-row fs-hide">
+            <strong className="label required"><label>Address</label></strong>
+            <div className="field">
+              <Field
+                name="address"
+                component={FormGeosuggest}
+                refObj={(el) => { this.geoSuggest = el; }}
+                onSuggestSelect={this.onSuggestSelect}
+                initialValue={(this.props.initialValues.address || '')}
+                placeholder=""
+              />
+            </div>
           </div>
-        </div>
+        }
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
           <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
@@ -299,11 +302,14 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           <strong className="label"><label>PASSWORD</label></strong>
           <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
         </div>
-        <div className="btn-block text-right">
-          <button type="submit" className="btn btn-default btn-add-row">
-            <span>Update</span>
-          </button>
-        </div>
+        {
+          !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
+          <div className="btn-block text-right">
+            <button type="submit" className="btn btn-default btn-add-row">
+              <span>Update</span>
+            </button>
+          </div>
+        }
         <Modal
           className="profile-page-modal"
           dialogComponentClass={CenteredModal}

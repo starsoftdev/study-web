@@ -208,6 +208,13 @@ export function* fetchPatientsWatcher() {
             gender: searchParams.gender,
           });
         }
+        if (isExport) {
+          if (searchParams.selectAllUncheckedManually) {
+            filterObj.patientsIDs = searchParams.patientsIDs;
+          } else if (searchParams.uncheckedPatients.length > 0) {
+            filterObj.excludePatients = searchParams.uncheckedPatients;
+          }
+        }
       }
 
       const queryParams = {
