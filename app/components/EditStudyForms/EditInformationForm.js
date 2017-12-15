@@ -570,6 +570,7 @@ export default class EditInformationForm extends React.Component {
                   placeholder="Select Protocol"
                   searchPlaceholder="Search"
                   searchable
+                  clearable={false}
                   options={protocolsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
@@ -636,6 +637,7 @@ export default class EditInformationForm extends React.Component {
                   placeholder="Select Indication"
                   searchPlaceholder="Search"
                   searchable
+                  clearable={false}
                   options={indicationsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
