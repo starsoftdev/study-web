@@ -307,7 +307,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', err.message);
+      toastr.error('', 'Error! Invalid coupon code.');
     }
   }
 }
@@ -409,7 +409,7 @@ export function* saveCardWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Add New Card', 'Card saved successfully!');
+      toastr.success('', 'Success! Your card has been added.');
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -434,7 +434,7 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Delete Card', 'Card deleted successfully!');
+      toastr.success('', 'Success! You have removed your card.');
       yield put(cardDeleted(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');

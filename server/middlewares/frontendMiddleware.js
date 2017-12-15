@@ -116,6 +116,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
+  const serverPublicPath = webpackConfig.output.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
+
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
@@ -174,6 +177,9 @@ const addProdMiddlewares = (app, options) => {
   // and other good practices on official Express.js docs http://mxs.is/googmy
   app.use(compression());
   app.use(publicPath, express.static(outputPath));
+
+  const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 

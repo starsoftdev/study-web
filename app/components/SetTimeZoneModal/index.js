@@ -15,11 +15,11 @@ class SetTimeZoneModal extends React.Component {
     const { show, currentUserRoleType } = this.props;
     let timezoneDemoUrl;
     if (currentUserRoleType === 'client') {
-      timezoneDemoUrl = '/timezone-demo.gif';
+      timezoneDemoUrl = '/images/timezone-demo.gif';
     } else if (currentUserRoleType === 'sponsor') {
-      timezoneDemoUrl = '/sponsor-timezone-demo.gif';
+      timezoneDemoUrl = '/images/sponsor-timezone-demo.gif';
     } else {
-      timezoneDemoUrl = '/dashboard-timezone-demo.gif';
+      timezoneDemoUrl = '/images/dashboard-timezone-demo.gif';
     }
     return (
       <Modal

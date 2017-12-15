@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
 import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
@@ -133,6 +132,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    if (clientCredits === 0 || clientCredits === null) {
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      return;
+    }
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -243,6 +247,8 @@ class TextSection extends React.Component {
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
     this.scrollElement();
+    const notValidPhone = !currentPatient.phone;
+
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
@@ -251,12 +257,15 @@ class TextSection extends React.Component {
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
-          <Button
-            disabled={disabled || unsubscribed || !ePMS}
-            onClick={this.submitText}
-          >
-            Send
-          </Button>
+          <div onClick={() => this.checkForValidPhone(notValidPhone)}>
+            <div
+              className="btn btn-default lightbox-opener pull-right"
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
+              disabled={disabled || !ePMS || unsubscribed || notValidPhone}
+            >
+              Send
+            </div>
+          </div>
         </div>
       </div>
     );
