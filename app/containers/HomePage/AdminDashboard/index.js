@@ -93,6 +93,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchUsersByRole: () => dispatch(fetchUsersByRole()),
   resetForm: () => dispatch(reset('dashboardFilters')),
   updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
+  clearCampaignFilter: () => dispatch(reset('campaignFilter')),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -131,6 +132,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     totals: PropTypes.object,
     updateTwilioNumbers: PropTypes.func,
     usersByRoles: PropTypes.object,
+    clearCampaignFilter: PropTypes.func,
   };
 
   constructor(props) {
@@ -178,9 +180,8 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.props.fetchProtocols();
     this.props.fetchCro();
     this.props.fetchUsersByRole();
-    // TODO re-enable when Five 9 is verified to work
-    // this.props.fetchFive9List();
     this.props.fetchSources();
+    this.props.fetchFive9List();
   }
 
   componentWillReceiveProps(newProps) {
@@ -212,6 +213,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       prevOffset: null,
     });
     resetForm();
+    this.props.clearCampaignFilter();
   }
 
   removeFilter(filter) {
@@ -389,29 +391,35 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   percentageFilterChange(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'percentage', e);
   }
 
   percentageFilterSubmit(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e });
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
   }
 
   nearbyFilterChange(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'nearbyStudies', e);
   }
 
   nearbyFilterSubmit(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e });
     this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.nearbyStudies, arg: e }, 'nearbyStudies');
   }
 
   searchFilterSubmit(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'search', { value: e });
     this.fetchStudiesAccordingToFilters({ value: e }, 'search');
   }
 
   addressFilterSubmit(e) {
+    const { change } = this.props;
     change('dashboardFilters', 'address', { value: e });
     this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
@@ -691,6 +699,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             changeStudyStatusDashboard={this.props.changeStudyStatusDashboard}
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
+            five9List={this.props.five9List}
           />
         </StickyContainer>
       </div>

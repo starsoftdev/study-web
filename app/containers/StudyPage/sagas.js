@@ -71,6 +71,7 @@ import {
   submitEmailSuccess,
   emailsFetched,
   emailsFetchError,
+  fetchEmails,
 } from './actions';
 
 // Bootstrap sagas
@@ -92,6 +93,9 @@ function* fetchStudyDetails() {
     include: [
       {
         relation: 'campaigns',
+        scope: {
+          order: 'orderNumber DESC',
+        },
       },
       {
         relation: 'protocol',
@@ -229,8 +233,6 @@ function* fetchStudyTextStats(action) {
     const response = yield call(request, requestURL, options);
     yield put(textStatsFetched(response));
   } catch (e) {
-    const errorMessage = get(e, 'message', 'Something went wrong while fetching text message stats. Please try again later.');
-    toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -475,6 +477,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                  include: 'roleForClient',
                 },
               },
             ],
@@ -768,6 +771,7 @@ function* submitEmail() {
         }),
       });
       yield put(submitEmailSuccess(response));
+      yield put(fetchEmails(studyId, patientId));
       toastr.success('', 'Success! Your email have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
@@ -779,7 +783,7 @@ function* submitEmail() {
   }
 }
 
-function* fetchEmails() {
+function* fetchEmailsWatcher() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
     const { studyId, patientId } = yield take(FETCH_EMAILS);
@@ -844,7 +848,7 @@ function* submitDeleteNote() {
 function* submitTextBlast() {
   while (true) {
     // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, onClose } = yield take(SUBMIT_TEXT_BLAST);
+    const { patients, message, clientRoleId, studyId, siteName, currentUser, onClose } = yield take(SUBMIT_TEXT_BLAST);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -860,6 +864,9 @@ function* submitTextBlast() {
           )),
           clientRoleId,
           message,
+          studyId,
+          siteName,
+          currentUser,
         }),
       });
       onClose();
@@ -1033,7 +1040,7 @@ export function* fetchStudySaga() {
     const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
-    // watch for socket.io or filtering actions that will refresh the text message stats
+    // watch for filtering actions that will refresh the text message stats
     const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
@@ -1055,7 +1062,7 @@ export function* fetchStudySaga() {
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
     const watcherEmail = yield fork(submitEmail);
-    const watcherEmailsFetch = yield fork(fetchEmails);
+    const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);

@@ -25,9 +25,9 @@ import {
   FETCH_SITE_LOCATIONS_SUCCESS,
   CLEAR_FILTERS,
   UPDATE_DASHBOARD_STUDY_SUCCESS,
-  FETCH_ALL_CLIENT_USERS,
-  FETCH_ALL_CLIENT_USERS_SUCCESS,
-  FETCH_ALL_CLIENT_USERS_ERROR,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
   FETCH_STUDY_CAMPAIGNS,
   FETCH_STUDY_CAMPAIGNS_ERROR,
   FETCH_STUDY_CAMPAIGNS_SUCCESS,
@@ -621,25 +621,25 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     }
-    case FETCH_ALL_CLIENT_USERS:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS:
       return {
         ...state,
         allClientUsers: {
-          details: [],
+          details: state.allClientUsers.details,
           fetching: true,
           error: null,
         },
       };
-    case FETCH_ALL_CLIENT_USERS_SUCCESS:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS:
       return {
         ...state,
         allClientUsers: {
-          details: action.payload,
+          details: action.payload.map(e => (e.isChecked ? e : state.allClientUsers.details.find((el) => (el.user_id === e.user_id && el.isChecked)) || e)),
           fetching: false,
           error: null,
         },
       };
-    case FETCH_ALL_CLIENT_USERS_ERROR:
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR:
       return {
         ...state,
         allClientUsers: {
@@ -1025,6 +1025,7 @@ export default function dashboardPageReducer(state = initialState, action) {
             level_id: action.payload.levelId,
             level_name: action.campaignInfo.levelName,
             custom_patient_goal: action.payload.customPatientGoal,
+            five_9_value: action.payload.five9value,
           };
         } else {
           return study;

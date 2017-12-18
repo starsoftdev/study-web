@@ -26,6 +26,8 @@ import {
   UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET,
   SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
   UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
+  CLIENT_OPENED_STUDY_PAGE,
+  CLIENT_CLOSED_STUDY_PAGE,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -115,12 +117,13 @@ export function fetchNotifications(userId, limit, offset) {
   };
 }
 
-export function fetchNotificationsSucceeded(payload, hasMoreItems, page) {
+export function fetchNotificationsSucceeded(payload, hasMoreItems, page, userId) {
   return {
     type: FETCH_NOTIFICATIONS_SUCCESS,
     payload,
     hasMoreItems,
     page,
+    userId,
   };
 }
 
@@ -149,6 +152,20 @@ export function markNotificationsRead(userId) {
   return {
     type: MARK_NOTIFICATIONS_READ,
     userId,
+  };
+}
+
+export function clientOpenedStudyPage(studyId) {
+  return {
+    type: CLIENT_OPENED_STUDY_PAGE,
+    studyId,
+  };
+}
+
+export function clientClosedStudyPage(studyId) {
+  return {
+    type: CLIENT_CLOSED_STUDY_PAGE,
+    studyId,
   };
 }
 

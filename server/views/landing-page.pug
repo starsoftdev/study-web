@@ -1,0 +1,156 @@
+#app
+  #wrapper
+    header#header
+      img.visible-print-block.logo-print(src='/4690a32ee65505ca26018d7fe4f0799a.svg', alt='Study KIK', width='260', height='38')
+      nav.navbar.navbar-default
+        .container-fluid
+          .navbar-header
+            button.navbar-toggle.collapsed(type='button')
+              span.sr-only Toggle navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.btn.btn-default.btn-login(href='/login')
+              span.hidden-xs LOGIN
+              span.hidden-sm.hidden-md.hidden-lg.glyphicon.glyphicon-log-in(class='visible-xs-*')
+            .logo-holder
+              a.navbar-brand(href='/')
+                img(src='/4690a32ee65505ca26018d7fe4f0799a.svg', alt='Study KIK', width='150')
+          .navbar-collapse.holder.collapse.well
+            ul.nav.navbar-nav
+              li
+                a(href='/')
+                  div STUDY SEARCH
+              li
+                a(href='/list-your-trials')
+                  div LIST YOUR TRIALS
+              li
+                a(href='/about')
+                  div ABOUT
+              li
+                a(href='/blog')
+                  div BLOG
+              li
+                a(href='/contact')
+                  div CONTACT
+    #main
+      .container
+        form.form-study.text-center.landing-form.fs-hide(action='#', novalidate='')
+          h1.main-heading=title
+          if location
+            h2.txt-orange
+              i.icomoon-map-marker
+              | #{location}
+          .in-viewport.fadeInUp(data-view='fadeInUp')
+            h3=instructions
+            .field-row
+              input.form-control.input-lg(type='text', name='name', value='', placeholder=fullNamePlaceholder)
+            .field-row
+              input.form-control.input-lg(type='email', name='email', value='', placeholder=emailPlaceholder)
+            .field-row
+              input.form-control.input-lg(type='phone', name='phone', value='', placeholder=phonePlaceholder)
+            .field-row
+              input.btn.btn-default.hidden.input-lg(type='reset', value='Reset')
+              input.btn.btn-default.btn-block.input-lg(type='submit', value='Sign up now!')
+            .field-row
+              unless landing.hideClickToCall
+                a.btn.btn-deep.btn-block.small(class=`${clickToCallNumber ?'' : 'disabled'}`, href=clickToCallNumber)
+                  i.icomoon-phone-square
+                  .inline
+                    span=clickToCallButtonText
+                    if clickToCallNumber
+                      span=formatPhone(landing.clickToCallButtonNumber)
+        article.landing.post
+          .row
+            .in-viewport(class=`${imgSrc ? 'col-xs-12 col-sm-6 pull-right' : 'centered'}`)
+              if landingDescription
+                .custom-description!=renderMarkdown(landingDescription)
+              else
+                h2(class=`${landingDescription ? 'nodesc' : ''}`)=indication
+                div
+                  strong.title.text-uppercase=landing.siteName
+                  address=address
+              p.instruction.text-underline=ifInterestedInstructions
+              p.note=bySignUpText
+              if !imgSrc && landing.showSocialMediaButtons
+                .social-area.clearfix
+                  h3.pull-left=landing.shareThisStudyText || 'Share this study:'
+                  ul.social-networks.pull-left.list-inline
+                    li.facebook
+                      a
+                        i.icomoon-facebook-square
+                    li.twitter
+                      a
+                        i.icomoon-twitter-square
+                    if imgSrc
+                      li.pinterest
+                        pinterestbutton(element='a', media='{imgSrc}')
+                          i.icomoon-pinterest-square
+                      li.gmail
+                        a(href=`mailto:?subject=${landing.studyName}&body=${location.href}`)
+                          i.icomoon-envelope-square
+            .col-xs-12.col-sm-6.in-viewport(data-view='slideInLeft')
+              if imgSrc
+                if isPdfPreview
+                  .img-holder.pdf
+                    object(data=`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`, width="100%", height="100%", type="application/pdf")
+                      embed(src=`${imgSrc}?#zoom=scale&scrollbar=1&toolbar=0&view=Fit`, width="100%", height="100%", type="application/pdf")
+                else
+                  .img-holder
+                    img.img-responsive(src=imgSrc, width="854", height="444", alt="preview")
+
+                // TODO: Why show it here again?
+                if landing.showSocialMediaButtons
+                  .social-area.clearfix
+                    h3.pull-left=landing.shareThisStudyText || 'Share this study:'
+                    ul.social-networks.pull-left.list-inline
+                      li.facebook
+                        a
+                          i.icomoon-facebook-square
+                      li.twitter
+                        a
+                          i.icomoon-twitter-square
+                      if imgSrc
+                        li.pinterest
+                          pinterestbutton(element='a', media='{imgSrc}')
+                            i.icomoon-pinterest-square
+                        li.gmail
+                          a(href=`mailto:?subject=${landing.studyName}&body=${location.href}`)
+                            i.icomoon-envelope-square
+    footer#footer
+      .footer-holder
+        .container-fluid
+          .clearfix
+            p.copyright.pull-left © StudyKIK 2017. All rights reserved
+            ul.list-inline.pull-left.footer-nav
+              li
+                a(href='/privacy-policy') Privacy Policy
+              li
+                a(href='/terms-and-conditions') Terms & Conditions
+            ul.social-networks.pull-right.list-inline
+              li
+                a(target='_blank', href='https://www.facebook.com/StudyKIK/')
+                  i.icomoon-facebook
+              li
+                a(target='_blank', href='https://www.instagram.com/studykik/')
+                  i.icomoon-instagram
+              li
+                a(target='_blank', href='https://twitter.com/studykik')
+                  i.icomoon-twitter
+              li
+                a(target='_blank', href='https://plus.google.com/115488773798119322354')
+                  i.icomoon-google-plus
+              li
+                a(target='_blank', href='https://www.linkedin.com/company/studykik')
+                  i.icomoon-linkedin
+              li
+                a(target='_blank', href='https://www.pinterest.com/studykik/')
+                  i.icomoon-pinterest-p
+    span.redux-toastr(aria-live='assertive')
+      span
+        .top-left
+        .top-right
+        .top-center
+        .bottom-left
+        .bottom-right
+        .bottom-center

@@ -66,14 +66,26 @@ class EmailSection extends React.Component {
 
     this.state = {
       compose: false,
+      noEmailsFetched: false,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    const { clearForm } = this.props;
+    const { clearForm, fetchEmails, studyId, currentPatient } = this.props;
     if (this.props.submittingEmail !== newProps.submittingEmail && !newProps.submittingEmail) {
       clearForm();
       this.switchCompose();
+    }
+    if (newProps.active && !this.props.active) {
+      if (currentPatient.id) {
+        this.switchCompose(false);
+        this.setState({ noEmailsFetched: false });
+        fetchEmails(studyId, currentPatient.id);
+      }
+    }
+    if (this.props.emails.fetching && !newProps.emails.fetching && newProps.emails.details.length === 0) {
+      this.switchCompose(true);
+      this.setState({ noEmailsFetched: true });
     }
   }
 
@@ -82,31 +94,32 @@ class EmailSection extends React.Component {
     const { submitEmail, studyId, currentPatient, currentUser, formSyncErrors, formValues } = this.props;
     if (_.isEmpty(formSyncErrors)) {
       submitEmail(studyId, currentPatient.id, currentUser, formValues.email, formValues.message, formValues.subject);
-    } else if (formSyncErrors.message) {
-      toastr.error('', formSyncErrors.message);
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
       toastr.error('', formSyncErrors.subject);
+    } else if (formSyncErrors.message) {
+      toastr.error('', formSyncErrors.message);
     }
   }
 
-  switchCompose() {
-    this.setState({ compose: !this.state.compose });
+  switchCompose(value = null) {
+    if (typeof value === 'boolean') {
+      this.setState({ compose: value });
+    } else {
+      this.setState({ compose: !this.state.compose });
+    }
   }
 
   render() {
-    const { active, change, fetchEmails, emails, studyId, currentPatient } = this.props;
-    const { compose } = this.state;
+    const { active, change, emails } = this.props;
+    const { compose, noEmailsFetched } = this.state;
     return (
       <div className={classNames((!active ? 'emails-tab' : ''), { active })}>
-        {(!compose && currentPatient.id) &&
+        {(!compose) &&
         <EmailSectionList
           switchCompose={this.switchCompose}
-          fetchEmails={fetchEmails}
           emails={emails}
-          studyId={studyId}
-          currentPatient={currentPatient}
           active={active}
         />
         }
@@ -117,6 +130,7 @@ class EmailSection extends React.Component {
           switchCompose={this.switchCompose}
           active={active}
           change={change}
+          noBackBtn={noEmailsFetched}
         />
         }
       </div>
