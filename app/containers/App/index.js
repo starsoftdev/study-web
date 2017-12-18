@@ -16,15 +16,23 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
 import mixpanel from 'mixpanel-browser';
+import IdleTimer from 'react-idle-timer';
+import LogRocket from 'logrocket';
+import moment from 'moment-timezone';
 
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import GlobalNotifications from '../../containers/GlobalNotifications';
-import { fetchMeFromToken, changeTemporaryPassword } from './actions';
+import { logout } from '../../containers/LoginPage/actions';
+import { fetchMeFromToken, changeTemporaryPassword, updateUser } from './actions';
 import { getItem } from '../../utils/localStorage';
 import ChangeTemporaryPasswordModal from '../../components/ChangeTemporaryPasswordModal';
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
+import EmailTutorialModal from '../../components/EmailTutorialModal';
+import IdleModal from '../../components/IdleModal';
+
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,6 +40,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   static propTypes = {
     children: React.PropTypes.node,
     changePassword: React.PropTypes.func,
+    logout: React.PropTypes.func,
+    updateUser: React.PropTypes.func,
     currentUserRoleType: React.PropTypes.string,
     fetchMeFromToken: React.PropTypes.func.isRequired,
     isLoggedIn: React.PropTypes.bool.isRequired,
@@ -43,21 +53,42 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
   constructor(props) {
     super(props);
     this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.idleHandler = this.idleHandler.bind(this);
+    this.stayLoggedIn = this.stayLoggedIn.bind(this);
     this.changePassword = this.props.changePassword.bind(this);
-
+    this.handleCloseEmailModal = this.handleCloseEmailModal.bind(this);
     this.state = {
+      forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
+      timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
       showChangePwdModal: false,
+      showSetTimeZoneModal: false,
+      showEmailTutorialModal: false,
+      showIdleModal: false,
     };
   }
 
   componentWillMount() {
+    const authTime = getItem('auth_time');
     // Always load user details from the localStorage Token
-    this.props.fetchMeFromToken();
+    this.props.fetchMeFromToken(true);
+
+    const timerId = setInterval(() => {
+      const currentTime = moment();
+      if ((currentTime.valueOf() - parseInt(authTime)) > this.state.forceLogout) {
+        clearInterval(this.state.timerId);
+        this.props.logout();
+      }
+    }, 600000);
+
+    this.setState({ timerId });
   }
 
   componentDidMount() {
     if (MIXPANEL_TOKEN) {
       mixpanel.init(MIXPANEL_TOKEN);
+    }
+    if (LOG_ROCKET) {
+      LogRocket.init(LOG_ROCKET);
     }
   }
 
@@ -66,6 +97,26 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (tempPassword) {
       this.setState({ showChangePwdModal: true });
+    }
+
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
+      this.setState({ showSetTimeZoneModal: true });
+    } else {
+      this.setState({ showSetTimeZoneModal: false });
+    }
+
+    if (nextProps.userData && nextProps.userData.needEmailCreditTutorial && nextProps.userData.id) {
+      this.setState({ showEmailTutorialModal: true });
+    } else {
+      this.setState({ showEmailTutorialModal: false });
+    }
+
+    if (window.FS && nextProps.userData) {
+      window.FS.identify(nextProps.userData.id, {
+        displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        timezone_str: nextProps.userData.timezone,
+      });
     }
 
     if (process.env.NODE_ENV !== 'development') {
@@ -79,6 +130,15 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         ReactGA.pageview(nextProps.location.pathname);
       }
     }
+
+    if (LOG_ROCKET && nextProps.userData) {
+      LogRocket.identify(`${nextProps.userData.id}`, {
+        name: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
+        email: nextProps.userData.email,
+        // Add your own custom user variables here, ie:
+        subscriptionType: 'pro',
+      });
+    }
   }
 
   handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function
@@ -87,6 +147,32 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     params.changeTempPassword = true;
 
     this.props.changePassword(params);
+  }
+
+  handleCloseEmailModal() {
+    this.setState({ showEmailTutorialModal: false });
+    this.props.updateUser(this.props.userData.id, { needEmailCreditTutorial: false });
+  }
+
+  idleHandler() { // eslint-disable-line react/prefer-stateless-function
+    this.setState({ showIdleModal: true });
+  }
+
+  stayLoggedIn() { // eslint-disable-line react/prefer-stateless-function
+    this.setState({ showIdleModal: false });
+  }
+
+  renderEmailTutorial() {
+    const { currentUserRoleType } = this.props;
+    if (currentUserRoleType === 'client') {
+      return (
+        <EmailTutorialModal
+          showModal={this.state.showEmailTutorialModal}
+          closeModal={this.handleCloseEmailModal}
+        />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -114,28 +200,53 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (currentUserRoleType === 'client' || currentUserRoleType === 'sponsor') {
       return (
-        <div id="wrapper">
-          <TopHeaderBar />
-          <SideNavBar
-            location={this.props.location}
-          />
-          <main id="main">
-            {React.Children.toArray(this.props.children)}
-          </main>
-          <GlobalNotifications {...this.props} events={pageEvents} />
-          <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-        </div>
+        <IdleTimer
+          element={document}
+          events={['mousemove', 'keydown', 'mousedown', 'touchstart']}
+          activeAction={this.activeHandler}
+          idleAction={this.idleHandler}
+          timeout={this.state.timeout}
+          startOnLoad
+          format="MM-DD-YYYY HH:MM:ss.SSS"
+        >
+          <div id="wrapper">
+            <TopHeaderBar />
+            <SideNavBar
+              location={this.props.location}
+            />
+            <main id="main">
+              {React.Children.toArray(this.props.children)}
+            </main>
+            <GlobalNotifications {...this.props} events={pageEvents} />
+            <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
+            {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
+            {this.renderEmailTutorial()}
+          </div>
+        </IdleTimer>
       );
     }
 
     return (
-      <div id="wrapper" className="dashboard">
-        <TopHeaderBar2 />
-        <main id="main">
-          {React.Children.toArray(this.props.children)}
-        </main>
-        <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-      </div>
+      <IdleTimer
+        element={document}
+        events={['mousemove', 'keydown', 'mousedown', 'touchstart']}
+        activeAction={this.activeHandler}
+        idleAction={this.idleHandler}
+        timeout={this.state.timeout}
+        startOnLoad
+        format="MM-DD-YYYY HH:MM:ss.SSS"
+      >
+        <div id="wrapper" className="dashboard">
+          <TopHeaderBar2 />
+          <main id="main">
+            {React.Children.toArray(this.props.children)}
+          </main>
+          <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
+          {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
+        </div>
+      </IdleTimer>
     );
   }
 }
@@ -150,7 +261,9 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     changePassword: (values) => dispatch(changeTemporaryPassword(values)),
-    fetchMeFromToken: () => dispatch(fetchMeFromToken()),
+    updateUser: (id, values) => dispatch(updateUser(id, values)),
+    fetchMeFromToken: (redirect) => dispatch(fetchMeFromToken(redirect)),
+    logout: () => dispatch(logout()),
   };
 }
 

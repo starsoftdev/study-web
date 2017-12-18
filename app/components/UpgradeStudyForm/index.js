@@ -200,7 +200,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           .filter(o => o.id > selectedStudy.level_id)
           .map(l => ({
             ...l,
-            label:`${l.name} $${l.price - selectedLevel.price} (+${l.posts - selectedLevel.posts} Posts and +${l.texts - selectedLevel.texts} Text Credits)`,
+            label:`${l.name} $${l.price - selectedLevel.price} (+${l.posts - selectedLevel.posts} Posts and +${l.texts - selectedLevel.texts} Text Credits + ${l.emailCredits - selectedLevel.emailCredits} Email Credits)`,
           }));
       }
     }

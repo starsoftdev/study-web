@@ -89,10 +89,6 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
 
-  DELETE_CLIENT_ROLE,
-  DELETE_CLIENT_ROLE_SUCCESS,
-  DELETE_CLIENT_ROLE_ERROR,
-
   SAVE_SITE,
   SAVE_SITE_SUCCESS,
   SAVE_SITE_ERROR,
@@ -100,6 +96,7 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
+  UPDATE_USER_SUCCESS,
 
   GET_CREDITS_PRICE_SUCCESS,
 
@@ -215,11 +212,6 @@ const initialState = {
       adding: false,
       error: null,
     },
-    clientSites: {
-      details: [],
-      fetching: false,
-      error: null,
-    },
     sitePatients: {
       details: [],
       fetching: false,
@@ -235,9 +227,9 @@ const initialState = {
       fetching: false,
       error: null,
       stats: {
+        emailsSent: 0,
         unreadText: 0,
-        unreadEmails: 0,
-        total: 0,
+        textTotal: 0,
       },
     },
     rewards: [],
@@ -303,10 +295,8 @@ const initialState = {
 };
 
 export default function appReducer(state = initialState, action) {
-  const { payload } = action;
   let foundIndex = -1;
   const cardsCollection = cloneDeep(state.baseData.cards.details);
-  const clientSitesCollection = map(state.baseData.clientSites.details, cloneDeep);
   const clientRolesCollection = map(state.baseData.clientRoles.details, cloneDeep);
   const sitesCopy = map(state.baseData.sites.details, cloneDeep);
   const patientsCopy = cloneDeep(state.baseData.sitePatients.details);
@@ -323,22 +313,22 @@ export default function appReducer(state = initialState, action) {
     case SET_AUTH_STATE:
       resultState = {
         ...state,
-        loggedIn: payload.newAuthState,
+        loggedIn: action.payload.newAuthState,
       };
       break;
     case LOGIN_ERROR:
       resultState = {
         ...state,
-        loginError: payload,
+        loginError: action.payload,
       };
       break;
     case SET_USER_DATA:
-      if (payload.userData) {
-        if (payload.userData.roleForSponsor) {
+      if (action.payload.userData) {
+        if (action.payload.userData.roleForSponsor) {
           userRoleType = 'sponsor';
-        } else if (payload.userData.roleForClient) {
+        } else if (action.payload.userData.roleForClient) {
           userRoleType = 'client';
-        } else if (payload.userData.roles && payload.userData.roles.length > 0) {
+        } else if (action.payload.userData.roles && action.payload.userData.roles.length > 0) {
           userRoleType = 'dashboard';
         } else {
           userRoleType = '';
@@ -346,31 +336,31 @@ export default function appReducer(state = initialState, action) {
       }
       resultState = {
         ...state,
-        userData: payload.userData,
+        userData: action.payload.userData,
         userRoleType,
       };
       break;
     case CHANGE_IMAGE_SUCCESS:
       resultState = {
         ...state,
-        userData: { ...state.userData, profileImageURL: payload.profileImageURL },
+        userData: { ...state.userData, profileImageURL: action.payload.profileImageURL },
       };
       break;
     case FETCH_EVENTS:
       resultState = {
         ...state,
-        pageEvents: payload,
+        pageEvents: action.payload,
       };
       break;
     case FETCH_INDICATIONS_SUCCESS:
       baseDataInnerState = {
-        indications: payload,
+        indications: action.payload,
       };
       break;
     case SORT_SUCCESS:
       baseDataInnerState = {
         studies: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -389,7 +379,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_LANDING_SUCCESS:
       baseDataInnerState = {
         landing: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -400,7 +390,7 @@ export default function appReducer(state = initialState, action) {
         landing: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -427,15 +417,15 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case CLINICAL_TRIALS_SEARCH_SUCCESS:
-      const trialsCollection = concat(state.baseData.trials.details, payload.data);
+      const trialsCollection = concat(state.baseData.trials.details, action.payload.data);
       if (trialsCollection && trialsCollection[0] === null) {
         trialsCollection.splice(0, 1);
       }
       baseDataInnerState = {
         trials: {
           details: trialsCollection,
-          total: payload.total,
-          wrongPostalCode: payload.wrongPostalCode,
+          total: action.payload.total,
+          wrongPostalCode: action.payload.wrongPostalCode,
           fetching: false,
           error: null,
         },
@@ -454,12 +444,12 @@ export default function appReducer(state = initialState, action) {
       break;
     case PATIENT_SUBSCRIBED:
       baseDataInnerState = {
-        subscribedFromLanding: payload,
+        subscribedFromLanding: action.payload,
       };
       break;
     case FIND_OUT_PATIENTS_POSTED:
       baseDataInnerState = {
-        findOutPosted: payload,
+        findOutPosted: action.payload,
       };
       break;
     case LIST_SITE_NOW_SUCCESS:
@@ -504,29 +494,29 @@ export default function appReducer(state = initialState, action) {
       break;
     case PATIENT_SUBSCRIPTION_ERROR:
       baseDataInnerState = {
-        subscriptionError: payload,
+        subscriptionError: action.payload,
       };
       break;
     case FETCH_SOURCES_SUCCESS:
       baseDataInnerState = {
-        sources: payload,
+        sources: action.payload,
       };
       break;
     case FETCH_LEVELS_SUCCESS: {
-      const levels = payload.map(l => {
+      const levels = action.payload.map(l => {
         switch (l.name) {
           case 'Ruby':
-            return { ...l, price: 5297, posts: 108, texts: 400 };
+            return { ...l, price: 5297, posts: 108, texts: 400, emailCredits: 200 };
           case 'Diamond':
-            return { ...l, price: 3297, posts: 64, texts: 300 };
+            return { ...l, price: 3297, posts: 64, texts: 300, emailCredits: 150 };
           case 'Platinum':
-            return { ...l, price: 1797, posts: 32, texts: 200 };
+            return { ...l, price: 1797, posts: 32, texts: 200, emailCredits: 100 };
           case 'Gold':
-            return { ...l, price: 797, posts: 10, texts: 50 };
+            return { ...l, price: 797, posts: 10, texts: 50, emailCredits: 25 };
           case 'Silver':
-            return { ...l, price: 297, posts: 3, texts: 15 };
+            return { ...l, price: 297, posts: 3, texts: 15, emailCredits: 7 };
           case 'Bronze':
-            return { ...l, price: 97, posts: 1, texts: 5 };
+            return { ...l, price: 97, posts: 1, texts: 5, emailCredits: 2 };
           default:
             return l;
         }
@@ -548,7 +538,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_COUPON_SUCCESS:
       baseDataInnerState = {
         coupon: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -559,7 +549,7 @@ export default function appReducer(state = initialState, action) {
         coupon: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -579,7 +569,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_REWARDS_SUCCESS:
       baseDataInnerState = {
-        rewards: payload,
+        rewards: action.payload,
       };
       break;
     case FETCH_REWARDS_ERROR:
@@ -592,13 +582,13 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
-          [siteId || 0]: payload,
+          [siteId || 0]: action.payload,
         },
       };
       break;
     }
     case REDEEM_SUCCESS: {
-      const { siteId, balance, points } = payload;
+      const { siteId, balance, points } = action.payload;
       baseDataInnerState = {
         rewardsBalance: {
           ...state.baseData.rewardsBalance,
@@ -620,7 +610,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_PROTOCOLS_SUCCESS:
       baseDataInnerState = {
         protocols: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -631,7 +621,7 @@ export default function appReducer(state = initialState, action) {
         protocols: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -647,7 +637,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CARDS_SUCCESS:
       baseDataInnerState = {
         cards: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -658,7 +648,7 @@ export default function appReducer(state = initialState, action) {
         cards: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -672,7 +662,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_CARD_SUCCESS:
-      cardsCollection.data.push(payload);
+      cardsCollection.data.push(action.payload);
       baseDataInnerState = {
         cards: {
           details: cardsCollection,
@@ -680,7 +670,7 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
         savedCard: {
-          details: payload,
+          details: action.payload,
           saving: false,
           error: null,
         },
@@ -691,7 +681,7 @@ export default function appReducer(state = initialState, action) {
         savedCard: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -705,7 +695,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case DELETE_CARD_SUCCESS:
-      remove(cardsCollection.data, { id: payload.id });
+      remove(cardsCollection.data, { id: action.payload.id });
       baseDataInnerState = {
         cards: {
           details: cardsCollection,
@@ -713,7 +703,7 @@ export default function appReducer(state = initialState, action) {
           error: null,
         },
         deletedCard: {
-          details: payload,
+          details: action.payload,
           deleting: false,
           error: null,
         },
@@ -724,7 +714,7 @@ export default function appReducer(state = initialState, action) {
         deletedCard: {
           details: null,
           deleting: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -738,10 +728,10 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case ADD_CREDITS_SUCCESS:
-      cardsCollection.data.push(payload);
+      cardsCollection.data.push(action.payload);
       baseDataInnerState = {
         addCredits: {
-          details: payload,
+          details: action.payload,
           adding: false,
           error: null,
         },
@@ -752,7 +742,7 @@ export default function appReducer(state = initialState, action) {
         addCredits: {
           details: null,
           adding: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -768,7 +758,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_SITES_SUCCESS:
       baseDataInnerState = {
         sites: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -779,7 +769,7 @@ export default function appReducer(state = initialState, action) {
         sites: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -798,9 +788,9 @@ export default function appReducer(state = initialState, action) {
       break;
     case FETCH_SITE_PATIENTS_SUCCESS:
       if (action.page === 1) {
-        newPatientsList = payload;
+        newPatientsList = action.payload;
       } else {
-        newPatientsList = patientsCopy.concat(payload);
+        newPatientsList = patientsCopy.concat(action.payload);
       }
       baseDataInnerState = {
         sitePatients: {
@@ -819,7 +809,7 @@ export default function appReducer(state = initialState, action) {
         sitePatients: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -844,6 +834,7 @@ export default function appReducer(state = initialState, action) {
           }
           patientData.twtm_max_date_created = action.newMessage.twilioTextMessage.dateCreated;
           patientData.last_message_body = action.newMessage.twilioTextMessage.body;
+          patientData.last_message_date = action.newMessage.twilioTextMessage.dateCreated;
         }
         return patientData;
       });
@@ -859,8 +850,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails,
+            textTotal: state.baseData.patientMessages.stats.textTotal,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts,
           },
         },
@@ -886,8 +877,8 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total || 0,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
             unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - unreadCount) || 0,
           },
         },
@@ -896,7 +887,7 @@ export default function appReducer(state = initialState, action) {
     case GET_CNS_INFO_SUCCESS:
       baseDataInnerState = {
         cnsInfo: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -922,7 +913,7 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         cnsSubmitProcess: {
           submitting: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -938,7 +929,11 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_CREDITS_SUCCESS:
       baseDataInnerState = {
         clientCredits: {
-          details: payload.customerCredits,
+          details: {
+            customerCredits: state.baseData.clientCredits.details.customerCredits,
+            emailCredits: state.baseData.clientCredits.details.emailCredits,
+            ...action.payload.customerCredits,
+          },
           fetching: false,
           error: null,
         },
@@ -949,7 +944,7 @@ export default function appReducer(state = initialState, action) {
         clientCredits: {
           details: state.baseData.clientCredits.details,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -961,8 +956,8 @@ export default function appReducer(state = initialState, action) {
           fetching: true,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total || 0,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
@@ -972,12 +967,12 @@ export default function appReducer(state = initialState, action) {
       baseDataInnerState = {
         patientMessages: {
           ...state.baseData.patientMessages,
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total || 0,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
             unreadTexts: state.baseData.patientMessages.stats.unreadTexts || 0,
           },
         },
@@ -991,9 +986,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total || 0,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
-            unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + payload) || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            unreadTexts: (parseInt(state.baseData.patientMessages.stats.unreadTexts) + action.payload) || 0,
           },
         },
       };
@@ -1006,9 +1001,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats.total || 0,
-            unreadEmails: state.baseData.patientMessages.stats.unreadEmails || 0,
-            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - payload) || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - action.payload) || 0,
           },
         },
       };
@@ -1019,11 +1014,11 @@ export default function appReducer(state = initialState, action) {
           ...state.baseData.patientMessages,
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
           stats: {
+            textTotal: 0,
+            emailsSent: 0,
             unreadText: 0,
-            unreadEmails: 0,
-            total: 0,
           },
         },
       };
@@ -1037,9 +1032,9 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
           stats: {
-            total: state.baseData.patientMessages.stats || 0,
-            unreadEmails: state.baseData.patientMessages.stats || 0,
-            unreadTexts: state.baseData.patientMessages.stats || 0,
+            textTotal: state.baseData.patientMessages.stats.textTotal || 0,
+            emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
+            unreadTexts: state.baseData.patientMessages.stats.unreadText || 0,
           },
         },
       };
@@ -1049,8 +1044,8 @@ export default function appReducer(state = initialState, action) {
         patientMessages: {
           ...state.baseData.patientMessages,
           stats: {
-            total: action.payload.total || 0,
-            unreadEmails: action.payload.unreadEmails || 0,
+            textTotal: action.payload.textTotal || 0,
+            emailsSent: action.payload.emailsSent || 0,
             unreadTexts: action.payload.unreadTexts || 0,
           },
         },
@@ -1091,7 +1086,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_CLIENT_ROLES_SUCCESS:
       baseDataInnerState = {
         clientRoles: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1102,7 +1097,7 @@ export default function appReducer(state = initialState, action) {
         clientRoles: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1119,7 +1114,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_SITE_SUCCESS:
       baseDataInnerState = {
         selectedSite: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1130,7 +1125,7 @@ export default function appReducer(state = initialState, action) {
         selectedSite: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1147,7 +1142,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_USER_SUCCESS:
       baseDataInnerState = {
         selectedUser: {
-          details: payload,
+          details: action.payload,
           fetching: false,
           error: null,
         },
@@ -1158,7 +1153,7 @@ export default function appReducer(state = initialState, action) {
         selectedUser: {
           details: null,
           fetching: false,
-          error: payload,
+          error: action.payload,
         },
       };
       break;
@@ -1190,24 +1185,21 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case DELETE_USER_SUCCESS:
-      forEach(clientSitesCollection, item => {
+      forEach(sitesCopy, item => {
         forEach(item.roles, role => {
-          if (role.user.id === payload.id) {
+          if (role.user_id === action.payload.id) {
             temRoleID = role.id;
             return false;
           }
           return true;
         });
       });
-      forEach(clientSitesCollection, item => {
-        if (remove(item.roles, { id: temRoleID }).length > 0) {
-          return false;
-        }
-        return true;
+      forEach(sitesCopy, item => {
+        return remove(item.roles, { id: temRoleID }).length <= 0;
       });
 
       forEach(clientRolesCollection, item => {
-        if (item.user.id === payload.id) {
+        if (item.user_id === action.payload.id) {
           temRoleID = item.id;
           return false;
         }
@@ -1217,12 +1209,12 @@ export default function appReducer(state = initialState, action) {
 
       baseDataInnerState = {
         deletedUser: {
-          details: payload,
+          details: action.payload,
           deleting: false,
           error: null,
         },
-        clientSites: {
-          details: clientSitesCollection,
+        sites: {
+          details: sitesCopy,
           fetching: false,
           error: null,
         },
@@ -1243,51 +1235,7 @@ export default function appReducer(state = initialState, action) {
         deletedUser: {
           details: null,
           deleting: false,
-          error: payload,
-        },
-        selectedUser: {
-          details: null,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    case DELETE_CLIENT_ROLE:
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: null,
-          deleting: true,
-          error: null,
-        },
-      };
-      break;
-
-    case DELETE_CLIENT_ROLE_SUCCESS:
-      remove(clientRolesCollection, { id: payload.id });
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: payload,
-          deleting: false,
-          error: null,
-        },
-        clientRoles: {
-          details: clientRolesCollection,
-          fetching: false,
-          error: null,
-        },
-        selectedUser: {
-          details: null,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    case DELETE_CLIENT_ROLE_ERROR:
-      baseDataInnerState = {
-        deletedClientRole: {
-          details: null,
-          deleting: false,
-          error: payload,
+          error: action.payload,
         },
         selectedUser: {
           details: null,
@@ -1306,11 +1254,14 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_SITE_SUCCESS:
-      foundIndex = findIndex(sitesCopy, { id: payload.id });
-      if (!payload.roles) {
+      foundIndex = findIndex(sitesCopy, { id: action.payload.id });
+      const payload = {
+        ...action.payload,
+      };
+      if (!action.payload.roles) {
         payload.roles = [];
       }
-      if (foundIndex < 0) {
+      if (foundIndex === -1) {
         sitesCopy.push(payload);
       } else {
         payload.roles = sitesCopy[foundIndex].roles;
@@ -1339,7 +1290,7 @@ export default function appReducer(state = initialState, action) {
         savedSite: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
         selectedSite: {
           details: null,
@@ -1358,9 +1309,9 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SAVE_USER_SUCCESS:
-      if (payload.userType === 'admin') {
-        forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
+      if (action.payload.userType === 'admin') {
+        forEach(sitesCopy, item => {
+          foundIndex = findIndex(item.roles, { id: action.payload.userResultData.id });
           if (foundIndex > -1) {
             item.roles.splice(foundIndex, 1);
             foundIndex = -1;
@@ -1368,56 +1319,55 @@ export default function appReducer(state = initialState, action) {
           }
           return true;
         });
-      } else if (payload.userType === 'nonAdmin') {
-        forEach(clientSitesCollection, item => {
-          foundIndex = findIndex(item.roles, { id: payload.userResultData.user.id });
-          if (foundIndex > -1) {
-            if (item.id === payload.userResultData.siteId) {
-              item.roles[foundIndex].user = payload.userResultData.user; // eslint-disable-line
+      } else if (action.payload.userType === 'nonAdmin') {
+        forEach(sitesCopy, item => {
+          if (item.id === action.payload.userResultData.siteId) {
+            foundIndex = findIndex(item.roles, { id: action.payload.userResultData.id });
+            if (foundIndex !== -1) {
+              item.roles[foundIndex].user = action.payload.userResultData.user; // eslint-disable-line
             } else {
               item.roles.splice(foundIndex, 1);
-              foundIndex = -1;
             }
             return false;
           }
           return true;
         });
         if (foundIndex < 0) {
-          foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
+          foundIndex = findIndex(sitesCopy, { id: action.payload.userResultData.siteId });
           if (foundIndex > -1) {
-            clientSitesCollection[foundIndex].roles.push(payload.userResultData);
+            sitesCopy[foundIndex].roles.push(action.payload.userResultData);
           }
         }
       }
-      foundIndex = findIndex(clientRolesCollection, (item) => (item.user_id === payload.userResultData.user.id));
-      if (payload.userType === 'admin') {
+      foundIndex = findIndex(clientRolesCollection, (item) => (item.user_id === action.payload.userResultData.user.id));
+      if (action.payload.userType === 'admin') {
         if (foundIndex < 0) {
-          clientRolesCollection.push(payload.userResultData);
+          clientRolesCollection.push(action.payload.userResultData);
         } else {
-          clientRolesCollection[foundIndex] = payload.userResultData;
+          clientRolesCollection[foundIndex] = action.payload.userResultData;
         }
-      } else if (payload.userType === 'nonAdmin') {
+      } else if (action.payload.userType === 'nonAdmin') {
         if (foundIndex > -1) {
-          clientRolesCollection[foundIndex] = payload.userResultData;
+          clientRolesCollection[foundIndex] = action.payload.userResultData;
         }
       }
-      // if (payload.userResultData.header === 'Add User') {
-      //   // if (payload.userResultData.siteId && payload.userResultData.siteId !== '0') {
-      //   //   foundIndex = findIndex(clientSitesCollection, { id: payload.userResultData.siteId });
-      //   //   clientSitesCollection[foundIndex].roles.push(payload.userResultData.user);
+      // if (action.payload.userResultData.header === 'Add User') {
+      //   // if (action.payload.userResultData.siteId && action.payload.userResultData.siteId !== '0') {
+      //   //   foundIndex = findIndex(sitesCopy, { id: action.payload.userResultData.siteId });
+      //   //   sitesCopy[foundIndex].roles.push(action.payload.userResultData.user);
       //   // } else {
-      //   clientRolesCollection.push(payload.userResultData);
+      //   clientRolesCollection.push(action.payload.userResultData);
       //   // }
       // }
 
       baseDataInnerState = {
         savedUser: {
-          details: payload,
+          details: action.payload,
           saving: false,
           error: null,
         },
-        clientSites: {
-          details: clientSitesCollection,
+        sites: {
+          details: sitesCopy,
           fetching: false,
           error: null,
         },
@@ -1438,7 +1388,7 @@ export default function appReducer(state = initialState, action) {
         savedUser: {
           details: null,
           saving: false,
-          error: payload,
+          error: action.payload,
         },
         selectedUser: {
           details: null,
@@ -1449,7 +1399,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_CREDITS_PRICE_SUCCESS:
       baseDataInnerState = {
-        creditsPrice: payload,
+        creditsPrice: action.payload,
       };
       break;
     case CHANGE_USERS_TIMEZONE:
@@ -1468,11 +1418,23 @@ export default function appReducer(state = initialState, action) {
 
       resultState = {
         ...state,
-        userData: { ...state.userData, timezone: payload },
+        userData: {
+          ...state.userData,
+          timezone: action.payload.timezone,
+          city: action.payload.city,
+          address: action.payload.address,
+          needSetup: action.payload.needSetup,
+        },
         baseData: {
           ...state.baseData,
           ...baseDataInnerState,
         },
+      };
+      break;
+    case UPDATE_USER_SUCCESS:
+      resultState = {
+        ...state,
+        userData: Object.assign(state.userData, action.payload),
       };
       break;
     case CHANGE_USERS_TIMEZONE_ERROR:
@@ -1489,7 +1451,7 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_TIMEZONE_SUCCESS:
       baseDataInnerState = {
-        timezone: payload.timezone,
+        timezone: action.payload.timezone,
       };
       break;
     case GET_TIMEZONE_ERROR:

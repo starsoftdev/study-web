@@ -93,6 +93,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       const { change } = this.props;
       const { patientQualificationSuite } = this.state;
       change('addPatientQualificationSuite', patientQualificationSuite);
+      change('siteLocation', newProps.selectedStudy.siteName);
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
@@ -317,6 +318,20 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                   <div className="holder-inner">
                     <form className="form-renew-study">
                       <div className="renew-study form-fields">
+                        <div className="field-row">
+                          <strong className="label">
+                            <label>Site Location</label>
+                          </strong>
+                          <div className="field">
+                            <Field
+                              name="siteLocation"
+                              component={Input}
+                              type="text"
+                              placeholder="Site Location"
+                              isDisabled
+                            />
+                          </div>
+                        </div>
                         <div className="field-row">
                           <strong className="label required">
                             <label>EXPOSURE LEVEL</label>

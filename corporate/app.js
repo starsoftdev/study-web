@@ -3,6 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
+import mixpanel from 'mixpanel-browser';
 import { getItem, removeItem } from '../app/utils/localStorage';
 
 import configureStore from '../app/store';
@@ -74,6 +75,7 @@ const routes = {
     { path: '/it/indication/:indication', component: Indication },
     { path: '/pl/indication/:indication', component: Indication },
     { path: '/uk/indication/:indication', component: Indication },
+    { path: '/hu/indication/:indication', component: Indication },
     { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
@@ -86,6 +88,7 @@ const routes = {
     { path: '/it', component: Home },
     { path: '/pl', component: Home },
     { path: '/uk', component: Home },
+    { path: '/hu', component: Home },
     { path: '*', component: NotFound },
   ],
 };
@@ -101,5 +104,14 @@ const render = () => {
     document.getElementById('app')
   );
 };
+
+if (SENTRY_DSN) {
+  Raven.config(SENTRY_DSN).install();
+}
+
+if (MIXPANEL_TOKEN) {
+  mixpanel.init(MIXPANEL_TOKEN);
+}
+
 
 render();

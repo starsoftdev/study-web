@@ -97,10 +97,6 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
 
-  DELETE_CLIENT_ROLE,
-  DELETE_CLIENT_ROLE_SUCCESS,
-  DELETE_CLIENT_ROLE_ERROR,
-
   SAVE_SITE,
   SAVE_SITE_SUCCESS,
   SAVE_SITE_ERROR,
@@ -108,6 +104,10 @@ import {
   SAVE_USER,
   SAVE_USER_SUCCESS,
   SAVE_USER_ERROR,
+
+  UPDATE_USER,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_ERROR,
 
   GET_CREDITS_PRICE,
   GET_CREDITS_PRICE_SUCCESS,
@@ -205,9 +205,10 @@ import {
 // ///////////////////////////////////////////
 // auth related action creators
 // ///////////////////////////////////////////
-export function fetchMeFromToken() {
+export function fetchMeFromToken(redirect) {
   return {
     type: FETCH_ME_FROM_TOKEN,
+    redirect,
   };
 }
 
@@ -567,13 +568,12 @@ export function clientCreditsFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId, offset, limit, search) {
+export function fetchSitePatients(userId, offset, limit) {
   return {
     type: FETCH_SITE_PATIENTS,
     userId,
     offset,
     limit,
-    search,
   };
 }
 
@@ -770,30 +770,6 @@ export function userDeletingError(payload) {
   };
 }
 
-export function deleteClientRole(id) {
-  return {
-    type: DELETE_CLIENT_ROLE,
-    id,
-  };
-}
-
-export function clientRoleDeleted(id, payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_SUCCESS,
-    payload: {
-      ...payload,
-      id,
-    },
-  };
-}
-
-export function clientRoleDeletingError(payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_ERROR,
-    payload,
-  };
-}
-
 export function saveSite(clientId, id, data) {
   return {
     type: SAVE_SITE,
@@ -852,6 +828,28 @@ export function userSavingError(payload) {
   };
 }
 
+export function updateUser(id, data) {
+  return {
+    type: UPDATE_USER,
+    id,
+    data,
+  };
+}
+
+export function updateUserSuccess(payload) {
+  return {
+    type: UPDATE_USER_SUCCESS,
+    payload,
+  };
+}
+
+export function updateUserError(payload) {
+  return {
+    type: UPDATE_USER_ERROR,
+    payload,
+  };
+}
+
 export function getCreditsPrice() {
   return {
     type: GET_CREDITS_PRICE,
@@ -894,11 +892,11 @@ export function fetchIndicationLevelPriceError(payload) {
   };
 }
 
-export function changeUsersTimezone(userId, payload) {
+export function changeUsersTimezone(userId, params) {
   return {
     type: CHANGE_USERS_TIMEZONE,
     userId,
-    payload,
+    params,
   };
 }
 

@@ -61,6 +61,7 @@ export default class AddPatientForm extends React.Component {
     submitting: React.PropTypes.bool.isRequired,
     submitAddPatient: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
+    switchShowAddProtocolModal: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.array,
   };
 
@@ -74,7 +75,6 @@ export default class AddPatientForm extends React.Component {
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
   }
 
@@ -124,22 +124,14 @@ export default class AddPatientForm extends React.Component {
     submitAddPatient(patient, onClose);
   }
 
-  selectIndication(indicationId) {
-    if (indicationId) {
-      const { change, protocols } = this.props;
-      const protocol = _.find(protocols, { indicationId });
-      if (protocol) {
-        change('protocol', protocol.studyId);
-      } else {
-        // clear the protocol value if the indicationId doesn't match
-        change('protocol', null);
-      }
-    }
-  }
-
   selectProtocol(studyId) {
-    if (studyId) {
-      const { change, protocols } = this.props;
+    const { protocols, change, switchShowAddProtocolModal } = this.props;
+
+    if (studyId === 'add-new-protocol') {
+      change('protocol', null);
+      change('indication', null);
+      switchShowAddProtocolModal();
+    } else {
       const protocol = _.find(protocols, { studyId });
       change('indication', protocol.indicationId);
     }
@@ -172,6 +164,7 @@ export default class AddPatientForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
+    protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
     const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
@@ -243,13 +236,13 @@ export default class AddPatientForm extends React.Component {
           />
         </div>
         <div className="field-row form-group">
-          <strong className="label">
+          <strong className="label required">
             <label>Protocol</label>
           </strong>
           <Field
             name="protocol"
             component={ReactSelect}
-            placeholder={this.state.siteLocation ? 'Select Protocol' : 'N/A'}
+            placeholder="Select Protocol"
             className="field"
             options={protocolOptions}
             disabled={isFetchingProtocols || !this.state.siteLocation}
@@ -257,7 +250,7 @@ export default class AddPatientForm extends React.Component {
           />
         </div>
         <div className="field-row form-group">
-          <strong className="label required">
+          <strong className="label">
             <label>Indication</label>
           </strong>
           <Field
@@ -265,8 +258,8 @@ export default class AddPatientForm extends React.Component {
             component={ReactSelect}
             className="field"
             placeholder="Select Indication"
+            disabled
             options={indicationOptions}
-            onChange={this.selectIndication}
           />
         </div>
         <div className="field-row">
