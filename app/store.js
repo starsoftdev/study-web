@@ -5,6 +5,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
+import LogRocket from 'logrocket';
 
 import globalSagas from './common/sagas';
 import createReducer from './reducers';
@@ -19,6 +20,7 @@ export default function configureStore(initialState = {}, history) {
   const middlewares = [
     sagaMiddleware,
     routerMiddleware(history),
+    LogRocket.reduxMiddleware(),
   ];
 
   const enhancers = [

@@ -9,6 +9,7 @@ import {
 } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
+import moment from 'moment-timezone';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
@@ -25,6 +26,7 @@ import {
 
 import {
   resetPasswordSuccess,
+  newPasswordReceived,
 } from '../../containers/ResetPasswordPage/actions';
 
 import {
@@ -58,6 +60,7 @@ export default function* loginSaga() {
       // remove jwt token from localstorage
       yield call(removeItem, 'auth_token');
       yield call(removeItem, 'user_id');
+      yield call(removeItem, 'auth_time');
     }
   }
 }
@@ -73,6 +76,7 @@ export function* authorize(data) {
     // store auth token to localstorage
     yield call(setItem, 'auth_token', response.id);
     yield call(setItem, 'user_id', response.userId);
+    yield call(setItem, 'auth_time', moment().valueOf());
     // yield call(setItem, 'auth_token_ttl', response.ttl);
     yield put(setAuthState(true));
 
@@ -80,7 +84,7 @@ export function* authorize(data) {
     toastr.success('', 'Login successful!');
 
     // fetch details of authenticated user
-    yield put(fetchMeFromToken());
+    yield put(fetchMeFromToken(true));
 
     // return the response from the generator task
     return response;
@@ -128,6 +132,7 @@ export function* logout() {
 
     yield call(removeItem, 'auth_token');
     yield call(removeItem, 'user_id');
+    yield call(removeItem, 'auth_time');
   } catch (err) {
     // yield put()
   }
@@ -154,18 +159,25 @@ export function* resetPassword() {
 export function* setNewPassword() {
   while (true) {
     try {
-      const { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
+      let { payload } = yield take(SET_NEW_PASSWORD_REQUEST);
       const state = yield select(selectLocationState());
 
       if (state.query && state.query.token) {
+        if (!payload) {
+          payload = {};
+        }
+        payload.token = state.query.token;
         const params = {
           method: 'POST',
           body: JSON.stringify(payload),
           authToken: state.query.token,
         };
         const requestURL = `${API_URL}/users/reset-password`;
-        yield call(request, requestURL, params);
-        toastr.success('', 'Success! Your password has been reset, check your inbox.');
+        const { password } = yield call(request, requestURL, params);
+        yield put(newPasswordReceived(password));
+        if (!payload.newUser) {
+          toastr.success('', 'Success! Your password has been reset.');
+        }
       } else {
         const errorMessage = get(null, 'message', 'Can not find auth token!');
         toastr.error('', errorMessage);

@@ -198,6 +198,12 @@ function dashboardIndicationPageReducer(state = initialState, action) {
     case DELETE_INDICATION_SUCCESS:
       return {
         ...state,
+        indications: {
+          ...state.indications,
+          details: state.indications.details.filter(indication => (
+            indication.id !== action.payload
+          )),
+        },
         addIndicationProcess: {
           saving: false,
           deleting: false,

@@ -155,9 +155,8 @@ export function* deleteIndicationWorker(action) {
     const params = {
       method: 'DELETE',
     };
-    const response = yield call(request, requestURL, params);
-    yield put(fetchIndications());
-    yield put(deleteIndicationSuccess(response));
+    yield call(request, requestURL, params);
+    yield put(deleteIndicationSuccess(action.payload));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while deleting indication');
     toastr.error('', errorMessage);

@@ -114,7 +114,7 @@ class FilterBar extends Component {
               disabled={this.state.protocol === null}
               options={siteLocationOptions}
               value={filter.siteLocation}
-              placeholder={this.state.protocol ? 'Select Principal Investigator' : 'N/A'}
+              placeholder="Select Principal Investigator"
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
           </div>

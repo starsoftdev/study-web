@@ -16,7 +16,6 @@ import Input from '../../../components/Input/index';
 import * as Selector from '../selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { fetchClientCredits } from '../../App/actions';
 import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
@@ -29,6 +28,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: Selector.selectPatientCategories(),
   sources: selectSources(),
   studyId: Selector.selectStudyId(),
+  site: Selector.selectSite(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -37,8 +37,7 @@ const mapDispatchToProps = (dispatch) => ({
   filterPatients: (text) => dispatch(filterPatientsForTextBlast(text)),
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
-  submitTextBlast: (patients, message, clientRoleId, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, onClose)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
+  submitTextBlast: (patients, message, clientRoleId, studyId, siteName, currentUser, onClose) => dispatch(submitTextBlast(patients, message, clientRoleId, studyId, siteName, currentUser, onClose)),
 });
 
 @reduxForm({
@@ -51,7 +50,6 @@ class TextBlastForm extends React.Component {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     clientCredits: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -62,6 +60,7 @@ class TextBlastForm extends React.Component {
     removePatients: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     studyId: React.PropTypes.number,
+    site: React.PropTypes.object,
     submitTextBlast: React.PropTypes.func.isRequired,
     ePMS: React.PropTypes.bool,
     campaign: React.PropTypes.number,
@@ -90,7 +89,7 @@ class TextBlastForm extends React.Component {
 
   componentDidMount() {
     const { studyName } = this.props;
-    const message = `Hello, please respond yes or no if you are interested in a research study for ${studyName}.`;
+    const message = `<first_name>, please respond yes or no if you are interested in a research study for ${studyName}.`;
     this.props.initialize({
       message,
     });
@@ -198,11 +197,10 @@ class TextBlastForm extends React.Component {
 
   submitTextBlast(event) {
     event.preventDefault();
-    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose } = this.props;
+    const { currentUser, formSyncErrors, formValues, submitTextBlast, onClose, studyId, site } = this.props;
     if (!formSyncErrors.message && !formSyncErrors.patients) {
-      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, (err, data) => {
+      submitTextBlast(formValues.patients, formValues.message, currentUser.roleForClient.id, studyId, site.name, currentUser, (err, data) => {
         onClose(err, data);
-        this.props.fetchClientCredits(currentUser.id);
       });
     } else if (formSyncErrors.message) {
       toastr.error('', formSyncErrors.message);
@@ -243,7 +241,7 @@ class TextBlastForm extends React.Component {
 
   checkForCredits(notEnoughCredits) {
     if (notEnoughCredits) {
-      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
     }
   }
 
