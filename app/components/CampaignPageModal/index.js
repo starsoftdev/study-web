@@ -71,27 +71,34 @@ export class CampaignPageModal extends React.Component {
       this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
     }
     // TODO re-enable Five9 when we figure out how to integrate it with the new web app code-base
-    // if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
-    //   this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
-    //   this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
-    //   this.five9ValueChanged();
-    // }
+    if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
+      this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
+      this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
+      this.five9ValueChanged();
+    }
 
-    // if (newProps.five9List.details.length && !this.state.five9List.length) {
-    //   this.setState({ five9List: newProps.five9List.details });
-    // }
+    if (newProps.five9List.details.length && !this.state.five9List.length) {
+      this.setState({ five9List: newProps.five9List.details });
+    }
 
-    // if (newProps.formValues.five_9_value && this.state.five9List.length) {
-    //   const five9List = this.state.five9List;
-    //   const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
-    //   if (index === -1 && newProps.formValues.five_9_value !== null) {
-    //     five9List.push({ name: newProps.formValues.five_9_value });
-    //     this.setState({ five9List });
-    //   }
-    // }
+    if (newProps.formValues.five_9_value && this.state.five9List.length) {
+      const five9List = this.state.five9List;
+      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
+      if (index === -1 && newProps.formValues.five_9_value !== null) {
+        five9List.push({ name: newProps.formValues.five_9_value });
+        this.setState({ five9List });
+      }
+    }
 
-    if (newProps.study && newProps.study !== this.props.study) {
+    if ((newProps.study && !this.props.study) || (newProps.study && this.props.study && newProps.study.study_id !== this.props.study.study_id)) {
       this.five9ValueChanged(newProps.study.five_9_value);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    // when campaigns have been loaded we need select first campaign by default
+    if ((prevProps.studyCampaigns.fetching && !this.props.studyCampaigns.fetching) || (!prevProps.openModal && this.props.openModal)) {
+      this.campaignChanged(this.props.studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -110,8 +117,8 @@ export class CampaignPageModal extends React.Component {
       this.setState({ selectedCampaign : campaignIndex, isCampaignHasPatients: (!!((foundCampaign.patients && foundCampaign.patients.length > 0))) });
       const { change } = this.props;
       change('campaign_id', foundCampaign.id);
-      change('datefrom', foundCampaign.dateFrom);
-      change('dateto', foundCampaign.dateTo);
+      change('datefrom', moment(foundCampaign.dateFrom).tz(this.props.study.timezone));
+      change('dateto', moment(foundCampaign.dateTo).tz(this.props.study.timezone));
       change('custom_patient_goal', foundCampaign.customPatientGoal);
       change('level_id', foundCampaign.level_id);
       change('patient_qualification_suite', foundCampaign.patientQualificationSuite);
@@ -134,8 +141,9 @@ export class CampaignPageModal extends React.Component {
       studyId: +study.study_id,
       five9value: formValues.five_9_value,
     };
-    if (typeof formValues.custom_patient_goal === 'number') {
-      submitValues.customPatientGoal = formValues.custom_patient_goal;
+    const customPatientGoal = parseInt(formValues.custom_patient_goal);
+    if (customPatientGoal) {
+      submitValues.customPatientGoal = customPatientGoal;
     } else {
       submitValues.customPatientGoal = null;
     }

@@ -23,6 +23,8 @@ import {
   FETCH_NOTIFICATIONS,
   FETCH_UNREAD_NOTIFICATIONS_COUNT,
   MARK_NOTIFICATIONS_READ,
+  CLIENT_OPENED_STUDY_PAGE,
+  CLIENT_CLOSED_STUDY_PAGE,
   SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET,
   UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET,
   SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
@@ -48,6 +50,8 @@ export function* GlobalNotificationsSaga() {
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
   yield fork(markNotificationsReadWorker);
+  yield fork(clientOpenedStudyPage);
+  yield fork(clientClosedStudyPage);
 }
 
 export function* setSocketConnection() {
@@ -269,7 +273,7 @@ export function* fetchNotifications(action) {
     if (response.length < 10) {
       hasMore = false;
     }
-    yield put(fetchNotificationsSucceeded(response, hasMore, page));
+    yield put(fetchNotificationsSucceeded(response, hasMore, page, userId));
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
     toastr.error('', errorMessage);
@@ -298,6 +302,30 @@ export function* markNotificationsReadWorker() {
       yield call(request, requestURL, params);
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong marking notifications read');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* clientOpenedStudyPage() {
+  while (true) {
+    const { studyId } = yield take(CLIENT_OPENED_STUDY_PAGE);
+    try {
+      socket.emit('clientOpenedStudyPage', { studyId }, () => {});
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* clientClosedStudyPage() {
+  while (true) {
+    const { studyId } = yield take(CLIENT_CLOSED_STUDY_PAGE);
+    try {
+      socket.emit('clientClosedStudyPage', { studyId }, () => {});
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
       toastr.error('', errorMessage);
     }
   }

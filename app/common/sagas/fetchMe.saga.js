@@ -13,13 +13,13 @@ import { selectCurrentPath } from '../../common/selectors/router.selector';
 
 export default function* fetchMeSaga() {
   while (true) {
-    yield take(FETCH_ME_FROM_TOKEN);
-    yield call(fetchMeFromToken);
+    const { redirect } = yield take(FETCH_ME_FROM_TOKEN);
+    yield call(fetchMeFromToken, redirect);
   }
 }
 
 
-export function* fetchMeFromToken() {
+export function* fetchMeFromToken(redirect) {
   const userId = getItem('user_id');
   const authToken = getItem('auth_token');
 
@@ -51,6 +51,9 @@ export function* fetchMeFromToken() {
     if (e.status === 401) {
       removeItem('auth_token');
     }
-    yield put(push('/login'));
+    // if the redirect is enabled (i.e. not for corporate site), then redirect to the login page
+    if (redirect) {
+      yield put(push('/login'));
+    }
   }
 }

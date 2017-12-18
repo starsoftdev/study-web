@@ -19,6 +19,7 @@ import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 const formName = 'searchPatients';
 
 const mapStateToProps = createStructuredSelector({
+  textBlastFormValues: selectValues('PatientDatabase.TextBlastModal'),
   formValues: selectValues(formName),
   hasError: selectSearchPatientsFormError(),
   indications: selectIndications(),
@@ -33,6 +34,7 @@ const mapStateToProps = createStructuredSelector({
 @connect(mapStateToProps, null)
 export default class SearchPatientsForm extends Component {
   static propTypes = {
+    textBlastFormValues: PropTypes.object,
     formValues: PropTypes.object,
     handleSubmit: PropTypes.func,
     hasError: PropTypes.bool,
@@ -263,7 +265,7 @@ export default class SearchPatientsForm extends Component {
               </div>
             </form>
           </div>
-          <PatientActionButtons searchPatients={this.props.searchPatients} paginationOptions={this.props.paginationOptions} />
+          <PatientActionButtons textBlastFormValues={this.props.textBlastFormValues} searchPatients={this.props.searchPatients} paginationOptions={this.props.paginationOptions} />
         </div>
         <form className="form-search patient-db-search" onSubmit={handleSubmit}>
           <div className="fields-holder clearfix form-search">

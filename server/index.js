@@ -19,9 +19,9 @@ app.use(helmet());
 // wasn't able to set up CORS for not blocking client requests to it if it wasn't set to allow for all IPs
 const corsOptions = {
   credentials: true,
-  maxAge: 86400,
+  maxAge: 86400000,
+  origin: '*',
 };
-corsOptions.origin = '*';
 app.use(cors(corsOptions));
 
 // In production we need to pass these values in instead of relying on webpack

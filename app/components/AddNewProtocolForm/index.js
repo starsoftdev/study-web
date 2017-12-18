@@ -31,7 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
 @reduxForm({ form: formName, validate: formValidator })
 @connect(mapStateToProps, mapDispatchToProps)
 
-class EditSiteForm extends Component { // eslint-disable-line react/prefer-stateless-function
+class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     savedSite: PropTypes.object,
@@ -144,4 +144,4 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 }
 
-export default EditSiteForm;
+export default AddNewProtocolForm;
