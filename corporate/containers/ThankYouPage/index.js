@@ -163,8 +163,7 @@ export class ThankYouPage extends React.Component {
                 <p className="appointment-footer-first">We are located at:</p>
                 <address className="txt-green">
                   {(this.props.cnsInfo.details.site_address || '') + ' ' + (this.props.cnsInfo.details.site_address2 || '')}
-                </address>
-                <address className="txt-green">
+                  <br />
                   {(this.props.cnsInfo.details.city || '') + ' ' + (this.props.cnsInfo.details.state || '') + ' ' + (this.props.cnsInfo.details.zip || '')}
                 </address>
                 { (!this.props.cnsInfo.details.site_address && !this.props.cnsInfo.details.site_address2) && <div><LoadingSpinner showOnlyIcon /></div>}
