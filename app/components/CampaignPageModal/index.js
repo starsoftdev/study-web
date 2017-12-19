@@ -227,6 +227,7 @@ export class CampaignPageModal extends React.Component {
                       onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
                     />
                   </div>
                 </div>
@@ -244,6 +245,7 @@ export class CampaignPageModal extends React.Component {
                       options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
                     />
                   </div>
                 </div>
