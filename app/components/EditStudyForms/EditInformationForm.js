@@ -381,6 +381,7 @@ export default class EditInformationForm extends React.Component {
                   }}
                   customSearchIconClass="icomoon-icon_search2"
                   clearable={false}
+                  backspaceRemoves={false}
                 />
               </div>
             </div>
@@ -571,6 +572,7 @@ export default class EditInformationForm extends React.Component {
                   searchPlaceholder="Search"
                   searchable
                   clearable={false}
+                  backspaceRemoves={false}
                   options={protocolsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
@@ -638,6 +640,7 @@ export default class EditInformationForm extends React.Component {
                   searchPlaceholder="Search"
                   searchable
                   clearable={false}
+                  backspaceRemoves={false}
                   options={indicationsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
