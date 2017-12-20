@@ -76,9 +76,9 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
               {/*<div className="img-holder pull-left">
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>*/}
-              <i className="icomoon-credit pull-left" />
+              <i className="icomoon-icon_comment_alt pull-left" />
               <div className="textbox">
-                <h2>PATIENT <br />MESSAGES</h2>
+                <h2>PATIENT <br />MESSAGES SUITE</h2>
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                   <strong className="number">{totals.textReceived}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">UNREAD<br />TEXT`</span>
+                  <span className="sub-title">UNREAD<br />TEXT</span>
                   <strong className="number">{totals.unreadText}</strong>
                 </li>
                 <li>
