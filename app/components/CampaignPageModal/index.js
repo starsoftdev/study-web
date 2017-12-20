@@ -230,6 +230,13 @@ export class CampaignPageModal extends React.Component {
                       backspaceRemoves={false}
                       deleteRemoves={false}
                       openOnFocus
+                      openOnClick
+                      onFocus={(e) => {
+                        console.log('focus', e);
+                      }}
+                      onOpen={(e) => {
+                        console.log('open', e);
+                      }}
                     />
                   </div>
                 </div>
