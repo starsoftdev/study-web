@@ -228,6 +228,7 @@ export class CampaignPageModal extends React.Component {
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
                       backspaceRemoves={false}
+                      deleteRemoves={false}
                     />
                   </div>
                 </div>
@@ -246,6 +247,7 @@ export class CampaignPageModal extends React.Component {
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
                       backspaceRemoves={false}
+                      deleteRemoves={false}
                     />
                   </div>
                 </div>
