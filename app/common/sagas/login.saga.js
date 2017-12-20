@@ -90,12 +90,8 @@ export function* authorize(data) {
     return response;
   } catch (err) {
     // dispatch LOGIN_ERROR action
-    if (err.code === 'USER_LOCKED') {
-      toastr.error('', err.message);
-    } else {
-      toastr.error('', 'Login Failed!');
-    }
     yield put(loginError(err));
+    toastr.error('', 'Login Failed!');
   } finally {
     // because this generator task is asyc, it is possible to
     // send a logout action before the user gets logged in
