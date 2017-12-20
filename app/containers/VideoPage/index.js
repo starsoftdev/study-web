@@ -6,6 +6,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import YouTube from 'react-youtube';
+import EmailTutorialSlider from '../../components/EmailTutorialSlider/index';
 
 export default class HelpSupportPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -67,6 +68,12 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
                 </div>
               ))
             }
+          </div>
+          <div className="video">
+            <p className="label">Email Credits</p>
+            <div id="slider-container">
+              <EmailTutorialSlider noFinishButton />
+            </div>
           </div>
         </section>
       </div>
