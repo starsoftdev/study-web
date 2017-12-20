@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import graphImage from '../../../assets/images/graph.svg';
 
+
 export class ReportViewInfo extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -24,18 +25,21 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
 
     return (
       <div className="infoarea row">
-        <div className="col-xs-6">
+        <div className="col-xs-4">
           <div className="box table-box">
             <div className="box-holder">
-              <i className="icomoon-doctor pull-left" />
+              {/*<i className="icomoon-doctor pull-left" />*/}
+              <div className="img-holder pull-left">
+                <img width="141" height="119" alt=" " src={graphImage} />
+              </div>
               <div className="textbox">
-                <h2>Principal <br /> INVESTIGATORS</h2>
+                <h2>PATIENT <br />SIGN UPS</h2>
               </div>
             </div>
           </div>
           <div className="box table-box">
             <div className="box-holder">
-              <ul className="list-inline text-center list-activities alt">
+              {/*<ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title">ACTIVE</span>
                   <strong className="number">{totals.active}</strong>
@@ -48,16 +52,31 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                   <span className="sub-title">TOTAL</span>
                   <strong className="number">{totals.active + totals.inActive}</strong>
                 </li>
+              </ul>*/}
+              <ul className="list-inline text-center list-activities alt">
+                <li>
+                  <span className="sub-title">TODAY</span>
+                  <strong className="number">N/A</strong>
+                </li>
+                <li>
+                  <span className="sub-title">YESTERDAY</span>
+                  <strong className="number">N/A</strong>
+                </li>
+                <li>
+                  <span className="sub-title">TOTAL</span>
+                  <strong className="number">N/A</strong>
+                </li>
               </ul>
             </div>
           </div>
         </div>
-        <div className="col-xs-6 green">
+        <div className="col-xs-4 green">
           <div className="box table-box">
             <div className="box-holder">
-              <div className="img-holder pull-left">
+              {/*<div className="img-holder pull-left">
                 <img width="141" height="119" alt=" " src={graphImage} />
-              </div>
+              </div>*/}
+              <i className="icomoon-credit pull-left" />
               <div className="textbox">
                 <h2>PATIENT <br />MESSAGES</h2>
               </div>
@@ -75,7 +94,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                   <strong className="number">{totals.textReceived}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">UNREAD<br />TEXT</span>
+                  <span className="sub-title">UNREAD<br />TEXT`</span>
                   <strong className="number">{totals.unreadText}</strong>
                 </li>
                 <li>
@@ -85,6 +104,48 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
               </ul>
             </div>
           </div>
+        </div>
+        <div className="col-xs-4 qualification-info">
+          <div className="box table-box">
+            <div className="box-holder">
+              <i className="icomoon-phone pull-left" />
+              <div className="textbox">
+                <h2>PATIENT <br />QUALIFICATION SUITE</h2>
+              </div>
+            </div>
+          </div>
+          <div className="box table-box">
+            <div className="box-holder">
+              <ul className="list-inline text-center list-activities">
+                <li>
+                  <span className="sub-title">Incoming<br />call</span>
+                  <strong className="number">N/A</strong>
+                </li>
+                <li>
+                  <span className="sub-title">Successful<br />transfer</span>
+                  <strong className="number">N/A</strong>
+                </li>
+                <li>
+                  <span className="sub-title">Unsuccessful<br />transfer</span>
+                  <strong className="number">N/A</strong>
+                </li>
+                <li>
+                  <span className="sub-title">Total call<br />duration</span>
+                  <strong className="number">N/A</strong>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {/*<div className="box">
+            <div className="col pull-left">
+              <span className="sub-title">REFER CRO/<br />SPONSOR</span>
+              <strong className="number">+300 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
+            </div>
+            <div className="col pull-right">
+              <span className="sub-title">Refer <br /> Site</span>
+              <strong className="number">+100 <span className="number-label">KIK<span className="text-lowercase">s</span></span></strong>
+            </div>
+          </div>*/}
         </div>
       </div>
     );
