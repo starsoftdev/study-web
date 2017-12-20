@@ -229,6 +229,7 @@ export class CampaignPageModal extends React.Component {
                       clearable={false}
                       backspaceRemoves={false}
                       deleteRemoves={false}
+                      openOnFocus
                     />
                   </div>
                 </div>
