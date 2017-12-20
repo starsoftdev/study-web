@@ -126,11 +126,6 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             <p>The email or password is incorrect!</p>
           </Alert>
         }
-        {code === 'USER_LOCKED' &&
-          <Alert bsStyle="danger">
-            <p>Your account has been locked upon 6 failed login attempts. Please try again in 30 minutes or you can contact a StudyKIK Representative.</p>
-          </Alert>
-        }
         {loginPassword &&
           <p>Your {newUser ? '' : 'new'} password is: <span id="new_password">{loginPassword}</span></p>
         }
