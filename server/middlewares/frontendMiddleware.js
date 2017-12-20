@@ -62,6 +62,7 @@ const logView = (req) => {
 const reserveSsrRoutes = (app, fs, templatePath) => {
   app.get('/:landingId([0-9]+)-*/', async (req, res) => {
     try {
+      logView(req);
       const landingId = req.params.landingId;
       const landing = await PagesService.fetchLanding(landingId);
       const file = await readFile(fs, templatePath);
@@ -156,7 +157,6 @@ const addDevMiddlewares = (app, webpackConfig) => {
   reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
-    logView(req);
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
@@ -206,7 +206,6 @@ const addProdMiddlewares = (app, options) => {
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
-    logView(req);
     res.sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 };
