@@ -57,6 +57,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
     textStatsFetched: React.PropTypes.func,
+    studyViewsStatFetched: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -89,7 +90,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -311,6 +312,7 @@ function mapDispatchToProps(dispatch) {
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
   };
 }
 
