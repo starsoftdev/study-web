@@ -34,6 +34,7 @@ import EmailTutorialModal from '../../components/EmailTutorialModal';
 import IdleModal from '../../components/IdleModal';
 
 import { selectAuthState, selectCurrentUser, selectEvents, selectUserRoleType } from './selectors';
+import BulkUploadTutorialModal from '../../components/BulkUploadTutorialModal/index';
 
 class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -63,6 +64,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       showChangePwdModal: false,
       showSetTimeZoneModal: false,
       showEmailTutorialModal: false,
+      showBulkUploadTutorialModal: false,
       showIdleModal: false,
     };
   }
@@ -111,6 +113,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showEmailTutorialModal: false });
     }
 
+    if (nextProps.userData && nextProps.userData.needBulkUploadTutorial && nextProps.userData.id) {
+      this.setState({ showBulkUploadTutorialModal: true });
+    } else {
+      this.setState({ showBulkUploadTutorialModal: false });
+    }
+
     if (window.FS && nextProps.userData) {
       window.FS.identify(nextProps.userData.id, {
         displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
@@ -154,6 +162,11 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.props.updateUser(this.props.userData.id, { needEmailCreditTutorial: false });
   }
 
+  handleCloseBulkUploadModal() {
+    this.setState({ showBulkUploadTutorialModal: false });
+    this.props.updateUser(this.props.userData.id, { needBulkUploadTutorial: false });
+  }
+
   idleHandler() { // eslint-disable-line react/prefer-stateless-function
     this.setState({ showIdleModal: true });
   }
@@ -169,6 +182,19 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         <EmailTutorialModal
           showModal={this.state.showEmailTutorialModal}
           closeModal={this.handleCloseEmailModal}
+        />
+      );
+    }
+    return null;
+  }
+
+  renderBulkUploadTutorial() {
+    const { currentUserRoleType } = this.props;
+    if (currentUserRoleType === 'client') {
+      return (
+        <BulkUploadTutorialModal
+          showModal={this.state.showBulkUploadTutorialModal}
+          closeModal={this.handleCloseBulkUploadModal}
         />
       );
     }
@@ -222,6 +248,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
             {this.renderEmailTutorial()}
+            {this.renderBulkUploadTutorial()}
           </div>
         </IdleTimer>
       );
