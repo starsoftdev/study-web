@@ -171,7 +171,7 @@ export class ReportViewTable extends React.Component {
           <td className="outbound_text">{item.outbound_text || 0}</td>
           <td className="inbound_text">{item.inbound_text || 0}</td>
           <td className="unread_text">{item.unread_text || 0}</td>
-          <td className="outbound_emails">{item.outbound_emails}</td>
+          <td className="outbound_emails">{item.outbound_emails || 0}</td>
         </tr>
       );
     }
