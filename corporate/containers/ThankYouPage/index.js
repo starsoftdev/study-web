@@ -158,17 +158,14 @@ export class ThankYouPage extends React.Component {
           <AppointmentForm
             onSubmit={this.submitAppointment}
             dates={dates}
-            footer={
-              <div className="text-center">
-                <p className="appointment-footer-first">We are located at:</p>
-                <address className="txt-green">
-                  {(this.props.cnsInfo.details.site_address || '') + ' ' + (this.props.cnsInfo.details.site_address2 || '')}
-                  <br />
-                  {(this.props.cnsInfo.details.city || '') + ' ' + (this.props.cnsInfo.details.state || '') + ' ' + (this.props.cnsInfo.details.zip || '')}
-                </address>
-                { (!this.props.cnsInfo.details.site_address && !this.props.cnsInfo.details.site_address2) && <div><LoadingSpinner showOnlyIcon /></div>}
+            footer={<div className="text-center"><div className="appointment-footer-first">We are located at:</div><div className="txt-green">
+              {(this.props.cnsInfo.details.site_address || '') + ' ' + (this.props.cnsInfo.details.site_address2 || '')}
+            </div>
+              <div className="txt-green">
+                {(this.props.cnsInfo.details.city || '') + ' ' + (this.props.cnsInfo.details.state || '') + ' ' + (this.props.cnsInfo.details.zip || '')}
               </div>
-            }
+              { (!this.props.cnsInfo.details.site_address && !this.props.cnsInfo.details.site_address2) && <div><LoadingSpinner showOnlyIcon /></div>}
+            </div>}
             header={<div className="text-center"><div className="appointment-header-first">Just one more step, {this.state.subscribedFromLanding.firstName}!</div><div className="appointment-header-second">Pick a date and time for your free consultation at CNS Healthcare:</div></div>}
             submitDisabled={this.props.cnsSubmitProcess.submitting}
           />
