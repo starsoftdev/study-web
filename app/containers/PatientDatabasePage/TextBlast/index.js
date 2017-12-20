@@ -110,7 +110,7 @@ class TextBlastModal extends React.Component {
 
   checkForCredits() {
     if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
-      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
     }
   }
 
