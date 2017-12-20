@@ -383,6 +383,7 @@ export default class EditInformationForm extends React.Component {
                   clearable={false}
                   backspaceRemoves={false}
                   deleteRemoves={false}
+                  isDisabled
                 />
               </div>
             </div>
