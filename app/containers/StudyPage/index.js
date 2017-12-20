@@ -20,7 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
@@ -171,7 +171,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
-            fetchStudy(params.id);
+            // fetchStudy(params.id);
+            studyViewsStatFetched(data.count);
           }
         });
       });
