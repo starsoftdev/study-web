@@ -172,6 +172,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
             // fetchStudy(params.id);
+            console.log('updated stats', data);
             studyViewsStatFetched(data.count);
           }
         });
