@@ -7,3 +7,17 @@ export const FETCH_FILTERED_PROTOCOLS_ERROR     = 'PatientDatabasePage/FETCH_FIL
 export const EXPORT_PATIENTS                    = 'PatientDatabasePage/EXPORT_PATIENTS';
 export const EXPORT_PATIENTS_SUCCESS            = 'PatientDatabasePage/EXPORT_PATIENTS_SUCCESS';
 export const EXPORT_PATIENTS_ERROR              = 'PatientDatabasePage/EXPORT_PATIENTS_ERROR';
+
+export const ADD_PROTOCOL                       = 'PatientDatabasePage/ADD_PROTOCOL';
+export const ADD_PROTOCOL_SUCCESS               = 'PatientDatabasePage/ADD_PROTOCOL_SUCCESS';
+export const ADD_PROTOCOL_ERROR                 = 'PatientDatabasePage/ADD_PROTOCOL_ERROR';
+
+export const EMPTY_ROW_REQUIRED_ERROR           = 'PatientDatabasePage/EMPTY_ROW_REQUIRED_ERROR';
+export const VALIDATION_ERROR                   = 'PatientDatabasePage/VALIDATION_ERROR';
+
+export const FETCH_HISTORY                      = 'PatientDatabasePage/FETCH_HISTORY';
+export const FETCH_HISTORY_SUCCESS              = 'PatientDatabasePage/FETCH_HISTORY_SUCCESS';
+export const FETCH_HISTORY_ERROR                = 'PatientDatabasePage/FETCH_HISTORY_ERROR';
+
+export const REVERT_BULK_UPLOAD                 = 'PatientDatabasePage/REVERT_BULK_UPLOAD';
+export const REVERT_BULK_UPLOAD_ERROR           = 'PatientDatabasePage/REVERT_BULK_UPLOAD_ERROR';
