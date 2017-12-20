@@ -10,18 +10,27 @@ const schema = {
   source: {
     presence: true,
   },
-  groupname: {
+  protocol: {
     presence: true,
+  },
+  /*groupname: {
+    presence: {
+      message: '^Error! Name field is required.',
+    },
   },
   groupemail: {
-    presence: true,
+    presence: {
+      message: '^Error! Email field is required.',
+    },
   },
   groupphone: {
-    presence: true,
+    presence: {
+      message: '^Error! Phone field is required.',
+    },
   },
   groupage: { presence: false },
   groupgender: { presence: false },
-  groupbmi: { presence: false },
+  groupbmi: { presence: false },*/
 };
 
 const fields = Object.keys(schema);
