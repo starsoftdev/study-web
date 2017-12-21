@@ -18,7 +18,6 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     const { patientSignUps } = this.props;
     const totals = {
       textSent: this.props.totals.details.outbound_text ? parseInt(this.props.totals.details.outbound_text) : 0,
-      textReceived: this.props.totals.details.inbound_text ? parseInt(this.props.totals.details.inbound_text) : 0,
       unreadText: this.props.totals.details.unread_text ? parseInt(this.props.totals.details.unread_text) : 0,
       emailSent: this.props.totals.details.outbound_emails ? parseInt(this.props.totals.details.outbound_emails) : 0,
     };
@@ -33,7 +32,6 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
               </div>
               <div className="textbox">
                 <h2 className="view-header">PATIENT <br />SIGN UPS</h2>
-                <span className="counter">TOTAL {patientSignUps.total}</span>
               </div>
             </div>
           </div>
@@ -41,12 +39,16 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">YESTERDAY</span>
+                  <span className="sub-title view-title">YESTERDAY</span>
                   <strong className="number">{patientSignUps.yesterday}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">TODAY</span>
+                  <span className="sub-title view-title">TODAY</span>
                   <strong className="number">{patientSignUps.today}</strong>
+                </li>
+                <li>
+                  <span className="sub-title view-title">TOTAL</span>
+                  <strong className="number">{patientSignUps.total}</strong>
                 </li>
               </ul>
             </div>
@@ -57,8 +59,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <i className="icomoon-icon_comment_alt pull-left i-view" />
               <div className="textbox">
-                <h2 className="view-header">PATIENT <br />MESSAGING SUITE</h2>
-                <span className="counter">EMAIL SENT {totals.emailSent}</span>
+                <h2 className="view-header">PATIENT <br />MESSAGES</h2>
               </div>
             </div>
           </div>
@@ -70,12 +71,12 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                   <strong className="number">{totals.textSent}</strong>
                 </li>
                 <li>
-                  <span className="sub-title view-title">TEXT<br />RECEIVED</span>
-                  <strong className="number">{totals.textReceived}</strong>
-                </li>
-                <li>
                   <span className="sub-title view-title">UNREAD<br />TEXT</span>
                   <strong className="number">{totals.unreadText}</strong>
+                </li>
+                <li>
+                  <span className="sub-title view-title">EMAIL <br />SENT</span>
+                  <strong className="number">{totals.emailSent}</strong>
                 </li>
               </ul>
             </div>
@@ -87,7 +88,6 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
               <i className="icomoon-phone pull-left i-view" />
               <div className="textbox">
                 <h2 className="view-header">PATIENT <br />QUALIFICATION SUITE</h2>
-                <span className="counter">Total N/A</span>
               </div>
             </div>
           </div>
