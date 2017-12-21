@@ -12,7 +12,6 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
   render() {
     const totals = {
-      count_total: 0,
       count_not_contacted: this.props.totals.details.count_not_contacted ? parseInt(this.props.totals.details.count_not_contacted) : 0,
       dnq: this.props.totals.details.dnq ? parseInt(this.props.totals.details.dnq) : 0,
       action_needed: this.props.totals.details.action_needed ? parseInt(this.props.totals.details.action_needed) : 0,
@@ -23,16 +22,10 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
       call_attempted: this.props.totals.details.call_attempted ? parseInt(this.props.totals.details.call_attempted) : 0,
     };
 
-    totals.count_total = (totals.count_not_contacted + totals.dnq + totals.action_needed + totals.scheduled + totals.consented + totals.screen_failed + totals.randomized + totals.call_attempted);
-
     const percentage = this.props.getPercentageObject(totals);
 
     return (
       <ul className="list-inline list-stats">
-        <li>
-          <strong className="heading"><span>REFERRALS</span></strong>
-          <strong className="number"><span>{totals.count_total}</span></strong>
-        </li>
         <li>
           <strong className="heading"><span>NOT<br /> CONTACTED</span></strong>
           <strong className="number"><span>{totals.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></strong>

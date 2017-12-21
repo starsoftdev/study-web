@@ -423,6 +423,10 @@
 			margin: 0 0 -5px;
 			.font(30px, 27px);
 			word-break: break-all;
+
+      &.report-font-fix {
+        font-size: 20px;
+      }
 		}
 		
 		.number {
@@ -493,32 +497,41 @@
 			font-weight: 400;
 			margin: 0 0 0 -10px;
 		}
-		
-		
-		@media screen and (max-width: 1870px) { 
-			.number {
-				font-size: 30px;
-			}
-			
-			
-			.icomoon-icon_chat_alt { font-size: 90%; }
-			.icomoon-envelop { font-size: 75%; }
-			
-			.sub-title {
-				margin: 0;
-				font-size: 24px;
 
-        &.font-fix {
-          font-size: 18px;
+    @media screen and (max-width: 1870px) {
+      .number {
+        font-size: 30px;
+      }
+
+
+      .icomoon-icon_chat_alt { font-size: 90%; }
+      .icomoon-envelop { font-size: 75%; }
+
+      .sub-title {
+        margin: 0;
+        font-size: 24px;
+
+        &.report-font-fix {
+          font-size: 16px;
         }
-			}
-			
-			.counter {
-				font-size: 24px;
-			}
-		}
-		
-		@media screen and (max-width: @psd) {
+      }
+
+      .counter {
+        font-size: 24px;
+      }
+    }
+
+    @media screen and (max-width: 1700px) {
+      .sub-title {
+
+        &.report-font-fix {
+          font-size: 14px;
+          line-height: inherit;
+        }
+      }
+    }
+
+    @media screen and (max-width: @psd) {
 			
 			h2 {
 				.font(28px);
@@ -536,18 +549,12 @@
 			.counter,
 			.sub-title {
 				.font(20px);
-				margin: 0; 
-			}
+				margin: 0;
 
-			.view-title {
-				.font(16px);
-			}
-
-      .qualification-info {
-        .sub-title {
-          .font(12px);
+        &.report-font-fix {
+          font-size: 12px;
         }
-      }
+			}
 			
 			.messages-counter {
 				width: 55px;
@@ -596,7 +603,16 @@
 				margin: 0 0 0 -5px;
 			}
 			
-		} //	end media query
+		}
+
+    @media screen and (max-width: 1390px) {
+      .sub-title {
+
+        &.report-font-fix {
+          font-size: 10px;
+        }
+      }
+    } //	end media query
 		
 	}
 
