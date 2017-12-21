@@ -2,12 +2,20 @@ import {
   FETCH_FILTERED_PROTOCOLS,
   FETCH_FILTERED_PROTOCOLS_SUCCESS,
   FETCH_FILTERED_PROTOCOLS_ERROR,
+  EMPTY_ROW_REQUIRED_ERROR,
+  VALIDATION_ERROR,
 } from '../../containers/UploadPatients/constants';
 
 const initialState = {
   protocols: {
     details: [],
     fetching: false,
+  },
+  emptyRowRequiredError: {
+    hasEmpty: false,
+  },
+  validationError: {
+    hasError: false,
   },
 };
 
@@ -35,6 +43,20 @@ export default function addPatientReducer(state = initialState, action) {
         protocols: {
           details: [],
           fetching: false,
+        },
+      };
+    case EMPTY_ROW_REQUIRED_ERROR:
+      return {
+        ...state,
+        emptyRowRequiredError: {
+          hasEmpty: action.hasEmpty,
+        },
+      };
+    case VALIDATION_ERROR:
+      return {
+        ...state,
+        validationError: {
+          hasError: action.hasError,
         },
       };
     default:
