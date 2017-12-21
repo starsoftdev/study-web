@@ -20,7 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
@@ -57,6 +57,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
     textStatsFetched: React.PropTypes.func,
+    studyViewsStatFetched: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -89,7 +90,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -171,7 +172,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
-            fetchStudy(params.id);
+            // fetchStudy(params.id);
+            studyViewsStatFetched(data.count);
           }
         });
       });
@@ -310,6 +312,7 @@ function mapDispatchToProps(dispatch) {
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
   };
 }
 
