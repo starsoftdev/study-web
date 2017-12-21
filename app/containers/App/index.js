@@ -58,6 +58,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     this.stayLoggedIn = this.stayLoggedIn.bind(this);
     this.changePassword = this.props.changePassword.bind(this);
     this.handleCloseEmailModal = this.handleCloseEmailModal.bind(this);
+    this.handleCloseBulkUploadModal = this.handleCloseBulkUploadModal.bind(this);
     this.state = {
       forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
       timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
