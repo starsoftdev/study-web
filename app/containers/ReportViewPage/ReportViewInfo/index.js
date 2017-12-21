@@ -39,15 +39,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title view-title">YESTERDAY</span>
+                  <span className="sub-title report-font-fix">YESTERDAY</span>
                   <strong className="number">{patientSignUps.yesterday}</strong>
                 </li>
                 <li>
-                  <span className="sub-title view-title">TODAY</span>
+                  <span className="sub-title report-font-fix">TODAY</span>
                   <strong className="number">{patientSignUps.today}</strong>
                 </li>
                 <li>
-                  <span className="sub-title view-title">TOTAL</span>
+                  <span className="sub-title report-font-fix">TOTAL</span>
                   <strong className="number">{patientSignUps.total}</strong>
                 </li>
               </ul>
@@ -67,15 +67,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title view-title">TEXT<br />SENT</span>
+                  <span className="sub-title report-font-fix">TEXT<br />SENT</span>
                   <strong className="number">{totals.textSent}</strong>
                 </li>
                 <li>
-                  <span className="sub-title view-title">UNREAD<br />TEXT</span>
+                  <span className="sub-title report-font-fix">UNREAD<br />TEXT</span>
                   <strong className="number">{totals.unreadText}</strong>
                 </li>
                 <li>
-                  <span className="sub-title view-title">EMAIL <br />SENT</span>
+                  <span className="sub-title report-font-fix">EMAIL <br />SENT</span>
                   <strong className="number">{totals.emailSent}</strong>
                 </li>
               </ul>
@@ -95,15 +95,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title font-fix">INCOMING<br />CALL</span>
+                  <span className="sub-title report-font-fix">INCOMING<br />CALL</span>
                   <strong className="number">N/A</strong>
                 </li>
                 <li>
-                  <span className="sub-title font-fix">SUCCESSFUL<br />TRANSFER</span>
+                  <span className="sub-title report-font-fix">UNSUCCESSFUL<br />TRANSFER</span>
                   <strong className="number">N/A</strong>
                 </li>
                 <li>
-                  <span className="sub-title font-fix">UNSUCCESSFUL<br />TRANSFER</span>
+                  <span className="sub-title report-font-fix">SUCCESSFUL<br />TRANSFER</span>
                   <strong className="number">N/A</strong>
                 </li>
               </ul>
