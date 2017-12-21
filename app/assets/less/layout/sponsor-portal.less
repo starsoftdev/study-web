@@ -125,10 +125,19 @@
         height: 170px;
       }
 
-      .box-holder {
+      .box-holder,
+      .reprot-view-box-holder {
         padding: 15px 45px;
         display: table-cell;
         vertical-align: middle;
+      }
+
+      .box-holder {
+        padding: 15px 45px;
+      }
+
+      .reprot-view-box-holder {
+        padding: 15px 40px;
       }
 
       .icomoon-doctor,
@@ -156,12 +165,6 @@
       }
     }
 
-    &.report-view-area {
-      .box-holder {
-        padding: 15px 40px !important;
-      }
-    }
-
     .green {
       .box {
         background: #9c6;
@@ -172,13 +175,15 @@
     }
 
     @media screen and (max-width: @psd) {
-      .box.table-box .box-holder {
+      .box.table-box .box-holder,
+      .box.table-box .reprot-view-box-holder {
         padding: 15px 40px;
       }
     }
 
     @media screen and (max-width: 1200px) {
-      .box.table-box .box-holder {
+      .box.table-box .box-holder,
+      .box.table-box .reprot-view-box-holder {
         padding: 15px 30px;
       }
     }
