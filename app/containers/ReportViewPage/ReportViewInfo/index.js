@@ -23,10 +23,10 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     };
 
     return (
-      <div className="infoarea row report-view-area">
+      <div className="infoarea row">
         <div className="col-xs-4">
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <div className="img-holder pull-left view-holder">
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>
@@ -36,7 +36,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             </div>
           </div>
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title report-font-fix">YESTERDAY</span>
@@ -56,7 +56,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
         </div>
         <div className="col-xs-4 green">
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <i className="icomoon-icon_comment_alt pull-left i-view" />
               <div className="textbox">
                 <h2 className="view-header">PATIENT <br />MESSAGES</h2>
@@ -64,7 +64,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             </div>
           </div>
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title report-font-fix">TEXT<br />SENT</span>
@@ -84,7 +84,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
         </div>
         <div className="col-xs-4 qualification-info">
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <i className="icomoon-phone pull-left i-view" />
               <div className="textbox">
                 <h2 className="view-header">PATIENT <br />QUALIFICATION SUITE</h2>
@@ -92,7 +92,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             </div>
           </div>
           <div className="box table-box">
-            <div className="box-holder">
+            <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title report-font-fix">INCOMING<br />CALL</span>
