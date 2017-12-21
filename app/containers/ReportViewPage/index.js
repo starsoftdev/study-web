@@ -21,8 +21,8 @@ import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectDnqPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectDnqPaginationOptions } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -42,6 +42,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     getCategoryNotes: PropTypes.func,
     categoryNotes: PropTypes.object,
     dnqPaginationOptions: PropTypes.object,
+    patientSignUps: PropTypes.object,
+    fetchPatientSignUps: PropTypes.func,
   };
 
   constructor(props) {
@@ -72,6 +74,12 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    this.props.fetchPatientSignUps(currentUser, protocolNumber);
   }
 
   getPercentageObject(item) {
@@ -183,6 +191,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           </div>
         </section>
         <ReportViewInfo
+          patientSignUps={this.props.patientSignUps}
           reportsList={this.props.reportsList}
           totals={this.props.totals}
         />
@@ -244,6 +253,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 }
 
 const mapStateToProps = createStructuredSelector({
+  patientSignUps: selectPatientSignUps(),
   currentUser: selectCurrentUser(),
   reportsList: selectReportsList(),
   formValues: selectSearchReportsFormValues(),
@@ -261,6 +271,7 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
+    fetchPatientSignUps: (params, protocolNumber) => dispatch(fetchPatientSignUps(params, protocolNumber)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
   };
 }
