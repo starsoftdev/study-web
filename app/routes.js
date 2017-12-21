@@ -267,7 +267,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/videos',
+      path: '/app/tutorials',
       name: 'videoPage',
       getComponent(nextState, cb) {
         System.import('./containers/VideoPage')
