@@ -248,8 +248,8 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
             <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
             <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
             {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
-            {this.renderEmailTutorial()}
             {this.renderBulkUploadTutorial()}
+            {this.renderEmailTutorial()}
           </div>
         </IdleTimer>
       );
