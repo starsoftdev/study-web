@@ -23,7 +23,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     };
 
     return (
-      <div className="infoarea row">
+      <div className="infoarea row report-view-area">
         <div className="col-xs-4">
           <div className="box table-box">
             <div className="box-holder">
