@@ -81,37 +81,39 @@ export class AppointmentForm extends React.Component { // eslint-disable-line re
     });
 
     return (
-      <form
-        action="#"
-        className="form-billing form-study appointment-form"
-        data-formvalidation="true"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-holder">
-          {this.props.header}
-          <div className="field-row">
-            <Field
-              name="date"
-              component={ReactSelect}
-              placeholder="Select Date"
-              options={options}
-              onChange={this.handleSelect}
-            />
+      <div className="container">
+        <form
+          action="#"
+          className="form-billing form-study appointment-form"
+          data-formvalidation="true"
+          onSubmit={handleSubmit}
+        >
+          <div className="form-holder">
+            {this.props.header}
+            <div className="field-row">
+              <Field
+                name="date"
+                component={ReactSelect}
+                placeholder="Select Date"
+                options={options}
+                onChange={this.handleSelect}
+              />
+            </div>
+            <div className="field-row">
+              <Field
+                name="time"
+                component={ReactSelect}
+                placeholder="Select Time"
+                options={this.state.timeOptions}
+              />
+            </div>
+            <div className="field-row">
+              <input disabled={this.props.submitDisabled} type="submit" value="Finish Appointment" className="btn btn-default btn-block input-lg" />
+            </div>
+            {this.props.footer}
           </div>
-          <div className="field-row">
-            <Field
-              name="time"
-              component={ReactSelect}
-              placeholder="Select Time"
-              options={this.state.timeOptions}
-            />
-          </div>
-          <div className="field-row">
-            <input disabled={this.props.submitDisabled} type="submit" value="Finish Appointment" className="btn btn-default btn-block input-lg" />
-          </div>
-          {this.props.footer}
-        </div>
-      </form>
+        </form>
+      </div>
     );
   }
 }
