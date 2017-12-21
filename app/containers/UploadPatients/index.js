@@ -165,7 +165,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   onSubmitForm(params) {
-    const { exportPatients, currentUser/* , formSyncErrors, touchFields*/ } = this.props;
+    const { exportPatients, currentUser } = this.props;
     const { patients, fileName } = this.state;
     const options = _.clone(params);
     options.patients = [];
@@ -204,45 +204,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       }
 
       exportPatients(options);
-
-      /* delete options.protocol;
-      delete options.groupname;
-      delete options.groupemail;
-      delete options.groupphone;
-      delete options.groupage;
-      delete options.groupgender;
-      delete options.groupbmi;
-
-      // console.log('fields', fields);
-
-      touchFields();
-
-
-      if (options.patients && options.patients.length) {
-        const hasEmpty = this.checkEmptyRequired(options.patients);
-        const hasError = this.validateEmailOrPhone(options.patients);
-
-        if (!_.isEmpty(formSyncErrors)) {
-          if (formSyncErrors.groupname) {
-            toastr.error('', formSyncErrors.groupname);
-          } else if (formSyncErrors.groupemail) {
-            toastr.error('', formSyncErrors.groupemail);
-          } else if (formSyncErrors.groupphone) {
-            toastr.error('', formSyncErrors.groupphone);
-          }
-        } else if (!hasEmpty && !hasError) {
-          /!* normalizing the phone number *!/
-          _.forEach(options.patients, (patient, index) => {
-            if (patient.phone) {
-              options.patients[index].phone = normalizePhoneForServer(patient.phone);
-            }
-          });
-
-          exportPatients(options);
-        }
-      } else {
-        toastr.error('', 'Error! There are no patients to be added.');
-      }*/
     });
   }
 
