@@ -250,7 +250,7 @@ class TextSection extends React.Component {
     const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null || this.textarea.value.trim() === '');
+    const disabled = (clientCredits === 0 || clientCredits === null);
     this.scrollElement();
     const notValidPhone = !currentPatient.phone;
 
