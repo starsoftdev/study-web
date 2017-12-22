@@ -560,7 +560,10 @@ export function* renewStudyWorker(action) {
     }));
     onClose();
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
+      errorMessage = 'Error! Invalid coupon code.';
+    }
     toastr.error('', errorMessage);
     yield put(studyRenewingError(err));
     if (err.status === 401) {
