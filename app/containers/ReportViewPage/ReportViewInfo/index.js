@@ -94,16 +94,16 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
           <div className="box table-box">
             <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
-                <li>
+                <li className="font-fix">
                   <span className="sub-title report-font-fix">INCOMING<br />CALL</span>
                   <strong className="number">N/A</strong>
                 </li>
-                <li>
-                  <span className="sub-title report-font-fix">UNSUCCESSFUL<br />TRANSFER</span>
+                <li className="font-fix">
+                  <span className="sub-title report-font-fix">SUCCESSFUL<br />TRANSFER</span>
                   <strong className="number">N/A</strong>
                 </li>
-                <li>
-                  <span className="sub-title report-font-fix">SUCCESSFUL<br />TRANSFER</span>
+                <li className="font-fix">
+                  <span className="sub-title report-font-fix">UNSUCCESSFUL<br />TRANSFER</span>
                   <strong className="number">N/A</strong>
                 </li>
               </ul>
