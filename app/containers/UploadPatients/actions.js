@@ -50,10 +50,10 @@ export function fetchFilteredProtcols(clientId, siteId) {
   };
 }
 
-export function fetchHistory(userId) {
+export function fetchHistory(clientId) {
   return {
     type: FETCH_HISTORY,
-    userId,
+    clientId,
   };
 }
 

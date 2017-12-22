@@ -139,10 +139,17 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
 
         <Modal dialogComponentClass={CenteredModal} show={this.state.showConfirmRevertModal} onHide={() => { this.switchShowConfirmRevertModal(null); }}>
           <Modal.Header>
-            <Modal.Title>Revert Import</Modal.Title>
-            <a className="lightbox-close close" onClick={() => { this.switchShowConfirmRevertModal(null); }}>
-              <i className="icomoon-icon_close" />
-            </a>
+            <Modal.Title>Revert Upload</Modal.Title>
+            {!this.state.revertStarted &&
+              <a
+                className="lightbox-close close"
+                onClick={() => {
+                  this.switchShowConfirmRevertModal(null);
+                }}
+              >
+                <i className="icomoon-icon_close" />
+              </a>
+            }
           </Modal.Header>
           <Modal.Body>
             <div className="confirm-modal-container">
