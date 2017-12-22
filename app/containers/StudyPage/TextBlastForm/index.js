@@ -241,7 +241,7 @@ class TextBlastForm extends React.Component {
 
   checkForCredits(notEnoughCredits) {
     if (notEnoughCredits) {
-      toastr.error('Error!', 'You do not have enough messaging credits. Please add more credits.');
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
     }
   }
 
