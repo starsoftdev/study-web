@@ -67,7 +67,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   renderCaptcha() {
     const { loginError } = this.props;
     const failedCount = loginError ? loginError.failedCount : 0;
-    if (failedCount >= 5) {
+    if (failedCount >= 3) {
       return (
         <div className="field-row clearfix area">
           <Field
@@ -109,7 +109,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           if (formError) {
             touchFields();
             return;
-          } else if (failedCount >= 5 && !formValues.reCaptcha) {
+          } else if (failedCount >= 3 && !formValues.reCaptcha) {
             toastr.error('', 'Validate recaptcha!');
             return;
           }
