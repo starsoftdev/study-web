@@ -74,10 +74,10 @@ export function* exportPatientsWatcher() {
 
 export function* fetchHistoryWatcher() {
   while (true) {
-    const { userId } = yield take(FETCH_HISTORY);
+    const { clientId } = yield take(FETCH_HISTORY);
 
     try {
-      const requestURL = `${API_URL}/uploadHistory/fetchHistory?userId=${userId}`;
+      const requestURL = `${API_URL}/uploadHistory/fetchHistory?clientId=${clientId}`;
       const response = yield call(request, requestURL, {
         method: 'GET',
       });
