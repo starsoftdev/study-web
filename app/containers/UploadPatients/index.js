@@ -95,9 +95,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   componentWillMount() {
     const { fetchIndications, fetchSources, fetchClientSites, currentUser, fetchHistory } = this.props;
     fetchIndications();
-    fetchHistory(currentUser.id);
     fetchSources();
     fetchClientSites(currentUser.roleForClient.client_id);
+    fetchHistory(currentUser.roleForClient.client_id);
   }
 
   componentWillReceiveProps(newProps) {
