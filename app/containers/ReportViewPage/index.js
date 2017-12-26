@@ -261,7 +261,11 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           </Modal.Body>
         </Modal>
 
-        <PQSModal showModal={this.state.showPQSModal} closePQSModal={this.closePQSModal} />
+        <PQSModal
+          showModal={this.state.showPQSModal}
+          closePQSModal={this.closePQSModal}
+          openPQSModal={this.openPQSModal}
+        />
       </div>
     );
   }
