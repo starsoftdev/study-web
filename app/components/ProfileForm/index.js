@@ -85,7 +85,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   componentWillReceiveProps(newProps) {
     const { timezone, dispatch, formValues, initialValues } = this.props;
 
-    if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging) {
+    if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging && newProps.changePasswordResult.success) {
       this.closeResetPasswordModal();
     }
     if (newProps.timezone && newProps.timezone !== timezone) {
