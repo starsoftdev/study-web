@@ -17,6 +17,7 @@ import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../components/CenteredModal/index';
+import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
@@ -53,6 +54,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       filters: null,
       showCategoryModal: false,
       currentDnqStudyId: false,
+      showPQSModal: false,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -60,6 +62,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.openDnqModal = this.openDnqModal.bind(this);
     this.closeCategoryModal = this.closeCategoryModal.bind(this);
     this.loadNotesItems = this.loadNotesItems.bind(this);
+    this.openPQSModal = this.openPQSModal.bind(this);
+    this.closePQSModal = this.closePQSModal.bind(this);
   }
 
   componentWillMount() {
@@ -144,6 +148,14 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', this.state.currentDnqStudyId, limit, offset);
   }
 
+  openPQSModal() {
+    this.setState({ showPQSModal: true });
+  }
+
+  closePQSModal() {
+    this.setState({ showPQSModal: false });
+  }
+
   render() {
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
@@ -194,6 +206,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           patientSignUps={this.props.patientSignUps}
           reportsList={this.props.reportsList}
           totals={this.props.totals}
+          openPQSModal={() => { this.openPQSModal(); }}
         />
         <ReportViewTotals
           reportsList={this.props.reportsList}
@@ -247,6 +260,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             </InfiniteScroll>
           </Modal.Body>
         </Modal>
+
+        <PQSModal showModal={this.state.showPQSModal} closePQSModal={this.closePQSModal} />
       </div>
     );
   }
