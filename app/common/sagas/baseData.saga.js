@@ -62,6 +62,7 @@ import {
   GET_CNS_INFO,
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_CATEGORIES,
 } from '../../containers/App/constants';
 
 import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
@@ -159,6 +160,8 @@ import {
   getCnsInfoError,
   submitCnsSuccess,
   submitCnsError,
+  patientCategoriesFetched,
+  patientCategoriesFetchingError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -180,6 +183,7 @@ export default function* baseDataSaga() {
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchPatientMessageUnreadCountWatcher);
+  yield fork(fetchPatientCategoriesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
@@ -615,6 +619,24 @@ export function* fetchPatientMessageUnreadCountWatcher() {
       yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
       console.trace(err);
+    }
+  }
+}
+
+export function* fetchPatientCategoriesWatcher() {
+  while (true) {
+    yield take(FETCH_PATIENT_CATEGORIES);
+
+    try {
+      const queryParams = { filter: '{"order":"autoCreateOrderNum ASC"}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/patientCategories?${queryString}`;
+
+      const response = yield call(request, requestURL);
+
+      yield put(patientCategoriesFetched(response));
+    } catch (err) {
+      yield put(patientCategoriesFetchingError(err));
     }
   }
 }

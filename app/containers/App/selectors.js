@@ -243,6 +243,11 @@ const selectPatientMessageUnreadCount = () => createSelector(
   (substate) => get(substate, 'baseData.patientMessages.stats.unreadTexts', 0)
 );
 
+const selectPatientCategories = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.patientCategories', [])
+);
+
 const selectClientRoles = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.clientRoles', {})
@@ -456,6 +461,7 @@ export {
   selectClientCredits,
   selectPatientMessages,
   selectPatientMessageUnreadCount,
+  selectPatientCategories,
   selectClientRoles,
   selectSelectedSite,
   selectSelectedSiteDetailsForForm,

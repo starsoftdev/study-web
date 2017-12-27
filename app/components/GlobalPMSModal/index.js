@@ -28,9 +28,9 @@ import {
   selectClientCredits,
   selectGlobalPMSPaginationOptions,
   selectSiteLocations,
+  selectPatientCategories,
 } from '../../containers/App/selectors';
-// import * as Selector from '../../containers/StudyPage/selectors';
-import { readStudyPatientMessages, fetchPatientCategories } from '../../containers/StudyPage/actions';
+import { readStudyPatientMessages } from '../../containers/StudyPage/actions';
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
 import PatientItem from './PatientItem';
@@ -45,6 +45,7 @@ import {
   updateSitePatients,
   clientCreditsFetched,
   addMessagesCountStat,
+  fetchPatientCategories,
 } from '../../containers/App/actions';
 import {
   selectSocket,
@@ -402,7 +403,7 @@ const mapStateToProps = createStructuredSelector({
   globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
   siteLocations: selectSiteLocations(),
   sites: selectSites(),
-  // patientCategories: Selector.selectPatientCategories(),
+  patientCategories: selectPatientCategories(),
 });
 
 function mapDispatchToProps(dispatch) {
