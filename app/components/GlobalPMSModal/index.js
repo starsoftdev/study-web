@@ -29,7 +29,7 @@ import {
   selectGlobalPMSPaginationOptions,
   selectSiteLocations,
 } from '../../containers/App/selectors';
-import * as Selector from '../../containers/StudyPage/selectors';
+// import * as Selector from '../../containers/StudyPage/selectors';
 import { readStudyPatientMessages, fetchPatientCategories } from '../../containers/StudyPage/actions';
 import MessageItem from './MessageItem';
 import CallItem from './CallItem';
@@ -282,7 +282,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       protocolNumber = `Protocol: ${this.state.selectedPatient.protocol_number}`;
     }
     let patientCategory = '';
-    if (this.state.selectedPatient.study_patient_category_id) {
+    if (this.state.selectedPatient.study_patient_category_id && this.props.patientCategories && this.props.patientCategories.length) {
       patientCategory = `Status: ${this.props.patientCategories[this.state.selectedPatient.study_patient_category_id - 1].name}`;
     }
     return (
@@ -402,7 +402,7 @@ const mapStateToProps = createStructuredSelector({
   globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
   siteLocations: selectSiteLocations(),
   sites: selectSites(),
-  patientCategories: Selector.selectPatientCategories(),
+  // patientCategories: Selector.selectPatientCategories(),
 });
 
 function mapDispatchToProps(dispatch) {
