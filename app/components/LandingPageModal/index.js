@@ -145,6 +145,7 @@ export class LandingPageModal extends React.Component {
           change('initialMessageText', landing.initialMessageText);
           change('facebookUrl', landing.facebookUrl);
           change('isSendInitialMessageText', landing.isSendInitialMessageText);
+          change('displayAlways', landing.displayAlways);
 
           this.setState({
             initialValuesEntered: true,
@@ -568,6 +569,18 @@ export class LandingPageModal extends React.Component {
                       type="text"
                       name="facebookUrl"
                       component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Display Always</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="checkbox"
+                      name="displayAlways"
+                      component={Checkbox}
                     />
                   </div>
                 </div>
