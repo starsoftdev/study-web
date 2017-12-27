@@ -132,6 +132,9 @@ import {
   ADD_MESSAGES_COUNT_STAT,
   DELETE_MESSAGES_COUNT_STAT,
 
+  PATIENT_CATEGORIES_FETCHED,
+  FETCH_PATIENT_CATEGORIES_ERROR,
+
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
@@ -290,6 +293,7 @@ const initialState = {
       error: null,
     },
     cnsSubmitProcess: {},
+    patientCategories: [],
     timezone: 'America/New_York',
   },
 };
@@ -1442,6 +1446,16 @@ export default function appReducer(state = initialState, action) {
         changeUsersTimezoneState: {
           saving: false,
         },
+      };
+      break;
+    case PATIENT_CATEGORIES_FETCHED:
+      baseDataInnerState = {
+        patientCategories: action.payload,
+      };
+      break;
+    case FETCH_PATIENT_CATEGORIES_ERROR:
+      baseDataInnerState = {
+        patientCategories: [],
       };
       break;
     case GET_TIMEZONE:
