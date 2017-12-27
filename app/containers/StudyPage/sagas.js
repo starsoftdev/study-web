@@ -258,9 +258,7 @@ function* fetchPatientCategories() {
     });
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    if (studyId) {
-      yield call(fetchPatients, studyId);
-    }
+    yield call(fetchPatients, studyId);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);

@@ -197,6 +197,10 @@ import {
   ADD_MESSAGES_COUNT_STAT,
   DELETE_MESSAGES_COUNT_STAT,
 
+  FETCH_PATIENT_CATEGORIES,
+  PATIENT_CATEGORIES_FETCHED,
+  FETCH_PATIENT_CATEGORIES_ERROR,
+
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
@@ -1303,6 +1307,24 @@ export function deleteMessagesCountStat(payload) {
   };
 }
 
+export function fetchPatientCategories(payload) {
+  return {
+    type: FETCH_PATIENT_CATEGORIES,
+    payload,
+  };
+}
+export function patientCategoriesFetched(payload) {
+  return {
+    type: PATIENT_CATEGORIES_FETCHED,
+    payload,
+  };
+}
+export function patientCategoriesFetchingError(payload) {
+  return {
+    type: FETCH_PATIENT_CATEGORIES_ERROR,
+    payload,
+  };
+}
 
 export function getTimezone(lat, lng) {
   return {
