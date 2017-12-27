@@ -162,7 +162,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: state.patients.details,
           total: state.patients.total,
           totalUnsubscribed: state.patients.totalUnsubscribed,
-          fetching: true,
+          fetching: !action.isExport,
           error: null,
         },
         paginationOptions: state.paginationOptions,
