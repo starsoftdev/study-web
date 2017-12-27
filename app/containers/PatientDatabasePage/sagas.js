@@ -566,6 +566,7 @@ function* submitEmailBlast() {
         };
       }
       reqParams.currentUser = currentUser;
+      reqParams.origin = 'patients database';
 
       yield call(request, requestURL, {
         method: 'POST',
