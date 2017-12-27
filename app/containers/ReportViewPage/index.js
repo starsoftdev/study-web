@@ -22,7 +22,7 @@ import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectDnqPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -41,7 +41,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     totals: PropTypes.object,
     getCategoryNotes: PropTypes.func,
     categoryNotes: PropTypes.object,
-    dnqPaginationOptions: PropTypes.object,
+    notesPaginationOptions: PropTypes.object,
     patientSignUps: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
   };
@@ -52,12 +52,15 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.state = {
       filters: null,
       showCategoryModal: false,
+      modalCategory: false,
+      modalTitle: false,
+      currentCategoryStudyId: false,
       currentDnqStudyId: false,
     };
 
     this.searchReports = this.searchReports.bind(this);
     this.loadReports = this.loadReports.bind(this);
-    this.openDnqModal = this.openDnqModal.bind(this);
+    this.openNotesModal = this.openNotesModal.bind(this);
     this.closeCategoryModal = this.closeCategoryModal.bind(this);
     this.loadNotesItems = this.loadNotesItems.bind(this);
   }
@@ -128,20 +131,20 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }
 
-  openDnqModal(id) {
-    this.setState({ showCategoryModal: true, currentDnqStudyId: id });
-    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', id, 10, 0);
+  openNotesModal(id, category, title) {
+    this.setState({ showCategoryModal: true, currentCategoryStudyId: id, modalCategory: category, modalTitle: title });
+    this.props.getCategoryNotes(this.state.filters, category, id, 10, 0);
   }
 
   closeCategoryModal() {
-    this.setState({ showCategoryModal: false });
+    this.setState({ showCategoryModal: false, currentCategoryStudyId: false, modalCategory: false, modalTitle: false });
   }
 
   loadNotesItems() {
-    const offset = this.props.dnqPaginationOptions.page * 10;
+    const offset = this.props.notesPaginationOptions.page * 10;
     const limit = 10;
 
-    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', this.state.currentDnqStudyId, limit, offset);
+    this.props.getCategoryNotes(this.state.filters, this.state.modalCategory, this.state.currentCategoryStudyId, limit, offset);
   }
 
   render() {
@@ -199,7 +202,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           reportsList={this.props.reportsList}
           getPercentageObject={this.getPercentageObject}
           totals={this.props.totals}
-          openDnqModal={this.openDnqModal}
+          openNotesModal={this.openNotesModal}
         />
         <ReportViewSearch
           searchReports={this.searchReports}
@@ -219,7 +222,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           currentUser={this.props.currentUser}
           totals={this.props.totals}
           loadReports={this.loadReports}
-          openDnqModal={this.openDnqModal}
+          openNotesModal={this.openNotesModal}
         />
         <Modal
           dialogComponentClass={CenteredModal}
@@ -227,7 +230,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         >
           <Modal.Header>
             <Modal.Title>
-              DNQ NOTES
+              {this.state.modalTitle} NOTES
               <a className="lightbox-close close" onClick={() => { this.closeCategoryModal(); }}>
                 <i className="icomoon-icon_close" />
               </a>
@@ -239,7 +242,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
               pageStart={0}
               loadMore={this.loadNotesItems}
               initialLoad={false}
-              hasMore={this.props.dnqPaginationOptions.hasMoreItems}
+              hasMore={this.props.notesPaginationOptions.hasMoreItems}
               useWindow={false}
             >
               { notes }
@@ -261,7 +264,7 @@ const mapStateToProps = createStructuredSelector({
   formTableValues: selectTableFormValues(),
   totals: selectReportsTotals(),
   categoryNotes: selectCategoryNotes(),
-  dnqPaginationOptions: selectDnqPaginationOptions(),
+  notesPaginationOptions: selectNotesPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
