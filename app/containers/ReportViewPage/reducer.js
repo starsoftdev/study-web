@@ -47,7 +47,7 @@ const initialState = {
     hasMoreItems: true,
     page: 1,
   },
-  dnqPaginationOptions: {
+  notesPaginationOptions: {
     hasMoreItems: true,
     page: 1,
   },
@@ -231,9 +231,9 @@ function reportViewPageReducer(state = initialState, action) {
           fetching: true,
           error: null,
         },
-        dnqPaginationOptions: {
+        notesPaginationOptions: {
           hasMoreItems: false,
-          page: state.dnqPaginationOptions.page,
+          page: state.notesPaginationOptions.page,
         },
       };
     case GET_CATEGORY_NOTES_SUCCESS:
@@ -249,7 +249,7 @@ function reportViewPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        dnqPaginationOptions: {
+        notesPaginationOptions: {
           hasMoreItems: action.hasMoreItems,
           page: action.page,
         },

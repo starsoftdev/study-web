@@ -22,7 +22,7 @@ export class ReportViewTable extends React.Component {
     currentUser: PropTypes.object,
     totals: PropTypes.object,
     loadReports: PropTypes.func,
-    openDnqModal: PropTypes.func,
+    openNotesModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -162,11 +162,11 @@ export class ReportViewTable extends React.Component {
           <td className="count_total">{countTotal}</td>
           <td className="count_not_contacted"><span className="text">{item.count_not_contacted || 0}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
           <td className="call_attempted"><span className="text">{item.call_attempted || 0}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
-          <td className="dnq"><span className="text" onClick={() => { this.props.openDnqModal(item.study_id); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
-          <td className="action_needed"><span className="text">{item.action_needed || 0}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
+          <td className="dnq"><span className="text" onClick={() => { this.props.openNotesModal(item.study_id, 'Not Qualified / Not Interested', 'DNQ'); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
+          <td className="action_needed"><span className="text" onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'PRESCREENED'); }}>{item.action_needed || 0}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></td>
           <td className="scheduled"><span className="text">{item.scheduled || 0}<span className="small">{`(${percentage.scheduled_p}%)`}</span></span></td>
           <td className="consented"><span className="text">{item.consented || 0}<span className="small">{`(${percentage.consented_p}%)`}</span></span></td>
-          <td className="screen_failed"><span className="text">{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
+          <td className="screen_failed"><span className="text" onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></td>
           <td className="randomized"><span className="text">{item.randomized || 0}<span className="small">{`(${percentage.randomized_p}%)`}</span></span></td>
           <td className="outbound_text">{item.outbound_text || 0}</td>
           <td className="inbound_text">{item.inbound_text || 0}</td>

@@ -655,6 +655,7 @@
       }
       &.action_needed {
         width: 170px;
+        cursor: pointer;
       }
       &.scheduled {
         width: 132px;
@@ -664,6 +665,7 @@
       }
       &.screen_failed {
         width: 170px;
+        cursor: pointer;
       }
       &.randomized {
         width: 156px;
@@ -682,7 +684,7 @@
       }
     }
     td {
-      &.dnq {
+      &.dnq, &.action_needed, &.screen_failed {
         color: #00afef;
         &:hover {
           color: #76daff;
