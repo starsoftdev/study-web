@@ -110,7 +110,7 @@ export class LandingPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding, updatedStudyAd } = this.props;
+    const { resetState, onClose, fetchLanding, updatedStudyAd, resetChangeAddState } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -169,6 +169,11 @@ export class LandingPageModal extends React.Component {
 
     if (!newProps.openModal && this.props.openModal) {
       this.onHide();
+    }
+
+    if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
+      this.closeStudyAddModal();
+      resetChangeAddState();
     }
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
