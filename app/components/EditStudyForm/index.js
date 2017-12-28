@@ -219,9 +219,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       change('emailNotifications', newProps.emailNotifications);
     }
 
-    // if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
-    //   resetChangeAddState();
-    // }
+    if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
+      this.closeStudyAddModal();
+    }
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
       const currentStudy = this.state.currentStudy;
