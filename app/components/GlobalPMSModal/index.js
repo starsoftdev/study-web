@@ -283,7 +283,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       protocolNumber = `Protocol: ${this.state.selectedPatient.protocol_number}`;
     }
     let patientCategory = '';
-    if (this.state.selectedPatient.study_patient_category_id && this.props.patientCategories && this.props.patientCategories.length) {
+    if (this.state.selectedPatient.study_patient_category_id && this.props.patientCategories && this.props.patientCategories.length && this.props.patientCategories[this.state.selectedPatient.study_patient_category_id - 1]) {
       patientCategory = `Status: ${this.props.patientCategories[this.state.selectedPatient.study_patient_category_id - 1].name}`;
     }
     return (
