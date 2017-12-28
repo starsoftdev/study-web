@@ -32,6 +32,7 @@ import {
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectLandingPageUpdateProcess,
+  selectUpdatedStudyAd,
   selectChangeStudyAddProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
@@ -80,6 +81,7 @@ export class LandingPageModal extends React.Component {
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     isOnTop: React.PropTypes.bool,
+    updatedStudyAd: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -103,11 +105,12 @@ export class LandingPageModal extends React.Component {
       studyAddModalOpen: false,
       studyPreviewModalOpen: false,
       initialValuesEntered: false,
+      updatedStudyAd: null,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding } = this.props;
+    const { resetState, onClose, fetchLanding, updatedStudyAd } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -169,6 +172,10 @@ export class LandingPageModal extends React.Component {
     }
 
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
+      if (newProps.updatedStudyAd && newProps.updatedStudyAd !== updatedStudyAd) {
+        this.setState({ updatedStudyAd: newProps.updatedStudyAd });
+      }
+
       this.closeStudyAddModal();
 
       /* this.setState({
@@ -257,9 +264,11 @@ export class LandingPageModal extends React.Component {
     const { openModal, onClose, changeStudyAddProcess } = this.props;
     let fileSrc = null;
 
-    if (this.state.landing) {
+    if (this.state.landing && !this.state.updatedStudyAd) {
       const landing = this.state.landing;
       fileSrc = landing.imgSrc;
+    } else {
+      fileSrc = this.state.updatedStudyAd;
     }
     /* const country = [{ label: 'USA', value: 'USA', id: 0 },
                     { label: 'Canada', value: 'Canada', id: 1 },
@@ -650,6 +659,7 @@ const mapStateToProps = createStructuredSelector({
   landing: selectLanding(),
   updateLandingPageProcess: selectLandingPageUpdateProcess(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
+  updatedStudyAd: selectUpdatedStudyAd(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPageModal);
