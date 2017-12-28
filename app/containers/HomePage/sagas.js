@@ -618,17 +618,13 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'studyAd' && index !== 'emailNotifications') {
+      if (index !== 'emailNotifications') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
     if (options.emailNotifications) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
-    }
-
-    if (options.studyAd && options.studyAd[0]) {
-      data.append('file', options.studyAd[0]);
     }
 
     const params = {
@@ -996,7 +992,7 @@ export function* changeStudyAddWorker(action) {
     toastr.success('', 'Success! Study ad has been updated.');
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
-    toastr.error('Error!');
+    toastr.error('', 'Something went wrong while updating study ad');
     yield put(changeStudyAddError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
