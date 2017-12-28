@@ -145,7 +145,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications } = this.props;
+    const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAddState } = this.props;
 
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
       const fields = [];
@@ -221,6 +221,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
 
     if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
       this.closeStudyAddModal();
+      resetChangeAddState();
     }
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
