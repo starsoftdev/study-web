@@ -992,7 +992,7 @@ export function* changeStudyAddWorker(action) {
     toastr.success('', 'Success! Study ad has been updated.');
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
-    toastr.error('', 'Something went wrong while updating study ad');
+    toastr.error('', 'Error! Unable to read file. Please try a different one.');
     yield put(changeStudyAddError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
