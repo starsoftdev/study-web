@@ -146,6 +146,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
 
   componentWillReceiveProps(newProps) {
     const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications } = this.props;
+
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
       const fields = [];
       let currentStudy = null;
@@ -226,7 +227,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       const currentStudy = this.state.currentStudy;
       currentStudy.image = newProps.updatedStudyAd;
       this.setState({ updatedStudyAd: newProps.updatedStudyAd, currentStudy });
-      this.closeStudyAddModal();
+      if (this.state.studyAddModalOpen) {
+        this.closeStudyAddModal();
+      }
     }
   }
 
@@ -294,6 +297,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         params.emailNotifications = newEmailNotifications;
       }
     }
+
     onSubmit(params);
   }
 
