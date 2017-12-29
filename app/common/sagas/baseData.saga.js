@@ -628,11 +628,18 @@ export function* fetchPatientCategoriesWatcher() {
     yield take(FETCH_PATIENT_CATEGORIES);
 
     try {
-      const queryParams = { filter: '{"order":"autoCreateOrderNum ASC"}' };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/patientCategories?${queryString}`;
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            fields: ['name', 'id'],
+            order: 'id ASC',
+          }),
+        },
+      };
+      const requestURL = `${API_URL}/patientCategories`;
 
-      const response = yield call(request, requestURL);
+      const response = yield call(request, requestURL, options);
 
       yield put(patientCategoriesFetched(response));
     } catch (err) {
