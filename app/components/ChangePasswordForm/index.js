@@ -5,7 +5,7 @@
 */
 
 import React from 'react';
-import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
+import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import changePasswordFormValidator from './validator';
 
@@ -26,7 +26,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
   };
 
   render() {
-    const { error, handleSubmit, pristine, reset, submitting } = this.props; // eslint-disable-line
+    const { handleSubmit, submitting } = this.props;
 
     return (
       <form onSubmit={handleSubmit} className="form-lightbox">
