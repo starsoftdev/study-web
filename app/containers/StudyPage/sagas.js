@@ -249,14 +249,18 @@ function* fetchPatientCategories() {
   // listen for the FETCH_PATIENT_CATEGORIES action
   const { studyId } = yield take(FETCH_PATIENT_CATEGORIES);
 
-  const filter = JSON.stringify({
-    fields: ['name', 'id'],
-  });
   try {
-    const requestURL = `${API_URL}/patientCategories?filter=${filter}`;
-    const response = yield call(request, requestURL, {
+    const options = {
       method: 'GET',
-    });
+      query: {
+        filter: JSON.stringify({
+          fields: ['name', 'id'],
+          order: 'id ASC',
+        }),
+      },
+    };
+    const requestURL = `${API_URL}/patientCategories`;
+    const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
     yield call(fetchPatients, studyId);
