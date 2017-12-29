@@ -162,16 +162,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: state.patients.details,
           total: state.patients.total,
           totalUnsubscribed: state.patients.totalUnsubscribed,
-          fetching: true,
+          fetching: !action.isExport,
           error: null,
         },
-        paginationOptions: {
-          hasMoreItems: false,
-          page: state.paginationOptions.page,
-          activeSort: state.paginationOptions.activeSort,
-          activeDirection: state.paginationOptions.activeDirection,
-          prevSearchFilter: state.paginationOptions.prevSearchFilter,
-        },
+        paginationOptions: state.paginationOptions,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
