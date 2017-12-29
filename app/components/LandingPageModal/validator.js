@@ -48,6 +48,9 @@ const schema = {
   shareThisStudyText: {
     presence: false,
   },
+  displayAlways: {
+    presence: false,
+  },
   showSocialMediaButtons: {
     presence: false,
   },

@@ -7,7 +7,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     reportsList: PropTypes.object,
     getPercentageObject: PropTypes.func,
     totals: PropTypes.object,
-    openDnqModal: PropTypes.func,
+    openNotesModal: PropTypes.func,
   }
 
   render() {
@@ -34,13 +34,13 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="heading"><span>CALL<br /> ATTEMPTED</span></strong>
           <strong className="number"><span>{totals.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></strong>
         </li>
-        <li onClick={() => { this.props.openDnqModal(); }}>
+        <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
           <strong className="heading"><span>DNQ</span></strong>
           <strong className="number pointer"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
         </li>
-        <li>
+        <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'PRESCREENED'); }}>
           <strong className="heading"><span>PRESCREENED</span></strong>
-          <strong className="number"><span>{totals.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></strong>
+          <strong className="number pointer"><span>{totals.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></strong>
         </li>
         <li>
           <strong className="heading"><span>SCHEDULED</span></strong>
@@ -50,9 +50,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="heading"><span>CONSENTED</span></strong>
           <strong className="number"><span>{totals.consented}<span className="small">{`(${percentage.consented_p}%)`}</span></span></strong>
         </li>
-        <li>
+        <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
           <strong className="heading"><span>SCREEN<br /> FAILED</span></strong>
-          <strong className="number"><span>{totals.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></strong>
+          <strong className="number pointer"><span>{totals.screen_failed}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span></strong>
         </li>
         <li>
           <strong className="heading"><span>RANDOMIZED</span></strong>

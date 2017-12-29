@@ -57,9 +57,9 @@ const selectCategoryNotes = () => createSelector(
   substate => substate.categoryNotes
 );
 
-const selectDnqPaginationOptions = () => createSelector(
+const selectNotesPaginationOptions = () => createSelector(
   selectReportViewPageDomain(),
-  substate => substate.dnqPaginationOptions
+  substate => substate.notesPaginationOptions
 );
 
 const selectPatientSignUps = () => createSelector(
@@ -77,6 +77,6 @@ export {
   selectChangeProtocolStatusProcess,
   selectReportsTotals,
   selectCategoryNotes,
-  selectDnqPaginationOptions,
+  selectNotesPaginationOptions,
   selectPatientSignUps,
 };
