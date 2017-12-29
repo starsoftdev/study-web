@@ -3,6 +3,7 @@
 import React from 'react';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { reset } from 'redux-form';
 import { actions as toastrActions, toastr } from 'react-redux-toastr';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
@@ -24,6 +25,7 @@ import {
   SUBMIT_EMAIL_BLAST,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
+  ADD_PROTOCOL,
 } from './constants';
 
 import {
@@ -43,6 +45,8 @@ import {
   submitAddPatientSuccess,
   submitAddPatientFailure,
   clearPatientsList,
+  addProtocolSucceess,
+  addProtocolError,
 } from './actions';
 
 export function* patientDatabasePageSaga() {
@@ -58,6 +62,7 @@ export function* patientDatabasePageSaga() {
   const watcherJ = yield fork(importPatients);
   const watcherK = yield fork(submitAddPatient);
   const watcherL = yield fork(getTotalPatientsCountWatcher);
+  const watcherM = yield fork(addProtocolWatcher);
   const watcherZ = yield fork(submitEmailBlast);
 
   yield take(LOCATION_CHANGE);
@@ -76,6 +81,7 @@ export function* patientDatabasePageSaga() {
   yield cancel(watcherJ);
   yield cancel(watcherK);
   yield cancel(watcherL);
+  yield cancel(watcherM);
   yield cancel(watcherZ);
 }
 
@@ -201,6 +207,13 @@ export function* fetchPatientsWatcher() {
           filterObj.where.and.push({
             gender: searchParams.gender,
           });
+        }
+        if (isExport) {
+          if (searchParams.selectAllUncheckedManually) {
+            filterObj.patientsIDs = searchParams.patientsIDs;
+          } else if (searchParams.uncheckedPatients.length > 0) {
+            filterObj.excludePatients = searchParams.uncheckedPatients;
+          }
         }
       }
 
@@ -512,7 +525,7 @@ function* submitTextBlast() {
 function* submitEmailBlast() {
   while (true) {
     // listen for the SUBMIT_EMAIL_BLAST action
-    const { filter, uncheckedPatients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
+    const { formValues, clientRoleId, currentUser, onClose } = yield take(SUBMIT_EMAIL_BLAST);
 
     const authToken = getItem('auth_token');
     if (!authToken) {
@@ -522,16 +535,42 @@ function* submitEmailBlast() {
     try {
       const requestURL = `${API_URL}/emails/addBlastEmails`;
 
+      let reqParams = {};
+      if (!formValues.selectAllUncheckedManually) {
+        reqParams = {
+          selectAll: true,
+          message: formValues.message,
+          from: formValues.email,
+          subject: formValues.subject,
+          clientRoleId,
+          patientsIDs: [],
+          queryParams: {
+            ...formValues.queryParams,
+            filter: {
+              ...formValues.queryParams.filter,
+              limit: null,
+              offset: null,
+            },
+          },
+        };
+        if (formValues.uncheckedPatients.length > 0) {
+          reqParams.excludePatients = formValues.uncheckedPatients;
+        }
+      } else {
+        reqParams = {
+          patientsIDs: formValues.patients.map(patient => patient.id),
+          message: formValues.message,
+          from: formValues.email,
+          subject: formValues.subject,
+          clientRoleId,
+        };
+      }
+      reqParams.currentUser = currentUser;
+      reqParams.origin = 'patients database';
+
       yield call(request, requestURL, {
         method: 'POST',
-        body: JSON.stringify({
-          filter,
-          uncheckedPatients,
-          from,
-          subject,
-          clientRoleId,
-          message,
-        }),
+        body: JSON.stringify(reqParams),
       });
       onClose();
       toastr.success('', 'Success! Your email blast have been sent.');
@@ -606,6 +645,33 @@ function* submitAddPatient() {
       toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
+export function* addProtocolWatcher() {
+  while (true) {
+    const { payload } = yield take(ADD_PROTOCOL);
+    try {
+      const requestURL = `${API_URL}/studies/addProtocol`;
+      const params = {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      };
+      const response = yield call(request, requestURL, params);
+
+      toastr.success('Add Protocol', 'The request has been submitted successfully');
+      yield put(addProtocolSucceess(response));
+
+      yield put(reset('addProtocol'));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      toastr.error('', errorMessage);
+      yield put(addProtocolError(err));
+      // if returns forbidden we remove the token from local storage
+      if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
     }

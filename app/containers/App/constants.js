@@ -97,10 +97,6 @@ export const DELETE_USER                           = 'App/DELETE_USER';
 export const DELETE_USER_SUCCESS                   = 'App/DELETE_USER_SUCCESS';
 export const DELETE_USER_ERROR                     = 'App/DELETE_USER_ERROR';
 
-export const DELETE_CLIENT_ROLE                    = 'App/DELETE_CLIENT_ROLE';
-export const DELETE_CLIENT_ROLE_SUCCESS            = 'App/DELETE_CLIENT_ROLE_SUCCESS';
-export const DELETE_CLIENT_ROLE_ERROR              = 'App/DELETE_CLIENT_ROLE_ERROR';
-
 export const SAVE_SITE                             = 'App/SAVE_SITE';
 export const SAVE_SITE_SUCCESS                     = 'App/SAVE_SITE_SUCCESS';
 export const SAVE_SITE_ERROR                       = 'App/SAVE_SITE_ERROR';
@@ -201,6 +197,10 @@ export const SUBMIT_CNS_ERROR                      = 'App/SUBMIT_CNS_ERROR';
 
 export const ADD_MESSAGES_COUNT_STAT               = 'App/ADD_MESSAGES_COUNT_STAT';
 export const DELETE_MESSAGES_COUNT_STAT            = 'App/DELETE_MESSAGES_COUNT_STAT';
+
+export const FETCH_PATIENT_CATEGORIES              = 'App/FETCH_PATIENT_CATEGORIES';
+export const FETCH_PATIENT_CATEGORIES_ERROR        = 'App/FETCH_PATIENT_CATEGORIES_ERROR';
+export const PATIENT_CATEGORIES_FETCHED            = 'App/PATIENT_CATEGORIES_FETCHED';
 
 export const GET_TIMEZONE = 'GET_TIMEZONE';
 export const GET_TIMEZONE_SUCCESS = 'GET_TIMEZONE_SUCCESS';

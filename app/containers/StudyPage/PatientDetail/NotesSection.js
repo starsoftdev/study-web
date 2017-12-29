@@ -66,7 +66,7 @@ class NotesSection extends React.Component {
   }
 
   render() {
-    const { active } = this.props;
+    const { active, note } = this.props;
     return (
       <div className={classNames('item note', { active })}>
         <section className="postarea notes" ref={scrollable => { this.scrollable = scrollable; }}>
@@ -74,7 +74,7 @@ class NotesSection extends React.Component {
         </section>
         <div className="textarea">
           <Field name="note" component={Input} componentClass="textarea" placeholder="Type a note..." />
-          <Button onClick={this.onClick}>Save</Button>
+          <Button onClick={this.onClick} disabled={!note}>Save</Button>
         </div>
       </div>
     );

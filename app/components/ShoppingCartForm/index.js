@@ -295,6 +295,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                     type="text"
                     placeholder="Coupon"
                     className={classNames({ couponSelected })}
+                    onBlur={this.onFetchCoupon}
                   />
               }
               <Button

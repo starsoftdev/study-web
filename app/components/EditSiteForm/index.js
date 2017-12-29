@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import moment from 'moment-timezone';
+import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -39,6 +41,8 @@ const toShortCode = country => {
       return 'fr';
     case 'Germany':
       return 'de';
+    case 'Hungary':
+      return 'hu';
     case 'Italy':
       return 'it';
     case 'Czech Republic':
@@ -78,10 +82,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   componentWillReceiveProps(newProps) {
-    const { change, timezone } = this.props;
+    const { change, timezone, formValues } = this.props;
     if (newProps.timezone && newProps.timezone !== timezone) {
       console.log('new timzone', newProps.timezone);
-      change('timezone', formatTimezone(newProps.timezone));
+      change('timezone', formatTimezone(newProps.timezone, formValues.city));
+      change('timezoneUnparsed', newProps.timezone);
     }
   }
 
@@ -104,6 +109,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       getTimezone(e.location.lat, e.location.lng);
     }
 
+    change('address', e.label);
     if (e.gmaps && e.gmaps.address_components) {
       const addressComponents = e.gmaps.address_components;
 
@@ -121,11 +127,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
             change('state', val.short_name);
+          } else {
+            change('state', '');
           }
         }
         if (!countryCode) {
           countryCode = _.find(val.types, (o) => (o === 'country'));
-          if (state) {
+          if (countryCode) {
             change('countryCode', val.short_name);
           }
         }
@@ -152,6 +160,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       }
       if (addressArr[2]) {
         change('state', addressArr[2]);
+      } else {
+        change('state', '');
       }
       if (addressArr[3]) {
         change('countryCode', toShortCode(addressArr[3]));
@@ -162,7 +172,12 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
   render() {
     const { handleSubmit, isEdit, initialValues, savedSite } = this.props;
-
+    let isDst = false;
+    if (this.props.formValues && this.props.formValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.formValues.timezoneUnparsed).isDST();
+    } else if (this.props.initialValues && this.props.initialValues.timezoneUnparsed) {
+      isDst = moment().tz(this.props.initialValues.timezoneUnparsed).isDST();
+    }
     return (
       <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>
         <div className="edit-site form-fields">
@@ -260,7 +275,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
-          <div className="field-row">
+          <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
             <strong className="label required"><label>Time Zone</label></strong>
             <div className="field">
               <Field
@@ -272,6 +287,13 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
               />
             </div>
           </div>
+          {
+            (isDst === true) &&
+            <div className="field-row">
+              <strong className="label"><label>&nbsp;</label></strong>
+              <div className="field dst-label">This time zone currently observes daylight savings.</div>
+            </div>
+          }
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving

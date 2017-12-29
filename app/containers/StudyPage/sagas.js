@@ -72,6 +72,7 @@ import {
   emailsFetched,
   emailsFetchError,
   callStatsFetched,
+  fetchEmails,
 } from './actions';
 
 // Bootstrap sagas
@@ -233,7 +234,6 @@ function* fetchStudyStats(action) {
     const response = yield call(request, requestURL, options);
     yield put(studyStatsFetched(response));
   } catch (e) {
-    toastr.error('', 'Error! Text stats has been disabled.');
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -478,6 +478,7 @@ function* fetchPatientDetails() {
                 relation: 'user',
                 scope: {
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
+                  include: 'roleForClient',
                 },
               },
             ],
@@ -771,6 +772,7 @@ function* submitEmail() {
         }),
       });
       yield put(submitEmailSuccess(response));
+      yield put(fetchEmails(studyId, patientId));
       toastr.success('', 'Success! Your email have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
@@ -782,7 +784,7 @@ function* submitEmail() {
   }
 }
 
-function* fetchEmails() {
+function* fetchEmailsWatcher() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
     const { studyId, patientId } = yield take(FETCH_EMAILS);
@@ -1037,7 +1039,7 @@ export function* fetchStudySaga() {
     const watcherA = yield fork(fetchStudyDetails);
     // watch for initial fetch actions that will load the text message stats
     const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
-    // watch for socket.io or filtering actions that will refresh the text message stats
+    // watch for filtering actions that will refresh the text message stats
     const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
@@ -1059,7 +1061,7 @@ export function* fetchStudySaga() {
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
     const watcherEmail = yield fork(submitEmail);
-    const watcherEmailsFetch = yield fork(fetchEmails);
+    const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
     const callStatsWatcher = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
 

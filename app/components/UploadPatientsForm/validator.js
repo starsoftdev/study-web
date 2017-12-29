@@ -10,18 +10,9 @@ const schema = {
   source: {
     presence: true,
   },
-  groupname: {
+  protocol: {
     presence: true,
   },
-  groupemail: {
-    presence: true,
-  },
-  groupphone: {
-    presence: true,
-  },
-  groupage: { presence: false },
-  groupgender: { presence: false },
-  groupbmi: { presence: false },
 };
 
 const fields = Object.keys(schema);

@@ -125,10 +125,18 @@
         height: 170px;
       }
 
-      .box-holder {
-        padding: 15px 80px;
+      .box-holder,
+      .reprot-view-box-holder {
         display: table-cell;
         vertical-align: middle;
+      }
+
+      .box-holder {
+        padding: 15px 45px;
+      }
+
+      .reprot-view-box-holder {
+        padding: 15px 25px;
       }
 
       .icomoon-doctor,
@@ -149,6 +157,10 @@
       .img-holder {
         width: 94px;
         margin: 0 25px 0 0;
+
+        &.view-holder {
+          width: 70px;
+        }
       }
     }
 
@@ -165,11 +177,17 @@
       .box.table-box .box-holder {
         padding: 15px 40px;
       }
+      .box.table-box .reprot-view-box-holder {
+        padding: 15px 20px;
+      }
     }
 
     @media screen and (max-width: 1200px) {
       .box.table-box .box-holder {
         padding: 15px 30px;
+      }
+      .box.table-box .reprot-view-box-holder {
+        padding: 15px 15px;
       }
     }
   }
@@ -204,6 +222,18 @@
 
     .number {
       padding: 0;
+    }
+
+    @media screen and (max-width: 1700px) {
+      li.font-fix {
+        padding: 0 5px;
+      }
+    }
+
+    @media screen and (max-width: @psd) {
+      li.font-fix {
+        padding: 0;
+      }
     }
   }
 
@@ -304,7 +334,7 @@
   .table-area {
     .clearfix;
     position: relative;
-    padding: 0 0 0 710px;
+    padding: 0 0 0 600px;
 
     .table-scroll-wrap {
       overflow-x: scroll;
@@ -352,7 +382,7 @@
     .table-left {
       top: 0;
       left: 0;
-      width: 710px;
+      width: 600px;
       position: absolute;
 
       .table .number {
@@ -540,13 +570,13 @@
     }
 
     @media screen and (max-width: @psd) {
-      padding-left: 553px;
+      padding-left: 530px;
       .reports & {
-        padding: 0 0 0 553px;
+        padding: 0 0 0 530px;
       }
 
       .table-left {
-        width: 553px;
+        width: 530px;
       }
 
       .table-right .table {
@@ -567,13 +597,13 @@
         width: 50px;
       }
       &:nth-child(2) {
-        width: 257px;
+        width: 270px;
       }
       &:nth-child(3) {
-        width: 173px;
+        width: 140px;
       }
       &:nth-child(4) {
-        width: 186px;
+        width: 140px;
       }
     }
 
@@ -583,13 +613,13 @@
           width: 50px;
         }
         &:nth-child(2) {
-          width: 125px;
+          width: 200px;
         }
         &:nth-child(3) {
-          width: 130px;
+          width: 140px;
         }
         &:nth-child(4) {
-          width: 186px;
+          width: 140px;
         }
       }
     }
@@ -613,9 +643,6 @@
       &.count_total {
         width: 130px;
       }
-      &.count_contacted {
-        width: 145px;
-      }
       &.count_not_contacted {
         width: 186px;
       }
@@ -628,6 +655,7 @@
       }
       &.action_needed {
         width: 170px;
+        cursor: pointer;
       }
       &.scheduled {
         width: 132px;
@@ -637,6 +665,7 @@
       }
       &.screen_failed {
         width: 170px;
+        cursor: pointer;
       }
       &.randomized {
         width: 156px;
@@ -655,7 +684,7 @@
       }
     }
     td {
-      &.dnq {
+      &.dnq, &.action_needed, &.screen_failed {
         color: #00afef;
         &:hover {
           color: #76daff;

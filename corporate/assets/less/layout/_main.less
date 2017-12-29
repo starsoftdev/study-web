@@ -3370,25 +3370,31 @@ input:focus {
 }
 
 .appointment-form{
-  height: 500px;
+  padding: 0 5px;
   .appointment-header-first{
     color: red;
     font-size: 43px;
+    @media screen and (max-width: 767px) {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 20px;
+    }
   }
   .appointment-header-second{
     color: #949ca1;
     font-size: 24px;
     text-align: center;
     margin: 5px 0px 30px 3px;
+    @media screen and (max-width: 767px) {
+      font-size: 21px;
+      line-height: 28px;
+    }
   }
   .form-holder{
     max-width: 775px !important;
   }
   .appointment-footer-first{
-    color: #28ade4;
-    font-size: 30px;
-    text-align: center;
-    margin: 30px 0px 0px 3px;
+    margin: 30px 0 10px 0;
   }
 }
 
