@@ -12,6 +12,18 @@
   }
 }
 
+.Select-arrow-zone{
+  pointer-events: none !important;
+}
+
+.field-before-dst-label{
+  margin-bottom: 5px !important;
+}
+.dst-label{
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+}
+
 .disabled-li {
   background-color: lightgray;
   cursor: not-allowed;
@@ -5644,6 +5656,7 @@ div[data-percentage],
 /* upload patients page  */
 /*****************/
 @import "../../../containers/UploadPatients/styles";
+@import "../../../components/AddNewProtocolForm/styles";
 /*****************/
 /*****************/
 /* patient database page  */
@@ -5779,6 +5792,10 @@ div[data-percentage],
 /* Dashboard TopHeaderBar Component  */
 /*****************/
 @import "../../../components/TopHeaderBar2/AvatarMenu/styles";
+
+/* EmailTutorialModal Component  */
+/*****************/
+@import "../../../components/EmailTutorialSlider/style";
 
 /*****************/
 /* Filter Component  */

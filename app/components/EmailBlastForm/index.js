@@ -16,8 +16,7 @@ import Input from '../Input/index';
 import * as Selector from '../../containers/StudyPage/selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitEmailBlast } from '../../containers/StudyPage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
-import { fetchClientCredits } from '../../containers/App/actions';
-import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSources, selectClientCredits } from '../../containers/App/selectors';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -28,6 +27,7 @@ const mapStateToProps = createStructuredSelector({
   patientCategories: Selector.selectPatientCategories(),
   sources: selectSources(),
   studyId: Selector.selectStudyId(),
+  clientCredits: selectClientCredits(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -37,7 +37,6 @@ const mapDispatchToProps = (dispatch) => ({
   removePatient: (patient) => dispatch(removePatientFromTextBlast(patient)),
   removePatients: () => dispatch(removePatientsFromTextBlast()),
   submitEmailBlast: (patients, message, from, subject, clientRoleId, onClose) => dispatch(submitEmailBlast(patients, message, from, subject, clientRoleId, onClose)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
 });
 
 @reduxForm({
@@ -49,7 +48,6 @@ class EmailBlastForm extends React.Component {
   static propTypes = {
     change: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
-    fetchClientCredits: React.PropTypes.func,
     findPatients: React.PropTypes.func.isRequired,
     filterPatients: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
@@ -64,6 +62,7 @@ class EmailBlastForm extends React.Component {
     campaign: React.PropTypes.number,
     studyName: React.PropTypes.string,
     initialize: React.PropTypes.func,
+    clientCredits: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -178,8 +177,18 @@ class EmailBlastForm extends React.Component {
 
   submitEmailBlast(event) {
     event.preventDefault();
-    const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose } = this.props;
-    if (_.isEmpty(formSyncErrors)) {
+    const { currentUser, formSyncErrors, formValues, submitEmailBlast, onClose, clientCredits } = this.props;
+
+    let newPatientsArr = [];
+    if (formValues.patients && formValues.filteredPatientSearchValues) {
+      newPatientsArr = formValues.patients.filter((v) => (
+        formValues.filteredPatientSearchValues.indexOf(v) !== -1
+      ));
+    }
+
+    if (newPatientsArr.length > clientCredits.details.emailCredits) {
+      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+    } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
       });
@@ -277,14 +286,14 @@ class EmailBlastForm extends React.Component {
   }
 
   render() {
-    const { patientCategories, sources, formValues } = this.props;
+    const { patientCategories, sources, formValues, clientCredits } = this.props;
     let newPatientsArr = [];
     if (formValues.patients && formValues.filteredPatientSearchValues) {
       newPatientsArr = formValues.patients.filter((v) => (
         formValues.filteredPatientSearchValues.indexOf(v) !== -1
       ));
     }
-    const disabled = (newPatientsArr.length === 0);
+    const disabled = (newPatientsArr.length === 0 || newPatientsArr.length > clientCredits.details.emailCredits);
     return (
       <Form
         className="text-email-blast-form"
@@ -396,12 +405,13 @@ class EmailBlastForm extends React.Component {
                 style={{ height: '350px' }}
               />
               <div className="footer">
-                <input
+                <div
                   className="btn btn-default lightbox-opener pull-right"
-                  value="Send"
-                  type="submit"
+                  onClick={(e) => this.submitEmailBlast(e)}
                   disabled={disabled}
-                />
+                >
+                  Send
+                </div>
               </div>
             </div>
           </div>

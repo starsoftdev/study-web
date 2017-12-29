@@ -8,7 +8,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectSites, selectClientRoles, selectSelectedUser,
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
-import { clearSelectedUser, deleteClientRole, saveUser, deleteUser } from '../../containers/App/actions';
+import { clearSelectedUser, saveUser, deleteUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -297,7 +297,6 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     clearSelectedUser: () => dispatch(clearSelectedUser()),
-    deleteClientRole: (id) => dispatch(deleteClientRole(id)),
     saveUser: (clientId, id, data) => dispatch(saveUser(clientId, id, data)),
     deleteUser: (id) => dispatch(deleteUser(id)),
   };

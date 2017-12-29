@@ -97,10 +97,6 @@ import {
   DELETE_USER_SUCCESS,
   DELETE_USER_ERROR,
 
-  DELETE_CLIENT_ROLE,
-  DELETE_CLIENT_ROLE_SUCCESS,
-  DELETE_CLIENT_ROLE_ERROR,
-
   SAVE_SITE,
   SAVE_SITE_SUCCESS,
   SAVE_SITE_ERROR,
@@ -200,6 +196,10 @@ import {
 
   ADD_MESSAGES_COUNT_STAT,
   DELETE_MESSAGES_COUNT_STAT,
+
+  FETCH_PATIENT_CATEGORIES,
+  PATIENT_CATEGORIES_FETCHED,
+  FETCH_PATIENT_CATEGORIES_ERROR,
 
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
@@ -572,13 +572,12 @@ export function clientCreditsFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId, offset, limit, search) {
+export function fetchSitePatients(userId, offset, limit) {
   return {
     type: FETCH_SITE_PATIENTS,
     userId,
     offset,
     limit,
-    search,
   };
 }
 
@@ -775,30 +774,6 @@ export function userDeletingError(payload) {
   };
 }
 
-export function deleteClientRole(id) {
-  return {
-    type: DELETE_CLIENT_ROLE,
-    id,
-  };
-}
-
-export function clientRoleDeleted(id, payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_SUCCESS,
-    payload: {
-      ...payload,
-      id,
-    },
-  };
-}
-
-export function clientRoleDeletingError(payload) {
-  return {
-    type: DELETE_CLIENT_ROLE_ERROR,
-    payload,
-  };
-}
-
 export function saveSite(clientId, id, data) {
   return {
     type: SAVE_SITE,
@@ -921,11 +896,11 @@ export function fetchIndicationLevelPriceError(payload) {
   };
 }
 
-export function changeUsersTimezone(userId, payload) {
+export function changeUsersTimezone(userId, params) {
   return {
     type: CHANGE_USERS_TIMEZONE,
     userId,
-    payload,
+    params,
   };
 }
 
@@ -1332,6 +1307,24 @@ export function deleteMessagesCountStat(payload) {
   };
 }
 
+export function fetchPatientCategories(payload) {
+  return {
+    type: FETCH_PATIENT_CATEGORIES,
+    payload,
+  };
+}
+export function patientCategoriesFetched(payload) {
+  return {
+    type: PATIENT_CATEGORIES_FETCHED,
+    payload,
+  };
+}
+export function patientCategoriesFetchingError(payload) {
+  return {
+    type: FETCH_PATIENT_CATEGORIES_ERROR,
+    payload,
+  };
+}
 
 export function getTimezone(lat, lng) {
   return {

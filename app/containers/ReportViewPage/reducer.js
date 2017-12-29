@@ -8,6 +8,7 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 
 import {
+  FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   GET_REPORTS_LIST,
   GET_REPORTS_LIST_SUCCESS,
   GET_REPORTS_LIST_ERROR,
@@ -25,6 +26,11 @@ import {
 } from './constants';
 
 const initialState = {
+  patientSignUps: {
+    today: 0,
+    yesterday: 0,
+    total: 0,
+  },
   reportsList: {
     details: [],
     fetching: false,
@@ -41,7 +47,7 @@ const initialState = {
     hasMoreItems: true,
     page: 1,
   },
-  dnqPaginationOptions: {
+  notesPaginationOptions: {
     hasMoreItems: true,
     page: 1,
   },
@@ -66,6 +72,15 @@ function reportViewPageReducer(state = initialState, action) {
   let foundIndex = null;
   let copy = null;
   switch (action.type) {
+    case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
+      return {
+        ...state,
+        patientSignUps: {
+          today: action.payload.today,
+          yesterday: action.payload.yesterday,
+          total: action.payload.total,
+        },
+      };
     case GET_REPORTS_LIST:
       if (action.offset === 0) {
         newReportsList = [];
@@ -216,9 +231,9 @@ function reportViewPageReducer(state = initialState, action) {
           fetching: true,
           error: null,
         },
-        dnqPaginationOptions: {
+        notesPaginationOptions: {
           hasMoreItems: false,
-          page: state.dnqPaginationOptions.page,
+          page: state.notesPaginationOptions.page,
         },
       };
     case GET_CATEGORY_NOTES_SUCCESS:
@@ -234,7 +249,7 @@ function reportViewPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        dnqPaginationOptions: {
+        notesPaginationOptions: {
           hasMoreItems: action.hasMoreItems,
           page: action.page,
         },

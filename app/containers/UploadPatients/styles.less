@@ -3,8 +3,57 @@
   background: #fff;
   border: 2px solid #f78e1e;
 
-  .status {
+  .drop-zone {
+    position: relative;
+    transition: all 0.25s ease;
+    border: dashed 2px #00afef;
+    padding: 20px;
+    margin: 0 0 20px 0;
+    text-align: center;
+
+    input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      opacity: 0;
+      z-index: 9;
+    }
+
+    .icon {
+      vertical-align: middle;
+      text-align: center;
+      padding: 10px 0;
+      color: #00afef;
+
+      i {
+        display: block;
+        font-size: 40px;
+        margin: 0 0 5px;
+        transform: rotate(180deg);
+      }
+    }
+
+    &:hover, &.drag-enter {
+      background-color: #00afef;
+
+      .icon {
+        color: #ffffff;
+      }
+    }
+  }
+
+  .field-row.status {
     margin: 0 0 30px;
+    text-align: center;
+
+    span {
+      width: 290px;
+    }
 
     .step-one {
       color: #00afef;
@@ -25,8 +74,39 @@
     }
   }
 
+  .import-progress {
+    margin: 0 0 20px;
+    padding: 15px;
+    border: 2px solid #f78e1e;
+    overflow: hidden;
+
+    .progress {
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .control {
+      overflow: hidden;
+      text-align: center;
+
+      .title {
+        font-size: 16px;
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 10px;
+      }
+
+      .upload-result{
+        font-size: 16px;
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 10px;
+      }
+    }
+  }
+
   .tip {
-    font-size: 14px;
+    font-size: 16px;
     width: 100%;
     margin: 0 0 20px;
     display: inline-block;
@@ -34,11 +114,12 @@
 
   .instructions {
     background-color: #f1f1f1;
-    padding: 10px;
-    margin: 0 0 10px;
-    font-size: 14px;
+    padding: 5px 10px 10px;
+    margin: 0 0 20px;
+    font-size: 16px;
 
     .head {
+      text-transform: uppercase;
       width: 100%;
       margin: 0 0 10px;
       display: inline-block;
@@ -49,20 +130,159 @@
       width: 100%;
       margin: 0 0 10px;
       display: inline-block;
+
+      .first-row {
+        width: 100%;
+        margin: 0 0 10px;
+        display: inline-block;
+      }
+    }
+
+    .download-template{
+      cursor: pointer;
+      display: inline-block;
+      margin: 0 0 0 5px;
+      color: #00afef;
+
+      &:hover {
+        text-decoration: underline;
+        color: #76daff;
+      }
     }
 
     .examples {
+      overflow: hidden;
+
+      .example-table{
+        width: 100%;
+        font-size: 14px;
+
+        tr {
+
+          th {
+            font-weight: inherit;
+            cursor: inherit;
+
+            &:hover {
+              color: inherit;
+            }
+          }
+
+          th, td {
+            border: 1px solid;
+            padding: 3px;
+          }
+        }
+      }
 
       .title {
         width: 100%;
         display: inline-block;
         margin: 0 0 10px;
       }
+    }
+  }
 
-      .item {
+  .preview {
+    margin: 0 0 20px;
+
+    .title {
+      font-size: 16px;
+
+      .head {
         width: 100%;
         display: inline-block;
+        font-weight: bold;
+      }
+
+      .body {
+        width: 100%;
+        margin: 0 0 10px;
+        display: inline-block;
+      }
+    }
+
+    .tip {
+      width: 100%;
+      margin: 10px 0 0;
+      display: inline-block;
+    }
+
+    .example-table {
+      width: 100%;
+      font-size: 14px;
+
+      tr {
+
+        th {
+          font-weight: inherit;
+          cursor: inherit;
+
+          &:hover {
+            color: inherit;
+          }
+        }
+
+        th, td {
+          border: 1px solid;
+          padding: 3px;
+
+          &.dob, &.bmi {
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    .validation-messages {
+      margin: 0 0 20px;
+      padding: 15px;
+      overflow: hidden;
+
+      &.warning {
+        border: 2px solid #ffcc22;
+        background-color: #fcf8e3;
+      }
+
+      &.error {
+        border: 2px solid #de6062;
+        background-color: #f2dede;
+
+        ul {
+          padding: 0;
+        }
+      }
+
+      .heading {
+
+        &.warning {
+          margin: 0 0 10px;
+          font-size: 16px;
+          font-weight: bold;
+          display: inline-block;
+          color: #8a6d3b;
+          width: 100%;
+        }
+
+        &.error {
+          font-size: 16px;
+          color: #de5b5b;
+        }
+      }
+
+      ul {
+        padding: 0 20px;
+        font-size: 16px;
         margin: 0;
+
+        li {
+          color: #8a6d3b;
+
+          &.error {
+            list-style-type: none;
+            color: #de5b5b;
+          }
+        }
       }
     }
   }
@@ -82,24 +302,38 @@
       line-height: 21px;
       padding: 0 10px 0 0;
       text-transform: uppercase;
+
+      &.filename {
+        width: calc(~'100% - 143px');
+      }
     }
 
     .field {
       width: 35%;
       position: relative;
+
+      label.upload-btn {
+        min-width: 133px;
+      }
+
+      #patients_list{
+        display: none;
+      }
     }
   }
 
   .fields-holder.array {
-    margin: 0 0 30px;
-    padding: 15px;
-    border: 1px solid #f78e1e;
-    min-height: 694px;
+    margin: 0;
+    padding: 15px 15px 0;
+    border: 2px solid #f78e1e;
+    min-height: 75px;
+    max-height: 570px;
+    overflow: auto;
 
     .field-row {
       margin: 0;
       padding: 0 0 15px;
-      overflow: hidden;
+      height: 55px;
 
       .remove {
         float: left;
@@ -119,18 +353,16 @@
         }
       }
 
-      .title {
-        font-size: 18px;
-        line-height: 1.25;
-        color: #354052;
-        display: block;
-        margin: 0 0 2px 0;
-        text-transform: uppercase;
-      }
-
       .field {
         margin-right: 1%;
         position: relative;
+
+        .has-error{
+
+          .form-control:focus {
+            border-color: #00afef !important;
+          }
+        }
 
         &.trash {
           width: 1%;
@@ -176,7 +408,8 @@
   .column-groups {
     width: 100%;
     overflow: hidden;
-    margin: 0 0 30px;
+    margin: 0 0 20px;
+    padding: 0 10px;
 
     .column {
       position: relative;
@@ -229,6 +462,108 @@
     }
   }
 
+  .legends {
+    overflow: hidden;
+    margin: 0;
+    padding: 0 15px;
+
+    &.scroll-fix {
+      padding: 0 30px 0 15px;
+    }
+
+    span {
+      margin-right: 1%;
+      position: relative;
+      float: left;
+
+      label {
+        font-size: 18px;
+        line-height: 1.25;
+        color: #354052;
+        display: block;
+        margin: 0 0 2px 0;
+        text-transform: uppercase;
+      }
+
+      &.name {
+        width: 22%;
+        margin-left: 2%;
+      }
+
+      &.email {
+        width: 22%;
+      }
+
+      &.phone {
+        width: 16%;
+      }
+
+      &.age {
+        width: 8%;
+      }
+
+      &.gender {
+        width: 15%;
+      }
+
+      &.bmi {
+        width: 10%;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .counters {
+    overflow: hidden;
+    margin: 0 0 20px;
+    padding: 0 15px;
+
+    .counter {
+      margin-right: 1%;
+      position: relative;
+      text-align: center;
+      float: left;
+
+      &.name {
+        width: 22%;
+        margin-left: 1%;
+
+        &.scroll-fix {
+          margin-left: 2%;
+        }
+      }
+
+      &.email {
+        width: 22%;
+      }
+
+      &.phone {
+        width: 16%;
+      }
+
+      &.age {
+        width: 8%;
+      }
+
+      &.gender {
+        width: 14%;
+
+        &.scroll-fix {
+          width: 15%;
+        }
+      }
+
+      &.bmi {
+        width: 10%;
+        margin-right: 0;
+      }
+    }
+  }
+
+  .text-left {
+    float: left;
+  }
+
   .text-right {
 
     button, input {
@@ -243,11 +578,115 @@
   }
 }
 
+.upload-history {
+  background: #fff;
+  border: 2px solid #f78e1e;
+  margin: 30px 0 0;
+  overflow: hidden;
+
+  header {
+    color: #fff;
+    background: #f78e1e;
+    padding: 12px 16px 16px;
+
+    h2 {
+      font-size: 21px;
+      line-height: 1.25;
+      font-weight: 700;
+      margin: 0 10px 0 0;
+      text-transform: uppercase;
+    }
+
+    .tip {
+      color: #101010;
+    }
+  }
+
+  .table {
+
+    tbody {
+
+      tr {
+
+        &:hover {
+          font-weight: 600;
+        }
+
+        td.status {
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    thead {
+
+      tr {
+
+        th {
+
+          &:hover {
+            color: inherit;
+            cursor: inherit;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 1600px) {
   .upload-patients-form {
     .field-row.main {
       .label {
         font-size: 15px;
+      }
+    }
+  }
+}
+
+.confirm-modal-container {
+  overflow: hidden;
+
+  .main-block {
+
+    &.text {
+      height: 120px;
+      line-height: 115px;
+      float: left;
+      width: 100%;
+      padding: 0 25px;
+    }
+
+    &.bar {
+      height: 120px;
+      line-height: 115px;
+      text-align: center;
+      padding: 0 25px;
+    }
+
+    .progress {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+      width: 100%;
+      margin: 0;
+    }
+
+    .confirm-text {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: normal;
+    }
+  }
+
+  .btn-block {
+    margin: 0 0 25px;
+    float: left;
+
+    input {
+
+      &.margin-right {
+        margin-right: 12px;
       }
     }
   }

@@ -145,11 +145,24 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
 
         <div className="field-row">
           <strong className="label">
-            <label className="add-exposure-level">CREDITS</label>
+            <label className="add-exposure-level">TEXT CREDITS</label>
           </strong>
           <div className="field">
             <Field
               name="credits"
+              component={Input}
+              type="text"
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label className="add-exposure-level">EMAIL CREDITS</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="emailCredits"
               component={Input}
               type="text"
             />

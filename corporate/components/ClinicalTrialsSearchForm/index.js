@@ -82,6 +82,10 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         id: 'de',
       },
       {
+        name: 'Hungary',
+        id: 'hu',
+      },
+      {
         name: 'Italy',
         id: 'it',
       },
@@ -125,7 +129,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                   component={ReactSelect}
                   placeholder="Select Country"
                   options={countries}
-                  className="field-lg"
+                  className="field-lg country-code"
                   selectedValue={this.state.countryCode}
                   onChange={countryCode => {
                     if (countryCode) {

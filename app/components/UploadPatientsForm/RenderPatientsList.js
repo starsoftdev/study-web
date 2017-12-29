@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { normalizePhoneDisplay } from '../../common/helper/functions';
+import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
 
 class RenderPatientsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -16,7 +16,9 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     patients: PropTypes.array,
     rowsCounts: PropTypes.object,
     fields: PropTypes.any,
+    duplicates: PropTypes.array,
     blur: React.PropTypes.func,
+    emptyRowRequiredError: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -26,31 +28,23 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     this.removeField = this.removeField.bind(this);
     this.changeField = this.changeField.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.validateEmail = this.validateEmail.bind(this);
   }
 
   componentDidMount() {
     const { fields, patients } = this.props;
 
+    // console.log('componentDidMount', patients);
     if (patients && patients.length) {
       if (fields.length) {
         fields.removeAll();
       }
       _.forEach(patients, (item) => {
-        let empty = true;
-
-        _.forEach(item, (prop) => {
-          if (prop !== '') {
-            empty = false;
-          }
-        });
-
-        if (item && item !== '' && !empty) {
-          const patient = item;
-          if (patient.phone) {
-            patient.phone = normalizePhoneDisplay(patient.phone);
-          }
-          fields.push(patient);
+        const patient = item;
+        if (patient.phone) {
+          patient.phone = normalizePhoneDisplay(patient.phone);
         }
+        fields.push(patient);
       });
     }
   }
@@ -80,11 +74,8 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
 
   addNewFields() {
     const { fields, addField } = this.props;
-
-    if (fields.length < 10) {
-      fields.push();
-      addField();
-    }
+    fields.push();
+    addField();
   }
 
   removeField(index) {
@@ -94,8 +85,13 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     fields.remove(index);
   }
 
+  validateEmail(email) {
+    const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return pattern.test(email);
+  }
+
   render() {
-    const { fields, rowsCounts } = this.props;
+    const { patients, fields, rowsCounts, emptyRowRequiredError, duplicates } = this.props;
     const genderOptions = [
       {
         label: 'Male',
@@ -107,148 +103,138 @@ class RenderPatientsList extends Component { // eslint-disable-line react/prefer
     ];
 
     return (
-      <div className="fields-holder array clearfix">
-        {
-          fields.map((patient, index) => {
-            return (<div className={`field-row ${(index === 0) ? 'first' : ''}`} key={index}>
-              <div className={`field trash pull-left ${(index === 0) ? 'first' : ''}`}>
-                <span
-                  className="icomoon-icon_trash remove"
-                  onClick={() => this.removeField(index)}
-                />
-              </div>
-              <div className="field name pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-name">Name</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].name`}
-                  component={Input}
-                  value={patient.name ? patient.name : null}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'name', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.name}
-                </div>
-                }
-              </div>
-              <div className="field email pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-email">Email</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].email`}
-                  component={Input}
-                  value={patient.email || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'email', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.email}
-                </div>
-                }
-              </div>
-              <div className="field phone pull-left">
-                {(index === 0) &&
-                <span className="title required">
-                  <label htmlFor="import-patient-phone">Phone</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].phone`}
-                  component={Input}
-                  value={patient.phone || ''}
-                  type="tel"
-                  onChange={(e) => { this.changeField(e, 'phone', index); }}
-                  onBlur={(event) => {
-                    this.onPhoneBlur(event, `patients[${index}].phone`);
-                  }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.phone}
-                </div>
-                }
-              </div>
-              <div className="field age pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">Age</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].age`}
-                  component={Input}
-                  value={patient.age || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'age', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.age}
-                </div>
-                }
-              </div>
-              <div className="field gender pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">Gender</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].gender`}
-                  placeholder="Select Gender"
-                  component={ReactSelect}
-                  value={patient.gender || ''}
-                  options={genderOptions}
-                  onChange={(e) => { this.changeField(e, 'gender', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.gender}
-                </div>
-                }
-              </div>
-              <div className="field bmi pull-left">
-                {(index === 0) &&
-                <span className="title">
-                  <label htmlFor="import-patient-phone">BMI</label>
-                </span>
-                }
-                <Field
-                  name={`patients[${index}].bmi`}
-                  component={Input}
-                  value={patient.bmi || ''}
-                  type="text"
-                  onChange={(e) => { this.changeField(e, 'bmi', index); }}
-                />
-                {(index === (fields.length - 1)) &&
-                <div className="counter">
-                  {rowsCounts.bmi}
-                </div>
-                }
-              </div>
-            </div>);
-          })
-        }
+      <div>
+        <div className="fields-holder array clearfix">
+          {
+            fields.map((patient, index) => {
+              let phoneHasError = false;
+              let emailHasError = false;
+              const duplicateIndex = _.findIndex(duplicates, (d) => { return d === patients[index].phone; });
+
+              if (duplicateIndex !== -1) {
+                phoneHasError = true;
+              }
+
+              if ((!patients[index].phone || patients[index].phone === '') && emptyRowRequiredError.hasEmpty) {
+                phoneHasError = true;
+              }
+
+              if (patients[index].phone && normalizePhoneForServer(patients[index].phone).length < 12) {
+                phoneHasError = true;
+              }
+
+              if ((!patients[index].email || patients[index].email === '') && emptyRowRequiredError.hasEmpty) {
+                emailHasError = true;
+              }
+
+              if (patients[index].email) {
+                emailHasError = !this.validateEmail(patients[index].email);
+              }
+
+              return (
+                <div className="field-row" key={index}>
+                  <div className="field trash pull-left">
+                    <span
+                      className="icomoon-icon_trash remove"
+                      onClick={() => this.removeField(index)}
+                    />
+                  </div>
+                  <div className="field name pull-left">
+                    <Field
+                      name={`patients[${index}].name`}
+                      component={Input}
+                      value={patient.name ? patient.name : null}
+                      className={((!patients[index].name || patients[index].name === '') && emptyRowRequiredError.hasEmpty) ? 'has-error' : ''}
+                      type="text"
+                      onChange={(e) => { this.changeField(e, 'name', index); }}
+                    />
+                  </div>
+                  <div className="field email pull-left">
+                    <Field
+                      name={`patients[${index}].email`}
+                      component={Input}
+                      value={patient.email || ''}
+                      className={emailHasError ? 'has-error' : ''}
+                      type="text"
+                      onChange={(e) => { this.changeField(e, 'email', index); }}
+                    />
+                  </div>
+                  <div className="field phone pull-left">
+                    <Field
+                      name={`patients[${index}].phone`}
+                      component={Input}
+                      value={patient.phone || ''}
+                      className={phoneHasError ? 'has-error' : ''}
+                      type="tel"
+                      onChange={(e) => { this.changeField(e, 'phone', index); }}
+                      onBlur={(event) => {
+                        this.onPhoneBlur(event, `patients[${index}].phone`);
+                      }}
+                    />
+                  </div>
+                  <div className="field age pull-left">
+                    <Field
+                      name={`patients[${index}].age`}
+                      component={Input}
+                      value={patient.age || ''}
+                      type="text"
+                      onChange={(e) => { this.changeField(e, 'age', index); }}
+                    />
+                  </div>
+                  <div className="field gender pull-left">
+                    <Field
+                      name={`patients[${index}].gender`}
+                      placeholder="Select Gender"
+                      component={ReactSelect}
+                      value={patient.gender || ''}
+                      options={genderOptions}
+                      onChange={(e) => { this.changeField(e, 'gender', index); }}
+                    />
+                  </div>
+                  <div className="field bmi pull-left">
+                    <Field
+                      name={`patients[${index}].bmi`}
+                      component={Input}
+                      value={patient.bmi || ''}
+                      type="text"
+                      onChange={(e) => { this.changeField(e, 'bmi', index); }}
+                    />
+                  </div>
+                </div>);
+            })
+          }
+        </div>
+        <div className="counters">
+          <div className={`counter name ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
+            {rowsCounts.name}
+          </div>
+          <div className="counter email">
+            {rowsCounts.email}
+          </div>
+          <div className="counter phone">
+            {rowsCounts.phone}
+          </div>
+          <div className="counter age">
+            {rowsCounts.age}
+          </div>
+          <div className={`counter gender ${(fields.length <= 10) ? 'scroll-fix' : ''}`}>
+            {rowsCounts.gender}
+          </div>
+          <div className="counter bmi">
+            {rowsCounts.bmi}
+          </div>
+        </div>
         <div className="text-left">
           <button
             type="button"
             className="btn btn-primary"
-            disabled={fields.length >= 10}
             onClick={this.addNewFields}
           >
             + Add Patient
           </button>
         </div>
       </div>
+
     );
   }
 }
