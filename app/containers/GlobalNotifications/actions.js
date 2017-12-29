@@ -22,6 +22,12 @@ import {
   SEND_STUDY_PATIENT_MESSAGES,
   SET_PROCESSING_STATUS,
   MARK_NOTIFICATIONS_READ,
+  SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET,
+  UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET,
+  SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
+  UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
+  CLIENT_OPENED_STUDY_PAGE,
+  CLIENT_CLOSED_STUDY_PAGE,
 } from './constants';
 
 export function subscribeToPageEvent(payload) {
@@ -146,5 +152,53 @@ export function markNotificationsRead(userId) {
   return {
     type: MARK_NOTIFICATIONS_READ,
     userId,
+  };
+}
+
+export function clientOpenedStudyPage(studyId) {
+  return {
+    type: CLIENT_OPENED_STUDY_PAGE,
+    studyId,
+  };
+}
+
+export function clientClosedStudyPage(studyId) {
+  return {
+    type: CLIENT_CLOSED_STUDY_PAGE,
+    studyId,
+  };
+}
+
+export function subscribeToUploadProgressSocket(bulkUploadId, jobId, cb) {
+  return {
+    type: SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET,
+    bulkUploadId,
+    jobId,
+    cb,
+  };
+}
+
+export function unsubscribeFromUploadProgressSocket(jobId, cb) {
+  return {
+    type: UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET,
+    jobId,
+    cb,
+  };
+}
+
+export function subscribeToRevertProgressSocket(bulkUploadId, jobId, cb) {
+  return {
+    type: SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
+    bulkUploadId,
+    jobId,
+    cb,
+  };
+}
+
+export function unsubscribeFromRevertProgressSocket(jobId, cb) {
+  return {
+    type: UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
+    jobId,
+    cb,
   };
 }

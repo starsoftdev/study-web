@@ -35,6 +35,10 @@ import {
   GET_TOTAL_PATIENTS_COUNT,
   GET_TOTAL_PATIENTS_COUNT_ERROR,
   GET_TOTAL_PATIENTS_COUNT_SUCCESS,
+
+  ADD_PROTOCOL,
+  ADD_PROTOCOL_SUCCESS,
+  ADD_PROTOCOL_ERROR,
 } from './constants';
 
 const initialState = {
@@ -79,6 +83,11 @@ const initialState = {
   },
   addPatientStatus:{
     adding: false,
+  },
+  addProtocolProcess:{
+    details: [],
+    fetching: false,
+    error: null,
   },
 };
 
@@ -153,16 +162,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: state.patients.details,
           total: state.patients.total,
           totalUnsubscribed: state.patients.totalUnsubscribed,
-          fetching: true,
+          fetching: !action.isExport,
           error: null,
         },
-        paginationOptions: {
-          hasMoreItems: false,
-          page: state.paginationOptions.page,
-          activeSort: state.paginationOptions.activeSort,
-          activeDirection: state.paginationOptions.activeDirection,
-          prevSearchFilter: state.paginationOptions.prevSearchFilter,
-        },
+        paginationOptions: state.paginationOptions,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -396,6 +399,33 @@ export default function patientDatabasePageReducer(state = initialState, action)
           totalUnsubscribed: state.patients.totalUnsubscribed,
           fetching: false,
           error: null,
+        },
+      };
+    case ADD_PROTOCOL:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case ADD_PROTOCOL_SUCCESS:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case ADD_PROTOCOL_ERROR:
+      return {
+        ...state,
+        addProtocolProcess:{
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:

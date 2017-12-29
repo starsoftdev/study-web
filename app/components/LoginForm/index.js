@@ -30,6 +30,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     touchFields: React.PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
     loginPassword: React.PropTypes.string,
+    newUser: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -66,7 +67,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   renderCaptcha() {
     const { loginError } = this.props;
     const failedCount = loginError ? loginError.failedCount : 0;
-    if (failedCount >= 5) {
+    if (failedCount >= 3) {
       return (
         <div className="field-row clearfix area">
           <Field
@@ -90,7 +91,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { submitting, loginError, loginPassword } = this.props;
+    const { submitting, loginError, loginPassword, newUser } = this.props;
     const code = loginError ? loginError.code : null;
 
     return (
@@ -108,7 +109,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           if (formError) {
             touchFields();
             return;
-          } else if (failedCount >= 5 && !formValues.reCaptcha) {
+          } else if (failedCount >= 3 && !formValues.reCaptcha) {
             toastr.error('', 'Validate recaptcha!');
             return;
           }
@@ -125,8 +126,13 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
             <p>The email or password is incorrect!</p>
           </Alert>
         }
+        {code === 'USER_LOCKED' &&
+          <Alert bsStyle="danger">
+            <p>Your account has been locked upon 6 failed login attempts. Please try again in 30 minutes or you can contact a StudyKIK Representative.</p>
+          </Alert>
+        }
         {loginPassword &&
-          <p>Your new password is: <span id="new_password">{loginPassword}</span></p>
+          <p>Your {newUser ? '' : 'new'} password is: <span id="new_password">{loginPassword}</span></p>
         }
         <Field
           name="email"

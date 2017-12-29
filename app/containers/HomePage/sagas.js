@@ -560,7 +560,10 @@ export function* renewStudyWorker(action) {
     }));
     onClose();
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
+      errorMessage = 'Error! Invalid coupon code.';
+    }
     toastr.error('', errorMessage);
     yield put(studyRenewingError(err));
     if (err.status === 401) {
@@ -615,17 +618,13 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'studyAd' && index !== 'emailNotifications') {
+      if (index !== 'emailNotifications') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
     if (options.emailNotifications) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
-    }
-
-    if (options.studyAd && options.studyAd[0]) {
-      data.append('file', options.studyAd[0]);
     }
 
     const params = {
@@ -993,7 +992,7 @@ export function* changeStudyAddWorker(action) {
     toastr.success('', 'Success! Study ad has been updated.');
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
-    toastr.error('Error!');
+    toastr.error('', 'Something went wrong while updating study ad');
     yield put(changeStudyAddError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });

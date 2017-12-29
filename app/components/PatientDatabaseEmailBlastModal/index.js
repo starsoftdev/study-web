@@ -17,7 +17,7 @@ import CenteredModal from '../CenteredModal/index';
 import Input from '../Input/index';
 import { submitEmailBlast } from '../../containers/PatientDatabasePage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectClientCredits } from '../../containers/App/selectors';
 import { selectPatients, selectTotalPatients } from '../../containers/PatientDatabasePage/selectors';
 
 const formName = 'PatientDatabase.EmailBlastModal';
@@ -40,6 +40,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     submitEmailBlast: React.PropTypes.func.isRequired,
     patients: React.PropTypes.object,
     totalPatients: React.PropTypes.number,
+    clientCredits: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -83,9 +84,12 @@ class PatientDatabaseEmailBlastModal extends React.Component {
 
   submitEmailBlast(event) {
     event.preventDefault();
-    const { formSyncErrors, formValues, submitEmailBlast, currentUser } = this.props;
-    if (_.isEmpty(formSyncErrors)) {
-      submitEmailBlast(formValues.queryParams.filter, formValues.uncheckedPatients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, this.onClose);
+    const { formSyncErrors, formValues, submitEmailBlast, currentUser, clientCredits } = this.props;
+    const emailCredits = clientCredits.details.emailCredits;
+    if (this.state.total > emailCredits) {
+      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+    } else if (_.isEmpty(formSyncErrors)) {
+      submitEmailBlast(formValues, currentUser.roleForClient.id, currentUser, this.onClose);
     } else if (formSyncErrors.patients) {
       toastr.error('', formSyncErrors.patients);
     } else if (formSyncErrors.email) {
@@ -111,7 +115,8 @@ class PatientDatabaseEmailBlastModal extends React.Component {
   }
 
   render() {
-    const { show, className } = this.props;
+    const { show, className, clientCredits } = this.props;
+    const disabled = (this.state.total > clientCredits.details.emailCredits);
 
     return (
       <Modal
@@ -170,11 +175,13 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     placeholder="Type a message..."
                   />
                   <div className="footer">
-                    <input
+                    <div
                       className="btn btn-default lightbox-opener pull-right"
-                      value="Send"
-                      type="submit"
-                    />
+                      onClick={(e) => this.submitEmailBlast(e)}
+                      disabled={disabled}
+                    >
+                      Send
+                    </div>
                   </div>
                 </div>
               </div>
@@ -192,12 +199,13 @@ const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   currentUser: selectCurrentUser(),
   totalPatients: selectTotalPatients(),
+  clientCredits: selectClientCredits(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     change: (field, value) => dispatch(change(formName, field, value)),
-    submitEmailBlast: (patients, uncheckedPatients, message, from, subject, clientRoleId, onClose) => dispatch(submitEmailBlast(patients, uncheckedPatients, message, from, subject, clientRoleId, onClose)),
+    submitEmailBlast: (formValues, clientRoleId, currentUser, onClose) => dispatch(submitEmailBlast(formValues, clientRoleId, currentUser, onClose)),
   };
 }
 
