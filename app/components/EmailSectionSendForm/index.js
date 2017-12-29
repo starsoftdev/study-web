@@ -1,28 +1,50 @@
 import React from 'react';
 import classNames from 'classnames';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
+import { toastr } from 'react-redux-toastr';
 
 import Input from '../Input/index';
 import formValidator from './validator';
+import { selectClientCredits } from '../../containers/App/selectors';
+
 const formName = 'PatientDetailModal.Email';
+
+const mapStateToProps = createStructuredSelector({
+  clientCredits: selectClientCredits(),
+});
+
 
 @reduxForm({
   form: formName,
   validate: formValidator,
 })
-@connect(null, null)
+@connect(mapStateToProps, null)
 class EmailSectionSendForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: React.PropTypes.func.isRequired,
     active: React.PropTypes.any,
     submitEmailBlast: React.PropTypes.func.isRequired,
     switchCompose: React.PropTypes.func.isRequired,
+    noBackBtn: React.PropTypes.bool,
+    clientCredits: React.PropTypes.object,
   };
 
+  handleSubmitEmailBlast(e) {
+    e.preventDefault();
+    const { clientCredits, submitEmailBlast } = this.props;
+    if (clientCredits.details.emailCredits === 0 || clientCredits.details.emailCredits === null) {
+      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+    } else {
+      submitEmailBlast(e);
+    }
+  }
+
   render() {
-    const { active, submitEmailBlast, switchCompose } = this.props;
+    const { active, submitEmailBlast, switchCompose, noBackBtn, clientCredits } = this.props;
+    const disabled = (clientCredits.details.emailCredits === 0 || clientCredits.details.emailCredits === null);
     return (
       <Form onSubmit={submitEmailBlast} className={classNames('item emails-info', { active })}>
         <div className="emails-info-holder">
@@ -56,8 +78,16 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
           />
         </div>
         <div className="textarea">
-          <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
-          <input type="submit" value="Send" className="btn btn-default right" />
+          {!noBackBtn &&
+            <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
+          }
+          <div
+            className="btn btn-default lightbox-opener pull-right"
+            onClick={(e) => this.handleSubmitEmailBlast(e)}
+            disabled={disabled}
+          >
+            Send
+          </div>
         </div>
       </Form>
     );

@@ -8,10 +8,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
 import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
-import { fetchClientCredits, markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import * as Selector from '../selectors';
 
 import {
@@ -43,7 +42,6 @@ class TextSection extends React.Component {
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
-    fetchClientCredits: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
@@ -60,6 +58,7 @@ class TextSection extends React.Component {
 
     this.state = {
       maxCharacters: 160,
+      patientToFetchMessages: null,
       enteredCharactersLength: 0,
       twilioMessages : [],
       socketBinded: false,
@@ -67,26 +66,29 @@ class TextSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { currentUser } = newProps;
+    // const { currentUser } = newProps;
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
 
     if (newProps.active && newProps.currentPatient) {
-      this.initStudyPatientMessagesFetch(newProps);
+      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(newProps);
+      });
     }
 
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        this.initStudyPatientMessagesFetch(newProps);
-        if (this.props.active && newMessage) {
+        if (this.props.active && newMessage && this.props.currentPatient) {
+          this.setState({ patientToFetchMessages: this.props.currentPatient.id }, () => {
+            this.initStudyPatientMessagesFetch(this.props);
+          });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
           this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
           });
-          this.props.fetchClientCredits(currentUser.id);
         }
       });
       this.setState({ socketBinded: true });
@@ -103,7 +105,7 @@ class TextSection extends React.Component {
         patientId: props.currentPatient.id,
         cb: (err, data) => {
           if (!err) {
-            if (this.state.twilioMessages !== data.messages) {
+            if (this.state.patientToFetchMessages === props.currentPatient.id) {
               this.setState({ twilioMessages: data.messages });
             }
           } else {
@@ -135,6 +137,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    if (clientCredits === 0 || clientCredits === null) {
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      return;
+    }
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -157,6 +164,12 @@ class TextSection extends React.Component {
         toastr.error('', errorMessage);
       }
     });
+  }
+
+  checkForValidPhone = (notValidPhone) => {
+    if (notValidPhone) {
+      toastr.error('Error!', 'The phone field is empty.');
+    }
   }
 
   renderText() {
@@ -238,7 +251,10 @@ class TextSection extends React.Component {
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
+    const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
+    const notValidPhone = !currentPatient.phone;
+
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
@@ -247,12 +263,15 @@ class TextSection extends React.Component {
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
-          <Button
-            disabled={disabled || unsubscribed || !ePMS}
-            onClick={this.submitText}
-          >
-            Send
-          </Button>
+          <div onClick={() => this.checkForValidPhone(notValidPhone)}>
+            <div
+              className="btn btn-default lightbox-opener pull-right"
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
+              disabled={sendDisabled}
+            >
+              Send
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -272,7 +291,6 @@ const mapDispatchToProps = (dispatch) => ({
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
-  fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 

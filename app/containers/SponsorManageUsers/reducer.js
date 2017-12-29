@@ -69,14 +69,11 @@ function sponsorManageUsersReducer(state = initialState, action) {
     case FETCH_MANAGE_SPONSOR_USERS_DATA_SUCCESS:
       studiesList = _.cloneDeep(action.payload.studiesList);
       _.forEach(action.payload.studiesList, (item) => {
-        if (item.protocol) {
-          foundProtocolIndex = _.findIndex(protocols, (o) => (o.id === item.protocol.id));
-          if (foundProtocolIndex === -1) {
-            protocols.push({ ...item.protocol, studyId: item.id });
-          }
+        foundProtocolIndex = _.findIndex(protocols, (o) => (o.id === item.protocolId));
+        if (foundProtocolIndex === -1) {
+          protocols.push({ id: item.protocolId, number: item.protocolNumber });
         }
       });
-      console.log(studiesList);
       return {
         ...state,
         protocols,

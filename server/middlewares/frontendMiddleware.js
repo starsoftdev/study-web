@@ -3,6 +3,22 @@ const express = require('express');
 const path = require('path');
 const request = require('request');
 const compression = require('compression');
+const pug = require('pug');
+const Promise = require('bluebird');
+const PagesService = require('../services/pages.service');
+const getLandingPageLocals = require('../views/landing-page.locals');
+
+const readFile = (fs, filePath) => {
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, (err, file) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(file);
+      }
+    });
+  });
+};
 
 const logView = (req) => {
   const partsArr = req.url.split('-');
@@ -36,6 +52,54 @@ const logView = (req) => {
   }
 };
 
+/**
+ * Making specific routes to be rendered on server.
+ *
+ * @param {Object} app Express server app instance
+ * @param {Object} fs File system utility
+ * @param {String} templatePath Path to React HTML template
+ */
+const reserveSsrRoutes = (app, fs, templatePath) => {
+  app.get('/:landingId([0-9]+)-*/', async (req, res) => {
+    try {
+      logView(req);
+      const landingId = req.params.landingId;
+      const landing = await PagesService.fetchLanding(landingId);
+      const file = await readFile(fs, templatePath);
+      const templateStr = file.toString();
+      const viewPath = path.join(__dirname, '../views/landing-page.pug');
+      const locals = getLandingPageLocals(landing);
+      const ssrContent = pug.compileFile(viewPath)(locals);
+
+      const facebookDescription = `Interested in a ${locals.title.replace(/study/gi, 'Research Study')}? Click this Link and Sign Up for more information. Your local research site will call you with more information.`;
+
+      // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
+      const result = templateStr      // If there are no needs for SSR for SEO purpose, just comment out below line and just keep medias tags as SSR.
+        .replace('<div id="app"></div>', ssrContent)
+        .replace(
+          '<meta property="og:title" content="StudyKIK">',
+          `<meta property="og:title" content="${locals.title}">`
+        )
+        .replace(
+          '<meta property="og:description" content="StudyKIK">',
+          `<meta property="og:description" content="${facebookDescription}">`
+        )
+        .replace(
+          '<meta property="og:image" content="">',
+          `<meta property="og:image" content="${locals.imgSrc || ''}">`
+        )
+        .replace(
+          '<meta property="og:url" content="">',
+          `<meta property="og:url" content="${req.url}">`
+        );
+      res.send(result);
+    } catch (e) {
+      res.send(e.message);
+    }
+  });
+};
+
+
 const addDevMiddlewares = (app, webpackConfig) => {
 // Dev middleware
   const webpack = require('webpack');
@@ -52,6 +116,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
+
+  const serverPublicPath = webpackConfig.output.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
 
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
@@ -87,8 +154,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
 
+  reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
+
   app.get('*', (req, res) => {
-    logView(req);
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
@@ -109,6 +177,9 @@ const addProdMiddlewares = (app, options) => {
   // and other good practices on official Express.js docs http://mxs.is/googmy
   app.use(compression());
   app.use(publicPath, express.static(outputPath));
+
+  const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 
@@ -132,8 +203,9 @@ const addProdMiddlewares = (app, options) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
 
+  reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
+
   app.get('*', (req, res) => {
-    logView(req);
     res.sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 };

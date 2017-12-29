@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, put, fork } from 'redux-saga/effects';
+import { take, call, put, fork, select } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
@@ -35,7 +35,6 @@ import {
   FETCH_SITE,
   FETCH_USER,
   DELETE_USER,
-  DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
   UPDATE_USER,
@@ -63,6 +62,7 @@ import {
   GET_CNS_INFO,
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_CATEGORIES,
 } from '../../containers/App/constants';
 
 import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
@@ -72,6 +72,10 @@ import {
   SUBMIT_TO_CLIENT_PORTAL,
   SUBMIT_TO_SPONSOR_PORTAL,
 } from '../../containers/DashboardPortalsPage/constants';
+
+import {
+  selectGlobalPMSFormValues,
+} from '../../components/GlobalPMSModal/selectors';
 
 import {
   indicationsFetched,
@@ -116,8 +120,6 @@ import {
   userFetchingError,
   userDeleted,
   userDeletingError,
-  clientRoleDeleted,
-  clientRoleDeletingError,
   siteSaved,
   siteSavingError,
   userSaved,
@@ -158,6 +160,8 @@ import {
   getCnsInfoError,
   submitCnsSuccess,
   submitCnsError,
+  patientCategoriesFetched,
+  patientCategoriesFetchingError,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -179,11 +183,11 @@ export default function* baseDataSaga() {
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchPatientMessageUnreadCountWatcher);
+  yield fork(fetchPatientCategoriesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
   yield fork(deleteUserWatcher);
-  yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
   yield fork(updateUserWatcher);
@@ -303,7 +307,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', err.message);
+      toastr.error('', 'Error! Invalid coupon code.');
     }
   }
 }
@@ -405,7 +409,7 @@ export function* saveCardWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Add New Card', 'Card saved successfully!');
+      toastr.success('', 'Success! Your card has been added.');
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -430,7 +434,7 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Delete Card', 'Card deleted successfully!');
+      toastr.success('', 'Success! You have removed your card.');
       yield put(cardDeleted(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -508,11 +512,32 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset, search } = yield take(FETCH_SITE_PATIENTS);
-
+    const { userId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
+    const formValues = yield select(selectGlobalPMSFormValues());
     try {
-      const requestURL = `${API_URL}/patients/patientsForUser?userId=${userId}&limit=${limit || 10}&offset=${offset || 0}&search=${search || ''}`;
-      const response = yield call(request, requestURL);
+      const requestURL = `${API_URL}/patients/patientsForUser`;
+      let query = {};
+      if (formValues) {
+        query = {
+          userId,
+          limit: limit || 10,
+          offset: offset || 0,
+          search: formValues.name,
+          siteId: formValues.siteLocation,
+        };
+      } else {
+        query = {
+          userId,
+          limit: limit || 10,
+          offset: offset || 0,
+        };
+      }
+      const params = {
+        method: 'GET',
+        query,
+      };
+
+      const response = yield call(request, requestURL, params);
 
       let hasMore = true;
       const page = ((offset || 0) / 10) + 1;
@@ -583,11 +608,35 @@ export function* fetchPatientMessageUnreadCountWatcher() {
     const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
     try {
       const requestURL = `${API_URL}/clients/${currentUser.roleForClient.client_id}/patientMessageStats`;
-      const response = yield call(request, requestURL);
+      const params = {
+        method: 'GET',
+        query: {
+          userId: currentUser.id,
+        },
+      };
+      const response = yield call(request, requestURL, params);
       yield put(patientMessageUnreadCountFetched(response));
       yield put(fetchPatientMessagesSucceeded(response));
     } catch (err) {
       console.trace(err);
+    }
+  }
+}
+
+export function* fetchPatientCategoriesWatcher() {
+  while (true) {
+    yield take(FETCH_PATIENT_CATEGORIES);
+
+    try {
+      const queryParams = { filter: '{"order":"autoCreateOrderNum ASC"}' };
+      const queryString = composeQueryString(queryParams);
+      const requestURL = `${API_URL}/patientCategories?${queryString}`;
+
+      const response = yield call(request, requestURL);
+
+      yield put(patientCategoriesFetched(response));
+    } catch (err) {
+      yield put(patientCategoriesFetchingError(err));
     }
   }
 }
@@ -678,30 +727,6 @@ export function* deleteUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);
       yield put(userDeletingError(err));
-    }
-  }
-}
-
-export function* deleteClientRoleWatcher() {
-  while (true) {
-    const { id } = yield take(DELETE_CLIENT_ROLE);
-
-    try {
-      const requestURL = `${API_URL}/clientRoles/${id}`;
-      const options = {
-        method: 'DELETE',
-        body: JSON.stringify({
-          id,
-        }),
-      };
-      const response = yield call(request, requestURL, options);
-
-      toastr.success('Delete Client Role', 'Client Role deleted successfully!');
-      yield put(clientRoleDeleted(id, response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      toastr.error('', errorMessage);
-      yield put(clientRoleDeletingError(err));
     }
   }
 }
@@ -849,17 +874,17 @@ export function* fetchIndicationLevelPriceWatcher() {
 
 export function* changeUsersTimezoneWatcher() {
   while (true) {
-    const { userId, payload } = yield take(CHANGE_USERS_TIMEZONE);
+    const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
       const requestURL = `${API_URL}/users/${userId}`;
-      const params = {
+      const reqParams = {
         method: 'PATCH',
-        body: JSON.stringify({ timezone: payload }),
+        body: JSON.stringify(params),
       };
-      const response = yield call(request, requestURL, params);
+      const response = yield call(request, requestURL, reqParams);
       toastr.success('Time Zone', 'Your time zone has been updated successfully!');
       moment.tz.setDefault(response.timezone);
-      yield put(changeUsersTimezoneSuccess(response.timezone));
+      yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Can not update timezone');
       toastr.error('', errorMessage);

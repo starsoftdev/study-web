@@ -227,6 +227,16 @@ export class CampaignPageModal extends React.Component {
                       onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
+                      deleteRemoves={false}
+                      openOnFocus
+                      openOnClick
+                      onFocus={(e) => {
+                        console.log('focus', e);
+                      }}
+                      onOpen={(e) => {
+                        console.log('open', e);
+                      }}
                     />
                   </div>
                 </div>
@@ -244,6 +254,8 @@ export class CampaignPageModal extends React.Component {
                       options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
+                      deleteRemoves={false}
                     />
                   </div>
                 </div>

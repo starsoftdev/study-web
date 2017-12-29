@@ -27,15 +27,16 @@ export class LoginPage extends Component {
 
   componentDidMount() {
     if (this.props.location.query.token) {
-      this.setNewPasswordRequest();
+      this.setNewPasswordRequest(this.props.location.query.nu ? { newUser: 1 } : null);
     }
   }
 
   render() {
+    const newUser = !!this.props.location.query.nu;
     return (
       <div className="login-page-wrapper">
         <div className="container">
-          <LoginForm onSubmit={this.onSubmitForm} />
+          <LoginForm onSubmit={this.onSubmitForm} newUser={newUser} />
         </div>
       </div>
     );
@@ -48,7 +49,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitForm: (values) => dispatch(loginRequest(values)),
-    setNewPasswordRequest: () => dispatch(setNewPasswordRequest()),
+    setNewPasswordRequest: (isNewUser) => dispatch(setNewPasswordRequest(isNewUser)),
   };
 }
 

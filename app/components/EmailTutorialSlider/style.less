@@ -1,0 +1,82 @@
+#email-tutorial-slider {
+  max-width: 590px;
+  .field-row.full {
+    .field {
+      width: 100%;
+      margin: 0 0 11px;
+    }
+    .label {
+      width: 100%;
+    }
+  }
+
+  .image-area {
+    padding: 5px 10px;
+    height: 500px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    align-items: center;
+    margin: 5px 2px !important;
+    img {
+      width: 100%;
+    }
+  }
+
+  .nav {
+    padding: 25px;
+    padding-top: 5px;
+  }
+
+  .dotnav {
+    position: relative;
+    padding: 10px 0px;
+  }
+
+  .dotnav-dots {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    margin-left: -7px;
+  }
+
+  .dotnav-dot {
+    width: 10px;
+    height: 10px;
+    margin: 0 5px;
+    padding: 5px;
+    cursor: default;
+    list-style: none;
+  }
+
+  .dotnav-dot::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: darken(#999, 10%);
+    transition: box-shadow 0.5s;
+  }
+
+  .dotnav-dot:hover::after,
+  .dotnav-dot:focus::after {
+    cursor: default;
+  }
+
+  .dotnav-dot_active {
+    cursor: default;
+  }
+
+  .dotnav-dot_active::after,
+  .dotnav-dot_active:hover::after,
+  .dotnav-dot_active:focus::after {
+    background-color: #00afef;
+  }
+}
+
+#slider-container {
+  display: inline-block;
+  border: #f78e1e solid 2px;
+  background: #fff;
+}

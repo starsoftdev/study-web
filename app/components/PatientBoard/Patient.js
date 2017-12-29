@@ -92,6 +92,11 @@ class Patient extends React.Component {
       return (
         <a
           className={classNames({ bottom: true, 'has-counter': unreadMessageCount > 0 })}
+          onClick={() => {
+            if (unreadMessageCount === 0) {
+              onPatientTextClick(category, patient);
+            }
+          }}
         >
           <div className="msg-alert">
             <div className="msg">
