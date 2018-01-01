@@ -18,6 +18,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
+import FormGeosuggest from '../../components/Input/Geosuggest';
 import {
   removeCustomEmailNotification,
 } from '../../containers/App/actions';
@@ -150,7 +151,7 @@ export default class EditInformationForm extends React.Component {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
       const { change, fetchAllStudyEmailNotificationsDashboard, initialFormValues } = this.props;
-      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, foundSiteLocation.id, initialFormValues.study_id);
+      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, foundSiteLocation.id, initialFormValues.studyId);
 
       change('site_id', foundSiteLocation.id);
       change('site_city', foundSiteLocation.city);
@@ -383,7 +384,6 @@ export default class EditInformationForm extends React.Component {
                   clearable={false}
                   backspaceRemoves={false}
                   deleteRemoves={false}
-                  disabled
                 />
               </div>
             </div>
@@ -408,8 +408,11 @@ export default class EditInformationForm extends React.Component {
                 <Field
                   type="text"
                   name="site_address"
-                  component={Input}
+                  component={FormGeosuggest}
                   initialValue={initialFormValues.site_address}
+                  refObj={(el) => {
+                    this.geoSuggest = el;
+                  }}
                   isDisabled
                 />
               </div>
