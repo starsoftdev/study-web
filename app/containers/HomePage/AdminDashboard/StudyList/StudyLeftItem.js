@@ -55,7 +55,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const lastLoginTime = item.last_login_time ? moment(item.last_login_time).tz(`${DASHBOARD_TIMEZONE}`).format('MM/DD/YY [at] h:mm A') : 'N/A';
 
-    const landingHref = item.landingPageUrl ? `/${item.studyId}-${item.landingPageUrl.toLowerCase().replace(/ /ig, '-')}` : '';
+    const landingHref = item.landingPageUrl ? `/${item.study_id}-${item.landingPageUrl.toLowerCase().replace(/ /ig, '-')}` : '';
     const facebookHref = item.facebookUrl;
 
     const maxLength = (str, len) => {
@@ -72,26 +72,26 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     return (
       <tr
-        onMouseEnter={(e) => this.mouseOverRow(e, item.studyId)}
+        onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
         onMouseLeave={this.mouseOutRow}
-        onFocus={(e) => this.mouseOverRow(e, item.studyId)}
+        onFocus={(e) => this.mouseOverRow(e, item.study_id)}
         onBlur={this.mouseOutRow}
 
-        className={(this.props.hoverRowIndex === item.studyId) ? 'active-table-row' : ''}
+        className={(this.props.hoverRowIndex === item.study_id) ? 'active-table-row' : ''}
       >
         <td>
           <span className={(item.selected) ? 'sm-container checked' : 'sm-container'}>
-            <span className="input-style" onClick={() => { onSelectStudy(item.studyId, !item.selected); }}>
+            <span className="input-style" onClick={() => { onSelectStudy(item.study_id, !item.selected); }}>
               <input name="all" type="checkbox" />
             </span>
           </span>
         </td>
         <td>
           <Field
-            name={`status-${item.studyId}`}
+            name={`status-${item.study_id}`}
             component={Toggle}
             className="field"
-            onChange={(value) => { this.props.changeStudyStatusDashboard([item.studyId], value ? 'active' : 'inactive', false); }}
+            onChange={(value) => { this.props.changeStudyStatusDashboard([item.study_id], value ? 'active' : 'inactive', false); }}
             initValue={item.isPublic}
           />
         </td>
@@ -102,7 +102,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         </td>
         <td className="list">
           <ul className="list-unstyled">
-            <li><span><a href={landingHref} className="landig-link" target="_blank">{item.studyId}</a></span></li>
+            <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
             <li><span>{`${(item.percent || item.percent === 0) ? `${item.percent}%` : ''}`}</span></li>
 
             <li><span>{maxLength(sm, 15)}</span></li>
@@ -116,12 +116,12 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td>
           <div><div className="site-location special_ellipsis_link_container"><a className="special_ellipsis_link landing-link" onClick={() => { this.props.submitToClientPortal(item.siteAdminUserId); }}>{ item.site_name }</a></div></div>
           <ul className="list-unstyled">
-            <li className="site-number">Site Number: <span>{item.siteId}</span></li>
+            <li className="site-number">Site Number: <span>{item.site_id}</span></li>
             <li className="protocol"><div className="special_ellipsis_div">Protocol: <span>{item.protocol_number || 'N/A'}</span></div></li>
             <li className="sponsor"><div className="special_ellipsis_div">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></div></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>
             <li className="login-info">Last Login: <span>{lastLoginTime}</span></li>
-            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(item.siteId, item.site_name); }}>Notes</a></span></li>
+            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(item.site_id, item.site_name); }}>Notes</a></span></li>
           </ul>
         </td>
         <td>
