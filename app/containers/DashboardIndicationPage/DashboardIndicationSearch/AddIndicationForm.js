@@ -24,7 +24,7 @@ export class AddIndicationForm extends React.Component { // eslint-disable-line 
     const levelArr = levels.details.map((level) => (
       (!level.isArchived)
       ? <div className="field-row" key={level.id}>
-        <strong className="label">
+        <strong className="label required">
           <label className="add-exposure-level">{level.name}</label>
         </strong>
         <div className="field">
