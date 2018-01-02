@@ -616,6 +616,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-locked-users',
+      name: 'dashboardLockedUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardLockedUsers/reducer'),
+          System.import('./containers/DashboardLockedUsers/sagas'),
+          System.import('./containers/DashboardLockedUsers'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardLockedUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-protocol',
       name: 'dashboardProtocolPage',
       getComponent(nextState, cb) {
