@@ -21,6 +21,7 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_STUDY,
+  FETCH_STUDY_STATS,
   FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
@@ -64,7 +65,6 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
-  FETCH_STUDY_NEW_TEXTS,
   CHANGE_SCHEDULED_DATE,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCEEDED,
@@ -238,6 +238,15 @@ export function fetchStudy(studyId) {
   return {
     type: FETCH_STUDY,
     studyId,
+  };
+}
+
+export function fetchStudyStats(studyId, campaignId, sourceId) {
+  return {
+    type: FETCH_STUDY_STATS,
+    studyId,
+    campaignId,
+    sourceId,
   };
 }
 
@@ -478,15 +487,6 @@ export function submitEmailBlast(patients, message, from, subject, clientRoleId,
     subject,
     clientRoleId,
     onClose,
-  };
-}
-
-export function fetchStudyTextNewStats(studyId, campaignId, sourceId) {
-  return {
-    type: FETCH_STUDY_NEW_TEXTS,
-    studyId,
-    campaignId,
-    sourceId,
   };
 }
 
