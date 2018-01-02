@@ -111,10 +111,10 @@ export default class EditInformationModal extends React.Component {
       } else if (!openModal && nextProps.openModal) {
         const { fetchAllStudyEmailNotificationsDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;
         // fetch more information about the users, the tagged indications, and the messaging numbers
-        fetchAllStudyEmailNotificationsDashboard(study.clientId, study.siteId, study.studyId);
-        fetchCustomNotificationEmails(study.studyId);
+        fetchAllStudyEmailNotificationsDashboard(study.client_id, study.site_id, study.study_id);
+        fetchCustomNotificationEmails(study.study_id);
         fetchMessagingNumbersDashboard();
-        fetchTaggedIndicationsForStudy(study.studyId);
+        fetchTaggedIndicationsForStudy(study.study_id);
       }
     }
   }
@@ -123,8 +123,8 @@ export default class EditInformationModal extends React.Component {
     if (study) {
       const initialValues = Object.assign({}, study);
       initialValues.recruitment_phone = normalizePhoneDisplay(initialValues.recruitment_phone);
-      initialValues.site = study.siteId;
-      delete initialValues.siteId;
+      initialValues.site = study.site_id;
+      delete initialValues.site_id;
       initialValues.messagingNumber = study.text_number_id;
       // populate the user email notifications
       initialValues.emailNotifications = this.emailNotificationFields;
