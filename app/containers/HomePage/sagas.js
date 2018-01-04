@@ -233,6 +233,9 @@ export function* fetchNoteWorker() {
         relation: 'site',
       }, {
         relation: 'user',
+        scope: {
+          where: { isArchived: false },
+        },
       }],
     };
 
