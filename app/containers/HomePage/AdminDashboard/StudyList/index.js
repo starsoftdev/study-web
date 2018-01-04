@@ -364,7 +364,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         type: 'inactive',
         clientId: editStudyValues.client_id,
         studyId: editStudyValues.study_id,
-        siteId: editStudyValues.site,
       });
     }
 
