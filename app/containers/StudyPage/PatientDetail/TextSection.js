@@ -266,7 +266,7 @@ class TextSection extends React.Component {
           <div onClick={() => this.checkForValidPhone(notValidPhone)}>
             <div
               className="btn btn-default lightbox-opener pull-right"
-              onClick={(e) => (unsubscribed || !ePMS || notValidPhone ? null : this.submitText(e))}
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
               disabled={sendDisabled}
             >
               Send
