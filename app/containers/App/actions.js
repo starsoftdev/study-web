@@ -572,10 +572,10 @@ export function clientCreditsFetchingError(payload) {
   };
 }
 
-export function fetchSitePatients(userId, offset, limit) {
+export function fetchSitePatients(clientRoleId, offset, limit) {
   return {
     type: FETCH_SITE_PATIENTS,
-    userId,
+    clientRoleId,
     offset,
     limit,
   };
