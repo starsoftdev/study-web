@@ -142,7 +142,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
-      this.props.fetchSitePatients(currentUser.id, 0, 10);
+      this.props.fetchSitePatients(currentUser.roleForClient.id, 0, 10);
     }
 
     if (currentUser && currentUser.roleForClient) {
@@ -188,7 +188,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   siteLocationChanged(value) {
-    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
+    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10); });
   }
 
   handleKeyPress() {
@@ -197,7 +197,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ searchTimer: null });
     }
     const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10);
+      this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10);
     }, 500);
     this.setState({ searchTimer: timerH });
   }
@@ -213,7 +213,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
     const limit = 10;
     const offset = this.props.globalPMSPaginationOptions.page * 10;
-    this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
+    this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, offset, limit);
   }
 
   render() {
@@ -408,7 +408,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
+    fetchSitePatients: (clientRoleId, offset, limit) => dispatch(fetchSitePatients(clientRoleId, offset, limit)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),

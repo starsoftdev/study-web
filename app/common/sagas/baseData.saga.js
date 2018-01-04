@@ -512,14 +512,14 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
+    const { clientRoleId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
     const formValues = yield select(selectGlobalPMSFormValues());
     try {
       const requestURL = `${API_URL}/patients/patientsForUser`;
       let query = {};
       if (formValues) {
         query = {
-          userId,
+          clientRoleId,
           limit: limit || 10,
           offset: offset || 0,
           search: formValues.name,
@@ -527,7 +527,7 @@ export function* fetchSitePatientsWatcher() {
         };
       } else {
         query = {
-          userId,
+          clientRoleId,
           limit: limit || 10,
           offset: offset || 0,
         };
