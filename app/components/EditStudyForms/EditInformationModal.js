@@ -28,7 +28,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchAllStudyEmailNotificationsDashboard: (clientId, siteId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId)),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, studyId)),
   fetchCustomNotificationEmails: (studyId) => dispatch(fetchCustomNotificationEmails(studyId)),
   fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
   fetchTaggedIndicationsForStudy: (studyId) => dispatch(fetchTaggedIndicationsForStudy(studyId)),
@@ -111,7 +111,7 @@ export default class EditInformationModal extends React.Component {
       } else if (!openModal && nextProps.openModal) {
         const { fetchAllStudyEmailNotificationsDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;
         // fetch more information about the users, the tagged indications, and the messaging numbers
-        fetchAllStudyEmailNotificationsDashboard(study.client_id, study.site_id, study.study_id);
+        fetchAllStudyEmailNotificationsDashboard(study.client_id, study.study_id);
         fetchCustomNotificationEmails(study.study_id);
         fetchMessagingNumbersDashboard();
         fetchTaggedIndicationsForStudy(study.study_id);
