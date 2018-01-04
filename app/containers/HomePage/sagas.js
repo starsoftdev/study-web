@@ -860,7 +860,6 @@ export function* fetchAllClientUsersWorker(action) {
       method: 'GET',
       query: {
         clientId: action.clientId,
-        siteId: action.siteId,
         studyId: action.studyId,
       },
     };
