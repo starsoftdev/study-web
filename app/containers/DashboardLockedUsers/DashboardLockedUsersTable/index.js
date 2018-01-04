@@ -89,8 +89,6 @@ export default class DashboardLockedUsersTable extends React.Component { // esli
           loader={null}
         >
           <table className="table-locked-user table client-admins">
-            <caption>Locked Users</caption>
-
             <thead>
               <tr>
                 <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
