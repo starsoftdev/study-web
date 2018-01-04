@@ -11,6 +11,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     patientSignUps: PropTypes.object,
     reportsList: PropTypes.object,
     totals: PropTypes.object,
+    openPQSModal: PropTypes.func,
   }
 
 
@@ -92,7 +93,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             </div>
           </div>
           <div className="box table-box">
-            <div className="reprot-view-box-holder">
+            <div className="reprot-view-box-holder" onClick={this.props.openPQSModal}>
               <ul className="list-inline text-center list-activities alt">
                 <li className="font-fix">
                   <span className="sub-title report-font-fix">INCOMING<br />CALL</span>
