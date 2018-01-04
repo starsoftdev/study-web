@@ -19,7 +19,7 @@ EXPORT_PATIENTS,
 FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
-FETCH_STUDY_NEW_TEXTS,
+FETCH_STUDY_STATS,
 ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
@@ -188,17 +188,24 @@ function* fetchStudyCallStats(action) {
     return;
   }
 
-  // listen for the latest FETCH_STUDY action
-  const { studyId, campaignId } = action;
+  // listen for the latest FETCH_STUDY or FETCH_STUDY_STATS action
+  const { studyId, campaignId, sourceId } = action;
 
   try {
-    let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
-    if (campaignId) {
-      requestURL += `?campaignId=${campaignId}`;
-    }
-    const response = yield call(request, requestURL, {
+    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    const options = {
       method: 'GET',
-    });
+    };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
+    const response = yield call(request, requestURL, options);
     yield put(callStatsFetched(response));
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
@@ -1044,9 +1051,10 @@ export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
     // watch for initial fetch actions that will load the text message stats
-    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
-    // watch for filtering actions that will refresh the text message stats
-    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyStats);
+    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
+    const watcherC = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyStats);
+    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyCallStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -1069,12 +1077,13 @@ export function* fetchStudySaga() {
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
-    const callStatsWatcher = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
+    yield cancel(watcherB);
+    yield cancel(watcherC);
+    yield cancel(watcherD);
     yield cancel(watcherE);
-    yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
@@ -1097,7 +1106,6 @@ export function* fetchStudySaga() {
     yield cancel(deletePatientWatcher);
     yield cancel(watcherEmail);
     yield cancel(watcherEmailsFetch);
-    yield cancel(callStatsWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

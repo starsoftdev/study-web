@@ -20,7 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
-import { fetchPatients, fetchPatientCategories, fetchStudy, setStudyId, updatePatientSuccess, fetchStudyTextNewStats, downloadReport, textStatsFetched, studyViewsStatFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
   selectSocket,
@@ -36,6 +36,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
     fetchStudy: PropTypes.func.isRequired,
+    fetchStudyStats: PropTypes.func.isRequired,
     fetchingStudy: PropTypes.bool.isRequired,
     patientCategories: PropTypes.array,
     params: PropTypes.object,
@@ -50,13 +51,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     updatePatientSuccess: React.PropTypes.func,
     fetchSources: PropTypes.func,
     sitePatients: React.PropTypes.object,
-    fetchStudyTextNewStats: React.PropTypes.func,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
     toastrActions: React.PropTypes.object.isRequired,
     clientOpenedStudyPage: React.PropTypes.func,
     clientClosedStudyPage: React.PropTypes.func,
-    textStatsFetched: React.PropTypes.func,
+    studyStatsFetched: React.PropTypes.func,
     studyViewsStatFetched: React.PropTypes.func,
   };
 
@@ -125,28 +125,30 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
           // fetch the new text stats
           // TODO needs to take into account the stats are filtered based on campaign and source selected
-          if (this.props.study && this.props.study.id === socketMessage.study.id) {
-            // check is patients is on the board
-            let needToUpdateMessageStats = false;
-            _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
-              _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
-                if (patient.id === socketMessage.patient_id) {
-                  needToUpdateMessageStats = true;
-                  return false;
-                }
-              });
-              if (needToUpdateMessageStats) {
-                return false;
-              }
-            });
-            if (needToUpdateMessageStats) {
-              if (socketMessage.twilioTextMessage.direction !== 'inbound') {
-                this.props.textStatsFetched({ total:(this.props.stats.texts + 1), sent:(this.props.stats.textsSent + 1), received:this.props.stats.textsReceived });
-              } else {
-                this.props.textStatsFetched({ total:(this.props.stats.texts + 1), sent:this.props.stats.textsSent, received:(this.props.stats.textsReceived + 1) });
-              }
-            }
-          }
+          // TODO needs to be able to fetch the redux state without having to resort to hacks
+          // TODO right now it cannot access redux state when getting an incoming text or sending an outgoing text
+          // if (params && parseInt(params.id) === socketMessage.study.id) {
+          //   // check is patients is on the board
+          //   let needToUpdateMessageStats = false;
+          //   _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
+          //     _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
+          //       if (patient.id === socketMessage.patient_id) {
+          //         needToUpdateMessageStats = true;
+          //         return false;
+          //       }
+          //     });
+          //     if (needToUpdateMessageStats) {
+          //       return false;
+          //     }
+          //   });
+          //   if (needToUpdateMessageStats) {
+          //     if (socketMessage.twilioTextMessage.direction !== 'inbound') {
+          //       studyStatsFetched({ total:(this.props.stats.texts + 1), sent:(this.props.stats.textsSent + 1), received:this.props.stats.textsReceived });
+          //     } else {
+          //       studyStatsFetched({ total:(this.props.stats.texts + 1), sent:this.props.stats.textsSent, received:(this.props.stats.textsReceived + 1) });
+          //     }
+          //   }
+          // }
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
               unreadMessageCount: (unreadMessageCount + 1),
@@ -169,10 +171,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           }
         });
 
-        // TODO fix performance issues, since this calls multiple endpoints instead of just updating the landing page view count
+        // TODO fix performance issues just updating the landing page view count, it calls the endpoint to get the overall landing page view count, rather than incrementing
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
-            // fetchStudy(params.id);
             studyViewsStatFetched(data.count);
           }
         });
@@ -205,7 +206,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -262,10 +263,10 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
             fetchStudy={fetchStudy}
+            fetchStudyStats={fetchStudyStats}
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
-            fetchStudyTextNewStats={this.props.fetchStudyTextNewStats}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -304,14 +305,14 @@ function mapDispatchToProps(dispatch) {
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
+    fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
     fetchSources: () => dispatch(fetchSources()),
-    fetchStudyTextNewStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyTextNewStats(studyId, campaignId, sourceId)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
-    textStatsFetched: (payload) => dispatch(textStatsFetched(payload)),
+    studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
   };
 }
