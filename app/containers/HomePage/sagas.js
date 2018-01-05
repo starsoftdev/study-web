@@ -233,6 +233,9 @@ export function* fetchNoteWorker() {
         relation: 'site',
       }, {
         relation: 'user',
+        scope: {
+          where: { isArchived: false },
+        },
       }],
     };
 
@@ -860,7 +863,6 @@ export function* fetchAllClientUsersWorker(action) {
       method: 'GET',
       query: {
         clientId: action.clientId,
-        siteId: action.siteId,
         studyId: action.studyId,
       },
     };
