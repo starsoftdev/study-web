@@ -38,8 +38,8 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <strong className="heading"><span>DNQ</span></strong>
           <strong className="number pointer"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
         </li>
-        <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'PRESCREENED'); }}>
-          <strong className="heading"><span>PRESCREENED</span></strong>
+        <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
+          <strong className="heading"><span>ACTION NEEDED</span></strong>
           <strong className="number pointer"><span>{totals.action_needed}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span></strong>
         </li>
         <li>
