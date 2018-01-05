@@ -488,6 +488,7 @@ function* fetchPatientDetails() {
               {
                 relation: 'user',
                 scope: {
+                  where: { isArchived: false },
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
                   include: 'roleForClient',
                 },
@@ -512,6 +513,7 @@ function* fetchPatientDetails() {
               {
                 relation: 'user',
                 scope: {
+                  where: { isArchived: false },
                   fields: ['id', 'firstName', 'lastName', 'profileImageURL'],
                 },
               },
