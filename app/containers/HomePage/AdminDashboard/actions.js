@@ -347,11 +347,10 @@ export function clearFilters() {
   };
 }
 
-export function fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId) {
+export function fetchAllStudyEmailNotificationsDashboard(clientId, studyId) {
   return {
     type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
     clientId,
-    siteId,
     studyId,
   };
 }
