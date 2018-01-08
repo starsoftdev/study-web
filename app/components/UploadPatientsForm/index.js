@@ -153,7 +153,7 @@ export default class UploadPatientsForm extends Component {
     if (newProps.sources && !defaultSourceSet) {
       const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
       const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
-      
+
       if (defaultSourceValue.value) {
         change('source', defaultSourceValue);
         this.setState({ defaultSourceSet: true });
