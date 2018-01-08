@@ -86,6 +86,7 @@ export default class UploadPatientsForm extends Component {
     super(props);
 
     this.state = {
+      defaultSourceSet: false,
       duplicateValidationResult: true,
       requiredValidationResult: true,
       dragEnter: false,
@@ -132,8 +133,8 @@ export default class UploadPatientsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols } = this.props;
-    const { currentStudy, siteLocation } = this.state;
+    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
+    const { currentStudy, siteLocation, defaultSourceSet } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
@@ -147,6 +148,13 @@ export default class UploadPatientsForm extends Component {
           }
         });
       }, 2000);
+    }
+
+    if (newProps.sources && !defaultSourceSet) {
+      const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
+      const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
+      change('source', defaultSourceValue);
+      this.setState({ defaultSourceSet: true });
     }
   }
 
@@ -353,6 +361,8 @@ export default class UploadPatientsForm extends Component {
       label: source.type,
       value: source.id,
     }));
+    const defaultSource = _.find(sourceOptions, { label: 'StudyKIK (Imported)' });
+    const defaultSourceValue = { value: (defaultSource ? defaultSource.value : null) };
     let disabled = false;
 
     if (!duplicateValidationResult || !requiredValidationResult) {
@@ -512,6 +522,8 @@ export default class UploadPatientsForm extends Component {
                 component={ReactSelect}
                 className="field"
                 placeholder="Select Source"
+                disabled
+                input={defaultSourceValue}
                 options={sourceOptions}
               />
             </div>
