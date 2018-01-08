@@ -185,6 +185,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         options.fileName = fileName;
       }
 
+      if (options.source) {
+        options.source = options.source.value;
+      }
+
       if (patients.length > 0) {
         _.forEach(patients, (patient) => {
           const normalizedPatient = {};
