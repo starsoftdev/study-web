@@ -96,7 +96,7 @@ class TextSection extends React.Component {
   }
 
   initStudyPatientMessagesFetch(props) {
-    if (props.currentPatient) {
+    if (props.currentPatient && props.currentPatient.id) {
       // otherwise method componentWillReceiveProps
       // receiving data with a missing property currentPatient
       // which leads to an error

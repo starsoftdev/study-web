@@ -89,7 +89,7 @@ export default class DashboardLockedUsersTable extends React.Component { // esli
           loader={null}
         >
           <table className="table-locked-user table client-admins">
-            <caption></caption>
+            <caption>&nbsp;</caption>
 
             <thead>
               <tr>
