@@ -69,30 +69,29 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
     const getLastItem = (item) => {
       return moment(item.date);
     };
-
-    if (uploadHistory.details.length > 0) {
-      // sort the history items
-      const sorted = _.orderBy(uploadHistory.details, (item) => getLastItem(item), 'desc');
-      return (
-        <table className="table">
-          <colgroup>
-            <col style={{ width: '36%' }} />
-            <col style={{ width: '19.2%' }} />
-            <col style={{ width: '12.5%' }} />
-            <col style={{ width: '12.2%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: 'auto' }} />
-          </colgroup>
-          <thead>
-            <tr key={_.uniqueId()}>
-              <th>File Name</th>
-              <th>User</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
+    // sort the history items
+    const sorted = _.orderBy(uploadHistory.details, (item) => getLastItem(item), 'desc');
+    return (
+      <table className="table">
+        <colgroup>
+          <col style={{ width: '36%' }} />
+          <col style={{ width: '19.2%' }} />
+          <col style={{ width: '12.5%' }} />
+          <col style={{ width: '12.2%' }} />
+          <col style={{ width: '10%' }} />
+          <col style={{ width: 'auto' }} />
+        </colgroup>
+        <thead>
+          <tr key={_.uniqueId()}>
+            <th>File Name</th>
+            <th>User</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        {(uploadHistory.details.length > 0) &&
           <tbody>
             {
               sorted.map((item) => {
@@ -121,11 +120,9 @@ class UploadHistoryList extends React.Component { // eslint-disable-line react/p
               })
             }
           </tbody>
-        </table>
-      );
-    } else {
-      return null;
-    }
+        }
+      </table>
+    );
   }
 
   render() {
