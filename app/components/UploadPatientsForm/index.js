@@ -78,7 +78,6 @@ export default class UploadPatientsForm extends Component {
     blur: PropTypes.func,
     setFileName: PropTypes.func,
     revertBulkUpload: PropTypes.func,
-    fetchHistory: PropTypes.func,
     protocols: PropTypes.array,
   };
 
