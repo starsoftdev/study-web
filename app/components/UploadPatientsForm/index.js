@@ -268,8 +268,8 @@ export default class UploadPatientsForm extends Component {
 
       if (json.length >= 20000) {
         toastr.error('', 'Error! Too many records.');
-      } else if (f.size >= 51200000) {
-        toastr.error('', 'Error! More than 50MB.');
+      } else if (f.size >= 20000000) {
+        toastr.error('', 'Error! More than 20MB.');
       } else {
         const patients = scope.clearEmptySheet(json);
         scope.setState({
@@ -389,7 +389,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 20MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
