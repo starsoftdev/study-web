@@ -78,7 +78,6 @@ export default class UploadPatientsForm extends Component {
     blur: PropTypes.func,
     setFileName: PropTypes.func,
     revertBulkUpload: PropTypes.func,
-    fetchHistory: PropTypes.func,
     protocols: PropTypes.array,
   };
 
@@ -86,6 +85,7 @@ export default class UploadPatientsForm extends Component {
     super(props);
 
     this.state = {
+      defaultSourceSet: false,
       duplicateValidationResult: true,
       requiredValidationResult: true,
       dragEnter: false,
@@ -132,8 +132,8 @@ export default class UploadPatientsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols } = this.props;
-    const { currentStudy, siteLocation } = this.state;
+    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
+    const { currentStudy, siteLocation, defaultSourceSet } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
@@ -147,6 +147,16 @@ export default class UploadPatientsForm extends Component {
           }
         });
       }, 2000);
+    }
+
+    if (newProps.sources && !defaultSourceSet) {
+      const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
+      const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
+
+      if (defaultSourceValue.value) {
+        change('source', defaultSourceValue);
+        this.setState({ defaultSourceSet: true });
+      }
     }
   }
 
@@ -258,8 +268,8 @@ export default class UploadPatientsForm extends Component {
 
       if (json.length >= 20000) {
         toastr.error('', 'Error! Too many records.');
-      } else if (f.size >= 51200000) {
-        toastr.error('', 'Error! More than 50MB.');
+      } else if (f.size >= 20000000) {
+        toastr.error('', 'Error! More than 20MB.');
       } else {
         const patients = scope.clearEmptySheet(json);
         scope.setState({
@@ -353,6 +363,8 @@ export default class UploadPatientsForm extends Component {
       label: source.type,
       value: source.id,
     }));
+    const defaultSource = _.find(sourceOptions, { label: 'StudyKIK (Imported)' });
+    const defaultSourceValue = { value: (defaultSource ? defaultSource.value : null) };
     let disabled = false;
 
     if (!duplicateValidationResult || !requiredValidationResult) {
@@ -377,7 +389,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 20MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
@@ -512,6 +524,8 @@ export default class UploadPatientsForm extends Component {
                 component={ReactSelect}
                 className="field"
                 placeholder="Select Source"
+                disabled
+                input={defaultSourceValue}
                 options={sourceOptions}
               />
             </div>

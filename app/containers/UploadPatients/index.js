@@ -126,7 +126,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
                 unsubscribeFromUploadProgressSocket(data.jobId, (err, result) => {
                   if (!err && result.success) {
                     this.setState({ socketId: null, jobId: null }, () => {
-                      fetchHistory(currentUser.id);
+                      fetchHistory(currentUser.roleForClient.client_id);
                       clearForm();
                       setPatientsExported();
                     });
@@ -152,7 +152,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
                 unsubscribeFromRevertProgressSocket(data.jobId, (err, result) => {
                   if (!err && result.success) {
                     this.setState({ socketId: null, jobId: null, revertProgress: 0 }, () => {
-                      fetchHistory(currentUser.id);
+                      fetchHistory(currentUser.roleForClient.client_id);
                     });
                   }
                 });
@@ -183,6 +183,10 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
 
       if (fileName) {
         options.fileName = fileName;
+      }
+
+      if (options.source) {
+        options.source = options.source.value;
       }
 
       if (patients.length > 0) {
@@ -289,7 +293,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { indications, fullSiteLocations, fetchHistory, addProtocolProcess } = this.props;
+    const { indications, fullSiteLocations, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
     return (
@@ -304,7 +308,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             uploadProgress={uploadProgress}
             isImporting={isImporting}
             uploadResult={uploadResult}
-            fetchHistory={fetchHistory}
             addProtocolProcess={addProtocolProcess}
             setPatients={this.setPatients}
             setFileName={this.setFileName}
