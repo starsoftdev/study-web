@@ -93,7 +93,6 @@ export default [
 export function* fetchPatientsWatcher() {
   while (true) {
     const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
-    const authToken = getItem('auth_token');
 
     try {
       const filterObj = {
@@ -220,7 +219,6 @@ export function* fetchPatientsWatcher() {
       const queryParams = {
         filter: JSON.stringify(filterObj),
         clientId,
-        authToken,
       };
 
       const queryString = composeQueryString(queryParams);
