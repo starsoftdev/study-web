@@ -1,3 +1,4 @@
+import FileSaver from 'file-saver';
 import { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
@@ -14,17 +15,6 @@ import {
   GET_PDF,
   SHOW_PROPOSAL_PDF,
 } from '../../containers/Proposals/constants';
-import { getItem } from '../../utils/localStorage';
-
-const serializeParams = (obj) => {
-  const str = [];
-  Object.keys(obj).forEach(p => {
-    if ({}.hasOwnProperty.call(obj, p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
-      str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
-    }
-  });
-  return str.join('&');
-};
 
 // Individual exports for testing
 export function* proposalSaga() {
@@ -114,18 +104,28 @@ export function* getPdf() {
     const { payload } = yield take(GET_PDF);
     try {
       const requestURL = `${API_URL}/proposals/getProposalsPDF`;
-      const authToken = getItem('auth_token');
       const proposals = [];
       for (const value of payload) {
         proposals.push(value.proposalpdfid);
       }
       const params = {
-        access_token: authToken,
+        query: {
+          proposals: JSON.stringify(proposals),
+        },
+        doNotParseAsJson: true,
       };
-      if (proposals.length > 0) {
-        params.proposals = JSON.stringify(proposals);
-      }
-      location.replace(`${requestURL}?${serializeParams(params)}`);
+
+      const response = yield call(request, requestURL, params);
+      response.blob().then(blob => {
+        if (proposals.length > 1) {
+          const dateNow = new Date();
+          const dateString = (`0${dateNow.getMonth() + 1}`).slice(-2) + (`0${dateNow.getDate()}`).slice(-2) + dateNow.getFullYear().toString().substr(2, 2);
+          const filename = `StudyKIK_Proposals_${dateString}.zip`;
+          FileSaver.saveAs(blob, filename);
+        } else if (proposals.length === 1) {
+          FileSaver.saveAs(blob, proposals[0].substr(proposals[0].indexOf('/') + 1));
+        }
+      });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       toastr.error('', errorMessage);
