@@ -38,6 +38,7 @@ export default function request(url, options = {}) {
 
   if (options.useDefaultContentType) {
     delete headers['Content-Type'];
+    delete headers.Accept;
   }
 
   options.headers = Object.assign({}, headers, options.headers ); // eslint-disable-line
@@ -57,7 +58,13 @@ export default function request(url, options = {}) {
     retries: 1,
   })
     .then(checkStatus)
-    .then(parseJSON)
+    .then((response) => {
+      if (options.doNotParseAsJson) {
+        return response;
+      } else {
+        return parseJSON(response);
+      }
+    })
     .then((data) => data);
 }
 
