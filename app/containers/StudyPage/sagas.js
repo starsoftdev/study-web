@@ -2,6 +2,7 @@
  * Created by mike on 9/23/16.
  */
 import React from 'react';
+import FileSaver from 'file-saver';
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
@@ -347,7 +348,7 @@ export function* downloadReport() {
     }
 
     try {
-      const requestURL = `${API_URL}/downloadClientReport?access_token=${authToken}&reportName=${reportName}`;
+      const requestURL = `${API_URL}/downloadClientReport?&reportName=${reportName}`;
       location.replace(`${requestURL}`);
     } catch (e) {
       // if returns forbidden we remove the token from local storage
@@ -401,8 +402,18 @@ export function* downloadReferral() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/getReferralPDF?access_token=${authToken}&reportName=${reportName}&studyId=${studyId}`;
-      location.replace(requestURL);
+      const params = {
+        query: {
+          reportName,
+          studyId,
+        },
+        doNotParseAsJson: true,
+      };
+      const requestURL = `${API_URL}/patients/getReferralPDF`;
+      const response = yield call(request, requestURL, params);
+      response.blob().then(blob => {
+        FileSaver.saveAs(blob, reportName);
+      });
     } catch (e) {
       // if returns forbidden we remove the token from local storage
       if (e.status === 401) {
