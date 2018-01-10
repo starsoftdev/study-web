@@ -29,7 +29,6 @@ import {
   selectDashboardEditNoteProcess,
   selectDashboardNote,
 } from '../selectors';
-import { selectSources } from '../../../../containers/App/selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import {
@@ -48,7 +47,6 @@ const mapStateToProps = createStructuredSelector({
   editStudyValues: selectValues('Dashboard.EditStudyForm'),
   note: selectDashboardNote(),
   paginationOptions: selectPaginationOptions(),
-  sources: selectSources(),
   studies: selectStudies(),
 });
 
