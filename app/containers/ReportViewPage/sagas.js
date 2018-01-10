@@ -160,7 +160,7 @@ export function* exportStudiesWorker(action) {
   }
 
   try {
-    const queryString = composeQueryString({ ...action.payload, authToken });
+    const queryString = composeQueryString({ ...action.payload });
     const requestURL = `${API_URL}/studies/getStudiesForDB?${queryString}`;
     yield call(request, requestURL);
     const toastrOptions = {
