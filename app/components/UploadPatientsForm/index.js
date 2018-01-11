@@ -256,10 +256,10 @@ export default class UploadPatientsForm extends Component {
       const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
-      if (json.length >= 20000) {
-        toastr.error('', 'Error! Too many records.');
-      } else if (f.size >= 51200000) {
-        toastr.error('', 'Error! More than 50MB.');
+      if (json.length >= 5000) {
+        toastr.error('', 'Error! Too many rows.');
+      } else if (f.size >= 5120000) {
+        toastr.error('', 'Error! File exceeds the upload limit.');
       } else {
         const patients = scope.clearEmptySheet(json);
         scope.setState({
@@ -377,7 +377,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 20,000 rows and less then 50MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
