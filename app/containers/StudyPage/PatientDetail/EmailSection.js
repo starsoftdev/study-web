@@ -92,8 +92,10 @@ class EmailSection extends React.Component {
   submitEmailBlast(event) {
     event.preventDefault();
     const { submitEmail, studyId, currentPatient, currentUser, formSyncErrors, formValues } = this.props;
-    if (_.isEmpty(formSyncErrors)) {
+    if (_.isEmpty(formSyncErrors) && currentPatient.email) {
       submitEmail(studyId, currentPatient.id, currentUser, formValues.email, formValues.message, formValues.subject);
+    } else if (!currentPatient.email) {
+      toastr.error('', 'Error! Patient email is required.');
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
