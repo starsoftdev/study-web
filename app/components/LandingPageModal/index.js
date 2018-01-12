@@ -147,6 +147,11 @@ export class LandingPageModal extends React.Component {
           change('hideClickToCall', landing.hideClickToCall);
           change('initialMessageText', landing.initialMessageText);
           change('facebookUrl', landing.facebookUrl);
+          change('facebookPageId', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.facebookPageId : '');
+          change('facebookPageToken', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.facebookPageToken : '');
+          change('facebookFormName', landing.facebookLandingForm ? landing.facebookLandingForm.facebookFormName : '');
+          change('facebookFormId', landing.facebookLandingForm ? landing.facebookLandingForm.id : null);
+          change('facebookPageInnerId', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.id : null);
           change('isSendInitialMessageText', landing.isSendInitialMessageText);
           change('displayAlways', landing.displayAlways);
 
@@ -582,6 +587,45 @@ export class LandingPageModal extends React.Component {
                       id="facebook-url"
                       type="text"
                       name="facebookUrl"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="facebook-url">FACEBOOK PAGE ID</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      id="facebook-url"
+                      type="text"
+                      name="facebookPageId"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="facebook-url">FACEBOOK TOKEN</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      id="facebook-url"
+                      type="text"
+                      name="facebookPageToken"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="facebook-url">FACEBOOK FORM NAME</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      id="facebook-url"
+                      type="text"
+                      name="facebookFormName"
                       component={Input}
                     />
                   </div>
