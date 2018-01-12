@@ -1209,14 +1209,16 @@ export function* deleteCampaignWorker(action) {
 
 
 let watcherD = false;
-
+let watcherF = false;
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
   }
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
-  const watcherF = yield fork(renewStudyWatcher);
+  if (!watcherF) {
+    watcherF = yield fork(renewStudyWatcher);
+  }
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
@@ -1263,8 +1265,11 @@ export function* homePageSaga() {
       yield cancel(watcherD);
       watcherD = false;
     }
+    if (watcherF) {
+      yield cancel(watcherF);
+      watcherF = false;
+    }
     yield cancel(watcherE);
-    yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
     yield cancel(watcherI);
