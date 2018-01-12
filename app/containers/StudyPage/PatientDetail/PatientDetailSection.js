@@ -131,7 +131,7 @@ class PatientDetailSection extends React.Component {
           </div>
         </div>
         <div className="field-row">
-          <strong className="label required">
+          <strong className="label">
             <label htmlFor="new-patient-email">Email</label>
           </strong>
           <div className="field">
