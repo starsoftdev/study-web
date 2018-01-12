@@ -61,8 +61,9 @@ export class ReportViewTable extends React.Component {
   }
 
   handleBodyScroll(event) {
-    const scrollTop = event.target.scrollingElement.scrollTop;
-    const scrollHeight = event.target.scrollingElement.scrollHeight;
+    const scrollingElement = event.target.scrollingElement;
+    const scrollTop = scrollingElement ? scrollingElement.scrollTop : document.documentElement.scrollTo;
+    const scrollHeight = scrollingElement ? scrollingElement.scrollHeight : document.documentElement.scrollHeight;
 
     if ((window.innerHeight + scrollTop < 990) || (scrollHeight - window.innerHeight - scrollTop < 80)) {
       if (this.state.isFixedBottomScroll) {
