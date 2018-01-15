@@ -58,6 +58,7 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  SET_SELECTED_STUDY_SOURCES,
 } from './constants';
 
 import {
@@ -96,12 +97,18 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  selectedStudySources: [],
 };
 
 function studyPageReducer(state = initialState, action) {
   let totalReferrals = 0;
 
   switch (action.type) {
+    case SET_SELECTED_STUDY_SOURCES:
+      return {
+        ...state,
+        selectedStudySources: action.list,
+      };
     case FETCH_STUDY_LEAD_SOURCES:
       return {
         ...state,
