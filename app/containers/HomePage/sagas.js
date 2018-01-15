@@ -1229,7 +1229,7 @@ export function* editStudyLeadSourcesWorker(action) {
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {
-      yield put(editStudyLeadSourcesSuccess(response));
+      yield put(editStudyLeadSourcesSuccess(action.leadSources));
       toastr.success('', 'The request has been submitted successfully.');
     } else {
       yield put(editStudyLeadSourcesError(response));

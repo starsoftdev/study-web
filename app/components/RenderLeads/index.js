@@ -43,9 +43,6 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
         {fields.map((lead, index) => {
           const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source_id !== 'undefined' && formValues.leadSource[index].source_id;
           let landingHref = null;
-          if (formValues.leadSource && formValues.leadSource[index]) {
-            landingHref = formValues.leadSource[index].url ? `/${formValues.leadSource[index].studyId}-${formValues.leadSource[index].url.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].googleUrl) ? `?utm=${formValues.leadSource[index].googleUrl}` : ''}` : '';
-          }
           let initObject = null;
 
           if (initialLeadSources && initialLeadSources.length > 0) {
@@ -67,6 +64,9 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
             if (initObject && initObject.messagingNumber) {
               messagingNumbersOptions.unshift(initObject.messagingNumber);
+              if (initObject.url && formValues.leadSource && formValues.leadSource[index]) {
+                landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${initObject.url.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].googleUrl) ? `?utm=${formValues.leadSource[index].googleUrl}` : ''}` : '';
+              }
             }
           }
 
