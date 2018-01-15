@@ -248,6 +248,30 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
     }
+
+    const sourceMapped = [];
+    _.forEach(sourceOptions, (source) => {
+      let item = null;
+      _.forEach(this.props.studyLeadSources.details, (studySource) => {
+        if (source.value === studySource.source_id.value) {
+          item = {
+            ...studySource,
+            group: source.label,
+            id: studySource.studySourceId,
+            label: `${source.label} ${studySource.source_name || ''}`,
+          };
+        }
+      });
+      if (item) {
+        sourceMapped.push(item);
+      } else {
+        sourceMapped.push({
+          group: source.label,
+          id: `${source.value}_`,
+          label: 'none',
+        });
+      }
+    });
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -268,7 +292,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             ePMS={ePMS}
             studyName={studyName}
             fetchStudyTextNewStats={this.props.fetchStudyTextNewStats}
-            studyLeadSources={this.props.studyLeadSources}
+            sourceMapped={sourceMapped}
           />
           <StudyStats stats={stats} />
           <PatientBoard

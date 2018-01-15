@@ -85,6 +85,7 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
+  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
 } from './constants';
 
 import {
@@ -265,6 +266,20 @@ export default function dashboardPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
+        },
+      };
+
+    case EDIT_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              ...item,
+            };
+          }),
+          fetching: false,
+          error: null,
         },
       };
 
