@@ -267,9 +267,9 @@ export default class UploadPatientsForm extends Component {
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
       if (json.length >= 20000) {
-        toastr.error('', 'Error! Too many records.');
+        toastr.error('', 'Error! Too many rows.');
       } else if (f.size >= 20000000) {
-        toastr.error('', 'Error! More than 20MB.');
+        toastr.error('', 'Error! File exceeds the upload limit.');
       } else {
         const patients = scope.clearEmptySheet(json);
         scope.setState({
