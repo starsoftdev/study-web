@@ -53,12 +53,7 @@ export function* fetchSitesWorker(action) {
       include: [{
         relation: 'roles',
         scope: {
-          include: [{
-            relation: 'user',
-            scope: {
-              where: { isArchived: false },
-            },
-          }],
+          include: ['user'],
         },
       }, {
         relation: 'twilioNumber',
@@ -102,9 +97,6 @@ export function* fetchNoteWorker() {
         relation: 'site',
       }, {
         relation: 'user',
-        scope: {
-          where: { isArchived: false },
-        },
       }],
     };
 
