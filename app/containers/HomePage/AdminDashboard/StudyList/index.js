@@ -20,6 +20,7 @@ import CampaignPageModal from '../../../../components/CampaignPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
+import LeadGenModal from '../../../../components/LeadGenModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 import EditInformationModal from '../../../../components/EditStudyForms/EditInformationModal';
@@ -111,6 +112,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
+    this.showLeadGenPageModal = this.showLeadGenPageModal.bind(this);
     this.showCampaignPageModal = this.showCampaignPageModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -143,6 +145,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
       showLandingPageModal: false,
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
+      showLeadGenPageModal: false,
       showCampaignPageModal: false,
       addEmailModalShow: false,
       isFixedBottomScroll: false,
@@ -250,6 +253,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: true,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
       });
     } else {
@@ -266,6 +270,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: true,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
       });
     } else {
@@ -282,11 +287,29 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: true,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
       });
     } else {
       this.setState({
         showPatientThankYouPageModal: false,
+      });
+    }
+  }
+
+  showLeadGenPageModal(visible) {
+    if (visible) {
+      this.setState({
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showLeadGenPageModal: true,
+        showCampaignPageModal: false,
+      });
+    } else {
+      this.setState({
+        showLeadGenPageModal: false,
       });
     }
   }
@@ -298,6 +321,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
       });
     } else {
@@ -314,6 +338,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: true,
       });
     } else {
@@ -433,6 +458,12 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             data-class="btn-deactivate"
             onClick={() => this.showPatientThankYouPageModal(true)}
           > Patient Thank You Email </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showLeadGenPageModal(true)}
+          > LEAD GEN </Button>
           <Button
             bsStyle="primary"
             className="pull-left"
@@ -887,6 +918,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 this.showPatientThankYouPageModal(false);
               }}
               openModal={this.state.showPatientThankYouPageModal}
+              studies={studies.details}
+            />
+            <LeadGenModal
+              onClose={() => {
+                this.showLeadGenPageModal(false);
+              }}
+              openModal={this.state.showLeadGenPageModal}
               studies={studies.details}
             />
             <CampaignPageModal

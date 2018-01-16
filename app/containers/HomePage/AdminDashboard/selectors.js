@@ -89,6 +89,11 @@ const selectLandingPageUpdateProcess = () => createSelector(
   substate => substate.updateLandingPageProcess
 );
 
+const selectFacebookLandingPageUpdateProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.updateFacebookLandingPageProcess
+);
+
 const selectChangeStudyAddProcess = () => createSelector(
   selectDashboardPageDomain(),
   substate => substate.changeStudyAddProcess
@@ -191,4 +196,5 @@ export {
   selectDashboardEditCampaignProcess,
   selectDashboardDeleteCampaignProcess,
   selectDashboardfive9List,
+  selectFacebookLandingPageUpdateProcess,
 };
