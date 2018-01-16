@@ -160,7 +160,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
-    this.saveFilters = this.saveFilters.bind(this);
     this.handleChange = this.handleChange.bind(this, 'dateRange');
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
@@ -248,10 +247,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     }
 
     this.fetchStudiesAccordingToFilters();
-  }
-
-  saveFilters() {
-
   }
 
   openFiltersModal() {
