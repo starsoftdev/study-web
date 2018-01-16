@@ -42,7 +42,6 @@ import {
   fetchStudyCampaignsDashboard,
   updateTwilioNumbers,
 } from './actions';
-import { selectSources } from '../../App/selectors';
 import {
   addCustomEmailNotification,
   addEmailNotificationUser,
@@ -72,7 +71,6 @@ const mapStateToProps = createStructuredSelector({
   totals: selectStudiesTotals(),
   usersByRoles: selectUsersByRoles(),
   paginationOptions: selectPaginationOptions(),
-  sources: selectSources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -135,7 +133,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     updateTwilioNumbers: PropTypes.func,
     usersByRoles: PropTypes.object,
     clearCampaignFilter: PropTypes.func,
-    sources: PropTypes.array,
   };
 
   constructor(props) {
@@ -350,8 +347,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
-    const sources = _.cloneDeep(this.props.sources);
-    const defaultSource = _.find(sources, (s) => { return s.type === 'StudyKIK'; });
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
     if ((value && key) || (key === 'campaign') || (key === 'source')) {
@@ -378,10 +373,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
     if (fetchByScroll) {
       offset = this.props.paginationOptions.page * 10;
-    }
-
-    if (!filters.source) {
-      filters.source = defaultSource.id;
     }
 
     if (isEmpty) {
@@ -701,7 +692,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             totals={this.props.totals}
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
             levels={this.props.levels}
-            sources={this.props.sources}
             addEmailNotificationUser={this.props.addEmailNotificationUser}
             addCustomEmailNotification={this.props.addCustomEmailNotification}
             fetchStudyCampaignsDashboard={this.props.fetchStudyCampaignsDashboard}
