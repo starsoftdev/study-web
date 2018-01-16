@@ -252,6 +252,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               googleUrl: item.googleUrl,
               url: item.url,
               studyId: item.studyId,
+              landingPageUrl: item.landingPageUrl,
             };
           }),
           fetching: false,
