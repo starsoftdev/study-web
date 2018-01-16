@@ -475,12 +475,7 @@ export function* fetchClientSitesWatcher() {
         include: [{
           relation: 'roles',
           scope: {
-            include: [{
-              relation: 'user',
-              scope: {
-                where: { isArchived: false },
-              },
-            }],
+            include: ['user'],
           },
         }, {
           relation: 'studies',
@@ -659,12 +654,7 @@ export function* fetchClientRolesWatcher() {
 
     try {
       const filterObj = {
-        include: [{
-          relation: 'user',
-          scope: {
-            where: { isArchived: false },
-          },
-        }],
+        include: 'user',
       };
 
       if (searchParams && searchParams.name) {
