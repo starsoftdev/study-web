@@ -29,9 +29,6 @@ const schema = {
     presence: false,
     url: true,
   },
-  cns: {
-    presence: false,
-  },
 };
 
 const fields = Object.keys(schema);
