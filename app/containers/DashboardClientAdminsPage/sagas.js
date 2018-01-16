@@ -150,12 +150,7 @@ export function* fetchSitesWorker(action) {
       include: [{
         relation: 'roles',
         scope: {
-          include: [{
-            relation: 'user',
-            scope: {
-              where: { isArchived: false },
-            },
-          }],
+          include: ['user'],
         },
       }, {
         relation: 'twilioNumber',
