@@ -132,7 +132,6 @@ export class ThankYouPageModal extends React.Component {
     }
 
     const list = Object.assign({ studyId: this.state.selected.study_id }, newList);
-    list.cns = newList.cns || null;
     submitForm(list);
   }
 
