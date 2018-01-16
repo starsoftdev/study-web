@@ -47,6 +47,8 @@ export class TrialsArticle extends Component {
 
     const landingDescription = (trial && trial.landingdescription && trial.landingdescription !== 'seed') ? trial.landingdescription : null;
 
+    const location = trial.landinglocation ? trial.landinglocation : addr;
+
     md.set({
       html: true,
       breaks: true,
@@ -76,7 +78,7 @@ export class TrialsArticle extends Component {
           <div className="info">
             <h4>{trial.name}</h4>
             <address>
-              <i className="icomoon-map-marker" /> {(addr !== null) ? addr : 'N/A'}
+              <i className="icomoon-map-marker" /> {(location !== null) ? location : 'N/A'}
             </address>
             <p className="distance">
               <i className="icomoon-car" /> {(typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
