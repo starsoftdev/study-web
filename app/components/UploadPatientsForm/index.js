@@ -267,7 +267,7 @@ export default class UploadPatientsForm extends Component {
       const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
 
       if (json.length >= 10000) {
-        toastr.error('', 'Error! File contains too many row.');
+        toastr.error('', 'Error! File contains too many rows.');
       } else if (f.size >= 10000000) {
         toastr.error('', 'Error! File exceeds the upload limit.');
       } else {
