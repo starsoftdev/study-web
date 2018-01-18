@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
@@ -79,6 +80,8 @@ export default class UploadPatientsForm extends Component {
     setFileName: PropTypes.func,
     revertBulkUpload: PropTypes.func,
     protocols: PropTypes.array,
+    lastAddedSiteLocation: PropTypes.any,
+    lastAddedProtocolNumber: PropTypes.any,
   };
 
   constructor(props) {
@@ -115,6 +118,8 @@ export default class UploadPatientsForm extends Component {
         gender: null,
         bmi: null,
       },
+      fileParsing: false,
+      needToUpdateProtocol: false,
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
@@ -136,7 +141,21 @@ export default class UploadPatientsForm extends Component {
     const { currentStudy, siteLocation, defaultSourceSet } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
+      this.setState({ needToUpdateProtocol : true });
       fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
+    }
+
+    if ((!newProps.isFetchingProtocols && this.props.isFetchingProtocols) && this.state.needToUpdateProtocol) {
+      if (this.props.lastAddedSiteLocation !== siteLocation) {
+        change('site', this.props.lastAddedSiteLocation);
+        this.setState({ siteLocation: this.props.lastAddedSiteLocation });
+        fetchFilteredProtcols(currentUser.roleForClient.id, this.props.lastAddedSiteLocation);
+      } else {
+        const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
+        change('protocol', newSelectedProtocol.studyId);
+        change('indication', newSelectedProtocol.indicationId);
+        this.setState({ needToUpdateProtocol : false });
+      }
     }
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
@@ -260,31 +279,33 @@ export default class UploadPatientsForm extends Component {
     // console.log('f', f);
     // console.log('name', name);
     reader.onload = function (e) {
-      let data = e.target.result;
-      if (!rABS) data = new Uint8Array(data);
-      const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
-      const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
-
-      if (json.length >= 10000) {
-        toastr.error('', 'Error! File contains too many rows.');
-      } else if (f.size >= 10000000) {
+      if (f.size >= 5000000) {
         toastr.error('', 'Error! File exceeds the upload limit.');
       } else {
-        const patients = scope.clearEmptySheet(json);
-        scope.setState({
-          missingKeys: [],
-          duplicateValidationResult: false,
-          requiredValidationResult: false,
-          fileName: name,
-          patients,
-        }, () => {
-          scope.props.setFileName(name);
-          scope.props.setPatients(patients);
-        });
+        scope.setState({ fileParsing: true });
+        let data = e.target.result;
+        if (!rABS) data = new Uint8Array(data);
+        const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
+        scope.setState({ fileParsing: false });
+        if (json.length >= 5000) {
+          toastr.error('', 'Error! File contains too many rows.');
+        } else {
+          const patients = scope.clearEmptySheet(json);
+          scope.setState({
+            missingKeys: [],
+            duplicateValidationResult: false,
+            requiredValidationResult: false,
+            fileName: name,
+            patients,
+          }, () => {
+            scope.props.setFileName(name);
+            scope.props.setPatients(patients);
+          });
+        }
       }
     };
-
     if (rABS) {
       reader.readAsBinaryString(f);
     } else {
@@ -357,8 +378,11 @@ export default class UploadPatientsForm extends Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    uploadSources.shift();
-    protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
+
+    if (uploadSources.length > 0) {
+      uploadSources.splice(1, 1, uploadSources.splice(0, 1, uploadSources[1])[0]); // swap StudyKIK and StudyKIK Imported
+    }
+    protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
       label: source.type,
       value: source.id,
@@ -449,6 +473,7 @@ export default class UploadPatientsForm extends Component {
               </div>
             </div>
           }
+          {this.state.fileParsing && <div className="field-row main text-center"><LoadingSpinner showOnlyIcon /></div>}
           {(!this.state.showPreview && !isImporting) &&
             <div className="field-row main">
               <strong className="label required">
