@@ -73,7 +73,6 @@
   },
   "dependencies": {
     "assets-webpack-plugin": "^3.5.1",
-    "async-retry": "^1.1.1",
     "babel-core": "6.13.2",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.3.2",
@@ -153,6 +152,7 @@
     "offline-plugin": "3.4.2",
     "optimizely-client-sdk": "^1.5.1",
     "postcss-loader": "0.9.1",
+    "promise-retry": "^1.1.1",
     "pug": "^2.0.0-rc.4",
     "react": "15.4.2",
     "react-addons-shallow-compare": "^15.4.1",

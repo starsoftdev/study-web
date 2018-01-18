@@ -90,6 +90,9 @@ import {
   FETCH_FIVE_9_LIST,
   FETCH_FIVE_9_LIST_SUCCESS,
   FETCH_FIVE_9_LIST_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -230,6 +233,27 @@ export function updateLandingPageSuccess(payload) {
 export function updateLandingPageError(payload) {
   return {
     type: UPDATE_LANDING_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPage(params) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateFacebookLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPageError(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
     payload,
   };
 }

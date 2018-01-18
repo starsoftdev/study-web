@@ -194,7 +194,7 @@ class PatientBoard extends React.Component {
     const submitData = {
       id: currentAppointmentId,
       patientId: currentPatient.id,
-      clientId: currentUser.roleForClient.client_id,
+      clientRoleId: currentUser.roleForClient.id,
       time,
       textReminder: formValues.textReminder || false,
     };
