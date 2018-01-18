@@ -233,8 +233,6 @@ export function* fetchNoteWorker() {
 
     const filterObj = {
       include: [{
-        relation: 'site',
-      }, {
         relation: 'user',
         scope: {
           where: { isArchived: false },
