@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
+import { readStudyPatientMessages, updatePatientSuccess, studyStatsFetched } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import * as Selector from '../selectors';
@@ -43,9 +43,11 @@ class TextSection extends React.Component {
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
+    studyStatsFetched: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
+    studyStats: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -155,6 +157,15 @@ class TextSection extends React.Component {
         this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
           lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
           updatedAt: data.dateCreated,
+        });
+        this.props.studyStatsFetched({
+          ...this.props.studyStats,
+          total: this.props.studyStats.texts + 1,
+          sent: this.props.studyStats.textsSent + 1,
+          received: this.props.studyStats.textsReceived,
+          totalDuration: this.props.studyStats.callsDuration,
+          views: this.props.studyStats.views,
+          countReceived: this.props.studyStats.calls,
         });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
@@ -282,6 +293,7 @@ const mapStateToProps = createStructuredSelector({
   clientCredits: selectClientCredits(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   site: Selector.selectSite(),
+  studyStats: Selector.selectStudyStats(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -292,6 +304,7 @@ const mapDispatchToProps = (dispatch) => ({
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
   updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
+  studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);
