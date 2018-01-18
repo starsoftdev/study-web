@@ -28,9 +28,9 @@ import {
 import { exportPatients, emptyRowRequiredError, addProtocol, validationError, fetchHistory, patientsExported } from './actions';
 
 import UploadPatientsForm from '../../components/UploadPatientsForm/index';
-import NewProtocolForm from '../../components/AddNewProtocolForm/index';
+import AddNewPatientList from '../../components/AddNewPatienList/index';
 import { fields } from '../../components/UploadPatientsForm/validator';
-import { addProtocolFields } from '../../components/AddNewProtocolForm/validator';
+import { addProtocolFields } from '../../components/AddNewPatienList/validator';
 import { normalizePhoneForServer } from '../../common/helper/functions';
 
 const formName = 'UploadPatients.UploadPatientsForm';
@@ -78,6 +78,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       jobId: null,
       uploadProgress: 0,
       revertProgress: 0,
+      lastAddedSiteLocation: null,
+      lastAddedProtocolNumber: null,
     };
 
 
@@ -276,6 +278,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         stripeCustomerId: currentUser.roleForClient.client.stripeCustomerId,
       };
       params.recruitmentPhone = normalizePhoneForServer(data.recruitmentPhone);
+      this.setState({ lastAddedSiteLocation: data.siteLocation });
+      this.setState({ lastAddedProtocolNumber: data.protocolNumber });
       addProtocol(params);
     } else {
       console.log('addProtocol', err, data);
@@ -313,17 +317,19 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             setFileName={this.setFileName}
             switchIsImporting={this.switchIsImporting}
             showProtocolModal={this.switchShowAddProtocolModal}
+            lastAddedSiteLocation={this.state.lastAddedSiteLocation}
+            lastAddedProtocolNumber={this.state.lastAddedProtocolNumber}
           />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
-            <Modal.Title>ADD NEW PROTOCOL</Modal.Title>
+            <Modal.Title>NEW PATIENT LIST</Modal.Title>
             <a className="lightbox-close close" onClick={this.switchShowAddProtocolModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
-            <NewProtocolForm
+            <AddNewPatientList
               onSubmit={this.addProtocol}
               fullSiteLocations={fullSiteLocations}
               indications={indications}
