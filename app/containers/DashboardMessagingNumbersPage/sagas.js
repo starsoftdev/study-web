@@ -48,7 +48,7 @@ export function* fetchMessagingNumbersWatcher() {
 export function* fetchMessagingNumbersWorker(action) {
   try {
     const query = action.query;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
 
     let requestURL = `${API_URL}/twilioNumbers/getMessagingNumbers?limit=${limit}&offset=${offset}`;
@@ -59,8 +59,8 @@ export function* fetchMessagingNumbersWorker(action) {
 
     const response = yield call(request, requestURL);
     let hasMoreItems = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMoreItems = false;
     }
     yield put(fetchMessagingNumbersSuccess(response, hasMoreItems, page));
