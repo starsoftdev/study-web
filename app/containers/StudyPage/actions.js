@@ -148,13 +148,14 @@ export function removePatientsFromTextBlast() {
   };
 }
 
-export function fetchPatients(studyId, text, campaignId, sourceId) {
+export function fetchPatients(studyId, text, campaignId, sourceId, skip) {
   return {
     type: FETCH_PATIENTS,
     studyId,
     text,
     campaignId,
     sourceId,
+    skip,
   };
 }
 
@@ -189,10 +190,13 @@ export function setStudyId(id) {
   };
 }
 
-export function patientsFetched(payload) {
+export function patientsFetched(payload, page, limit, skip) {
   return {
     type: FETCH_PATIENTS_SUCCESS,
     payload,
+    page,
+    limit,
+    skip,
   };
 }
 
