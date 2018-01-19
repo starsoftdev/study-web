@@ -413,7 +413,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 10,000 rows and less then 10MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
