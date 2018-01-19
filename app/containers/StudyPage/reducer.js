@@ -85,6 +85,10 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  paginationOptions: {
+    hasMoreItems: true,
+    page: 1,
+  },
 };
 
 function studyPageReducer(state = initialState, action) {
@@ -109,6 +113,11 @@ function studyPageReducer(state = initialState, action) {
       for (const category of action.payload) {
         totalReferrals += category.patients.length;
       }
+      const hasMoreItems = totalReferrals >= action.limit;
+      
+      if (action.skip !== 0) {
+        totalReferrals += state.stats.totalReferrals;
+      }
 
       return {
         ...state,
@@ -116,24 +125,41 @@ function studyPageReducer(state = initialState, action) {
           const tempCategory = _.find(action.payload, category => (
             category.id === patientCategory.id
           ));
+          let patients = [];
           // try to find the category in the payload
           // if it's not found, clear the patient list
           if (tempCategory) {
             // return the payload as the mapping
+            if (action.skip !== 0) {
+              patients = patientCategory.patients.concat(tempCategory.patients);
+            } else {
+              patients = tempCategory.patients;
+            }
             return {
               ...patientCategory,
-              patients: tempCategory.patients,
+              patients,
             };
           }
+
+          if (action.skip !== 0) {
+            patients = patientCategory.patients;
+          } else {
+            patients = [];
+          }
+
           return {
             ...patientCategory,
-            patients: [],
+            patients,
           };
         }),
         fetchingPatients: false,
         stats: {
           ...state.stats,
           referrals: totalReferrals,
+        },
+        paginationOptions: {
+          hasMoreItems,
+          page: action.page,
         },
       };
     case FETCH_PATIENTS_ERROR:

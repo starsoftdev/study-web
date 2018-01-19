@@ -431,12 +431,12 @@ export function* downloadReferral() {
 export function* fetchPatientsSaga() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
-    yield call(fetchPatients, studyId, text, campaignId, sourceId);
+    const { studyId, text, campaignId, sourceId, skip } = yield take(FETCH_PATIENTS);
+    yield call(fetchPatients, studyId, text, campaignId, sourceId, skip);
   }
 }
 
-function* fetchPatients(studyId, text, campaignId, sourceId) {
+function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
@@ -453,13 +453,26 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
     if (text) {
       queryParams.text = text;
     }
+    const limit = 100;
+    const offset = skip || 0;
+    const filter = {
+      limit,
+    };
+
+    if (offset > 0) {
+      filter.offset = offset;
+    }
+    
+    queryParams.filter = JSON.stringify(filter);
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
+
+    const page = 1 + (offset / 2);
     // populate the patients
-    yield put(patientsFetched(response));
+    yield put(patientsFetched(response, page, limit, offset));
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
