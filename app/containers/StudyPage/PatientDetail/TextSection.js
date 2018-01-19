@@ -158,15 +158,6 @@ class TextSection extends React.Component {
           lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
           updatedAt: data.dateCreated,
         });
-        this.props.studyStatsFetched({
-          ...this.props.studyStats,
-          total: this.props.studyStats.texts + 1,
-          sent: this.props.studyStats.textsSent + 1,
-          received: this.props.studyStats.textsReceived,
-          totalDuration: this.props.studyStats.callsDuration,
-          views: this.props.studyStats.views,
-          countReceived: this.props.studyStats.calls,
-        });
         this.setState({ enteredCharactersLength: 0 }, () => {
           textarea.value = '';
         });
