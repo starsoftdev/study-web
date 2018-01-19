@@ -13,6 +13,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -37,7 +38,7 @@ import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../contai
 import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/StudyPage/selectors';
 import PatientCategory from './PatientCategory';
-
+import { selectValues } from '../../common/selectors/form.selector';
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)
@@ -75,6 +76,9 @@ class PatientBoard extends React.Component {
     ePMS: React.PropTypes.bool,
     fetchingPatients: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
+    loadMore: React.PropTypes.func,
+    paginationOptions: React.PropTypes.object,
+    studyPatientsFilter: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -93,6 +97,7 @@ class PatientBoard extends React.Component {
     this.resetFormsValues = this.resetFormsValues.bind(this);
     this.onPatientScheduleSubmit = this.onPatientScheduleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
+    this.loadItems = this.loadItems.bind(this);
   }
 
   componentDidMount() {
@@ -241,11 +246,18 @@ class PatientBoard extends React.Component {
 
   handleScroll(event) {
     let scrollTop;
+    let scrollBottom;
     if (event.target.scrollingElement) {
       scrollTop = event.target.scrollingElement.scrollTop;
+      scrollBottom = scrollTop + window.innerHeight;
     } else {
       // for firefox compatibility
       scrollTop = event.pageY;
+      scrollBottom = scrollTop + window.innerHeight;
+    }
+    if (scrollBottom > event.target.scrollingElement.scrollHeight) {
+      console.log('reaches bottom');
+      // this.loadItems();
     }
     this.setState({
       stick: scrollTop >= 654,
@@ -264,25 +276,40 @@ class PatientBoard extends React.Component {
     }
   }
 
+  loadItems() {
+    if (this.props.paginationOptions.hasMoreItems && !this.props.fetchingPatients) {
+      this.props.loadMore(this.props.studyPatientsFilter, true);
+    }
+  }
+
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
-          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
-          <nav className="nav-status">
-            <ul className={classNames('list-inline', { stick: this.state.stick })}>
-              {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
-              ))}
-            </ul>
-          </nav>
-          <PatientDetailModal
-            onClose={this.closePatientModal}
-            params={params}
-            ePMS={ePMS}
-          />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
+          <InfiniteScroll
+            className="tbody"
+            pageStart={0}
+            loadMore={this.loadItems}
+            initialLoad={false}
+            hasMore={paginationOptions.hasMoreItems}
+            loader={null}
+          >
+            {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
+            <nav className="nav-status">
+              <ul className={classNames('list-inline', { stick: this.state.stick })}>
+                {patientCategories.map(patientCategory => (
+                  <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+                ))}
+              </ul>
+            </nav>
+            <PatientDetailModal
+              onClose={this.closePatientModal}
+              params={params}
+              ePMS={ePMS}
+            />
+            <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
+          </InfiniteScroll>
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -303,6 +330,7 @@ const mapStateToProps = createStructuredSelector({
   studyId: Selector.selectStudyId(),
   selectedDate: Selector.selectSelectedDate(),
   currentUser: selectCurrentUser(),
+  studyPatientsFilter: selectValues('filterStudyPatients'),
 });
 
 const mapDispatchToProps = (dispatch) => (

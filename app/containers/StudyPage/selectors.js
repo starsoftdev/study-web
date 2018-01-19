@@ -128,6 +128,11 @@ export const selectFetchingStudy = () => createSelector(
   (subState) => subState.fetchingStudy
 );
 
+export const selectPaginationOptions = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.paginationOptions
+);
+
 export const selectFetchingPatients = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.fetchingPatients
