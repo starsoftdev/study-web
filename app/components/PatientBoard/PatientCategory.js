@@ -160,7 +160,8 @@ class PatientCategory extends React.Component {
       };
 
       // sort the patients into the categories
-      const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
+      const sorted = category.patients;
+      // _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
 
       return (
         <div className="slide">

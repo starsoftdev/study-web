@@ -58,6 +58,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientClosedStudyPage: React.PropTypes.func,
     studyStatsFetched: React.PropTypes.func,
     studyViewsStatFetched: React.PropTypes.func,
+    paginationOptions: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -214,13 +215,20 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
-  handleSubmit(searchFilter) {
-    const { params: { id } } = this.props;
-    this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId);
+  handleSubmit(searchFilter, loadMore) {
+    const { params: { id }, paginationOptions } = this.props;
+    let skip = 0;
+    if (loadMore) {
+      skip = paginationOptions.page * 100;
+    }
+    // console.log('skip', skip, paginationOptions.page);
+    if (paginationOptions.hasMoreItems) {
+      this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId, skip);
+    }    
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params, paginationOptions } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -289,6 +297,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             site={site}
             params={params}
             ePMS={ePMS}
+            loadMore={this.handleSubmit}
+            paginationOptions={paginationOptions}
           />
         </section>
       </div>
@@ -311,11 +321,12 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
+  paginationOptions: Selector.selectPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
+    fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
