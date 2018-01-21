@@ -187,10 +187,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         options.fileName = fileName;
       }
 
-      if (options.source) {
-        options.source = options.source.value;
-      }
-
       if (patients.length > 0) {
         _.forEach(patients, (patient) => {
           const normalizedPatient = {};
@@ -300,6 +296,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { indications, fullSiteLocations, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
+    const initialValues = { source: 2 };
+
     return (
       <div className="container-fluid">
         <section className="patient-upload">
@@ -319,6 +317,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             showProtocolModal={this.switchShowAddProtocolModal}
             lastAddedSiteLocation={this.state.lastAddedSiteLocation}
             lastAddedProtocolNumber={this.state.lastAddedProtocolNumber}
+            initialValues={initialValues}
           />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
