@@ -138,7 +138,7 @@ export default class UploadPatientsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
-    const { currentStudy, siteLocation, defaultSourceSet } = this.state;
+    const { currentStudy, siteLocation } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.setState({ needToUpdateProtocol : true });
@@ -166,16 +166,6 @@ export default class UploadPatientsForm extends Component {
           }
         });
       }, 2000);
-    }
-
-    if (newProps.sources && !defaultSourceSet) {
-      const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
-      const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
-
-      if (defaultSourceValue.value) {
-        change('source', defaultSourceValue);
-        this.setState({ defaultSourceSet: true });
-      }
     }
   }
 
@@ -384,11 +374,9 @@ export default class UploadPatientsForm extends Component {
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
+      label: (source.type === 'StudyKIK (Imported)' ? 'Database' : source.type), // rename StudyKIK Imported
       value: source.id,
     }));
-    const defaultSource = _.find(sourceOptions, { label: 'StudyKIK (Imported)' });
-    const defaultSourceValue = { value: (defaultSource ? defaultSource.value : null) };
     let disabled = false;
 
     if (!duplicateValidationResult || !requiredValidationResult) {
@@ -547,10 +535,7 @@ export default class UploadPatientsForm extends Component {
               <Field
                 name="source"
                 component={ReactSelect}
-                className="field"
-                placeholder="Select Source"
-                disabled
-                input={defaultSourceValue}
+                className="field"selectedSourceValue
                 options={sourceOptions}
               />
             </div>
