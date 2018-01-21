@@ -58,6 +58,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentCategoryStudyId: false,
       currentDnqStudyId: false,
       showPQSModal: false,
+      defaultSource: 1,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -77,6 +78,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const messaging = this.props.location.query.messaging || null;
 
     const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsList(filters);
@@ -118,7 +120,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
-
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsTotals(filters);
