@@ -81,6 +81,15 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }, 600000);
 
     this.setState({ timerId });
+
+    const OneSignal = window.OneSignal || [];
+    OneSignal.push(['init', {
+      appId: process.env.ONE_SIGNAL_APP_ID,
+      autoRegister: true,
+      notifyButton: {
+        enable: true, /* Set to false to hide */
+      },
+    }]);
   }
 
   componentDidMount() {
