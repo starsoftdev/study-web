@@ -82,9 +82,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     this.setState({ timerId });
 
+    console.log(4, ONE_SIGNAL_APP_ID);
+    console.log(44, process.env.ONE_SIGNAL_APP_ID);
+
     const OneSignal = window.OneSignal || [];
     OneSignal.push(['init', {
-      appId: process.env.ONE_SIGNAL_APP_ID,
+      appId: ONE_SIGNAL_APP_ID,
       autoRegister: true,
       notifyButton: {
         enable: true, /* Set to false to hide */
