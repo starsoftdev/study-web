@@ -58,12 +58,13 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   onPhoneBlur(event) {
+    event.preventDefault();
     console.log(event)
-    const { change } = this.props;
+    const { blur } = this.props;
     console.log(event.target.value)
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     console.log(formattedPhoneNumber)
-    change('phone', formattedPhoneNumber);
+    blur('phone', formattedPhoneNumber);
   }
 
   setVisible(el) {
