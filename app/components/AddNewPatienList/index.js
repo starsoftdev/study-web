@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, blur } from 'redux-form';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSavedSite, selectTimezone } from '../../containers/App/selectors';
@@ -70,11 +72,25 @@ class AddNewPatientList extends Component { // eslint-disable-line react/prefer-
       name: row.name,
     }));
 
+    const tooltip = (
+      <Tooltip
+        id={'ms-tooltip'}
+        className="tooltop-inner"
+      >
+        {'Example: Acne Patient List'}
+      </Tooltip>
+    );
+
     return (
       <form className="form-lightbox form-add-protocol" onSubmit={this.onSubmitForm}>
         <div className="add-protocol form-fields">
           <div className="field-row">
-            <strong className="label required"><label>List Name</label></strong>
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+            >
+              <strong className="label required"><label>List Name</label></strong>
+            </OverlayTrigger>
             <Field
               name="protocolNumber"
               component={Input}
