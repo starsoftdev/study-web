@@ -101,6 +101,18 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }
     if (LOG_ROCKET) {
       LogRocket.init(LOG_ROCKET);
+      if (MIXPANEL_TOKEN) {
+        LogRocket.getSessionURL((sessionURL) => {
+          mixpanel.track('LogRocket', { sessionURL });
+        });
+      }
+      if (SENTRY_DSN) {
+        Raven.setDataCallback((data) => {
+          // eslint-disable-next-line no-param-reassign
+          data.extra.sessionURL = LogRocket.sessionURL;
+          return data;
+        });
+      }
     }
   }
 
