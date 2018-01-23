@@ -354,7 +354,7 @@ export default class UploadPatientsForm extends Component {
       uploadResult,
     } = this.props;
     const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
-    const uploadSources = _.clone(sources);
+    let uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -370,7 +370,9 @@ export default class UploadPatientsForm extends Component {
     }));
 
     if (uploadSources.length > 0) {
-      uploadSources.splice(1, 1, uploadSources.splice(0, 1, uploadSources[1])[0]); // swap StudyKIK and StudyKIK Imported
+      uploadSources = _.sortBy(uploadSources, (item) => {
+        return (item.type === 'StudyKIK (Imported)' ? -1 : item.orderNumber);
+      });
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
@@ -535,6 +537,7 @@ export default class UploadPatientsForm extends Component {
               <Field
                 name="source"
                 component={ReactSelect}
+                placeholder="Select Source"
                 className="field"selectedSourceValue
                 options={sourceOptions}
               />
