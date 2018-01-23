@@ -16,7 +16,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
+import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
@@ -33,7 +33,6 @@ const mapStateToProps = createStructuredSelector({
   isFetchingProtocols: selectIsFetchingProtocols(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
-  sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
   formSyncErrors: selectSyncErrors(formName),
 });
