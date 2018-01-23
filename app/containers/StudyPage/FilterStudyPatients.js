@@ -162,7 +162,7 @@ class FilterStudyPatientsForm extends Component {
               component={ReactSelect}
               className="field"
               options={sourceOptions}
-              disabled={submitting || loading || !this.state.campaign}
+              disabled={submitting || loading}
               placeholder="Select Source"
               onChange={event => this.searchPatient(event, 'source')}
             />
