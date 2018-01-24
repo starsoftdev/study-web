@@ -38,7 +38,6 @@ export const SUBMIT_TEXT_BLAST                  = 'PatientDatabasePage/SUBMIT_TE
 
 export const SET_ACTIVE_SORT                    = 'PatientDatabasePage/SET_ACTIVE_SORT';
 
-export const SORT_PATIENTS_SUCCESS              = 'PatientDatabasePage/SORT_PATIENTS_SUCCESS';
 export const IMPORT_PATIENTS                    = 'PatientDatabasePage/IMPORT_PATIENTS';
 export const SUBMIT_ADD_PATIENT                 = 'PatientDatabasePage/SUBMIT_ADD_PATIENT';
 export const SUBMIT_ADD_PATIENT_SUCCESS         = 'PatientDatabasePage/SUBMIT_ADD_PATIENT_SUCCESS';
