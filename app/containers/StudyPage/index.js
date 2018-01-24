@@ -79,7 +79,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id);
+    fetchStudy(params.id, 1);
     fetchPatientCategories(params.id);
     fetchSources();
 
@@ -265,6 +265,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.indication && study.indication.name) {
       studyName = study.indication.name;
     }
+    const initialValues = { source: 1 };
 
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
@@ -289,6 +290,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
+            initialValues={initialValues}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -329,7 +331,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
-    fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
+    fetchStudy: (studyId, sourceId) => dispatch(fetchStudy(studyId, sourceId)),
     fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
