@@ -16,7 +16,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
+import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
@@ -33,7 +33,6 @@ const mapStateToProps = createStructuredSelector({
   isFetchingProtocols: selectIsFetchingProtocols(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
-  sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
   formSyncErrors: selectSyncErrors(formName),
 });
@@ -138,7 +137,7 @@ export default class UploadPatientsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
-    const { currentStudy, siteLocation, defaultSourceSet } = this.state;
+    const { currentStudy, siteLocation } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.setState({ needToUpdateProtocol : true });
@@ -166,16 +165,6 @@ export default class UploadPatientsForm extends Component {
           }
         });
       }, 2000);
-    }
-
-    if (newProps.sources && !defaultSourceSet) {
-      const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
-      const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
-
-      if (defaultSourceValue.value) {
-        change('source', defaultSourceValue);
-        this.setState({ defaultSourceSet: true });
-      }
     }
   }
 
@@ -364,7 +353,7 @@ export default class UploadPatientsForm extends Component {
       uploadResult,
     } = this.props;
     const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
-    const uploadSources = _.clone(sources);
+    let uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -380,15 +369,15 @@ export default class UploadPatientsForm extends Component {
     }));
 
     if (uploadSources.length > 0) {
-      uploadSources.splice(1, 1, uploadSources.splice(0, 1, uploadSources[1])[0]); // swap StudyKIK and StudyKIK Imported
+      uploadSources = _.sortBy(uploadSources, (item) => {
+        return (item.type === 'StudyKIK (Imported)' ? -1 : item.orderNumber);
+      });
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
+      label: (source.type === 'StudyKIK (Imported)' ? 'Database' : source.type), // rename StudyKIK Imported
       value: source.id,
     }));
-    const defaultSource = _.find(sourceOptions, { label: 'StudyKIK (Imported)' });
-    const defaultSourceValue = { value: (defaultSource ? defaultSource.value : null) };
     let disabled = false;
 
     if (!duplicateValidationResult || !requiredValidationResult) {
@@ -413,7 +402,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 10,000 rows and less then 10MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
@@ -547,10 +536,8 @@ export default class UploadPatientsForm extends Component {
               <Field
                 name="source"
                 component={ReactSelect}
-                className="field"
                 placeholder="Select Source"
-                disabled
-                input={defaultSourceValue}
+                className="field"selectedSourceValue
                 options={sourceOptions}
               />
             </div>
