@@ -220,7 +220,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: [],
           total: null,
-          totalUnsubscribed: state.patients.totalUnsubscribed,
+          totalUnsubscribed: null,
           fetching: false,
           error: null,
         },
