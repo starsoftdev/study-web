@@ -56,7 +56,7 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
     const { fetchSponsors } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchSponsors(query, limit, offset);
   }
 
@@ -64,8 +64,8 @@ export class DashboardSponsorAdminPage extends React.Component { // eslint-disab
     const { fetchSponsors, sponsors } = this.props;
     if (!sponsors.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchSponsors(query, limit, offset);
     }
   }

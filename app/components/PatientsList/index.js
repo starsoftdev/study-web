@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { Modal } from 'react-bootstrap';
-import _, { map, omit } from 'lodash';
+import { map, omit } from 'lodash';
 import moment from 'moment-timezone';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -32,7 +32,6 @@ import {
   removePatientsFromTextBlast,
   removePatientFromTextBlast,
   setActiveSort,
-  sortPatientsSuccess,
   updateSelectAll,
 } from '../../containers/PatientDatabasePage/actions';
 import { selectProtocols, selectCurrentUser } from '../../containers/App/selectors';
@@ -61,7 +60,6 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     paginationOptions: PropTypes.object,
     searchPatients: PropTypes.func,
     setActiveSort: PropTypes.func,
-    sortPatientsSuccess: PropTypes.func,
     protocols: PropTypes.object,
     currentUser: PropTypes.object,
     formValues: PropTypes.object,
@@ -158,38 +156,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
   }
 
   sortBy(ev) {
+    const { setActiveSort, searchPatients, paginationOptions } = this.props;
     ev.preventDefault();
-    let sort = ev.currentTarget.dataset.sort;
+    const sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
-    } else if (ev.currentTarget.className && ev.currentTarget.className.indexOf('down') !== -1) {
-      direction = null;
-      sort = null;
     }
 
-    this.props.setActiveSort(sort, direction);
-
-    if (sort === 'status') {
-      const dir = ((direction === 'down') ? 'desc' : 'asc');
-      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
-        return o.studyPatientCategory.patientCategory.name;
-      }], [dir]);
-      this.props.sortPatientsSuccess(sortedPatients);
-    } else if (sort === 'indication') {
-      const dir = ((direction === 'down') ? 'desc' : 'asc');
-      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
-        return _.map(o.indications, i => i.name).join(' ');
-      }], [dir]);
-      this.props.sortPatientsSuccess(sortedPatients);
-    } else {
-      const dir = ((direction === 'down') ? 'desc' : 'asc');
-      const sortedPatients = _.orderBy(this.props.patients.details, [function (o) {
-        return o[sort];
-      }], [dir]);
-      this.props.sortPatientsSuccess(sortedPatients);
-    }
+    setActiveSort(sort, direction);
+    searchPatients({ clearPatients: true, ...paginationOptions.prevSearchFilter, sort, direction }, true);
   }
 
   renderPatientsTable() {
@@ -378,7 +355,6 @@ function mapDispatchToProps(dispatch) {
     disableChat: (payload) => dispatch(disableChat(payload)),
     sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
-    sortPatientsSuccess: (patients) => dispatch(sortPatientsSuccess(patients)),
     updateSelectAll: (val) => dispatch(updateSelectAll(val)),
   };
 }
