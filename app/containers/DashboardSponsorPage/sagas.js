@@ -43,7 +43,7 @@ export function* fetchSponsorsWatcher() {
 export function* fetchSponsorsWorker(action) {
   try {
     const query = action.query;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     let requestURL = `${API_URL}/sponsors/fetchAllSponsors?limit=${limit}&offset=${offset}`;
 
@@ -56,9 +56,9 @@ export function* fetchSponsorsWorker(action) {
     };
     const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
-    const page = (offset / 10) + 1;
+    const page = (offset / 50) + 1;
 
-    if (response.length < 10) {
+    if (response.length < 50) {
       hasMoreItems = false;
     }
     yield put(fetchSponsorsSuccess(response, hasMoreItems, page));
