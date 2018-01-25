@@ -13,9 +13,10 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
+import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
 import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
@@ -32,7 +33,6 @@ const mapStateToProps = createStructuredSelector({
   isFetchingProtocols: selectIsFetchingProtocols(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
-  sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
   formSyncErrors: selectSyncErrors(formName),
 });
@@ -79,6 +79,8 @@ export default class UploadPatientsForm extends Component {
     setFileName: PropTypes.func,
     revertBulkUpload: PropTypes.func,
     protocols: PropTypes.array,
+    lastAddedSiteLocation: PropTypes.any,
+    lastAddedProtocolNumber: PropTypes.any,
   };
 
   constructor(props) {
@@ -115,6 +117,8 @@ export default class UploadPatientsForm extends Component {
         gender: null,
         bmi: null,
       },
+      fileParsing: false,
+      needToUpdateProtocol: false,
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
@@ -133,10 +137,24 @@ export default class UploadPatientsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
-    const { currentStudy, siteLocation, defaultSourceSet } = this.state;
+    const { currentStudy, siteLocation } = this.state;
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
+      this.setState({ needToUpdateProtocol : true });
       fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
+    }
+
+    if ((!newProps.isFetchingProtocols && this.props.isFetchingProtocols) && this.state.needToUpdateProtocol) {
+      if (this.props.lastAddedSiteLocation !== siteLocation) {
+        change('site', this.props.lastAddedSiteLocation);
+        this.setState({ siteLocation: this.props.lastAddedSiteLocation });
+        fetchFilteredProtcols(currentUser.roleForClient.id, this.props.lastAddedSiteLocation);
+      } else {
+        const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
+        change('protocol', newSelectedProtocol.studyId);
+        change('indication', newSelectedProtocol.indicationId);
+        this.setState({ needToUpdateProtocol : false });
+      }
     }
 
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
@@ -147,16 +165,6 @@ export default class UploadPatientsForm extends Component {
           }
         });
       }, 2000);
-    }
-
-    if (newProps.sources && !defaultSourceSet) {
-      const defaultSource = _.find(newProps.sources, { type: 'StudyKIK (Imported)' });
-      const defaultSourceValue = { value: (defaultSource ? defaultSource.id : null) };
-
-      if (defaultSourceValue.value) {
-        change('source', defaultSourceValue);
-        this.setState({ defaultSourceSet: true });
-      }
     }
   }
 
@@ -260,31 +268,33 @@ export default class UploadPatientsForm extends Component {
     // console.log('f', f);
     // console.log('name', name);
     reader.onload = function (e) {
-      let data = e.target.result;
-      if (!rABS) data = new Uint8Array(data);
-      const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
-      const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
-
-      if (json.length >= 10000) {
-        toastr.error('', 'Error! File contains too many rows.');
-      } else if (f.size >= 10000000) {
+      if (f.size >= 5000000) {
         toastr.error('', 'Error! File exceeds the upload limit.');
       } else {
-        const patients = scope.clearEmptySheet(json);
-        scope.setState({
-          missingKeys: [],
-          duplicateValidationResult: false,
-          requiredValidationResult: false,
-          fileName: name,
-          patients,
-        }, () => {
-          scope.props.setFileName(name);
-          scope.props.setPatients(patients);
-        });
+        scope.setState({ fileParsing: true });
+        let data = e.target.result;
+        if (!rABS) data = new Uint8Array(data);
+        const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
+        scope.setState({ fileParsing: false });
+        if (json.length >= 5000) {
+          toastr.error('', 'Error! File contains too many rows.');
+        } else {
+          const patients = scope.clearEmptySheet(json);
+          scope.setState({
+            missingKeys: [],
+            duplicateValidationResult: false,
+            requiredValidationResult: false,
+            fileName: name,
+            patients,
+          }, () => {
+            scope.props.setFileName(name);
+            scope.props.setPatients(patients);
+          });
+        }
       }
     };
-
     if (rABS) {
       reader.readAsBinaryString(f);
     } else {
@@ -343,7 +353,7 @@ export default class UploadPatientsForm extends Component {
       uploadResult,
     } = this.props;
     const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
-    const uploadSources = _.clone(sources);
+    let uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -357,14 +367,17 @@ export default class UploadPatientsForm extends Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    uploadSources.shift();
-    protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
+
+    if (uploadSources.length > 0) {
+      uploadSources = _.sortBy(uploadSources, (item) => {
+        return (item.type === 'StudyKIK (Imported)' ? -1 : item.orderNumber);
+      });
+    }
+    protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
+      label: (source.type === 'StudyKIK (Imported)' ? 'Database' : source.type), // rename StudyKIK Imported
       value: source.id,
     }));
-    const defaultSource = _.find(sourceOptions, { label: 'StudyKIK (Imported)' });
-    const defaultSourceValue = { value: (defaultSource ? defaultSource.value : null) };
     let disabled = false;
 
     if (!duplicateValidationResult || !requiredValidationResult) {
@@ -389,7 +402,7 @@ export default class UploadPatientsForm extends Component {
             <div className="instructions">
               <span className="head">Upload Instructions</span>
               <span className="body">
-                <span className="first-row">Please upload an Excel file up to 10,000 rows and less then 10MB in size.</span>
+                <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
                   <span className="download-template" onClick={this.downloadExample}>Download Template</span>
@@ -449,6 +462,7 @@ export default class UploadPatientsForm extends Component {
               </div>
             </div>
           }
+          {this.state.fileParsing && <div className="field-row main text-center"><LoadingSpinner showOnlyIcon /></div>}
           {(!this.state.showPreview && !isImporting) &&
             <div className="field-row main">
               <strong className="label required">
@@ -522,10 +536,8 @@ export default class UploadPatientsForm extends Component {
               <Field
                 name="source"
                 component={ReactSelect}
-                className="field"
                 placeholder="Select Source"
-                disabled
-                input={defaultSourceValue}
+                className="field"selectedSourceValue
                 options={sourceOptions}
               />
             </div>

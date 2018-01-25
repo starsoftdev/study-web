@@ -1,5 +1,6 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
+import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { reset } from 'redux-form';
@@ -135,20 +136,23 @@ export function* addProtocolWatcher() {
   }
 }
 
-export function* fetchFilteredProtocolsWatcher() {
-  while (true) {
-    const { clientRoleId, siteId } = yield take(FETCH_FILTERED_PROTOCOLS);
 
-    try {
-      const params = {
-        clientRoleId,
-      };
-      const requestURL = `${API_URL}/sites/${siteId}/protocols`;
-      const response = yield call(request, requestURL, params);
-      yield put(filteredProtcolsFetched(response));
-    } catch (err) {
-      yield put(filteredProtcolsFetchingError(err));
-      console.error(err);
-    }
+export function* fetchFilteredProtocolsWatcher() {
+  yield* takeLatest(FETCH_FILTERED_PROTOCOLS, fetchFilteredProtocolsWorker);
+}
+
+export function* fetchFilteredProtocolsWorker(action) {
+  const { clientRoleId, siteId } = action;
+
+  try {
+    const params = {
+      clientRoleId,
+    };
+    const requestURL = `${API_URL}/sites/${siteId}/protocols`;
+    const response = yield call(request, requestURL, params);
+    yield put(filteredProtcolsFetched(response));
+  } catch (err) {
+    yield put(filteredProtcolsFetchingError(err));
+    console.error(err);
   }
 }
