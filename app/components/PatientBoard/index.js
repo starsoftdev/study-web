@@ -257,7 +257,7 @@ class PatientBoard extends React.Component {
     }
     if (scrollBottom > event.target.scrollingElement.scrollHeight) {
       console.log('reaches bottom');
-      // this.loadItems();
+      this.loadItems();
     }
     this.setState({
       stick: scrollTop >= 654,
@@ -287,29 +287,20 @@ class PatientBoard extends React.Component {
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
-          <InfiniteScroll
-            className="tbody"
-            pageStart={0}
-            loadMore={this.loadItems}
-            initialLoad={false}
-            hasMore={paginationOptions.hasMoreItems}
-            loader={null}
-          >
-            {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
-            <nav className="nav-status">
-              <ul className={classNames('list-inline', { stick: this.state.stick })}>
-                {patientCategories.map(patientCategory => (
-                  <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
-                ))}
-              </ul>
-            </nav>
-            <PatientDetailModal
-              onClose={this.closePatientModal}
-              params={params}
-              ePMS={ePMS}
-            />
-            <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
-          </InfiniteScroll>
+          {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
+          <nav className="nav-status">
+            <ul className={classNames('list-inline', { stick: this.state.stick })}>
+              {patientCategories.map(patientCategory => (
+                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+              ))}
+            </ul>
+          </nav>
+          <PatientDetailModal
+            onClose={this.closePatientModal}
+            params={params}
+            ePMS={ePMS}
+          />
+          <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
