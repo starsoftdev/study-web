@@ -12,6 +12,7 @@ import {
   EXPORT_PATIENTS_SUCCESS,
   FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
+  FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_DETAILS_SUCCESS,
@@ -93,6 +94,7 @@ const initialState = {
 
 function studyPageReducer(state = initialState, action) {
   let totalReferrals = 0;
+  let hasMoreItems;
 
   switch (action.type) {
     case FETCH_CAMPAIGNS_SUCCESS:
@@ -109,16 +111,19 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         fetchingStudy: true,
       };
+    case FETCH_PATIENTS:
+      return {
+        ...state,
+        fetchingPatients: true,
+      };
     case FETCH_PATIENTS_SUCCESS:
       for (const category of action.payload) {
         totalReferrals += category.patients.length;
       }
-      const hasMoreItems = totalReferrals >= action.limit;
-      
+      hasMoreItems = totalReferrals >= action.limit;
       if (action.skip !== 0) {
         totalReferrals += state.stats.totalReferrals;
       }
-
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
