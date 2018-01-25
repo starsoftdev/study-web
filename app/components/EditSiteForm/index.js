@@ -109,7 +109,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     let postalCode = '';
     let streetNmber = '';
     let route = '';
-    if (e.location) {
+    console.log(e);
+    if (e && e.location) {
       console.log('location', e.location);
       getTimezone(e.location.lat, e.location.lng);
 
@@ -230,6 +231,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 component={FormGeosuggest}
                 refObj={(el) => { this.geoSuggest = el; }}
                 onSuggestSelect={this.onSuggestSelect}
+                onChange={(e) => { console.log(e); }}
                 initialValue={isEdit ? initialValues.address : ''}
                 placeholder=""
               />
