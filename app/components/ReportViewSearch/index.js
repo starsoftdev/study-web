@@ -170,14 +170,10 @@ export class ReportViewSearch extends React.Component {
 
   render() {
     const { selectedTime, predefined } = this.state;
-    const testOptions = [
+    const defaultSourceOptions = [
       {
-        label: 'test1',
-        value: 'test1',
-      },
-      {
-        label: 'test2',
-        value: 'test2',
+        label: 'StudyKIK',
+        value: 1,
       },
     ];
 
@@ -245,7 +241,8 @@ export class ReportViewSearch extends React.Component {
               name="source"
               component={ReactSelect}
               placeholder="Select Source"
-              options={testOptions}
+              options={defaultSourceOptions}
+              selectedValue={1}
               disabled
             />
           </div>

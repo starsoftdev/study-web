@@ -32,7 +32,6 @@ import {
   RESET_TEXT_BLAST,
   SUBMIT_TEXT_BLAST,
   SET_ACTIVE_SORT,
-  SORT_PATIENTS_SUCCESS,
   DOWNLOAD_COMPLETE,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
@@ -313,13 +312,6 @@ export function setActiveSort(sort, direction) {
     type: SET_ACTIVE_SORT,
     sort,
     direction,
-  };
-}
-
-export function sortPatientsSuccess(patients) {
-  return {
-    type: SORT_PATIENTS_SUCCESS,
-    patients,
   };
 }
 

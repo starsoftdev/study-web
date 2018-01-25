@@ -42,7 +42,7 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
     const { fetchAdmins } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchAdmins(query, limit, offset);
   }
 
@@ -50,8 +50,8 @@ export class DashboardManageUsers extends React.Component { // eslint-disable-li
     const { fetchAdmins, admins } = this.props;
     if (!admins.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchAdmins(query, limit, offset);
     }
   }
