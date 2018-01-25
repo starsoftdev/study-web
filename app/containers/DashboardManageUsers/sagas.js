@@ -45,7 +45,7 @@ export function* fetchAdminsWatcher() {
 export function* fetchAdminsWorker(action) {
   try {
     const query = action.query;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const skip = action.skip || 0;
     let requestURL = `${API_URL}/users/fetchAllDashboardAdmins?limit=${limit}&offset=${skip}`;
 
@@ -59,8 +59,8 @@ export function* fetchAdminsWorker(action) {
     const response = yield call(request, requestURL, params);
 
     let hasMoreItems = true;
-    const page = (skip / 10) + 1;
-    if (response.length < 10) {
+    const page = (skip / 50) + 1;
+    if (response.length < 50) {
       hasMoreItems = false;
     }
     yield put(fetchAdminsSuccess(response, hasMoreItems, page));

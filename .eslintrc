@@ -30,7 +30,8 @@
     "OPTIMIZELY_PROJECT_ID": true,
     "LOG_ROCKET": true,
     "FORCE_LOGOUT": true,
-    "IDLE_TIMEOUT": true
+    "IDLE_TIMEOUT": true,
+    "ONE_SIGNAL_APP_ID": true
   },
   "rules": {
     "arrow-body-style": 0,

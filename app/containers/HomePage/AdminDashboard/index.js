@@ -350,6 +350,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
+    const { change } = this.props;
     const sources = _.cloneDeep(this.props.sources);
     const defaultSource = _.find(sources, (s) => { return s.type === 'StudyKIK'; });
     let filters = _.cloneDeep(this.props.filtersFormValues);
@@ -382,6 +383,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
     if (!filters.source) {
       filters.source = defaultSource.id;
+      change('dashboardFilters', 'source', defaultSource.id);
     }
 
     if (isEmpty) {
