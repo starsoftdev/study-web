@@ -44,7 +44,7 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
     const { fetchCro } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchCro(query, limit, offset);
   }
 
@@ -52,8 +52,8 @@ export class DashboardCROPage extends React.Component { // eslint-disable-line r
     const { fetchCro, cro } = this.props;
     if (!cro.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchCro(query, limit, offset);
     }
   }

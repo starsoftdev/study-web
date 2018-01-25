@@ -10,8 +10,8 @@ NODE_ENV=development
 API_URL=http://localhost:3000/api/v1
 SOCKET_URL=http://localhost:3000
 HTTP=true
-GOOGLE_RECAPTCHA_SITE_KEY=(your Google Recaptcha Site Key)
-DASHBOARD_TIMEZONE=America/Los_Angeles
+GOOGLE_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+DASHBOARD_TIMEZONE=America/New_York
 FORCE_LOGOUT=(should be 10 hours in milliseconds)
 IDLE_TIMEOUT=(should be 2 hours in milliseconds)
 ```
@@ -124,9 +124,12 @@ In addition, it is best practice if the absolute imports are before the relative
 - [dotenv](https://github.com/bkeepers/dotenv) for loading environment variables from a .env file
 - [ESLint](http://eslint.org/) for linting
 - [Express](http://expressjs.com/) for web server
+- [Google APIs](https://console.developers.google.com) for Google APIs
+- [moment](https://momentjs.com/) for parsing and displaying timezones
 - [React](https://github.com/facebook/react) for all the goodness.
 - [Redux](https://github.com/gaearon/redux) for the _Atomic Flux_ architecture.
 - [React-Router](https://github.com/rackt/react-router) for routing goodness.
 - [React-Transform](https://github.com/gaearon/babel-plugin-react-transform) for development fun (and productivity).
 - [Socket.io](http://socket.io/) for real time communication features
+- [Sentry](https://sentry.io) for production crash logging
 - [Webpack](https://github.com/webpack/webpack) for asset management and production builds.
