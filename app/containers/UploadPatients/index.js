@@ -187,10 +187,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
         options.fileName = fileName;
       }
 
-      if (options.source) {
-        options.source = options.source.value;
-      }
-
       if (patients.length > 0) {
         _.forEach(patients, (patient) => {
           const normalizedPatient = {};
@@ -300,13 +296,19 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { indications, fullSiteLocations, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
+    const defaultSource = _.find(this.props.sources, (item) => (item.type === 'StudyKIK (Imported)'));
+    const initialValues = {};
+    if (defaultSource) {
+      initialValues.source = defaultSource.id;
+    }
+
     return (
       <div className="container-fluid">
         <section className="patient-upload">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
 
-          <UploadPatientsForm
+          {(this.props.sources.length > 0) && <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             revertProgress={revertProgress}
             uploadProgress={uploadProgress}
@@ -319,7 +321,9 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             showProtocolModal={this.switchShowAddProtocolModal}
             lastAddedSiteLocation={this.state.lastAddedSiteLocation}
             lastAddedProtocolNumber={this.state.lastAddedProtocolNumber}
-          />
+            initialValues={initialValues}
+            sources={this.props.sources}
+          />}
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
