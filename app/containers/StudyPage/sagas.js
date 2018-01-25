@@ -453,7 +453,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
     if (text) {
       queryParams.text = text;
     }
-    const limit = 100;
+    const limit = 10;
     const offset = skip || 0;
     const filter = {
       limit,
@@ -462,7 +462,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
     if (offset > 0) {
       filter.offset = offset;
     }
-    
+
     queryParams.filter = JSON.stringify(filter);
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
@@ -470,7 +470,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
       method: 'GET',
     });
 
-    const page = 1 + (offset / 2);
+    const page = 1 + (offset / 10);
     // populate the patients
     yield put(patientsFetched(response, page, limit, offset));
   } catch (e) {

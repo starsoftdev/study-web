@@ -219,12 +219,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const { params: { id }, paginationOptions } = this.props;
     let skip = 0;
     if (loadMore) {
-      skip = paginationOptions.page * 100;
+      skip = paginationOptions.page * 10;
     }
-    // console.log('skip', skip, paginationOptions.page);
+    console.log('skip', skip, paginationOptions.page);
     if (paginationOptions.hasMoreItems) {
       this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId, skip);
-    }    
+    }
   }
 
   render() {
