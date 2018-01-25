@@ -79,6 +79,9 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
     this.onSuggestSelect = this.onSuggestSelect.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.state = {
+      fetchingTimezone: false,
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -87,6 +90,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       console.log('new timzone', newProps.timezone);
       change('timezone', formatTimezone(newProps.timezone, formValues.city));
       change('timezoneUnparsed', newProps.timezone);
+
+      this.setState({ fetchingTimezone: false });
     }
   }
 
@@ -107,6 +112,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     if (e.location) {
       console.log('location', e.location);
       getTimezone(e.location.lat, e.location.lng);
+
+      this.setState({ fetchingTimezone: true });
     }
 
     change('address', e.label);
@@ -172,12 +179,17 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
   render() {
     const { handleSubmit, isEdit, initialValues, savedSite } = this.props;
+    const { fetchingTimezone } = this.state;
+
+    const submitButtonDisabled = savedSite.saving || fetchingTimezone;
+
     let isDst = false;
     if (this.props.formValues && this.props.formValues.timezoneUnparsed) {
       isDst = moment().tz(this.props.formValues.timezoneUnparsed).isDST();
     } else if (this.props.initialValues && this.props.initialValues.timezoneUnparsed) {
       isDst = moment().tz(this.props.initialValues.timezoneUnparsed).isDST();
     }
+
     return (
       <form className="form-lightbox form-edit-site" onSubmit={handleSubmit}>
         <div className="edit-site form-fields">
@@ -295,7 +307,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           }
           <div className="btn-block text-right">
-            <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
+            <button type="submit" className="btn btn-default btn-add-row" disabled={submitButtonDisabled}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
                 : <span>{isEdit ? 'Update' : 'Submit'}</span>
