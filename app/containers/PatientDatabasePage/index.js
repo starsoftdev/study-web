@@ -15,7 +15,6 @@ import { selectCurrentUser, selectSiteLocations } from '../App/selectors';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
-import { getItem } from '../../utils/localStorage';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -72,8 +71,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('notifyPatientsDbReportReady', (data) => {
-          const authToken = getItem('auth_token');
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.client_id === data.clientId && authToken === data.authToken) {
+          if (currentUser.roleForClient && data.url && currentUser.roleForClient.client_id === data.clientId) {
             setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportDbPatients'); }, 1000);
             location.replace(data.url);
           }
@@ -84,6 +82,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
 
   searchPatients(searchFilter, isSearch, isExport = false) {
     const queryParams = omit(omitBy(searchFilter, isUndefined), ['includeIndication', 'excludeIndication']);
+    const savedSearchFilter = { ...searchFilter };
 
     if (searchFilter.includeIndication) {
       queryParams.includeIndication = map(searchFilter.includeIndication, i => i.value).join(',');
@@ -111,16 +110,20 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if (!userIsAdmin && !queryParams.site) {
       queryParams.site = _.find(this.props.sites, { id: currentUser.roleForClient.site_id }).id;
     }
+    if (queryParams.clearPatients) {
+      this.props.clearPatientsList();
+      delete savedSearchFilter.clearPatients;
+    }
 
     if ((queryParams.status !== null && !isUndefined(queryParams.status)) || (queryParams.source !== null && !isUndefined(queryParams.source))
       || queryParams.includeIndication || queryParams.name || queryParams.site
       || queryParams.excludeIndication || queryParams.gender || queryParams.ageFrom
       || queryParams.ageTo || queryParams.bmiFrom || queryParams.bmiTo || !isSearch) {
-      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
+      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, savedSearchFilter, isExport);
     } else {
       this.props.clearPatientsList();
       this.props.resetTextBlast();
-      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, searchFilter, isExport);
+      this.props.fetchPatients(currentUser.roleForClient.client_id, queryParams, this.props.patients.details, savedSearchFilter, isExport);
     }
   }
 
