@@ -22,7 +22,7 @@ class PatientNote extends React.Component {
   renderProfileImage() {
     const { note } = this.props;
     /* eslint-disable global-require */
-    if (note.user && note.user.profileImageURL) {
+    if (note.user.profileImageURL) {
       return (
         <img alt="" src={note.user.profileImageURL} />
       );
@@ -36,7 +36,7 @@ class PatientNote extends React.Component {
   render() {
     const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
     return (
-      <div className={classNames('note-msg', { reply: (note.user && note.user.id === currentUser.id) })}>
+      <div className={classNames('note-msg', { reply: note.user.id === currentUser.id })}>
         <div className="note">
           <div className="note-header">
             <a
@@ -60,7 +60,7 @@ class PatientNote extends React.Component {
                 <span className="label"> Name: </span>
                 <div className="content">
                   <span>
-                    {(note.user && note.user.roleForClient) ? `${note.user.firstName} ${note.user.lastName}` : 'StudyKIK'}
+                    {note.user.roleForClient ? `${note.user.firstName} ${note.user.lastName}` : 'StudyKIK'}
                   </span>
                 </div>
               </div>

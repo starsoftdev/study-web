@@ -47,7 +47,7 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     const { fetchIndications } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchIndications(query, limit, offset);
   }
 
@@ -55,8 +55,8 @@ export class DashboardIndicationPage extends React.Component { // eslint-disable
     const { fetchIndications, indications } = this.props;
     if (!indications.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchIndications(query, limit, offset);
     }
   }

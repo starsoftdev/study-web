@@ -81,6 +81,17 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }, 600000);
 
     this.setState({ timerId });
+
+    if (ONE_SIGNAL_APP_ID) {
+      const OneSignal = window.OneSignal || [];
+      OneSignal.push(['init', {
+        appId: ONE_SIGNAL_APP_ID,
+        autoRegister: true,
+        notifyButton: {
+          enable: true, /* Set to false to hide */
+        },
+      }]);
+    }
   }
 
   componentDidMount() {
@@ -89,6 +100,18 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     }
     if (LOG_ROCKET) {
       LogRocket.init(LOG_ROCKET);
+      if (MIXPANEL_TOKEN) {
+        LogRocket.getSessionURL((sessionURL) => {
+          mixpanel.track('LogRocket', { sessionURL });
+        });
+      }
+      if (SENTRY_DSN) {
+        Raven.setDataCallback((data) => {
+          // eslint-disable-next-line no-param-reassign
+          data.extra.sessionURL = LogRocket.sessionURL;
+          return data;
+        });
+      }
     }
   }
 
@@ -97,6 +120,17 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
 
     if (tempPassword) {
       this.setState({ showChangePwdModal: true });
+    }
+
+    console.log(1, window.OneSignal);
+    if (window.OneSignal && nextProps.userData) {
+      window.OneSignal.push(() => {
+        window.OneSignal.sendTags({
+          userId: nextProps.userData.id,
+        }, (tagsSent) => {
+          console.log(2, tagsSent);
+        });
+      });
     }
 
     if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
@@ -109,14 +143,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       this.setState({ showEmailTutorialModal: true });
     } else {
       this.setState({ showEmailTutorialModal: false });
-    }
-
-    if (window.FS && nextProps.userData) {
-      window.FS.identify(nextProps.userData.id, {
-        displayName: `${nextProps.userData.firstName} ${nextProps.userData.lastName}`,
-        email: nextProps.userData.email,
-        timezone_str: nextProps.userData.timezone,
-      });
     }
 
     if (process.env.NODE_ENV !== 'development') {

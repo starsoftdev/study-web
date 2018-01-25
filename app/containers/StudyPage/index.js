@@ -78,7 +78,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id);
+    fetchStudy(params.id, 1);
     fetchPatientCategories(params.id);
     fetchSources();
 
@@ -127,28 +127,42 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           // TODO needs to take into account the stats are filtered based on campaign and source selected
           // TODO needs to be able to fetch the redux state without having to resort to hacks
           // TODO right now it cannot access redux state when getting an incoming text or sending an outgoing text
-          // if (params && parseInt(params.id) === socketMessage.study.id) {
-          //   // check is patients is on the board
-          //   let needToUpdateMessageStats = false;
-          //   _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
-          //     _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
-          //       if (patient.id === socketMessage.patient_id) {
-          //         needToUpdateMessageStats = true;
-          //         return false;
-          //       }
-          //     });
-          //     if (needToUpdateMessageStats) {
-          //       return false;
-          //     }
-          //   });
-          //   if (needToUpdateMessageStats) {
-          //     if (socketMessage.twilioTextMessage.direction !== 'inbound') {
-          //       studyStatsFetched({ total:(this.props.stats.texts + 1), sent:(this.props.stats.textsSent + 1), received:this.props.stats.textsReceived });
-          //     } else {
-          //       studyStatsFetched({ total:(this.props.stats.texts + 1), sent:this.props.stats.textsSent, received:(this.props.stats.textsReceived + 1) });
-          //     }
-          //   }
-          // }
+          if (params && parseInt(params.id) === socketMessage.study.id) {
+            // check is patients is on the board
+            let needToUpdateMessageStats = false;
+            _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
+              _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
+                if (patient.id === socketMessage.patient_id) {
+                  needToUpdateMessageStats = true;
+                  return false;
+                }
+              });
+              if (needToUpdateMessageStats) {
+                return false;
+              }
+            });
+            if (needToUpdateMessageStats) {
+              if (socketMessage.twilioTextMessage.direction !== 'inbound') {
+                this.props.studyStatsFetched({
+                  total: this.props.stats.texts + 1,
+                  sent: this.props.stats.textsSent + 1,
+                  received: this.props.stats.textsReceived,
+                  totalDuration: this.props.stats.callsDuration,
+                  views: this.props.stats.views,
+                  countReceived: this.props.stats.calls,
+                });
+              } else {
+                this.props.studyStatsFetched({
+                  total: this.props.stats.texts + 1,
+                  sent: this.props.stats.textsSent,
+                  received: this.props.stats.textsReceived + 1,
+                  totalDuration: this.props.stats.callsDuration,
+                  views: this.props.stats.views,
+                  countReceived: this.props.stats.calls,
+                });
+              }
+            }
+          }
           if (curCategoryId && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.props.updatePatientSuccess(socketMessage.patient_id, curCategoryId, {
               unreadMessageCount: (unreadMessageCount + 1),
@@ -243,6 +257,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.indication && study.indication.name) {
       studyName = study.indication.name;
     }
+    const initialValues = { source: 1 };
 
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
@@ -267,6 +282,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
+            initialValues={initialValues}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -304,7 +320,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
-    fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
+    fetchStudy: (studyId, sourceId) => dispatch(fetchStudy(studyId, sourceId)),
     fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
