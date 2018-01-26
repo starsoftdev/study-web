@@ -60,7 +60,7 @@ class NotesSection extends React.Component {
 
   renderNotes() {
     const { currentUser, currentPatient, submitDeleteNote, notes } = this.props;
-    return notes.filter(note => note.user).map(note => (
+    return notes.map(note => (
       <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
     ));
   }
