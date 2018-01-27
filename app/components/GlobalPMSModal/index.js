@@ -28,6 +28,7 @@ import {
   selectClientCredits,
   selectGlobalPMSPaginationOptions,
   selectSiteLocations,
+  selectPatientCategories,
 } from '../../containers/App/selectors';
 import { readStudyPatientMessages } from '../../containers/StudyPage/actions';
 import MessageItem from './MessageItem';
@@ -44,6 +45,7 @@ import {
   updateSitePatients,
   clientCreditsFetched,
   addMessagesCountStat,
+  fetchPatientCategories,
 } from '../../containers/App/actions';
 import {
   selectSocket,
@@ -57,7 +59,6 @@ import { incrementStudyUnreadMessages, subtractStudyUnreadMessages } from '../..
 import alertSound from './sounds/message_received.wav';
 
 @reduxForm({ form: 'globalPMS', validate: formValidator })
-@connect(mapStateToProps, null)
 
 class GlobalPMSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -87,6 +88,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     addMessagesCountStat: React.PropTypes.func,
     subtractStudyUnreadMessages: React.PropTypes.func,
     sites: React.PropTypes.array,
+    fetchPatientCategories: React.PropTypes.func.isRequired,
+    patientCategories: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -107,6 +110,10 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       searchTimer: null,
       siteLocation: null,
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchPatientCategories();
   }
 
   componentWillReceiveProps(newProps) {
@@ -135,7 +142,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
-      this.props.fetchSitePatients(currentUser.id, 0, 10);
+      this.props.fetchSitePatients(currentUser.roleForClient.id, 0, 10);
     }
 
     if (currentUser && currentUser.roleForClient) {
@@ -181,7 +188,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   siteLocationChanged(value) {
-    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.id, 0, 10); });
+    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10); });
   }
 
   handleKeyPress() {
@@ -190,7 +197,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ searchTimer: null });
     }
     const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.id, 0, 10);
+      this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10);
     }, 500);
     this.setState({ searchTimer: timerH });
   }
@@ -206,7 +213,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
     const limit = 10;
     const offset = this.props.globalPMSPaginationOptions.page * 10;
-    this.props.fetchSitePatients(this.props.currentUser.id, offset, limit);
+    this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, offset, limit);
   }
 
   render() {
@@ -273,7 +280,11 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
     let protocolNumber = '';
     if (this.state.selectedPatient.protocol_number) {
-      protocolNumber = 'Protocol: '.concat(this.state.selectedPatient.protocol_number);
+      protocolNumber = `Protocol: ${this.state.selectedPatient.protocol_number}`;
+    }
+    let patientCategory = '';
+    if (this.state.selectedPatient.patient_category_id && this.props.patientCategories && this.props.patientCategories.length) {
+      patientCategory = `Status: ${this.props.patientCategories[this.state.selectedPatient.patient_category_id - 1].name}`;
     }
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
@@ -351,6 +362,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                       <Link to={`/app/study/${this.state.selectedPatient.study_id}`} onClick={this.handleClose}>
                         <span className="protocol">{protocolNumber}</span>
                       </Link>
+                      <span className="category">{patientCategory}</span>
                     </header>
                     <div
                       className="scroll-holder"
@@ -391,11 +403,12 @@ const mapStateToProps = createStructuredSelector({
   globalPMSPaginationOptions: selectGlobalPMSPaginationOptions(),
   siteLocations: selectSiteLocations(),
   sites: selectSites(),
+  patientCategories: selectPatientCategories(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
+    fetchSitePatients: (clientRoleId, offset, limit) => dispatch(fetchSitePatients(clientRoleId, offset, limit)),
     searchSitePatients: (keyword) => dispatch(searchSitePatients(keyword)),
     updateSitePatients: (newMessage) => dispatch(updateSitePatients(newMessage)),
     fetchPatientMessages: (patientId) => dispatch(fetchPatientMessages(patientId)),
@@ -408,6 +421,7 @@ function mapDispatchToProps(dispatch) {
     incrementStudyUnreadMessages: (studyId) => dispatch(incrementStudyUnreadMessages(studyId)),
     addMessagesCountStat: (payload) => dispatch(addMessagesCountStat(payload)),
     subtractStudyUnreadMessages: (studyId, count) => dispatch(subtractStudyUnreadMessages(studyId, count)),
+    fetchPatientCategories: () => dispatch(fetchPatientCategories()),
   };
 }
 

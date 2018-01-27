@@ -21,11 +21,12 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_PATIENT_CATEGORIES_SUCCESS,
   FETCH_STUDY,
+  FETCH_STUDY_STATS,
   FETCH_PROTOCOL_SUCCESS,
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
-  FETCH_STUDY_TEXTS_SUCCESS,
+  FETCH_STUDY_STATS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
@@ -64,7 +65,6 @@ import {
   SWITCH_TO_TEXT_SECTION_DETAIL,
   SWITCH_TO_EMAIL_SECTION_DETAIL,
   SWITCH_TO_OTHER_SECTION_DETAIL,
-  FETCH_STUDY_NEW_TEXTS,
   CHANGE_SCHEDULED_DATE,
   SUBMIT_SCHEDULE,
   SUBMIT_SCHEDULE_SUCCEEDED,
@@ -235,10 +235,20 @@ export function patientCategoriesFetched(payload) {
   };
 }
 
-export function fetchStudy(studyId) {
+export function fetchStudy(studyId, sourceId) {
   return {
     type: FETCH_STUDY,
     studyId,
+    sourceId,
+  };
+}
+
+export function fetchStudyStats(studyId, campaignId, sourceId) {
+  return {
+    type: FETCH_STUDY_STATS,
+    studyId,
+    campaignId,
+    sourceId,
   };
 }
 
@@ -305,9 +315,9 @@ export function callStatsFetched(payload) {
   };
 }
 
-export function textStatsFetched(payload) {
+export function studyStatsFetched(payload) {
   return {
-    type: FETCH_STUDY_TEXTS_SUCCESS,
+    type: FETCH_STUDY_STATS_SUCCESS,
     payload,
   };
 }
@@ -479,15 +489,6 @@ export function submitEmailBlast(patients, message, from, subject, clientRoleId,
     subject,
     clientRoleId,
     onClose,
-  };
-}
-
-export function fetchStudyTextNewStats(studyId, campaignId, sourceId) {
-  return {
-    type: FETCH_STUDY_NEW_TEXTS,
-    studyId,
-    campaignId,
-    sourceId,
   };
 }
 

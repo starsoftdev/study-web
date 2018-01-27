@@ -6,6 +6,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import YouTube from 'react-youtube';
+import EmailTutorialSlider from '../../components/EmailTutorialSlider/index';
 
 export default class HelpSupportPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -55,9 +56,9 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
 
     return (
       <div className="container-fluid">
-        <Helmet title="Videos - StudyKIK" />
+        <Helmet title="Tutorials - StudyKIK" />
         <section className="study-portal">
-          <h2 className="main-heading">Videos</h2>
+          <h2 className="main-heading">Tutorials</h2>
           <div className="videos">
             {
               videos.map(v => (
@@ -67,6 +68,12 @@ export default class HelpSupportPage extends React.Component { // eslint-disable
                 </div>
               ))
             }
+          </div>
+          <div className="video">
+            <p className="label">Email Credits</p>
+            <div id="slider-container">
+              <EmailTutorialSlider noFinishButton />
+            </div>
           </div>
         </section>
       </div>
