@@ -22,7 +22,6 @@ import {
   INIT_CHAT,
   DISABLE_CHAT,
   SET_ACTIVE_SORT,
-  SORT_PATIENTS_SUCCESS,
   IMPORT_PATIENTS,
   SUBMIT_ADD_PATIENT,
   SUBMIT_ADD_PATIENT_FAILURE,
@@ -162,16 +161,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: state.patients.details,
           total: state.patients.total,
           totalUnsubscribed: state.patients.totalUnsubscribed,
-          fetching: true,
+          fetching: !action.isExport,
           error: null,
         },
-        paginationOptions: {
-          hasMoreItems: false,
-          page: state.paginationOptions.page,
-          activeSort: state.paginationOptions.activeSort,
-          activeDirection: state.paginationOptions.activeDirection,
-          prevSearchFilter: state.paginationOptions.prevSearchFilter,
-        },
+        paginationOptions: state.paginationOptions,
       };
     case FETCH_PATIENTS_SUCCESS:
       return {
@@ -227,7 +220,7 @@ export default function patientDatabasePageReducer(state = initialState, action)
         patients: {
           details: [],
           total: null,
-          totalUnsubscribed: state.patients.totalUnsubscribed,
+          totalUnsubscribed: null,
           fetching: false,
           error: null,
         },
@@ -389,22 +382,11 @@ export default function patientDatabasePageReducer(state = initialState, action)
       return {
         ...state,
         paginationOptions: {
-          hasMoreItems: state.paginationOptions.hasMoreItems,
-          page: state.paginationOptions.page,
+          hasMoreItems: true,
+          page: 1,
           activeSort: action.sort,
           activeDirection: action.direction,
           prevSearchFilter: state.paginationOptions.prevSearchFilter,
-        },
-      };
-    case SORT_PATIENTS_SUCCESS:
-      return {
-        ...state,
-        patients: {
-          details: action.patients,
-          total: state.patients.total,
-          totalUnsubscribed: state.patients.totalUnsubscribed,
-          fetching: false,
-          error: null,
         },
       };
     case ADD_PROTOCOL:

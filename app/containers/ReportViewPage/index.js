@@ -17,12 +17,13 @@ import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../components/CenteredModal/index';
+import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectDnqPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -41,7 +42,9 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     totals: PropTypes.object,
     getCategoryNotes: PropTypes.func,
     categoryNotes: PropTypes.object,
-    dnqPaginationOptions: PropTypes.object,
+    notesPaginationOptions: PropTypes.object,
+    patientSignUps: PropTypes.object,
+    fetchPatientSignUps: PropTypes.func,
   };
 
   constructor(props) {
@@ -50,14 +53,21 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.state = {
       filters: null,
       showCategoryModal: false,
+      modalCategory: false,
+      modalTitle: false,
+      currentCategoryStudyId: false,
       currentDnqStudyId: false,
+      showPQSModal: false,
+      defaultSource: 1,
     };
 
     this.searchReports = this.searchReports.bind(this);
     this.loadReports = this.loadReports.bind(this);
-    this.openDnqModal = this.openDnqModal.bind(this);
+    this.openNotesModal = this.openNotesModal.bind(this);
     this.closeCategoryModal = this.closeCategoryModal.bind(this);
     this.loadNotesItems = this.loadNotesItems.bind(this);
+    this.openPQSModal = this.openPQSModal.bind(this);
+    this.closePQSModal = this.closePQSModal.bind(this);
   }
 
   componentWillMount() {
@@ -68,10 +78,17 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const messaging = this.props.location.query.messaging || null;
 
     const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
+  }
+
+  componentDidMount() {
+    const { currentUser } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    this.props.fetchPatientSignUps(currentUser, protocolNumber);
   }
 
   getPercentageObject(item) {
@@ -103,7 +120,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
-
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsTotals(filters);
@@ -120,20 +137,28 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }
 
-  openDnqModal(id) {
-    this.setState({ showCategoryModal: true, currentDnqStudyId: id });
-    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', id, 10, 0);
+  openNotesModal(id, category, title) {
+    this.setState({ showCategoryModal: true, currentCategoryStudyId: id, modalCategory: category, modalTitle: title });
+    this.props.getCategoryNotes(this.state.filters, category, id, 10, 0);
   }
 
   closeCategoryModal() {
-    this.setState({ showCategoryModal: false });
+    this.setState({ showCategoryModal: false, currentCategoryStudyId: false, modalCategory: false, modalTitle: false });
   }
 
   loadNotesItems() {
-    const offset = this.props.dnqPaginationOptions.page * 10;
+    const offset = this.props.notesPaginationOptions.page * 10;
     const limit = 10;
 
-    this.props.getCategoryNotes(this.state.filters, 'Not Qualified / Not Interested', this.state.currentDnqStudyId, limit, offset);
+    this.props.getCategoryNotes(this.state.filters, this.state.modalCategory, this.state.currentCategoryStudyId, limit, offset);
+  }
+
+  openPQSModal() {
+    this.setState({ showPQSModal: true });
+  }
+
+  closePQSModal() {
+    this.setState({ showPQSModal: false });
   }
 
   render() {
@@ -183,14 +208,16 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           </div>
         </section>
         <ReportViewInfo
+          patientSignUps={this.props.patientSignUps}
           reportsList={this.props.reportsList}
           totals={this.props.totals}
+          openPQSModal={() => { this.openPQSModal(); }}
         />
         <ReportViewTotals
           reportsList={this.props.reportsList}
           getPercentageObject={this.getPercentageObject}
           totals={this.props.totals}
-          openDnqModal={this.openDnqModal}
+          openNotesModal={this.openNotesModal}
         />
         <ReportViewSearch
           searchReports={this.searchReports}
@@ -210,7 +237,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           currentUser={this.props.currentUser}
           totals={this.props.totals}
           loadReports={this.loadReports}
-          openDnqModal={this.openDnqModal}
+          openNotesModal={this.openNotesModal}
         />
         <Modal
           dialogComponentClass={CenteredModal}
@@ -218,7 +245,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         >
           <Modal.Header>
             <Modal.Title>
-              DNQ NOTES
+              {this.state.modalTitle} NOTES
               <a className="lightbox-close close" onClick={() => { this.closeCategoryModal(); }}>
                 <i className="icomoon-icon_close" />
               </a>
@@ -230,7 +257,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
               pageStart={0}
               loadMore={this.loadNotesItems}
               initialLoad={false}
-              hasMore={this.props.dnqPaginationOptions.hasMoreItems}
+              hasMore={this.props.notesPaginationOptions.hasMoreItems}
               useWindow={false}
             >
               { notes }
@@ -238,12 +265,19 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             </InfiniteScroll>
           </Modal.Body>
         </Modal>
+
+        <PQSModal
+          showModal={this.state.showPQSModal}
+          closePQSModal={this.closePQSModal}
+          openPQSModal={this.openPQSModal}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  patientSignUps: selectPatientSignUps(),
   currentUser: selectCurrentUser(),
   reportsList: selectReportsList(),
   formValues: selectSearchReportsFormValues(),
@@ -251,7 +285,7 @@ const mapStateToProps = createStructuredSelector({
   formTableValues: selectTableFormValues(),
   totals: selectReportsTotals(),
   categoryNotes: selectCategoryNotes(),
-  dnqPaginationOptions: selectDnqPaginationOptions(),
+  notesPaginationOptions: selectNotesPaginationOptions(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -261,6 +295,7 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
+    fetchPatientSignUps: (params, protocolNumber) => dispatch(fetchPatientSignUps(params, protocolNumber)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
   };
 }

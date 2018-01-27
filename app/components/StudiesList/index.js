@@ -27,7 +27,7 @@ import pqsImage from '../../assets/images/pqs.png';
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     clientId: PropTypes.number,
-    clientSites: PropTypes.object,
+    sites: PropTypes.object,
     clearIndicaoionLevelPrice: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
     currentUser: PropTypes.object.isRequired,
@@ -341,11 +341,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const studyLevel = _.find(this.props.studyLevels, { id: renewStudyFormValues.exposureLevel });
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
 
-    const eSelectedSite = _.find(this.props.clientSites.details, (o) => (o.id === this.state.selectedSiteId));
+    const eSelectedSite = _.find(this.props.sites.details, (o) => (o.id === this.state.selectedSiteId));
     const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
 
     const emailNotificationArray = [];
-    _.forEach(this.props.clientSites.details, (site) => {
+    _.forEach(this.props.sites.details, (site) => {
       _.forEach(site.roles, (role) => {
         const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
         if (isChecked && role.user) {
@@ -412,11 +412,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
     const studyLevel = _.find(this.props.studyLevels, { id: upgradeStudyFormValues.level });
 
-    const eSelectedSite = _.find(this.props.clientSites.details, (o) => (o.id === this.state.selectedSiteId));
+    const eSelectedSite = _.find(this.props.sites.details, (o) => (o.id === this.state.selectedSiteId));
     const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
 
     const emailNotificationArray = [];
-    _.forEach(this.props.clientSites.details, (site) => {
+    _.forEach(this.props.sites.details, (site) => {
       _.forEach(site.roles, (role) => {
         if (role.user) {
           const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
@@ -581,7 +581,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   renderStudiesTable() {
-    const { studies, currentUser, clientSites, queryParams } = this.props;
+    const { studies, currentUser, sites, queryParams } = this.props;
     let selectedSiteID = null;
     if (currentUser && currentUser.roleForClient) {
       selectedSiteID = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin') ? null : true;
@@ -590,8 +590,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       }
     }
     let siteArray = [];
-    if (clientSites && clientSites.details) {
-      siteArray = clientSites.details.map((item) =>
+    if (sites && sites.details) {
+      siteArray = sites.details.map((item) =>
         item.id
       );
     }
@@ -770,7 +770,7 @@ const mapStateToProps = createStructuredSelector({
   upgradedStudy: selectUpgradedStudy(),
   editStudyFields: selectEditStudyFields(),
   currentUserClientId: selectCurrentUserClientId(),
-  clientSites: selectClientSites(),
+  sites: selectClientSites(),
   clientAdmins: selectHomePageClientAdmins(),
 });
 

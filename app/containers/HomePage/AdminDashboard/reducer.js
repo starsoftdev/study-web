@@ -46,6 +46,10 @@ import {
   UPDATE_PATIENT_THANK_YOU_EMAIL_ERROR,
   RESET_PATIENT_THANK_YOU_EMAIL_STATE,
 
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+
   UPDATE_LANDING_PAGE,
   UPDATE_LANDING_PAGE_SUCCESS,
   UPDATE_LANDING_PAGE_ERROR,
@@ -130,6 +134,11 @@ const initialState = {
     error: null,
   },
   updateLandingPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updateFacebookLandingPageProcess: {
     success: false,
     saving: false,
     error: null,
@@ -835,6 +844,33 @@ export default function dashboardPageReducer(state = initialState, action) {
           })),
           fetching: false,
           error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
         },
       };
     case UPDATE_LANDING_PAGE:

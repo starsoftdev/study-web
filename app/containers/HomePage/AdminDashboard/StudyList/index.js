@@ -21,6 +21,7 @@ import CallTrackingPageModal from '../../../../components/CallTrackingPageModal'
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
+import LeadGenModal from '../../../../components/LeadGenModal';
 import CenteredModal from '../../../../components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 import EditInformationModal from '../../../../components/EditStudyForms/EditInformationModal';
@@ -30,7 +31,6 @@ import {
   selectDashboardEditNoteProcess,
   selectDashboardNote,
 } from '../selectors';
-import { selectSources } from '../../../../containers/App/selectors';
 import StudyLeftItem from './StudyLeftItem';
 import StudyRightItem from './StudyRightItem';
 import {
@@ -49,7 +49,6 @@ const mapStateToProps = createStructuredSelector({
   editStudyValues: selectValues('Dashboard.EditStudyForm'),
   note: selectDashboardNote(),
   paginationOptions: selectPaginationOptions(),
-  sources: selectSources(),
   studies: selectStudies(),
 });
 
@@ -114,6 +113,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.showLandingPageModal = this.showLandingPageModal.bind(this);
     this.showThankYouPageModal = this.showThankYouPageModal.bind(this);
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
+    this.showLeadGenPageModal = this.showLeadGenPageModal.bind(this);
     this.showCampaignPageModal = this.showCampaignPageModal.bind(this);
     this.showCallTrackingModal = this.showCallTrackingModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
@@ -147,6 +147,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
       showLandingPageModal: false,
       showThankYouPageModal: false,
       showPatientThankYouPageModal: false,
+      showLeadGenPageModal: false,
       showCampaignPageModal: false,
       showCallTrackingModal:false,
       addEmailModalShow: false,
@@ -158,8 +159,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
       showNoteModal: false,
       hideNoteModal: false,
-      adminSiteId: null,
-      adminSiteName: null,
+      adminStudyId: null,
     };
   }
 
@@ -255,6 +255,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: true,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
         showCallTrackingModal: false,
       });
@@ -272,6 +273,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: true,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
         showCallTrackingModal: false,
       });
@@ -289,12 +291,30 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: true,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
         showCallTrackingModal: false,
       });
     } else {
       this.setState({
         showPatientThankYouPageModal: false,
+      });
+    }
+  }
+
+  showLeadGenPageModal(visible) {
+    if (visible) {
+      this.setState({
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showLeadGenPageModal: true,
+        showCampaignPageModal: false,
+      });
+    } else {
+      this.setState({
+        showLeadGenPageModal: false,
       });
     }
   }
@@ -306,6 +326,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: false,
         showCallTrackingModal: false,
       });
@@ -323,6 +344,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showLandingPageModal: false,
         showThankYouPageModal: false,
         showPatientThankYouPageModal: false,
+        showLeadGenPageModal: false,
         showCampaignPageModal: true,
         showCallTrackingModal: false,
       });
@@ -389,7 +411,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         type: 'inactive',
         clientId: editStudyValues.client_id,
         studyId: editStudyValues.study_id,
-        siteId: editStudyValues.site,
       });
     }
 
@@ -405,11 +426,10 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  showNoteModal(siteId, siteName) {
+  showNoteModal(studyId) {
     this.setState({
       showNoteModal: true,
-      adminSiteId: siteId,
-      adminSiteName: siteName,
+      adminStudyId: studyId,
     });
   }
 
@@ -467,6 +487,12 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             data-class="btn-deactivate"
             onClick={() => this.showCallTrackingModal(true)}
           > Call Tracking </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
+            onClick={() => this.showLeadGenPageModal(true)}
+          > LEAD GEN </Button>
           <Button
             bsStyle="primary"
             className="pull-left"
@@ -917,6 +943,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
               openModal={this.state.showPatientThankYouPageModal}
               studies={studies.details}
             />
+            <LeadGenModal
+              onClose={() => {
+                this.showLeadGenPageModal(false);
+              }}
+              openModal={this.state.showLeadGenPageModal}
+              studies={studies.details}
+            />
             <CampaignPageModal
               five9List={this.props.five9List}
               isOnTop={this.state.campaignPageOnTop}
@@ -944,7 +977,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
               keyboard
             >
               <Modal.Header>
-                <Modal.Title>{this.state.adminSiteName}</Modal.Title>
+                <Modal.Title>{this.state.adminStudyId}</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeNoteModal}>
                   <i className="icomoon-icon_close" />
                 </a>
@@ -953,13 +986,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 <div className="holder clearfix">
                   <div className="form-admin-note">
                     <DashboardNoteSearch
-                      siteId={this.state.adminSiteId}
+                      studyId={this.state.adminStudyId}
                       addNote={this.props.addNote}
                       editNoteProcess={this.props.editNoteProcess}
                       hideParentModal={this.setNoteModalClass}
                     />
                     <DashboardNoteTable
-                      siteId={this.state.adminSiteId}
+                      studyId={this.state.adminStudyId}
                       tableName="Notes"
                       note={this.props.note}
                       editNoteProcess={this.props.editNoteProcess}

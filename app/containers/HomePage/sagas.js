@@ -37,6 +37,7 @@ import {
   FETCH_STUDY_CAMPAIGNS,
   CHANGE_STUDY_STATUS,
   UPDATE_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE,
   CHANGE_STUDY_ADD,
   REMOVE_STUDY_AD,
   UPDATE_THANK_YOU_PAGE,
@@ -69,6 +70,8 @@ import {
   fetchCustomNotificationEmailsError,
   changeStudyStatusDashboardSuccess,
   changeStudyStatusDashboardError,
+  updateFacebookLandingPageSuccess,
+  updateFacebookLandingPageError,
   updateLandingPageSuccess,
   updateLandingPageError,
   updateThankYouPageSuccess,
@@ -233,9 +236,10 @@ export function* fetchNoteWorker() {
 
     const filterObj = {
       include: [{
-        relation: 'site',
-      }, {
         relation: 'user',
+        scope: {
+          where: { isArchived: false },
+        },
       }],
     };
 
@@ -564,7 +568,10 @@ export function* renewStudyWorker(action) {
     }));
     onClose();
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
+      errorMessage = 'Error! Invalid coupon code.';
+    }
     toastr.error('', errorMessage);
     yield put(studyRenewingError(err));
     if (err.status === 401) {
@@ -620,7 +627,7 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'studyAd' && index !== 'emailNotifications' && index !== 'leadSource') {
+      if (index !== 'emailNotifications' && index !== 'leadSource') {
         data.append(index, value);
       }
     });
@@ -631,10 +638,6 @@ export function* editStudyWorker(action) {
 
     if (options.leadSource) {
       data.append('leadSource', JSON.stringify(options.leadSource));
-    }
-
-    if (options.studyAd && options.studyAd[0]) {
-      data.append('file', options.studyAd[0]);
     }
 
     const params = {
@@ -870,7 +873,6 @@ export function* fetchAllClientUsersWorker(action) {
       method: 'GET',
       query: {
         clientId: action.clientId,
-        siteId: action.siteId,
         studyId: action.studyId,
       },
     };
@@ -957,6 +959,26 @@ export function* changeStudyStatusWorker(action) {
   }
 }
 
+export function* updateFacebookLandingPageWatcher() {
+  yield* takeLatest(UPDATE_FACEBOOK_LANDING_PAGE, updateFacebookLandingPageWorker);
+}
+
+export function* updateFacebookLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateFacebookLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateFacebookLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateFacebookLandingPageError(err));
+  }
+}
 
 export function* updateLandingPageWatcher() {
   yield* takeLatest(UPDATE_LANDING_PAGE, updateLandingPageWorker);
@@ -1002,7 +1024,7 @@ export function* changeStudyAddWorker(action) {
     toastr.success('', 'Success! Study ad has been updated.');
     yield put(changeStudyAddSuccess(response));
   } catch (err) {
-    toastr.error('Error!');
+    toastr.error('', 'Error! Unable to read file. Please try a different one.');
     yield put(changeStudyAddError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -1246,14 +1268,16 @@ export function* editStudyLeadSourcesWorker(action) {
 
 
 let watcherD = false;
-
+let watcherF = false;
 export function* homePageSaga() {
   const watcherA = yield fork(fetchPatientSignUpsWatcher);
   if (!watcherD) {
     watcherD = yield fork(fetchStudiesWatcher);
   }
   const watcherE = yield fork(fetchIndicationLevelPriceWatcher);
-  const watcherF = yield fork(renewStudyWatcher);
+  if (!watcherF) {
+    watcherF = yield fork(renewStudyWatcher);
+  }
   const watcherG = yield fork(upgradeStudyWatcher);
   const watcherH = yield fork(editStudyWatcher);
   const watcherI = yield fork(fetchUpgradeStudyPriceWatcher);
@@ -1273,6 +1297,7 @@ export function* homePageSaga() {
   const fetchStudyCampaignsWatcher1 = yield fork(fetchStudyCampaignsWatcher);
   const changeStudyStatusWatcher1 = yield fork(changeStudyStatusWatcher);
   const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
+  const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
@@ -1301,8 +1326,11 @@ export function* homePageSaga() {
       yield cancel(watcherD);
       watcherD = false;
     }
+    if (watcherF) {
+      yield cancel(watcherF);
+      watcherF = false;
+    }
     yield cancel(watcherE);
-    yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
     yield cancel(watcherI);
@@ -1322,6 +1350,7 @@ export function* homePageSaga() {
     yield cancel(fetchStudyCampaignsWatcher1);
     yield cancel(changeStudyStatusWatcher1);
     yield cancel(updateLandingPageWatcher1);
+    yield cancel(updateFacebookLandingPageWatcher1);
     yield cancel(updateThankYouPageWatcher1);
     yield cancel(updatePatientThankYouEmailWatcher1);
     yield cancel(changeStudyAddWatcher1);

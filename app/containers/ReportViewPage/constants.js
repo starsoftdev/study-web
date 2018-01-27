@@ -3,6 +3,8 @@
  * ReportViewPage constants
  *
  */
+export const FETCH_PATIENT_SIGN_UPS = 'app/ReportViewPage/FETCH_PATIENT_SIGN_UPS';
+export const FETCH_PATIENT_SIGN_UPS_SUCCEESS = 'app/ReportViewPage/FETCH_PATIENT_SIGN_UPS_SUCCEESS';
 
 export const GET_REPORTS_LIST = 'app/ReportViewPage/GET_REPORTS_LIST';
 export const GET_REPORTS_LIST_SUCCESS = 'app/ReportViewPage/GET_REPORTS_LIST_SUCCESS';

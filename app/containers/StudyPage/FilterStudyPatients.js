@@ -21,17 +21,17 @@ class FilterStudyPatientsForm extends Component {
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    fetchPatients: PropTypes.func.isRequired,
     fetchStudy: PropTypes.func.isRequired,
+    fetchStudyStats: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
-    fetchPatients: PropTypes.func.isRequired,
     campaign: PropTypes.number,
     search: PropTypes.string,
     source: PropTypes.number,
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
-    fetchStudyTextNewStats: PropTypes.func,
     setSelectedStudySources: PropTypes.func,
     sourceMapped: PropTypes.array,
   };
@@ -57,7 +57,7 @@ class FilterStudyPatientsForm extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
     let newSource = source;
     if (campaign === -1) {
@@ -67,11 +67,10 @@ class FilterStudyPatientsForm extends Component {
       newSource = null;
     }
     fetchPatients(studyId, search, newCampaign, newSource);
-    fetchStudyTextNewStats(studyId, newCampaign, newSource);
   }
 
   searchPatient(event, type) {
-    const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
     let newSource = source;
@@ -95,10 +94,10 @@ class FilterStudyPatientsForm extends Component {
       /* -1 means all was selected */
       if (event === -1) {
         fetchPatients(studyId, search, newCampaign, null);
-        fetchStudyTextNewStats(studyId, newCampaign, null);
+        fetchStudyStats(studyId, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, event);
-        fetchStudyTextNewStats(studyId, newCampaign, event);
+        fetchStudyStats(studyId, newCampaign, event);
       }
     } else {
       /* -1 means all was selected */
@@ -107,10 +106,10 @@ class FilterStudyPatientsForm extends Component {
       });
       if (event === -1) {
         fetchPatients(studyId, search, null, newSource);
-        fetchStudyTextNewStats(studyId, null, newSource);
+        fetchStudyStats(studyId, null, newSource);
       } else {
         fetchPatients(studyId, search, event, newSource);
-        fetchStudyTextNewStats(studyId, event, newSource);
+        fetchStudyStats(studyId, event, newSource);
       }
     }
   }

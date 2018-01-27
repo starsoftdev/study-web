@@ -2,6 +2,7 @@
  * Created by mike on 9/23/16.
  */
 import React from 'react';
+import FileSaver from 'file-saver';
 import { call, fork, put, take, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { takeLatest } from 'redux-saga';
@@ -19,7 +20,7 @@ EXPORT_PATIENTS,
 FETCH_PATIENT_DETAILS,
 FETCH_PATIENT_CATEGORIES,
 FETCH_STUDY,
-FETCH_STUDY_NEW_TEXTS,
+FETCH_STUDY_STATS,
 ADD_PATIENT_INDICATION,
 REMOVE_PATIENT_INDICATION,
 SUBMIT_PATIENT_UPDATE,
@@ -56,7 +57,7 @@ import {
   studyViewsStatFetched,
   submitAddPatientSuccess,
   submitAddPatientFailure,
-  textStatsFetched,
+  studyStatsFetched,
   addPatientIndicationSuccess,
   removePatientIndicationSuccess,
   updatePatientSuccess,
@@ -71,6 +72,8 @@ import {
   submitEmailSuccess,
   emailsFetched,
   emailsFetchError,
+  callStatsFetched,
+  fetchEmails,
 } from './actions';
 
 // Bootstrap sagas
@@ -180,34 +183,41 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 }
 
 // TODO re-enable when optimized for high traffic
-// function* fetchStudyCallStats(action) {
-//   const authToken = getItem('auth_token');
-//   if (!authToken) {
-//     return;
-//   }
-//
-//   // listen for the latest FETCH_STUDY action
-//   const { studyId, campaignId } = action;
-//
-//   try {
-//     let requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
-//     if (campaignId) {
-//       requestURL += `?campaignId=${campaignId}`;
-//     }
-//     const response = yield call(request, requestURL, {
-//       method: 'GET',
-//     });
-//     yield put(callStatsFetched(response));
-//   } catch (e) {
-//     const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
-//     toastr.error('', errorMessage);
-//     if (e.status === 401) {
-//       yield call(() => { location.href = '/login'; });
-//     }
-//   }
-// }
+function* fetchStudyCallStats(action) {
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
 
-function* fetchStudyTextStats(action) {
+  // listen for the latest FETCH_STUDY or FETCH_STUDY_STATS action
+  const { studyId, campaignId, sourceId } = action;
+
+  try {
+    const requestURL = `${API_URL}/twilioCallRecords/countStudyCallRecords/${studyId}`;
+    const options = {
+      method: 'GET',
+    };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
+    const response = yield call(request, requestURL, options);
+    yield put(callStatsFetched(response));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while fetching call stats. Please try again later.');
+    toastr.error('', errorMessage);
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
@@ -216,7 +226,7 @@ function* fetchStudyTextStats(action) {
   const { studyId, campaignId, sourceId } = action;
 
   try {
-    const requestURL = `${API_URL}/studies/${studyId}/textMessages/count`;
+    const requestURL = `${API_URL}/studies/${studyId}/stats/count`;
     const options = {
       method: 'GET',
     };
@@ -230,7 +240,7 @@ function* fetchStudyTextStats(action) {
       options.query.sourceIds = JSON.stringify(sourceId);
     }
     const response = yield call(request, requestURL, options);
-    yield put(textStatsFetched(response));
+    yield put(studyStatsFetched(response));
   } catch (e) {
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -247,17 +257,21 @@ function* fetchPatientCategories() {
   // listen for the FETCH_PATIENT_CATEGORIES action
   const { studyId } = yield take(FETCH_PATIENT_CATEGORIES);
 
-  const filter = JSON.stringify({
-    fields: ['name', 'id'],
-  });
   try {
-    const requestURL = `${API_URL}/patientCategories?filter=${filter}`;
-    const response = yield call(request, requestURL, {
+    const options = {
       method: 'GET',
-    });
+      query: {
+        filter: JSON.stringify({
+          fields: ['name', 'id'],
+          order: 'id ASC',
+        }),
+      },
+    };
+    const requestURL = `${API_URL}/patientCategories`;
+    const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId);
+    yield call(fetchPatients, studyId, null, null, 1);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);
@@ -334,7 +348,7 @@ export function* downloadReport() {
     }
 
     try {
-      const requestURL = `${API_URL}/downloadClientReport?access_token=${authToken}&reportName=${reportName}`;
+      const requestURL = `${API_URL}/downloadClientReport?&reportName=${reportName}`;
       location.replace(`${requestURL}`);
     } catch (e) {
       // if returns forbidden we remove the token from local storage
@@ -388,8 +402,18 @@ export function* downloadReferral() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/getReferralPDF?access_token=${authToken}&reportName=${reportName}&studyId=${studyId}`;
-      location.replace(requestURL);
+      const params = {
+        query: {
+          reportName,
+          studyId,
+        },
+        doNotParseAsJson: true,
+      };
+      const requestURL = `${API_URL}/patients/getReferralPDF`;
+      const response = yield call(request, requestURL, params);
+      response.blob().then(blob => {
+        FileSaver.saveAs(blob, reportName);
+      });
     } catch (e) {
       // if returns forbidden we remove the token from local storage
       if (e.status === 401) {
@@ -770,6 +794,7 @@ function* submitEmail() {
         }),
       });
       yield put(submitEmailSuccess(response));
+      yield put(fetchEmails(studyId, patientId));
       toastr.success('', 'Success! Your email have been sent.');
     } catch (e) {
       const errorMessage = get(e, 'message', 'Something went wrong while sanding patient email. Please try again later.');
@@ -781,7 +806,7 @@ function* submitEmail() {
   }
 }
 
-function* fetchEmails() {
+function* fetchEmailsWatcher() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
     const { studyId, patientId } = yield take(FETCH_EMAILS);
@@ -1034,12 +1059,11 @@ export function* deletePatient() {
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
-    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyViewsStat);
-    const watcherD = yield fork(takeLatest, FETCH_PATIENTS, fetchStudyViewsStat);
     // watch for initial fetch actions that will load the text message stats
-    const watcherE = yield fork(takeLatest, FETCH_STUDY, fetchStudyTextStats);
-    // watch for filtering actions that will refresh the text message stats
-    const refreshTextStatsWatcher = yield fork(takeLatest, FETCH_STUDY_NEW_TEXTS, fetchStudyTextStats);
+    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
+    const watcherC = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyStats);
+    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    const watcherE = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyCallStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -1060,15 +1084,15 @@ export function* fetchStudySaga() {
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
     const watcherEmail = yield fork(submitEmail);
-    const watcherEmailsFetch = yield fork(fetchEmails);
+    const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
     yield cancel(watcherB);
+    yield cancel(watcherC);
     yield cancel(watcherD);
     yield cancel(watcherE);
-    yield cancel(refreshTextStatsWatcher);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);

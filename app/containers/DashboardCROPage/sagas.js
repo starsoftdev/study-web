@@ -43,7 +43,7 @@ export function* fetchCroWatcher() {
 export function* fetchCroWorker(action) {
   try {
     const query = action.query;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
 
     let requestURL = `${API_URL}/cros/crosForDashboard?limit=${limit}&offset=${offset}`;
@@ -57,8 +57,8 @@ export function* fetchCroWorker(action) {
     };
     const response = yield call(request, requestURL, params);
     let hasMoreItems = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMoreItems = false;
     }
     yield put(fetchCroSuccess(response, hasMoreItems, page));

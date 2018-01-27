@@ -90,6 +90,9 @@ import {
   FETCH_FIVE_9_LIST,
   FETCH_FIVE_9_LIST_SUCCESS,
   FETCH_FIVE_9_LIST_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   EDIT_STUDY_LEAD_SOURCES,
   EDIT_STUDY_LEAD_SOURCES_SUCCESS,
   EDIT_STUDY_LEAD_SOURCES_ERROR,
@@ -237,6 +240,27 @@ export function updateLandingPageError(payload) {
   };
 }
 
+export function updateFacebookLandingPage(params) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateFacebookLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPageError(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+    payload,
+  };
+}
+
 export function resetLandingPageState() {
   return {
     type: RESET_LANDING_PAGE_STATE,
@@ -350,11 +374,10 @@ export function clearFilters() {
   };
 }
 
-export function fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId) {
+export function fetchAllStudyEmailNotificationsDashboard(clientId, studyId) {
   return {
     type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
     clientId,
-    siteId,
     studyId,
   };
 }

@@ -35,7 +35,6 @@ import {
   FETCH_SITE,
   FETCH_USER,
   DELETE_USER,
-  DELETE_CLIENT_ROLE,
   SAVE_SITE,
   SAVE_USER,
   UPDATE_USER,
@@ -63,6 +62,7 @@ import {
   GET_CNS_INFO,
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
+  FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY_LEAD_SOURCES,
 } from '../../containers/App/constants';
 
@@ -121,8 +121,6 @@ import {
   userFetchingError,
   userDeleted,
   userDeletingError,
-  clientRoleDeleted,
-  clientRoleDeletingError,
   siteSaved,
   siteSavingError,
   userSaved,
@@ -163,6 +161,8 @@ import {
   getCnsInfoError,
   submitCnsSuccess,
   submitCnsError,
+  patientCategoriesFetched,
+  patientCategoriesFetchingError,
   fetchStudyLeadSourcesSuccess,
   fetchStudyLeadSourcesError,
 } from '../../containers/App/actions';
@@ -186,11 +186,11 @@ export default function* baseDataSaga() {
   yield fork(searchSitePatientsWatcher);
   yield fork(fetchPatientMessagesWatcher);
   yield fork(fetchPatientMessageUnreadCountWatcher);
+  yield fork(fetchPatientCategoriesWatcher);
   yield fork(fetchClientRolesWatcher);
   yield fork(fetchSiteWatcher);
   yield fork(fetchUserWatcher);
   yield fork(deleteUserWatcher);
-  yield fork(deleteClientRoleWatcher);
   yield fork(saveSiteWatcher);
   yield fork(saveUserWatcher);
   yield fork(updateUserWatcher);
@@ -311,7 +311,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', err.message);
+      toastr.error('', 'Error! Invalid coupon code.');
     }
   }
 }
@@ -413,7 +413,7 @@ export function* saveCardWatcher() {
 
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Add New Card', 'Card saved successfully!');
+      toastr.success('', 'Success! Your card has been added.');
       yield put(cardSaved(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -438,7 +438,7 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Delete Card', 'Card deleted successfully!');
+      toastr.success('', 'Success! You have removed your card.');
       yield put(cardDeleted(response));
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
@@ -479,7 +479,12 @@ export function* fetchClientSitesWatcher() {
         include: [{
           relation: 'roles',
           scope: {
-            include: ['user'],
+            include: [{
+              relation: 'user',
+              scope: {
+                where: { isArchived: false },
+              },
+            }],
           },
         }, {
           relation: 'studies',
@@ -516,14 +521,14 @@ export function* fetchClientSitesWatcher() {
 
 export function* fetchSitePatientsWatcher() {
   while (true) {
-    const { userId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
+    const { clientRoleId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
     const formValues = yield select(selectGlobalPMSFormValues());
     try {
       const requestURL = `${API_URL}/patients/patientsForUser`;
       let query = {};
       if (formValues) {
         query = {
-          userId,
+          clientRoleId,
           limit: limit || 10,
           offset: offset || 0,
           search: formValues.name,
@@ -531,7 +536,7 @@ export function* fetchSitePatientsWatcher() {
         };
       } else {
         query = {
-          userId,
+          clientRoleId,
           limit: limit || 10,
           offset: offset || 0,
         };
@@ -627,13 +632,43 @@ export function* fetchPatientMessageUnreadCountWatcher() {
   }
 }
 
+export function* fetchPatientCategoriesWatcher() {
+  while (true) {
+    yield take(FETCH_PATIENT_CATEGORIES);
+
+    try {
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            fields: ['name', 'id'],
+            order: 'id ASC',
+          }),
+        },
+      };
+      const requestURL = `${API_URL}/patientCategories`;
+
+      const response = yield call(request, requestURL, options);
+
+      yield put(patientCategoriesFetched(response));
+    } catch (err) {
+      yield put(patientCategoriesFetchingError(err));
+    }
+  }
+}
+
 export function* fetchClientRolesWatcher() {
   while (true) {
     const { clientId, searchParams } = yield take(FETCH_CLIENT_ROLES);
 
     try {
       const filterObj = {
-        include: 'user',
+        include: [{
+          relation: 'user',
+          scope: {
+            where: { isArchived: false },
+          },
+        }],
       };
 
       if (searchParams && searchParams.name) {
@@ -713,30 +748,6 @@ export function* deleteUserWatcher() {
       const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
       toastr.error('', errorMessage);
       yield put(userDeletingError(err));
-    }
-  }
-}
-
-export function* deleteClientRoleWatcher() {
-  while (true) {
-    const { id } = yield take(DELETE_CLIENT_ROLE);
-
-    try {
-      const requestURL = `${API_URL}/clientRoles/${id}`;
-      const options = {
-        method: 'DELETE',
-        body: JSON.stringify({
-          id,
-        }),
-      };
-      const response = yield call(request, requestURL, options);
-
-      toastr.success('Delete Client Role', 'Client Role deleted successfully!');
-      yield put(clientRoleDeleted(id, response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      toastr.error('', errorMessage);
-      yield put(clientRoleDeletingError(err));
     }
   }
 }

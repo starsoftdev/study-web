@@ -39,6 +39,10 @@ export const UPDATE_LANDING_PAGE_SUCCESS                 = 'DashboardPage/UPDATE
 export const UPDATE_LANDING_PAGE_ERROR                   = 'DashboardPage/UPDATE_LANDING_PAGE_ERROR';
 export const RESET_LANDING_PAGE_STATE                    = 'DashboardPage/RESET_LANDING_PAGE_STATE';
 
+export const UPDATE_FACEBOOK_LANDING_PAGE                = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE';
+export const UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS        = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS';
+export const UPDATE_FACEBOOK_LANDING_PAGE_ERROR          = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_ERROR';
+
 export const CHANGE_STUDY_ADD                            = 'DashboardPage/CHANGE_STUDY_ADD';
 export const CHANGE_STUDY_ADD_SUCCESS                    = 'DashboardPage/CHANGE_STUDY_ADD_SUCCESS';
 export const CHANGE_STUDY_ADD_ERROR                      = 'DashboardPage/CHANGE_STUDY_ADD_ERROR';

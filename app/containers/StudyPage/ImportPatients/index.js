@@ -5,6 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
+import { push } from 'react-router-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
@@ -14,13 +15,15 @@ const mapStateToProps = (state) => ({
   studyId: state.studyPage.studyId,
 });
 
-const mapDispatchToProps = () => ({
+const mapDispatchToProps = (dispatch) => ({
+  push: (path) => dispatch(push(path)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
 @reduxForm({ form: 'importPatients' })
 export default class ImportPatientsModal extends React.Component {
   static propTypes = {
+    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     show: React.PropTypes.bool.isRequired,
     onHide: React.PropTypes.func.isRequired,
@@ -31,21 +34,26 @@ export default class ImportPatientsModal extends React.Component {
   constructor(props) {
     super(props);
     this.renderUpload = this.renderUpload.bind(this);
+    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   componentDidMount() {
+  }
+
+  moveToUploadPage() {
+    const { push } = this.props;
+    push('/app/upload-patients');
   }
 
   renderUpload() {
     const { toggleAddPatient } = this.props;
     return (
       <div>
-        <span className="modal-opener coming-soon-wrapper">
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text coming-soon-old">Upload Patients</span>
-              <span className="text coming-soon-new" />
+              <span className="text">Upload Patients</span>
             </div>
           </div>
         </span>
@@ -69,6 +77,7 @@ export default class ImportPatientsModal extends React.Component {
     const sanitizedProps = sanitizeProps(props);
     delete sanitizedProps.toggleAddPatient;
     delete sanitizedProps.studyId;
+    delete sanitizedProps.push;
     return (
       <Modal
         {...sanitizedProps}
