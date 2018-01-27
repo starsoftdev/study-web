@@ -6,6 +6,7 @@ import _, { map } from 'lodash';
 import { Field, reduxForm, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -22,7 +23,7 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
-import { parseTimezone } from '../../utils/time';
+
 const formName = 'manageSiteUser';
 
 @reduxForm({ form: formName })
@@ -173,7 +174,8 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
   addSite(siteData) {
     const { currentUserClientId } = this.props;
     const params = siteData;
-    params.timezone = parseTimezone(siteData.timezone);
+    params.timezone = siteData.timezoneUnparsed;
+    params.phoneNumber = normalizePhoneForServer(params.phoneNumber);
 
     this.props.saveSite(currentUserClientId, null, params);
   }
@@ -226,8 +228,6 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
         cEditRedeemable = true;
       }
     }
-
-    console.log('site', siteOptions);
 
     return (
       <div className="sites-users-page">

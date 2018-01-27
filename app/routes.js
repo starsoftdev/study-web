@@ -267,7 +267,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/videos',
+      path: '/app/tutorials',
       name: 'videoPage',
       getComponent(nextState, cb) {
         System.import('./containers/VideoPage')
@@ -616,6 +616,27 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
+      path: '/app/dashboard-locked-users',
+      name: 'dashboardLockedUsersPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardLockedUsers/reducer'),
+          System.import('./containers/DashboardLockedUsers/sagas'),
+          System.import('./containers/DashboardLockedUsers'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardLockedUsersPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
       path: '/app/dashboard-protocol',
       name: 'dashboardProtocolPage',
       getComponent(nextState, cb) {
@@ -650,27 +671,6 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardCROPage', reducer.default);
-          injectSagas(sagas.default);
-          renderRoute(component);
-        });
-
-        importModules.catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToLogin,
-      path: '/app/dashboard-note',
-      name: 'dashboardNotePage',
-      getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('./containers/DashboardNotePage/reducer'),
-          System.import('./containers/DashboardNotePage/sagas'),
-          System.import('./containers/DashboardNotePage'),
-        ]);
-
-        const renderRoute = loadModule(cb);
-
-        importModules.then(([reducer, sagas, component]) => {
-          injectReducer('dashboardNotePage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

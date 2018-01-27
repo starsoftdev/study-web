@@ -32,6 +32,7 @@ import {
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectLandingPageUpdateProcess,
+  selectUpdatedStudyAd,
   selectChangeStudyAddProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
@@ -80,6 +81,7 @@ export class LandingPageModal extends React.Component {
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     isOnTop: React.PropTypes.bool,
+    updatedStudyAd: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -103,11 +105,12 @@ export class LandingPageModal extends React.Component {
       studyAddModalOpen: false,
       studyPreviewModalOpen: false,
       initialValuesEntered: false,
+      updatedStudyAd: null,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding } = this.props;
+    const { resetState, onClose, fetchLanding, updatedStudyAd, resetChangeAddState } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -145,6 +148,7 @@ export class LandingPageModal extends React.Component {
           change('initialMessageText', landing.initialMessageText);
           change('facebookUrl', landing.facebookUrl);
           change('isSendInitialMessageText', landing.isSendInitialMessageText);
+          change('displayAlways', landing.displayAlways);
 
           this.setState({
             initialValuesEntered: true,
@@ -167,7 +171,16 @@ export class LandingPageModal extends React.Component {
       this.onHide();
     }
 
+    if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
+      this.closeStudyAddModal();
+      resetChangeAddState();
+    }
+
     if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
+      if (newProps.updatedStudyAd && newProps.updatedStudyAd !== updatedStudyAd) {
+        this.setState({ updatedStudyAd: newProps.updatedStudyAd });
+      }
+
       this.closeStudyAddModal();
 
       /* this.setState({
@@ -202,6 +215,7 @@ export class LandingPageModal extends React.Component {
   handleSubmit(ev) {
     ev.preventDefault();
     const { formError, newList, touchFields, submitForm } = this.props;
+    const { landing } = this.state;
     if (formError) {
       touchFields();
       return;
@@ -212,6 +226,9 @@ export class LandingPageModal extends React.Component {
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
+    }
+    if (list.locationMask === undefined && landing.locationMask !== list.locationMask) {
+      list.locationMask = null;
     }
     submitForm(list);
   }
@@ -256,9 +273,11 @@ export class LandingPageModal extends React.Component {
     const { openModal, onClose, changeStudyAddProcess } = this.props;
     let fileSrc = null;
 
-    if (this.state.landing) {
+    if (this.state.landing && !this.state.updatedStudyAd) {
       const landing = this.state.landing;
       fileSrc = landing.imgSrc;
+    } else {
+      fileSrc = this.state.updatedStudyAd;
     }
     /* const country = [{ label: 'USA', value: 'USA', id: 0 },
                     { label: 'Canada', value: 'Canada', id: 1 },
@@ -571,6 +590,18 @@ export class LandingPageModal extends React.Component {
                     />
                   </div>
                 </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Display Always</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="checkbox"
+                      name="displayAlways"
+                      component={Checkbox}
+                    />
+                  </div>
+                </div>
 
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
@@ -637,6 +668,7 @@ const mapStateToProps = createStructuredSelector({
   landing: selectLanding(),
   updateLandingPageProcess: selectLandingPageUpdateProcess(),
   changeStudyAddProcess: selectChangeStudyAddProcess(),
+  updatedStudyAd: selectUpdatedStudyAd(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPageModal);

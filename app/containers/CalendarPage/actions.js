@@ -145,11 +145,11 @@ export function submitScheduleFailed(payload) {
   };
 }
 
-export function deleteSchedule(scheduleId, clientId) {
+export function deleteSchedule(scheduleId, clientRoleId) {
   return {
     type: DELETE_SCHEDULE,
     scheduleId,
-    clientId,
+    clientRoleId,
   };
 }
 export function deleteScheduleSucceeded(payload) {

@@ -44,34 +44,6 @@ export class SponsorDashboard extends React.Component {
         <div className="col-xs-6">
           <div className="box table-box">
             <div className="box-holder">
-              <i className="icomoon-doctor pull-left" />
-              <div className="textbox">
-                <h2>Principal <br /> INVESTIGATORS</h2>
-              </div>
-            </div>
-          </div>
-          <div className="box table-box">
-            <div className="box-holder">
-              <ul className="list-inline text-center list-activities alt">
-                <li>
-                  <span className="sub-title">ACTIVE</span>
-                  <strong className="number">{principalInvestigatorTotals.active}</strong>
-                </li>
-                <li>
-                  <span className="sub-title">INACTIVE</span>
-                  <strong className="number">{principalInvestigatorTotals.inactive}</strong>
-                </li>
-                <li>
-                  <span className="sub-title">TOTAL</span>
-                  <strong className="number">{principalInvestigatorTotals.total}</strong>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="col-xs-6 green">
-          <div className="box table-box">
-            <div className="box-holder">
               <div className="img-holder pull-left">
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>
@@ -94,6 +66,34 @@ export class SponsorDashboard extends React.Component {
                 <li>
                   <span className="sub-title">TOTAL</span>
                   <strong className="number">{patientSignUps.total}</strong>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="col-xs-6 green">
+          <div className="box table-box">
+            <div className="box-holder">
+              <i className="icomoon-doctor pull-left" />
+              <div className="textbox">
+                <h2>Principal <br /> investigators</h2>
+              </div>
+            </div>
+          </div>
+          <div className="box table-box">
+            <div className="box-holder">
+              <ul className="list-inline text-center list-activities alt">
+                <li>
+                  <span className="sub-title">ACTIVE</span>
+                  <strong className="number">{principalInvestigatorTotals.active}</strong>
+                </li>
+                <li>
+                  <span className="sub-title">INACTIVE</span>
+                  <strong className="number">{principalInvestigatorTotals.inactive}</strong>
+                </li>
+                <li>
+                  <span className="sub-title">TOTAL</span>
+                  <strong className="number">{principalInvestigatorTotals.total}</strong>
                 </li>
               </ul>
             </div>

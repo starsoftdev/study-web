@@ -93,7 +93,6 @@ export default [
 export function* fetchPatientsWatcher() {
   while (true) {
     const { clientId, searchParams, patients, searchFilter, isExport } = yield take(FETCH_PATIENTS);
-    const authToken = getItem('auth_token');
 
     try {
       const filterObj = {
@@ -208,12 +207,18 @@ export function* fetchPatientsWatcher() {
             gender: searchParams.gender,
           });
         }
+        if (isExport) {
+          if (searchParams.selectAllUncheckedManually) {
+            filterObj.patientsIDs = searchParams.patientsIDs;
+          } else if (searchParams.uncheckedPatients.length > 0) {
+            filterObj.excludePatients = searchParams.uncheckedPatients;
+          }
+        }
       }
 
       const queryParams = {
         filter: JSON.stringify(filterObj),
         clientId,
-        authToken,
       };
 
       const queryString = composeQueryString(queryParams);
@@ -282,11 +287,18 @@ export function* fetchPatientCategoriesWatcher() {
     yield take(FETCH_PATIENT_CATEGORIES);
 
     try {
-      const queryParams = { filter: '{"order":"autoCreateOrderNum ASC"}' };
-      const queryString = composeQueryString(queryParams);
-      const requestURL = `${API_URL}/patientCategories?${queryString}`;
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            fields: ['name', 'id'],
+            order: 'id ASC',
+          }),
+        },
+      };
+      const requestURL = `${API_URL}/patientCategories`;
 
-      const response = yield call(request, requestURL);
+      const response = yield call(request, requestURL, options);
 
       yield put(patientCategoriesFetched(response));
     } catch (err) {
@@ -559,6 +571,7 @@ function* submitEmailBlast() {
         };
       }
       reqParams.currentUser = currentUser;
+      reqParams.origin = 'patients database';
 
       yield call(request, requestURL, {
         method: 'POST',

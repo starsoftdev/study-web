@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
 import { touch } from 'redux-form';
 import _ from 'lodash';
+import { push } from 'react-router-redux';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { selectValues } from '../../common/selectors/form.selector';
@@ -39,6 +40,7 @@ function mapDispatchToProps(dispatch) {
   return {
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     touchAddProtocolFields: () => dispatch(touch('addProtocol', ...addProtocolFields)),
+    push: (path) => dispatch(push(path)),
   };
 }
 
@@ -51,10 +53,12 @@ export default class PatientActionButtons extends React.Component {
     fullSiteLocations: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     addProtocolProcess: React.PropTypes.object,
+    push: React.PropTypes.func,
     clientId: React.PropTypes.number,
     formValues: React.PropTypes.object,
     importPatientsStatus: React.PropTypes.object,
     paginationOptions: React.PropTypes.object,
+    textBlastFormValues: React.PropTypes.object,
     searchPatients: React.PropTypes.func,
     showAddProtocolModal: React.PropTypes.bool,
   };
@@ -83,6 +87,7 @@ export default class PatientActionButtons extends React.Component {
     this.renderUpload = this.renderUpload.bind(this);
     this.addProtocol = this.addProtocol.bind(this);
     this.toggleAddProtocolModal = this.toggleAddProtocolModal.bind(this);
+    this.moveToUploadPage = this.moveToUploadPage.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -95,6 +100,11 @@ export default class PatientActionButtons extends React.Component {
     this.setState({
       showImportPatientsModal: !this.state.showImportPatientsModal,
     });
+  }
+
+  moveToUploadPage() {
+    const { push } = this.props;
+    push('/app/upload-patients');
   }
 
   toggleAddPatientModal() {
@@ -188,24 +198,29 @@ export default class PatientActionButtons extends React.Component {
   }
 
   download() {
+    const patientsIDs = _.map(this.props.textBlastFormValues.patients, patient => (patient.id));
     if (!this.props.formValues.patients || this.props.formValues.patients.length === 0) {
       this.setState({
         showAlertModal: true,
       });
     } else {
-      this.props.searchPatients(this.props.paginationOptions.prevSearchFilter, true, true);
+      this.props.searchPatients({
+        ...this.props.paginationOptions.prevSearchFilter,
+        patientsIDs,
+        selectAllUncheckedManually: this.props.textBlastFormValues.selectAllUncheckedManually,
+        uncheckedPatients: this.props.textBlastFormValues.uncheckedPatients,
+      }, true, true);
     }
   }
 
   renderUpload() {
     return (
       <div>
-        <span className="modal-opener coming-soon-wrapper">
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text coming-soon-old">Upload Patients</span>
-              <span className="text coming-soon-new" />
+              <span className="text">Upload Patients</span>
             </div>
           </div>
         </span>

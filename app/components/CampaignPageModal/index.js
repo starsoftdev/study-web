@@ -122,6 +122,7 @@ export class CampaignPageModal extends React.Component {
       change('custom_patient_goal', foundCampaign.customPatientGoal);
       change('level_id', foundCampaign.level_id);
       change('patient_qualification_suite', foundCampaign.patientQualificationSuite);
+      change('five_9_value', foundCampaign.five9value);
     }
   }
 
@@ -139,7 +140,7 @@ export class CampaignPageModal extends React.Component {
       levelId: formValues.level_id,
       patientQualificationSuite: formValues.patient_qualification_suite || false,
       studyId: +study.study_id,
-      five9value: formValues.five_9_value,
+      five9value: formValues.five_9_value || null,
     };
     const customPatientGoal = parseInt(formValues.custom_patient_goal);
     if (customPatientGoal) {
@@ -227,6 +228,16 @@ export class CampaignPageModal extends React.Component {
                       onChange={(e) => { this.campaignChanged(e); }}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
+                      deleteRemoves={false}
+                      openOnFocus
+                      openOnClick
+                      onFocus={(e) => {
+                        console.log('focus', e);
+                      }}
+                      onOpen={(e) => {
+                        console.log('open', e);
+                      }}
                     />
                   </div>
                 </div>
@@ -244,6 +255,8 @@ export class CampaignPageModal extends React.Component {
                       options={exposureLevelOptions}
                       customSearchIconClass="icomoon-icon_search2"
                       clearable={false}
+                      backspaceRemoves={false}
+                      deleteRemoves={false}
                     />
                   </div>
                 </div>

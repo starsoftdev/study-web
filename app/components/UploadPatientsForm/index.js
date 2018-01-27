@@ -1,39 +1,48 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, change, Field, FieldArray, reduxForm, reset } from 'redux-form';
-import classNames from 'classnames';
+import * as XLSX from 'xlsx';
+import FileSaver from 'file-saver';
+import { ProgressBar } from 'react-bootstrap';
+import { blur, change, Field, reduxForm, touch } from 'redux-form';
+import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { fetchFilteredProtcols } from '../../containers/UploadPatients/actions';
-import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus } from '../../containers/UploadPatients/selectors';
-import RenderPatientsList from './RenderPatientsList';
-import { normalizePhoneForServer } from '../../common/helper/functions';
+import LoadingSpinner from '../../components/LoadingSpinner';
+
+import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
+import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
+import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
+import { selectSyncErrors } from '../../common/selectors/form.selector';
+import UploadPatientsPreviewForm from './UploadPatientsPreview';
+import UploadHistoryList from './UploadHistoryList';
+
 import formValidator, { fields as formFields } from './validator';
 
 const formName = 'UploadPatients.UploadPatientsForm';
 
 const mapStateToProps = createStructuredSelector({
+  uploadHistory: selectUploadHistory(),
   currentUser: selectCurrentUser(),
   indications: selectIndications(),
   isFetchingProtocols: selectIsFetchingProtocols(formName),
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
-  sources: selectSources(),
   exportPatientsStatus: selectExportPatientsStatus(),
+  formSyncErrors: selectSyncErrors(formName),
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  touchFields: () => dispatch(touch(formName, ...formFields)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  clearForm: () => dispatch(reset(formName)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
+  revertBulkUpload: (uploadId) => dispatch(revertBulkUpload(uploadId)),
 });
 
 @reduxForm({
@@ -42,32 +51,56 @@ const mapDispatchToProps = (dispatch) => ({
   formFields,
 })
 @connect(mapStateToProps, mapDispatchToProps)
-export default class UploadPatientsForm extends React.Component {
+export default class UploadPatientsForm extends Component {
   static propTypes = {
-    addPatientStatus: React.PropTypes.object,
-    currentUser: React.PropTypes.object,
-    change: React.PropTypes.func,
-    fetchFilteredProtcols: React.PropTypes.func,
-    clearForm: React.PropTypes.func,
-    exportPatientsStatus: React.PropTypes.any,
-    indications: React.PropTypes.array,
-    isFetchingProtocols: React.PropTypes.bool,
-    onClose: React.PropTypes.func,
-    sites: React.PropTypes.array,
-    sources: React.PropTypes.array,
-    submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func,
-    blur: React.PropTypes.func,
-    protocols: React.PropTypes.array,
+    addProtocolProcess: PropTypes.object,
+    uploadProgress: PropTypes.any,
+    revertProgress: PropTypes.any,
+    touchFields: PropTypes.func,
+    formSyncErrors: PropTypes.object,
+    addPatientStatus: PropTypes.object,
+    uploadHistory: PropTypes.object,
+    currentUser: PropTypes.object,
+    uploadResult: PropTypes.object,
+    change: PropTypes.func,
+    fetchFilteredProtcols: PropTypes.func,
+    showProtocolModal: PropTypes.func,
+    exportPatientsStatus: PropTypes.any,
+    indications: PropTypes.array,
+    isFetchingProtocols: PropTypes.bool,
+    isImporting: PropTypes.bool,
+    switchIsImporting: PropTypes.func,
+    setPatients: PropTypes.func,
+    onClose: PropTypes.func,
+    sites: PropTypes.array,
+    sources: PropTypes.array,
+    handleSubmit: PropTypes.func,
+    blur: PropTypes.func,
+    setFileName: PropTypes.func,
+    revertBulkUpload: PropTypes.func,
+    protocols: PropTypes.array,
+    lastAddedSiteLocation: PropTypes.any,
+    lastAddedProtocolNumber: PropTypes.any,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
+      defaultSourceSet: false,
+      duplicateValidationResult: true,
+      requiredValidationResult: true,
+      dragEnter: false,
       showPreview: false,
+      isDragOver: false,
       siteLocation: null,
+      fileName: null,
+      currentStudy: null,
+      missingKeys: [],
+      patients: [],
       fields: [],
+      duplicates: [],
+      prevItems: [],
       rowsCounts: {
         name: 0,
         email: 0,
@@ -76,195 +109,96 @@ export default class UploadPatientsForm extends React.Component {
         gender: 0,
         bmi: 0,
       },
+      cachedColumns: {
+        name: null,
+        email: null,
+        phone: null,
+        age: null,
+        gender: null,
+        bmi: null,
+      },
+      fileParsing: false,
+      needToUpdateProtocol: false,
     };
 
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
-    this.selectIndication = this.selectIndication.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
-    this.mapTextAreaGroups = this.mapTextAreaGroups.bind(this);
-    this.updateFields = this.updateFields.bind(this);
     this.addField = this.addField.bind(this);
-    this.changeField = this.changeField.bind(this);
     this.switchPreview = this.switchPreview.bind(this);
-    this.renderGroupFields = this.renderGroupFields.bind(this);
-    this.updateCounters = this.updateCounters.bind(this);
+    this.handleFile = this.handleFile.bind(this);
+    this.setRequiredValidationResult = this.setRequiredValidationResult.bind(this);
+    this.setDuplicateValidationResult = this.setDuplicateValidationResult.bind(this);
+    this.downloadExample = this.downloadExample.bind(this);
+    this.onDragEnterHandler = this.onDragEnterHandler.bind(this);
+    this.onDragLeaveHandler = this.onDragLeaveHandler.bind(this);
+    this.clearEmptySheet = this.clearEmptySheet.bind(this);
+    this.revert = this.revert.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, clearForm, change } = this.props;
+    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
+    const { currentStudy, siteLocation } = this.state;
+
+    if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
+      this.setState({ needToUpdateProtocol : true });
+      fetchFilteredProtcols(currentUser.roleForClient.id, siteLocation);
+    }
+
+    if ((!newProps.isFetchingProtocols && this.props.isFetchingProtocols) && this.state.needToUpdateProtocol) {
+      if (this.props.lastAddedSiteLocation !== siteLocation) {
+        change('site', this.props.lastAddedSiteLocation);
+        this.setState({ siteLocation: this.props.lastAddedSiteLocation });
+        fetchFilteredProtcols(currentUser.roleForClient.id, this.props.lastAddedSiteLocation);
+      } else {
+        const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
+        change('protocol', newSelectedProtocol.studyId);
+        change('indication', newSelectedProtocol.indicationId);
+        this.setState({ needToUpdateProtocol : false });
+      }
+    }
+
     if (exportPatientsStatus.exporting && !newProps.exportPatientsStatus.exporting) {
-      clearForm();
-
-      change('groupname', '');
-      change('groupemail', '');
-      change('groupphone', '');
-      change('groupage', '');
-      change('groupgender', '');
-      change('groupbmi', '');
-
-      this.setState({ fields: [], showPreview: false });
+      setTimeout(() => {
+        this.setState({ fields: [], showPreview: false, fileName: null, currentStudy: null }, () => {
+          if (isImporting) {
+            location.href = `/app/study/${currentStudy}`;
+          }
+        });
+      }, 2000);
     }
   }
 
-  mapTextAreaGroups(event) {
-    const { fields } = this.state;
-    const scope = this;
-    const pattern = /\r\n|\r|\n/g;
-    // recognize integers for age fields
-    const agePattern = /[^\d]+/g;
-    // recognize decimals for age fields
-    const bmiPattern = /[^\d.]+/g;
-    const replaced = event.target.value.replace(pattern, '|');
-    const items = replaced.split('|');
-
-    const key = event.target.name.substring(5);
-
-    if (items.length < fields.length) {
-      // add empty strings to keep balance with rest of the columns
-      _.forEach(fields, (item, index) => {
-        fields[index][key] = '';
-      });
-    }
-
-    _.forEach(items, (item, index) => {
-      let value = item;
-
-      // recognize lower case for gender fields
-      if (key === 'gender' && value !== 'N/A') {
-        value = value.toLowerCase();
-      }
-      // recognize integers for age fields
-      if (key === 'age' && value !== 'N/A') {
-        value = value.replace(agePattern, '');
-      }
-      // recognize decimals for age fields
-      if (key === 'bmi' && value !== 'N/A') {
-        value = value.replace(bmiPattern, '');
-      }
-
-      if (fields[index]) {
-        if (fields[index][key] !== value) {
-          fields[index][key] = value;
-        }
-      } else if (value && value !== '') {
-        fields[index] = {
-          [key]: value,
-        };
-      }
-    });
-    this.setState({ fields }, () => {
-      scope.updateCounters();
-    });
+  onDragEnterHandler() {
+    this.setState({ dragEnter: true });
   }
 
-  updateFields(index) {
-    const { change } = this.props;
-    const { fields } = this.state;
-    const scope = this;
-
-    let groupName = '';
-    let groupEmail = '';
-    let groupPhone = '';
-    let groupAge = '';
-    let groupGender = '';
-    let groupBmi = '';
-
-    if (index !== null) {
-      fields.splice(index, 1);
-    }
-
-    _.forEach(fields, (field) => {
-      _.forEach(field, (value, key) => {
-        switch (key) {
-          case 'name':
-            if (groupName !== '') {
-              groupName += `\n${value}`;
-            } else {
-              groupName += `${value}`;
-            }
-            break;
-          case 'email':
-            if (groupEmail !== '') {
-              groupEmail += `\n${value}`;
-            } else {
-              groupEmail += `${value}`;
-            }
-            break;
-          case 'phone':
-            if (groupPhone !== '') {
-              groupPhone += `\n${normalizePhoneForServer(value)}`;
-            } else {
-              groupPhone += `${normalizePhoneForServer(value)}`;
-            }
-            break;
-          case 'age':
-            if (groupAge !== '') {
-              groupAge += `\n${value || 'N/A'}`;
-            } else {
-              groupAge += `${value || 'N/A'}`;
-            }
-            break;
-          case 'gender':
-            if (groupGender !== '') {
-              groupGender += `\n${value || 'N/A'}`;
-            } else {
-              groupGender += `${value || 'N/A'}`;
-            }
-            break;
-          case 'bmi':
-            if (groupBmi !== '') {
-              groupBmi += `\n${value || 'N/A'}`;
-            } else {
-              groupBmi += `${value || 'N/A'}`;
-            }
-            break;
-          default:
-            break;
-        }
-      });
-    });
-
-    change('groupname', groupName);
-    change('groupemail', groupEmail);
-    change('groupphone', groupPhone);
-    change('groupage', groupAge);
-    change('groupgender', groupGender);
-    change('groupbmi', groupBmi);
-
-    this.setState({ fields }, () => {
-      scope.updateCounters();
-    });
+  onDragLeaveHandler() {
+    this.setState({ dragEnter: false });
   }
 
-  updateCounters() {
-    const { fields } = this.state;
-    const counters = {
-      name: 0,
-      email: 0,
-      phone: 0,
-      age: 0,
-      gender: 0,
-      bmi: 0,
-    };
+  setRequiredValidationResult(requiredValidationResult, missingKeys) {
+    this.setState({ requiredValidationResult, missingKeys });
+  }
 
-    _.forEach(fields, (field) => {
-      _.forEach(field, (value, key) => {
-        if (value && value !== '') {
-          counters[key]++;
-        }
-      });
-    });
-
-    this.setState({ rowsCounts: counters });
+  setDuplicateValidationResult(duplicateValidationResult) {
+    this.setState({ duplicateValidationResult });
   }
 
   switchPreview() {
-    const scope = this;
-    const { fields } = this.state;
-    const cloneFields = _.clone(fields).splice(0, 10);
-    this.setState({ fields: cloneFields, showPreview: !this.state.showPreview }, () => {
-      scope.updateFields(null);
-    });
+    const { fields, fileName } = this.state;
+    const { isImporting, switchIsImporting, touchFields, formSyncErrors } = this.props;
+
+    touchFields();
+
+    if (!fileName) {
+      toastr.error('', 'Error! Please upload an Excel file.');
+    } else if (_.isEmpty(formSyncErrors)) {
+      this.setState({ fields, showPreview: !this.state.showPreview }, () => {
+        if (isImporting) {
+          switchIsImporting();
+        }
+      });
+    }
   }
 
   addField() {
@@ -273,101 +207,153 @@ export default class UploadPatientsForm extends React.Component {
     this.setState({ fields });
   }
 
-  changeField(value, name, index) {
-    const fields = this.state.fields;
-    const scope = this;
-    let val = value;
-
-    if (val === '' && name !== 'phone') {
-      val = 'N/A';
-    }
-
-    fields[index][name] = val;
-    _.forEach(fields, (field, i) => {
-      if ((i !== index) && !fields[i][name]) {
-        if (name !== 'phone') {
-          fields[i][name] = 'N/A';
-        } else {
-          fields[i][name] = '';
-        }
-      }
-    });
-
-    this.setState({ fields }, () => {
-      scope.updateFields(null);
-    });
-  }
-
-  changeSiteLocation(siteId) {
+  changeSiteLocation(location) {
     const { currentUser, fetchFilteredProtcols, change } = this.props;
-    this.setState({ siteLocation: siteId });
-    if (siteId) {
-      fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
-    } else {
-      // clear the protocol value if there is no site id
-      change('protocol', null);
-    }
-  }
+    let siteLocation = null;
 
-  selectIndication(indicationId) {
-    if (indicationId) {
-      const { change, protocols } = this.props;
-      const protocol = _.find(protocols, { indicationId });
-      if (protocol) {
-        change('protocol', protocol.studyId);
-      } else {
-        // clear the protocol value if the indicationId doesn't match
-        change('protocol', null);
-      }
+    if (location) {
+      fetchFilteredProtcols(currentUser.roleForClient.id, location);
+      siteLocation = location;
+    } else {
+        // clear the protocol value if there is no site id
+      change('protocol', null);
+      change('indication', null);
     }
+
+    this.setState({ siteLocation });
   }
 
   selectProtocol(studyId) {
-    if (studyId) {
-      const { change, protocols } = this.props;
-      const protocol = _.find(protocols, { studyId });
-      change('indication', protocol.indicationId);
+    const { protocols, showProtocolModal, change } = this.props;
+
+    if (studyId === 'add-new-protocol') {
+      change('protocol', null);
+      change('indication', null);
+      showProtocolModal();
+    } else {
+      this.setState({ currentStudy: studyId }, () => {
+        const protocol = _.find(protocols, { studyId });
+        change('indication', protocol.indicationId);
+      });
     }
   }
 
-  renderGroupFields(names) {
-    const { rowsCounts } = this.state;
-    let counter = 0;
+  clearEmptySheet(json) {
+    const validPatients = [];
+    _.forEach(json, (patient) => {
+      let hasValues = false;
+      _.forEach(patient, (prop, propKey) => {
+        if (patient[propKey]) {
+          hasValues = true;
+        }
+      });
 
-    const groupFields = names.map(item => {
-      const key = item.substring(0, 5);
-      const name = item.substring(5);
-      const required = (item === 'groupname' || item === 'groupemail' || item === 'groupphone');
-
-      if (key && key !== 'group') {
-        return null;
+      if (hasValues) {
+        validPatients.push(patient);
       }
-
-      counter++;
-      return (
-        <div className={classNames('column', `${name}s`)} key={counter}>
-          <span className={classNames('title', (required ? 'required' : ''))}>
-            <label htmlFor={`group${name}`}>{name}</label>
-          </span>
-          <Field
-            name={`group${name}`}
-            component={Input}
-            componentClass="textarea"
-            className="group"
-            onChange={this.mapTextAreaGroups}
-          />
-          <span className="rows-counter">{rowsCounts[name]}</span>
-        </div>
-      );
     });
 
-    return groupFields;
+    return validPatients;
+  }
+
+  handleFile(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const rABS = false;
+    const scope = this;
+    const files = e.target.files;
+    const f = files[0];
+    const name = f ? f.name : '';
+    const reader = new FileReader();
+    // console.log('f', f);
+    // console.log('name', name);
+    reader.onload = function (e) {
+      if (f.size >= 5000000) {
+        toastr.error('', 'Error! File exceeds the upload limit.');
+      } else {
+        scope.setState({ fileParsing: true });
+        let data = e.target.result;
+        if (!rABS) data = new Uint8Array(data);
+        const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
+        scope.setState({ fileParsing: false });
+        if (json.length >= 5000) {
+          toastr.error('', 'Error! File contains too many rows.');
+        } else {
+          const patients = scope.clearEmptySheet(json);
+          scope.setState({
+            missingKeys: [],
+            duplicateValidationResult: false,
+            requiredValidationResult: false,
+            fileName: name,
+            patients,
+          }, () => {
+            scope.props.setFileName(name);
+            scope.props.setPatients(patients);
+          });
+        }
+      }
+    };
+    if (rABS) {
+      reader.readAsBinaryString(f);
+    } else {
+      reader.readAsArrayBuffer(f);
+    }
+  }
+
+  downloadExample() {
+    const header = {
+      header:[
+        'Full Name',
+        'Email',
+        'Phone',
+        'DOB',
+        'Gender',
+        'BMI',
+      ],
+    };
+    const wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' };
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet([], header);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'SheetJS');
+
+    const wbout = XLSX.write(workbook, wopts);
+
+    const s2ab = (s) => {
+      const buf = new ArrayBuffer(s.length);
+      const view = new Uint8Array(buf);
+      for (let i = 0; i !== s.length; ++i) {
+        view[i] = s.charCodeAt(i) & 0xFF; // eslint-disable-line no-bitwise
+      }
+      return buf;
+    };
+
+    /* the saveAs call downloads a file on the local machine */
+    FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'Upload_Patients_Template.xlsx');
+  }
+
+  revert(uploadId) {
+    // TODO: check for 48 hours
+    const { revertBulkUpload } = this.props;
+    revertBulkUpload(uploadId);
   }
 
   render() {
-    const { handleSubmit, submitting, indications, isFetchingProtocols, protocols, sites, sources, change, blur } = this.props;
-    const { fields, showPreview, rowsCounts } = this.state;
-    const uploadSources = _.clone(sources);
+    const {
+      setPatients,
+      handleSubmit,
+      indications,
+      isFetchingProtocols,
+      protocols,
+      sites,
+      sources,
+      isImporting,
+      uploadHistory,
+      uploadResult,
+    } = this.props;
+    const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
+    let uploadSources = _.clone(sources);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -381,118 +367,218 @@ export default class UploadPatientsForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    uploadSources.shift();
+
+    if (uploadSources.length > 0) {
+      uploadSources = _.sortBy(uploadSources, (item) => {
+        return (item.type === 'StudyKIK (Imported)' ? -1 : item.orderNumber);
+      });
+    }
+    protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
+      label: (source.type === 'StudyKIK (Imported)' ? 'Database' : source.type), // rename StudyKIK Imported
       value: source.id,
     }));
+    let disabled = false;
 
-    // {error && <span className="error">{error}</span>}
+    if (!duplicateValidationResult || !requiredValidationResult) {
+      const index = _.findIndex(missingKeys, (k) => { return k.toLowerCase() === 'phone'; });
+      if (index !== -1) {
+        disabled = true;
+      }
+    }
 
     return (
-      <Form
-        className="upload-patients-form"
-        onSubmit={handleSubmit}
-      >
-        <div className="field-row status">
-          <span className="step-one">
-            1. Copy & Paste contacts
+      <div className="upload-patients-container">
+        <Form className="upload-patients-form" onSubmit={handleSubmit}>
+          <div className="field-row status">
+            <span className="step-one">
+            1. Upload Patients List
           </span>
-          <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
-            1. Preview Contacts
+            <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
+            2. Preview & Finish
           </span>
-        </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Site Location</label>
-          </strong>
-          <Field
-            name="site"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Site Location"
-            options={siteOptions}
-            onChange={this.changeSiteLocation}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label">
-            <label>Protocol</label>
-          </strong>
-          <Field
-            name="protocol"
-            component={ReactSelect}
-            placeholder="Select Protocol"
-            className="field"
-            options={protocolOptions}
-            disabled={isFetchingProtocols || !this.state.siteLocation}
-            onChange={this.selectProtocol}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Indication</label>
-          </strong>
-          <Field
-            name="indication"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Indication"
-            options={indicationOptions}
-            onChange={this.selectIndication}
-          />
-        </div>
-        <div className="field-row main">
-          <strong className="label required">
-            <label>Source</label>
-          </strong>
-          <Field
-            name="source"
-            component={ReactSelect}
-            className="field"
-            placeholder="Select Source"
-            options={sourceOptions}
-          />
-        </div>
-        {!this.state.showPreview &&
-          <span className="tip">
-            Copy & Paste contacts
-          </span>
-        }
-        {!this.state.showPreview &&
-          <div className="column-groups">
-            {this.renderGroupFields(formFields)}
           </div>
-        }
-        {!this.state.showPreview &&
-          <div className="instructions">
-            <span className="head">Pasting instructions</span>
-            <span className="body">Please separate your fields by entering one contact per line.</span>
-            <span className="examples">
-              <span className="title">Examples:</span>
-              <span className="item">John Doe</span>
-              <span className="item">Jane Doe</span>
-              <span className="item">Janie Doe</span>
-            </span>
+          {(!showPreview && !isImporting) &&
+            <div className="instructions">
+              <span className="head">Upload Instructions</span>
+              <span className="body">
+                <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
+                  Please format the first row of your colums with the proper column names
+                  i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
+                  <span className="download-template" onClick={this.downloadExample}>Download Template</span>
+              </span>
+              <div className="examples">
+                <span className="title">* Only the Phone field is required; all other fields are optional.</span>
+                <table className="example-table">
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>DOB</th>
+                    <th>Gender</th>
+                    <th>BMI</th>
+                  </tr>
+                  <tr>
+                    <td>Doe, John</td>
+                    <td>johndoe@example.com</td>
+                    <td>(111) 111-1111</td>
+                    <td>1/1/1111</td>
+                    <td>Male</td>
+                    <td>18.4</td>
+                  </tr>
+                  <tr>
+                    <td>Doe, Jane</td>
+                    <td>janedoe@example.com</td>
+                    <td>(555) 555-5555</td>
+                    <td>5/5/5555</td>
+                    <td>Female</td>
+                    <td>24.5</td>
+                  </tr>
+                  <tr>
+                    <td>Doe, Janie</td>
+                    <td>janiedoe@example.com</td>
+                    <td>(888) 888-8888</td>
+                    <td>8/8/8888</td>
+                    <td>Female</td>
+                    <td>29</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          }
+          {(!showPreview && !isImporting) &&
+            <div
+              className={classNames('drop-zone', (dragEnter ? 'drag-enter' : ''))}
+            >
+              <input
+                type="file"
+                onChange={this.handleFile}
+                onDragEnter={this.onDragEnterHandler}
+                onDragLeave={this.onDragLeaveHandler}
+              />
+              <div className="icon">
+                <i className="icomoon-arrow_up_alt" />
+                <span className="text">Drag and drop Excel<br /> file here</span>
+              </div>
+            </div>
+          }
+          {this.state.fileParsing && <div className="field-row main text-center"><LoadingSpinner showOnlyIcon /></div>}
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>UPLOAD PATIENTS LIST</label></strong>
+              <div className="field">
+                <label htmlFor="patients_list" data-text="Browse" data-hover-text="Attach File" className="btn btn-default upload-btn" />
+                <Field
+                  id="patients_list"
+                  name="file"
+                  component={Input}
+                  type="file"
+                  onChange={this.handleFile}
+                />
+                <strong className="label filename">
+                  <span className="filename" htmlFor="patients_list">{this.state.fileName ? this.state.fileName : ''}</span>
+                </strong>
+              </div>
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Site Location</label>
+              </strong>
+              <Field
+                name="site"
+                component={ReactSelect}
+                className="field"
+                placeholder="Select Site Location"
+                options={siteOptions}
+                onChange={this.changeSiteLocation}
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Protocol</label>
+              </strong>
+              <Field
+                name="protocol"
+                component={ReactSelect}
+                placeholder="Select Protocol"
+                className="field"
+                options={protocolOptions}
+                disabled={isFetchingProtocols || !this.state.siteLocation}
+                onChange={this.selectProtocol}
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label">
+                <label>Indication</label>
+              </strong>
+              <Field
+                name="indication"
+                component={ReactSelect}
+                className="field"
+                placeholder="Select Indication"
+                options={indicationOptions}
+                disabled
+              />
+            </div>
+          }
+          {(!this.state.showPreview && !isImporting) &&
+            <div className="field-row main">
+              <strong className="label required">
+                <label>Source</label>
+              </strong>
+              <Field
+                name="source"
+                component={ReactSelect}
+                placeholder="Select Source"
+                className="field"selectedSourceValue
+                options={sourceOptions}
+              />
+            </div>
+          }
+          {(showPreview && !isImporting) &&
+            <UploadPatientsPreviewForm
+              setDuplicateValidationResult={this.setDuplicateValidationResult}
+              setRequiredValidationResult={this.setRequiredValidationResult}
+              setPatients={setPatients}
+              patients={patients}
+            />
+          }
+          {isImporting &&
+            <div className="import-progress">
+              <div className="control">
+                <ProgressBar bsStyle="success" now={this.props.uploadProgress} />
+                {uploadResult === null &&
+                  <span className="title">Import of <b>{this.state.fileName}</b> {(uploadResult !== null) ? 'finished' : 'in progress'}.</span>
+                }
+                {uploadResult !== null &&
+                  <span className="upload-result">
+                    {`${uploadResult.imported} patients added and ${uploadResult.skipped} skipped.`}
+                  </span>
+                }
+              </div>
+            </div>
+          }
+          <div className="text-right">
+            {(!showPreview && !isImporting) && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
+            {(showPreview && !isImporting) && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
+            {(showPreview && !isImporting) && <Button type="submit" disabled={disabled}>Submit</Button>}
           </div>
+        </Form>
+        {(!showPreview && !isImporting) &&
+          <UploadHistoryList
+            revertProgress={this.props.revertProgress}
+            uploadHistory={uploadHistory}
+            revert={this.revert}
+          />
         }
-        {this.state.showPreview && <FieldArray
-          name="patients"
-          component={RenderPatientsList}
-          patients={fields}
-          rowsCounts={rowsCounts}
-          change={change}
-          addField={this.addField}
-          changeField={this.changeField}
-          updateFields={this.updateFields}
-          blur={blur}
-        />}
-        <div className="text-right">
-          {!showPreview && <Button type="button" className="no-margin-right" onClick={this.switchPreview}>Next</Button>}
-          {showPreview && <input type="button" value="back" className="btn btn-gray-outline margin-right" onClick={this.switchPreview} />}
-          {showPreview && <Button type="submit" disabled={submitting}>Submit</Button>}
-        </div>
-      </Form>
+      </div>
     );
   }
 }

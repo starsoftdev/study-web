@@ -3,6 +3,7 @@ import _, { get } from 'lodash';
 import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
+import FileSaver from 'file-saver';
 
 import {
   receiptsReceived,
@@ -12,18 +13,7 @@ import {
   GET_PDF,
   SHOW_INVOICE_PDF,
 } from '../../containers/Receipts/constants';
-import { getItem } from '../../utils/localStorage';
 import request from '../../utils/request';
-
-const serializeParams = (obj) => {
-  const str = [];
-  Object.keys(obj).forEach(p => {
-    if ({}.hasOwnProperty.call(obj, p) && obj[p] !== undefined && obj[p] !== null) {  // we need to pass 0 and empty string
-      str.push(`${encodeURIComponent(p)}=${encodeURIComponent(obj[p])}`);
-    }
-  });
-  return str.join('&');
-};
 
 // Individual exports for testing
 export function* receiptSaga() {
@@ -104,18 +94,28 @@ export function* getPdf() {
     const { payload } = yield take(GET_PDF);
     try {
       const requestURL = `${API_URL}/invoices/getInvoicePDF`;
-      const authToken = getItem('auth_token');
       const invoices = [];
       for (const value of payload) {
         invoices.push(value.invoice_pdf_id);
       }
+
       const params = {
-        access_token: authToken,
+        query: {
+          invoices: JSON.stringify(invoices),
+        },
+        doNotParseAsJson: true,
       };
-      if (invoices.length > 0) {
-        params.invoices = JSON.stringify(invoices);
-      }
-      location.replace(`${requestURL}?${serializeParams(params)}`);
+      const response = yield call(request, requestURL, params);
+      response.blob().then(blob => {
+        if (invoices.length > 1) {
+          const dateNow = new Date();
+          const dateString = (`0${dateNow.getMonth() + 1}`).slice(-2) + (`0${dateNow.getDate()}`).slice(-2) + dateNow.getFullYear().toString().substr(2, 2);
+          const filename = `StudyKIK_Receipt_${dateString}.zip`;
+          FileSaver.saveAs(blob, filename);
+        } else if (invoices.length === 1) {
+          FileSaver.saveAs(blob, invoices[0].substr(invoices[0].indexOf('/') + 1));
+        }
+      });
     } catch (err) {
       const errorMessage = get(err, 'message', 'Something went wrong!');
       toastr.error('', errorMessage);
