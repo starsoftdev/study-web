@@ -47,7 +47,7 @@ export class DashboardMessagingNumbersPage extends React.Component {
     const { fetchMessagingNumbers } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchMessagingNumbers(query, limit, offset);
   }
 
@@ -55,8 +55,8 @@ export class DashboardMessagingNumbersPage extends React.Component {
     const { fetchMessagingNumbers, messagingNumber } = this.props;
     if (!messagingNumber.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchMessagingNumbers(query, limit, offset);
     }
   }

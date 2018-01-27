@@ -8,8 +8,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import Button from 'react-bootstrap/lib/Button';
-import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
+import { readStudyPatientMessages, updatePatientSuccess, studyStatsFetched } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import * as Selector from '../selectors';
@@ -44,9 +43,11 @@ class TextSection extends React.Component {
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
     updatePatientSuccess: React.PropTypes.func,
+    studyStatsFetched: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
+    studyStats: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -59,6 +60,7 @@ class TextSection extends React.Component {
 
     this.state = {
       maxCharacters: 160,
+      patientToFetchMessages: null,
       enteredCharactersLength: 0,
       twilioMessages : [],
       socketBinded: false,
@@ -72,13 +74,17 @@ class TextSection extends React.Component {
     }
 
     if (newProps.active && newProps.currentPatient) {
-      this.initStudyPatientMessagesFetch(newProps);
+      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(newProps);
+      });
     }
 
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
-        this.initStudyPatientMessagesFetch(newProps);
-        if (this.props.active && newMessage) {
+        if (this.props.active && newMessage && this.props.currentPatient) {
+          this.setState({ patientToFetchMessages: this.props.currentPatient.id }, () => {
+            this.initStudyPatientMessagesFetch(this.props);
+          });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
@@ -92,7 +98,7 @@ class TextSection extends React.Component {
   }
 
   initStudyPatientMessagesFetch(props) {
-    if (props.currentPatient) {
+    if (props.currentPatient && props.currentPatient.id) {
       // otherwise method componentWillReceiveProps
       // receiving data with a missing property currentPatient
       // which leads to an error
@@ -101,7 +107,7 @@ class TextSection extends React.Component {
         patientId: props.currentPatient.id,
         cb: (err, data) => {
           if (!err) {
-            if (this.state.twilioMessages !== data.messages) {
+            if (this.state.patientToFetchMessages === props.currentPatient.id) {
               this.setState({ twilioMessages: data.messages });
             }
           } else {
@@ -133,6 +139,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
+    const clientCredits = this.props.clientCredits.details.customerCredits;
+    if (clientCredits === 0 || clientCredits === null) {
+      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      return;
+    }
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -155,6 +166,12 @@ class TextSection extends React.Component {
         toastr.error('', errorMessage);
       }
     });
+  }
+
+  checkForValidPhone = (notValidPhone) => {
+    if (notValidPhone) {
+      toastr.error('Error!', 'The phone field is empty.');
+    }
   }
 
   renderText() {
@@ -236,7 +253,10 @@ class TextSection extends React.Component {
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
+    const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
+    const notValidPhone = !currentPatient.phone;
+
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
@@ -245,12 +265,15 @@ class TextSection extends React.Component {
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
-          <Button
-            disabled={disabled || unsubscribed || !ePMS}
-            onClick={this.submitText}
-          >
-            Send
-          </Button>
+          <div onClick={() => this.checkForValidPhone(notValidPhone)}>
+            <div
+              className="btn btn-default lightbox-opener pull-right"
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
+              disabled={sendDisabled}
+            >
+              Send
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -261,6 +284,7 @@ const mapStateToProps = createStructuredSelector({
   clientCredits: selectClientCredits(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   site: Selector.selectSite(),
+  studyStats: Selector.selectStudyStats(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -271,6 +295,7 @@ const mapDispatchToProps = (dispatch) => ({
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
   updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
+  studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

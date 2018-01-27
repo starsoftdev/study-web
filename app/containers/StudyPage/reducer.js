@@ -21,7 +21,7 @@ import {
   FETCH_SITE_SUCCESS,
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
-  FETCH_STUDY_TEXTS_SUCCESS,
+  FETCH_STUDY_STATS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
@@ -368,7 +368,7 @@ function studyPageReducer(state = initialState, action) {
           callsDuration: action.payload.totalDuration,
         },
       };
-    case FETCH_STUDY_TEXTS_SUCCESS:
+    case FETCH_STUDY_STATS_SUCCESS:
       return {
         ...state,
         stats: {
@@ -376,6 +376,9 @@ function studyPageReducer(state = initialState, action) {
           texts: action.payload.total,
           textsSent: action.payload.sent,
           textsReceived: action.payload.received,
+          views: action.payload.views,
+          calls: action.payload.countReceived,
+          callsDuration: action.payload.totalDuration,
         },
       };
     case SET_STUDY_ID:

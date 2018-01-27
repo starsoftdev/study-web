@@ -73,9 +73,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
-        socket.on('notifyChangePoints', (clientId, newCreditsAmount) => {
+        socket.on('notifyChangePoints', (clientId, newCreditsAmount, newEmailCredit) => {
           if (currentUser.roleForClient && currentUser.roleForClient.client_id === clientId) {
-            this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount } });
+            this.props.clientCreditsFetched({ customerCredits: { customerCredits: newCreditsAmount, emailCredits: newEmailCredit } });
           }
         });
         socket.on('notifyEmailSent', (params) => {
@@ -225,7 +225,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchSitePatients: (userId, offset, limit) => dispatch(fetchSitePatients(userId, offset, limit)),
+  fetchSitePatients: (clientRoleId, offset, limit) => dispatch(fetchSitePatients(clientRoleId, offset, limit)),
   fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   clientCreditsFetched: (payload) => dispatch(clientCreditsFetched(payload)),
   logout: () => dispatch(logout()),

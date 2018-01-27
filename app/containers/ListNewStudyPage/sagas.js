@@ -59,7 +59,10 @@ export function* submitFormWatcher() {
       yield put(reset('listNewStudy'));
       yield put(reset('shoppingCart'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
+        errorMessage = 'Error! Invalid coupon code.';
+      }
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       // if returns forbidden we remove the token from local storage

@@ -46,8 +46,8 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     this.setState({ hover: false });
   }
 
-  showNote(siteId, siteName) {
-    this.props.showNoteModal(siteId, siteName);
+  showNote(studyId) {
+    this.props.showNoteModal(studyId);
   }
 
   render() {
@@ -121,7 +121,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li className="sponsor"><div className="special_ellipsis_div">Sponsor: <span>{item.sponsor_name || 'N/A'}</span></div></li>
             <li className="cro">CRO: <span>{item.cro_name || 'N/A'}</span></li>
             <li className="login-info">Last Login: <span>{lastLoginTime}</span></li>
-            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(item.site_id, item.site_name); }}>Notes</a></span></li>
+            <li className="login-info"><span><a className="special_ellipsis_link landing-link" onClick={() => { this.showNote(item.study_id); }}>Notes</a></span></li>
           </ul>
         </td>
         <td>

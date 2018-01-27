@@ -111,7 +111,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchSponsorSchedules: (sponsorId, searchParams) => dispatch(fetchSponsorSchedules(sponsorId, searchParams)),
   fetchSponsorSites: (sponsorId, searchParams) => dispatch(fetchSponsorSites(sponsorId, searchParams)),
   submitSchedule: (data) => dispatch(submitSchedule(data)),
-  deleteSchedule: (scheduleId, clientId) => dispatch(deleteSchedule(scheduleId, clientId)),
+  deleteSchedule: (scheduleId, clientRoleId) => dispatch(deleteSchedule(scheduleId, clientRoleId)),
   setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
 });
 
@@ -179,7 +179,7 @@ export default class CalendarPage extends React.Component {
     if (currentUser.roleForClient) {
       this.props.fetchClientSites(currentUser.roleForClient.client_id);
       this.props.fetchIndications();
-      this.props.fetchSchedules({ clientId: currentUser.roleForClient.client_id });
+      this.props.fetchSchedules({ clientRoleId: currentUser.roleForClient.id });
       this.props.fetchProtocols(currentUser.roleForClient.id);
     } else if (currentUser.roleForSponsor) {
       this.props.fetchSponsorProtocols(currentUser.roleForSponsor.id, {}, 0, 0, null, null);
@@ -276,7 +276,7 @@ export default class CalendarPage extends React.Component {
     if (data.siteLocation && data.protocol) { // CREATE
       submitData = {
         patientId: data.patient.value,
-        clientId: currentUser.roleForClient.client_id,
+        clientRoleId: currentUser.roleForClient.id,
         time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
@@ -297,7 +297,7 @@ export default class CalendarPage extends React.Component {
         time: updatedDate.clone().add(data.period === 'AM' ?
           data.hour % 12 :
           (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
-        clientId: currentUser.roleForClient.client_id,
+        clientRoleId: currentUser.roleForClient.id,
         patientId: data.patient.value,
         textReminder: data.textReminder,
       };
@@ -317,7 +317,7 @@ export default class CalendarPage extends React.Component {
       allModalDeferred: false,
     });
 
-    deleteSchedule(scheduleId, currentUser.roleForClient.client_id);
+    deleteSchedule(scheduleId, currentUser.roleForClient.id);
   }
 
   navigateToToday = () => {

@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => ({
   arrayRemoveAll: (field) => dispatch(arrayRemoveAll(formName, field)),
   arrayPush: (field, value) => dispatch(arrayPush(formName, field, value)),
   change: (field, value) => dispatch(change(formName, field, value)),
-  fetchAllStudyEmailNotificationsDashboard: (clientId, siteId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, siteId, studyId)),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, studyId)),
   removeCustomEmailNotification: (id, email) => dispatch(removeCustomEmailNotification(id, email)),
   removeTaggedIndicationForStudy: (studyId, indication) => dispatch(removeTaggedIndicationForStudy(studyId, indication)),
   startSubmit: () => dispatch(startSubmit(formName)),
@@ -150,7 +150,7 @@ export default class EditInformationForm extends React.Component {
     const foundSiteLocation = _.find(this.props.siteLocations, (item) => (item.id === e));
     if (foundSiteLocation) {
       const { change, fetchAllStudyEmailNotificationsDashboard, initialFormValues } = this.props;
-      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, foundSiteLocation.id, initialFormValues.study_id);
+      fetchAllStudyEmailNotificationsDashboard(foundSiteLocation.client_id, initialFormValues.study_id);
 
       change('site_id', foundSiteLocation.id);
       change('site_city', foundSiteLocation.city);
@@ -381,6 +381,9 @@ export default class EditInformationForm extends React.Component {
                   }}
                   customSearchIconClass="icomoon-icon_search2"
                   clearable={false}
+                  backspaceRemoves={false}
+                  deleteRemoves={false}
+                  disabled
                 />
               </div>
             </div>
@@ -570,6 +573,9 @@ export default class EditInformationForm extends React.Component {
                   placeholder="Select Protocol"
                   searchPlaceholder="Search"
                   searchable
+                  clearable={false}
+                  backspaceRemoves={false}
+                  deleteRemoves={false}
                   options={protocolsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
@@ -636,6 +642,9 @@ export default class EditInformationForm extends React.Component {
                   placeholder="Select Indication"
                   searchPlaceholder="Search"
                   searchable
+                  clearable={false}
+                  backspaceRemoves={false}
+                  deleteRemoves={false}
                   options={indicationsOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />

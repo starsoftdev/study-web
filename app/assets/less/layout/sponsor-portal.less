@@ -125,10 +125,25 @@
         height: 170px;
       }
 
-      .box-holder {
-        padding: 15px 80px;
+      .box-holder,
+      .reprot-view-box-holder {
         display: table-cell;
         vertical-align: middle;
+      }
+
+      .box-holder {
+        padding: 15px 45px;
+      }
+
+      .reprot-view-box-holder {
+        padding: 15px 25px;
+
+        ul {
+
+          li {
+            cursor: pointer;
+          }
+        }
       }
 
       .icomoon-doctor,
@@ -149,6 +164,10 @@
       .img-holder {
         width: 94px;
         margin: 0 25px 0 0;
+
+        &.view-holder {
+          width: 70px;
+        }
       }
     }
 
@@ -165,11 +184,17 @@
       .box.table-box .box-holder {
         padding: 15px 40px;
       }
+      .box.table-box .reprot-view-box-holder {
+        padding: 15px 20px;
+      }
     }
 
     @media screen and (max-width: 1200px) {
       .box.table-box .box-holder {
         padding: 15px 30px;
+      }
+      .box.table-box .reprot-view-box-holder {
+        padding: 15px 15px;
       }
     }
   }
@@ -204,6 +229,18 @@
 
     .number {
       padding: 0;
+    }
+
+    @media screen and (max-width: 1700px) {
+      li.font-fix {
+        padding: 0 5px;
+      }
+    }
+
+    @media screen and (max-width: @psd) {
+      li.font-fix {
+        padding: 0;
+      }
     }
   }
 
@@ -625,6 +662,7 @@
       }
       &.action_needed {
         width: 170px;
+        cursor: pointer;
       }
       &.scheduled {
         width: 132px;
@@ -634,6 +672,7 @@
       }
       &.screen_failed {
         width: 170px;
+        cursor: pointer;
       }
       &.randomized {
         width: 156px;
@@ -652,7 +691,7 @@
       }
     }
     td {
-      &.dnq {
+      &.dnq, &.action_needed, &.screen_failed {
         color: #00afef;
         &:hover {
           color: #76daff;

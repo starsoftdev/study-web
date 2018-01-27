@@ -25,6 +25,10 @@ import {
   MARK_NOTIFICATIONS_READ,
   CLIENT_OPENED_STUDY_PAGE,
   CLIENT_CLOSED_STUDY_PAGE,
+  SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET,
+  UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET,
+  SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET,
+  UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
 } from '../../containers/GlobalNotifications/constants';
 
 let props = null;
@@ -39,6 +43,10 @@ export function* GlobalNotificationsSaga() {
   yield fork(subscribeToChatEvent);
   yield fork(fetchStudyPatientMessages);
   yield fork(sendStudyPatientMessages);
+  yield fork(subscribeToUploadProgressSocket);
+  yield fork(unsubscribeFromUploadProgressSocket);
+  yield fork(subscribeToRevertProgressSocket);
+  yield fork(unsubscribeFromRevertProgressSocket);
   yield fork(takeLatest, FETCH_NOTIFICATIONS, fetchNotifications);
   yield fork(takeLatest, FETCH_UNREAD_NOTIFICATIONS_COUNT, fetchUnreadNotificationsCount);
   yield fork(markNotificationsReadWorker);
@@ -77,6 +85,92 @@ export function* subscribeToPageEvent() {
         },
         (err, data) => {
           payload.cb(err, data);
+        }
+      );
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* subscribeToUploadProgressSocket() {
+  while (true) {
+    const { bulkUploadId, jobId, cb } = yield take(SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET);
+    try {
+      socket.emit(
+        'subscribeToUploadProgressSocket',
+        {
+          user: props.currentUser,
+          bulkUploadId,
+          jobId,
+        },
+        (err, data) => {
+          cb(err, data);
+        }
+      );
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* unsubscribeFromUploadProgressSocket() {
+  while (true) {
+    const { jobId, cb } = yield take(UNSUBSCRIBE_FROM_UPLOAD_PROGRESS_SOCKET);
+    try {
+      socket.emit(
+        'unsubscribeFromUploadProgressSocket',
+        {
+          user: props.currentUser,
+          jobId,
+        },
+        (err, data) => {
+          cb(err, data);
+        }
+      );
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* subscribeToRevertProgressSocket() {
+  while (true) {
+    const { bulkUploadId, jobId, cb } = yield take(SUBSCRIBE_TO_REVERT_PROGRESS_SOCKET);
+    try {
+      socket.emit(
+        'subscribeToRevertProgressSocket',
+        {
+          user: props.currentUser,
+          bulkUploadId,
+          jobId,
+        },
+        (err, data) => {
+          cb(err, data);
+        }
+      );
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+export function* unsubscribeFromRevertProgressSocket() {
+  while (true) {
+    const { jobId, cb } = yield take(UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET);
+    try {
+      socket.emit(
+        'unsubscribeFromRevertProgressSocket',
+        {
+          user: props.currentUser,
+          jobId,
+        },
+        (err, data) => {
+          cb(err, data);
         }
       );
     } catch (err) {

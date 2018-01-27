@@ -35,7 +35,7 @@ class HelpMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><Link to="/app/help-support" onClick={() => this.handleClickOutside()}>Help and Support</Link></li>
-              <li><Link to="/app/videos" onClick={() => this.handleClickOutside()}>Videos</Link></li>
+              <li><Link to="/app/tutorials" onClick={() => this.handleClickOutside()}>Tutorials</Link></li>
             </ul>
           </div>
         </div>

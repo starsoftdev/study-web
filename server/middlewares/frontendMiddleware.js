@@ -62,6 +62,7 @@ const logView = (req) => {
 const reserveSsrRoutes = (app, fs, templatePath) => {
   app.get('/:landingId([0-9]+)-*/', async (req, res) => {
     try {
+      logView(req);
       const landingId = req.params.landingId;
       const landing = await PagesService.fetchLanding(landingId);
       const file = await readFile(fs, templatePath);
@@ -116,6 +117,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
+  const serverPublicPath = webpackConfig.output.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
+
   // Since webpackDevMiddleware uses memory-fs internally to store build
   // artifacts, we use it instead
   const fs = middleware.fileSystem;
@@ -129,6 +133,10 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
 
   app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
+
+  app.get('/lv17', (req, res) => res.redirect(301, 'https://studykik.com/4002638-lv17'));
+
+  app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
@@ -153,7 +161,6 @@ const addDevMiddlewares = (app, webpackConfig) => {
   reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
-    logView(req);
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
         res.sendStatus(404);
@@ -175,6 +182,9 @@ const addProdMiddlewares = (app, options) => {
   app.use(compression());
   app.use(publicPath, express.static(outputPath));
 
+  const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
+  app.use('/images', express.static(serverPublicPath));
+
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 
   app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
@@ -186,6 +196,10 @@ const addProdMiddlewares = (app, options) => {
   app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
 
   app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
+
+  app.get('/lv17', (req, res) => res.redirect(301, 'https://studykik.com/4002638-lv17'));
+
+  app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
@@ -200,7 +214,6 @@ const addProdMiddlewares = (app, options) => {
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('*', (req, res) => {
-    logView(req);
     res.sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 };

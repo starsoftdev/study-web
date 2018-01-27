@@ -227,7 +227,7 @@ export function* deleteSchedulesWorker(action) {
     const params = {
       method: 'DELETE',
       query: {
-        clientId: action.clientId,
+        clientRoleId: action.clientRoleId,
       },
     };
     const response = yield call(request, requestURL, params);
