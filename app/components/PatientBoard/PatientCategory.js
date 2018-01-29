@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
+import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 
 import * as Selector from '../../containers/StudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -146,6 +147,25 @@ class PatientCategory extends React.Component {
     this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
   }
 
+  rowRenderer = ({ key, index, style }) => {
+    const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
+    const patient = category.patients[index];
+    return (
+      <Patient
+        key={key}
+        category={category}
+        currentUser={this.props.currentUser}
+        currentPatientId={currentPatientId}
+        patient={patient}
+        unreadMessageCount={patient.unreadMessageCount}
+        currentSite={currentSite}
+        onPatientClick={onPatientClick}
+        onPatientTextClick={onPatientTextClick}
+        style={style}
+      />
+    );
+  }
+
   renderPatients() {
     const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
 
@@ -166,21 +186,25 @@ class PatientCategory extends React.Component {
       return (
         <div className="slide">
           <div className="slide-holder">
-            <ul className="list-unstyled">
-              {sorted.map(patient => (
-                <Patient
-                  key={patient.id}
-                  category={category}
-                  currentUser={this.props.currentUser}
-                  currentPatientId={currentPatientId}
-                  patient={patient}
-                  unreadMessageCount={patient.unreadMessageCount}
-                  currentSite={currentSite}
-                  onPatientClick={onPatientClick}
-                  onPatientTextClick={onPatientTextClick}
-                />
-                ))}
-            </ul>
+            <WindowScroller>
+              {({ height, isScrolling, onChildScroll, scrollTop }) => (
+                <AutoSizer disableHeight>
+                  {({ width }) => (
+                    <List
+                      autoHeight
+                      height={height}
+                      width={width}
+                      isScrolling={isScrolling}
+                      onScroll={onChildScroll}
+                      rowCount={sorted.length}
+                      rowHeight={120}
+                      rowRenderer={this.rowRenderer}
+                      scrollTop={scrollTop}
+                    />
+                  )}
+                </AutoSizer>
+              )}
+            </WindowScroller>
           </div>
         </div>
       );

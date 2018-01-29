@@ -255,7 +255,8 @@ class PatientBoard extends React.Component {
       scrollTop = event.pageY;
       scrollBottom = scrollTop + window.innerHeight;
     }
-    if (scrollBottom > event.target.scrollingElement.scrollHeight) {
+    console.log('scroll event', scrollBottom, event.target.scrollingElement.scrollHeight);
+    if (scrollBottom >= event.target.scrollingElement.scrollHeight) {
       console.log('reaches bottom');
       this.loadItems();
     }
@@ -291,7 +292,15 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
+                <PatientCategory
+                  key={patientCategory.id}
+                  category={patientCategory}
+                  onPatientClick={this.onPatientClick}
+                  onPatientTextClick={this.onPatientTextClick}
+                  onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
+                  hasMoreItems={paginationOptions.hasMoreItems}
+                  loadMore={this.loadMore}
+                />
               ))}
             </ul>
           </nav>
