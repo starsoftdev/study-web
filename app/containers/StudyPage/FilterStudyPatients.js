@@ -70,6 +70,7 @@ class FilterStudyPatientsForm extends Component {
   }
 
   searchPatient(event, type) {
+    console.log(123, event, type);
     const { fetchPatients, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
@@ -115,7 +116,7 @@ class FilterStudyPatientsForm extends Component {
   }
 
   groupHeaderClicked(group) {
-    const { fetchPatients, fetchStudyTextNewStats, studyId, campaign, search } = this.props;
+    const { fetchPatients, fetchStudyStats, studyId, campaign, search } = this.props;
     let newCampaign = campaign;
     if (campaign === -1) {
       newCampaign = null;
@@ -135,11 +136,11 @@ class FilterStudyPatientsForm extends Component {
       if (group === 'All') {
         this.setState({ selectedStudySources: selectedValues });
         fetchPatients(studyId, search, newCampaign, selectedValues);
-        fetchStudyTextNewStats(studyId, newCampaign, selectedValues);
+        fetchStudyStats(studyId, newCampaign, selectedValues);
       } else {
         this.setState({ selectedStudySources: [...this.state.selectedStudySources, ...selectedValues] });
         fetchPatients(studyId, search, newCampaign, selectedValues);
-        fetchStudyTextNewStats(studyId, newCampaign, selectedValues);
+        fetchStudyStats(studyId, newCampaign, selectedValues);
       }
     }
   }

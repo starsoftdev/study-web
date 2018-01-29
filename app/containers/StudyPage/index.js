@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
+import { selectSitePatients, selectCurrentUser, selectSources } from '../../containers/App/selectors';
 import { fetchSources, fetchStudyLeadSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
@@ -80,7 +80,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage, fetchStudyLeadSources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id, 1);
+    fetchStudy(params.id);
     fetchPatientCategories(params.id);
     fetchSources();
     fetchStudyLeadSources(params.id);
@@ -277,11 +277,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             id: studySource.studySourceId,
             label: `${source.label} ${studySource.source_name || ''}`,
           };
+
+          sourceMapped.push(item);
         }
       });
-      if (item) {
-        sourceMapped.push(item);
-      } else {
+      if (!item) {
         sourceMapped.push({
           group: source.label,
           id: `${source.value}_`,
@@ -332,7 +332,7 @@ const mapStateToProps = createStructuredSelector({
   fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
-  sources: Selector.selectSources(),
+  sources: selectSources(),
   site: Selector.selectSite(),
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
