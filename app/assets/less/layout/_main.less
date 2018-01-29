@@ -5088,7 +5088,14 @@ div[data-percentage],
     background: #fff;
     margin: 0 -2px 30px 0;
     border: solid 2px #ccc;
-    ul {
+    .slide-holder {
+      .ReactVirtualized__Grid.ReactVirtualized__List {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    
+    ul, .ReactVirtualized__Grid__innerScrollContainer {
       margin: 0;
       display: block;
       li {
