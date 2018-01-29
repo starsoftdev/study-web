@@ -257,7 +257,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               studySourceId: item.studySourceId,
               landingPageId: item.landingPageId,
               recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
-              messagingNumber: { value: item.phoneNumberId, label:item.phoneNumber },
+              messagingNumber: item.phoneNumberId ? { value: item.phoneNumberId, label:item.phoneNumber } : null,
               googleUrl: item.googleUrl,
               url: item.url,
               studyId: item.studyId,
