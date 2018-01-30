@@ -65,10 +65,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
             if (initObject && initObject.messagingNumber) {
               messagingNumbersOptions.unshift(initObject.messagingNumber);
-              if (initObject.url && formValues.leadSource && formValues.leadSource[index]) {
-                landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${initObject.landingPageUrl.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].url) ? `?utm=${formValues.leadSource[index].url}` : ''}` : '';
-                googleHref = initObject.googleUrl ? initObject.googleUrl : '';
-              }
+            }
+            if (initObject && initObject.url && formValues.leadSource && formValues.leadSource[index]) {
+              landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${initObject.landingPageUrl.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].url) ? `?utm=${formValues.leadSource[index].url}` : ''}` : '';
+              googleHref = initObject.googleUrl ? initObject.googleUrl : '';
             }
           }
 
