@@ -189,7 +189,7 @@ class PatientCategory extends React.Component {
               isScrolling={isScrolling}
               onScroll={onChildScroll}
               rowCount={count}
-              rowHeight={110}
+              rowHeight={120}
               rowRenderer={this.rowRenderer}
               scrollTop={scrollTop}
             />
