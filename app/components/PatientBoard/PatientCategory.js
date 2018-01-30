@@ -12,6 +12,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import moment from 'moment';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
+import VirtualList from 'react-virtual-list';
 
 import * as Selector from '../../containers/StudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -131,6 +132,14 @@ class PatientCategory extends React.Component {
     });
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   if (nextProps.draggingElement !== this.props.draggingElement) {
+  //     return false;
+  //   }
+
+  //   return true;
+  // }
+
   componentDidUpdate() {
     if (this.state.columnWidth === '') {
       this.handleResize();
@@ -166,8 +175,58 @@ class PatientCategory extends React.Component {
     );
   }
 
+  renderWithReactVirtualized = (count) => (
+    <WindowScroller>
+      {({ height, isScrolling, onChildScroll, scrollTop }) => (
+        <AutoSizer disableHeight>
+          {({ width }) => (
+            <List
+              autoHeight
+              height={height}
+              width={width}
+              isScrolling={isScrolling}
+              onScroll={onChildScroll}
+              rowCount={count}
+              rowHeight={120}
+              rowRenderer={this.rowRenderer}
+              scrollTop={scrollTop}
+            />
+          )}
+        </AutoSizer>
+      )}
+    </WindowScroller>
+  );
+
+  myList = ({
+    virtual,
+    itemHeight,
+  }) => (
+    <ul style={virtual.style}>
+      {virtual.items.map(patient => (
+        <Patient
+          key={`item_${patient.id}`}
+          category={this.props.category}
+          currentUser={this.props.currentUser}
+          currentPatientId={this.props.currentPatientId}
+          patient={patient}
+          unreadMessageCount={patient.unreadMessageCount}
+          currentSite={this.props.currentSite}
+          onPatientClick={this.props.onPatientClick}
+          onPatientTextClick={this.props.onPatientTextClick}
+          style={{ height: itemHeight }}
+        />
+      ))}
+    </ul>
+  );
+
+  renderWithVirutalList = () => {
+
+  }
+
   renderPatients() {
     const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
+
+    const MyVirtualList = VirtualList()(this.myList);
 
     if (category.patients.length > 0) {
       const getLastUpdate = (patient) => {
@@ -180,31 +239,19 @@ class PatientCategory extends React.Component {
       };
 
       // sort the patients into the categories
-      const sorted = category.patients;
+      const count = category.patients.length;
       // _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
 
       return (
         <div className="slide">
           <div className="slide-holder">
-            <WindowScroller>
-              {({ height, isScrolling, onChildScroll, scrollTop }) => (
-                <AutoSizer disableHeight>
-                  {({ width }) => (
-                    <List
-                      autoHeight
-                      height={height}
-                      width={width}
-                      isScrolling={isScrolling}
-                      onScroll={onChildScroll}
-                      rowCount={sorted.length}
-                      rowHeight={120}
-                      rowRenderer={this.rowRenderer}
-                      scrollTop={scrollTop}
-                    />
-                  )}
-                </AutoSizer>
-              )}
-            </WindowScroller>
+            {
+              // this.renderWithReactVirtualized(count)
+            }
+            <MyVirtualList
+              items={category.patients}
+              itemHeight={150}
+            />
           </div>
         </div>
       );
