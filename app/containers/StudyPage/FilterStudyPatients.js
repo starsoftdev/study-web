@@ -47,7 +47,7 @@ class FilterStudyPatientsForm extends Component {
     this.state = {
       campaign: null,
       selectedGroups: [],
-      selectedStudySources: [[{ group:'StudyKIK', id:'1_', label:'none' }]],
+      selectedStudySources: [{ group:'StudyKIK', id:'1_', label:'none' }],
     };
   }
 
