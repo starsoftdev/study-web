@@ -80,7 +80,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage, fetchStudyLeadSources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id);
+    fetchStudy(params.id, [{ group:'StudyKIK', id:'1_', label:'none' }]);
     fetchPatientCategories(params.id);
     fetchSources();
     fetchStudyLeadSources(params.id);

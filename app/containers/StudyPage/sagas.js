@@ -214,7 +214,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
       yield call(() => { location.href = '/login'; });
     }
   }
-}*/
+} */
 
 function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
@@ -270,7 +270,7 @@ function* fetchPatientCategories() {
     const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, null, null, null);
+    yield call(fetchPatients, studyId, null, null, [{ group:'StudyKIK', id:'1_', label:'none' }]);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);
