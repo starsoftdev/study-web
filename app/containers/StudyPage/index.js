@@ -241,7 +241,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
-    const sourceOptions = sources.map(source => (
+    const sortedSources = _.sortBy(sources, ['orderNumber']);
+    const sourceOptions = sortedSources.map(source => (
       {
         label: source.type,
         value: source.id,
