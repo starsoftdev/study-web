@@ -143,8 +143,8 @@ class FilterStudyPatientsForm extends Component {
         fetchStudyStats(studyId, newCampaign, selectedValues);
       } else {
         this.setState({ selectedStudySources: [...this.state.selectedStudySources, ...selectedValues] });
-        fetchPatients(studyId, search, newCampaign, selectedValues);
-        fetchStudyStats(studyId, newCampaign, selectedValues);
+        fetchPatients(studyId, search, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
+        fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
       }
     }
   }
