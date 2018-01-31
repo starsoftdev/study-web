@@ -536,8 +536,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     _.forEach((this.props.sources), (item) => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
-
-    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+    sourcesOptions.unshift({ label: 'All', value: -1 });
 
     if (studies.details.length > 0) {
       return (
@@ -583,7 +582,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                         searchPlaceholder="Search"
                         searchable
                         options={sourcesOptions}
-                        selectedValue={sourceSelectedValue}
                         customSearchIconClass="icomoon-icon_search2"
                         onChange={this.sourceChanged}
                       />
