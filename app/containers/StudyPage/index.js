@@ -258,8 +258,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.indication && study.indication.name) {
       studyName = study.indication.name;
     }
-    const initialValues = { source: 1 };
-
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
     }
@@ -283,7 +281,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
-            initialValues={initialValues}
           />
           <StudyStats stats={stats} />
           <PatientBoard

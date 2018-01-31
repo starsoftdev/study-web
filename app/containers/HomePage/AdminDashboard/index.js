@@ -386,6 +386,11 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       change('dashboardFilters', 'source', defaultSource.id);
     }
 
+    if (filters.source === -1) {
+      change('dashboardFilters', 'source', null);
+      delete filters.source;
+    }
+
     if (isEmpty) {
       this.props.clearFilters();
     } else if (_.isEqual(this.state.prevTotalsFilters, filters)) {
