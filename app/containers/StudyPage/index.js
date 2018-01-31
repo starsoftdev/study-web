@@ -269,13 +269,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const sourceMapped = [];
     _.forEach(sourceOptions, (source) => {
       let item = null;
+      const label = source.label.replace('StudyKIK (Imported)', 'Database');
       _.forEach(this.props.studyLeadSources.details, (studySource) => {
         if (source.value === studySource.source_id.value) {
           item = {
             ...studySource,
-            group: source.label,
+            group: label,
             id: studySource.studySourceId,
-            label: `${source.label} ${studySource.source_name || ''}`,
+            label: `- ${label} ${studySource.source_name || ''}`,
           };
 
           sourceMapped.push(item);
