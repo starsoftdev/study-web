@@ -46,7 +46,7 @@ class FilterStudyPatientsForm extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
       campaign: null,
-      selectedGroups: [],
+      selectedGroups: ['StudyKIK'],
       selectedStudySources: [{ group:'StudyKIK', id:'1_', label:'none' }],
     };
   }
@@ -70,7 +70,6 @@ class FilterStudyPatientsForm extends Component {
   }
 
   searchPatient(event, type) {
-    console.log(123, event, type);
     const { fetchPatients, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
@@ -122,17 +121,22 @@ class FilterStudyPatientsForm extends Component {
       newCampaign = null;
     }
     if (this.state.selectedGroups.indexOf(group) === -1) {
-      this.setState({ selectedGroups: [...this.state.selectedGroups, group] });
+      let selectedGroups = [];
+      if (group !== 'All') {
+        selectedGroups = [...this.state.selectedGroups, group];
+      }
 
       const selectedValues = [];
       _.forEach(this.props.sourceMapped, (item) => {
         if (group === 'All') {
           selectedValues.push(item);
+          selectedGroups.push(item.group);
         } else if (group === item.group) {
           selectedValues.push(item);
         }
       });
 
+      this.setState({ selectedGroups });
       if (group === 'All') {
         this.setState({ selectedStudySources: selectedValues });
         fetchPatients(studyId, search, newCampaign, selectedValues);
@@ -164,11 +168,16 @@ class FilterStudyPatientsForm extends Component {
       </div>);
     };
 
-    const selectedItemsTemplate = (controlSelectedValue) => (
-      <div>
+    const selectedItemsTemplate = (controlSelectedValue) => {
+      if (controlSelectedValue.length === 1) {
+        return (<div>
+          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
+        </div>);
+      }
+      return (<div>
         {controlSelectedValue.length} item(s) selected
-      </div>
-    );
+      </div>);
+    };
 
     const groupHeaderTemplate = (group) => {
       return <div onClick={() => { this.groupHeaderClicked(group); }}>{group}</div>;
