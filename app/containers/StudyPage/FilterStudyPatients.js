@@ -147,6 +147,7 @@ class FilterStudyPatientsForm extends Component {
         fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
       }
     }
+    this.sourceSelectContainer.click(); //fake click to close the dropdown
   }
 
   render() {
@@ -170,7 +171,7 @@ class FilterStudyPatientsForm extends Component {
 
     const selectedItemsTemplate = (controlSelectedValue) => {
       if (controlSelectedValue.length === 1) {
-        return (<div>
+        return (<div className="truncate">
           {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
         </div>);
       }
@@ -231,7 +232,12 @@ class FilterStudyPatientsForm extends Component {
               onChange={(event, val) => this.searchPatient(val, 'campaign')}
             />
           </div>
-          <div className="custom-select pull-left no-right-padding">
+          <div
+            className="custom-select pull-left no-right-padding"
+            ref={(sourceSelectContainer) => {
+              this.sourceSelectContainer = sourceSelectContainer;
+            }}
+          >
             <Field
               name="source"
               component={ReactMultiSelect}
