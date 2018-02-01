@@ -506,7 +506,7 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">If Intersted...</label>
+                    <label htmlFor="new-patient-phone">If Interested...</label>
                   </strong>
                   <div className="field">
                     <Field
