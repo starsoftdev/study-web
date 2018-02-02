@@ -375,10 +375,10 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     });
 
     let offset = 0;
-    const limit = 10;
+    const limit = 50;
 
     if (fetchByScroll) {
-      offset = this.props.paginationOptions.page * 10;
+      offset = this.props.paginationOptions.page * limit;
     }
 
     if (!filters.source) {
@@ -400,7 +400,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       }
     } else {
       this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
-      this.props.fetchTotalsDashboard(filters, 10, 0);
+      this.props.fetchTotalsDashboard(filters, 50, 0);
       this.props.fetchStudiesDashboard(filters, limit, offset);
       this.setState({ prevOffset: offset });
     }
