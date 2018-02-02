@@ -773,8 +773,8 @@ export function* fetchStudiesDashboardWorker(action) {
     const response = yield call(request, requestURL, options);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.studies.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.studies.length < 50) {
       hasMore = false;
     }
 
