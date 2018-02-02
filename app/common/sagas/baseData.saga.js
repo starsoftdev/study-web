@@ -545,8 +545,8 @@ export function* fetchSitePatientsWatcher() {
       const response = yield call(request, requestURL, params);
 
       let hasMore = true;
-      const page = ((offset || 0) / 10) + 1;
-      if (response.length < 10) {
+      const page = ((offset || 0) / 50) + 1;
+      if (response.length < 50) {
         hasMore = false;
       }
 
