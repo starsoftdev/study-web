@@ -191,7 +191,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
   }
 
   loadItems() {
-    this.props.getPaginatedProposals(15, (this.props.paginationOptions.page) * 15);
+    this.props.getPaginatedProposals(50, (this.props.paginationOptions.page) * 50);
   }
 
   sortBy(ev) {
@@ -430,7 +430,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
           <InfiniteScroll
             element="tbody"
             pageStart={0}
-            loadMore={() => getPaginatedProposals(15, (paginationOptions.page) * 15)}
+            loadMore={() => getPaginatedProposals(50, (paginationOptions.page) * 50)}
             initialLoad={false}
             hasMore={paginationOptions.hasMoreItems}
             loader={null}

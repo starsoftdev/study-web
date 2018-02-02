@@ -525,7 +525,7 @@ export function* fetchSitePatientsWatcher() {
       if (formValues) {
         query = {
           clientRoleId,
-          limit: limit || 10,
+          limit: limit || 50,
           offset: offset || 0,
           search: formValues.name,
           siteId: formValues.siteLocation,
@@ -533,7 +533,7 @@ export function* fetchSitePatientsWatcher() {
       } else {
         query = {
           clientRoleId,
-          limit: limit || 10,
+          limit: limit || 50,
           offset: offset || 0,
         };
       }

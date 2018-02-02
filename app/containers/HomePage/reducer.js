@@ -124,7 +124,7 @@ const initialState = {
     siteId: null,
     status: null,
     hasMoreItems: true,
-    limit: 15,
+    limit: 50,
     skip: 0,
   },
   addNotificationProcess: {
