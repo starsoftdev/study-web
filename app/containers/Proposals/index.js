@@ -97,7 +97,7 @@ export class Proposals extends Component { // eslint-disable-line react/prefer-s
 
     const { currentUser, fetchClientSites, fetchEvents } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    this.getPaginatedProposals(15, 0);
+    this.getPaginatedProposals(50, 0);
     fetchEvents(events);
   }
 
