@@ -406,7 +406,7 @@ export function* fetchProtocolsWatcher() {
 
 export function* fetchProtocolsWorker(action) {
   try {
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     const sort = action.sort || null;
     const order = action.order || null;
@@ -430,8 +430,8 @@ export function* fetchProtocolsWorker(action) {
     const response = yield call(request, requestURL, params);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
 
