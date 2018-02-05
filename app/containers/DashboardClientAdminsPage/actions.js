@@ -124,10 +124,10 @@ export function fetchClientAdminError(payload) {
   };
 }
 
-export function fetchSites(payload) {
+export function fetchSites(clientId) {
   return {
     type: FETCH_SITES,
-    payload,
+    clientId,
   };
 }
 
