@@ -62,14 +62,6 @@ class Patient extends React.Component {
     this.renderPatientTextMessageSummary = this.renderPatientTextMessageSummary.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.draggingElement !== this.props.draggingElement) {
-      return false;
-    }
-
-    return true;
-  }
-
   renderUnreadMessageCount() {
     const { unreadMessageCount } = this.props;
     if (unreadMessageCount > 0) {
