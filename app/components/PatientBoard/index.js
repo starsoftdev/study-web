@@ -13,7 +13,6 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
-import InfiniteScroll from 'react-infinite-scroller';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -255,9 +254,7 @@ class PatientBoard extends React.Component {
       scrollTop = event.pageY;
       scrollBottom = scrollTop + window.innerHeight;
     }
-    console.log('scroll event', scrollBottom, event.target.scrollingElement.scrollHeight);
     if (scrollBottom >= event.target.scrollingElement.scrollHeight) {
-      console.log('reaches bottom');
       this.loadItems();
     }
     this.setState({

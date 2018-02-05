@@ -99,6 +99,7 @@ const collect = (connect, monitor) => ({
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
+    itemType: React.PropTypes.any,
     study: React.PropTypes.object.isRequired,
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
@@ -133,9 +134,7 @@ class PatientCategory extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    console.log('should component update', nextProps, this.props);
-    if (nextProps.draggingElement !== this.props.draggingElement) {
-      console.log('do not update component', nextProps.draggingElement, this.props.draggingElement);
+    if (nextProps.itemType === 'patient' && !this.props.itemType) {
       return false;
     }
 
@@ -177,6 +176,28 @@ class PatientCategory extends React.Component {
     );
   }
 
+  myList = ({
+    virtual,
+    itemHeight,
+  }) => (
+    <ul className="list-unstyled auto-height" style={virtual.style}>
+      {virtual.items.map(patient => (
+        <Patient
+          key={patient.id}
+          category={this.props.category}
+          currentUser={this.props.currentUser}
+          currentPatientId={this.props.currentPatientId}
+          patient={patient}
+          unreadMessageCount={patient.unreadMessageCount}
+          currentSite={this.props.currentSite}
+          onPatientClick={this.props.onPatientClick}
+          onPatientTextClick={this.props.onPatientTextClick}
+          style={{ height: itemHeight }}
+        />
+      ))}
+    </ul>
+  );
+
   renderWithReactVirtualized = (count) => (
     <WindowScroller>
       {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -199,43 +220,32 @@ class PatientCategory extends React.Component {
     </WindowScroller>
   );
 
-  myList = ({
-    virtual,
-    itemHeight,
-  }) => (
-    <ul className="list-unstyled" style={virtual.style}>
-      {virtual.items.map(patient => (
-        <Patient
-          key={patient.id}
-          category={this.props.category}
-          currentUser={this.props.currentUser}
-          currentPatientId={this.props.currentPatientId}
-          patient={patient}
-          unreadMessageCount={patient.unreadMessageCount}
-          currentSite={this.props.currentSite}
-          onPatientClick={this.props.onPatientClick}
-          onPatientTextClick={this.props.onPatientTextClick}
-          style={{ height: itemHeight }}
-        />
-      ))}
-    </ul>
-  );
-
   renderWithVirutalList = () => {
 
   }
 
   renderPatients() {
     const { category } = this.props;
-
-    const MyVirtualList = VirtualList()(this.myList);
-
     if (category.patients.length > 0) {
+      const getLastUpdate = (patient) => {
+        const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
+        if (patient.lastTextMessage && patient.lastTextMessage.dateCreated) {
+          return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
+        }
+
+        return tempMax;
+      };
+
+      const MyVirtualList = VirtualList()(this.myList);
+
+      // sort the patients into the categories
+      const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
+
       return (
         <div className="slide">
           <div className="slide-holder">
             <MyVirtualList
-              items={category.patients}
+              items={sorted}
               itemHeight={150}
             />
           </div>
