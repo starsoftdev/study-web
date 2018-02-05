@@ -96,7 +96,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if (isSearch) {
       queryParams.skip = 0;
     } else {
-      queryParams.skip = (paginationOptions.page) * 50;
+      queryParams.skip = (paginationOptions.page) * queryParams.limit;
     }
 
     if (searchFilter.sort !== undefined && searchFilter.direction !== undefined) {
