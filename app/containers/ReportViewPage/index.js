@@ -58,6 +58,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentCategoryStudyId: false,
       currentDnqStudyId: false,
       showPQSModal: false,
+      defaultSource: 1,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -77,6 +78,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const messaging = this.props.location.query.messaging || null;
 
     const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsList(filters);
@@ -118,19 +120,19 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
-
+    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsTotals(filters);
-    this.props.getReportsList(filters, 10, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    this.props.getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
   }
 
   loadReports(isSort, sort, direction) {
     let offset = 0;
     if (!isSort) {
-      offset = this.props.paginationOptions.page * 10;
+      offset = this.props.paginationOptions.page * 50;
     }
-    const limit = 10;
+    const limit = 50;
 
     this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }

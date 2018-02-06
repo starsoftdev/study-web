@@ -13,7 +13,7 @@ export class DashboardNoteSearch extends React.Component {
     addNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
     noteSearchFormValues: PropTypes.object,
-    siteId: PropTypes.number,
+    studyId: PropTypes.number,
     hideParentModal: PropTypes.func,
   }
 
@@ -30,7 +30,8 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.editNoteProcess.saving && this.props.editNoteProcess.saving) {
+    if ((!newProps.editNoteProcess.saving && this.props.editNoteProcess.saving) ||
+      (!newProps.editNoteProcess.deleting && this.props.editNoteProcess.deleting)) {
       this.closeAddNoteModal();
     }
   }
@@ -41,7 +42,7 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   openAddNoteModal() {
-    if (this.props.siteId) {
+    if (this.props.studyId) {
       this.setState({ addNoteModalOpen: true });
       this.props.hideParentModal(true);
     }
@@ -50,7 +51,7 @@ export class DashboardNoteSearch extends React.Component {
   addNote(params) {
     const nParam = {
       noteData: params.noteData,
-      site_id: this.props.siteId,
+      study_id: this.props.studyId,
     };
     this.props.addNote(nParam);
   }
