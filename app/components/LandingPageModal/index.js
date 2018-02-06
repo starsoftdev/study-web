@@ -215,6 +215,7 @@ export class LandingPageModal extends React.Component {
   handleSubmit(ev) {
     ev.preventDefault();
     const { formError, newList, touchFields, submitForm } = this.props;
+    const { landing } = this.state;
     if (formError) {
       touchFields();
       return;
@@ -225,6 +226,9 @@ export class LandingPageModal extends React.Component {
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
+    }
+    if (list.locationMask === undefined && landing.locationMask !== list.locationMask) {
+      list.locationMask = null;
     }
     submitForm(list);
   }
@@ -502,7 +506,7 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">If Intersted...</label>
+                    <label htmlFor="new-patient-phone">If Interested...</label>
                   </strong>
                   <div className="field">
                     <Field

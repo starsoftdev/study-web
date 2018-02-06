@@ -105,7 +105,7 @@ export function* fetchPatientsWatcher() {
         where: {
           and: [],
         },
-        limit: searchParams.limit || 15,
+        limit: searchParams.limit || 50,
         skip: searchParams.skip || 0,
         isExport,
       };

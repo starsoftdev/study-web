@@ -271,7 +271,7 @@ function* fetchPatientCategories() {
     const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId);
+    yield call(fetchPatients, studyId, null, null, 1);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);
@@ -754,6 +754,7 @@ function* submitPatientNote() {
         method: 'POST',
         body: JSON.stringify({
           study_id: studyId,
+          isProxy: currentUser.isProxy,
           note,
         }),
       });

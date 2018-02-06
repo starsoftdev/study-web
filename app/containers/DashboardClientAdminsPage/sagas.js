@@ -209,7 +209,7 @@ export function* fetchClientAdminWatcher() {
 export function* fetchClientAdminWorker(action) {
   try {
     const query = action.query;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     const orderDir = action.orderDir || 'ASC';
 
@@ -225,8 +225,8 @@ export function* fetchClientAdminWorker(action) {
     const response = yield call(request, requestURL, params);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
     yield put(fetchClientAdminSuccess(response, hasMore, page));

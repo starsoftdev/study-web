@@ -10,7 +10,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     editNote: PropTypes.func,
     deleteNote: PropTypes.func,
     editNoteProcess: PropTypes.object,
-    siteId: PropTypes.number,
+    studyId: PropTypes.number,
     tableName: PropTypes.string,
     hideParentModal: PropTypes.func,
   }
@@ -30,7 +30,7 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
     const nParam = {
       id: params.id,
       noteData: params.noteData,
-      site_id: this.props.siteId,
+      study_id: this.props.studyId,
     };
     this.props.editNote(nParam);
   }
@@ -41,8 +41,8 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
 
   render() {
     let note = this.props.note.details;
-    if (this.props.siteId) {
-      note = _.filter(note, (item) => (item.site_id === this.props.siteId));
+    if (this.props.studyId) {
+      note = _.filter(note, (item) => (item.study_id === this.props.studyId));
     } else {
       return null;
     }
