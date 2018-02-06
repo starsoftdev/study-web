@@ -156,8 +156,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
       showNoteModal: false,
       hideNoteModal: false,
-      adminSiteId: null,
-      adminSiteName: null,
+      adminStudyId: null,
     };
   }
 
@@ -402,11 +401,10 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  showNoteModal(siteId, siteName) {
+  showNoteModal(studyId) {
     this.setState({
       showNoteModal: true,
-      adminSiteId: siteId,
-      adminSiteName: siteName,
+      adminStudyId: studyId,
     });
   }
 
@@ -538,8 +536,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     _.forEach((this.props.sources), (item) => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
-
-    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+    sourcesOptions.unshift({ label: 'All', value: -1 });
 
     if (studies.details.length > 0) {
       return (
@@ -585,7 +582,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                         searchPlaceholder="Search"
                         searchable
                         options={sourcesOptions}
-                        selectedValue={sourceSelectedValue}
                         customSearchIconClass="icomoon-icon_search2"
                         onChange={this.sourceChanged}
                       />
@@ -677,7 +673,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 loadMore={this.loadItems}
                 initialLoad={false}
                 hasMore={this.props.paginationOptions.hasMoreItems}
-                loader={<LoadingSpinner showOnlyIcon />}
               >
                 <StickyContainer className="table-area">
                   <div className="table-left" data-table="">
@@ -947,7 +942,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
               keyboard
             >
               <Modal.Header>
-                <Modal.Title>{this.state.adminSiteName}</Modal.Title>
+                <Modal.Title>{this.state.adminStudyId}</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeNoteModal}>
                   <i className="icomoon-icon_close" />
                 </a>
@@ -956,13 +951,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 <div className="holder clearfix">
                   <div className="form-admin-note">
                     <DashboardNoteSearch
-                      siteId={this.state.adminSiteId}
+                      studyId={this.state.adminStudyId}
                       addNote={this.props.addNote}
                       editNoteProcess={this.props.editNoteProcess}
                       hideParentModal={this.setNoteModalClass}
                     />
                     <DashboardNoteTable
-                      siteId={this.state.adminSiteId}
+                      studyId={this.state.adminStudyId}
                       tableName="Notes"
                       note={this.props.note}
                       editNoteProcess={this.props.editNoteProcess}

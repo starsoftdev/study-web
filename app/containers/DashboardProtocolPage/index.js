@@ -44,7 +44,7 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
     const { fetchProtocols } = this.props;
     this.props.setSearchQuery(query);
     const offset = 0;
-    const limit = 10;
+    const limit = 50;
     fetchProtocols(query, limit, offset);
   }
 
@@ -52,8 +52,8 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
     const { fetchProtocols, protocol } = this.props;
     if (!protocol.fetching) {
       const query = this.props.paginationOptions.query;
-      const offset = this.props.paginationOptions.page * 10;
-      const limit = 10;
+      const offset = this.props.paginationOptions.page * 50;
+      const limit = 50;
       fetchProtocols(query, limit, offset);
     }
   }

@@ -81,8 +81,8 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
       } else {
-        fetchPatients(studyId, search, newCampaign, event);
-        fetchStudyStats(studyId, newCampaign, event);
+        fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
+        fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
       }
     } else {
       /* -1 means all was selected */
@@ -162,7 +162,7 @@ class FilterStudyPatientsForm extends Component {
               component={ReactSelect}
               className="field"
               options={sourceOptions}
-              disabled={submitting || loading || !this.state.campaign}
+              disabled={submitting || loading}
               placeholder="Select Source"
               onChange={event => this.searchPatient(event, 'source')}
             />
