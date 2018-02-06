@@ -60,7 +60,7 @@ class PatientNote extends React.Component {
                 <span className="label"> Name: </span>
                 <div className="content">
                   <span>
-                    {(note.user && note.user.roleForClient) ? `${note.user.firstName} ${note.user.lastName}` : 'StudyKIK'}
+                    {(note.user && (note.user.roleForClient || note.archivedAuthor)) ? `${note.user.firstName} ${note.user.lastName}` : 'StudyKIK'}
                   </span>
                 </div>
               </div>

@@ -142,7 +142,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
         this.props.fetchPatientMessages(this.state.selectedPatient.id);
         this.props.markAsReadPatientMessages(this.state.selectedPatient.id);
       }
-      this.props.fetchSitePatients(currentUser.roleForClient.id, 0, 10);
+      this.props.fetchSitePatients(currentUser.roleForClient.id, 0, 50);
     }
 
     if (currentUser && currentUser.roleForClient) {
@@ -188,7 +188,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
   }
 
   siteLocationChanged(value) {
-    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10); });
+    this.setState({ siteLocation: value, selectedPatient: { id: 0 } }, () => { this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 50); });
   }
 
   handleKeyPress() {
@@ -197,7 +197,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       this.setState({ searchTimer: null });
     }
     const timerH = setTimeout(() => {
-      this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 10);
+      this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, 0, 50);
     }, 500);
     this.setState({ searchTimer: timerH });
   }
@@ -211,8 +211,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
       return;
     }
 
-    const limit = 10;
-    const offset = this.props.globalPMSPaginationOptions.page * 10;
+    const limit = 50;
+    const offset = this.props.globalPMSPaginationOptions.page * 50;
     this.props.fetchSitePatients(this.props.currentUser.roleForClient.id, offset, limit);
   }
 
