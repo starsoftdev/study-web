@@ -673,7 +673,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 loadMore={this.loadItems}
                 initialLoad={false}
                 hasMore={this.props.paginationOptions.hasMoreItems}
-                loader={<LoadingSpinner showOnlyIcon />}
               >
                 <StickyContainer className="table-area">
                   <div className="table-left" data-table="">
