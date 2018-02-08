@@ -37,7 +37,7 @@ import {
   CONFIRM_CHANGE_PASSWORD_REQUEST,
 } from '../../containers/ProfilePage/constants';
 
-import { loginError, logout as logoutAction } from '../../containers/LoginPage/actions';
+import { loginError, logout as logoutAction, loginSuccess } from '../../containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from '../../containers/App/actions';
 
 export default function* loginSaga() {
@@ -79,6 +79,7 @@ export function* authorize(data) {
     yield call(setItem, 'auth_time', moment().valueOf());
     // yield call(setItem, 'auth_token_ttl', response.ttl);
     yield put(setAuthState(true));
+    yield put(loginSuccess());
 
     // show toastr message
     toastr.success('', 'Login successful!');
