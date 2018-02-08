@@ -227,11 +227,13 @@ export function* fetchNoteWatcher() {
   yield* takeLatest(FETCH_NOTE, fetchNoteWorker);
 }
 
-export function* fetchNoteWorker() {
+export function* fetchNoteWorker(action) {
   try {
     const requestURL = `${API_URL}/notes`;
+    const { studyId } = action;
 
     const filterObj = {
+      where: { study_id: studyId },
       include: [{
         relation: 'user',
         scope: {
