@@ -8,7 +8,7 @@ import React from 'react';
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { toastr, toastrActions } from 'react-redux-toastr';
+import { toastr, actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
 import FaSpinner from 'react-icons/lib/fa/spinner';
@@ -91,7 +91,6 @@ export function* authorize(data) {
       options: {
         timeOut: 0,
         icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
-        showCloseButton: true,
       },
     };
     yield put(toastrActions.add(toastrOptions));
