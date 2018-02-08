@@ -183,7 +183,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         <div className="field-row">
           <input
             disabled={loginFormSubmitState} type="submit" value="submit"
-            className={`btn btn-default btn-block input-lg ${loginFormSubmitState ? 'submitting' : ''}`}
+            className="btn btn-default btn-block input-lg"
           />
         </div>
       </form>
