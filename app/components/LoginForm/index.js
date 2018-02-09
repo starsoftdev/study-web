@@ -9,7 +9,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { toastr } from 'react-redux-toastr';
 
 import Input from '../../components/Input';
-import { selectLoginError } from '../../containers/App/selectors';
+import { selectLoginError, selectLoginFormSubmitState } from '../../containers/App/selectors';
 import loginFormValidator, { fields } from './validator';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { selectNewPassword } from '../../containers/ResetPasswordPage/selectors';
@@ -24,7 +24,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     loginError: React.PropTypes.any,
     handleSubmit: React.PropTypes.func.isRequired,
-    submitting: React.PropTypes.bool.isRequired,
+    loginFormSubmitState: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func,
     formError: React.PropTypes.bool.isRequired,
     touchFields: React.PropTypes.func.isRequired,
@@ -40,6 +40,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
     this.toggleCheckbox = this.toggleCheckbox.bind(this);
     this.setVisible = this.setVisible.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.submitLoginForm = this.submitLoginForm.bind(this);
   }
 
   componentDidMount() {
@@ -62,6 +63,24 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   toggleCheckbox() {
     this.checkbox.classList.toggle('jcf-unchecked');
     this.checkbox.classList.toggle('jcf-checked');
+  }
+
+  submitLoginForm(e) {
+    e.preventDefault();
+    const { formError, touchFields, formValues, loginError } = this.props;
+    const failedCount = loginError ? loginError.failedCount : 0;
+    if (formError) {
+      touchFields();
+      return;
+    } else if (failedCount >= 3 && !formValues.reCaptcha) {
+      toastr.error('', 'Validate recaptcha!');
+      return;
+    }
+    // this.recaptcha.execute();
+    this.props.handleSubmit();
+    if (this.recaptcha) {
+      this.recaptcha.reset();
+    }
   }
 
   renderCaptcha() {
@@ -91,7 +110,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { submitting, loginError, loginPassword, newUser } = this.props;
+    const { loginFormSubmitState, loginError, loginPassword, newUser } = this.props;
     const code = loginError ? loginError.code : null;
 
     return (
@@ -102,23 +121,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         className="form-login"
         data-formvalidation="true"
         data-view="fadeInUp"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const { formError, touchFields, formValues, loginError } = this.props;
-          const failedCount = loginError ? loginError.failedCount : 0;
-          if (formError) {
-            touchFields();
-            return;
-          } else if (failedCount >= 3 && !formValues.reCaptcha) {
-            toastr.error('', 'Validate recaptcha!');
-            return;
-          }
-          // this.recaptcha.execute();
-          this.props.handleSubmit();
-          if (this.recaptcha) {
-            this.recaptcha.reset();
-          }
-        }}
+        onSubmit={this.submitLoginForm}
       >
         <h2 className="main-heading">ACCOUNT LOGIN</h2>
         {code === 'LOGIN_FAILED' &&
@@ -178,7 +181,10 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           this.renderCaptcha()
         }
         <div className="field-row">
-          <input disabled={submitting} type="submit" value="submit" className="btn btn-default btn-block input-lg" />
+          <input
+            disabled={loginFormSubmitState} type="submit" value="submit"
+            className="btn btn-default btn-block input-lg"
+          />
         </div>
       </form>
     );
@@ -191,6 +197,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   loginError: selectLoginError(),
   loginPassword: selectNewPassword(),
+  loginFormSubmitState: selectLoginFormSubmitState(),
 });
 function mapDispatchToProps(dispatch) {
   return {
