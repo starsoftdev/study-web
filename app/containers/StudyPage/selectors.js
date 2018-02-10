@@ -199,6 +199,11 @@ export const selectScheduledFormInitialized = () => createSelector(
   (subState) => subState.scheduledFormInitialized
 );
 
+export const selectPatientCategoriesTotals = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.patientCategoriesTotals
+);
+
 export const selectFetchingPatientsError = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.fetchingPatientsError

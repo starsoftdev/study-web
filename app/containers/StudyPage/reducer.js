@@ -59,10 +59,12 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
 
 const initialState = {
   stats: {},
+  patientCategoriesTotals: [],
   carousel: {
     note: true,
     text: false,
@@ -93,7 +95,6 @@ const initialState = {
 };
 
 function studyPageReducer(state = initialState, action) {
-  let totalReferrals = 0;
   let hasMoreItems;
 
   switch (action.type) {
@@ -117,13 +118,7 @@ function studyPageReducer(state = initialState, action) {
         fetchingPatients: true,
       };
     case FETCH_PATIENTS_SUCCESS:
-      for (const category of action.payload) {
-        totalReferrals += category.patients.length;
-      }
-      hasMoreItems = totalReferrals >= action.limit;
-      if (action.skip !== 0) {
-        totalReferrals += state.stats.totalReferrals;
-      }
+      hasMoreItems = action.payload.length > 0;
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
@@ -158,10 +153,6 @@ function studyPageReducer(state = initialState, action) {
           };
         }),
         fetchingPatients: false,
-        stats: {
-          ...state.stats,
-          referrals: totalReferrals,
-        },
         paginationOptions: {
           hasMoreItems,
           page: action.page,
@@ -357,7 +348,13 @@ function studyPageReducer(state = initialState, action) {
           views: action.payload.views,
           calls: action.payload.countReceived,
           callsDuration: action.payload.totalDuration,
+          referrals: action.payload.totalReferrals,
         },
+      };
+    case PATIENT_CATEGORIES_TOTALS_FETCHED:
+      return {
+        ...state,
+        patientCategoriesTotals: action.payload,
       };
     case SET_STUDY_ID:
       return {
