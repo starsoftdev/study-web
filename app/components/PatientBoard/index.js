@@ -78,6 +78,7 @@ class PatientBoard extends React.Component {
     loadMore: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
     studyPatientsFilter: React.PropTypes.object,
+    patientCategoriesTotals: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -281,7 +282,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -291,6 +292,7 @@ class PatientBoard extends React.Component {
               {patientCategories.map(patientCategory => (
                 <PatientCategory
                   key={patientCategory.id}
+                  patientCategoriesTotals={patientCategoriesTotals}
                   category={patientCategory}
                   onPatientClick={this.onPatientClick}
                   onPatientTextClick={this.onPatientTextClick}
