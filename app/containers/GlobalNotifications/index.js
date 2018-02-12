@@ -50,19 +50,7 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           if (!err) {
             socket.on('notification', (notification) => {
               if (props.currentUser.roleForClient && props.currentUser.roleForClient.client_id === notification.clientId) {
-                if (props.currentUser.roleForClient.isAdmin) {
-                  this.props.receiveNotification(notification);
-                } else {
-                  try {
-                    const eventData = JSON.parse(notification.event_log.eventData);
-                    if (props.currentUser.roleForClient.site_id === eventData.siteId) {
-                      this.props.receiveNotification(notification);
-                    }
-                  } catch (e) {
-                    console.log('error parsing notification.event_log.eventData: ', e);
-                    this.props.receiveNotification(notification);
-                  }
-                }
+                this.props.receiveNotification(notification);
               }
             });
             socket.on('connect', () => {
