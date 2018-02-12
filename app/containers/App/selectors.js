@@ -22,6 +22,11 @@ const selectLoginError = () => createSelector(
   (substate) => substate.loginError
 );
 
+const selectLoginFormSubmitState = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.submittingLoginForm
+);
+
 const selectUserRoleType = () => createSelector(
   selectGlobal(),
   (substate) => substate.userRoleType
@@ -434,6 +439,7 @@ export {
   selectEvents,
   selectCurrentUser,
   selectLoginError,
+  selectLoginFormSubmitState,
   selectUserRoleType,
   selectCurrentUserClientId,
   selectCurrentUserStripeCustomerId,
