@@ -121,7 +121,8 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         const socketMessage = newMessage;
-        if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id) {
+        if (currentUser.roleForClient && currentUser.roleForClient.client_id === socketMessage.client_id &&
+          (currentUser.roleForClient.isAdmin || currentUser.roleForClient.site_id === socketMessage.study.site_id)) {
           this.props.clientCreditsFetched({ customerCredits: { customerCredits: newMessage.customerCredits } });
           if (socketMessage.twilioTextMessage && socketMessage.twilioTextMessage.direction === 'inbound') {
             this.startSound();
