@@ -55,7 +55,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
-  fetchNote: () => dispatch(fetchNote()),
+  fetchNote: (studyId) => dispatch(fetchNote(studyId)),
   addNote: (payload) => dispatch(addNote(payload)),
   editNote: (payload) => dispatch(editNote(payload)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
@@ -161,7 +161,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   componentWillMount() {
-    this.props.fetchNote();
+    // this.props.fetchNote();
   }
 
   componentDidMount() {
@@ -402,6 +402,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   showNoteModal(studyId) {
+    this.props.fetchNote(studyId);
     this.setState({
       showNoteModal: true,
       adminStudyId: studyId,
