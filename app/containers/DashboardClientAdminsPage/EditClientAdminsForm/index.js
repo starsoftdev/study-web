@@ -1,8 +1,8 @@
-import { map } from 'lodash';
+import _, { map, sumBy } from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
@@ -19,6 +19,16 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
     saving: PropTypes.bool,
     deleting: PropTypes.bool,
     onDelete: PropTypes.func,
+    clientSites: PropTypes.object,
+    change: PropTypes.func,
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.clientSites.fetching && !newProps.clientSites.fetching && newProps.clientSites.error === null) {
+      _.forEach((newProps.clientSites.details), (site) => {
+        this.props.change(`site-${site.id}`, sumBy(site.rewards, 'points'));
+      });
+    }
   }
 
   render() {
@@ -31,20 +41,23 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
       label: `${sponsor.first_name} ${sponsor.last_name}`,
       value: sponsor.id,
     }));
-    const rewards = map(this.props.initialValues.clientSites, (site) => (
-      <div className="field-row" key={site.id}>
-        <strong className="label">
-          <label className="add-exposure-level">{site.name} Rewards</label>
-        </strong>
-        <div className="field">
-          <Field
-            name={`site-${site.id}`}
-            component={Input}
-            type="text"
-          />
+    let rewards;
+    if (this.props.clientSites) {
+      rewards = map(this.props.clientSites.details, (site) => (
+        <div className="field-row" key={site.id}>
+          <strong className="label">
+            <label className="add-exposure-level">{site.name} Rewards</label>
+          </strong>
+          <div className="field">
+            <Field
+              name={`site-${site.id}`}
+              component={Input}
+              type="text"
+            />
+          </div>
         </div>
-      </div>
-    ));
+      ));
+    }
 
     return (
       <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
@@ -193,7 +206,9 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
 
 const mapStateToProps = createStructuredSelector({
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = (dispatch) => ({
+  change: (name, value) => dispatch(change('dashboardEditClientAdminsForm', name, value)),
+});
 
 export default connect(
   mapStateToProps,
