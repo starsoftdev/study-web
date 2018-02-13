@@ -66,9 +66,7 @@ export default class FilterQueryForm extends React.Component {
                     if (filter.onSubmit) {
                       filter.onSubmit(e);
                     }
-                  }
-
-                  }
+                  }}
                 />
               )}
               <Button
