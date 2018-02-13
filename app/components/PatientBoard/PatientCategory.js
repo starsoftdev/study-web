@@ -10,7 +10,6 @@ import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 import classNames from 'classnames';
-import moment from 'moment';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
 
@@ -111,6 +110,7 @@ class PatientCategory extends React.Component {
     isOver: React.PropTypes.bool.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
+    patientCategoriesTotals: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -227,26 +227,13 @@ class PatientCategory extends React.Component {
   renderPatients() {
     const { category } = this.props;
     if (category.patients.length > 0) {
-      const getLastUpdate = (patient) => {
-        const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
-        if (patient.lastTextMessage && patient.lastTextMessage.dateCreated) {
-          return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
-        }
-
-        return tempMax;
-      };
-
       const MyVirtualList = VirtualList()(this.myList);
-
-      // sort the patients into the categories
-      const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
-
       return (
         <div className="slide">
           <div className="slide-holder">
             <MyVirtualList
-              items={sorted}
-              itemHeight={150}
+              items={category.patients}
+              itemHeight={174}
             />
           </div>
         </div>
@@ -256,7 +243,10 @@ class PatientCategory extends React.Component {
   }
 
   render() {
-    const { category, connectDropTarget } = this.props;
+    const { category, connectDropTarget, patientCategoriesTotals } = this.props;
+    const total = _.find(patientCategoriesTotals, item => (
+      item.patient_category_id === category.id
+    ));
 
     const openerStyle = {
       width: this.state.columnWidth,
@@ -270,7 +260,7 @@ class PatientCategory extends React.Component {
         className={classNames({ active: this.state.hover, hover: this.state.hover })}
       >
         <span className="opener" style={openerStyle}>
-          <strong className="number">{category.patients.length}</strong>
+          <strong className="number">{(total) ? total.count : 0}</strong>
           <span className="text">{category.name}</span>
         </span>
         {this.renderPatients()}
