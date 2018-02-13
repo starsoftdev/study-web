@@ -18,7 +18,6 @@ import {
 } from './constants';
 import {
   fetchClientAdmin,
-  fetchSites,
   getAvailPhoneNumbers,
   fetchClientAdminSuccess,
   fetchClientAdminError,
@@ -107,8 +106,6 @@ export function* editMessagingNumberWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    yield put(fetchSites());
-
     yield put(editMessagingNumberSuccess(response));
   } catch (err) {
     if (get(err, 'constraint') === 'twilio_number_id_idx') {
@@ -164,13 +161,11 @@ export function* fetchSitesWorker(action) {
       }],
     };
 
-    const searchParams = action.payload || {};
+    const clientId = action.clientId || null;
 
-    if (searchParams.name) {
+    if (clientId) {
       filterObj.where = {
-        name: {
-          like: `%${searchParams.name}%`,
-        },
+        client_id: clientId,
       };
     }
 
@@ -281,7 +276,6 @@ export function* editClientAdminWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(fetchClientAdmin());
-    yield put(fetchSites());
 
     yield put(editClientAdminSuccess(response));
   } catch (err) {
