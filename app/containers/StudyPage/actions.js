@@ -82,6 +82,8 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  FETCH_PATIENT_CATEGORIES_TOTALS,
+  PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -321,6 +323,22 @@ export function callStatsFetched(payload) {
 export function studyStatsFetched(payload) {
   return {
     type: FETCH_STUDY_STATS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchPatientCategoriesTotals(studyId, campaignId, sourceId) {
+  return {
+    type: FETCH_PATIENT_CATEGORIES_TOTALS,
+    studyId,
+    campaignId,
+    sourceId,
+  };
+}
+
+export function patientCategoriesTotalsFetched(payload) {
+  return {
+    type: PATIENT_CATEGORIES_TOTALS_FETCHED,
     payload,
   };
 }
