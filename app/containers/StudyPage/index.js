@@ -59,6 +59,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     studyStatsFetched: React.PropTypes.func,
     studyViewsStatFetched: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
+    patientCategoriesTotals: React.PropTypes.array,
   };
 
   static defaultProps = {
@@ -217,18 +218,21 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   handleSubmit(searchFilter, loadMore) {
     const { params: { id }, paginationOptions } = this.props;
+    const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 0;
     let skip = 0;
     if (loadMore) {
-      skip = paginationOptions.page * 100;
+      skip = paginationOptions.page * 50;
     }
 
     if (paginationOptions.hasMoreItems) {
-      this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId, skip);
+      this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, sourceId, skip);
     }
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params, paginationOptions } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy,
+      campaigns, patientCategories, protocol, site, sources, study, stats,
+      fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -287,13 +291,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             sourceOptions={sourceOptions}
             fetchStudy={fetchStudy}
             fetchStudyStats={fetchStudyStats}
-            handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
             initialValues={initialValues}
           />
           <StudyStats stats={stats} />
           <PatientBoard
+            patientCategoriesTotals={patientCategoriesTotals}
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
             site={site}
@@ -319,6 +323,7 @@ const mapStateToProps = createStructuredSelector({
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
   stats: Selector.selectStudyStats(),
+  patientCategoriesTotals: Selector.selectPatientCategoriesTotals(),
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
