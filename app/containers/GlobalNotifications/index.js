@@ -50,6 +50,10 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
           if (!err) {
             socket.on('notification', (notification) => {
               if (props.currentUser.roleForClient && props.currentUser.roleForClient.client_id === notification.clientId) {
+                if ((notification.event_log.eventType === 'redeem-rewards' || notification.event_log.eventType === 'earn-rewards')
+                  && !props.currentUser.roleForClient.canRedeemRewards) {
+                  return;
+                }
                 if (props.currentUser.roleForClient.isAdmin) {
                   this.props.receiveNotification(notification);
                 } else {
