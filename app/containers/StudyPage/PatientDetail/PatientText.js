@@ -54,8 +54,9 @@ class PatientText extends React.Component {
     const { currentPatient, textMessage, currentUser } = this.props;
     if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       const user = (textMessage.user || currentUser);
+      const author = (!textMessage.isProxyMessage) ? `${user.firstName} ${user.lastName || ''}` : 'StudyKIK';
       return (
-        <strong className="name">{user.firstName} {user.lastName || ''}</strong>
+        <strong className="name">{author}</strong>
       );
     }
     return (
