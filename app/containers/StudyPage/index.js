@@ -242,12 +242,16 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
     const sortedSources = _.sortBy(sources, ['orderNumber']);
-    const sourceOptions = sortedSources.map(source => (
-      {
+    let defaultSource = '';
+    const sourceOptions = sortedSources.map(source => {
+      if (source.type === 'StudyKIK') {
+        defaultSource = source.id;
+      }
+      return {
         label: source.type,
         value: source.id,
-      }
-    ));
+      };
+    });
     sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.name;
     let sponsor = 'None';
@@ -281,6 +285,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
+            initialValues={{ source: defaultSource }}
           />
           <StudyStats stats={stats} />
           <PatientBoard
