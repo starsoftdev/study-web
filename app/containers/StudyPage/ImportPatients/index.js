@@ -49,12 +49,11 @@ export default class ImportPatientsModal extends React.Component {
     const { toggleAddPatient } = this.props;
     return (
       <div>
-        <span className="modal-opener coming-soon-wrapper">
+        <span className="modal-opener" onClick={this.moveToUploadPage}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
               <span className="text">Upload Patients</span>
-              <span className="text coming-soon-new" />
             </div>
           </div>
         </span>
