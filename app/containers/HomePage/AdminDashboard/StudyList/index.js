@@ -65,7 +65,10 @@ const mapDispatchToProps = (dispatch) => ({
   toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
 
-@reduxForm({ form: 'campaignFilter' })
+@reduxForm({
+  form: 'campaignFilter',
+  enableReinitialize: true,
+})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class StudyList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
