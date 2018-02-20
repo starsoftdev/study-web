@@ -230,11 +230,13 @@ export function* fetchNoteWatcher() {
   yield* takeLatest(FETCH_NOTE, fetchNoteWorker);
 }
 
-export function* fetchNoteWorker() {
+export function* fetchNoteWorker(action) {
   try {
     const requestURL = `${API_URL}/notes`;
+    const { studyId } = action;
 
     const filterObj = {
+      where: { study_id: studyId },
       include: [{
         relation: 'user',
         scope: {
@@ -409,7 +411,7 @@ export function* fetchProtocolsWatcher() {
 
 export function* fetchProtocolsWorker(action) {
   try {
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     const sort = action.sort || null;
     const order = action.order || null;
@@ -433,8 +435,8 @@ export function* fetchProtocolsWorker(action) {
     const response = yield call(request, requestURL, params);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
 
@@ -782,8 +784,8 @@ export function* fetchStudiesDashboardWorker(action) {
     const response = yield call(request, requestURL, options);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.studies.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.studies.length < 50) {
       hasMore = false;
     }
 

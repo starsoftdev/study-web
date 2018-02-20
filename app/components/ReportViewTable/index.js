@@ -4,7 +4,8 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer, Sticky } from 'react-sticky';
-import ReactTooltip from 'react-tooltip';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import InfiniteScroll from 'react-infinite-scroller';
 import classNames from 'classnames';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -115,6 +116,11 @@ export class ReportViewTable extends React.Component {
     const leftPartTable = reportsList.details.map((item, index) => {
       const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
       const piName = (item.principalinvestigatorname) ? item.principalinvestigatorname : 'N/A';
+      const tooltip = (
+        <Tooltip id={`tooltip-id-${index}`} className="sponsor-report-tooltip">
+          {`${item.study_id} - ${item.site_name}`}
+        </Tooltip>
+      );
 
       return (
         <tr
@@ -123,14 +129,13 @@ export class ReportViewTable extends React.Component {
           onFocus={(e) => this.mouseOverRow(e, index)}
           onBlur={this.mouseOutRow}
           key={index}
-
           className={(this.state.hoveredRowIndex === index) ? 'active-table-row' : ''}
         >
+          <td></td>
           <td>
-          </td>
-          <td>
-            <a data-for={`study-id-${index}`} target="_blank" data-tip={`${item.study_id} - ${item.site_name}`} href={landingHref} className="tooltip-element">{`${piName}`}</a>
-            <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
+            <OverlayTrigger placement="top" overlay={tooltip}>
+              <a target="_blank" href={landingHref} className="tooltip-element">{`${piName}`}</a>
+            </OverlayTrigger>
           </td>
           <td>{item.level}</td>
           <td>

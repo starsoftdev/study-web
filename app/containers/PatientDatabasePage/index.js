@@ -58,13 +58,13 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     if (newProps.sites && newProps.sites.length > 0 && this.props.sites.length === 0) {
       const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
       if (userIsAdmin) {
-        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: 'All', limit: 15, skip: 0 }, this.props.patients.details, { site: 'All' }, false);
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: 'All', limit: 50, skip: 0 }, this.props.patients.details, { site: 'All' }, false);
       } else {
         let defaultSiteLocation = null;
         if (currentUser.roleForClient.site_id && newProps.sites.length > 0) {
           defaultSiteLocation = _.find(newProps.sites, { id: currentUser.roleForClient.site_id }).id;
         }
-        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: defaultSiteLocation, limit: 15, skip: 0 }, this.props.patients.details, { site: defaultSiteLocation }, false);
+        this.props.fetchPatients(currentUser.roleForClient.client_id, { site: defaultSiteLocation, limit: 50, skip: 0 }, this.props.patients.details, { site: defaultSiteLocation }, false);
       }
     }
 
@@ -92,11 +92,11 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
     }
 
     const { currentUser, paginationOptions } = this.props;
-    queryParams.limit = 15;
+    queryParams.limit = 50;
     if (isSearch) {
       queryParams.skip = 0;
     } else {
-      queryParams.skip = (paginationOptions.page) * 15;
+      queryParams.skip = (paginationOptions.page) * queryParams.limit;
     }
 
     if (searchFilter.sort !== undefined && searchFilter.direction !== undefined) {
