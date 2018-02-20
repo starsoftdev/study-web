@@ -498,6 +498,8 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       { label: 'TIER 4', value: tier4Count, percent: tier4Percent, color: '#949ca1' },
     ];
 
+    const defaultSource = _.find(this.props.sources, (s) => { return s.type === 'StudyKIK'; }) || '';
+
     const lineData = [
       {
         name: 'Patients',
@@ -712,6 +714,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
             five9List={this.props.five9List}
+            initialValues={{ 'source-search': defaultSource.id }}
           />
         </StickyContainer>
       </div>
