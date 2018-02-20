@@ -59,7 +59,7 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                   {email.subject}
                 </strong>
                 <div className="email-content">
-                  <p>{email.body}</p>
+                  <p>{email.body.split('\n').map((i, k) => <span key={k}>{i}<br /></span>)}</p>
                 </div>
                 <strong className="author">
                   {`${email.first_name} ${(email.last_name) ? email.last_name : ''}`}
@@ -79,7 +79,7 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                 {selected.subject}
               </strong>
               <div className="email-content">
-                <p>{selected.body}</p>
+                <p>{selected.body.split('\n').map((i, k) => <span key={k}>{i}<br /></span>)}</p>
               </div>
               <strong className="author">
                 {`${selected.first_name} ${(selected.last_name) ? selected.last_name : ''}`}

@@ -30,7 +30,8 @@ export class DashboardNoteSearch extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (!newProps.editNoteProcess.saving && this.props.editNoteProcess.saving) {
+    if ((!newProps.editNoteProcess.saving && this.props.editNoteProcess.saving) ||
+      (!newProps.editNoteProcess.deleting && this.props.editNoteProcess.deleting)) {
       this.closeAddNoteModal();
     }
   }

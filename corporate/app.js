@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 import mixpanel from 'mixpanel-browser';
+import LogRocket from 'logrocket';
+
 import { getItem, removeItem } from '../app/utils/localStorage';
 
 import configureStore from '../app/store';
@@ -111,6 +113,24 @@ if (SENTRY_DSN) {
 
 if (MIXPANEL_TOKEN) {
   mixpanel.init(MIXPANEL_TOKEN);
+}
+
+if (LOG_ROCKET) {
+  LogRocket.init(LOG_ROCKET);
+
+  if (MIXPANEL_TOKEN) {
+    LogRocket.getSessionURL((sessionURL) => {
+      mixpanel.track('LogRocket', { sessionURL });
+    });
+  }
+
+  if (SENTRY_DSN) {
+    Raven.setDataCallback((data) => {
+      // eslint-disable-next-line no-param-reassign
+      data.extra.sessionURL = LogRocket.sessionURL;
+      return data;
+    });
+  }
 }
 
 

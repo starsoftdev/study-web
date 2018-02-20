@@ -160,7 +160,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
-    this.saveFilters = this.saveFilters.bind(this);
     this.handleChange = this.handleChange.bind(this, 'dateRange');
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
@@ -248,10 +247,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     }
 
     this.fetchStudiesAccordingToFilters();
-  }
-
-  saveFilters() {
-
   }
 
   openFiltersModal() {
@@ -375,15 +370,20 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     });
 
     let offset = 0;
-    const limit = 10;
+    const limit = 50;
 
     if (fetchByScroll) {
-      offset = this.props.paginationOptions.page * 10;
+      offset = this.props.paginationOptions.page * limit;
     }
 
     if (!filters.source) {
       filters.source = defaultSource.id;
       change('dashboardFilters', 'source', defaultSource.id);
+    }
+
+    if (filters.source === -1) {
+      change('dashboardFilters', 'source', null);
+      delete filters.source;
     }
 
     if (isEmpty) {
@@ -395,7 +395,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       }
     } else {
       this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
-      this.props.fetchTotalsDashboard(filters, 10, 0);
+      this.props.fetchTotalsDashboard(filters, 50, 0);
       this.props.fetchStudiesDashboard(filters, limit, offset);
       this.setState({ prevOffset: offset });
     }
@@ -497,6 +497,8 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       { label: 'TIER 3', value: tier3Count, percent: tier3Percent, color: '#a0cf67' },
       { label: 'TIER 4', value: tier4Count, percent: tier4Percent, color: '#949ca1' },
     ];
+
+    const defaultSource = _.find(this.props.sources, (s) => { return s.type === 'StudyKIK'; }) || '';
 
     const lineData = [
       {
@@ -712,6 +714,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
             five9List={this.props.five9List}
+            initialValues={{ 'source-search': defaultSource.id }}
           />
         </StickyContainer>
       </div>

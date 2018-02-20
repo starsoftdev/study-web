@@ -136,7 +136,7 @@ export class LandingPageModal extends React.Component {
           change('instructions', landing.instructions);
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
-          change('phonePlaceholder', landing.phonePlaceholder);
+          change('phonePlaceholder', normalizePhoneDisplay(landing.phonePlaceholder));
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
           change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
@@ -182,22 +182,13 @@ export class LandingPageModal extends React.Component {
       }
 
       this.closeStudyAddModal();
-
-      /* this.setState({
-        landingFetched: false,
-        initialValuesEntered: false,
-      }, () => {
-        fetchLanding(this.state.selected.study_id);
-        resetChangeAddState();
-        this.closeStudyAddModal();
-      }); */
     }
   }
 
   onPhoneBlur(event) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
-    blur('clickToCallButtonNumber', formattedPhoneNumber);
+    blur(event.target.name, formattedPhoneNumber);
   }
 
   onHide() {
@@ -223,6 +214,7 @@ export class LandingPageModal extends React.Component {
 
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
+    formValues.phonePlaceholder = normalizePhoneForServer(formValues.phonePlaceholder);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
@@ -279,26 +271,6 @@ export class LandingPageModal extends React.Component {
     } else {
       fileSrc = this.state.updatedStudyAd;
     }
-    /* const country = [{ label: 'USA', value: 'USA', id: 0 },
-                    { label: 'Canada', value: 'Canada', id: 1 },
-                    { label: 'UK', value: 'UK', id: 2 },
-                    { label: 'France', value: 'France', id: 3 },
-                    { label: 'Italy', value: 'Italy', id: 4 },
-                    { label: 'Germany', value: 'Germany', id: 5 },
-                    { label: 'Brazil', value: 'Brazil', id: 6 },
-                    { label: 'Chile', value: 'Chile', id: 7 },
-                    { label: 'Colombia', value: 'Colombia', id: 8 },
-                    { label: 'Cuba', value: 'Cuba', id: 9 },
-                    { label: 'Czech Republic', value: 'Czech Republic', id: 10 },
-                    { label: 'Denmark', value: 'Denmark', id: 11 },
-                    { label: 'Fiji', value: 'Fiji', id: 12 },
-                    { label: 'Australia', value: 'Australia', id: 13 },
-                    { label: 'Hungary', value: 'Hungary', id: 14 },
-                    { label: 'Iceland', value: 'Iceland', id: 15 },
-                    { label: 'Japan', value: 'Japan', id: 16 },
-                    { label: 'Luxembourg', value: 'Luxembourg', id: 17 },
-                    { label: 'Malaysia', value: 'Malaysia', id: 18 },
-    ]; */
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('landing-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
@@ -390,26 +362,11 @@ export class LandingPageModal extends React.Component {
                       type="tel"
                       name="phonePlaceholder"
                       component={Input}
+                      onBlur={this.onPhoneBlur}
                       required
                     />
                   </div>
                 </div>
-                {/* <div className="field-row">
-                  <strong className="label required">
-                    <label htmlFor="new-patient-phone">Country</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="country"
-                      component={ReactSelect}
-                      placeholder="Select Country"
-                      searchPlaceholder="Search"
-                      searchable
-                      options={country}
-                      customSearchIconClass="icomoon-icon_search2"
-                    />
-                  </div>
-                </div> */}
                 <div className="field-row">
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Sign up Now Button</label>
@@ -474,26 +431,12 @@ export class LandingPageModal extends React.Component {
                         </a>
                       </div>
                     }
-                    {/* <label htmlFor="study-ad" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label> */}
                     <a
                       className="btn btn-gray upload-btn"
                       onClick={this.openStudyAddModal}
                     >
                       update study ad
                     </a>
-                    {/* <Field
-                      id="study-ad"
-                      name="studyAd"
-                      component={Input}
-                      type="file"
-                      className="hidden"
-                      onChange={this.handleFileChange}
-                    /> */}
-                    {/* TODO need to put an error message up so that people know to upload a file. */}
-                    {/* formError
-                    ? <div className="has-error">{formErrors.studyAd}</div>
-                    : null
-                    */}
                   </div>
                 </div>
                 <div className="field-row textarea">
@@ -506,7 +449,7 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">If Intersted...</label>
+                    <label htmlFor="new-patient-phone">If Interested...</label>
                   </strong>
                   <div className="field">
                     <Field
