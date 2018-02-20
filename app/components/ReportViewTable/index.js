@@ -120,7 +120,7 @@ export class ReportViewTable extends React.Component {
         <Tooltip id={`tooltip-id-${index}`} className="sponsor-report-tooltip">
           {`${item.study_id} - ${item.site_name}`}
         </Tooltip>
-      )
+      );
 
       return (
         <tr
