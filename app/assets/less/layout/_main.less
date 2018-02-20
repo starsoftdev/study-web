@@ -5567,6 +5567,12 @@ div[data-percentage],
   }
 }
 
+.sponsor-report-tooltip {
+  font-weight: bold;
+  font-size: 18px;
+  padding: 3px 8px;
+}
+
 .tooltipClass {
   &.type-info {
     background-color: #00AFEF;
@@ -5576,6 +5582,9 @@ div[data-percentage],
     padding: 3px 8px;
     &.place-top::after {
       border-top-color: #00AFEF;
+    }
+    &.place-right::after {
+      border-right-color: #00AFEF;
     }
   }
   &:hover {
@@ -5589,6 +5598,9 @@ div[data-percentage],
   opacity: 1;
   &.place-top::after {
     border-top-color: #00AFEF;
+  }
+  &.place-right::after {
+    border-right-color: #00AFEF;
   }
 }
 
