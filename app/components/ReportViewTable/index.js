@@ -115,6 +115,8 @@ export class ReportViewTable extends React.Component {
     const leftPartTable = reportsList.details.map((item, index) => {
       const landingHref = item.url ? `/${item.study_id}-${item.url.toLowerCase().replace(/ /ig, '-')}` : '';
       const piName = (item.principalinvestigatorname) ? item.principalinvestigatorname : 'N/A';
+      const dataTip = `${item.study_id} - ${item.site_name}`;
+      const placement = dataTip.length > 20 ? 'right' : 'top';
 
       return (
         <tr
@@ -129,8 +131,8 @@ export class ReportViewTable extends React.Component {
           <td>
           </td>
           <td>
-            <a data-for={`study-id-${index}`} target="_blank" data-tip={`${item.study_id} - ${item.site_name}`} href={landingHref} className="tooltip-element">{`${piName}`}</a>
-            <ReactTooltip id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
+            <a data-for={`study-id-${index}`} target="_blank" data-tip={dataTip} href={landingHref} className="tooltip-element">{`${piName}`}</a>
+            <ReactTooltip place={placement} id={`study-id-${index}`} type="info" class="tooltipClass" delayHide={500} effect="solid" />
           </td>
           <td>{item.level}</td>
           <td>
