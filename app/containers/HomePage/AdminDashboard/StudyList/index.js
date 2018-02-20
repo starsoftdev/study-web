@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   setHoverRowIndex: (index) => dispatch(setHoverRowIndex(index)),
   submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
-  fetchNote: () => dispatch(fetchNote()),
+  fetchNote: (studyId) => dispatch(fetchNote(studyId)),
   addNote: (payload) => dispatch(addNote(payload)),
   editNote: (payload) => dispatch(editNote(payload)),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
@@ -66,7 +66,10 @@ const mapDispatchToProps = (dispatch) => ({
   toggleAllStudies: (status) => dispatch(toggleAllStudies(status)),
 });
 
-@reduxForm({ form: 'campaignFilter' })
+@reduxForm({
+  form: 'campaignFilter',
+  enableReinitialize: true,
+})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class StudyList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -164,7 +167,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   componentWillMount() {
-    this.props.fetchNote();
+    // this.props.fetchNote();
   }
 
   componentDidMount() {
@@ -427,6 +430,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   showNoteModal(studyId) {
+    this.props.fetchNote(studyId);
     this.setState({
       showNoteModal: true,
       adminStudyId: studyId,
@@ -561,8 +565,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     _.forEach((this.props.sources), (item) => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
-
-    const sourceSelectedValue = (this.props.filtersFormValues && this.props.filtersFormValues.source) ? this.props.filtersFormValues.source : undefined;
+    sourcesOptions.unshift({ label: 'All', value: -1 });
 
     if (studies.details.length > 0) {
       return (
@@ -608,7 +611,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                         searchPlaceholder="Search"
                         searchable
                         options={sourcesOptions}
-                        selectedValue={sourceSelectedValue}
                         customSearchIconClass="icomoon-icon_search2"
                         onChange={this.sourceChanged}
                       />
@@ -700,7 +702,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 loadMore={this.loadItems}
                 initialLoad={false}
                 hasMore={this.props.paginationOptions.hasMoreItems}
-                loader={<LoadingSpinner showOnlyIcon />}
               >
                 <StickyContainer className="table-area">
                   <div className="table-left" data-table="">

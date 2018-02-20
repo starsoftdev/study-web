@@ -123,23 +123,6 @@ export class LandingPage extends React.Component {
     }
 
     this.props.subscribeFromLanding(data);
-
-    /* if (separateNames[1]) {
-      this.props.subscribeFromLanding(data);
-    } else {
-      const err = {
-        message: 'Must provide a last name.',
-        status: 422,
-        details: {
-          codes: {
-            lastName: ['absent'],
-          },
-        },
-        statusText: 'Unprocessable Entity',
-      };
-
-      this.props.patientSubscriptionError(err);
-    } */
   }
 
   render() {

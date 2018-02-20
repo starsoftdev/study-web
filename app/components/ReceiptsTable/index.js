@@ -185,8 +185,8 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
 
   loadItems() {
     const { currentUser, getReceipts, paginationOptions, receipts, searchOptions } = this.props;
-    const limit = 15;
-    const offset = (paginationOptions.page) * 15;
+    const limit = 50;
+    const offset = (paginationOptions.page) * 50;
     getReceipts(currentUser.roleForClient.id, limit, offset, receipts, paginationOptions.activeSort, paginationOptions.activeDirection, searchOptions);
   }
 
@@ -212,7 +212,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
       sortProposalsSuccess(sortedProposals);
     } else if (sort !== 'payment') {
       setActiveSort(sort, direction);
-      getReceipts(currentUser.roleForClient.id, 15, 0, receipts, sort, direction, searchOptions);
+      getReceipts(currentUser.roleForClient.id, 50, 0, receipts, sort, direction, searchOptions);
     }
   }
 

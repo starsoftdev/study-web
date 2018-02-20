@@ -86,7 +86,7 @@ export function patientsFetched(searchParams, payload, patients, searchFilter, q
   }
 
   let hasMore = true;
-  let page = (searchParams.skip / 15) + 1;
+  let page = (searchParams.skip / 50) + 1;
   if (initResult.length < searchParams.limit) {
     hasMore = false;
     page = 1;
