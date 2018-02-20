@@ -13,6 +13,11 @@ class LoadingSpinner extends Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { message, showOnlyIcon, size, noMessage } = this.props;
+    if (showOnlyIcon) {
+      return (
+        <FaSpinner size={size || 30} className="spinner-icon text-info" />
+      );
+    }
 
     const spinnerText = (
       <p className="text-info spinner-text">
@@ -20,11 +25,6 @@ class LoadingSpinner extends Component { // eslint-disable-line react/prefer-sta
       </p>
     );
 
-    if (showOnlyIcon) {
-      return (
-        <FaSpinner size={size || 30} className="spinner-icon text-info" />
-      );
-    }
 
     return (
       <div className="container-fluid">

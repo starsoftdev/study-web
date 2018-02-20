@@ -11,12 +11,14 @@ import AddMessagingNumberForm from '../AddMessagingNumberForm';
 import EditClientAdminsForm from '../EditClientAdminsForm';
 import EditMessagingNumberForm from './EditMessagingNumber';
 import RowItem from './RowItem';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer } from '../../../common/helper/functions';
 import {
   selectDashboardClientAdmins,
   selectPaginationOptions,
   // selectSearchQuery,
 } from '../selectors';
+
+import { fetchSites } from '../actions';
 
 export class DashboardClientAdminsTable extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -36,6 +38,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
     addMessagingProcess: PropTypes.object,
     loadMore: PropTypes.func,
     searchParam: PropTypes.object,
+    fetchSites: PropTypes.func,
   }
 
   constructor(props) {
@@ -89,39 +92,20 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
   }
 
   editAdminClick(item) {
-    const filteredClientSites = this.props.clientSites.details.filter((element) => (
-      element.client_id === item.client_id
-    ));
-    const initRewards = {};
-    map(filteredClientSites, (site) => {
-      initRewards[`site-${site.id}`] = sumBy(site.rewards, 'points');
-    });
     this.setState({ editClientAdminInitValues: {
       initialValues: {
         ...item,
-        ...initRewards,
-        clientSites: filteredClientSites,
         bd: item.bd_user_id,
         ae: item.ae_user_id,
       },
     } });
+
+    this.props.fetchSites(item.client_id);
     this.openAddSponsorModal();
   }
 
   editMessagingClick(item) {
-    const initialValues = {};
-    const filteredClientSites = this.props.clientSites.details.filter((element) => (
-      element.client_id === item.client_id
-    ));
-    forEach((filteredClientSites), (item) => {
-      initialValues[`site-phoneNumber-${item.id}`] = item.phoneNumber ? normalizePhoneDisplay(item.phoneNumber) : null;
-      initialValues[`site-${item.id}`] = item.twilioNumber ? item.twilioNumber.id : null;
-    });
-    this.setState({ editClientMessagingNumberValues: {
-      clientSites: filteredClientSites,
-      phoneNumber: this.props.availPhoneNumbers,
-      initialValues,
-    } });
+    this.props.fetchSites(item.client_id);
     this.openEditMessagingNumber();
   }
 
@@ -300,6 +284,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
             <div className="holder clearfix">
               <EditClientAdminsForm
                 {...this.state.editClientAdminInitValues}
+                clientSites={this.props.clientSites}
                 usersByRoles={this.props.usersByRoles}
                 addMessagingNumberClick={this.addMessagingNumberClick}
                 onSubmit={this.editClientAdmin}
@@ -337,6 +322,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
             <div className="holder clearfix">
               <EditMessagingNumberForm
                 {...this.state.editClientMessagingNumberValues}
+                clientSites={this.props.clientSites}
                 messagingNumberOptions={messagingNumberOptions}
                 onSubmit={this.updateMessagingNumber}
                 addMessagingNumberClick={this.addMessagingNumberClick}
@@ -358,7 +344,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    fetchSites:(clientId) => dispatch(fetchSites(clientId)),
   };
 }
 
