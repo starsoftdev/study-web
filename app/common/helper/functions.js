@@ -47,7 +47,7 @@ export function normalizePhoneDisplay(value) {
     // we return the formatted phone number using google-libphonenumber
     return formatPhone(onlyNums);
   } catch (err) { // google-libphonenumber throws an error if the number is not valid, we handle this case here
-    onlyNums = value.replace(/[^\d]+/g, '')
+    onlyNums = value.replace(/[^\d]+/g, '');
     if (onlyNums.length <= 10) {
       return `(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3, 6)}-${onlyNums.slice(6, 10)}`;
     } else if (onlyNums.length === 11 && value.slice(0, 2) === '+1') {
