@@ -22,7 +22,7 @@ export default class Filter extends React.Component {
   }
 
   submitSearch(value) {
-    if (!value || !/^\d+$/.test(value)) {
+    if (!value || !/^\d+$/.test(value) || value > 2147483647) {
       toastr.error('', 'Error! Invalid study number.');
       return;
     }
@@ -55,7 +55,7 @@ export default class Filter extends React.Component {
       >
         <strong className="title">Search</strong>
         <input
-          type="text" name={name} className="form-control" placeholder="Study #" ref={(searchVal) => (
+          type="number" name={name} className="form-control" placeholder="Study #" ref={(searchVal) => (
           this.searchVal = searchVal
         )}
         />
