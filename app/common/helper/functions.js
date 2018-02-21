@@ -22,20 +22,32 @@ export function normalizePhoneForServer(value) {
   if (!value) {
     return value;
   }
-  return normalizePhoneDisplay(value).replace(/[^\d+]+/g, '');
+  // we remove any unneeded characters other than digits and the first +
+  let onlyNums = value.replace(/[^\d+]+/g, '');
+  try {
+    // we return the international format of phone number using google-libphonenumber
+    const phoneNumber = phoneUtil.parse(onlyNums, '');
+    return phoneUtil.format(phoneNumber, PNF.INTERNATIONAL).replace(/[^\d+]+/g, '');
+  } catch (err) { // google-libphonenumber throws an error if the number is not valid, we handle this case here
+    onlyNums = value.replace(/[^\d]+/g, '');
+    if (onlyNums.length <= 10) {
+      return `+1${onlyNums}`;
+    }
+    return `+${onlyNums}`;
+  }
 }
 
 export function normalizePhoneDisplay(value) {
   if (!value) {
     return value;
   }
-  let onlyNums = value.replace(/[^\d]+/g, '');
+  // we remove any unneeded characters other than digits and the first +
+  let onlyNums = value.replace(/[^\d+]+/g, '');
   try {
-    if (value[0] === '+') {
-      onlyNums = `+${onlyNums}`;
-    }
+    // we return the formatted phone number using google-libphonenumber
     return formatPhone(onlyNums);
-  } catch (err) {
+  } catch (err) { // google-libphonenumber throws an error if the number is not valid, we handle this case here
+    onlyNums = value.replace(/[^\d]+/g, '');
     if (onlyNums.length <= 10) {
       return `(${onlyNums.slice(0, 3)}) ${onlyNums.slice(3, 6)}-${onlyNums.slice(6, 10)}`;
     } else if (onlyNums.length === 11 && value.slice(0, 2) === '+1') {
