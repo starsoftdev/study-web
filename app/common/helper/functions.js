@@ -37,9 +37,12 @@ export function normalizePhoneForServer(value) {
   }
 }
 
-export function normalizePhoneDisplay(value) {
+export function normalizePhoneDisplay(value, data = null) {
   if (!value) {
     return value;
+  }
+  if (data && `+${data.dialCode}` === value) {
+    return `+${data.dialCode}`;
   }
   // we remove any unneeded characters other than digits and the first +
   let onlyNums = value.replace(/[^\d+]+/g, '');
