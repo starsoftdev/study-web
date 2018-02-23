@@ -154,9 +154,10 @@ export function* resetPassword() {
   while (true) {
     try {
       const { payload } = yield take(RESET_PASSWORD_REQUEST);
+      const requestPayload = { ...payload, email: payload.email.toLowerCase() };
       const params = {
         method: 'POST',
-        body: JSON.stringify(payload),
+        body: JSON.stringify(requestPayload),
       };
       const requestURL = `${API_URL}/users/reset`;
       yield call(request, requestURL, params);
