@@ -58,14 +58,10 @@ export default class Filter extends React.Component {
         <input
           type="number" name={name} className="form-control" placeholder="Study #"
           onKeyDown={() => {
-            if (this.searchVal.value > 2147483647) {
-              this.searchVal.value = this.state.oldSearchValue;
-            } else {
-              this.setState({ oldSearchValue: this.searchVal.value });
-            }
+            this.setState({ oldSearchValue: this.searchVal.value });
           }}
           onKeyUp={() => {
-            if (this.searchVal.value > 2147483647) {
+            if (!parseInt(this.searchVal.value) || this.searchVal.value > 2147483647) {
               this.searchVal.value = this.state.oldSearchValue;
             }
           }}
