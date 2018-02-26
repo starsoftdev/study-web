@@ -226,7 +226,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
       const currentStudy = this.state.currentStudy;
-      currentStudy.image = newProps.updatedStudyAd;
+      if (currentStudy) {
+        currentStudy.image = newProps.updatedStudyAd;
+      }
       this.setState({ updatedStudyAd: newProps.updatedStudyAd, currentStudy });
       if (this.state.studyAddModalOpen) {
         this.closeStudyAddModal();
@@ -268,8 +270,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   handleCloseModal() {
-    this.props.onHide(false);
+    this.props.resetChangeAddState();
     this.resetState();
+    this.props.onHide(false);
   }
 
   handleFormSubmit(event) {
@@ -401,7 +404,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   render() {
     const { editedStudy, changeStudyAddProcess, removedStudyAdId } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
-    const fileSrc = (removedStudyAdId && removedStudyAdId === this.state.currentStudy.id) ? null : this.state.updatedStudyAd || image;
+    const fileSrc = (removedStudyAdId && removedStudyAdId === this.state.currentStudy.id) ? null : image || this.state.updatedStudyAd;
     const preview =
       (<div className="img-preview">
         <a
