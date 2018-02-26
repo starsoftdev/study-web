@@ -376,7 +376,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       offset = this.props.paginationOptions.page * limit;
     }
 
-    if (!filters.source) {
+    if (!filters.source && defaultSource) {
       filters.source = defaultSource.id;
       change('dashboardFilters', 'source', defaultSource.id);
     }
