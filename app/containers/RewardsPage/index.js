@@ -138,7 +138,8 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
     const { siteLocations, pickReward, currentUser } = this.props;
     let redeemable = false;
     if (currentUser && currentUser.roleForClient) {
-      redeemable = currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin';
+      redeemable = !currentUser.roleForClient.client.rewardsLocked &&
+        (currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
     }
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
 
