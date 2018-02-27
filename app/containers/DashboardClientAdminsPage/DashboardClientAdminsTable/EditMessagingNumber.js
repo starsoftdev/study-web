@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, blur } from 'redux-form';
+import { Field, reduxForm, blur, change } from 'redux-form';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import Input from '../../../components/Input';
 
@@ -15,11 +16,12 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
   static propTypes = {
     handleSubmit: PropTypes.func,
     saving: PropTypes.bool,
-    clientSites: PropTypes.array,
+    clientSites: PropTypes.object,
     phoneNumber: PropTypes.object,
     messagingNumberOptions: PropTypes.array,
     addMessagingNumberClick: PropTypes.func,
     blur: React.PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -35,11 +37,20 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
 
   componentWillMount() {
     if (this.props.clientSites) {
-      const selectedSites = this.props.clientSites.map((item) => (
+      const selectedSites = this.props.clientSites.details.map((item) => (
         item.twilio_number_id
       ));
       this.setState({
         vSelected: selectedSites,
+      });
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.clientSites.fetching && !newProps.clientSites.fetching && newProps.clientSites.error === null) {
+      _.forEach((newProps.clientSites.details), (item) => {
+        this.props.change(`site-phoneNumber-${item.id}`, (item.phoneNumber ? normalizePhoneDisplay(item.phoneNumber) : null));
+        this.props.change(`site-${item.id}`, (item.twilioNumber ? item.twilioNumber.id : null));
       });
     }
   }
@@ -64,38 +75,40 @@ export class EditMessagingNumberForm extends React.Component { // eslint-disable
 
   render() {
     // const messagingNumberOptions = [{ label: '(524) 999-1234', value: 1 }, { label: '(524) 999-1234', value: 2 }, { label: '(524) 999-1234', value: 3 }];
-    const filteredSites = this.props.clientSites.map((item, index) => (
-      <div className="messaging-number-row" key={item.id}>
-        <div className="field-row">
-          <strong className="label">
-            <label className="messaging-number">{item.name}</label>
-          </strong>
-          <div className="field">
-            <Field
-              name={`site-${item.id}`}
-              component={ReactSelect}
-              placeholder="Select Messaging Number"
-              options={this.props.messagingNumberOptions}
-              onChange={(e) => this.messagingNumberChange(e, index)}
-              onBlur={() => {}}
-            />
+    let filteredSites = <div className="text-center"><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></div>;
+    if (this.props.clientSites) {
+      filteredSites = this.props.clientSites.details.map((item, index) => (
+        <div className="messaging-number-row" key={item.id}>
+          <div className="field-row">
+            <strong className="label">
+              <label className="messaging-number">{item.name}</label>
+            </strong>
+            <div className="field">
+              <Field
+                name={`site-${item.id}`}
+                component={ReactSelect}
+                placeholder="Select Messaging Number"
+                options={this.props.messagingNumberOptions}
+                onChange={(e) => this.messagingNumberChange(e, index)}
+                onBlur={() => {}}
+              />
+            </div>
+          </div>
+          <div className="field-row">
+            <strong className="label">
+              <label className="site-phone" />
+            </strong>
+            <div className="field">
+              <Field
+                name={`site-phoneNumber-${item.id}`}
+                component={Input}
+                onBlur={(e) => { this.onPhoneBlur(e, `site-phoneNumber-${item.id}`); }}
+              />
+            </div>
           </div>
         </div>
-        <div className="field-row">
-          <strong className="label">
-            <label className="site-phone" />
-          </strong>
-          <div className="field">
-            <Field
-              name={`site-phoneNumber-${item.id}`}
-              component={Input}
-              onBlur={(e) => { this.onPhoneBlur(e, `site-phoneNumber-${item.id}`); }}
-            />
-          </div>
-        </div>
-      </div>
-
-    ));
+      ));
+    }
 
     return (
       <form className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
@@ -120,6 +133,7 @@ const mapStateToProps = createStructuredSelector({
 });
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur('dashboardEditMessagingNumberForm', field, value)),
+  change: (name, value) => dispatch(change('dashboardEditMessagingNumberForm', name, value)),
 });
 
 export default connect(

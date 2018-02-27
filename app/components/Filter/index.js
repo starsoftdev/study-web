@@ -61,7 +61,7 @@ export default class Filter extends React.Component {
         />
         <button className="btn btn-default" onClick={() => this.submitSearch(this.searchVal.value)}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
@@ -83,13 +83,13 @@ export default class Filter extends React.Component {
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
   }
 
-  createNearByBox(options) {
+  createNearbyBox(options) {
     const { name, style } = options;
 
     return (
@@ -110,7 +110,7 @@ export default class Filter extends React.Component {
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit({ miles: this.miles.value, zip: this.zip.value }); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
@@ -165,7 +165,7 @@ export default class Filter extends React.Component {
       case 'compare':
         return this.createComparisonBox(options);
       case 'nearby':
-        return this.createNearByBox(options);
+        return this.createNearbyBox(options);
       case 'address':
         return this.createAddressBox(options);
       default:

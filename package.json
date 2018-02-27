@@ -224,5 +224,8 @@
   ],
   "pre-commit#master": [
     "lint:fix"
+  ],
+  "pre-commit": [
+    "lint:fix"
   ]
 }
