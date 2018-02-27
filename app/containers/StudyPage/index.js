@@ -219,13 +219,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   handleSubmit(searchFilter, loadMore) {
     const { params: { id }, paginationOptions } = this.props;
     const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 0;
+    const campaignId = searchFilter.campaignId || searchFilter.campaign;
     let skip = 0;
     if (loadMore) {
       skip = paginationOptions.page * 50;
     }
 
     if (paginationOptions.hasMoreItems) {
-      this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, sourceId, skip);
+      this.props.fetchPatients(id, searchFilter.text, campaignId, sourceId, skip);
     }
   }
 
