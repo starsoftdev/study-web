@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -40,10 +39,8 @@ export class DashboardNoteTable extends React.Component { // eslint-disable-line
   }
 
   render() {
-    let note = this.props.note.details;
-    if (this.props.studyId) {
-      note = _.filter(note, (item) => (item.study_id === this.props.studyId));
-    } else {
+    const note = this.props.note.details;
+    if (!this.props.studyId) {
       return null;
     }
 

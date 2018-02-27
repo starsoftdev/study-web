@@ -516,9 +516,10 @@ export function updateTwilioNumbersError(payload) {
   };
 }
 
-export function fetchNote() {
+export function fetchNote(studyId) {
   return {
     type: FETCH_NOTE,
+    studyId,
   };
 }
 
