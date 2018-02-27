@@ -72,7 +72,7 @@ export function* getReceipts() {
       }
 
       let hasMore = true;
-      let page = (offset / 15) + 1;
+      let page = (offset / 50) + 1;
       if (response.length < limit) {
         hasMore = false;
         page = 1;

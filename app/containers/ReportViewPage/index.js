@@ -124,16 +124,16 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.setState({ filters });
 
     this.props.getReportsTotals(filters);
-    this.props.getReportsList(filters, 10, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    this.props.getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
     this.props.fetchPatientSignUps(currentUser, protocolNumber, (filters.source ? filters.source : null));
   }
 
   loadReports(isSort, sort, direction) {
     let offset = 0;
     if (!isSort) {
-      offset = this.props.paginationOptions.page * 10;
+      offset = this.props.paginationOptions.page * 50;
     }
-    const limit = 10;
+    const limit = 50;
 
     this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
   }

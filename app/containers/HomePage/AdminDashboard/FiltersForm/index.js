@@ -72,6 +72,14 @@ const filterOptions = {
     },
   ],
 
+  addressOptions : [
+    {
+      id: 1,
+      label: 'Find',
+      value: 'find',
+    },
+  ],
+
   percentageOptions : [
     {
       id: 1,
@@ -295,6 +303,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               optionLabelKey="label"
               dataSource={filterOptions.nearbyStudiesOptions}
               customSearchIconClass="icomoon-icon_search2"
+              disabled
             />
           </div>
 
@@ -343,7 +352,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               component={ReactMultiCheckBox}
               placeholder="ADDRESS"
               optionLabelKey="label"
-              dataSource={filterOptions.nearbyStudiesOptions}
+              dataSource={filterOptions.addressOptions}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -430,6 +439,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               dataSource={filterOptions.percentageOptions}
               initialValue={initialValues.percentage}
               customSearchIconClass="icomoon-icon_search2"
+              disabled
             />
           </div>
 

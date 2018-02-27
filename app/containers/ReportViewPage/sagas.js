@@ -97,7 +97,7 @@ export function* fetchReportsWorker(action) {
   try {
     const params = action.searchParams;
 
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     const sort = action.sort || null;
     const order = action.order || null;

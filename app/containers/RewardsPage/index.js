@@ -153,7 +153,6 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                 <RewardForm
                   currentUser={currentUser}
                   siteLocations={siteLocations}
-                  initialValues={{ site: siteLocations[0].id }}
                 />
               }
             </div>
