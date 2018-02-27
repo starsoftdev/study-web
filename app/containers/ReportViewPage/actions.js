@@ -24,11 +24,12 @@ import {
   GET_CATEGORY_NOTES_ERROR,
 } from './constants';
 
-export function fetchPatientSignUps(currentUser, protocolNumber) {
+export function fetchPatientSignUps(currentUser, protocolNumber, sourceId) {
   return {
     type: FETCH_PATIENT_SIGN_UPS,
     currentUser,
     protocolNumber,
+    sourceId,
   };
 }
 
