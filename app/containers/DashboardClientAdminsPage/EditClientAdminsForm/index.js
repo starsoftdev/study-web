@@ -158,6 +158,19 @@ export class EditClientAdminsForm extends React.Component { // eslint-disable-li
 
         <div className="field-row">
           <strong className="label">
+            <label className="add-exposure-level">LOCK REWARDS</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="rewardsLocked"
+              type="checkbox"
+              component={Checkbox}
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
             <label className="add-exposure-level">TEXT CREDITS</label>
           </strong>
           <div className="field">
