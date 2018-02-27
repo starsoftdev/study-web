@@ -31,6 +31,7 @@ class FilterStudyPatientsForm extends Component {
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
+    patientBoardLoading: PropTypes.bool,
   };
   static defaultProps = {
     submitting: false,
@@ -46,6 +47,14 @@ class FilterStudyPatientsForm extends Component {
   }
 
   componentWillMount() {
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { patientBoardLoading, fetchPatientCategoriesTotals, studyId, campaign, source } = this.props;
+
+    if (patientBoardLoading && !newProps.patientBoardLoading) {
+      fetchPatientCategoriesTotals(studyId, campaign, source);
+    }
   }
 
   onSubmit(event) {
