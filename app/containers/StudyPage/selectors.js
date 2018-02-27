@@ -209,6 +209,11 @@ export const selectFetchingPatientsError = () => createSelector(
   (subState) => subState.fetchingPatientsError
 );
 
+export const selectPatientBoardLoading = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.patientBoardLoading
+);
+
 export const selectSchedulePatientFormValues = () => createSelector(
   selectFormDomain(),
   (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.values : null)

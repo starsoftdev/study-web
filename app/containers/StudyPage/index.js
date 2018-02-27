@@ -60,6 +60,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     studyViewsStatFetched: React.PropTypes.func,
     paginationOptions: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
+    patientBoardLoading: React.PropTypes.bool,
   };
 
   static defaultProps = {
@@ -233,7 +234,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   render() {
     const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy,
       campaigns, patientCategories, protocol, site, sources, study, stats,
-      fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
+      fetchingPatients, params, paginationOptions, patientCategoriesTotals, patientBoardLoading } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -288,6 +289,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             </p>
           </header>
           <FilterStudyPatients
+            patientBoardLoading={patientBoardLoading}
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
             fetchStudy={fetchStudy}
@@ -316,6 +318,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 const mapStateToProps = createStructuredSelector({
   campaigns: Selector.selectCampaigns(),
   fetchingPatients: Selector.selectFetchingPatients(),
+  patientBoardLoading: Selector.selectPatientBoardLoading(),
   fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
