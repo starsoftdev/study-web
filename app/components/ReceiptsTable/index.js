@@ -241,10 +241,14 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
         timezone = site.timezone;
       }
     }
-
     _.map(raw, (receipt, key) => {
-      const dateWrapper = moment(receipt.created).tz(timezone).format('MM/DD/YY');
       const siteName = receipt.site_name || '-';
+      const site = _.find(sites, site => site.name === siteName);
+      if (site) {
+        timezone = site.timezone;
+        console.log('timezone', timezone);
+      }
+      const dateWrapper = moment(receipt.created).tz(timezone).format('MM/DD/YY');
 
       let invoiceIdLink = receipt.invoice_id;
       let checkbox = (
