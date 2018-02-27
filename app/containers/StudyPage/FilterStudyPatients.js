@@ -147,7 +147,7 @@ class FilterStudyPatientsForm extends Component {
         fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
       }
     }
-    this.sourceSelectContainer.click(); //fake click to close the dropdown
+    this.sourceSelectContainer.click(); // fake click to close the dropdown
   }
 
   render() {
