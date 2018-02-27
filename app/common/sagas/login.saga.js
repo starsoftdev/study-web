@@ -4,12 +4,14 @@
 
 /* eslint-disable no-constant-condition, consistent-return */
 
+import React from 'react';
 import {
   take, call, put, cancel, cancelled, fork, select,
 } from 'redux-saga/effects';
-import { toastr } from 'react-redux-toastr';
+import { toastr, actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
@@ -37,7 +39,7 @@ import {
   CONFIRM_CHANGE_PASSWORD_REQUEST,
 } from '../../containers/ProfilePage/constants';
 
-import { loginError, logout as logoutAction } from '../../containers/LoginPage/actions';
+import { loginError, logout as logoutAction, loginSuccess } from '../../containers/LoginPage/actions';
 import { fetchMeFromToken, setAuthState, setUserData } from '../../containers/App/actions';
 
 export default function* loginSaga() {
@@ -79,9 +81,19 @@ export function* authorize(data) {
     yield call(setItem, 'auth_time', moment().valueOf());
     // yield call(setItem, 'auth_token_ttl', response.ttl);
     yield put(setAuthState(true));
+    yield put(loginSuccess());
 
     // show toastr message
-    toastr.success('', 'Login successful!');
+    const toastrOptions = {
+      id: 'loginSuccessToastr',
+      type: 'success',
+      message: 'Login successful!',
+      options: {
+        timeOut: 0,
+        icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+      },
+    };
+    yield put(toastrActions.add(toastrOptions));
 
     // fetch details of authenticated user
     yield put(fetchMeFromToken(true));
