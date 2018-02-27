@@ -70,7 +70,7 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       const templateStr = file.toString();
       const viewPath = path.join(__dirname, '../views/landing-page.pug');
       const locals = getLandingPageLocals(landing);
-      const ipcountry = req.headers.http_cf_ipcountry || null;
+      const ipcountry = req.headers['cf-ipcountry'] || null;
       let country = null;
       const ssrContent = pug.compileFile(viewPath)(locals);
       if (ipcountry) {
