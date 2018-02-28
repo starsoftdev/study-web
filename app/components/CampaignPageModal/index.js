@@ -169,10 +169,8 @@ export class CampaignPageModal extends React.Component {
     const { openModal, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
     const timezone = (study && study.timezone) ? study.timezone : 'utc';
-    let currentCampaignOrderNumber = -1;
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
-        currentCampaignOrderNumber = c.orderNumber;
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
       return { label: c.orderNumber, value: c.id };
@@ -192,9 +190,13 @@ export class CampaignPageModal extends React.Component {
       if (campaignIndex < studyCampaigns.details.length - 1) {
         fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
       }
-      isFutureCampaign = studyCampaigns.details[campaignIndex].orderNumber > currentCampaignOrderNumber;
-    }
 
+      if (!studyCampaigns.details[campaignIndex].dateFrom) {
+        isFutureCampaign = true;
+      } else {
+        isFutureCampaign = !studyCampaigns.details[campaignIndex].isCurrent && moment(studyCampaigns.details[campaignIndex].dateFrom).isAfter(moment().subtract(1, 'days'));
+      }
+    }
 
     const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
 
