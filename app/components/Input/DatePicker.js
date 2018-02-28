@@ -22,8 +22,6 @@ export default class DatePicker extends Component {
     maxDate: PropTypes.any,
     isDisabled: PropTypes.bool,
     useUTC: PropTypes.bool,
-    title: PropTypes.string,
-    canNotSetTBD: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -110,7 +108,7 @@ export default class DatePicker extends Component {
   }
 
   render() {
-    const { name, className, dateStyle, minDate, maxDate, isDisabled, useUTC, title, canNotSetTBD, ...rest } = this.props;
+    const { name, className, dateStyle, minDate, maxDate, isDisabled, useUTC, ...rest } = this.props;
     const { date, modalVisible } = this.state;
 
     const currentDate = moment();
@@ -145,7 +143,7 @@ export default class DatePicker extends Component {
         keyboard
       >
         <Modal.Header>
-          <Modal.Title>{title || 'Choose Start Date'}</Modal.Title>
+          <Modal.Title>Choose Start Date</Modal.Title>
           <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
             <i className="icomoon-icon_close" />
           </a>
@@ -164,10 +162,7 @@ export default class DatePicker extends Component {
             Today: {currentDate.format('dddd, MMMM Do, YYYY')}
           </div>
           <div className="link-holder text-center">
-            <a
-              className={canNotSetTBD ? 'disabled' : ''}
-              onClick={() => { if (!canNotSetTBD) { this.setToBeDetermined(); this.toggleModal(false); } }}
-            >To Be Determined</a>
+            <a onClick={() => { this.setToBeDetermined(); this.toggleModal(false); }}>To Be Determined</a>
           </div>
         </Modal.Body>
       </Modal>
