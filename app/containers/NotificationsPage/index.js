@@ -162,8 +162,8 @@ export class NotificationsPage extends React.Component {
   loadMore() {
     const { fetchNotifications, paginationOptions, currentUser } = this.props;
     if (!paginationOptions.fetching) {
-      const offset = paginationOptions.page * 10;
-      const limit = 10;
+      const offset = paginationOptions.page * 50;
+      const limit = 50;
       fetchNotifications(currentUser.id, limit, offset);
     }
   }
