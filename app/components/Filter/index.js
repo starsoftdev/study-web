@@ -16,14 +16,13 @@ export default class Filter extends React.Component {
     onClose: React.PropTypes.func,
     onChange: React.PropTypes.func,
     onSubmit: React.PropTypes.func,
-    oldSearchValue: React.PropTypes.number,
   };
 
   componentDidMount() {
   }
 
   submitSearch(value) {
-    if (!value || !/^\d+$/.test(value) || value > 2147483647) {
+    if (!value || !/^\d+$/.test(value)) {
       toastr.error('', 'Error! Invalid study number.');
       return;
     }
@@ -56,18 +55,9 @@ export default class Filter extends React.Component {
       >
         <strong className="title">Search</strong>
         <input
-          type="number" name={name} className="form-control" placeholder="Study #"
-          onKeyDown={() => {
-            this.setState({ oldSearchValue: this.searchVal.value });
-          }}
-          onKeyUp={() => {
-            if (!parseInt(this.searchVal.value) || this.searchVal.value > 2147483647) {
-              this.searchVal.value = this.state.oldSearchValue;
-            }
-          }}
-          ref={(searchVal) => (
-            this.searchVal = searchVal
-          )}
+          type="text" name={name} className="form-control" placeholder="Study #" ref={(searchVal) => (
+          this.searchVal = searchVal
+        )}
         />
         <button className="btn btn-default" onClick={() => this.submitSearch(this.searchVal.value)}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
