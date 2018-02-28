@@ -511,6 +511,7 @@ function* submitTextBlast() {
         };
       }
       reqParams.currentUser = currentUser;
+      reqParams.scheduleFromPatientDB = true;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify(reqParams),
