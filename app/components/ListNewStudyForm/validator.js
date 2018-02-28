@@ -5,7 +5,12 @@ const schema = {
   indication_id: { presence: { message: '^You need to select indication' } },
   protocolNumber: { presence: true },
   sponsorName: { presence: true },
-  file: { validFile: ['images', 'pdf'] },
+  file: {
+    validFile: {
+      allowedFileTypes: ['images', 'pdf'],
+      message: 'The selected file is in the wrong format.',
+    },
+  },
   sponsorEmail: { email: true, emailDomain: true },
   recruitmentPhone: {
     presence: {
