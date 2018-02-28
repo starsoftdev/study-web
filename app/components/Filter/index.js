@@ -62,7 +62,15 @@ export default class Filter extends React.Component {
           }}
           onKeyUp={() => {
             if (!parseInt(this.searchVal.value) || this.searchVal.value > 2147483647) {
-              this.searchVal.value = this.state.oldSearchValue;
+              if (this.state.oldSearchValue < 2147483647) {
+                this.searchVal.value = this.state.oldSearchValue;
+              } else {
+                let oldValue = this.state.oldSearchValue;
+                while (oldValue > 2147483647) {
+                  oldValue = parseInt(oldValue / 10);
+                }
+                this.searchVal.value = oldValue;
+              }
             }
           }}
           ref={(searchVal) => (
