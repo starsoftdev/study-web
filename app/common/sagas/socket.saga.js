@@ -257,7 +257,7 @@ export function* sendStudyPatientMessages() {
 export function* fetchNotifications(action) {
   try {
     const userId = action.userId;
-    const limit = action.limit || 10;
+    const limit = action.limit || 50;
     const offset = action.offset || 0;
     const requestURL = `${API_URL}/users/${userId}/notifications`;
     const params = {
@@ -269,8 +269,8 @@ export function* fetchNotifications(action) {
     };
     const response = yield call(request, requestURL, params);
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
     yield put(fetchNotificationsSucceeded(response, hasMore, page, userId));
