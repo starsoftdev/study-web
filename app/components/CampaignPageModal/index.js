@@ -96,9 +96,10 @@ export class CampaignPageModal extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { studyCampaigns, openModal } = this.props;
     // when campaigns have been loaded we need select first campaign by default
-    if ((prevProps.studyCampaigns.fetching && !this.props.studyCampaigns.fetching) || (!prevProps.openModal && this.props.openModal)) {
-      this.campaignChanged(this.props.studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+    if ((prevProps.studyCampaigns.fetching && !studyCampaigns.fetching) || (!prevProps.openModal && openModal && studyCampaigns.details.length > 0)) {
+      this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -168,8 +169,10 @@ export class CampaignPageModal extends React.Component {
     const { openModal, levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
     const exposureLevelOptions = levels.map(level => ({ value: level.id, label: level.name }));
     const timezone = (study && study.timezone) ? study.timezone : 'utc';
+    let currentCampaignOrderNumber = -1;
     const campaignOptions = studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
+        currentCampaignOrderNumber = c.orderNumber;
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
       return { label: c.orderNumber, value: c.id };
@@ -178,6 +181,7 @@ export class CampaignPageModal extends React.Component {
     const dateTo = formValues.dateto ? moment(formValues.dateto).tz(timezone) : undefined;
     let fromMinDate = null;
     let toMaxDate = null;
+    let isFutureCampaign = false;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
@@ -188,7 +192,9 @@ export class CampaignPageModal extends React.Component {
       if (campaignIndex < studyCampaigns.details.length - 1) {
         fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
       }
+      isFutureCampaign = studyCampaigns.details[campaignIndex].orderNumber > currentCampaignOrderNumber;
     }
+
 
     const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
 
@@ -232,12 +238,6 @@ export class CampaignPageModal extends React.Component {
                       deleteRemoves={false}
                       openOnFocus
                       openOnClick
-                      onFocus={(e) => {
-                        console.log('focus', e);
-                      }}
-                      onOpen={(e) => {
-                        console.log('open', e);
-                      }}
                     />
                   </div>
                 </div>
@@ -273,6 +273,7 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateFrom}
                       minDate={fromMinDate}
                       maxDate={moment(formValues.dateto).subtract(1, 'days')}
+                      canNotSetTBD={!isFutureCampaign}
                     />
                   </div>
                 </div>
@@ -289,6 +290,8 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateTo}
                       minDate={moment(formValues.datefrom).add(1, 'days')}
                       maxDate={toMaxDate}
+                      title="Choose End Date"
+                      canNotSetTBD={!isFutureCampaign}
                     />
                   </div>
                 </div>
