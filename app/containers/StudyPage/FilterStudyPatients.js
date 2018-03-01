@@ -51,9 +51,18 @@ class FilterStudyPatientsForm extends Component {
 
   componentWillReceiveProps(newProps) {
     const { patientBoardLoading, fetchPatientCategoriesTotals, studyId, campaign, source } = this.props;
+    let newCampaign = campaign;
+    let newSource = source;
+    /* nulling the values if all is selected */
+    if (campaign === -1) {
+      newCampaign = null;
+    }
+    if (source === -1) {
+      newSource = null;
+    }
 
     if (patientBoardLoading && !newProps.patientBoardLoading) {
-      fetchPatientCategoriesTotals(studyId, campaign, source);
+      fetchPatientCategoriesTotals(studyId, newCampaign, newSource);
     }
   }
 
