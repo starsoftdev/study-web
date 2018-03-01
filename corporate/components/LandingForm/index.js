@@ -2,12 +2,11 @@ import React, { PropTypes } from 'react';
 import inViewport from 'in-viewport';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { blur, change, Field, reduxForm } from 'redux-form';
+import { blur, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
-import IntlTelInput from '../../../app/components/Input/IntTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
@@ -20,7 +19,6 @@ const mapStateToProps = createStructuredSelector({});
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  change: (name, value) => dispatch(change(formName, name, value)),
   patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
 });
 
@@ -39,7 +37,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     landing: PropTypes.object,
     subscriptionError: PropTypes.object,
     blur: React.PropTypes.func.isRequired,
-    change: React.PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
 
@@ -48,9 +45,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     this.watcher = null;
 
     this.setVisible = this.setVisible.bind(this);
-    this.onDefaultPhoneBlur = this.onDefaultPhoneBlur.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.onPhoneChange = this.onPhoneChange.bind(this);
   }
 
   componentDidMount() {
@@ -61,21 +56,10 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     this.watcher.dispose();
   }
 
-  onDefaultPhoneBlur(event) {
+  onPhoneBlur(event) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     blur('phone', formattedPhoneNumber);
-  }
-
-  onPhoneChange(status, value, countryData, number) {
-    const { change } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    change('phone', formattedPhoneNumber);
-  }
-
-  onPhoneBlur(status, value, countryData, number) {
-    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    document.getElementsByName('phone')[0].value = formattedPhoneNumber;
   }
 
   setVisible(el) {
@@ -100,32 +84,8 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
-    const ipcountryValue = document.head.querySelector('[property=ipcountry]').content;
-    let errorMessage = '';
-    let phoneInput =
-      (<Field
-        name="phone"
-        type="phone"
-        component={Input}
-        placeholder={phonePlaceholder}
-        className="field-row"
-        bsClass="form-control input-lg"
-        onBlur={this.onDefaultPhoneBlur}
-      />);
 
-    if (ipcountryValue !== 'US') {
-      phoneInput =
-        (<Field
-          name="phone"
-          type="phone"
-          component={IntlTelInput}
-          placeholder={phonePlaceholder}
-          preferredCountries={[ipcountryValue.toLowerCase()]}
-          className="field-row"
-          onBlur={this.onPhoneBlur}
-          onChange={this.onPhoneChange}
-        />);
-    }
+    let errorMessage = '';
 
     if (subscriptionError) {
       if (subscriptionError.status === 422) {
@@ -187,7 +147,15 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             className="field-row"
             bsClass="form-control input-lg"
           />
-          {phoneInput}
+          <Field
+            name="phone"
+            type="phone"
+            component={Input}
+            placeholder={phonePlaceholder}
+            className="field-row"
+            bsClass="form-control input-lg"
+            onBlur={this.onPhoneBlur}
+          />
           <div className="field-row">
             <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
             <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
