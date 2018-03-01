@@ -14,10 +14,10 @@ import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { saveCard } from '../../containers/App/actions';
-import { selectStudyLevels, selectAvailPhoneNumbers, selectCurrentUserClientId, selectSavedCard } from '../../containers/App/selectors';
+import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '../../containers/App/selectors';
 import { selectSelectedIndicationLevelPrice } from '../../containers/HomePage/selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
-import RenderLeads from './renderLeads';
+import RenderLeads from '../../components/RenderLeads';
 import formValidator from './validator';
 
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
@@ -29,7 +29,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     selectedIndicationLevelPrice: PropTypes.object,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
-    availPhoneNumbers: PropTypes.array,
     selectedStudy: PropTypes.object,
     savedCard: PropTypes.object,
     show: PropTypes.bool,
@@ -40,6 +39,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    formValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -54,12 +54,11 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
     this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
-    this.handleCallChoose = this.handleCallChoose.bind(this);
     this.state = {
       level: null,
       patientQualificationSuite: false,
-      callTracking: false,
       addCardModalOpenU: false,
+      isCallTrackingAlreadySet: false,
     };
   }
 
@@ -81,6 +80,20 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenU) {
       this.closeAddCardModal();
     }
+
+    if (!this.props.selectedStudy && newProps.selectedStudy) {
+      if (newProps.selectedStudy.callTracking) {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', true));
+        this.setState({
+          isCallTrackingAlreadySet: true,
+        });
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+        this.setState({
+          isCallTrackingAlreadySet: false,
+        });
+      }
+    }
   }
 
   onSaveCard(params) {
@@ -98,7 +111,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     const resetState = {
       level: null,
       patientQualificationSuite: false,
-      callTracking: false,
     };
 
     this.setState(resetState, () => {
@@ -118,9 +130,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.props.onHide(true);
   }
 
-  handleExposureChoose(e) {
+  handleExposureChoose(e, val) {
     this.setState({
-      level: e,
+      level: val,
     });
   }
 
@@ -130,19 +142,13 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
-  handleCallChoose(e) {
-    this.setState({
-      callTracking: e,
-    });
-  }
-
   handleSubmit() {
     this.props.validateAndSubmit();
   }
 
   generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    const { level, callTracking, patientQualificationSuite } = this.state;
+    const { studyLevels, selectedIndicationLevelPrice, selectedStudy, callTracking } = this.props;
+    const { level, patientQualificationSuite } = this.state;
     const addOns = [];
 
     const campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
@@ -169,7 +175,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (callTracking) {
+    if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
         title: 'Call Tracking',
         price: CALL_TRACKING_PRICE,
@@ -182,7 +188,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, callTracking, selectedStudy, formValues } = this.props;
     let patientQualificationSuite = false;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
 
@@ -236,75 +242,73 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
               <div className="pull-left col">
                 <div className="scroll jcf--scrollable">
                   <div className="holder-inner">
-                    <form className="form-upgrade-study">
-                      <div className="upgrade-study form-fields">
-                        <div className="field-row">
-                          <strong className="label">
-                            <label>UPGRADE LEVEL</label>
-                          </strong>
-                          <div className="field">
-                            <Field
-                              name="level"
-                              className="with-loader-disabled-for-now"
-                              component={ReactSelect}
-                              placeholder="Select Upgrade"
-                              onChange={this.handleExposureChoose}
-                              options={filteredLevels}
-                              selectedValue={value || undefined}
-                              disabled={selectedIndicationLevelPrice.fetching || isDisabled}
-                            />
-                            {selectedIndicationLevelPrice.fetching &&
-                            (
-                              <span className="hide">
-                                <LoadingSpinner showOnlyIcon size={20} />
-                              </span>
-                            )
-                            }
-                          </div>
-                        </div>
-                        <div className="field-row">
-                          <strong className="label"><label>Patient qualification <br />
-                            Suite: ${qualificationSuitePrice / 100}</label></strong>
-                          <div className="field">
-                            <Field
-                              name="addPatientQualificationSuite"
-                              disabled={patientQualificationSuite === 'On' || patientQualificationSuite === true}
-                              component={Toggle}
-                              onChange={this.handleQualificationChoose}
-                            />
-                          </div>
-                        </div>
-                        {false &&
-                          <div className="field-row">
-                            <strong className="label">
-                              <label>CALL TRACKING: $247</label>
-                            </strong>
-                            <div className="field">
-                              <Field
-                                name="callTracking"
-                                component={Toggle}
-                                onChange={this.handleCallChoose}
-                              />
-                            </div>
-                          </div>
-                        }
-                        {callTracking &&
-                          <FieldArray name="leads" component={RenderLeads} availPhoneNumbers={availPhoneNumbers} />
-                        }
-                        <div className="field-row label-top">
-                          <strong className="label">
-                            <label>NOTES</label>
-                          </strong>
-                          <div className="field">
-                            <Field
-                              name="notes"
-                              component={Input}
-                              componentClass="textarea"
-                            />
-                          </div>
+                    <div className="upgrade-study form-fields">
+                      <div className="field-row">
+                        <strong className="label">
+                          <label>UPGRADE LEVEL</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="level"
+                            className="with-loader-disabled-for-now"
+                            component={ReactSelect}
+                            placeholder="Select Upgrade"
+                            onChange={this.handleExposureChoose}
+                            options={filteredLevels}
+                            selectedValue={value || undefined}
+                            disabled={selectedIndicationLevelPrice.fetching || isDisabled}
+                          />
+                          {selectedIndicationLevelPrice.fetching &&
+                          (
+                            <span className="hide">
+                              <LoadingSpinner showOnlyIcon size={20} />
+                            </span>
+                          )
+                          }
                         </div>
                       </div>
-                    </form>
+                      <div className="field-row">
+                        <strong className="label"><label>Patient qualification <br />
+                          Suite: ${qualificationSuitePrice / 100}</label></strong>
+                        <div className="field">
+                          <Field
+                            name="addPatientQualificationSuite"
+                            disabled={patientQualificationSuite === 'On' || patientQualificationSuite === true}
+                            component={Toggle}
+                            onChange={this.handleQualificationChoose}
+                          />
+                        </div>
+                      </div>
+                      {
+                        <div className="field-row">
+                          <strong className="label">
+                            <label>CALL TRACKING: $247</label>
+                          </strong>
+                          <div className="field">
+                            <Field
+                              name="callTracking"
+                              component={Toggle}
+                              disabled={this.state.isCallTrackingAlreadySet}
+                            />
+                          </div>
+                        </div>
+                      }
+                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
+                        <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                      }
+                      <div className="field-row label-top">
+                        <strong className="label">
+                          <label>NOTES</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="notes"
+                            component={Input}
+                            componentClass="textarea"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -334,7 +338,6 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   callTracking: selectUpgradeStudyFormCallTrackingValue(),
   leadsCount: selectUpgradeStudyFormLeadsCount(),
-  availPhoneNumbers: selectAvailPhoneNumbers(),
   savedCard: selectSavedCard(),
 });
 

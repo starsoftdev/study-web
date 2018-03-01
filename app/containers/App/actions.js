@@ -204,6 +204,10 @@ import {
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
+
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -918,10 +922,11 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function fetchLanding(studyId) {
+export function fetchLanding(studyId, url) {
   return {
     type: FETCH_LANDING,
     studyId,
+    url,
   };
 }
 
@@ -1344,6 +1349,27 @@ export function getTimezoneSuccess(payload) {
 export function getTimezoneError(payload) {
   return {
     type: GET_TIMEZONE_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudyLeadSources(studyId) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES,
+    studyId,
+  };
+}
+
+export function fetchStudyLeadSourcesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyLeadSourcesError(payload) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES_ERROR,
     payload,
   };
 }

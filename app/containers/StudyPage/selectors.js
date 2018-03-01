@@ -208,3 +208,8 @@ export const selectSchedulePatientFormErrors = () => createSelector(
   selectFormDomain(),
   (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.syncErrors : null)
 );
+
+export const selectStudyLeadSources = () => createSelector(
+  selectStudyPageDomain(),
+  (substate) => substate.studyLeadSources
+);
