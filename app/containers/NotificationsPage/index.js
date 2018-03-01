@@ -95,7 +95,6 @@ export class NotificationsPage extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log('props', props.notifications);
     const initialNotifications = sanitize(props.notifications);
     this.loadMore = this.loadMore.bind(this);
     this.handleClickItem = this.handleClickItem.bind(this);
@@ -161,16 +160,16 @@ export class NotificationsPage extends React.Component {
   }
 
   loadMore() {
-    const { fetchNotifications, notifications, paginationOptions, currentUser } = this.props;
+    const { fetchNotifications, paginationOptions, currentUser } = this.props;
     if (!paginationOptions.fetching) {
-      const offset = paginationOptions.page * 10;
-      const limit = 10;
+      const offset = paginationOptions.page * 50;
+      const limit = 50;
       fetchNotifications(currentUser.id, limit, offset);
     }
   }
 
   render() {
-    const { sortDescription, sortDate, sortTime } = this.state;
+    const { sortDescription, sortDate, sortTime, notifications } = this.state;
     return (
       <div className="container-fluid">
         <Helmet title="Notifications - StudyKIK" />
@@ -203,7 +202,7 @@ export class NotificationsPage extends React.Component {
                 </thead>
                 <tbody>
                   {
-                    this.state.notifications.map((n, i) => <NotificationItem key={i} notification={n} onClick={() => { this.handleClickItem(n); }} />)
+                    notifications.map((n, i) => <NotificationItem key={i} notification={n} onClick={() => { this.handleClickItem(n); }} />)
                   }
                 </tbody>
                 <tfoot>

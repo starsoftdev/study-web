@@ -800,6 +800,7 @@ function* submitPatientNote() {
         method: 'POST',
         body: JSON.stringify({
           study_id: studyId,
+          isProxy: currentUser.isProxy,
           note,
         }),
       });

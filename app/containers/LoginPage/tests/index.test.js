@@ -6,7 +6,7 @@ import expect from 'expect';
 import chai from 'chai';
 
 import LoginPage from '../index';
-import LoginForm from '../../../components/LoginForm';
+import LoginForm from '../../../../corporate/components/LoginForm';
 
 import configureStore from '../../../store';
 

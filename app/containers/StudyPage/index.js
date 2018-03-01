@@ -255,12 +255,17 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
-    const sourceOptions = sources.map(source => (
-      {
+    const sortedSources = _.sortBy(sources, ['orderNumber']);
+    let defaultSource = '';
+    const sourceOptions = sortedSources.map(source => {
+      if (source.type === 'StudyKIK') {
+        defaultSource = source.id;
+      }
+      return {
         label: source.type,
         value: source.id,
-      }
-    ));
+      };
+    });
     sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.name;
     let sponsor = 'None';
@@ -271,8 +276,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (study.indication && study.indication.name) {
       studyName = study.indication.name;
     }
-    const initialValues = { source: 1 };
-
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
     }
@@ -296,7 +299,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             fetchStudyStats={fetchStudyStats}
             ePMS={ePMS}
             studyName={studyName}
-            initialValues={initialValues}
+            initialValues={{ source: defaultSource }}
           />
           <StudyStats stats={stats} />
           <PatientBoard

@@ -34,7 +34,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
         senderImage = this.props.currentUser.profileImageURL;
       }
       if (messageData.user) {
-        senderName = messageData.user.firstName.concat(' '.concat(messageData.user.lastName || ''));
+        senderName = (!messageData.twilioTextMessage.isProxyMessage) ? messageData.user.firstName.concat(' '.concat(messageData.user.lastName || '')) : 'StudyKIK';
       }
     } else {
       if (messageData.patient.gender === 'Female') {

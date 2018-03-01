@@ -14,7 +14,6 @@ import {
   addMessagingNumber,
   editMessagingNumber,
   getAvailPhoneNumbers,
-  fetchSites,
   fetchClientAdmin,
   addClientAdmin,
   editClientAdmin,
@@ -39,7 +38,6 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
   static propTypes = {
     clientSites: PropTypes.object,
     availPhoneNumbers: PropTypes.object,
-    fetchSites: PropTypes.func,
     getAvailPhoneNumbers: PropTypes.func,
     fetchClientAdmins: PropTypes.func,
     clientAdmins: PropTypes.object,
@@ -70,7 +68,6 @@ export class DashboardClientAdminsPage extends React.Component { // eslint-disab
     this.props.fetchClientAdmins();
     this.props.fetchUsersByRoles();
 
-    this.props.fetchSites();
     this.props.getAvailPhoneNumbers();
   }
 
@@ -141,7 +138,6 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSites:       () => dispatch(fetchSites()),
     getAvailPhoneNumbers: () => dispatch(getAvailPhoneNumbers()),
     fetchClientAdmins: (query, limit, offset) => dispatch(fetchClientAdmin(query, limit, offset)),
     fetchUsersByRoles: () => dispatch(fetchUsersByRoles()),
