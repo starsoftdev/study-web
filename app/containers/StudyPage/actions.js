@@ -82,6 +82,7 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  SET_SELECTED_STUDY_SOURCES,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -689,6 +690,13 @@ export function downloadReferral(reportName, studyId) {
     type: DOWNLOAD_PATIENT_REFERRAL,
     reportName,
     studyId,
+  };
+}
+
+export function setSelectedStudySources(list) {
+  return {
+    type: SET_SELECTED_STUDY_SOURCES,
+    list,
   };
 }
 

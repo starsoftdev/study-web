@@ -17,6 +17,7 @@ import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 import { selectValues } from '../../../../common/selectors/form.selector';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
+import CallTrackingPageModal from '../../../../components/CallTrackingPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
@@ -117,6 +118,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
     this.showLeadGenPageModal = this.showLeadGenPageModal.bind(this);
     this.showCampaignPageModal = this.showCampaignPageModal.bind(this);
+    this.showCallTrackingModal = this.showCallTrackingModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -150,6 +152,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
       showPatientThankYouPageModal: false,
       showLeadGenPageModal: false,
       showCampaignPageModal: false,
+      showCallTrackingModal:false,
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
@@ -257,6 +260,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -274,6 +278,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -291,6 +296,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: true,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -325,6 +331,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -342,6 +349,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: true,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -350,18 +358,35 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  campaignChanged(e) {
-    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('campaign', e);
-    this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'campaign');
+  showCallTrackingModal(visible) {
+    if (visible) {
+      this.setState({
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: false,
+        showCallTrackingModal: true,
+      });
+    } else {
+      this.setState({
+        showCallTrackingModal: false,
+      });
+    }
   }
 
-  sourceChanged(e) {
+  campaignChanged(e, val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('source', e);
+    setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'source');
+    fetchStudiesAccordingToFilters(val, 'campaign');
+  }
+
+  sourceChanged(e, val) {
+    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    setFilterFormValues('source', val);
+    this.toggleAllStudies(false);
+    fetchStudiesAccordingToFilters(val, 'source');
   }
 
   addEmailNotificationClick(custom = false) {
@@ -464,6 +489,12 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             bsStyle="primary"
             className="pull-left"
             data-class="btn-deactivate"
+            onClick={() => this.showCallTrackingModal(true)}
+          > Call Tracking </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
             onClick={() => this.showLeadGenPageModal(true)}
           > LEAD GEN </Button>
           <Button
@@ -478,12 +509,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             data-class="btn-deactivate"
             onClick={() => this.showEditInformationModal(true)}
           > Info </Button>
-          <Button
-            bsStyle="primary"
-            className="pull-left"
-            data-class="btn-deactivate"
-            onClick={this.adSetStudies}
-          > Ad Set </Button>
           <Button
             bsStyle="primary"
             className="pull-left"
@@ -934,6 +959,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 this.showCampaignPageModal(false);
               }}
               openModal={this.state.showCampaignPageModal}
+              study={selectedStudies[0]}
+            />
+            <CallTrackingPageModal
+              onClose={() => {
+                this.showCallTrackingModal(false);
+              }}
+              openModal={this.state.showCallTrackingModal}
               study={selectedStudies[0]}
             />
             <Modal

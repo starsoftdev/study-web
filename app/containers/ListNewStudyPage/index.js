@@ -19,8 +19,8 @@ import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } 
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
-import { selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';
-import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
+import { selectListNewStudyFormValues, selectListNewStudyFormError, selectRegisteredFields } from '../../components/ListNewStudyForm/selectors';
+// import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { ComingSoon } from '../../components/ComingSoon';
@@ -62,6 +62,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     submitForm: PropTypes.func,
     saveSite: PropTypes.func,
     hasErrors: PropTypes.bool,
+    newStudyFields: PropTypes.array,
     availPhoneNumbers: PropTypes.array,
     currentUser: PropTypes.object,
     formSubmissionStatus: PropTypes.object,
@@ -126,9 +127,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   onSubmitForm() {
-    const { hasErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
+    const { hasErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart, newStudyFields } = this.props;
     if (hasErrors || shoppingCartFormError) {
-      touchNewStudy();
+      touchNewStudy(newStudyFields);
       touchShoppingCart();
       return;
     }
@@ -323,6 +324,7 @@ const mapStateToProps = createStructuredSelector({
   listNewStudyState : selectListNewStudyPageDomain(),
   formValues: selectListNewStudyFormValues(),
   hasErrors: selectListNewStudyFormError(),
+  newStudyFields: selectRegisteredFields(),
   availPhoneNumbers: selectAvailPhoneNumbers(),
   currentUser: selectCurrentUser(),
   formSubmissionStatus: selectFormSubmissionStatus(),
@@ -346,7 +348,7 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
-    touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
+    touchNewStudy: (newStudyFields) => (dispatch(touch('listNewStudy', ...newStudyFields))),
     touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };
 }

@@ -16,6 +16,50 @@
   pointer-events: none !important;
 }
 
+.special-cursor-text{
+  input{
+    cursor: text !important;
+  }
+}
+
+.truncate{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.r-ss-option-group-heading{
+  border: none !important;
+  &:hover{
+    background-color: #00AFEF !important;
+    color: #FFF !important;
+  }
+}
+
+.study-source-link:hover{
+  text-decoration: underline;
+  color: #76daff;
+}
+
+.study-source-link:focus {
+  color: #00afef !important;
+}
+
+.studySourceMultiSelect{
+  .studySourceSelectOption{
+    padding: 7px;
+  }
+  .hiddenSelectOption{
+    display: none;
+  }
+  .r-ss-dropdown-option{
+    padding: 0 !important;
+  }
+  .r-ss-option-group-heading{
+    font-size: 18px !important;
+  }
+}
+
 .field-before-dst-label{
   margin-bottom: 5px !important;
 }
@@ -2928,6 +2972,7 @@ th, .th {
   &:hover {
     color: #999;
     outline: none;
+    cursor: pointer;
   }
 
   &:before {

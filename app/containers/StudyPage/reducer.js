@@ -58,7 +58,14 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  SET_SELECTED_STUDY_SOURCES,
 } from './constants';
+
+import {
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
+} from '../App/constants';
 
 const initialState = {
   stats: {},
@@ -85,12 +92,58 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  studyLeadSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  selectedStudySources: [],
 };
 
 function studyPageReducer(state = initialState, action) {
   let totalReferrals = 0;
 
   switch (action.type) {
+    case SET_SELECTED_STUDY_SOURCES:
+      return {
+        ...state,
+        selectedStudySources: action.list,
+      };
+    case FETCH_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: state.studyLeadSources.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              source_id: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
         ...state,
