@@ -60,7 +60,11 @@ export class Dashboard extends React.Component {
 
   render() {
     const { currentUser, patientSignUps, patientMessagesCount, rewardsBalance, siteLocations, pickReward } = this.props;
-    const redeemable = (currentUser.roleForClient && currentUser.roleForClient.canRedeemRewards) || currentUser.roleForClient.name === 'Super Admin';
+    let redeemable = false;
+    if (currentUser && currentUser.roleForClient) {
+      redeemable = !currentUser.roleForClient.client.rewardsLocked &&
+        (currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin');
+    }
     const redeemableSiteLocations = reject(siteLocations, { id: 0 });
     return (
       <section className="row infoarea text-uppercase">

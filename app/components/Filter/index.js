@@ -16,13 +16,14 @@ export default class Filter extends React.Component {
     onClose: React.PropTypes.func,
     onChange: React.PropTypes.func,
     onSubmit: React.PropTypes.func,
+    oldSearchValue: React.PropTypes.number,
   };
 
   componentDidMount() {
   }
 
   submitSearch(value) {
-    if (!value || !/^\d+$/.test(value)) {
+    if (!value || !/^\d+$/.test(value) || value > 2147483647) {
       toastr.error('', 'Error! Invalid study number.');
       return;
     }
@@ -55,13 +56,30 @@ export default class Filter extends React.Component {
       >
         <strong className="title">Search</strong>
         <input
-          type="text" name={name} className="form-control" placeholder="Study #" ref={(searchVal) => (
-          this.searchVal = searchVal
-        )}
+          type="number" name={name} className="form-control" placeholder="Study #"
+          onKeyDown={() => {
+            this.setState({ oldSearchValue: this.searchVal.value });
+          }}
+          onKeyUp={() => {
+            if (!parseInt(this.searchVal.value) || this.searchVal.value > 2147483647) {
+              if (this.state.oldSearchValue < 2147483647) {
+                this.searchVal.value = this.state.oldSearchValue;
+              } else {
+                let oldValue = this.state.oldSearchValue;
+                while (oldValue > 2147483647) {
+                  oldValue = parseInt(oldValue / 10);
+                }
+                this.searchVal.value = oldValue;
+              }
+            }
+          }}
+          ref={(searchVal) => (
+            this.searchVal = searchVal
+          )}
         />
         <button className="btn btn-default" onClick={() => this.submitSearch(this.searchVal.value)}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
@@ -83,13 +101,13 @@ export default class Filter extends React.Component {
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
   }
 
-  createNearByBox(options) {
+  createNearbyBox(options) {
     const { name, style } = options;
 
     return (
@@ -110,7 +128,7 @@ export default class Filter extends React.Component {
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit({ miles: this.miles.value, zip: this.zip.value }); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
-          <i className="icomoon-icon_close"></i>
+          <i className="icomoon-icon_close" />
         </a>
       </div>
     );
@@ -165,7 +183,7 @@ export default class Filter extends React.Component {
       case 'compare':
         return this.createComparisonBox(options);
       case 'nearby':
-        return this.createNearByBox(options);
+        return this.createNearbyBox(options);
       case 'address':
         return this.createAddressBox(options);
       default:
