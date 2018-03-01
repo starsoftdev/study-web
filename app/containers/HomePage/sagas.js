@@ -780,6 +780,10 @@ export function* fetchStudiesDashboardWorker(action) {
       hasMore = false;
     }
 
+    if (response.studies.length === 0) {
+      toastr.error('', 'Error! Invalid study number.');
+    }
+
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
     console.log(err);
