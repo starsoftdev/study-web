@@ -72,7 +72,6 @@ import {
   submitEmailSuccess,
   emailsFetched,
   emailsFetchError,
-  callStatsFetched,
   fetchEmails,
 } from './actions';
 
@@ -165,7 +164,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceId = sourceId;
+      options.query.sourceIds = JSON.stringify(sourceId);
     }
     if (text) {
       options.query.text = text;
@@ -183,7 +182,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 }
 
 // TODO re-enable when optimized for high traffic
-function* fetchStudyCallStats(action) {
+/* function* fetchStudyCallStats(action) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
@@ -215,7 +214,7 @@ function* fetchStudyCallStats(action) {
       yield call(() => { location.href = '/login'; });
     }
   }
-}
+} */
 
 function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
@@ -237,7 +236,7 @@ function* fetchStudyStats(action) {
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceId = sourceId;
+      options.query.sourceIds = JSON.stringify(sourceId);
     }
     const response = yield call(request, requestURL, options);
     yield put(studyStatsFetched(response));
@@ -271,7 +270,7 @@ function* fetchPatientCategories() {
     const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, null, null, 1);
+    yield call(fetchPatients, studyId, null, null, [{ group:'StudyKIK', id:'1_', label:'none' }]);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);
@@ -448,7 +447,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
       queryParams.campaignId = campaignId;
     }
     if (sourceId) {
-      queryParams.sourceId = sourceId;
+      queryParams.sourceIds = JSON.stringify(sourceId);
     }
     if (text) {
       queryParams.text = text;
@@ -1063,8 +1062,8 @@ export function* fetchStudySaga() {
     // watch for initial fetch actions that will load the text message stats
     const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
     const watcherC = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyStats);
-    const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
-    const watcherE = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyCallStats);
+    // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
+    // const watcherE = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyCallStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
     const watcherH = yield fork(exportPatients);
@@ -1092,8 +1091,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherC);
-    yield cancel(watcherD);
-    yield cancel(watcherE);
+    // yield cancel(watcherD);
+    // yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);

@@ -10,12 +10,13 @@ import Input from '../../components/Input';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { addEmailNotificationUser, fetchClientAdmins } from '../../containers/App/actions';
+import { addEmailNotificationUser, fetchClientAdmins, fetchStudyLeadSources } from '../../containers/App/actions';
 import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../containers/App/selectors';
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
 import { setEmailNotifications } from '../../containers/HomePage/actions';
-import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications } from '../../containers/HomePage/selectors';
+import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
 import StudyAddForm from '../../components/StudyAddForm';
+import RenderLeads from '../../components/RenderLeads';
 import {
   changeStudyAdd,
   removeStudyAd,
@@ -41,6 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
+  fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
 });
 
 const mapStateToProps = createStructuredSelector({
@@ -57,6 +59,7 @@ const mapStateToProps = createStructuredSelector({
   changeStudyAddProcess: selectChangeStudyAddProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),
+  studyLeadSources: selectStudyLeadSources(),
 });
 @reduxForm({
   form: formName,
@@ -98,6 +101,8 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     resetChangeAddState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
+    fetchStudyLeadSources: PropTypes.func.isRequired,
+    studyLeadSources: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -148,6 +153,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAddState } = this.props;
 
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
+      this.props.fetchStudyLeadSources(newProps.selectedStudyId);
       const fields = [];
       let currentStudy = null;
       let isAllChecked = true;
@@ -213,6 +219,20 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         updatedStudyAd: null,
         fileSrc: (currentStudy.image || null),
       });
+
+      if (currentStudy.callTracking) {
+        this.setState({
+          callTracking: true,
+        });
+      } else {
+        this.setState({
+          callTracking: false,
+        });
+      }
+    }
+
+    if (this.props.studyLeadSources.fetching && !newProps.studyLeadSources.fetching) {
+      change('leadSource', newProps.studyLeadSources.details);
     }
 
     if (newProps.emailNotifications.length > 0 && newProps.emailNotifications !== emailNotifications) {
@@ -301,7 +321,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         params.emailNotifications = newEmailNotifications;
       }
     }
-
+    params.leadSource = formValues.leadSource;
     onSubmit(params);
   }
 
@@ -493,6 +513,11 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                           */}
                         </div>
                       </div>
+
+                      {this.state.callTracking &&
+                        <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} disableDelete isClientEditForm />
+                      }
+
                       <div className="clearfix">
                         <button
                           type="submit"

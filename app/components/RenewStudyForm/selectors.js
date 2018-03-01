@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
@@ -48,9 +48,17 @@ const selectRenewStudyFormPatientMessagingSuiteValue = () => createSelector(
   substate => get(substate, 'renewStudy.values.patientMessagingSuite', null)
 );
 
-const selectRenewStudyFormCallTrackingValue = () => createSelector(
+const selectCallTracking = () => createSelector(
   selectFormDomain(),
   substate => get(substate, 'renewStudy.values.callTracking', null)
+);
+
+const selectLeadsCount = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const leads = get(substate, 'renewStudy.values.leadSource', []);
+    return leads.length;
+  }
 );
 
 const selectRenewStudyFormStartDateValue = () => createSelector(
@@ -63,6 +71,16 @@ const selectRenewStudyFormNotesValue = () => createSelector(
   substate => get(substate, 'renewStudy.values.notes', null)
 );
 
+const selectRenewStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const regFieldsArr = get(substate, 'renewStudy.registeredFields', []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
+  }
+);
+
 export default selectFormDomain;
 export {
   selectRenewStudyFormValues,
@@ -71,7 +89,9 @@ export {
   selectRenewStudyFormCampaignLengthValue,
   selectRenewStudyFormcondenseTwoWeeksValue,
   selectRenewStudyFormPatientMessagingSuiteValue,
-  selectRenewStudyFormCallTrackingValue,
+  selectCallTracking,
   selectRenewStudyFormStartDateValue,
   selectRenewStudyFormNotesValue,
+  selectLeadsCount,
+  selectRenewStudyFields,
 };
