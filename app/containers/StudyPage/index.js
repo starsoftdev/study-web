@@ -12,8 +12,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchSources } from '../../containers/App/actions';
+import { selectSitePatients, selectCurrentUser, selectSources } from '../../containers/App/selectors';
+import { fetchSources, fetchStudyLeadSources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../containers/NotFoundPage/index';
@@ -49,7 +49,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     stats: PropTypes.object,
     socket: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
-    fetchSources: PropTypes.func,
+    fetchSources: React.PropTypes.func,
+    fetchStudyLeadSources: PropTypes.func,
     sitePatients: React.PropTypes.object,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
@@ -58,6 +59,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     clientClosedStudyPage: React.PropTypes.func,
     studyStatsFetched: React.PropTypes.func,
     studyViewsStatFetched: React.PropTypes.func,
+    studyLeadSources: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -76,11 +78,12 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage, fetchStudyLeadSources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id, 1);
+    fetchStudy(params.id, [{ group:'StudyKIK', id:'1_', label:'none' }]);
     fetchPatientCategories(params.id);
     fetchSources();
+    fetchStudyLeadSources(params.id);
 
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
@@ -265,6 +268,31 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
     }
+
+    const sourceMapped = [];
+    _.forEach(sourceOptions, (source) => {
+      let item = null;
+      const label = source.label.replace('StudyKIK (Imported)', 'Database');
+      _.forEach(this.props.studyLeadSources.details, (studySource) => {
+        if (source.value === studySource.source_id.value) {
+          item = {
+            ...studySource,
+            group: label,
+            id: studySource.studySourceId,
+            label: `- ${label} ${studySource.source_name || ''}`,
+          };
+
+          sourceMapped.push(item);
+        }
+      });
+      if (!item) {
+        sourceMapped.push({
+          group: source.label,
+          id: `${source.value}_`,
+          label: 'none',
+        });
+      }
+    });
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -286,6 +314,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             ePMS={ePMS}
             studyName={studyName}
             initialValues={{ source: defaultSource }}
+            sourceMapped={sourceMapped}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -307,7 +336,7 @@ const mapStateToProps = createStructuredSelector({
   fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
-  sources: Selector.selectSources(),
+  sources: selectSources(),
   site: Selector.selectSite(),
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
@@ -316,6 +345,7 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
+  studyLeadSources: Selector.selectStudyLeadSources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -333,6 +363,7 @@ function mapDispatchToProps(dispatch) {
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
+    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
   };
 }
 
