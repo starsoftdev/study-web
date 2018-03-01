@@ -5,4 +5,8 @@ const schema = {
   password: { presence: true },
 };
 
+const fields = Object.keys(schema);
+
+export { fields };
+
 export default validatorFactory(schema);

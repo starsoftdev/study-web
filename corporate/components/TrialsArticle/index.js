@@ -76,7 +76,7 @@ export class TrialsArticle extends Component {
             />
           </div>
           <div className="info">
-            <h4>{trial.name}</h4>
+            <h4>{trial.landingtitle || trial.name}</h4>
             <address>
               <i className="icomoon-map-marker" /> {(location !== null) ? location : 'N/A'}
             </address>

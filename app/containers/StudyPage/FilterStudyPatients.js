@@ -91,8 +91,8 @@ class FilterStudyPatientsForm extends Component {
         fetchStudyStats(studyId, newCampaign, null);
         fetchPatientCategoriesTotals(studyId, newCampaign, null);
       } else {
-        fetchPatients(studyId, search, newCampaign, event, null);
-        fetchStudyStats(studyId, newCampaign, event);
+        fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
+        fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
         fetchPatientCategoriesTotals(studyId, newCampaign, event);
       }
     } else {

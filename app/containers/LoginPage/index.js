@@ -6,7 +6,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import LoginForm from '../../components/LoginForm';
+import LoginForm from '../../../corporate/components/LoginForm';
 import { loginRequest } from './actions';
 import { setNewPasswordRequest } from '../SetNewPasswordPage/actions';
 

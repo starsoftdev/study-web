@@ -142,6 +142,8 @@ import {
 
 import {
   LOGIN_ERROR,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
 } from '../../containers/LoginPage/constants';
 
 import {
@@ -155,6 +157,7 @@ import {
 const initialState = {
   loggedIn: !!getItem('auth_token'),
   loginError: null,
+  submittingLoginForm: false,
   userData: null,
   pageEvents: null,
   baseData: {
@@ -324,6 +327,19 @@ export default function appReducer(state = initialState, action) {
       resultState = {
         ...state,
         loginError: action.payload,
+        submittingLoginForm: false,
+      };
+      break;
+    case LOGIN_REQUEST:
+      resultState = {
+        ...state,
+        submittingLoginForm: true,
+      };
+      break;
+    case LOGIN_SUCCESS:
+      resultState = {
+        ...state,
+        submittingLoginForm: false,
       };
       break;
     case SET_USER_DATA:

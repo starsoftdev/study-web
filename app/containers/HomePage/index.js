@@ -112,7 +112,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
     const filters = _.assign(searchProtocolsFormValues, searchParams);
     this.setState({ filters });
-    fetchProtocols(currentUser.roleForSponsor.id, filters, 10, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    fetchProtocols(currentUser.roleForSponsor.id, filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
   }
 
   gotoListNewStudy() {
@@ -124,9 +124,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
     let offset = 0;
     if (!isSort) {
-      offset = this.props.paginationOptions.page * 10;
+      offset = this.props.paginationOptions.page * 50;
     }
-    const limit = 10;
+    const limit = 50;
 
     fetchProtocols(currentUser.roleForSponsor.id, this.state.filters, limit, offset, (sort || null), (direction || null));
   }
@@ -148,7 +148,11 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <Dashboard location={this.props.location} />
             </div>
             <div className="search-studies-panel clearfix form-group">
-              <SearchStudiesForm onSubmit={this.searchStudies} currentUser={currentUser} />
+              <SearchStudiesForm
+                onSubmit={this.searchStudies}
+                currentUser={currentUser}
+                initialValues={{ status: ACTIVE_STATUS_VALUE }}
+              />
               <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
                 + List New Study
               </button>
