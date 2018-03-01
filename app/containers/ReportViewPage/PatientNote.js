@@ -51,7 +51,7 @@ class PatientNote extends React.Component {
                 <span className="label"> Name: </span>
                 <div className="content">
                   <span>
-                    {note.firstName} {note.lastName}
+                    {(!note.is_proxy) ? `${note.firstName} ${note.lastName}` : 'StudyKIK'}
                   </span>
                 </div>
               </div>

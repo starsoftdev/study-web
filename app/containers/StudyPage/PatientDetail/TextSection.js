@@ -148,6 +148,7 @@ class TextSection extends React.Component {
     const options = {
       studyId,
       currentUserId: currentUser.id,
+      isProxy: currentUser.isProxy,
       patientId: currentPatient.id,
       body: textarea.value,
       to: currentPatient.phone,

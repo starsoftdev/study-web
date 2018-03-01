@@ -74,7 +74,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
   componentDidMount() {
     const { currentUser, fetchClientSites, getReceipts, receipts } = this.props;
     fetchClientSites(currentUser.roleForClient.client_id);
-    getReceipts(currentUser.roleForClient.id, 15, 0, receipts);
+    getReceipts(currentUser.roleForClient.id, 50, 0, receipts);
   }
 
   componentWillReceiveProps(nProps) {
@@ -173,7 +173,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
     const { currentUser, getReceipts, paginationOptions, receipts, setSearchOptions } = this.props;
     setSearchOptions(this.searchOptions);
 
-    getReceipts(currentUser.roleForClient.id, 15, 0, receipts, paginationOptions.activeSort, paginationOptions.activeDirection, this.searchOptions);
+    getReceipts(currentUser.roleForClient.id, 50, 0, receipts, paginationOptions.activeSort, paginationOptions.activeDirection, this.searchOptions);
   }
 
   render() {
