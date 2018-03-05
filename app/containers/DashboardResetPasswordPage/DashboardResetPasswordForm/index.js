@@ -30,7 +30,6 @@ export class DashboardResetPasswordForm extends React.Component { // eslint-disa
 
     const { formError, touchFields } = this.props;
     if (formError) {
-      console.log('touchFrields');
       touchFields();
       return;
     }
