@@ -5,7 +5,7 @@ const schema = {
   code: { presence: true },
   neverExpires: { presence: false },
   type: { presence: true },
-  amount: { presence: true },
+  amount: { presence: true, numericality: { greaterThan: 0 } },
   validFrom: { presence: false },
   validTo: { presence: false },
 };
