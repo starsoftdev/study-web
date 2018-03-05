@@ -44,6 +44,7 @@ export class CallTrackingPageModal extends React.Component {
     messagingNumbers: PropTypes.object,
     editStudyLeadSources: PropTypes.func,
     isOnTop: PropTypes.bool,
+    array: PropTypes.object,
   };
 
   constructor(props) {
@@ -69,7 +70,8 @@ export class CallTrackingPageModal extends React.Component {
       this.setState({ isLeadSourcesFetched: true });
 
       if (newProps.studyLeadSources.details.length > 0) {
-        this.props.change('leadSource', newProps.studyLeadSources.details);
+        this.props.array.removeAll('leadSource');
+        newProps.studyLeadSources.details.map((newItem) => this.props.array.push('leadSource', newItem));
       } else {
         this.props.change('leadSource', [{ source_id: null }]);
       }
