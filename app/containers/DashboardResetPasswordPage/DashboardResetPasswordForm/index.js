@@ -1,37 +1,52 @@
 import React, { PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, touch } from 'redux-form';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import Input from '../../../components/Input';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import formValidator from './validator';
+import formValidator, { fields } from './validator';
+import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 
-@reduxForm({ form: 'dashboardResetPasswordForm', validate: formValidator })
+const formName = 'dashboardResetPasswordForm';
+@reduxForm({ form: formName, validate: formValidator })
 
 export class DashboardResetPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     updatePasswordProcess: PropTypes.object,
     handleSubmit: PropTypes.func,
-    submitForm: PropTypes.func,
-    formValues: PropTypes.object,
+    touchFields: PropTypes.func,
+    formError: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+    this.onSubmitForm = this.onSubmitForm.bind(this);
+  }
 
   onSubmitForm = (e) => {
     e.preventDefault();
-    console.log('formValues: ', this.props.formValues);
-    this.props.submitForm(this.props.formValues);
+
+    const { formError, touchFields } = this.props;
+    if (formError) {
+      console.log('touchFrields');
+      touchFields();
+      return;
+    }
+    this.props.handleSubmit();
   }
 
 
   render() {
     return (
-      <form className="form-search selects-form clearfix" onSubmit={this.props.handleSubmit(this.props.submitForm)}>
+      <form className="form-search selects-form clearfix" onSubmit={this.onSubmitForm}>
         <div className="fields-holder row">
           <div className="col custom-select no-left-padding">
             <Field
               name="userEmail"
               component={Input}
-              placeholder="User's email"
+              placeholder="* Email"
             />
           </div>
         </div>
@@ -42,7 +57,7 @@ export class DashboardResetPasswordForm extends React.Component { // eslint-disa
               name="newPassword"
               component={Input}
               type="password"
-              placeholder="Password"
+              placeholder="* Password"
             />
           </div>
         </div>
@@ -62,4 +77,14 @@ export class DashboardResetPasswordForm extends React.Component { // eslint-disa
   }
 }
 
-export default DashboardResetPasswordForm;
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    touchFields: () => dispatch(touch(formName, ...fields)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardResetPasswordForm);

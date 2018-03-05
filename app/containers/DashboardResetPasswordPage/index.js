@@ -11,13 +11,12 @@ import { createStructuredSelector } from 'reselect';
 
 import { DashboardResetPasswordForm } from './DashboardResetPasswordForm';
 import { updatePassword } from './actions';
-import { selectDashboardResetPasswordFormValues, selectDashboardResetPasswordProcess } from './selectors';
+import { selectDashboardResetPasswordProcess } from './selectors';
 
 export class DashboardResetPasswordPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     updatePasswordProcess: PropTypes.object,
     submitForm: PropTypes.func,
-    formValues: PropTypes.object,
   };
 
   render() {
@@ -27,8 +26,7 @@ export class DashboardResetPasswordPage extends React.Component { // eslint-disa
         <h2 className="main-heading">RESET PASSWORD</h2>
         <DashboardResetPasswordForm
           updatePasswordProcess={this.props.updatePasswordProcess}
-          formValues={this.props.formValues}
-          submitForm={this.props.submitForm}
+          onSubmit={this.props.submitForm}
         />
       </div>
     );
@@ -37,7 +35,6 @@ export class DashboardResetPasswordPage extends React.Component { // eslint-disa
 
 
 const mapStateToProps = createStructuredSelector({
-  formValues: selectDashboardResetPasswordFormValues(),
   updatePasswordProcess: selectDashboardResetPasswordProcess(),
 });
 
