@@ -130,21 +130,23 @@ class Patient extends React.Component {
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
         data-patient-id={patient.id}
       >
-        <a
-          className="top"
-          onClick={() => {
-            onPatientClick(category, patient);
-          }}
-        >
-          <strong className="name">
-            <span className="first-name">{patient.firstName}</span>
-            <span> </span>
-            <span className="last-name">{patient.lastName}</span>
-          </strong>
-          <span className="email">{patient.email}</span>
-          <span className="phone">{patientPhone}</span>
-        </a>
-        {this.renderPatientTextMessageSummary()}
+        <div className="patient-inner">
+          <a
+            className="top"
+            onClick={() => {
+              onPatientClick(category, patient);
+            }}
+          >
+            <strong className="name">
+              <span className="first-name">{patient.firstName}</span>
+              <span> </span>
+              <span className="last-name">{patient.lastName}</span>
+            </strong>
+            <span className="email">{patient.email}</span>
+            <span className="phone">{patientPhone}</span>
+          </a>
+          {this.renderPatientTextMessageSummary()}
+        </div>
       </li>
     );
   }

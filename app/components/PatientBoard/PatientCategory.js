@@ -233,7 +233,7 @@ class PatientCategory extends React.Component {
           <div className="slide-holder">
             <MyVirtualList
               items={category.patients}
-              itemHeight={174}
+              itemHeight={178}
             />
           </div>
         </div>
