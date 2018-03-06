@@ -151,6 +151,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
 
+  app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   app.get('/app*', (req, res) => {
@@ -213,6 +215,8 @@ const addProdMiddlewares = (app, options) => {
   app.get('/lv17', (req, res) => res.redirect(301, 'https://studykik.com/4002638-lv17'));
 
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
+
+  app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
