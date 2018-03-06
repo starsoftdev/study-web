@@ -5094,7 +5094,7 @@ div[data-percentage],
       padding: 0;
       display: block;
       li {
-        height: 174px;
+        height: 178px;
         padding: 3px;
         display: block;
         position: relative;
@@ -5104,9 +5104,12 @@ div[data-percentage],
         }
         &.patient-selected,
         &:hover {
+          .patient-inner {
+            height: 100%;
+            background: #00afef;
+          }
           a {
             color: #fff;
-            background: #00afef;
             &:before {
               opacity: 1;
             }
@@ -5172,7 +5175,6 @@ div[data-percentage],
       }
       &.bottom {
         padding-top: 0;
-        min-height: 64px;
       }
     }
     .phone,
