@@ -358,7 +358,7 @@ export class LandingPageModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      type="tel"
+                      type="text"
                       name="phonePlaceholder"
                       component={Input}
                       required
