@@ -38,20 +38,70 @@
   margin: 0 auto 50px;
 
   .field-row {
+    position: relative;
+    width: 100%;
+
+    @media screen and (max-width: @psd) {
+      height: 60px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 767px) {
+      height: 40px;
+    }
+
+
+    input[name="phone"] {
+      position: absolute;
+
+      &.length-2 {
+        padding-left: 105px;
+      }
+
+      &.length-3 {
+        padding-left: 115px;
+      }
+
+      &.length-4 {
+        padding-left: 125px;
+      }
+    }
 
     .intl-tel-input {
-      width: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+
+      .selected-flag {
+
+        .selected-dial-code {
+          padding-right: 35px;
+        }
+
+        .iti-arrow {
+          border-color: #999 transparent transparent;
+          border-style: solid;
+          display: inline-block;
+          height: 0;
+          width: 0;
+          border-top-color: #00afef;
+          border-width: 10px 10px 0;
+        }
+      }
 
       .country-list {
         width: 100%;
+        margin: 0 -1px;
       }
 
       input {
-        height: 60px;
-
-        &:focus {
-          // border-color: #f00;
-        }
+        visibility: hidden;
+        display: none;
       }
     }
 
