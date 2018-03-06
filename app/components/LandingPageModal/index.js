@@ -137,6 +137,7 @@ export class LandingPageModal extends React.Component {
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
           change('phonePlaceholder', landing.phonePlaceholder);
+          change('distance', landing.distance);
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
           change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
@@ -411,6 +412,18 @@ export class LandingPageModal extends React.Component {
                       name="clickToCallButtonNumber"
                       component={Input}
                       onBlur={this.onPhoneBlur}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Distance</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="distance"
+                      component={Input}
                     />
                   </div>
                 </div>
