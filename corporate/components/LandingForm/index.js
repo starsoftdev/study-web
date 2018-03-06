@@ -117,7 +117,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
       (<Field
         name="phone"
         ccName="code"
-        type="phone"
+        type="tel"
         component={inputWrap}
         placeholder={phonePlaceholder}
         className="field-row"
