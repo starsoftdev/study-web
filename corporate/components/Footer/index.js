@@ -11,7 +11,7 @@ export default class Footer extends React.Component { // eslint-disable-line rea
 
   render() {
     const { pathname } = this.props.location;
-
+    const year = (new Date()).getFullYear();
     return (
       <footer id="footer">
         {(pathname === '/') > 0 &&
@@ -20,7 +20,7 @@ export default class Footer extends React.Component { // eslint-disable-line rea
         <div className="footer-holder">
           <div className="container-fluid">
             <div className="clearfix">
-              <p className="copyright pull-left">© StudyKIK 2017. All rights reserved</p>
+              <p className="copyright pull-left">© StudyKIK {year}. All rights reserved</p>
               <FooterNavBar />
               <SocialNetworks />
             </div>
