@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
 
 /**
  * Direct selector to the dashboardResetPasswordPage state domain
@@ -9,17 +8,9 @@ const selectDashboardResetPasswordPageDomain = () => state => state.dashboardRes
 /**
  * Default selector used by DashboardResetPasswordPage
  */
-
-const selectFormDomain = () => state => state.form;
-
 const selectDashboardResetPasswordPage = () => createSelector(
   selectDashboardResetPasswordPageDomain(),
   (substate) => substate
-);
-
-const selectDashboardResetPasswordFormValues = () => createSelector(
-  selectFormDomain(),
-  (substate) => get(substate, 'dashboardResetPasswordForm.values', {})
 );
 
 const selectDashboardResetPasswordProcess = () => createSelector(
@@ -30,6 +21,5 @@ const selectDashboardResetPasswordProcess = () => createSelector(
 export default selectDashboardResetPasswordPage;
 export {
   selectDashboardResetPasswordPageDomain,
-  selectDashboardResetPasswordFormValues,
   selectDashboardResetPasswordProcess,
 };
