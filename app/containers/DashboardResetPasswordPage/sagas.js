@@ -28,7 +28,6 @@ export function* updatePasswordWatcher() {
 export function* updatePasswordWorker(action) {
   try {
     const requestURL = `${API_URL}/users/adminResetUserPassword`;
-    console.log('payload: ', action);
     const { userEmail, newPassword } = action.payload;
 
     const params = {
