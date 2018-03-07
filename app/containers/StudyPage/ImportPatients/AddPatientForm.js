@@ -4,16 +4,16 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, Field, reduxForm, touch } from 'redux-form';
+import { blur, Field, reduxForm, touch, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
+import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
-import ReactSelect from '../../../components/Input/ReactSelect';
 import { submitAddPatient } from '../actions';
 import { selectStudyId, selectAddPatientStatus } from '../selectors';
 import formValidator, { fields } from './validator';
@@ -33,12 +33,15 @@ class AddPatientForm extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     touchFields: React.PropTypes.func.isRequired,
+    changeField: React.PropTypes.func.isRequired,
+    sourceMapped: React.PropTypes.array,
   };
 
   constructor(props) {
     super(props);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.addPatient = this.addPatient.bind(this);
+    this.groupHeaderClicked = this.groupHeaderClicked.bind(this);
   }
 
   onPhoneBlur(event) {
@@ -65,14 +68,42 @@ class AddPatientForm extends React.Component {
     submitAddPatient(studyId, patient, onClose);
   }
 
+  groupHeaderClicked(group) {
+    const foundItem = _.find(this.props.sourceMapped, (item) => {
+      return item.group === group;
+    });
+    if (foundItem && !foundItem.studySourceId) {
+      this.props.changeField('source', foundItem);
+      this.props.blur('source', foundItem);
+      this.sourceSelectContainer.click(); // fake click to close the dropdown
+    }
+  }
+
   render() {
-    const { addPatientStatus, sources } = this.props;
-    const uploadSources = _.clone(sources);
+    const { addPatientStatus } = this.props;
+    const uploadSources = _.clone(this.props.sourceMapped);
     uploadSources.shift();
-    const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
-      value: source.id,
-    }));
+    const itemTemplate = (controlSelectedValue) => {
+      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.label === 'none' ? 'hiddenSelectOption studySourceSelectOption' : 'studySourceSelectOption'}`}>
+        {controlSelectedValue.label}
+        <i className="close-icon icomoon-icon_close" />
+      </div>);
+    };
+
+    const selectedItemsTemplate = (controlSelectedValue) => {
+      if (controlSelectedValue.length === 1) {
+        return (<div className="truncate">
+          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
+        </div>);
+      }
+      return (<div>
+        {controlSelectedValue.length} item(s) selected
+      </div>);
+    };
+
+    const groupHeaderTemplate = (group) => {
+      return <div onClick={() => { this.groupHeaderClicked(group); }}>{group}</div>;
+    };
     return (
       <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
         <div className="field-row">
@@ -128,16 +159,31 @@ class AddPatientForm extends React.Component {
             onBlur={this.onPhoneBlur}
           />
         </div>
-        <div className="field-row">
+        <div
+          className="field-row"
+          ref={(sourceSelectContainer) => {
+            this.sourceSelectContainer = sourceSelectContainer;
+          }}
+        >
           <strong className="label required">
             <label>Source</label>
           </strong>
           <Field
             name="source"
-            component={ReactSelect}
-            className="field required"
+            component={ReactMultiSelect}
             placeholder="Select Source"
-            options={sourceOptions}
+            searchPlaceholder="Search"
+            searchable
+            optionLabelKey="label"
+            includeAllOption={false}
+            customOptionTemplateFunction={itemTemplate}
+            customSelectedValueTemplateFunction={selectedItemsTemplate}
+            customGroupHeadingTemplateFunction={groupHeaderTemplate}
+            dataSource={uploadSources}
+            customSearchIconClass="icomoon-icon_search2"
+            groupBy="group"
+            initialValue={this.props.newPatient.source}
+            className="studySourceMultiSelect studySourceMultiSelectShort"
           />
         </div>
         <div className="text-right">
@@ -163,6 +209,7 @@ function mapDispatchToProps(dispatch) {
     blur: (field, value) => dispatch(blur(formName, field, value)),
     submitAddPatient: (studyId, patient, onClose) => dispatch(submitAddPatient(studyId, patient, onClose)),
     touchFields: () => dispatch(touch(formName, ...fields)),
+    changeField: (field, value) => dispatch(change(formName, field, value)),
   };
 }
 
