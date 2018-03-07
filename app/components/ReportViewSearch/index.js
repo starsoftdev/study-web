@@ -179,6 +179,8 @@ export class ReportViewSearch extends React.Component {
       };
     });
 
+    sourceOptions.unshift({ label: 'All', value: 'All' });
+
     const statusOptions = [
       {
         label: 'All',
@@ -235,7 +237,7 @@ export class ReportViewSearch extends React.Component {
               component={ReactSelect}
               placeholder="Select Study Status"
               options={statusOptions}
-              onChange={(e, val) => this.initSearch(val, 'status')}
+              onChange={(e) => this.initSearch(e, 'status')}
             />
           </div>
           <div className="pull-left custom-select">
@@ -244,7 +246,7 @@ export class ReportViewSearch extends React.Component {
               component={ReactSelect}
               placeholder="Select Source"
               options={sourceOptions}
-              onChange={(e, val) => this.initSearch(val, 'source')}
+              onChange={(e) => this.initSearch(e, 'source')}
             />
           </div>
         </div>
