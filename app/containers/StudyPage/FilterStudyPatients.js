@@ -198,6 +198,7 @@ class FilterStudyPatientsForm extends Component {
           source={source}
           ePMS={ePMS}
           studyName={studyName}
+          sourceMapped={this.props.sourceMapped}
         />
         <div className="fields-holder">
           <div className="search-area pull-left no-left-padding">
@@ -247,7 +248,7 @@ class FilterStudyPatientsForm extends Component {
               optionLabelKey="label"
               includeAllOption={false}
               multiple
-              onChange={(e, val) => this.searchPatient(val, 'source')}
+              onChange={(val) => this.searchPatient(val, 'source')}
               customOptionTemplateFunction={itemTemplate}
               customSelectedValueTemplateFunction={selectedItemsTemplate}
               customGroupHeadingTemplateFunction={groupHeaderTemplate}
