@@ -110,3 +110,8 @@ export const selectAddProtocolProcessStatus = () => createSelector(
   selectPatientDatabasePageDomain(),
   (subState) => subState.addProtocolProcess
 );
+
+export const selectStudyLeadSources = () => createSelector(
+  selectPatientDatabasePageDomain(),
+  (substate) => substate.studyLeadSources
+);
