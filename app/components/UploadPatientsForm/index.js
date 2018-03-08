@@ -97,6 +97,7 @@ export default class UploadPatientsForm extends Component {
       fileName: null,
       currentStudy: null,
       missingKeys: [],
+      allowedFormats: [ 'xls', 'xlsx', 'xlsm', 'xlw', 'xlsb', 'xml', 'csv', 'ods', 'fods' ],
       patients: [],
       fields: [],
       duplicates: [],
@@ -263,11 +264,15 @@ export default class UploadPatientsForm extends Component {
     const scope = this;
     const files = e.target.files;
     const f = files[0];
-    const name = f ? f.name : '';
+    const name = f ? f.name : null;
+    const ext = (name) ? name.split('.').pop() : null;
+    const index = _.findIndex(scope.state.allowedFormats, (f) => { return f === ext; });
     const reader = new FileReader();
     reader.onload = function (e) {
       if (f.size >= 5000000) {
         toastr.error('', 'Error! File exceeds the upload limit.');
+      } else if (ext && index === -1) {
+        toastr.error('', 'Error! The selected file is in the wrong format.');
       } else {
         scope.setState({ fileParsing: true });
         let data = e.target.result;
