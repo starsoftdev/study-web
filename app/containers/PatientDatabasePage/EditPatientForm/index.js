@@ -423,7 +423,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>Protocol</label>
+            <label>* Protocol</label>
           </strong>
           <Field
             name="protocol"
