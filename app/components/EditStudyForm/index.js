@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
-  fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
+  fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
 });
 
 const mapStateToProps = createStructuredSelector({
@@ -153,7 +153,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAddState } = this.props;
 
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
-      this.props.fetchStudyLeadSources(newProps.selectedStudyId);
+      this.props.fetchStudyLeadSources(newProps.selectedStudyId, [1]);
       const fields = [];
       let currentStudy = null;
       let isAllChecked = true;
