@@ -70,9 +70,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               googleHref = initObject.googleUrl ? initObject.googleUrl : '';
             }
           }
-
-          const disableDeleteFirstItem = (this.props.isAdmin && index === 0);
-
+          
           const urlLink = landingHref ? <a href={landingHref} className="landig-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
           const googleUrlLink = googleHref ? <a href={googleHref} className="landig-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
 
@@ -92,11 +90,6 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
-                {((!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) && !disableDeleteFirstItem) &&
-                  <div className="link-delete" onClick={() => fields.remove(index)}>
-                    <i className="icomoon-icon_trash" />
-                  </div>
-                }
               </div>
               {
                 showName && (
