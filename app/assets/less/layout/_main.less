@@ -28,14 +28,6 @@
   text-overflow: ellipsis;
 }
 
-.r-ss-option-group-heading{
-  border: none !important;
-  &:hover{
-    background-color: #00AFEF !important;
-    color: #FFF !important;
-  }
-}
-
 .study-source-link:hover{
   text-decoration: underline;
   color: #76daff;
@@ -46,6 +38,18 @@
 }
 
 .studySourceMultiSelect{
+  .r-ss-option-group-heading{
+    background-color: #ffffff !important;
+    border: none !important;
+    padding: 0 !important;
+    .inner-heading{
+      padding: .5rem .25rem;
+    }
+    &:hover{
+      background-color: #00AFEF !important;
+      color: #FFF !important;
+    }
+  }
   .studySourceSelectOption{
     padding: 7px;
   }
