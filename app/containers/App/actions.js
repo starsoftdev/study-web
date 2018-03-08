@@ -1353,10 +1353,11 @@ export function getTimezoneError(payload) {
   };
 }
 
-export function fetchStudyLeadSources(studyId) {
+export function fetchStudyLeadSources(studyId, excludeSourceIds) {
   return {
     type: FETCH_STUDY_LEAD_SOURCES,
     studyId,
+    excludeSourceIds,
   };
 }
 
