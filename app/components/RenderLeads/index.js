@@ -29,19 +29,18 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
   componentWillMount() {
     if (this.props.fields.length === 0) {
-      this.props.fields.push({ source_id: null });
+      this.props.fields.push({ source: null });
     }
   }
 
   render() {
     const { fields, formValues, messagingNumbers, initialLeadSources } = this.props;
-    const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source_id);
-
+    const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source);
 
     return (
       <div className="leads-list">
         {fields.map((lead, index) => {
-          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source_id !== 'undefined' && formValues.leadSource[index].source_id;
+          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source !== 'undefined' && formValues.leadSource[index].source;
           let landingHref = null;
           let googleHref = null;
           let initObject = null;
@@ -85,7 +84,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               <div className="field-row dropdown">
                 <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}><label>Lead Source #{(index + 1)}</label></strong>
                 <Field
-                  name={`${lead}.source_id`}
+                  name={`${lead}.source`}
                   component={ReactSelect}
                   objectValue
                   placeholder="Select Lead Source"
