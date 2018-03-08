@@ -296,7 +296,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { indications, fullSiteLocations, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
-    const defaultSource = _.find(this.props.sources, (item) => (item.type === 'StudyKIK (Imported)'));
+    const defaultSource = _.find(this.props.sources, (item) => (item.type === 'Database'));
     const initialValues = {};
     if (defaultSource) {
       initialValues.source = defaultSource.id;
