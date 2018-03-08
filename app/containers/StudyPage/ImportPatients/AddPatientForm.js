@@ -2,20 +2,19 @@
  * Created by mike on 10/9/16.
  */
 import React from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { blur, Field, reduxForm, touch, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import { submitAddPatient } from '../actions';
-import { selectStudyId, selectAddPatientStatus } from '../selectors';
+import { selectStudyId, selectAddPatientStatus, selectStudyLeadSources } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'addPatient';
@@ -35,13 +34,13 @@ class AddPatientForm extends React.Component {
     touchFields: React.PropTypes.func.isRequired,
     changeField: React.PropTypes.func.isRequired,
     sourceMapped: React.PropTypes.array,
+    studyLeadSources: React.PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.addPatient = this.addPatient.bind(this);
-    this.groupHeaderClicked = this.groupHeaderClicked.bind(this);
   }
 
   onPhoneBlur(event) {
@@ -63,47 +62,22 @@ class AddPatientForm extends React.Component {
     patient.client_id = clientId;
     /* normalizing the phone number */
     patient.phone = normalizePhoneForServer(newPatient.phone);
-    patient.source_id = newPatient.source;
+    patient.studySourceId = newPatient.source;
     delete patient.source;
     submitAddPatient(studyId, patient, onClose);
   }
 
-  groupHeaderClicked(group) {
-    const foundItem = _.find(this.props.sourceMapped, (item) => {
-      return item.group === group;
-    });
-    if (foundItem && !foundItem.studySourceId) {
-      this.props.changeField('source', foundItem);
-      this.props.blur('source', foundItem);
-      this.sourceSelectContainer.click(); // fake click to close the dropdown
-    }
-  }
-
   render() {
-    const { addPatientStatus } = this.props;
-    const uploadSources = _.clone(this.props.sourceMapped);
-    uploadSources.shift();
-    const itemTemplate = (controlSelectedValue) => {
-      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.label === 'none' ? 'hiddenSelectOption studySourceSelectOption' : 'studySourceSelectOption'}`}>
-        {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close" />
-      </div>);
-    };
+    const { addPatientStatus, studyLeadSources } = this.props;
 
-    const selectedItemsTemplate = (controlSelectedValue) => {
-      if (controlSelectedValue.length === 1) {
-        return (<div className="truncate">
-          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
-        </div>);
-      }
-      return (<div>
-        {controlSelectedValue.length} item(s) selected
-      </div>);
-    };
+    const sourceOptions = studyLeadSources.details.map((studySource) => {
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      return {
+        label: sourceName.replace('StudyKIK (Imported)', 'Database'),
+        value: studySource.studySourceId,
+      };
+    });
 
-    const groupHeaderTemplate = (group) => {
-      return <div onClick={() => { this.groupHeaderClicked(group); }}>{group}</div>;
-    };
     return (
       <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
         <div className="field-row">
@@ -159,31 +133,16 @@ class AddPatientForm extends React.Component {
             onBlur={this.onPhoneBlur}
           />
         </div>
-        <div
-          className="field-row"
-          ref={(sourceSelectContainer) => {
-            this.sourceSelectContainer = sourceSelectContainer;
-          }}
-        >
+        <div className="field-row">
           <strong className="label required">
             <label>Source</label>
           </strong>
           <Field
             name="source"
-            component={ReactMultiSelect}
+            component={ReactSelect}
+            className="field required"
             placeholder="Select Source"
-            searchPlaceholder="Search"
-            searchable
-            optionLabelKey="label"
-            includeAllOption={false}
-            customOptionTemplateFunction={itemTemplate}
-            customSelectedValueTemplateFunction={selectedItemsTemplate}
-            customGroupHeadingTemplateFunction={groupHeaderTemplate}
-            dataSource={uploadSources}
-            customSearchIconClass="icomoon-icon_search2"
-            groupBy="group"
-            initialValue={this.props.newPatient.source}
-            className="studySourceMultiSelect studySourceMultiSelectShort"
+            options={sourceOptions}
           />
         </div>
         <div className="text-right">
@@ -202,6 +161,7 @@ const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
   studyId: selectStudyId(),
   sources: selectSources(),
+  studyLeadSources: selectStudyLeadSources(),
 });
 
 function mapDispatchToProps(dispatch) {
