@@ -252,7 +252,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         studyLeadSources: {
           details: action.payload.map((item) => {
             return {
-              source_id: { value: item.source_id, label: item.type },
+              source: { value: item.source_id, label: item.type },
               source_name: item.source_name,
               studySourceId: item.studySourceId,
               landingPageId: item.landingPageId,
