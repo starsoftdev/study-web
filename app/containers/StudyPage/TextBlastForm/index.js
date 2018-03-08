@@ -97,8 +97,13 @@ class TextBlastForm extends React.Component {
   }
 
   textAreaChange(message = '') {
-    const value = (this.textarea && this.textarea.value) ? this.textarea.value : message;
-    this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {});
+    setTimeout(() => {
+      let value = (this.textarea && this.textarea.value) ? this.textarea.value : null;
+      if (!value && message && typeof message === 'string') {
+        value = message;
+      }
+      this.setState({ enteredCharactersLength: value ? value.length : 0 }, () => {});
+    }, 0);
   }
 
   selectCategory(checked, categoryId) {
