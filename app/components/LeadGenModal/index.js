@@ -15,7 +15,7 @@ import { selectLanding } from '../../containers/App/selectors';
 import {
   updateFacebookLandingPage,
   resetLandingPageState,
-  changeStudyAdd,
+  changeStudyAd,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectFacebookLandingPageUpdateProcess,
@@ -29,7 +29,7 @@ function mapDispatchToProps(dispatch) {
     blur: (field, value) => dispatch(blur(formName, field, value)),
     submitForm: (values) => dispatch(updateFacebookLandingPage(values)),
     resetState: () => dispatch(resetLandingPageState()),
-    submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+    submitStudyAd: (values) => dispatch(changeStudyAd(values)),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     resetForm: () => dispatch(reset(formName)),
   };
@@ -54,7 +54,7 @@ export class LeadGenModal extends React.Component {
     newList: React.PropTypes.any,
     landing: React.PropTypes.object,
     updateFacebookLandingPageProcess: React.PropTypes.any,
-    submitStudyAdd: React.PropTypes.func.isRequired,
+    submitStudyAd: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
     isOnTop: React.PropTypes.bool,
   };
