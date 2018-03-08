@@ -73,7 +73,7 @@ export class CallTrackingPageModal extends React.Component {
         this.props.array.removeAll('leadSource');
         newProps.studyLeadSources.details.map((newItem) => this.props.array.push('leadSource', newItem));
       } else {
-        this.props.change('leadSource', [{ source_id: null }]);
+        this.props.change('leadSource', [{ source: null }]);
       }
     }
 
