@@ -282,7 +282,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <h2>Patient becomes enrolled</h2>
               </div>
               <p>
-                With the end goal being a enrolled cinical trial, StudyKIK provided your site
+                With the end goal being an enrolled clinical trial, StudyKIK provided your site
                 with the tools needed to make that process as easy as possible.
               </p>
               <div className="img-holder">
