@@ -10,7 +10,6 @@ import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import ReactMultiSelect from '../../../components/Input/ReactMultiSelect';
 
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
@@ -83,7 +82,6 @@ export default class AddPatientForm extends React.Component {
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
-    this.groupHeaderClicked = this.groupHeaderClicked.bind(this);
   }
 
   onPhoneBlur(event) {
@@ -127,7 +125,7 @@ export default class AddPatientForm extends React.Component {
       patient.study_id = newPatient.protocol;
     }
     delete patient.protocol;
-    patient.source_id = newPatient.source;
+    patient.studySourceId = newPatient.source;
     delete patient.source;
     submitAddPatient(patient, onClose);
   }
@@ -149,24 +147,10 @@ export default class AddPatientForm extends React.Component {
     }
   }
 
-  groupHeaderClicked(foundItem) {
-    if (foundItem && !foundItem.studySourceId) {
-      this.props.change('source', foundItem);
-      this.props.blur('source', foundItem);
-      const evWrap = document.getElementsByClassName('r-ss-trigger r-ss-open');
-      evWrap[0].click(); // fake click to close the dropdown
-    }
-  }
-
   render() {
-    const { submitting, indications, isFetchingProtocols, protocols, sites, sources, currentUser, studyLeadSources } = this.props;
+    const { submitting, indications, isFetchingProtocols, protocols, sites, currentUser, studyLeadSources } = this.props;
     const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
-    const sourceOptions = sources.map(source => {
-      return {
-        label: source.type,
-        value: source.id,
-      };
-    });
+
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -191,56 +175,13 @@ export default class AddPatientForm extends React.Component {
     }));
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
 
-    const sourceMapped = [];
-    _.forEach(sourceOptions, (source) => {
-      let item = null;
-      const label = source.label.replace('StudyKIK (Imported)', 'Database');
-      _.forEach(studyLeadSources.details, (studySource) => {
-        if (source.value === studySource.source_id.value) {
-          item = {
-            ...studySource,
-            group: label,
-            id: studySource.studySourceId,
-            label: `- ${label} ${studySource.source_name || ''}`,
-          };
-
-          sourceMapped.push(item);
-        }
-      });
-      if (!item) {
-        sourceMapped.push({
-          group: source.label,
-          id: `${source.value}_`,
-          label: 'none',
-        });
-      }
+    const sourceOptions = studyLeadSources.details.map((studySource) => {
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      return {
+        label: sourceName.replace('StudyKIK (Imported)', 'Database'),
+        value: studySource.studySourceId,
+      };
     });
-
-    const itemTemplate = (controlSelectedValue) => {
-      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.label === 'none' ? 'hiddenSelectOption studySourceSelectOption' : 'studySourceSelectOption'}`}>
-        {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close" />
-      </div>);
-    };
-
-    const selectedItemsTemplate = (controlSelectedValue) => {
-      if (controlSelectedValue.length === 1) {
-        return (<div className="truncate">
-          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
-        </div>);
-      }
-      return (<div>
-        {controlSelectedValue.length} item(s) selected
-      </div>);
-    };
-
-    const groupHeaderTemplate = (group) => {
-      const foundItem = _.find(sourceMapped, (item) => {
-        return item.group === group;
-      });
-
-      return <div onClick={() => { this.groupHeaderClicked(foundItem); }}>{group}</div>;
-    };
 
     return (
       <Form className="form-lightbox" onSubmit={this.addPatient}>
@@ -334,30 +275,16 @@ export default class AddPatientForm extends React.Component {
             options={indicationOptions}
           />
         </div>
-        <div
-          className="field-row form-group" ref={(sourceSelectContainer) => {
-            this.sourceSelectContainer = sourceSelectContainer;
-          }}
-        >
+        <div className="field-row form-group">
           <strong className="label required">
             <label>Source</label>
           </strong>
           <Field
             name="source"
-            component={ReactMultiSelect}
+            component={ReactSelect}
+            className="field required"
             placeholder="Select Source"
-            searchPlaceholder="Search"
-            searchable
-            optionLabelKey="label"
-            includeAllOption={false}
-            customOptionTemplateFunction={itemTemplate}
-            customSelectedValueTemplateFunction={selectedItemsTemplate}
-            customGroupHeadingTemplateFunction={groupHeaderTemplate}
-            dataSource={sourceMapped}
-            customSearchIconClass="icomoon-icon_search2"
-            groupBy="group"
-            className="studySourceMultiSelect studySourceMultiSelectShort"
-            initialValue={this.props.newPatient.source}
+            options={sourceOptions}
             disabled={studyLeadSources.fetching || !this.state.selectedStudyId}
           />
         </div>

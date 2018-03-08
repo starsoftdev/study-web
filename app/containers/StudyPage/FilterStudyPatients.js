@@ -34,6 +34,7 @@ class FilterStudyPatientsForm extends Component {
     studyName: PropTypes.string,
     setSelectedStudySources: PropTypes.func,
     sourceMapped: PropTypes.array,
+    totalCountByGroups: PropTypes.object,
   };
   static defaultProps = {
     submitting: false,
@@ -44,6 +45,7 @@ class FilterStudyPatientsForm extends Component {
     this.searchPatient = this.searchPatient.bind(this);
     this.groupHeaderClicked = this.groupHeaderClicked.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.groupClearClicked = this.groupClearClicked.bind(this);
     this.state = {
       campaign: null,
       selectedGroups: ['StudyKIK'],
@@ -96,6 +98,45 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
       } else {
+        const groupsCopy = _.clone(this.state.selectedGroups);
+        const indexesToRemove = [];
+
+        /* Check whether we need to add some headers selections */
+        const totalSelectedCountByGroups = {};
+        for (const item of event) {
+          if (totalSelectedCountByGroups[item.group]) {
+            totalSelectedCountByGroups[item.group]++;
+          } else {
+            totalSelectedCountByGroups[item.group] = 1;
+          }
+        }
+        totalSelectedCountByGroups.all = event.length;
+
+        _.forEach((totalSelectedCountByGroups), (value, key) => {
+          if (this.props.totalCountByGroups[key] === value && groupsCopy.indexOf(key) === -1) {
+            groupsCopy.push(key);
+          }
+          if (this.props.totalCountByGroups[key] > value && groupsCopy.indexOf(key) !== -1) {
+            // indexesToRemove.push(this.state.selectedGroups.indexOf(key));
+          }
+        });
+
+        /* Check whether we need to clean some headers selections */
+        for (const group of this.state.selectedGroups) {
+          const result = _.find(event, (item) => (item.group === group));
+          if (!result) {
+            indexesToRemove.push(this.state.selectedGroups.indexOf(group));
+          }
+        }
+
+        for (let i = indexesToRemove.length - 1; i >= 0; i--) { groupsCopy.splice(indexesToRemove[i], 1); }
+
+        if (totalSelectedCountByGroups.all === this.props.totalCountByGroups.all && this.state.selectedGroups.indexOf('All') === -1) {
+          groupsCopy.push('All');
+        }
+
+        this.setState({ selectedGroups: groupsCopy });
+
         fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
         fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
       }
@@ -136,8 +177,13 @@ class FilterStudyPatientsForm extends Component {
         }
       });
 
+      if ([...this.state.selectedStudySources, ...selectedValues].length === this.props.totalCountByGroups.all && selectedGroups.indexOf('All') === -1) {
+        selectedGroups.push('All');
+      }
+
       this.setState({ selectedGroups });
       if (group === 'All') {
+        selectedValues.shift(); // remove "All" item
         this.setState({ selectedStudySources: selectedValues });
         fetchPatients(studyId, search, newCampaign, selectedValues);
         fetchStudyStats(studyId, newCampaign, selectedValues);
@@ -146,6 +192,42 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
         fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
       }
+    }
+    this.sourceSelectContainer.click(); // fake click to close the dropdown
+  }
+
+  groupClearClicked(group) {
+    const { fetchPatients, fetchStudyStats, studyId, campaign, search } = this.props;
+    let newCampaign = campaign;
+    if (campaign === -1) {
+      newCampaign = null;
+    }
+    if (group === 'All') {
+      this.setState({ selectedStudySources: [], selectedGroups: [] });
+      fetchPatients(studyId, search, newCampaign, []);
+      fetchStudyStats(studyId, newCampaign, []);
+    } else {
+      const selectedGroups = _.clone(this.state.selectedGroups);
+      const selectedValues = _.clone(this.state.selectedStudySources);
+
+      selectedGroups.splice(this.state.selectedGroups.indexOf(group), 1);
+
+      const indexToRemove = [];
+      _.forEach(selectedValues, (item, index) => {
+        if (group === item.group) {
+          indexToRemove.push(index);
+        }
+      });
+
+      for (let i = indexToRemove.length - 1; i >= 0; i--) { selectedValues.splice(indexToRemove[i], 1); }
+
+      if (selectedGroups.indexOf('All') !== -1) {
+        selectedGroups.splice(selectedGroups.indexOf('All'), 1);
+      }
+
+      this.setState({ selectedStudySources: selectedValues, selectedGroups });
+      fetchPatients(studyId, search, newCampaign, selectedValues);
+      fetchStudyStats(studyId, newCampaign, selectedValues);
     }
     this.sourceSelectContainer.click(); // fake click to close the dropdown
   }
@@ -163,7 +245,7 @@ class FilterStudyPatientsForm extends Component {
       studyName,
     } = this.props;
     const itemTemplate = (controlSelectedValue) => {
-      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.label === 'none' ? 'hiddenSelectOption studySourceSelectOption' : 'studySourceSelectOption'}`}>
+      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.isStudySourceNameSet ? 'studySourceSelectOption' : 'hiddenSelectOption studySourceSelectOption'}`}>
         {controlSelectedValue.label}
         <i className="close-icon icomoon-icon_close" />
       </div>);
@@ -181,7 +263,8 @@ class FilterStudyPatientsForm extends Component {
     };
 
     const groupHeaderTemplate = (group) => {
-      return <div onClick={() => { this.groupHeaderClicked(group); }}>{group}</div>;
+      const isGroupSelected = this.state.selectedGroups.indexOf(group);
+      return <div className={`${(isGroupSelected === -1) ? 'inner-heading' : 'selected inner-heading'}`} onClick={() => { this.groupHeaderClicked(group); }}>{group}<i onClick={(e) => { e.preventDefault(); e.stopPropagation(); this.groupClearClicked(group); }} className="close-icon icomoon-icon_close" /></div>;
     };
 
     const selectedValues = this.state.selectedStudySources;
