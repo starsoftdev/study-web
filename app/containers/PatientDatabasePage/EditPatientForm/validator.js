@@ -37,6 +37,7 @@ const schema = {
   gender: { presence: false },
   bmi: { presence: false },
   site: { presence: true },
+  protocol: { presence: true },
   status: { presence: false },
   source: { presence: true },
 };
