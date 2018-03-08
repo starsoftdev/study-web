@@ -84,16 +84,16 @@ export class DashboardAddMessagingNumberPage extends React.Component { // eslint
       { label: 'Brazil', value: 'BR', id: 6 },
       { label: 'Chile', value: 'CL', id: 7 },
       { label: 'Colombia', value: 'CO', id: 8 },
-      { label: 'Cuba', value: 'CB', id: 9 },
+      // { label: 'Cuba', value: 'CB', id: 9 },
       { label: 'Czech Republic', value: 'CZ', id: 10 },
       { label: 'Denmark', value: 'DK', id: 11 },
-      { label: 'Fiji', value: 'FJ', id: 12 },
+      // { label: 'Fiji', value: 'FJ', id: 12 },
       { label: 'Australia', value: 'AU', id: 13 },
       { label: 'Hungary', value: 'HU', id: 14 },
       { label: 'Iceland', value: 'IS', id: 15 },
       { label: 'Japan', value: 'JP', id: 16 },
       { label: 'Luxembourg', value: 'LU', id: 17 },
-      { label: 'Malaysia', value: 'MY', id: 18 },
+      // { label: 'Malaysia', value: 'MY', id: 18 },
     ];
 
     return (
