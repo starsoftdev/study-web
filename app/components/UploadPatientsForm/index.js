@@ -97,7 +97,7 @@ export default class UploadPatientsForm extends Component {
       fileName: null,
       currentStudy: null,
       missingKeys: [],
-      allowedFormats: [ 'xls', 'xlsx', 'xlsm', 'xlw', 'xlsb', 'xml', 'csv', 'ods', 'fods' ],
+      allowedFormats: ['xls', 'xlsx', 'xlsm', 'xlw', 'xlsb', 'xml', 'csv', 'ods', 'fods'],
       patients: [],
       fields: [],
       duplicates: [],
