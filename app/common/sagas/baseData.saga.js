@@ -1338,10 +1338,19 @@ function* readStudyPatientMessages() {
 
 function* fetchStudyLeadSources() {
   while (true) {
-    const { studyId } = yield take(FETCH_STUDY_LEAD_SOURCES);
+    const { studyId, excludeSourceIds } = yield take(FETCH_STUDY_LEAD_SOURCES);
     try {
+      const options = {
+        method: 'GET',
+      };
+
+      if (excludeSourceIds) {
+        options.query = {};
+        options.query.excludeSourceIds = JSON.stringify(excludeSourceIds);
+      }
+
       const requestURL = `${API_URL}/studies/${studyId}/fetchStudyLeadSources`;
-      const response = yield call(request, requestURL);
+      const response = yield call(request, requestURL, options);
 
       yield put(fetchStudyLeadSourcesSuccess(response));
     } catch (err) {
