@@ -1,11 +1,3 @@
-export const LEAD_SOURCE_LIST = [
-  { value: 6, label: 'TV' },
-  { value: 5, label: 'Radio' },
-  { value: 4, label: 'Print' },
-  { value: 3, label: 'Digital' },
-  { value: 7, label: 'Other' },
-];
-
 export const CAMPAIGN_LENGTH_LIST = [
   { value: 1, label: '1 Month' },
   { value: 2, label: '2 Months' },
