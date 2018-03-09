@@ -273,7 +273,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const sourceMapped = this.props.studyLeadSources.details.map((studySource) => {
       const isStudySourceNameSet = !!studySource.source_name;
       const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
-      const group = studySource.source_id.label.replace('StudyKIK (Imported)', 'Database');
+      const group = studySource.source.label.replace('StudyKIK (Imported)', 'Database');
       sourceName.replace('StudyKIK (Imported)', 'Database');
       if (totalCountByGroups[group]) {
         totalCountByGroups[group]++;
