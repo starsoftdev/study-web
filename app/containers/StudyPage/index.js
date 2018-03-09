@@ -274,7 +274,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       let item = null;
       const label = source.label.replace('StudyKIK (Imported)', 'Database');
       _.forEach(this.props.studyLeadSources.details, (studySource) => {
-        if (source.value === studySource.source_id.value) {
+        if (source.value === studySource.source.value) {
           item = {
             ...studySource,
             group: label,
