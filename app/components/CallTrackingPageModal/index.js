@@ -73,7 +73,7 @@ export class CallTrackingPageModal extends React.Component {
         this.props.array.removeAll('leadSource');
         newProps.studyLeadSources.details.map((newItem) => this.props.array.push('leadSource', newItem));
       } else {
-        this.props.change('leadSource', [{ source_id: null }]);
+        this.props.change('leadSource', [{ source: null }]);
       }
     }
 
@@ -94,6 +94,15 @@ export class CallTrackingPageModal extends React.Component {
     if (callTrackingFormError) {
       touchCallTracking(callTrackingFields);
       return;
+    }
+
+    // transform the Google URL submission to append http:// in front of it in case it isn't specified
+    if (formValues.leadSource && formValues.leadSource.length > 0) {
+      for (const leadSource of formValues.leadSource) {
+        if (leadSource.googleUrl && !/http(s)?:\/\//g.test(leadSource.googleUrl)) {
+          leadSource.googleUrl = `http://${leadSource.googleUrl}`;
+        }
+      }
     }
 
     this.props.editStudyLeadSources(study.study_id, formValues.leadSource, formValues.callTracking);
@@ -135,7 +144,13 @@ export class CallTrackingPageModal extends React.Component {
                   </div>
                 </div>
                 <div className="field-row">
-                  <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} isAdmin messagingNumbers={messagingNumbers} initialLeadSources={this.props.studyLeadSources.details} />
+                  <FieldArray
+                    name="leadSource"
+                    component={RenderLeads}
+                    formValues={this.props.formValues}
+                    isAdmin messagingNumbers={messagingNumbers}
+                    initialLeadSources={this.props.studyLeadSources.details}
+                  />
                 </div>
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">

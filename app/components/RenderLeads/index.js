@@ -29,19 +29,18 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
   componentWillMount() {
     if (this.props.fields.length === 0) {
-      this.props.fields.push({ source_id: null });
+      this.props.fields.push({ source: null });
     }
   }
 
   render() {
     const { fields, formValues, messagingNumbers, initialLeadSources } = this.props;
-    const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source_id);
-
+    const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source);
 
     return (
       <div className="leads-list">
         {fields.map((lead, index) => {
-          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source_id !== 'undefined' && formValues.leadSource[index].source_id;
+          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source !== 'undefined' && formValues.leadSource[index].source;
           let landingHref = null;
           let googleHref = null;
           let initObject = null;
@@ -67,15 +66,13 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               messagingNumbersOptions.unshift(initObject.messagingNumber);
             }
             if (initObject && initObject.url && formValues.leadSource && formValues.leadSource[index]) {
-              landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${initObject.landingPageUrl.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].url) ? `?utm=${formValues.leadSource[index].url}` : ''}` : '';
+              landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${initObject.url.toLowerCase().replace(/ /ig, '-')}${(formValues.leadSource[index].url) ? `?utm=${formValues.leadSource[index].url}` : ''}` : '';
               googleHref = initObject.googleUrl ? initObject.googleUrl : '';
             }
           }
 
-          const disableDeleteFirstItem = (this.props.isAdmin && index === 0);
-
-          const urlLink = landingHref ? <a href={landingHref} className="landig-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
-          const googleUrlLink = googleHref ? <a href={googleHref} className="landig-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
+          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
+          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
@@ -85,7 +82,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               <div className="field-row dropdown">
                 <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}><label>Lead Source #{(index + 1)}</label></strong>
                 <Field
-                  name={`${lead}.source_id`}
+                  name={`${lead}.source`}
                   component={ReactSelect}
                   objectValue
                   placeholder="Select Lead Source"
@@ -93,11 +90,6 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
-                {((!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) && !disableDeleteFirstItem) &&
-                  <div className="link-delete" onClick={() => fields.remove(index)}>
-                    <i className="icomoon-icon_trash" />
-                  </div>
-                }
               </div>
               {
                 showName && (
