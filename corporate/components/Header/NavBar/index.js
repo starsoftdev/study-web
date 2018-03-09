@@ -52,9 +52,15 @@ export class NavBar extends React.Component { // eslint-disable-line react/prefe
     }
   }
 
+  isLandingPage = path => {
+    const reg = /\d{1,}-\w/;
+    return reg.test(path);
+  }
+
   render() {
     const { menuCollapsed } = this.props;
     const { pathname } = this.props.location;
+
     return (
       <Collapse className="navbar-collapse holder" in={!menuCollapsed}>
         <Well>
@@ -65,12 +71,14 @@ export class NavBar extends React.Component { // eslint-disable-line react/prefe
                   key={index}
                   className={classNames({ active: (pathname === item.link) })}
                 >
+                  {!this.isLandingPage(pathname) &&
                   <Link
                     to={item.link}
                     onClick={this.handleClick}
                   >
                     <div>{item.text.toUpperCase()}</div>
                   </Link>
+                  }
                 </li>
               )
             }

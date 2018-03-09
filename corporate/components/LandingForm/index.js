@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
-import IntlTelInput from '../../../app/components/Input/IntTelInput';
+import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
@@ -47,10 +47,16 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     super(props);
     this.watcher = null;
 
+    this.state = {
+      phone: '',
+      codeLength: null,
+      selectedCountryData: null,
+    };
+
     this.setVisible = this.setVisible.bind(this);
-    this.onDefaultPhoneBlur = this.onDefaultPhoneBlur.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.onPhoneChange = this.onPhoneChange.bind(this);
+    this.onCodeChange = this.onCodeChange.bind(this);
+    this.onSelectFlag = this.onSelectFlag.bind(this);
   }
 
   componentDidMount() {
@@ -61,21 +67,24 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     this.watcher.dispose();
   }
 
-  onDefaultPhoneBlur(event) {
+  onPhoneBlur(event) {
     const { blur } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    const { selectedCountryData } = this.state;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value, selectedCountryData);
+
     blur('phone', formattedPhoneNumber);
   }
 
-  onPhoneChange(status, value, countryData, number) {
+  onCodeChange(status, value, countryData, number) {
     const { change } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    change('phone', formattedPhoneNumber);
+    this.setState({ phone: formattedPhoneNumber, codeLength: countryData.dialCode.length, selectedCountryData: countryData }, () => {
+      change('code', value);
+    });
   }
 
-  onPhoneBlur(status, value, countryData, number) {
-    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    document.getElementsByName('phone')[0].value = formattedPhoneNumber;
+  onSelectFlag(code, selectedCountryData) {
+    this.setState({ codeLength: selectedCountryData.dialCode.length, selectedCountryData });
   }
 
   setVisible(el) {
@@ -101,31 +110,23 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
     const ipcountryValue = document.head.querySelector('[property=ipcountry]').content;
+    const inputWrap = (ipcountryValue !== 'US') ? mixIntlTelInput : Input;
+    const bsClass = `form-control input-lg ${(this.state.codeLength) ? `length-${this.state.codeLength}` : ''}`;
     let errorMessage = '';
-    let phoneInput =
+    const phoneInput =
       (<Field
         name="phone"
-        type="phone"
-        component={Input}
+        ccName="code"
+        type="tel"
+        component={inputWrap}
         placeholder={phonePlaceholder}
         className="field-row"
-        bsClass="form-control input-lg"
-        onBlur={this.onDefaultPhoneBlur}
+        bsClass={bsClass}
+        onBlur={this.onPhoneBlur}
+        preferredCountries={[ipcountryValue.toLowerCase()]}
+        onSelectFlag={this.onSelectFlag}
+        onCodeChange={this.onCodeChange}
       />);
-
-    if (ipcountryValue !== 'US') {
-      phoneInput =
-        (<Field
-          name="phone"
-          type="phone"
-          component={IntlTelInput}
-          placeholder={phonePlaceholder}
-          preferredCountries={[ipcountryValue.toLowerCase()]}
-          className="field-row"
-          onBlur={this.onPhoneBlur}
-          onChange={this.onPhoneChange}
-        />);
-    }
 
     if (subscriptionError) {
       if (subscriptionError.status === 422) {
