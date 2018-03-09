@@ -2,12 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
-import _, { find } from 'lodash';
+import _ from 'lodash';
 import { touch, reset } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../containers/App/actions';
@@ -473,66 +472,6 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     }
 
     this.props.editStudy(this.state.selectedStudyId, { ...params, clientId: this.props.currentUserClientId });
-  }
-
-  generateRenewStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { exposureLevel, campaignLength, condenseTwoWeeks, callTracking } = this.props.renewStudyFormValues;
-    const addOns = [];
-
-    if (exposureLevel && campaignLength) {
-      if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
-        const foundExposureLevel = find(studyLevels, { id: exposureLevel });
-        const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
-        const durationString = (condenseTwoWeeks) ? '2 Weeks' : monthLength.label;
-
-        addOns.push({
-          title: `${durationString} ${foundExposureLevel.type}`,
-          price: selectedIndicationLevelPrice.details,
-          quantity: monthLength.value,
-          total: selectedIndicationLevelPrice.details * monthLength.value,
-        });
-      }
-    }
-    if (callTracking) {
-      addOns.push({
-        title: 'Call Tracking',
-        price: CALL_TRACKING_PRICE,
-        quantity: 1,
-        total: CALL_TRACKING_PRICE,
-      });
-    }
-
-    return addOns;
-  }
-
-  generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { level, callTracking } = this.props.upgradeStudyFormValues;
-    const addOns = [];
-
-    if (level) {
-      if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
-        const foundLevel = find(studyLevels, { id: level });
-
-        addOns.push({
-          title: `${foundLevel.type}`,
-          price: selectedIndicationLevelPrice.details,
-          quantity: 1,
-          total: selectedIndicationLevelPrice.details,
-        });
-      }
-    }
-    if (callTracking) {
-      addOns.push({
-        title: 'Call Tracking',
-        price: CALL_TRACKING_PRICE,
-        quantity: 1,
-        total: CALL_TRACKING_PRICE,
-      });
-    }
-
-    return addOns;
   }
 
   sortBy(ev) {
