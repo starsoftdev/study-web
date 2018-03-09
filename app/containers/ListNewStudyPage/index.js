@@ -13,13 +13,14 @@ import { touch } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import _, { find } from 'lodash';
 import Helmet from 'react-helmet';
+import { toastr } from 'react-redux-toastr';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
-import { selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';
+import { selectListNewStudyFormValues, selectListNewStudyFormError, selectGetListNewStudyFormErrors } from '../../components/ListNewStudyForm/selectors';
 import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
@@ -62,6 +63,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     submitForm: PropTypes.func,
     saveSite: PropTypes.func,
     hasErrors: PropTypes.bool,
+    listNewStudyFormErrors: PropTypes.object,
     availPhoneNumbers: PropTypes.array,
     currentUser: PropTypes.object,
     formSubmissionStatus: PropTypes.object,
@@ -126,8 +128,11 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   onSubmitForm() {
-    const { hasErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
+    const { hasErrors, listNewStudyFormErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
     if (hasErrors || shoppingCartFormError) {
+      if (listNewStudyFormErrors && listNewStudyFormErrors.file) {
+        toastr.error('', 'Error! The selected file is in the wrong format.');
+      }
       touchNewStudy();
       touchShoppingCart();
       return;
@@ -323,6 +328,7 @@ const mapStateToProps = createStructuredSelector({
   listNewStudyState : selectListNewStudyPageDomain(),
   formValues: selectListNewStudyFormValues(),
   hasErrors: selectListNewStudyFormError(),
+  listNewStudyFormErrors: selectGetListNewStudyFormErrors(),
   availPhoneNumbers: selectAvailPhoneNumbers(),
   currentUser: selectCurrentUser(),
   formSubmissionStatus: selectFormSubmissionStatus(),
@@ -340,10 +346,10 @@ function mapDispatchToProps(dispatch) {
     fetchClientAdmins: (clientId) => dispatch(fetchClientAdmins(clientId)),
     fetchClientSites: (clientId, searchParams) => dispatch(fetchClientSites(clientId, searchParams)),
     fetchIndications: () => dispatch(fetchIndications()),
-    fetchLevels:      () => dispatch(fetchLevels()),
-    submitForm:     (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
+    fetchLevels: () => dispatch(fetchLevels()),
+    submitForm: (cartValues, formValues) => dispatch(submitForm(cartValues, formValues)),
     saveSite: (clientId, id, data) => dispatch(saveSite(clientId, id, data)),
-    hideSubmitFormModal:  () => dispatch(hideSubmitFormModal()),
+    hideSubmitFormModal: () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
     touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),

@@ -17,6 +17,9 @@ const schema = {
       message: '^Invalid Email domain',
     },
   },
+  code: {
+    presence: false,
+  },
   phone: {
     presence: {
       message: '^Phone number cannot be blank',
