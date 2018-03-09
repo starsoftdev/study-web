@@ -1245,7 +1245,6 @@ export function* editStudyLeadSourcesWatcher() {
 
 export function* editStudyLeadSourcesWorker(action) {
   try {
-    console.log('sage', action);
     const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
     const params = {
       method: 'POST',
