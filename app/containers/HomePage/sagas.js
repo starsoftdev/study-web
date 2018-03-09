@@ -781,7 +781,7 @@ export function* fetchStudiesDashboardWorker(action) {
     }
 
     if (response.studies.length === 0) {
-      toastr.error('', 'Error! Invalid study number.');
+      toastr.error('', 'Error! No studies found.');
     }
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
