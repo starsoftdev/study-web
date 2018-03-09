@@ -269,30 +269,28 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       return <NotFoundPage />;
     }
 
-    const sourceMapped = [];
-    _.forEach(sourceOptions, (source) => {
-      let item = null;
-      const label = source.label.replace('StudyKIK (Imported)', 'Database');
-      _.forEach(this.props.studyLeadSources.details, (studySource) => {
-        if (source.value === studySource.source.value) {
-          item = {
-            ...studySource,
-            group: label,
-            id: studySource.studySourceId,
-            label: `- ${label} ${studySource.source_name || ''}`,
-          };
-
-          sourceMapped.push(item);
-        }
-      });
-      if (!item) {
-        sourceMapped.push({
-          group: source.label,
-          id: `${source.value}_`,
-          label: 'none',
-        });
+    const totalCountByGroups = {};
+    const sourceMapped = this.props.studyLeadSources.details.map((studySource) => {
+      const isStudySourceNameSet = !!studySource.source_name;
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      const group = studySource.source.label.replace('StudyKIK (Imported)', 'Database');
+      sourceName.replace('StudyKIK (Imported)', 'Database');
+      if (totalCountByGroups[group]) {
+        totalCountByGroups[group]++;
+      } else {
+        totalCountByGroups[group] = 1;
       }
+      return {
+        label: sourceName,
+        id: studySource.studySourceId,
+        studySourceId: studySource.studySourceId,
+        group,
+        isStudySourceNameSet,
+      };
     });
+    totalCountByGroups.all = sourceMapped.length;
+    sourceMapped.unshift({ label: 'All', id: '-1', group: 'All' });
+
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -315,6 +313,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             studyName={studyName}
             initialValues={{ source: defaultSource }}
             sourceMapped={sourceMapped}
+            totalCountByGroups={totalCountByGroups}
           />
           <StudyStats stats={stats} />
           <PatientBoard
