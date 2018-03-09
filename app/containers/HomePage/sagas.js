@@ -1245,11 +1245,13 @@ export function* editStudyLeadSourcesWatcher() {
 
 export function* editStudyLeadSourcesWorker(action) {
   try {
-    console.log('sage', action);
     const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
     const params = {
       method: 'POST',
-      body: JSON.stringify({ leadSources: action.leadSources, callTracking: action.callTracking }),
+      body: JSON.stringify({
+        leadSources: action.leadSources,
+        callTracking: action.callTracking,
+      }),
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {

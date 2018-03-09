@@ -16,7 +16,7 @@ import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../commo
 import { setEmailNotifications } from '../../containers/HomePage/actions';
 import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
 import StudyAddForm from '../../components/StudyAddForm';
-import RenderLeads from '../../components/RenderLeads';
+
 import {
   changeStudyAdd,
   removeStudyAd,
@@ -135,7 +135,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       campaignLength: null,
       condenseTwoWeeks: false,
       patientMessagingSuite: false,
-      callTracking: false,
       minDate: 'none',
       isReset: false,
       emailFields: null,
@@ -153,7 +152,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAddState } = this.props;
 
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
-      this.props.fetchStudyLeadSources(newProps.selectedStudyId, [1]);
       const fields = [];
       let currentStudy = null;
       let isAllChecked = true;
@@ -165,10 +163,10 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
               if (studies && studies.details) {
                 const studyDetails = studies.details.find(s => s.studyId === newProps.selectedStudyId);
                 if (studyDetails) {
+                  // currently we join together information to support getting studies via site users or admin users
                   currentStudy = { ...currentStudy, ...studyDetails };
                 }
               }
-              this.setState({ currentStudy });
             }
           });
           if (clientAdmins) {
@@ -219,16 +217,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         updatedStudyAd: null,
         fileSrc: (currentStudy.image || null),
       });
-
-      if (currentStudy.callTracking) {
-        this.setState({
-          callTracking: true,
-        });
-      } else {
-        this.setState({
-          callTracking: false,
-        });
-      }
     }
 
     if (this.props.studyLeadSources.fetching && !newProps.studyLeadSources.fetching) {
@@ -278,7 +266,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       campaignLength: null,
       condenseTwoWeeks: false,
       patientMessagingSuite: false,
-      callTracking: false,
       minDate: 'none',
       isReset: false,
       emailFields: null,
@@ -321,7 +308,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         params.emailNotifications = newEmailNotifications;
       }
     }
-    params.leadSource = formValues.leadSource;
     onSubmit(params);
   }
 
@@ -389,12 +375,13 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   uploadStudyAdd(e) {
+    const { selectedStudyId } = this.props;
     if (e.type !== 'application/pdf') {
       e.toBlob((blob) => {
-        this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
+        this.props.submitStudyAdd({ file: blob, study_id: selectedStudyId });
       });
     } else {
-      this.props.submitStudyAdd({ file: e, study_id: this.state.currentStudy.id });
+      this.props.submitStudyAdd({ file: e, study_id: selectedStudyId });
     }
   }
 
@@ -513,10 +500,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                           */}
                         </div>
                       </div>
-
-                      {this.state.callTracking &&
-                        <FieldArray name="leadSource" component={RenderLeads} formValues={this.props.formValues} disableDelete isClientEditForm />
-                      }
 
                       <div className="clearfix">
                         <button
