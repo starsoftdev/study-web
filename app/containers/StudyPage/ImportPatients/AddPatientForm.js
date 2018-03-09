@@ -73,7 +73,7 @@ class AddPatientForm extends React.Component {
     const sourceOptions = studyLeadSources.details.map((studySource) => {
       const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
       return {
-        label: sourceName.replace('StudyKIK (Imported)', 'Database'),
+        label: sourceName,
         value: studySource.studySourceId,
       };
     });
