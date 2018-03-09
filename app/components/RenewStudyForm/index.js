@@ -219,27 +219,27 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.props.onHide(true);
   }
 
-  handleExposureChoose(e, val) {
+  handleExposureChoose(val) {
     this.setState({
       exposureLevel: val,
     });
   }
 
-  handleLengthChoose(e, val) {
+  handleLengthChoose(val) {
     this.setState({
       campaignLength: val,
     });
   }
 
-  handleCondenseChoose(e) {
+  handleCondenseChoose(val) {
     this.setState({
-      condenseTwoWeeks: e,
+      condenseTwoWeeks: val,
     });
   }
 
-  handleQualificationChoose(e) {
+  handleQualificationChoose(val) {
     this.setState({
-      patientQualificationSuite: e,
+      patientQualificationSuite: val,
     });
   }
 
@@ -303,8 +303,6 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     const { studyLevels, campaignLength, selectedIndicationLevelPrice, formValues, callTracking } = this.props;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
     const currentDate = moment();
-
-    console.log(this.props.selectedStudy);
 
     const addOns = this.generateRenewStudyShoppingCartAddOns();
     return (
