@@ -5,37 +5,65 @@
 */
 
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import classnames from 'classnames';
 import { Field } from 'redux-form';
 import _ from 'lodash';
+import { fetchSources } from '../../containers/App/actions';
+import { selectSources } from '../../containers/App/selectors';
+
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
-import {
-  LEAD_SOURCE_LIST,
-} from '../../common/constants';
+const mapStateToProps = createStructuredSelector({
+  sources: selectSources(),
+});
 
+const mapDispatchToProps = (dispatch) => ({
+  fetchSources: () => dispatch(fetchSources()),
+});
+
+@connect(mapStateToProps, mapDispatchToProps)
 class RenderLeads extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    disableDelete: PropTypes.bool,
     fields: PropTypes.object,
     formValues: PropTypes.object,
-    meta: PropTypes.object,
-    disableDelete: PropTypes.bool,
+    fetchSources: PropTypes.func,
     isAdmin: PropTypes.bool,
     isClientEditForm: PropTypes.bool,
-    messagingNumbers: PropTypes.object,
     initialLeadSources: PropTypes.array,
+    messagingNumbers: PropTypes.object,
+    meta: PropTypes.object,
+    sources: PropTypes.array,
   };
 
   componentWillMount() {
-    if (this.props.fields.length === 0) {
-      this.props.fields.push({ source: null });
+    const { fields, sources, fetchSources } = this.props;
+    if (fields.length === 0) {
+      fields.push({ source: null });
+    }
+    if (sources.length === 0) {
+      fetchSources();
     }
   }
 
   render() {
-    const { fields, formValues, messagingNumbers, initialLeadSources } = this.props;
+    const { fields, formValues, messagingNumbers, initialLeadSources, sources } = this.props;
     const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source);
+
+    let sourceOptions = [];
+    if (sources.length > 0) {
+      sourceOptions = _.sortBy(sources, (item) => {
+        return item.orderNumber;
+      }).filter(source => {
+        return source.type !== 'Database' && source.type !== 'StudyKIK';
+      }).map(source => ({
+        label: source.type,
+        value: source.id,
+      }));
+    }
 
     return (
       <div className="leads-list">
@@ -86,7 +114,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   component={ReactSelect}
                   objectValue
                   placeholder="Select Lead Source"
-                  options={LEAD_SOURCE_LIST}
+                  options={sourceOptions}
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
