@@ -102,7 +102,7 @@ class FilterStudyPatientsForm extends Component {
       } else {
         fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
         fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
-        fetchPatientCategoriesTotals(studyId, newCampaign, event);
+        fetchPatientCategoriesTotals(studyId, newCampaign, (event !== null ? event : 1));
       }
     } else {
       /* -1 means all was selected */
