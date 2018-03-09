@@ -70,7 +70,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               googleHref = initObject.googleUrl ? initObject.googleUrl : '';
             }
           }
-          
+
           const urlLink = landingHref ? <a href={landingHref} className="landig-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
           const googleUrlLink = googleHref ? <a href={googleHref} className="landig-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
 

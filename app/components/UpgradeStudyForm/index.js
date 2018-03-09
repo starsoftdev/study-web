@@ -130,15 +130,15 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.props.onHide(true);
   }
 
-  handleExposureChoose(e, val) {
+  handleExposureChoose(val) {
     this.setState({
       level: val,
     });
   }
 
-  handleQualificationChoose(e) {
+  handleQualificationChoose(val) {
     this.setState({
-      patientQualificationSuite: e,
+      patientQualificationSuite: val,
     });
   }
 
