@@ -179,8 +179,6 @@ export class ReportViewSearch extends React.Component {
       };
     });
 
-    sourceOptions.unshift({ label: 'All', value: 'All' });
-
     const statusOptions = [
       {
         label: 'All',
