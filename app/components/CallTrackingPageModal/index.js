@@ -62,7 +62,7 @@ export class CallTrackingPageModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchMessagingNumbersDashboard();
-      this.props.fetchStudyLeadSources(this.props.study.study_id);
+      this.props.fetchStudyLeadSources(this.props.study.study_id, [1]);
       this.props.change('callTracking', this.props.study.callTracking);
     }
 
@@ -179,7 +179,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
-    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
+    fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
     touchCallTracking: (fields) => dispatch(touch(formName, ...fields)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
     editStudyLeadSources: (studyId, leadSources, callTracking) => dispatch(editStudyLeadSources(studyId, leadSources, callTracking)),
