@@ -71,7 +71,7 @@ class AddPatientForm extends React.Component {
     const { addPatientStatus, studyLeadSources } = this.props;
 
     const sourceOptions = studyLeadSources.details.map((studySource) => {
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
       return {
         label: sourceName,
         value: studySource.studySourceId,
