@@ -28,7 +28,7 @@ class FilterStudyPatientsForm extends Component {
     loading: PropTypes.bool.isRequired,
     campaign: PropTypes.number,
     search: PropTypes.string,
-    source: PropTypes.number,
+    source: PropTypes.any,
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
