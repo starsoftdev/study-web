@@ -7,7 +7,7 @@ import { get } from 'lodash';
 const selectFormDomain = () => state => state.form;
 
 /**
- * RequestProposalForm -> all values
+ * ListNewStudyForm -> all values
  */
 const selectListNewStudyFormValues = () => createSelector(
   selectFormDomain(),
@@ -15,7 +15,7 @@ const selectListNewStudyFormValues = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> checking validation error
+ * ListNewStudyForm -> checking validation error
  */
 const selectListNewStudyFormError = () => createSelector(
   selectFormDomain(),
@@ -26,7 +26,15 @@ const selectListNewStudyFormError = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> `callTracking`
+ * ListNewStudyForm -> getting validation errors
+ */
+const selectGetListNewStudyFormErrors = () => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, 'listNewStudy.syncErrors', {})
+);
+
+/**
+ * ListNewStudyForm -> `callTracking`
  */
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
@@ -34,7 +42,7 @@ const selectCallTracking = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> count of `leads`
+ * ListNewStudyForm -> count of `leads`
  */
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
@@ -48,6 +56,7 @@ export default selectFormDomain;
 export {
   selectListNewStudyFormValues,
   selectListNewStudyFormError,
+  selectGetListNewStudyFormErrors,
   selectCallTracking,
   selectLeadsCount,
 };
