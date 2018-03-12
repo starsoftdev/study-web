@@ -14,7 +14,7 @@ import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
 import { submitAddPatient } from '../actions';
-import { selectStudyId, selectAddPatientStatus, selectStudyLeadSources } from '../selectors';
+import { selectStudyId, selectAddPatientStatus, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'addPatient';
@@ -34,7 +34,7 @@ class AddPatientForm extends React.Component {
     touchFields: React.PropTypes.func.isRequired,
     changeField: React.PropTypes.func.isRequired,
     sourceMapped: React.PropTypes.array,
-    studyLeadSources: React.PropTypes.object,
+    studySources: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -68,9 +68,9 @@ class AddPatientForm extends React.Component {
   }
 
   render() {
-    const { addPatientStatus, studyLeadSources } = this.props;
+    const { addPatientStatus, studySources } = this.props;
 
-    const sourceOptions = studyLeadSources.details.map((studySource) => {
+    const sourceOptions = studySources.details.map((studySource) => {
       const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
       return {
         label: sourceName,
@@ -161,7 +161,7 @@ const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
   studyId: selectStudyId(),
   sources: selectSources(),
-  studyLeadSources: selectStudyLeadSources(),
+  studySources: selectStudySources(),
 });
 
 function mapDispatchToProps(dispatch) {

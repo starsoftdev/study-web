@@ -13,7 +13,7 @@ import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { fetchSources, fetchStudyLeadSources } from '../../containers/App/actions';
+import { fetchStudySources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../containers/NotFoundPage/index';
@@ -31,7 +31,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     campaigns: PropTypes.array,
     fetchPatients: PropTypes.func.isRequired,
-    downloadReport: PropTypes.func,
+    downloadReport: PropTypes.func.isRequired,
     fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
@@ -48,18 +48,17 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     study: PropTypes.object,
     stats: PropTypes.object,
     socket: React.PropTypes.any,
-    updatePatientSuccess: React.PropTypes.func,
-    fetchSources: React.PropTypes.func,
-    fetchStudyLeadSources: PropTypes.func,
+    updatePatientSuccess: React.PropTypes.func.isRequired,
+    fetchStudySources: PropTypes.func.isRequired,
     sitePatients: React.PropTypes.object,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
     toastrActions: React.PropTypes.object.isRequired,
-    clientOpenedStudyPage: React.PropTypes.func,
-    clientClosedStudyPage: React.PropTypes.func,
-    studyStatsFetched: React.PropTypes.func,
-    studyViewsStatFetched: React.PropTypes.func,
-    studyLeadSources: React.PropTypes.object,
+    clientOpenedStudyPage: React.PropTypes.func.isRequired,
+    clientClosedStudyPage: React.PropTypes.func.isRequired,
+    studyStatsFetched: React.PropTypes.func.isRequired,
+    studyViewsStatFetched: React.PropTypes.func.isRequired,
+    studySources: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -78,12 +77,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage, fetchStudyLeadSources } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources } = this.props;
     setStudyId(parseInt(params.id));
     fetchStudy(params.id, [{ group:'StudyKIK', id:'1_', label:'none' }]);
     fetchPatientCategories(params.id);
-    fetchSources();
-    fetchStudyLeadSources(params.id);
+    fetchStudySources(params.id);
 
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
@@ -270,7 +268,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
 
     const totalCountByGroups = {};
-    const sourceMapped = this.props.studyLeadSources.details.map((studySource) => {
+    const sourceMapped = this.props.studySources.details.map((studySource) => {
       const isStudySourceNameSet = !!studySource.source_name;
       const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
       const group = studySource.source.label;
@@ -343,7 +341,7 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
-  studyLeadSources: Selector.selectStudyLeadSources(),
+  studySources: Selector.selectStudySources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -355,13 +353,12 @@ function mapDispatchToProps(dispatch) {
     fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
-    fetchSources: () => dispatch(fetchSources()),
     toastrActions: bindActionCreators(toastrActions, dispatch),
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
-    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
+    fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
   };
 }
 
