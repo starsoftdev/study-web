@@ -28,7 +28,7 @@ class FilterStudyPatientsForm extends Component {
     loading: PropTypes.bool.isRequired,
     campaign: PropTypes.number,
     search: PropTypes.string,
-    source: PropTypes.number,
+    source: PropTypes.any,
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
@@ -94,7 +94,7 @@ class FilterStudyPatientsForm extends Component {
         this.setState({ selectedStudySources: event });
       }
       /* -1 means all was selected */
-      if (event === -1) {
+      if (event === -1 || !event) {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
       } else {

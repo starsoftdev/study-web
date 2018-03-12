@@ -27,7 +27,6 @@ import {
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_STATS_SUCCESS,
-  FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
   EXPORT_PATIENTS_SUCCESS,
@@ -262,13 +261,6 @@ export function protocolFetched(payload) {
 export function siteFetched(payload) {
   return {
     type: FETCH_SITE_SUCCESS,
-    payload,
-  };
-}
-
-export function sourcesFetched(payload) {
-  return {
-    type: FETCH_SOURCES_SUCCESS,
     payload,
   };
 }

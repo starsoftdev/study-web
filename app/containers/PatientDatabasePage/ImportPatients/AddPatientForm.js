@@ -14,11 +14,11 @@ import Form from 'react-bootstrap/lib/Form';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
-import { fetchStudyLeadSources } from '../../App/actions';
+import { fetchStudySources } from '../../App/actions';
 import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
-import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols, selectStudyLeadSources } from '../selectors';
+import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'PatientDatabase.AddPatientModal';
@@ -33,7 +33,7 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(formName),
   sites: selectSiteLocations(),
   sources: selectSources(),
-  studyLeadSources: selectStudyLeadSources(),
+  studySources: selectStudySources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -42,7 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
   submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
   touchFields: () => dispatch(touch(formName, ...fields)),
-  fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
+  fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -66,8 +66,8 @@ export default class AddPatientForm extends React.Component {
     touchFields: React.PropTypes.func.isRequired,
     switchShowAddProtocolModal: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.array,
-    fetchStudyLeadSources: React.PropTypes.func.isRequired,
-    studyLeadSources: React.PropTypes.object,
+    fetchStudySources: React.PropTypes.func.isRequired,
+    studySources: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -132,7 +132,7 @@ export default class AddPatientForm extends React.Component {
 
   selectProtocol(studyId) {
     this.setState({ selectedStudyId: studyId });
-    const { protocols, change, switchShowAddProtocolModal, fetchStudyLeadSources } = this.props;
+    const { protocols, change, switchShowAddProtocolModal, fetchStudySources } = this.props;
 
     if (studyId === 'add-new-protocol') {
       change('protocol', null);
@@ -140,7 +140,7 @@ export default class AddPatientForm extends React.Component {
       switchShowAddProtocolModal();
     } else {
       if (studyId) {
-        fetchStudyLeadSources(studyId);
+        fetchStudySources(studyId);
       }
       const protocol = _.find(protocols, { studyId });
       change('indication', protocol.indicationId);
@@ -148,7 +148,7 @@ export default class AddPatientForm extends React.Component {
   }
 
   render() {
-    const { submitting, indications, isFetchingProtocols, protocols, sites, currentUser, studyLeadSources } = this.props;
+    const { submitting, indications, isFetchingProtocols, protocols, sites, currentUser, studySources } = this.props;
     const userIsAdmin = currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin';
 
     const indicationOptions = indications.map(indicationIterator => ({
@@ -175,8 +175,8 @@ export default class AddPatientForm extends React.Component {
     }));
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
 
-    const sourceOptions = studyLeadSources.details.map((studySource) => {
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+    const sourceOptions = studySources.details.map((studySource) => {
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
       return {
         label: sourceName,
         value: studySource.studySourceId,
@@ -285,7 +285,7 @@ export default class AddPatientForm extends React.Component {
             className="field required"
             placeholder="Select Source"
             options={sourceOptions}
-            disabled={studyLeadSources.fetching || !this.state.selectedStudyId}
+            disabled={studySources.fetching || !this.state.selectedStudyId}
           />
         </div>
         <div className="text-right">

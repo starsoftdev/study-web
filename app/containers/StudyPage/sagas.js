@@ -52,7 +52,6 @@ import {
   patientsExported,
   protocolFetched,
   siteFetched,
-  sourcesFetched,
   studyFetched,
   studyViewsStatFetched,
   submitAddPatientSuccess,
@@ -124,7 +123,6 @@ function* fetchStudyDetails() {
     yield put(campaignsFetched(response.campaigns));
     yield put(protocolFetched(response.protocol));
     yield put(siteFetched(response.site));
-    yield put(sourcesFetched(response.sources));
     delete response.campaigns;
     delete response.protocol;
     delete response.site;
