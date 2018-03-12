@@ -104,7 +104,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
     const payload = omit(patientData, ['indications', 'status', 'source', 'protocol']);
 
     payload.indications = map(patientData.indications, indicationIterator => ({ id: indicationIterator.id, isOriginal: indicationIterator.isOriginal }));
-    payload.source_id = patientData.source;
+    payload.studySourceId = patientData.source;
     payload.patient_category_id = patientData.status;
     payload.phone = normalizePhoneForServer(patientData.phone);
     payload.site_id = patientData.site;
