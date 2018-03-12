@@ -60,7 +60,7 @@ export class LandingPage extends React.Component {
   componentWillMount() {
     const { splat, siteLocation } = this.props.params;
     if (!isNaN(parseInt(splat))) {
-      this.props.fetchLanding(splat, siteLocation);
+      this.props.fetchLanding(splat, siteLocation, this.props.location.query.utm);
     } else {
       this.props.clearLanding();
       browserHistory.push('/');
@@ -180,7 +180,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLanding: (studyId, url) => dispatch(fetchLanding(studyId, url)),
+    fetchLanding: (studyId, url, utm) => dispatch(fetchLanding(studyId, url, utm)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
     patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
     sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
