@@ -94,7 +94,7 @@ class FilterStudyPatientsForm extends Component {
         this.setState({ selectedStudySources: event });
       }
       /* -1 means all was selected */
-      if (event === -1) {
+      if (event === -1 || !event) {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
       } else {
