@@ -112,7 +112,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{orderNumber}</span>
         </td>
         <td className="indication">
-          <a data-for={`indication-${orderNumber}`} data-tip={studyId} href={landingHref} className="tooltip-element landig-link" target="_blank">{indication.name}</a>
+          <a data-for={`indication-${orderNumber}`} data-tip={studyId} href={landingHref} className="tooltip-element landing-link" target="_blank">{indication.name}</a>
           <ReactTooltip id={`indication-${orderNumber}`} type="info" class="tooltipClass wide" delayHide={500} effect="solid" />
         </td>
         <td className="location">

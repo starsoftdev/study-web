@@ -51,6 +51,7 @@ import {
   FETCH_CAMPAIGNS_BY_STUDY,
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
+  EDIT_STUDY_LEAD_SOURCES,
 } from './AdminDashboard/constants';
 
 import {
@@ -107,6 +108,8 @@ import {
   fetchFive9ListError,
   removeStudyAdSuccess,
   removeStudyAdError,
+  editStudyLeadSourcesSuccess,
+  editStudyLeadSourcesError,
 } from './AdminDashboard/actions';
 
 import {
@@ -563,6 +566,7 @@ export function* renewStudyWorker(action) {
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
+      callTracking: formValues.callTracking,
     }));
     onClose();
   } catch (err) {
@@ -599,6 +603,7 @@ export function* upgradeStudyWorker(action) {
     toastr.success('Upgrade Study', 'The request has been submitted successfully');
     response.newLevelId = formValues.level;
     response.studyId = studyId;
+    response.callTracking = formValues.callTracking;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
@@ -624,13 +629,17 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'emailNotifications') {
+      if (index !== 'emailNotifications' && index !== 'leadSource') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
     if (options.emailNotifications) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
+
+    if (options.leadSource) {
+      data.append('leadSource', JSON.stringify(options.leadSource));
     }
 
     const params = {
@@ -1230,6 +1239,37 @@ export function* deleteCampaignWorker(action) {
   }
 }
 
+export function* editStudyLeadSourcesWatcher() {
+  yield* takeLatest(EDIT_STUDY_LEAD_SOURCES, editStudyLeadSourcesWorker);
+}
+
+export function* editStudyLeadSourcesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({
+        leadSources: action.leadSources,
+        callTracking: action.callTracking,
+      }),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(editStudyLeadSourcesSuccess(action.leadSources));
+      toastr.success('', 'The request has been submitted successfully.');
+    } else {
+      yield put(editStudyLeadSourcesError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(editStudyLeadSourcesError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 
 let watcherD = false;
 let watcherF = false;
@@ -1270,6 +1310,7 @@ export function* homePageSaga() {
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
+  const editStudyLeadSourcesWatcher1 = yield fork(editStudyLeadSourcesWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1322,6 +1363,7 @@ export function* homePageSaga() {
     yield cancel(fetchCampaignsByStudyWatcher1);
     yield cancel(editCampaignWatcher1);
     yield cancel(deleteCampaignWatcher1);
+    yield cancel(editStudyLeadSourcesWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);

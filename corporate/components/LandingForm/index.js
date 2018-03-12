@@ -38,6 +38,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     subscriptionError: PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -57,8 +58,12 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   onPhoneBlur(event) {
+    event.preventDefault();
+    console.log(event);
     const { blur } = this.props;
+    console.log(event.target.value);
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
+    console.log(formattedPhoneNumber);
     blur('phone', formattedPhoneNumber);
   }
 

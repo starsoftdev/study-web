@@ -10,12 +10,13 @@ import Input from '../../components/Input';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { addEmailNotificationUser, fetchClientAdmins } from '../../containers/App/actions';
+import { addEmailNotificationUser, fetchClientAdmins, fetchStudyLeadSources } from '../../containers/App/actions';
 import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../containers/App/selectors';
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
 import { setEmailNotifications } from '../../containers/HomePage/actions';
-import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications } from '../../containers/HomePage/selectors';
+import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
 import StudyAddForm from '../../components/StudyAddForm';
+
 import {
   changeStudyAdd,
   removeStudyAd,
@@ -41,6 +42,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
+  fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
 });
 
 const mapStateToProps = createStructuredSelector({
@@ -57,6 +59,7 @@ const mapStateToProps = createStructuredSelector({
   changeStudyAddProcess: selectChangeStudyAddProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),
+  studyLeadSources: selectStudyLeadSources(),
 });
 @reduxForm({
   form: formName,
@@ -98,6 +101,8 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     resetChangeAddState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
+    fetchStudyLeadSources: PropTypes.func.isRequired,
+    studyLeadSources: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -130,7 +135,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       campaignLength: null,
       condenseTwoWeeks: false,
       patientMessagingSuite: false,
-      callTracking: false,
       minDate: 'none',
       isReset: false,
       emailFields: null,
@@ -159,10 +163,10 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
               if (studies && studies.details) {
                 const studyDetails = studies.details.find(s => s.studyId === newProps.selectedStudyId);
                 if (studyDetails) {
+                  // currently we join together information to support getting studies via site users or admin users
                   currentStudy = { ...currentStudy, ...studyDetails };
                 }
               }
-              this.setState({ currentStudy });
             }
           });
           if (clientAdmins) {
@@ -215,6 +219,10 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       });
     }
 
+    if (this.props.studyLeadSources.fetching && !newProps.studyLeadSources.fetching) {
+      change('leadSource', newProps.studyLeadSources.details);
+    }
+
     if (newProps.emailNotifications.length > 0 && newProps.emailNotifications !== emailNotifications) {
       change('emailNotifications', newProps.emailNotifications);
     }
@@ -258,7 +266,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       campaignLength: null,
       condenseTwoWeeks: false,
       patientMessagingSuite: false,
-      callTracking: false,
       minDate: 'none',
       isReset: false,
       emailFields: null,
@@ -301,7 +308,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         params.emailNotifications = newEmailNotifications;
       }
     }
-
     onSubmit(params);
   }
 
@@ -369,12 +375,13 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   uploadStudyAdd(e) {
+    const { selectedStudyId } = this.props;
     if (e.type !== 'application/pdf') {
       e.toBlob((blob) => {
-        this.props.submitStudyAdd({ file: blob, study_id: this.state.currentStudy.id });
+        this.props.submitStudyAdd({ file: blob, study_id: selectedStudyId });
       });
     } else {
-      this.props.submitStudyAdd({ file: e, study_id: this.state.currentStudy.id });
+      this.props.submitStudyAdd({ file: e, study_id: selectedStudyId });
     }
   }
 
@@ -493,6 +500,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                           */}
                         </div>
                       </div>
+
                       <div className="clearfix">
                         <button
                           type="submit"
