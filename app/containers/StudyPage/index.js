@@ -272,7 +272,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const totalCountByGroups = {};
     const sourceMapped = this.props.studyLeadSources.details.map((studySource) => {
       const isStudySourceNameSet = !!studySource.source_name;
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      const sourceName = studySource.source_name ? `- ${studySource.source_name}` : studySource.source_id.label;
       const group = studySource.source.label;
       if (totalCountByGroups[group]) {
         totalCountByGroups[group]++;
