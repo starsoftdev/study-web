@@ -176,7 +176,7 @@ export default class AddPatientForm extends React.Component {
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
 
     const sourceOptions = studySources.details.map((studySource) => {
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source_id.label;
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
       return {
         label: sourceName,
         value: studySource.studySourceId,
