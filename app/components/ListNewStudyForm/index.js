@@ -398,7 +398,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             />
           </div>
 
-          {false &&
+          {
             <div className="tracking-source">
               <div className="field-row">
                 <strong className="label"><label>CALL TRACKING: $247</label></strong>
@@ -412,7 +412,11 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           }
 
           {callTracking &&
-            <FieldArray name="leadSource" component={RenderLeads} availPhoneNumbers={this.props.availPhoneNumbers} />
+            <FieldArray
+              name="leadSource"
+              component={RenderLeads}
+              formValues={formValues}
+            />
           }
 
           <div className="field-row">
@@ -437,8 +441,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               />
             </div>
           </div>
-
-
         </div>
 
         <Modal dialogComponentClass={CenteredModal} show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
