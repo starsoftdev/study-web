@@ -41,9 +41,10 @@ import {
 } from './constants';
 
 import {
-  FETCH_STUDY_LEAD_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR,
+  CLEAR_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES_SUCCESS,
+  FETCH_STUDY_SOURCES_ERROR,
 } from '../App/constants';
 
 const initialState = {
@@ -94,7 +95,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  studyLeadSources: {
+  studySources: {
     details: [],
     fetching: false,
     error: null,
@@ -110,23 +111,31 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let totalPatients = 0;
 
   switch (action.type) {
-    case FETCH_STUDY_LEAD_SOURCES:
+    case CLEAR_STUDY_SOURCES:
       return {
         ...state,
-        studyLeadSources: {
-          details: state.studyLeadSources.details,
+        studySources: {
+          details: [],
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_SOURCES:
+      return {
+        ...state,
+        studySources: {
+          details: state.studySources.details,
           fetching: true,
           error: null,
         },
       };
-
-    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+    case FETCH_STUDY_SOURCES_SUCCESS:
       return {
         ...state,
-        studyLeadSources: {
+        studySources: {
           details: action.payload.map((item) => {
             return {
-              source_id: { value: item.source_id, label: item.type },
+              source: { value: item.source_id, label: item.type },
               source_name: item.source_name,
               studySourceId: item.studySourceId,
             };
@@ -136,10 +145,10 @@ export default function patientDatabasePageReducer(state = initialState, action)
         },
       };
 
-    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+    case FETCH_STUDY_SOURCES_ERROR:
       return {
         ...state,
-        studyLeadSources: {
+        studySources: {
           details: [],
           fetching: false,
           error: action.payload,
