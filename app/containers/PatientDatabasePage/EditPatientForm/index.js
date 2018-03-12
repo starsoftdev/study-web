@@ -197,7 +197,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         addPatientIndication(formValues.id, protocol.indicationId, studyId);
       }
     } else {
-      const { clearStudySources } = this.props
+      const { clearStudySources } = this.props;
       clearStudySources();
     }
   }
