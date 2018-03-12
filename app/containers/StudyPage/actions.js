@@ -27,7 +27,6 @@ import {
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_STATS_SUCCESS,
-  FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   EXPORT_PATIENTS,
   EXPORT_PATIENTS_SUCCESS,
@@ -82,6 +81,7 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  SET_SELECTED_STUDY_SOURCES,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -261,13 +261,6 @@ export function protocolFetched(payload) {
 export function siteFetched(payload) {
   return {
     type: FETCH_SITE_SUCCESS,
-    payload,
-  };
-}
-
-export function sourcesFetched(payload) {
-  return {
-    type: FETCH_SOURCES_SUCCESS,
     payload,
   };
 }
@@ -689,6 +682,13 @@ export function downloadReferral(reportName, studyId) {
     type: DOWNLOAD_PATIENT_REFERRAL,
     reportName,
     studyId,
+  };
+}
+
+export function setSelectedStudySources(list) {
+  return {
+    type: SET_SELECTED_STUDY_SOURCES,
+    list,
   };
 }
 

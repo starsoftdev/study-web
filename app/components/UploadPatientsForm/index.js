@@ -370,12 +370,12 @@ export default class UploadPatientsForm extends Component {
 
     if (uploadSources.length > 0) {
       uploadSources = _.sortBy(uploadSources, (item) => {
-        return (item.type === 'StudyKIK (Imported)' ? -1 : item.orderNumber);
+        return (item.type === 'Database' ? -1 : item.orderNumber);
       });
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const sourceOptions = uploadSources.map(source => ({
-      label: (source.type === 'StudyKIK (Imported)' ? 'Database' : source.type), // rename StudyKIK Imported
+      label: source.type,
       value: source.id,
     }));
     let disabled = false;
