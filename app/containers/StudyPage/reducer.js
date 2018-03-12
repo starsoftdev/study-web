@@ -22,7 +22,6 @@ import {
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_STATS_SUCCESS,
-  FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SHOW_SCHEDULED_MODAL,
@@ -62,9 +61,9 @@ import {
 } from './constants';
 
 import {
-  FETCH_STUDY_LEAD_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR,
+  FETCH_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES_SUCCESS,
+  FETCH_STUDY_SOURCES_ERROR,
 } from '../App/constants';
 
 const initialState = {
@@ -92,7 +91,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  studyLeadSources: {
+  studySources: {
     details: [],
     fetching: false,
     error: null,
@@ -109,20 +108,20 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         selectedStudySources: action.list,
       };
-    case FETCH_STUDY_LEAD_SOURCES:
+    case FETCH_STUDY_SOURCES:
       return {
         ...state,
-        studyLeadSources: {
-          details: state.studyLeadSources.details,
+        studySources: {
+          details: state.studySources.details,
           fetching: true,
           error: null,
         },
       };
 
-    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+    case FETCH_STUDY_SOURCES_SUCCESS:
       return {
         ...state,
-        studyLeadSources: {
+        studySources: {
           details: action.payload.map((item) => {
             return {
               source: { value: item.source_id, label: item.type },
@@ -135,10 +134,10 @@ function studyPageReducer(state = initialState, action) {
         },
       };
 
-    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+    case FETCH_STUDY_SOURCES_ERROR:
       return {
         ...state,
-        studyLeadSources: {
+        studySources: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -339,11 +338,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         site: action.payload,
-      };
-    case FETCH_SOURCES_SUCCESS:
-      return {
-        ...state,
-        sources: action.payload,
       };
     case FETCH_STUDY_SUCCESS:
       return {

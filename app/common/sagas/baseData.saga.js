@@ -63,6 +63,7 @@ import {
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_PATIENT_CATEGORIES,
+  FETCH_STUDY_SOURCES,
   FETCH_STUDY_LEAD_SOURCES,
 } from '../../containers/App/constants';
 
@@ -163,6 +164,8 @@ import {
   submitCnsError,
   patientCategoriesFetched,
   patientCategoriesFetchingError,
+  fetchStudySourcesSuccess,
+  fetchStudySourcesError,
   fetchStudyLeadSourcesSuccess,
   fetchStudyLeadSourcesError,
 } from '../../containers/App/actions';
@@ -218,6 +221,7 @@ export default function* baseDataSaga() {
   yield fork(getCnsInfoWatcher);
   yield fork(submitCnsWatcher);
   yield fork(readStudyPatientMessages);
+  yield fork(fetchStudySources);
   yield fork(fetchStudyLeadSources);
 }
 
@@ -982,7 +986,7 @@ export function* changeTemporaryPassword() {
 
 export function* fetchLanding() {
   while (true) {
-    const { studyId, url } = yield take(FETCH_LANDING);
+    const { studyId, url, utm } = yield take(FETCH_LANDING);
 
     // put the fetching study action in case of a navigation action
     try {
@@ -991,9 +995,13 @@ export function* fetchLanding() {
         method: 'GET',
         query: {
           url,
+          utm,
         },
       });
       yield put(landingFetched(response));
+      if (!response.isUtmValid) {
+        toastr.error('', 'Error! Invalid UTM.');
+      }
     } catch (err) {
       yield put(fetchLandingError(err));
     }
@@ -1336,6 +1344,24 @@ function* readStudyPatientMessages() {
   }
 }
 
+function* fetchStudySources() {
+  while (true) {
+    const { studyId } = yield take(FETCH_STUDY_SOURCES);
+    try {
+      const options = {
+        method: 'GET',
+      };
+
+      const requestURL = `${API_URL}/studies/${studyId}/studySources`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(fetchStudySourcesSuccess(response));
+    } catch (err) {
+      yield put(fetchStudySourcesError(err));
+    }
+  }
+}
+
 function* fetchStudyLeadSources() {
   while (true) {
     const { studyId, excludeSourceIds } = yield take(FETCH_STUDY_LEAD_SOURCES);
@@ -1349,7 +1375,7 @@ function* fetchStudyLeadSources() {
         options.query.excludeSourceIds = JSON.stringify(excludeSourceIds);
       }
 
-      const requestURL = `${API_URL}/studies/${studyId}/fetchStudyLeadSources`;
+      const requestURL = `${API_URL}/studies/${studyId}/studyLeadSources`;
       const response = yield call(request, requestURL, options);
 
       yield put(fetchStudyLeadSourcesSuccess(response));
