@@ -55,6 +55,8 @@ function ReactSelect({
       simpleValue={!objectValue}
       autosize={false}
       clearValueText={clearValueText || 'Clear Selection'}
+      openOnClick
+      openOnFocus
       {...rest}
     />
   );
