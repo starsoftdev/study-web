@@ -97,6 +97,7 @@ export default class UploadPatientsForm extends Component {
       fileName: null,
       currentStudy: null,
       missingKeys: [],
+      allowedFormats: ['xls', 'xlsx', 'xlsm', 'xlw', 'xlsb', 'xml', 'csv', 'ods', 'fods'],
       patients: [],
       fields: [],
       duplicates: [],
@@ -263,34 +264,44 @@ export default class UploadPatientsForm extends Component {
     const scope = this;
     const files = e.target.files;
     const f = files[0];
-    const name = f ? f.name : '';
+    const name = f ? f.name : null;
+    const ext = (name) ? name.split('.').pop() : null;
+    const index = _.findIndex(scope.state.allowedFormats, (f) => { return f === ext; });
     const reader = new FileReader();
-    // console.log('f', f);
-    // console.log('name', name);
     reader.onload = function (e) {
       if (f.size >= 5000000) {
         toastr.error('', 'Error! File exceeds the upload limit.');
+      } else if (ext && index === -1) {
+        toastr.error('', 'Error! The selected file is in the wrong format.');
       } else {
         scope.setState({ fileParsing: true });
         let data = e.target.result;
         if (!rABS) data = new Uint8Array(data);
-        const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
-        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
-        scope.setState({ fileParsing: false });
-        if (json.length >= 5000) {
-          toastr.error('', 'Error! File contains too many rows.');
-        } else {
-          const patients = scope.clearEmptySheet(json);
-          scope.setState({
-            missingKeys: [],
-            duplicateValidationResult: false,
-            requiredValidationResult: false,
-            fileName: name,
-            patients,
-          }, () => {
-            scope.props.setFileName(name);
-            scope.props.setPatients(patients);
+        try {
+          const workbook = XLSX.read(data, { type: rABS ? 'binary' : 'array' });
+          const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(firstWorksheet, { defval: null });
+          if (json.length >= 5000) {
+            scope.setState({ fileParsing: false }, () => {
+              toastr.error('', 'Error! File contains too many rows.');
+            });
+          } else {
+            const patients = scope.clearEmptySheet(json);
+            scope.setState({
+              fileParsing: false,
+              missingKeys: [],
+              duplicateValidationResult: false,
+              requiredValidationResult: false,
+              fileName: name,
+              patients,
+            }, () => {
+              scope.props.setFileName(name);
+              scope.props.setPatients(patients);
+            });
+          }
+        } catch (e) {
+          scope.setState({ fileParsing: false }, () => {
+            toastr.error('', 'Error! The selected file is in the wrong format.');
           });
         }
       }
