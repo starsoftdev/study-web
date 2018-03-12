@@ -93,7 +93,11 @@ export function* addMessagingNumberWorker(action) {
     const message = 'Phone Number bought successfully';
     toastr.success('', message);
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
+    let errorMessage = get(err, 'message', 'Something went wrong while saving messaging number');
+    const code = get(err, 'code', 31000);
+    if (code === 21615) {
+      errorMessage = 'Error! Local address required.';
+    }
     toastr.error('', errorMessage);
     yield put(addMessagingNumberError(err));
   }
