@@ -982,7 +982,7 @@ export function* changeTemporaryPassword() {
 
 export function* fetchLanding() {
   while (true) {
-    const { studyId, url } = yield take(FETCH_LANDING);
+    const { studyId, url, utm } = yield take(FETCH_LANDING);
 
     // put the fetching study action in case of a navigation action
     try {
@@ -991,9 +991,13 @@ export function* fetchLanding() {
         method: 'GET',
         query: {
           url,
+          utm,
         },
       });
       yield put(landingFetched(response));
+      if (!response.isUtmValid) {
+        toastr.error('', 'Error! Invalid UTM.');
+      }
     } catch (err) {
       yield put(fetchLandingError(err));
     }
