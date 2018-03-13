@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 
 import {
   FETCH_NOTE,
@@ -88,6 +89,7 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
+  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
 } from './constants';
 
 import {
@@ -97,6 +99,9 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -205,6 +210,11 @@ const initialState = {
     deleting: false,
     error: false,
   },
+  studyLeadSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
   updatedStudyAd: null,
   removedStudyAd: null,
   levels: [],
@@ -225,6 +235,64 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
+
+    case FETCH_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: state.studyLeadSources.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              source: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId,
+              landingPageId: item.landingPageId,
+              recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
+              messagingNumber: item.phoneNumberId ? { value: item.phoneNumberId, label:item.phoneNumber } : null,
+              googleUrl: item.googleUrl,
+              url: item.url,
+              studyId: item.studyId,
+              landingPageUrl: item.landingPageUrl,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+
+    case EDIT_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              ...item,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
     case FETCH_STUDY_INDICATION_TAG:
       return {
         ...state,

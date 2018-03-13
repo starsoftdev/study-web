@@ -41,6 +41,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     blur: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
   };
 
   constructor(props) {

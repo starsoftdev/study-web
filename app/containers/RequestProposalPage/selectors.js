@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 /**
  * Direct selector to the requestProposalPage state domain
@@ -49,6 +49,16 @@ const selectProposalsFormValues = () => createSelector(
   (substate) => get(substate, 'requestProposal.values', {})
 );
 
+const selectRegisteredFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const regFieldsArr = get(substate, 'requestProposal.registeredFields', []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
+  }
+);
+
 const selectIndicationLevelPrice = () => createSelector(
   selectRequestProposalPageDomain(),
   (substate) => substate.indicationLevelPrice,
@@ -63,4 +73,5 @@ export {
   selectProposalsFormError,
   selectProposalsFormValues,
   selectIndicationLevelPrice,
+  selectRegisteredFields,
 };
