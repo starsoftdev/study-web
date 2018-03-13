@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import inViewport from 'in-viewport';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { blur, Field, reduxForm } from 'redux-form';
+import { blur, change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
+import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
@@ -19,6 +20,7 @@ const mapStateToProps = createStructuredSelector({});
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
+  change: (name, value) => dispatch(change(formName, name, value)),
   patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
 });
 
@@ -34,19 +36,27 @@ const mapDispatchToProps = (dispatch) => ({
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    landing: PropTypes.object,
-    subscriptionError: PropTypes.object,
+    landing: React.PropTypes.object,
+    subscriptionError: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    change: PropTypes.func.isRequired,
+    change: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.watcher = null;
 
+    this.state = {
+      phone: '',
+      codeLength: null,
+      selectedCountryData: null,
+    };
+
     this.setVisible = this.setVisible.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
+    this.onCodeChange = this.onCodeChange.bind(this);
+    this.onSelectFlag = this.onSelectFlag.bind(this);
   }
 
   componentDidMount() {
@@ -58,13 +68,23 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   onPhoneBlur(event) {
-    event.preventDefault();
-    console.log(event);
     const { blur } = this.props;
-    console.log(event.target.value);
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
-    console.log(formattedPhoneNumber);
+    const { selectedCountryData } = this.state;
+    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value, selectedCountryData);
+
     blur('phone', formattedPhoneNumber);
+  }
+
+  onCodeChange(status, value, countryData, number) {
+    const { change } = this.props;
+    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
+    this.setState({ phone: formattedPhoneNumber, codeLength: countryData.dialCode.length, selectedCountryData: countryData }, () => {
+      change('code', value);
+    });
+  }
+
+  onSelectFlag(code, selectedCountryData) {
+    this.setState({ codeLength: selectedCountryData.dialCode.length, selectedCountryData });
   }
 
   setVisible(el) {
@@ -89,8 +109,24 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
-
+    const ipcountryValue = document.head.querySelector('[property=ipcountry]').content;
+    const inputWrap = (ipcountryValue !== 'US') ? mixIntlTelInput : Input;
+    const bsClass = `form-control input-lg ${(this.state.codeLength) ? `length-${this.state.codeLength}` : ''}`;
     let errorMessage = '';
+    const phoneInput =
+      (<Field
+        name="phone"
+        ccName="code"
+        type="tel"
+        component={inputWrap}
+        placeholder={phonePlaceholder}
+        className="field-row"
+        bsClass={bsClass}
+        onBlur={this.onPhoneBlur}
+        preferredCountries={[ipcountryValue.toLowerCase()]}
+        onSelectFlag={this.onSelectFlag}
+        onCodeChange={this.onCodeChange}
+      />);
 
     if (subscriptionError) {
       if (subscriptionError.status === 422) {
@@ -152,15 +188,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             className="field-row"
             bsClass="form-control input-lg"
           />
-          <Field
-            name="phone"
-            type="phone"
-            component={Input}
-            placeholder={phonePlaceholder}
-            className="field-row"
-            bsClass="form-control input-lg"
-            onBlur={this.onPhoneBlur}
-          />
+          {phoneInput}
           <div className="field-row">
             <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
             <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
