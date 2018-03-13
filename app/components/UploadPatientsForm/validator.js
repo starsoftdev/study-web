@@ -7,7 +7,7 @@ const schema = {
   site: {
     presence: true,
   },
-  source: {
+  studySource: {
     presence: true,
   },
   protocol: {

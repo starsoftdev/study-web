@@ -54,3 +54,8 @@ export const selectIsFetchingProtocols = (formName) => createSelector(
   selectFormDomain(),
   (substate) => get(substate, `${formName}.protocols.fetching`, false)
 );
+
+export const selectStudySources = () => createSelector(
+  selectUploadPatientsPageDomain(),
+  (substate) => substate.studySources
+);
