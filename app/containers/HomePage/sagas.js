@@ -522,7 +522,7 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     const requestURL = `${API_URL}/upgradeLevelSkus/getPrice`;
     const params = {
       query: {
-        fromLevel,
+        fromLevel: fromLevel || 0,
         toLevel,
       },
     };
