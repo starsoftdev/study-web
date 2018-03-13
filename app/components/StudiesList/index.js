@@ -443,6 +443,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       });
     }
 
+    let campaignLength = selectedStudy.campaignlength;
+    if (upgradeStudyFields.indexOf('campaignLength') !== -1) {
+      campaignLength = upgradeStudyFormValues.campaignLength;
+    }
+
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...upgradeStudyFormValues,
@@ -456,7 +461,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
-      campaignlength: selectedStudy.campaignlength,
+      campaignlength: campaignLength,
       client_id: this.props.currentUser.roleForClient.client_id,
       name: '',
       studyNotificationEmails: emailNotificationArray,
