@@ -20,7 +20,7 @@ import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } 
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
-import { selectListNewStudyFormValues, selectListNewStudyFormError, selectGetListNewStudyFormErrors } from '../../components/ListNewStudyForm/selectors';
+import { selectGetListNewStudyFormErrors, selectListNewStudyFormValues, selectListNewStudyFormError, selectRegisteredFields } from '../../components/ListNewStudyForm/selectors';
 import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
@@ -64,6 +64,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     saveSite: PropTypes.func,
     hasErrors: PropTypes.bool,
     listNewStudyFormErrors: PropTypes.object,
+    newStudyFields: PropTypes.array,
     availPhoneNumbers: PropTypes.array,
     currentUser: PropTypes.object,
     formSubmissionStatus: PropTypes.object,
@@ -128,12 +129,12 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
   }
 
   onSubmitForm() {
-    const { hasErrors, listNewStudyFormErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
+    const { hasErrors, listNewStudyFormErrors, newStudyFields, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
     if (hasErrors || shoppingCartFormError) {
       if (listNewStudyFormErrors && listNewStudyFormErrors.file) {
         toastr.error('', 'Error! The selected file is in the wrong format.');
       }
-      touchNewStudy();
+      touchNewStudy(newStudyFields);
       touchShoppingCart();
       return;
     }
@@ -329,6 +330,7 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectListNewStudyFormValues(),
   hasErrors: selectListNewStudyFormError(),
   listNewStudyFormErrors: selectGetListNewStudyFormErrors(),
+  newStudyFields: selectRegisteredFields(),
   availPhoneNumbers: selectAvailPhoneNumbers(),
   currentUser: selectCurrentUser(),
   formSubmissionStatus: selectFormSubmissionStatus(),
@@ -352,7 +354,7 @@ function mapDispatchToProps(dispatch) {
     hideSubmitFormModal: () => dispatch(hideSubmitFormModal()),
     fetchIndicationLevelPrice: (indicationId, levelId) => dispatch(fetchIndicationLevelPrice(indicationId, levelId)),
     clearFormSubmissionData: () => (dispatch(clearFormSubmissionData())),
-    touchNewStudy: () => (dispatch(touch('listNewStudy', ...newStudyFields))),
+    touchNewStudy: (newStudyFields) => (dispatch(touch('listNewStudy', ...newStudyFields))),
     touchShoppingCart: () => (dispatch(touch('shoppingCart', ...shoppingCartFields))),
   };
 }

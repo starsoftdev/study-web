@@ -58,6 +58,8 @@ export function* fetchPatientSignUpsWorker(action) {
     let requestURL = '';
     let timezone = action.currentUser.timezone;
     const protocolNumber = action.protocolNumber;
+    const sourceId = action.sourceId;
+
     if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
       requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
       if (!action.currentUser.roleForClient.isAdmin) {
@@ -72,6 +74,7 @@ export function* fetchPatientSignUpsWorker(action) {
       query: {
         timezone,
         protocolNumber,
+        sourceId,
       },
     };
     const response = yield call(request, requestURL, params);

@@ -18,6 +18,7 @@ import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { selectSources } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -32,6 +33,7 @@ export class ReportViewSearch extends React.Component {
     reportsList: PropTypes.object,
     socket: React.PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
+    sources: PropTypes.array,
   }
 
   constructor(props) {
@@ -170,12 +172,12 @@ export class ReportViewSearch extends React.Component {
 
   render() {
     const { selectedTime, predefined } = this.state;
-    const defaultSourceOptions = [
-      {
-        label: 'StudyKIK',
-        value: 1,
-      },
-    ];
+    const sourceOptions = this.props.sources.map((item) => {
+      return {
+        label: item.type,
+        value: item.id,
+      };
+    });
 
     const statusOptions = [
       {
@@ -241,9 +243,8 @@ export class ReportViewSearch extends React.Component {
               name="source"
               component={ReactSelect}
               placeholder="Select Source"
-              options={defaultSourceOptions}
-              selectedValue={1}
-              disabled
+              options={sourceOptions}
+              onChange={(e) => this.initSearch(e, 'source')}
             />
           </div>
         </div>
@@ -291,6 +292,7 @@ export class ReportViewSearch extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
+  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {
