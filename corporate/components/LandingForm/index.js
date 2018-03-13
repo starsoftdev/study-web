@@ -40,7 +40,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     subscriptionError: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
-    handleSubmit: React.PropTypes.func.isRequired
+    handleSubmit: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
