@@ -136,7 +136,8 @@ export class LandingPageModal extends React.Component {
           change('instructions', landing.instructions);
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
-          change('phonePlaceholder', normalizePhoneDisplay(landing.phonePlaceholder));
+          change('phonePlaceholder', landing.phonePlaceholder);
+          change('distance', landing.distance);
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
           change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
@@ -214,7 +215,6 @@ export class LandingPageModal extends React.Component {
 
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
-    formValues.phonePlaceholder = normalizePhoneForServer(formValues.phonePlaceholder);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
@@ -359,10 +359,9 @@ export class LandingPageModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      type="tel"
+                      type="text"
                       name="phonePlaceholder"
                       component={Input}
-                      onBlur={this.onPhoneBlur}
                       required
                     />
                   </div>
@@ -413,6 +412,18 @@ export class LandingPageModal extends React.Component {
                       name="clickToCallButtonNumber"
                       component={Input}
                       onBlur={this.onPhoneBlur}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">Distance</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="distance"
+                      component={Input}
                     />
                   </div>
                 </div>
