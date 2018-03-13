@@ -39,7 +39,8 @@ COPY --from=buildstep /usr/src/app/node_modules node_modules
 COPY . .
 
 RUN npm run build \
-  && rm .env
+  && rm .env \
+  && touch .env
 
 ENTRYPOINT [ "/sbin/tini", "--" ]
 ENV PORT=80
