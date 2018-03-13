@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import inViewport from 'in-viewport';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -36,12 +36,11 @@ const mapDispatchToProps = (dispatch) => ({
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    landing: PropTypes.object,
-    subscriptionError: PropTypes.object,
+    landing: React.PropTypes.object,
+    subscriptionError: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    change: PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired
   };
 
   constructor(props) {
