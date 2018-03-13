@@ -927,11 +927,10 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function fetchLanding(studyId, url, utm) {
+export function fetchLanding(studyId, utm) {
   return {
     type: FETCH_LANDING,
     studyId,
-    url,
     utm,
   };
 }
