@@ -789,6 +789,10 @@ export function* fetchStudiesDashboardWorker(action) {
       hasMore = false;
     }
 
+    if (response.studies.length === 0 && offset === 0) {
+      toastr.error('', 'Error! No studies found.');
+    }
+
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
   } catch (err) {
     console.log(err);
