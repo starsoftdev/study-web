@@ -97,12 +97,12 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         </td>
         <td>
           {
-            facebookHref ? <a href={facebookHref} className="landig-link" target="_blank">{id + 1}</a> : `${id + 1}`
+            facebookHref ? <a href={facebookHref} className="landing-link" target="_blank">{id + 1}</a> : `${id + 1}`
           }
         </td>
         <td className="list">
           <ul className="list-unstyled">
-            <li><span><a href={landingHref} className="landig-link" target="_blank">{item.study_id}</a></span></li>
+            <li><span><a href={landingHref} className="landing-link" target="_blank">{item.study_id}</a></span></li>
             <li><span>{`${(item.percent || item.percent === 0) ? `${item.percent}%` : ''}`}</span></li>
 
             <li><span>{maxLength(sm, 15)}</span></li>

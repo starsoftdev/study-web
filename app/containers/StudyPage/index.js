@@ -12,8 +12,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients, selectCurrentUser } from '../../containers/App/selectors';
-import { fetchSources } from '../../containers/App/actions';
+import { selectSitePatients, selectCurrentUser, selectSources } from '../../containers/App/selectors';
+import { fetchStudySources } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../containers/NotFoundPage/index';
@@ -31,7 +31,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   static propTypes = {
     campaigns: PropTypes.array,
     fetchPatients: PropTypes.func.isRequired,
-    downloadReport: PropTypes.func,
+    downloadReport: PropTypes.func.isRequired,
     fetchPatientCategories: PropTypes.func.isRequired,
     fetchingPatientCategories: PropTypes.bool.isRequired,
     fetchingPatients: PropTypes.bool.isRequired,
@@ -48,16 +48,17 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     study: PropTypes.object,
     stats: PropTypes.object,
     socket: React.PropTypes.any,
-    updatePatientSuccess: React.PropTypes.func,
-    fetchSources: PropTypes.func,
+    updatePatientSuccess: React.PropTypes.func.isRequired,
+    fetchStudySources: PropTypes.func.isRequired,
     sitePatients: React.PropTypes.object,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
     toastrActions: React.PropTypes.object.isRequired,
-    clientOpenedStudyPage: React.PropTypes.func,
-    clientClosedStudyPage: React.PropTypes.func,
-    studyStatsFetched: React.PropTypes.func,
-    studyViewsStatFetched: React.PropTypes.func,
+    clientOpenedStudyPage: React.PropTypes.func.isRequired,
+    clientClosedStudyPage: React.PropTypes.func.isRequired,
+    studyStatsFetched: React.PropTypes.func.isRequired,
+    studyViewsStatFetched: React.PropTypes.func.isRequired,
+    studySources: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -76,11 +77,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, fetchSources, socket, clientOpenedStudyPage } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id, 1);
+    fetchStudy(params.id, [{ group:'StudyKIK', id:'1_', label:'none' }]);
     fetchPatientCategories(params.id);
-    fetchSources();
+    fetchStudySources(params.id);
 
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
@@ -265,6 +266,28 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (this.props.fetchingPatientsError && this.props.fetchingPatientsError.status === 404) {
       return <NotFoundPage />;
     }
+
+    const totalCountByGroups = {};
+    const sourceMapped = this.props.studySources.details.map((studySource) => {
+      const isStudySourceNameSet = !!studySource.source_name;
+      const sourceName = studySource.source_name ? `- ${studySource.source_name}` : studySource.source.label;
+      const group = studySource.source.label;
+      if (totalCountByGroups[group]) {
+        totalCountByGroups[group]++;
+      } else {
+        totalCountByGroups[group] = 1;
+      }
+      return {
+        label: sourceName,
+        id: studySource.studySourceId,
+        studySourceId: studySource.studySourceId,
+        group,
+        isStudySourceNameSet,
+      };
+    });
+    totalCountByGroups.all = sourceMapped.length;
+    sourceMapped.unshift({ label: 'All', id: '-1', group: 'All' });
+
     return (
       <div className="container-fluid no-padding">
         <Helmet title={pageTitle} />
@@ -286,6 +309,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             ePMS={ePMS}
             studyName={studyName}
             initialValues={{ source: defaultSource }}
+            sourceMapped={sourceMapped}
+            totalCountByGroups={totalCountByGroups}
           />
           <StudyStats stats={stats} />
           <PatientBoard
@@ -307,7 +332,7 @@ const mapStateToProps = createStructuredSelector({
   fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
-  sources: Selector.selectSources(),
+  sources: selectSources(),
   site: Selector.selectSite(),
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
@@ -316,6 +341,7 @@ const mapStateToProps = createStructuredSelector({
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
+  studySources: Selector.selectStudySources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -327,12 +353,12 @@ function mapDispatchToProps(dispatch) {
     fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
     setStudyId: (id) => dispatch(setStudyId(id)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
-    fetchSources: () => dispatch(fetchSources()),
     toastrActions: bindActionCreators(toastrActions, dispatch),
     clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
     clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
     studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
+    fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
   };
 }
 

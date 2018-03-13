@@ -164,6 +164,11 @@ const selectDashboardfive9List = () => createSelector(
   (substate) => substate.five9List
 );
 
+const selectStudyLeadSources = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.studyLeadSources
+);
+
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -197,4 +202,5 @@ export {
   selectDashboardDeleteCampaignProcess,
   selectDashboardfive9List,
   selectFacebookLandingPageUpdateProcess,
+  selectStudyLeadSources,
 };
