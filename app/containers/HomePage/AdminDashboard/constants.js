@@ -124,3 +124,7 @@ export const DELETE_CAMPAIGN_ERROR                       = 'DashboardPage/DELETE
 export const FETCH_FIVE_9_LIST                           = 'DashboardPage/FETCH_FIVE_9_LIST';
 export const FETCH_FIVE_9_LIST_SUCCESS                   = 'DashboardPage/FETCH_FIVE_9_LIST_SUCCESS';
 export const FETCH_FIVE_9_LIST_ERROR                     = 'DashboardPage/FETCH_FIVE_9_LIST_ERROR';
+
+export const EDIT_STUDY_LEAD_SOURCES                     = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES';
+export const EDIT_STUDY_LEAD_SOURCES_SUCCESS             = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_SUCCESS';
+export const EDIT_STUDY_LEAD_SOURCES_ERROR               = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_ERROR';

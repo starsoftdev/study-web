@@ -204,6 +204,15 @@ import {
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
+
+  CLEAR_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES_SUCCESS,
+  FETCH_STUDY_SOURCES_ERROR,
+
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -918,10 +927,12 @@ export function changeUsersTimezoneError(payload) {
   };
 }
 
-export function fetchLanding(studyId) {
+export function fetchLanding(studyId, url, utm) {
   return {
     type: FETCH_LANDING,
     studyId,
+    url,
+    utm,
   };
 }
 
@@ -1344,6 +1355,56 @@ export function getTimezoneSuccess(payload) {
 export function getTimezoneError(payload) {
   return {
     type: GET_TIMEZONE_ERROR,
+    payload,
+  };
+}
+
+export function clearStudySources() {
+  return {
+    type: CLEAR_STUDY_SOURCES,
+  };
+}
+
+export function fetchStudySources(studyId) {
+  return {
+    type: FETCH_STUDY_SOURCES,
+    studyId,
+  };
+}
+
+export function fetchStudySourcesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudySourcesError(payload) {
+  return {
+    type: FETCH_STUDY_SOURCES_ERROR,
+    payload,
+  };
+}
+
+
+export function fetchStudyLeadSources(studyId, excludeSourceIds) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES,
+    studyId,
+    excludeSourceIds,
+  };
+}
+
+export function fetchStudyLeadSourcesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyLeadSourcesError(payload) {
+  return {
+    type: FETCH_STUDY_LEAD_SOURCES_ERROR,
     payload,
   };
 }
