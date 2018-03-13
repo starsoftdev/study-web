@@ -25,11 +25,23 @@ FROM node:carbon-alpine
 
 RUN apk add --no-cache \
   lcms2 \
-  libpng
+  libpng \
+  tini
+
+# Chamber gets the env variables from AWS Parameter Store
+RUN apk add --no-cache openssl ca-certificates && \
+wget https://github.com/segmentio/chamber/releases/download/v1.16.0/chamber-v1.16.0-linux-amd64 -O /sbin/chamber && \
+  chmod +x /sbin/chamber
   
 WORKDIR /usr/src/app
 
 COPY --from=buildstep /usr/src/app/node_modules node_modules
 COPY . .
 
-RUN npm run build
+RUN npm run build \
+  && rm .env
+
+ENTRYPOINT [ "/sbin/tini", "--" ]
+ENV PORT=80
+EXPOSE 80
+CMD [ "chamber", "exec", "development", "--", "node", "server"]
