@@ -1,6 +1,3 @@
-const upgradeStudyFields = ['level', 'addPatientMessagingSuite', 'addPatientQualificationSuite', 'notes'];
-export { upgradeStudyFields };
-
 export default values => {
   const errors = {};
   const leadSourceErrors = [];
@@ -8,6 +5,9 @@ export default values => {
     errors.level = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
     errors.addPatientQualificationSuite = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
     errors.callTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
+  }
+  if (!values.level && values.startDate) {
+    errors.level = 'You need to select the Upgrade Level';
   }
 
   if (values.callTracking && values.leadSource) {
