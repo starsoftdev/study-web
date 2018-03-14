@@ -16,8 +16,9 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
+import { fetchStudySources, clearStudySources } from '../../containers/App/actions';
 import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
-import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
+import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory, selectStudySources } from '../../containers/UploadPatients/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
 import UploadHistoryList from './UploadHistoryList';
@@ -35,6 +36,7 @@ const mapStateToProps = createStructuredSelector({
   sites: selectSiteLocations(),
   exportPatientsStatus: selectExportPatientsStatus(),
   formSyncErrors: selectSyncErrors(formName),
+  studySources: selectStudySources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -43,6 +45,8 @@ const mapDispatchToProps = (dispatch) => ({
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
   revertBulkUpload: (uploadId) => dispatch(revertBulkUpload(uploadId)),
+  fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
+  clearStudySources: () => dispatch(clearStudySources()),
 });
 
 @reduxForm({
@@ -73,7 +77,6 @@ export default class UploadPatientsForm extends Component {
     setPatients: PropTypes.func,
     onClose: PropTypes.func,
     sites: PropTypes.array,
-    sources: PropTypes.array,
     handleSubmit: PropTypes.func,
     blur: PropTypes.func,
     setFileName: PropTypes.func,
@@ -81,6 +84,9 @@ export default class UploadPatientsForm extends Component {
     protocols: PropTypes.array,
     lastAddedSiteLocation: PropTypes.any,
     lastAddedProtocolNumber: PropTypes.any,
+    clearStudySources: PropTypes.func,
+    fetchStudySources: PropTypes.func.isRequired,
+    studySources: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -137,8 +143,13 @@ export default class UploadPatientsForm extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, change } = this.props;
+    const { exportPatientsStatus, isImporting, addProtocolProcess, currentUser, fetchFilteredProtcols, studySources, change } = this.props;
     const { currentStudy, siteLocation } = this.state;
+
+    if (!newProps.studySources.fetching && studySources.fetching && newProps.studySources.details.length > 0) {
+      const defaultSource = _.find(newProps.studySources.details, (item) => (item.source.label === 'Database'));
+      change('studySource', defaultSource.studySourceId);
+    }
 
     if (newProps.addProtocolProcess.fetching === false && newProps.addProtocolProcess.fetching !== addProtocolProcess.fetching) {
       this.setState({ needToUpdateProtocol : true });
@@ -209,7 +220,7 @@ export default class UploadPatientsForm extends Component {
   }
 
   changeSiteLocation(location) {
-    const { currentUser, fetchFilteredProtcols, change } = this.props;
+    const { currentUser, fetchFilteredProtcols, change, clearStudySources } = this.props;
     let siteLocation = null;
 
     if (location) {
@@ -219,13 +230,14 @@ export default class UploadPatientsForm extends Component {
         // clear the protocol value if there is no site id
       change('protocol', null);
       change('indication', null);
+      clearStudySources();
     }
 
     this.setState({ siteLocation });
   }
 
   selectProtocol(studyId) {
-    const { protocols, showProtocolModal, change } = this.props;
+    const { protocols, showProtocolModal, change, fetchStudySources } = this.props;
 
     if (studyId === 'add-new-protocol') {
       change('protocol', null);
@@ -233,6 +245,7 @@ export default class UploadPatientsForm extends Component {
       showProtocolModal();
     } else {
       this.setState({ currentStudy: studyId }, () => {
+        fetchStudySources(studyId);
         const protocol = _.find(protocols, { studyId });
         change('indication', protocol.indicationId);
       });
@@ -358,13 +371,13 @@ export default class UploadPatientsForm extends Component {
       isFetchingProtocols,
       protocols,
       sites,
-      sources,
+      studySources,
       isImporting,
       uploadHistory,
       uploadResult,
     } = this.props;
     const { showPreview, patients, requiredValidationResult, duplicateValidationResult, dragEnter, missingKeys } = this.state;
-    let uploadSources = _.clone(sources);
+    let uploadSources = _.clone(studySources.details);
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -385,9 +398,9 @@ export default class UploadPatientsForm extends Component {
       });
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
-    const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
-      value: source.id,
+    const mapSourceOptions = uploadSources.map(s => ({
+      label: s.source_name ? s.source_name : s.source.label,
+      value: s.studySourceId,
     }));
     let disabled = false;
 
@@ -545,11 +558,12 @@ export default class UploadPatientsForm extends Component {
                 <label>Source</label>
               </strong>
               <Field
-                name="source"
+                name="studySource"
                 component={ReactSelect}
                 placeholder="Select Source"
-                className="field"selectedSourceValue
-                options={sourceOptions}
+                className="field"
+                disabled={studySources.fetching || !studySources.details.length}
+                options={mapSourceOptions}
               />
             </div>
           }
