@@ -375,7 +375,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="area">
                   <strong className="h3">Instant Patient Email and Text Message w/Site Phone</strong>
                   <p>
-                    Once a patient signs up for your clinical trial, the receive an instant text message and
+                    Once a patient signs up for your clinical trial, they receive an instant text message and
                     email notification with your site’s contact information &amp; a question asking when is
                     the best time to call them for a pre-screening phone call.
                   </p>
