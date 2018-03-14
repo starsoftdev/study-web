@@ -4,10 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { find } from 'lodash';
+import moment from 'moment-timezone';
 
-import { CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import { CALL_TRACKING_PRICE, CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import Input from '../../components/Input';
+import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Toggle from '../../components/Input/Toggle';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
@@ -53,9 +55,11 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
+    this.handleCampaignLengthChoose = this.handleCampaignLengthChoose.bind(this);
     this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
     this.state = {
       level: null,
+      campaignLength: null,
       patientQualificationSuite: false,
       addCardModalOpenU: false,
       isCallTrackingAlreadySet: false,
@@ -68,6 +72,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     if (newProps.selectedStudy) {
+      if (!this.state.campaignLength) {
+        this.setState({ campaignLength: newProps.selectedStudy.campaignLength || 1 });
+      }
       const { patientQualificationSuite } = newProps.selectedStudy;
       if (patientQualificationSuite === 'On' || patientQualificationSuite === true) {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
@@ -110,6 +117,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   resetState() {
     const resetState = {
       level: null,
+      campaignLength: null,
       patientQualificationSuite: false,
     };
 
@@ -136,6 +144,12 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     });
   }
 
+  handleCampaignLengthChoose(val) {
+    this.setState({
+      campaignLength: val,
+    });
+  }
+
   handleQualificationChoose(val) {
     this.setState({
       patientQualificationSuite: val,
@@ -151,7 +165,10 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     const { level, patientQualificationSuite } = this.state;
     const addOns = [];
 
-    const campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
+    let campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
+    if (selectedStudy && !selectedStudy.level_id) {
+      campaignLength = this.state.campaignLength;
+    }
 
     if (level && campaignLength) {
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
@@ -217,7 +234,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       value = topLevel.id;
       isDisabled = true;
     }
-
     const addOns = this.generateUpgradeStudyShoppingCartAddOns();
 
     return (
@@ -244,7 +260,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                   <div className="holder-inner">
                     <div className="upgrade-study form-fields">
                       <div className="field-row">
-                        <strong className="label">
+                        <strong className={`label ${(!selectedStudy || !selectedStudy.level_id) ? 'required' : ''}`}>
                           <label>UPGRADE LEVEL</label>
                         </strong>
                         <div className="field">
@@ -267,6 +283,39 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                           }
                         </div>
                       </div>
+                      {(!selectedStudy || !selectedStudy.level_id) &&
+                      (
+                        <div>
+                          <div className="field-row">
+                            <strong className="label required"><label>Campaign Length</label></strong>
+                            <div className="field">
+                              <Field
+                                name="campaignLength"
+                                component={ReactSelect}
+                                placeholder="Select Campaign Length"
+                                onChange={this.handleCampaignLengthChoose}
+                                options={CAMPAIGN_LENGTH_LIST}
+                                selectedValue={this.state.campaignLength}
+                              />
+                            </div>
+                          </div>
+                          <div className="field-row">
+                            <strong className="label required"><label>Start Date</label></strong>
+                            <div className="field">
+                              <Field
+                                id="start-date"
+                                name="startDate"
+                                component={DatePicker}
+                                className="form-control datepicker-input"
+                                initialDate={moment()}
+                                minDate={moment()}
+                                canNotSetTBD
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                      }
                       <div className="field-row">
                         <strong className="label"><label>Patient qualification <br />
                           Suite: ${qualificationSuitePrice / 100}</label></strong>
