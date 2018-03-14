@@ -58,10 +58,7 @@ export class TrialsArticle extends Component {
 
     const phoneNumber = trial.click_to_call_button_number || trial.phone_number || trial.recruitment_phone || null;
 
-    let distance = (typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A';
-    if (trial.landingdistance && distance === 'N/A') {
-      distance = trial.landingdistance;
-    }
+    const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A');
 
     return (
       <article
