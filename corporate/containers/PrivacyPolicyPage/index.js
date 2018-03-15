@@ -15,132 +15,209 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
                 StudyKIK respects your privacy and will never sell or trade personal information provided on this Website.  Maintaining trust is paramount to us.
               </p>
             </header>
+            <p>
+              Effective on: 2018-03-05
+            </p>
             <hr className="divider" />
             <h3>
-              General Information
+              Introduction and Scope
             </h3>
             <p>
-              Our Website is designed to provide you with useful information about clinical trials. Registration is not required in order to access the public areas of our Website. However, you may, at your option, choose to register in order to access certain resources and areas of our Website, for example, to find a clinical trial near you. We do not collect personal information from individuals who choose to browse our site without registering.
-            </p>
-            <p>
-              We are committed to consistently improving the quality of our service, Website performance, and providing relevant content to you during your visits.
+              Caerus Marketing Group LLC, d/b/a StudyKIK, a California limited liability company with offices located at 1675 Scenic Ave, Suite 150,
+              Costa Mesa, CA 92626 (“StudyKIK,” “we,” “us,” “our”), takes the protection of personally identifiable information (“personal data”) very
+              seriously. This Privacy Notice (the “Notice”) addresses data subjects whose personal data we may receive through our website located
+              at <a href="http://www.studykik.com">www.studykik.com</a> and over the phone if we call you at your request.
             </p>
             <hr className="divider" />
-            <h3>Personal Information</h3>
+            <h3>Controllership</h3>
             <p>
-              Personal information that may be provided by you on this Website includes:
-              <ul>
-                <li>Your name</li>
-                <li>Your telephone number</li>
-                <li>Postal Code, and</li>
-                <li>Your e-mail address</li>
-              </ul>
+              In the context of this Notice, StudyKIK acts as a data controller for the personal data we process.
+            </p>
+            <hr className="divider" />
+            <h3>Categories of Personal Data</h3>
+            <p>
+              We may process the following types of personal data:
+            </p>
+            <ul>
+              <li>Biographical information such as your first and last name, age, and date of birth;</li>
+              <li>Contact information such as your email address and phone number;</li>
+              <li>Payment information including payment card numbers; and</li>
+              <li>Health data (sensitive personal data), such as information about medical symptoms or prescribed medications.</li>
+            </ul>
+            <hr className="divider" />
+            <h3>How We Receive Personal Data</h3>
+            <p>
+              You may provide us with personal data when you:
+            </p>
+            <ul>
+              <li>fill out a form on our website;</li>
+              <li>speak to us on the phone; or</li>
+              <li>visit our website (by way of our cookies and tracking pixels).</li>
+            </ul>
+            <p>
+              After you enter your name and contact information into the form on our website, a StudyKIK representative will call you at the phone number
+              you provided. During this initial phone call, the StudyKIK representative will ask you a series of questions in order to determine your
+              eligibility to participate in a variety of applicable clinical trials. Our representative will obtain your explicit consent before asking
+              you any questions about your health.
             </p>
             <p>
-              This information is voluntary and is not required in order to visit our Website.
+              If you choose to participate in a clinical trial, we may also receive your personal data, including health data, from doctors working on
+              behalf of clinical research organizations (CROs), in which case we will notify you, where required by applicable laws, without undue delay.
             </p>
+            <hr className="divider" />
+            <h3>Basis of Processing</h3>
             <p>
-              All personal information is kept confidential and maintained on secure servers.
+              Within the scope of this Notice, we may rely on one or more of the following legal grounds for processing your personal data:
             </p>
+            <ul>
+              <li>your explicit consent;</li>
+              <li>the need to perform our obligations under a contract or to perform related pre-contractual duties at your request;</li>
+              <li>the necessity to comply with our legal obligations; or</li>
+              <li>the need to pursue the legitimate interests of pharmaceutical companies, such as to find better treatments for medical conditions; and</li>
+              <li>any other ground, as required or permitted by law in the specific respective context.</li>
+            </ul>
             <hr className="divider" />
             <h3>Purposes of Processing</h3>
             <p>
-              The Personal Information that we collect from you on this website may be used in the following ways:
+              We process personal data for the purposes of:
             </p>
             <ul>
-              <li>To send you information about clinical trials and information related to clinical trials of interest to you. You may receive phone calls, voicemails, text messages and emails regarding clinical trials. You may opt out at any time.</li>
-              <li>To enable you to connect with a research facility conducting a clinical trial of interest to you, and, with your permission, to enable that clinical trial site to access personal information provided by you on our Website and connect with you.</li>
-              <li>To improve our Website. We continually strive to improve our Website based on the feedback we receive from you.</li>
-              <li>To improve customer service. Your personal information helps us to more effectively respond to your customer service requests and support needs.</li>
-              <li>To enable registration of clinical trial sites in our program.</li>
+              <li>assisting pharmaceutical companies and external CROs in finding medical study participants;</li>
+              <li>enabling your use of our website and the services we provide;</li>
+              <li>responding to your inquiries, and/or other requests or questions, and</li>
+              <li>sending you marketing emails.</li>
+            </ul>
+            <hr className="divider" />
+            <h3>Use of Cookies</h3>
+            <p>
+              We use cookies to store information on your computer. Cookies improve your navigation on this site and enhance your user experience. You may
+              delete or otherwise control cookies. For more information please visit <a href="https://www.aboutcookies.org/">https://www.aboutcookies.org/</a>.
+            </p>
+            <hr className="divider" />
+            <h3>Data Retention Periods</h3>
+            <p>
+              When the purposes of processing are satisfied, we will retain your data for up to one year in order to notify you of similar clinical research
+              opportunities that may interest you, unless you request that we delete your data sooner. If we don’t hear from you (i.e., if you don’t request
+              additional information about new clinical trials based on the information we send you) within a year, your personal data will be deleted.
+            </p>
+            <hr className="divider" />
+            <h3>Sharing Personal Data with Third Parties</h3>
+            <p>
+              We may share your personal data with other entities. Such third parties may include:
+            </p>
+            <ul>
+              <li>CROs and pharmaceutical companies, in which case the transfers of your sensitive personal data are taking place only based on your explicit consent;</li>
+              <li>those providing and managing IT systems and infrastructure for StudyKIK;</li>
+              <li>those providing payment processing services;</li>
+              <li>those providing text messaging and communications software; and</li>
+              <li>companies providing external customer support solutions.</li>
             </ul>
             <p>
-              Your personal information, whether public or private, will not be sold, exchanged, transferred, or given to any other company for any reason other than to facilitate your contacting a clinical trial site conducting a trial of interest to you, or to facilitate such a site contacting you.
-            </p>
-            <p>This processing of your personal information is based on your explicit consent, which is indicated by your taking the affirmative act of providing personal information where requested on the StudyKIK Website.  Provision of such personal information is voluntary.</p>
-            <hr className="divider" />
-            <h3>Sharing Information About You</h3>
-            <p>
-              StudyKIK shares personal information that you provide on its website with participating clinical trial sites (i.e., StudyKIK customers).  By providing your personal information to StudyKIK (e.g., entering your personal information on the StudyKIK Website), you are explicitly consenting to StudyKIK sharing your personal information with participating clinical trial sites and to such entities contacting you for purposes of possible participation in clinical trials.
+              We will require that these third parties maintain at least the same level of confidentiality that we maintain for such personal data.
             </p>
             <p>
-              In some instances, the personal information you provide on the StudyKIK website may be transferred or otherwise processed outside of the country in which you reside. These countries may include countries that do not provide the same level of protection for your personal information as provided in your country.  By providing your personal information, you are giving your consent to such transfer.  In addition, in such instances, StudyKIK will meet applicable legal requirements in order to make such transfer legitimate.
+              Our service providers may be located outside of the United States; however, we will require that these third parties maintain at least
+              the same level of data protection that we maintain for your personal data. StudyKIK remains liable for the protection of personal data
+              that we transfer to our service providers within the scope of our Privacy Shield certification, except to the extent that we are not
+              responsible for the event giving rise to any unauthorized or improper processing.
             </p>
             <hr className="divider" />
-            <h3>Third Party Resources</h3>
+            <h3>Other Disclosure of Your personal data</h3>
             <p>
-              Occasionally, at our discretion, we may include or offer third party products or services on our website. These third-party sites have separate and independent privacy policies. We therefore have no responsibility or liability for the content and activities of these linked sites. Nonetheless, we seek to protect the integrity of our site and welcome any feedback about these sites.
+              We may disclose your personal data:
+            </p>
+            <ul>
+              <li>
+                to the extent required by law or if we have a good-faith belief that such disclosure is necessary in order to comply with official investigations
+                or legal proceedings initiated by governmental and/or law enforcement officials, or private parties, including but not limited to: in response
+                to subpoenas, search warrants, or court orders;
+              </li>
+              <li>
+                if we sell or transfer all or a portion of our company’s business interests, assets, or both, or in connection with a corporate merger,
+                consolidation, restructuring, or other company change; or
+              </li>
+              <li>to our subsidiaries or affiliates only if necessary for business and operational purposes.</li>
+            </ul>
+            <p>
+              We reserve the right to use, transfer, sell, and share aggregated, anonymous data, which does not include any personal data, about our website
+              users as a group for any legal business purpose, such as analyzing usage trends and seeking compatible advertisers, sponsors, clients, and customers.
+            </p>
+            <p>
+              If we must disclose your personal data in order to comply with official investigations or legal proceedings initiated by governmental and/or law
+              enforcement officials, we may not be able to ensure that such recipients of your personal data will maintain the privacy or security of your personal data.
             </p>
             <hr className="divider" />
-            <h3>Right of Access, Correction or Objection</h3>
-            <p>Whenever we process personal information, we take steps to ensure that your personal information is kept accurate and up to date for the purposes for which it was collected. If you would like to contact StudyKIK to request access to your personal information, to update your personal information, to object to the processing of your personal information or to make inquiries regarding this policy or your privacy rights, please email Support at <a href="mailto:info@studykik.com">info@studykik.com</a>.
+            <h3>Data Integrity & Security</h3>
+            <p>
+              StudyKIK has implemented and will maintain technical, organizational, and physical security measures that are reasonably designed to help protect personal
+              data from unauthorized processing, such as unauthorized access, disclosure, alteration, or destruction.
             </p>
             <hr className="divider" />
-            <h3>Email Opt-Out</h3>
+            <h3>Access & Review</h3>
             <p>
-              Every email message sent by StudyKIK provides a clear link to directly and securely update and/or unsubscribe your information.  We immediately unsubscribe individuals who request it.
-            </p>
-            <p>We use Aweber and Sendgrid to send emails.  You can read Aweber’s privacy policy here.  You can read Sedgrid’s privacy policy here.</p>
-            <hr className="divider" />
-            <h3>Cookies</h3>
-            <p>
-              A cookie is an element of data that is sent to your browser.  Your browser may store it on your system based the preferences you have set on your browser.
-            </p>
-            <p>
-              Our Website uses cookies for Google Analytics.  These cookies are used to collect information about how visitors use our site. The cookies collect information in an anonymous form, including the number of visitors to the site, where visitors have come to the site from and the pages they visited.
-            </p>
-            <p>
-              You have the option to configure your Internet browser to notify you when you have received a cookie and provide you with the choice to accept or decline to accept the cookie.  Further, you have the option to block all cookies.
+              If you are a data subject about whom we store personal data, you may have the right to request access to, and the opportunity to update, correct, or delete,
+              such personal data. To submit such requests or raise any other questions, please use the information provided in the Contact Us section of this Notice.
             </p>
             <hr className="divider" />
-            <h3>Security</h3>
+            <h3>Changes to this Notice</h3>
             <p>
-              We take reasonable technical and organizational security measures to protect your personal information from loss, misuse, unauthorized access or disclosure, alteration, or destruction.  We use advanced firewall protection and various anti-virus software to safeguard personal information volunteered on the StudyKIK website and to minimize the risk of a security breach.  Further, we use Secure Socket Layer technology that uses server authentication and data encryption to ensure that our customer and partner data is secure.   Although we thoroughly test the security of our websites and services and want to provide you with the greatest protection possible, sharing information over the Internet can never be fully secure.
+              If we make any material change to this Notice, we will post the revised Notice to this web page and update the “Effective” date above to reflect the date on
+              which the new Notice became effective.
             </p>
             <hr className="divider" />
-            <h3>Retention of Personal Information</h3>
+            <h3>EU-U.S. and Swiss-U.S. Privacy Shield Frameworks</h3>
             <p>
-              Personal information that you provide on the StudyKIK website will be retained by StudyKIK for a period of 4 years.  Upon expiration of the retention period, your personal information will be removed from our StudyKIK systems.  Personal information that you have provided to clinical trial sites with which you have chosen to interact after leaving the StudyKIK Website is subject to the data retention policies of those clinical trial sites.
+              With respect to personal data in the scope of this Notice, StudyKIK complies with the EU-U.S. Privacy Shield Framework and the Swiss-U.S. Privacy Shield
+              Framework (the "Privacy Shield"), as adopted and set forth by the U.S. Department of Commerce regarding the processing of personal data. StudyKIK commits
+              to adhere to and has certified to the Department of Commerce that it adheres to the Privacy Shield Principles.
+            </p>
+            <p>
+              To learn more about the Privacy Shield, and to view StudyKIK’s certification, please
+              visit <a href="https://www.privacyshield.gov">https://www.privacyshield.gov</a> and <a href="https://www.privacyshield.gov/list">https://www.privacyshield.gov/list</a>,
+              respectively.
             </p>
             <hr className="divider" />
-            <h3>Additional Rights</h3>
+            <h3>VeraSafe Privacy Program</h3>
             <p>
-              You have the right to file a complaint regarding the processing of your personal information with the relevant competent authority.
+              StudyKIK is a member of the <a href="https://www.verasafe.com/privacy-services/certification-standard/">VeraSafe Privacy Program</a>, meaning that
+              with respect to personal data processed in the scope of this Notice, VeraSafe has assessed StudyKIK’s data governance and data security for compliance
+              with the VeraSafe Privacy Program Certification Criteria. The certification criteria require that participants maintain a high standard for data privacy
+              and implement specific best practices pertaining to notice, onward transfer, choice, access, data security, data quality, recourse, and enforcement.
             </p>
             <hr className="divider" />
-            <h3>Modifications to Policy</h3>
+            <h3>Dispute Resolution</h3>
             <p>
-              We reserve the right to modify or supplement this Privacy Policy at any time.  However, we will always process your personal information according to the Privacy Policy that was in effect at the time of collection. The most recent version of the Privacy Policy will appear on the website with the relevant modification date.  Please check this Privacy Policy frequently and particularly before you submit additional information via the Website.
+              Where a privacy complaint or dispute cannot be resolved through StudyKIK’s internal processes, StudyKIK has agreed to participate in
+              the <a href="https://www.verasafe.com/privacy-services/dispute-resolution/privacy-shield-dispute-procedure/">VeraSafe Privacy Shield Dispute Resolution Procedure</a>.
+              Subject to the terms of the VeraSafe Privacy Shield Dispute Resolution Procedure, VeraSafe will provide appropriate recourse free of charge to you.
+              To file a complaint with VeraSafe and participate in the VeraSafe Privacy Shield Dispute Resolution Procedure, please submit the required information
+              here: <a href="https://www.verasafe.com/privacy-services/dispute-resolution/submit-dispute/">https://www.verasafe.com/privacy-services/dispute-resolution/submit-dispute/</a>.
             </p>
             <hr className="divider" />
-            <h3>Contact Information</h3>
-            <p>If you would like to contact StudyKIK in order to make inquiries regarding this policy or any of your rights under the policy, please email support at <a href="mailto:info@studykik.com">info@studykik.com</a>.
+            <h3>Binding Arbitration</h3>
+            <p>
+              If your dispute or complaint can’t be resolved by us, nor through the dispute resolution program established by VeraSafe, you may have the right
+              to require that we enter into binding arbitration with you pursuant to the Privacy Shield’s Recourse, Enforcement and Liability Principle and
+              Annex I of the Privacy Shield.
             </p>
             <hr className="divider" />
-            <h3>Telephone Consumer Protection Act (47 U.S.C. § 227)</h3>
+            <h3>Regulatory Oversight</h3>
             <p>
-              In compliance with the Telephone Consumer Protection Act (TCPA) and the Cellular Telephone Industries Association (CTIA, an international industry trade group representing the interests of wireless telecommunications companies) we disclose on each opt-in page what users are to expect for SMS interaction and users agree to receive messages about current and future studies.
+              StudyKIK is subject to the investigatory and enforcement powers of the United States Federal Trade Commission.
+            </p>
+            <hr className="divider" />
+            <h3>Contact Us</h3>
+            <p>
+              If you have any questions about this Notice or our processing of your personal data, please write to our Product Development Manager by email
+              at mo.tan@studykik.com or by postal mail at:
             </p>
             <p>
-              Users are given disclosure that text messages and data rates may apply.
-            </p>
-            <p>
-              Users are given opt out instructions with each SMS message and may opt out at any time by texting STOP.
-            </p>
-            <p>
-              When a user sends STOP we will prevent them from receiving any additional messages. Below is the exact message:
-            </p>
-            <p>
-              “You have successfully been unsubscribed. You will not receive any more messages from this number.”
-            </p>
-            <p>
-              Users receive an automated SMS message instantly after the user opts in via any web form.
-            </p>
-            <p>
-              In compliance with TCPA, follow up SMS communication initiated by StudyKIK will only be sent between 8 a.m. and 9 p.m. in the users’ time zone.
-            </p>
-            <p>
-              All records are kept for a minimum of 4 years, which is the federal statute of limitations for bringing an action under the TCPA.
+              StudyKIK<br />
+              1675 Scenic Ave, #150, Costa Mesa<br />
+              CA 92626<br />
+              USA<br />
+              <br />
+              Please allow up to four weeks for us to reply.<br />
             </p>
           </section>
         </div>
