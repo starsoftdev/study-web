@@ -111,7 +111,7 @@ export function* fetchReportsWorker(action) {
 
     const queryString = composeQueryString(params);
 
-    const requestURL = `${API_URL}/studies/getStudiesByProtocol?${queryString}`;
+    const requestURL = `${API_URL}/studies/getStudiesByProtocolTmp?${queryString}`;
 
 
     const response = yield call(request, requestURL);
@@ -200,9 +200,9 @@ export function* fetchReportsTotalsWorker(action) {
     let requestURL;
     if (action.searchParams) {
       queryString = composeQueryString(action.searchParams);
-      requestURL = `${API_URL}/studies/getStudiesByProtocolTotals?${queryString}`;
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp?${queryString}`;
     } else {
-      requestURL = `${API_URL}/studies/getStudiesByProtocolTotals`;
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp`;
     }
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(response));
