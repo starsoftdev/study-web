@@ -58,6 +58,8 @@ export class TrialsArticle extends Component {
 
     const phoneNumber = trial.click_to_call_button_number || trial.phone_number || trial.recruitment_phone || null;
 
+    const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A');
+
     return (
       <article
         key={index}
@@ -81,7 +83,7 @@ export class TrialsArticle extends Component {
               <i className="icomoon-map-marker" /> {(location !== null) ? location : 'N/A'}
             </address>
             <p className="distance">
-              <i className="icomoon-car" /> {(typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A'}
+              <i className="icomoon-car" /> {distance}
             </p>
             <span className="tel">
               <i className="icomoon-phone" /> {(phoneNumber !== null) ? formatPhone(phoneNumber) : 'N/A'}
