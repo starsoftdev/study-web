@@ -313,7 +313,7 @@ class FilterStudyPatientsForm extends Component {
               options={campaignOptions}
               disabled={submitting || loading}
               placeholder="Select Campaign"
-              onChange={(event, val) => this.searchPatient(val, 'campaign')}
+              onChange={(event) => this.searchPatient(event, 'campaign')}
             />
           </div>
           <div
