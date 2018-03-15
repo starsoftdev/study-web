@@ -74,6 +74,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     if (newProps.selectedStudy) {
       if (!this.state.campaignLength) {
         this.setState({ campaignLength: newProps.selectedStudy.campaignLength || 1 });
+        this.props.dispatch(change('upgradeStudy', 'campaignLength', newProps.selectedStudy.campaignLength || 1));
       }
       const { patientQualificationSuite } = newProps.selectedStudy;
       if (patientQualificationSuite === 'On' || patientQualificationSuite === true) {
@@ -290,12 +291,12 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                             <strong className="label required"><label>Campaign Length</label></strong>
                             <div className="field">
                               <Field
+                                id="campaign-length"
                                 name="campaignLength"
                                 component={ReactSelect}
                                 placeholder="Select Campaign Length"
                                 onChange={this.handleCampaignLengthChoose}
                                 options={CAMPAIGN_LENGTH_LIST}
-                                selectedValue={this.state.campaignLength}
                               />
                             </div>
                           </div>
