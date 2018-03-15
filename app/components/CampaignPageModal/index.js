@@ -96,9 +96,10 @@ export class CampaignPageModal extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { studyCampaigns, openModal } = this.props;
     // when campaigns have been loaded we need select first campaign by default
-    if ((prevProps.studyCampaigns.fetching && !this.props.studyCampaigns.fetching) || (!prevProps.openModal && this.props.openModal)) {
-      this.campaignChanged(this.props.studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+    if ((prevProps.studyCampaigns.fetching && !studyCampaigns.fetching) || (!prevProps.openModal && openModal && studyCampaigns.details.length > 0)) {
+      this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -178,6 +179,7 @@ export class CampaignPageModal extends React.Component {
     const dateTo = formValues.dateto ? moment(formValues.dateto).tz(timezone) : undefined;
     let fromMinDate = null;
     let toMaxDate = null;
+    let isFutureCampaign = false;
     const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
@@ -187,6 +189,12 @@ export class CampaignPageModal extends React.Component {
       // if campaign is not the last, then it has a next campaign, we set the min date accordingly
       if (campaignIndex < studyCampaigns.details.length - 1) {
         fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
+      }
+
+      if (!studyCampaigns.details[campaignIndex].dateFrom) {
+        isFutureCampaign = true;
+      } else {
+        isFutureCampaign = !studyCampaigns.details[campaignIndex].isCurrent && moment(studyCampaigns.details[campaignIndex].dateFrom).isAfter(moment().subtract(1, 'days'));
       }
     }
 
@@ -232,12 +240,6 @@ export class CampaignPageModal extends React.Component {
                       deleteRemoves={false}
                       openOnFocus
                       openOnClick
-                      onFocus={(e) => {
-                        console.log('focus', e);
-                      }}
-                      onOpen={(e) => {
-                        console.log('open', e);
-                      }}
                     />
                   </div>
                 </div>
@@ -273,6 +275,7 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateFrom}
                       minDate={fromMinDate}
                       maxDate={moment(formValues.dateto).subtract(1, 'days')}
+                      canNotSetTBD={!isFutureCampaign}
                     />
                   </div>
                 </div>
@@ -289,6 +292,8 @@ export class CampaignPageModal extends React.Component {
                       initialDate={dateTo}
                       minDate={moment(formValues.datefrom).add(1, 'days')}
                       maxDate={toMaxDate}
+                      title="Choose End Date"
+                      canNotSetTBD={!isFutureCampaign}
                     />
                   </div>
                 </div>

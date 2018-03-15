@@ -522,7 +522,7 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     const requestURL = `${API_URL}/upgradeLevelSkus/getPrice`;
     const params = {
       query: {
-        fromLevel,
+        fromLevel: fromLevel || 0,
         toLevel,
       },
     };
@@ -787,6 +787,10 @@ export function* fetchStudiesDashboardWorker(action) {
     const page = (offset / 50) + 1;
     if (response.studies.length < 50) {
       hasMore = false;
+    }
+
+    if (response.studies.length === 0 && offset === 0) {
+      toastr.error('', 'Error! No studies found.');
     }
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));

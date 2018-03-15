@@ -282,7 +282,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <h2>Patient becomes enrolled</h2>
               </div>
               <p>
-                With the end goal being a enrolled cinical trial, StudyKIK provided your site
+                With the end goal being an enrolled clinical trial, StudyKIK provided your site
                 with the tools needed to make that process as easy as possible.
               </p>
               <div className="img-holder">
@@ -375,7 +375,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="area">
                   <strong className="h3">Instant Patient Email and Text Message w/Site Phone</strong>
                   <p>
-                    Once a patient signs up for your clinical trial, the receive an instant text message and
+                    Once a patient signs up for your clinical trial, they receive an instant text message and
                     email notification with your site’s contact information &amp; a question asking when is
                     the best time to call them for a pre-screening phone call.
                   </p>
