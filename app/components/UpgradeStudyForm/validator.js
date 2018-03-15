@@ -6,8 +6,13 @@ export default values => {
     errors.addPatientQualificationSuite = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
     errors.callTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
   }
-  if (!values.level && values.startDate) {
-    errors.level = 'You need to select the Upgrade Level';
+  if (values.startDate) {
+    if (!values.level) {
+      errors.level = 'You need to select the Upgrade Level';
+    }
+    if (!values.campaignLength) {
+      errors.campaignLength = 'You need to select the campaign length';
+    }
   }
 
   if (values.callTracking && values.leadSource) {
