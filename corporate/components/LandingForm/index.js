@@ -120,7 +120,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         type="tel"
         component={inputWrap}
         placeholder={phonePlaceholder}
-        className="field-row"
+        className="field-row fixed-height"
         bsClass={bsClass}
         onBlur={this.onPhoneBlur}
         preferredCountries={[ipcountryValue.toLowerCase()]}
@@ -177,7 +177,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             type="text"
             component={Input}
             placeholder={fullNamePlaceholder}
-            className="field-row"
+            className="field-row fixed-height"
             bsClass="form-control input-lg"
           />
           <Field
@@ -185,16 +185,16 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             type="email"
             component={Input}
             placeholder={emailPlaceholder}
-            className="field-row"
+            className="field-row fixed-height"
             bsClass="form-control input-lg"
           />
           {phoneInput}
-          <div className="field-row">
+          <div className="field-row fixed-height">
             <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
             <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
           </div>
-          <div className="field-row">
-            {!landing.hideClickToCall &&
+          {!landing.hideClickToCall &&
+            <div className="field-row">
               <a
                 href={clickToCallNumber}
                 className={classNames({ 'btn btn-deep btn-block small': true, disabled: !clickToCallNumber })}
@@ -207,8 +207,8 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
                   }
                 </div>
               </a>
-            }
-          </div>
+            </div>
+          }
         </div>
       </form>
     );
