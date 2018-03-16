@@ -80,25 +80,27 @@ function redirectToLogin(store) {
         const currentUser = selectCurrentUser()(store.getState());
         let userRole;
         let otherRoles;
-        if (currentUser.roleForClient) {
-          userRole = 'client';
-          otherRoles = ['sponsor', 'dashboard'];
-        } else if (currentUser.roleForSponsor) {
-          userRole = 'sponsor';
-          otherRoles = ['client', 'dashboard'];
-        } else {
-          userRole = 'dashboard';
-          otherRoles = ['client', 'sponsor'];
-        }
+        if (currentUser) {
+          if (currentUser.roleForClient) {
+            userRole = 'client';
+            otherRoles = ['sponsor', 'dashboard'];
+          } else if (currentUser.roleForSponsor) {
+            userRole = 'sponsor';
+            otherRoles = ['client', 'dashboard'];
+          } else {
+            userRole = 'dashboard';
+            otherRoles = ['client', 'sponsor'];
+          }
 
-        if (
-          authorizedRoutes[userRole].indexOf(pathname) === -1 &&
-          (
-            authorizedRoutes[otherRoles[0]].indexOf(pathname) > -1 ||
-            authorizedRoutes[otherRoles[1]].indexOf(pathname) > -1
-          )
-        ) {
-          location.href = '/app';
+          if (
+            authorizedRoutes[userRole].indexOf(pathname) === -1 &&
+            (
+              authorizedRoutes[otherRoles[0]].indexOf(pathname) > -1 ||
+              authorizedRoutes[otherRoles[1]].indexOf(pathname) > -1
+            )
+          ) {
+            location.href = '/app';
+          }
         }
       }, 4000);
     }
