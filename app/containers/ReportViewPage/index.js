@@ -22,7 +22,7 @@ import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
 import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
 
@@ -47,6 +47,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     patientSignUps: PropTypes.object,
     fetchPatientSignUps: PropTypes.func,
     fetchSources: PropTypes.func,
+    clearReportList: PropTypes.func,
   };
 
   constructor(props) {
@@ -90,6 +91,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const { currentUser } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     this.props.fetchPatientSignUps(currentUser, protocolNumber, 1);
+  }
+
+  componentWillUnmount() {
+    this.props.clearReportList();
   }
 
   getPercentageObject(item) {
@@ -301,6 +306,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatientSignUps: (params, protocolNumber, sourceId) => dispatch(fetchPatientSignUps(params, protocolNumber, sourceId)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
     fetchSources: () => dispatch(fetchSources()),
+    clearReportList: () => dispatch(clearReportList()),
   };
 }
 
