@@ -16,6 +16,7 @@ export default {
     '/confirm-password-change',
   ],
   sponsor: [
+    '/app/me/profile',
     '/app/calendar',
     '/app/manage-users',
     '/app/receipts-project-agreements',
