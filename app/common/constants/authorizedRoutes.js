@@ -19,6 +19,7 @@ export default {
     '/app/calendar',
     '/app/manage-users',
     '/app/receipts-project-agreements',
+    '/app/report',
     '/confirm-password-change',
   ],
   dashboard: [
