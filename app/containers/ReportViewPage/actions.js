@@ -22,6 +22,7 @@ import {
   GET_CATEGORY_NOTES,
   GET_CATEGORY_NOTES_SUCCESS,
   GET_CATEGORY_NOTES_ERROR,
+  CLEAR_REPORT_LIST,
 } from './constants';
 
 export function fetchPatientSignUps(currentUser, protocolNumber, sourceId) {
@@ -155,5 +156,11 @@ export function getCategoryNotesError(payload) {
   return {
     type: GET_CATEGORY_NOTES_ERROR,
     payload,
+  };
+}
+
+export function clearReportList() {
+  return {
+    type: CLEAR_REPORT_LIST,
   };
 }
