@@ -149,6 +149,9 @@ export class ReportViewTable extends React.Component {
 
     const rightPartTable = reportsList.details.map((item, index) => {
       const percentage = this.props.getPercentageObject(item);
+
+      const countTotal = parseInt(item.count_not_contacted || 0) + parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
+
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
@@ -162,7 +165,7 @@ export class ReportViewTable extends React.Component {
           <td className="level_date_from">{item.levelDateFrom}</td>
           <td className="level_date_to">{item.levelDateTo}</td>
           <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
-          <td className="count_total">{item.count_total}</td>
+          <td className="count_total">{countTotal}</td>
           <td className="count_not_contacted"><span className="text">{item.count_not_contacted || 0}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
           <td className="call_attempted"><span className="text">{item.call_attempted || 0}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
           <td className="dnq"><span className="text" onClick={() => { this.props.openNotesModal(item.study_id, 'Not Qualified / Not Interested', 'DNQ'); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
