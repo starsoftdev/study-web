@@ -23,6 +23,7 @@ import {
   GET_CATEGORY_NOTES,
   GET_CATEGORY_NOTES_ERROR,
   GET_CATEGORY_NOTES_SUCCESS,
+  CLEAR_REPORT_LIST,
 } from './constants';
 
 const initialState = {
@@ -261,6 +262,15 @@ function reportViewPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
+        },
+      };
+    case CLEAR_REPORT_LIST:
+      return {
+        ...state,
+        reportsList: {
+          details: [],
+          fetching: false,
+          error: null,
         },
       };
     default:
