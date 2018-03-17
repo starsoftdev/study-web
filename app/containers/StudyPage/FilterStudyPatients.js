@@ -164,7 +164,7 @@ class FilterStudyPatientsForm extends Component {
     if (this.state.selectedGroups.indexOf(group) === -1) {
       let selectedGroups = [];
       if (group !== 'All') {
-        selectedGroups = [...this.state.selectedGroups, group];
+        selectedGroups = [group];
       }
 
       const selectedValues = [];
@@ -188,9 +188,9 @@ class FilterStudyPatientsForm extends Component {
         fetchPatients(studyId, search, newCampaign, selectedValues);
         fetchStudyStats(studyId, newCampaign, selectedValues);
       } else {
-        this.setState({ selectedStudySources: [...this.state.selectedStudySources, ...selectedValues] });
-        fetchPatients(studyId, search, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
-        fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
+        this.setState({ selectedStudySources: [...selectedValues] });
+        fetchPatients(studyId, search, newCampaign, [...selectedValues]);
+        fetchStudyStats(studyId, newCampaign, [...selectedValues]);
       }
     }
     this.sourceSelectContainer.click(); // fake click to close the dropdown
@@ -225,9 +225,9 @@ class FilterStudyPatientsForm extends Component {
         selectedGroups.splice(selectedGroups.indexOf('All'), 1);
       }
 
-      this.setState({ selectedStudySources: selectedValues, selectedGroups });
-      fetchPatients(studyId, search, newCampaign, selectedValues);
-      fetchStudyStats(studyId, newCampaign, selectedValues);
+      this.setState({ selectedStudySources: [], selectedGroups: [] });
+      fetchPatients(studyId, search, newCampaign, []);
+      fetchStudyStats(studyId, newCampaign, []);
     }
     this.sourceSelectContainer.click(); // fake click to close the dropdown
   }
@@ -254,7 +254,7 @@ class FilterStudyPatientsForm extends Component {
     const selectedItemsTemplate = (controlSelectedValue) => {
       if (controlSelectedValue.length === 1) {
         return (<div className="truncate">
-          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
+          {controlSelectedValue[0] ? controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group : 'Select Source'}
         </div>);
       }
       return (<div>
@@ -329,8 +329,6 @@ class FilterStudyPatientsForm extends Component {
               searchPlaceholder="Search"
               searchable
               optionLabelKey="label"
-              includeAllOption={false}
-              multiple
               onChange={(val) => this.searchPatient(val, 'source')}
               customOptionTemplateFunction={itemTemplate}
               customSelectedValueTemplateFunction={selectedItemsTemplate}
