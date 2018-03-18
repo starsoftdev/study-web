@@ -391,7 +391,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   renderEmailList() {
-    const { change, formValues } = this.props;
+    const { change, formValues, currentUser } = this.props;
 
     return (
       <div className="emails-list-holder">
@@ -403,6 +403,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           addEmailNotification={this.addEmailNotificationClick}
           closeEmailNotification={this.closeAddEmailModal}
           emailFields={this.state.emailFields}
+          currentUser={currentUser}
         />
       </div>
     );

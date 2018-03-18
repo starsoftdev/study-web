@@ -3152,7 +3152,15 @@ section.get-start {
 			&:hover {
 				color: #76daff;
 				text-decoration: underline;
-			}
+      }
+      
+      &[disabled] {
+        color: darken(#999, 10%);
+        cursor: not-allowed;
+        &:hover {
+          text-decoration: none;
+        }
+      }
 		}
 	}
 	
