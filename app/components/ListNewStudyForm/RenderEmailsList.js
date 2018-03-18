@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import _ from 'lodash';
 import { Field } from 'redux-form';
 import { Modal } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
@@ -24,6 +25,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
     fields: PropTypes.object,
     addEmailNotificationUser: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -36,8 +38,10 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   addEmailNotificationClick() {
-    const { showAddEmailModal } = this.props;
-    showAddEmailModal();
+    const { showAddEmailModal, currentUser } = this.props;
+    if (currentUser.isAdmin) {
+      showAddEmailModal();
+    }
   }
 
   addEmailNotificationSubmit(values) {
@@ -85,7 +89,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { fields, formValues } = this.props;
+    const { fields, formValues, currentUser } = this.props;
     return (
       <div>
         <div className={fields.length === 0 ? 'heading-area-no-border' : 'heading-area'}>
@@ -117,7 +121,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           }
         </ul>
         <div className="btn-holder">
-          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
+          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.isAdmin}>Add Email Notification</a>
         </div>
 
         <Modal

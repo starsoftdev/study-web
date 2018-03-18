@@ -13,6 +13,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
     addEmailNotificationClick: PropTypes.func,
     closeEmailNotification: PropTypes.func,
     emailFields: PropTypes.array,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -27,8 +28,10 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
   }
 
   addEmailNotificationClick() {
-    const { addEmailNotificationClick } = this.props;
-    addEmailNotificationClick();
+    const { addEmailNotificationClick, currentUser } = this.props;
+    if (currentUser.roleForClient.isAdmin) {
+      addEmailNotificationClick();
+    }
   }
 
   selectAll(e) {
@@ -102,7 +105,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
           }
         </ul>
         <div className="btn-holder">
-          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
+          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick} disabled={!currentUser.roleForClient.isAdmin}>Add Email Notification</a>
         </div>
       </div>
     );
