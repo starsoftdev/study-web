@@ -253,8 +253,14 @@ class FilterStudyPatientsForm extends Component {
 
     const selectedItemsTemplate = (controlSelectedValue) => {
       if (controlSelectedValue.length === 1) {
+        let label = 'Select Source';
+        if (controlSelectedValue[0] && controlSelectedValue[0].studySourceId) {
+          label = controlSelectedValue[0].label;
+        } else if (controlSelectedValue[0]) {
+          label = controlSelectedValue[0].group;
+        }
         return (<div className="truncate">
-          {controlSelectedValue[0] ? controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group : 'Select Source'}
+          {label}
         </div>);
       }
       return (<div>
