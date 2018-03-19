@@ -253,7 +253,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         value: source.id,
       };
     });
-    sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.name;
     let sponsor = 'None';
     if (study.sponsor) {
@@ -286,7 +285,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     totalCountByGroups.all = sourceMapped.length;
-    sourceMapped.unshift({ label: 'All', id: '-1', group: 'All' });
 
     return (
       <div className="container-fluid no-padding">
