@@ -22,7 +22,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import RenderLeads from '../../components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from '../../components/EditSiteForm/index';
-import { selectCurrentUserClientId, selectSavedSite } from '../../containers/App/selectors';
+import { selectCurrentUserClientId, selectSavedSite, selectCurrentUser } from '../../containers/App/selectors';
 import { selectAddNotificationProcess } from '../../containers/ListNewStudyPage/selectors';
 import {
   selectCallTracking,
@@ -46,6 +46,7 @@ const mapStateToProps = createStructuredSelector({
   currentUserClientId: selectCurrentUserClientId(),
   addNotificationProcess: selectAddNotificationProcess(),
   savedSite: selectSavedSite(),
+  currentUser: selectCurrentUser(),
 });
 
 const formName = 'listNewStudy';
@@ -83,6 +84,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
     availPhoneNumbers: PropTypes.array,
     addNotificationProcess: PropTypes.object,
     savedSite: PropTypes.object,
@@ -193,7 +195,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels } = this.props;
+    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels, currentUser } = this.props;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
       id: row.id,
@@ -232,6 +234,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         hideAddEmailModal={hideAddEmailModal}
                         addEmailNotificationUser={addEmailNotificationUser}
                         currentUserClientId={currentUserClientId}
+                        currentUser={currentUser}
                       />
                     </div>
 
