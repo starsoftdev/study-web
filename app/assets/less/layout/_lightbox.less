@@ -596,6 +596,15 @@ input:focus {
         text-decoration: underline;
         cursor: pointer;
       }
+
+      &[disabled] {
+        color: darken(#999, 10%);
+        cursor: not-allowed;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
   }
 
