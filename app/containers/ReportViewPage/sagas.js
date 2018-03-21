@@ -124,7 +124,6 @@ export function* fetchReportsWorker(action) {
 
     yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
-    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
     yield put(getReportsListError(err));
   }
 }
@@ -208,7 +207,6 @@ export function* fetchReportsTotalsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(response));
   } catch (err) {
-    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
     yield put(getReportsTotalsError(err));
   }
 }
