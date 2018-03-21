@@ -375,14 +375,14 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  campaignChanged(e, val) {
+  campaignChanged(val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
     setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
     fetchStudiesAccordingToFilters(val, 'campaign');
   }
 
-  sourceChanged(e, val) {
+  sourceChanged(val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
     setFilterFormValues('source', val);
     this.toggleAllStudies(false);

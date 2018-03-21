@@ -55,15 +55,15 @@ import {
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
 
-  CHANGE_STUDY_ADD,
-  CHANGE_STUDY_ADD_SUCCESS,
-  CHANGE_STUDY_ADD_ERROR,
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
 
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
 
-  RESET_CHANGE_STUDY_ADD_STATE,
+  RESET_CHANGE_STUDY_AD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
@@ -153,7 +153,7 @@ const initialState = {
     saving: false,
     error: null,
   },
-  changeStudyAddProcess: {
+  changeStudyAdProcess: {
     success: false,
     saving: false,
     error: null,
@@ -909,31 +909,31 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD:
+    case CHANGE_STUDY_AD:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: true,
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD_SUCCESS:
+    case CHANGE_STUDY_AD_SUCCESS:
       return {
         ...state,
         updatedStudyAd: action.payload.imgSrc,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: true,
           saving: false,
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD_ERROR:
+    case CHANGE_STUDY_AD_ERROR:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: false,
           error: true,
@@ -955,11 +955,11 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         removedStudyAdId: null,
       };
-    case RESET_CHANGE_STUDY_ADD_STATE:
+    case RESET_CHANGE_STUDY_AD_STATE:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: false,
           error: null,
