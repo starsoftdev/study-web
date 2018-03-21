@@ -558,10 +558,6 @@ export default class EditInformationForm extends React.Component {
                 />
               </div>
             </div>
-            {/* <div className="field-row add-messaging-number-row">
-            <strong className="label"> </strong>
-            <a href="#popup-add-messaging-number" className="link-add-messaging-number lightbox-opener">+ Add Messaging Number</a>
-          </div> */}
             <div className="field-row">
               <strong className="label">
                 <label htmlFor="new-patient-phone">PROTOCOL</label>
