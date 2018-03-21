@@ -72,6 +72,11 @@ export class Header extends React.Component { // eslint-disable-line react/prefe
     }
   }
 
+  isLandingPage = path => {
+    const reg = /\d{1,}-\w/;
+    return reg.test(path);
+  }
+
   render() {
     const { isLoggedIn, userDataFetched, location } = this.props;
     const { menuCollapsed } = this.state;
@@ -85,17 +90,19 @@ export class Header extends React.Component { // eslint-disable-line react/prefe
         <nav className="navbar navbar-default">
           <div className="container-fluid">
             <div className="navbar-header">
-              <button
-                ref={(button) => { this.button = button; }}
-                onClick={this.handleClick}
-                type="button"
-                className="navbar-toggle collapsed"
-              >
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
+              {!this.isLandingPage(location.pathname) &&
+                <button
+                  ref={(button) => { this.button = button; }}
+                  onClick={this.handleClick}
+                  type="button"
+                  className="navbar-toggle collapsed"
+                >
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                </button>
+              }
               <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage || isLoggedIn })}>
                 <span className="hidden-xs">LOGIN</span>
                 <Glyphicon glyph="log-in" className="visible-xs-* hidden-sm hidden-md hidden-lg" />
