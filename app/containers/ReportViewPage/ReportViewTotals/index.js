@@ -13,14 +13,14 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
   render() {
     const totals = {
-      count_not_contacted: this.props.totals.details.count_not_contacted ? parseInt(this.props.totals.details.count_not_contacted) : 0,
-      dnq: this.props.totals.details.dnq ? parseInt(this.props.totals.details.dnq) : 0,
-      action_needed: this.props.totals.details.action_needed ? parseInt(this.props.totals.details.action_needed) : 0,
-      scheduled: this.props.totals.details.scheduled ? parseInt(this.props.totals.details.scheduled) : 0,
-      consented: this.props.totals.details.consented ? parseInt(this.props.totals.details.consented) : 0,
-      screen_failed: this.props.totals.details.screen_failed ? parseInt(this.props.totals.details.screen_failed) : 0,
-      randomized: this.props.totals.details.randomized ? parseInt(this.props.totals.details.randomized) : 0,
-      call_attempted: this.props.totals.details.call_attempted ? parseInt(this.props.totals.details.call_attempted) : 0,
+      count_not_contacted: this.props.totals.details.count_not_contacted ? parseInt(this.props.totals.details.count_not_contacted) : 'N/A',
+      dnq: this.props.totals.details.dnq ? parseInt(this.props.totals.details.dnq) : 'N/A',
+      action_needed: this.props.totals.details.action_needed ? parseInt(this.props.totals.details.action_needed) : 'N/A',
+      scheduled: this.props.totals.details.scheduled ? parseInt(this.props.totals.details.scheduled) : 'N/A',
+      consented: this.props.totals.details.consented ? parseInt(this.props.totals.details.consented) : 'N/A',
+      screen_failed: this.props.totals.details.screen_failed ? parseInt(this.props.totals.details.screen_failed) : 'N/A',
+      randomized: this.props.totals.details.randomized ? parseInt(this.props.totals.details.randomized) : 'N/A',
+      call_attempted: this.props.totals.details.call_attempted ? parseInt(this.props.totals.details.call_attempted) : 'N/A',
     };
 
     const percentage = this.props.getPercentageObject(totals);
