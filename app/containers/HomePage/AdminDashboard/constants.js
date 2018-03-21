@@ -43,10 +43,10 @@ export const UPDATE_FACEBOOK_LANDING_PAGE                = 'DashboardPage/UPDATE
 export const UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS        = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS';
 export const UPDATE_FACEBOOK_LANDING_PAGE_ERROR          = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_ERROR';
 
-export const CHANGE_STUDY_ADD                            = 'DashboardPage/CHANGE_STUDY_ADD';
-export const CHANGE_STUDY_ADD_SUCCESS                    = 'DashboardPage/CHANGE_STUDY_ADD_SUCCESS';
-export const CHANGE_STUDY_ADD_ERROR                      = 'DashboardPage/CHANGE_STUDY_ADD_ERROR';
-export const RESET_CHANGE_STUDY_ADD_STATE                = 'DashboardPage/RESET_CHANGE_STUDY_ADD_STATE';
+export const CHANGE_STUDY_AD                            = 'DashboardPage/CHANGE_STUDY_AD';
+export const CHANGE_STUDY_AD_SUCCESS                    = 'DashboardPage/CHANGE_STUDY_AD_SUCCESS';
+export const CHANGE_STUDY_AD_ERROR                      = 'DashboardPage/CHANGE_STUDY_AD_ERROR';
+export const RESET_CHANGE_STUDY_AD_STATE                = 'DashboardPage/RESET_CHANGE_STUDY_AD_STATE';
 
 export const REMOVE_STUDY_AD                            = 'DashboardPage/REMOVE_STUDY_AD';
 export const REMOVE_STUDY_AD_SUCCESS                    = 'DashboardPage/REMOVE_STUDY_AD_SUCCESS';
