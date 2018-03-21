@@ -197,9 +197,9 @@ export class ReportViewTable extends React.Component {
                 <thead>
                   <tr>
                     <th className="default-cursor">#<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>LISTING <i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
+                    <th data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
+                    <th data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>LISTING <i className="caret-arrow" /></th>
+                    <th data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
               </table>
@@ -215,9 +215,9 @@ export class ReportViewTable extends React.Component {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
+                      <th data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
+                      <th data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
+                      <th data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
                       <th data-sort="count_total" className={`count_total th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
                       <th data-sort="count_not_contacted" className={`count_not_contacted th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
                       <th data-sort="call_attempted" className={`call_attempted th ${(this.props.paginationOptions.activeSort === 'call_attempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED <i className="caret-arrow" /></th>
