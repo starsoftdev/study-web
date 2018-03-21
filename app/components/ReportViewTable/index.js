@@ -149,9 +149,6 @@ export class ReportViewTable extends React.Component {
 
     const rightPartTable = reportsList.details.map((item, index) => {
       const percentage = this.props.getPercentageObject(item);
-
-      const countTotal = parseInt(item.count_not_contacted || 0) + parseInt(item.call_attempted || 0) + parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) + parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
-
       return (
         <tr
           onMouseOver={(e) => this.mouseOverRow(e, index)}
@@ -165,7 +162,7 @@ export class ReportViewTable extends React.Component {
           <td className="level_date_from">{item.levelDateFrom}</td>
           <td className="level_date_to">{item.levelDateTo}</td>
           <td className="last_login_time">{ (item.last_login_time ? moment(item.last_login_time).tz(item.timezone).format('MM/DD/YY [at] h:mm A') : '')}</td>
-          <td className="count_total">{countTotal}</td>
+          <td className="count_total">{item.count_total}</td>
           <td className="count_not_contacted"><span className="text">{item.count_not_contacted || 0}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></td>
           <td className="call_attempted"><span className="text">{item.call_attempted || 0}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></td>
           <td className="dnq"><span className="text" onClick={() => { this.props.openNotesModal(item.study_id, 'Not Qualified / Not Interested', 'DNQ'); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></td>
@@ -221,19 +218,19 @@ export class ReportViewTable extends React.Component {
                       <th onClick={this.sortBy} data-sort="level_date_from" className={`level_date_from th ${(this.props.paginationOptions.activeSort === 'level_date_from') ? this.props.paginationOptions.activeDirection : ''}`}>START DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="level_date_to" className={`level_date_to th ${(this.props.paginationOptions.activeSort === 'level_date_to') ? this.props.paginationOptions.activeDirection : ''}`}>END DATE <i className="caret-arrow" /></th>
                       <th onClick={this.sortBy} data-sort="last_login_time" className={`last_login_time th ${(this.props.paginationOptions.activeSort === 'last_login_time') ? this.props.paginationOptions.activeDirection : ''}`}>LAST LOGIN <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="count_total" className={`count_total th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="count_not_contacted" className={`count_not_contacted th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="call_attempted" className={`call_attempted th ${(this.props.paginationOptions.activeSort === 'call_attempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="dnq" className={`dnq th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="action_needed" className={`action_needed th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="scheduled" className={`scheduled th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="consented" className={`consented th ${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="screen_failed" className={`screen_failed th ${(this.props.paginationOptions.activeSort === 'screen_failed') ? this.props.paginationOptions.activeDirection : ''}`}>SCREEN FAILED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="randomized" className={`randomized th ${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="outbound_text" className={`outbound_text th ${(this.props.paginationOptions.activeSort === 'outbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT SENT <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="inbound_text" className={`inbound_text th ${(this.props.paginationOptions.activeSort === 'inbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT RECEIVED <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="unread_text" className={`unread_text th ${(this.props.paginationOptions.activeSort === 'unread_text') ? this.props.paginationOptions.activeDirection : ''}`}>UNREAD TEXT <i className="caret-arrow" /></th>
-                      <th onClick={this.sortBy} data-sort="outbound_emails" className={`outbound_emails th ${(this.props.paginationOptions.activeSort === 'outbound_emails') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL SENT <i className="caret-arrow" /></th>
+                      <th data-sort="count_total" className={`count_total th ${(this.props.paginationOptions.activeSort === 'count_total') ? this.props.paginationOptions.activeDirection : ''}`}>REFERRALS <i className="caret-arrow" /></th>
+                      <th data-sort="count_not_contacted" className={`count_not_contacted th ${(this.props.paginationOptions.activeSort === 'count_not_contacted') ? this.props.paginationOptions.activeDirection : ''}`}>NOT CONTACTED <i className="caret-arrow" /></th>
+                      <th data-sort="call_attempted" className={`call_attempted th ${(this.props.paginationOptions.activeSort === 'call_attempted') ? this.props.paginationOptions.activeDirection : ''}`}>CALL ATTEMPTED <i className="caret-arrow" /></th>
+                      <th data-sort="dnq" className={`dnq th ${(this.props.paginationOptions.activeSort === 'dnq') ? this.props.paginationOptions.activeDirection : ''}`}>DNQ <i className="caret-arrow" /></th>
+                      <th data-sort="action_needed" className={`action_needed th ${(this.props.paginationOptions.activeSort === 'action_needed') ? this.props.paginationOptions.activeDirection : ''}`}>ACTION NEEDED <i className="caret-arrow" /></th>
+                      <th data-sort="scheduled" className={`scheduled th ${(this.props.paginationOptions.activeSort === 'scheduled') ? this.props.paginationOptions.activeDirection : ''}`}>SCHEDULED <i className="caret-arrow" /></th>
+                      <th data-sort="consented" className={`consented th ${(this.props.paginationOptions.activeSort === 'consented') ? this.props.paginationOptions.activeDirection : ''}`}>CONSENTED <i className="caret-arrow" /></th>
+                      <th data-sort="screen_failed" className={`screen_failed th ${(this.props.paginationOptions.activeSort === 'screen_failed') ? this.props.paginationOptions.activeDirection : ''}`}>SCREEN FAILED <i className="caret-arrow" /></th>
+                      <th data-sort="randomized" className={`randomized th ${(this.props.paginationOptions.activeSort === 'randomized') ? this.props.paginationOptions.activeDirection : ''}`}>RANDOMIZED <i className="caret-arrow" /></th>
+                      <th data-sort="outbound_text" className={`outbound_text th ${(this.props.paginationOptions.activeSort === 'outbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT SENT <i className="caret-arrow" /></th>
+                      <th data-sort="inbound_text" className={`inbound_text th ${(this.props.paginationOptions.activeSort === 'inbound_text') ? this.props.paginationOptions.activeDirection : ''}`}>TEXT RECEIVED <i className="caret-arrow" /></th>
+                      <th data-sort="unread_text" className={`unread_text th ${(this.props.paginationOptions.activeSort === 'unread_text') ? this.props.paginationOptions.activeDirection : ''}`}>UNREAD TEXT <i className="caret-arrow" /></th>
+                      <th data-sort="outbound_emails" className={`outbound_emails th ${(this.props.paginationOptions.activeSort === 'outbound_emails') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL SENT <i className="caret-arrow" /></th>
                     </tr>
                   </thead>
                 </table>
