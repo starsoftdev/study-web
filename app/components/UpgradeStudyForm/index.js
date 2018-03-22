@@ -330,7 +330,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                         </div>
                       </div>
                       {
-                        <div className="field-row">
+                        <div className="field-row global-invisible-item">
                           <strong className="label">
                             <label>CALL TRACKING: $247</label>
                           </strong>
