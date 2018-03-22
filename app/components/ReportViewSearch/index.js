@@ -182,7 +182,7 @@ export class ReportViewSearch extends React.Component {
     const statusOptions = [
       {
         label: 'All',
-        value: 'all',
+        value: 'All',
       },
       {
         label: 'Active',
