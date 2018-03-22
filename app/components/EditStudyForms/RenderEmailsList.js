@@ -29,7 +29,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
 
   addEmailNotificationClick() {
     const { addEmailNotificationClick, currentUser } = this.props;
-    if (currentUser.roleForClient.isAdmin) {
+    if (currentUser && currentUser.roleForClient.isAdmin) {
       addEmailNotificationClick();
     }
   }
@@ -73,6 +73,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
 
   render() {
     const { fields, formValues, currentUser } = this.props;
+    const enableAddEmailNotif = currentUser && currentUser.roleForClient.isAdmin;
     let formValuesLength;
     if (formValues.emailNotifications) {
       formValuesLength = formValues.emailNotifications.length;
@@ -105,7 +106,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
           }
         </ul>
         <div className="btn-holder">
-          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick} disabled={!currentUser.roleForClient.isAdmin}>Add Email Notification</a>
+          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick} disabled={!enableAddEmailNotif}>Add Email Notification</a>
         </div>
       </div>
     );
