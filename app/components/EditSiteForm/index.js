@@ -87,7 +87,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   componentWillReceiveProps(newProps) {
     const { change, timezone, formValues } = this.props;
     if (newProps.timezone && newProps.timezone !== timezone) {
-      console.log('new timzone', newProps.timezone);
       change('timezone', formatTimezone(newProps.timezone, formValues.city));
       change('timezoneUnparsed', newProps.timezone);
 
@@ -113,7 +112,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     let streetNmber = '';
     let route = '';
     if (e && e.location) {
-      console.log('location', e.location);
       getTimezone(e.location.lat, e.location.lng);
 
       this.setState({ fetchingTimezone: true });
@@ -233,9 +231,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
                 component={FormGeosuggest}
                 refObj={(el) => { this.geoSuggest = el; }}
                 onSuggestSelect={this.onSuggestSelect}
-                onChange={(e) => {
-                  console.log('event', e);
-                }}
                 initialValue={isEdit ? initialValues.address : ''}
                 placeholder=""
               />
