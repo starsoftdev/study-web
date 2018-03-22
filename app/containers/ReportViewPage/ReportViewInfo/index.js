@@ -18,9 +18,9 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
   render() {
     const { patientSignUps } = this.props;
     const totals = {
-      textSent: this.props.totals.details.outbound_text ? parseInt(this.props.totals.details.outbound_text) : 'N/A',
-      unreadText: this.props.totals.details.unread_text ? parseInt(this.props.totals.details.unread_text) : 'N/A',
-      emailSent: this.props.totals.details.outbound_emails ? parseInt(this.props.totals.details.outbound_emails) : 'N/A',
+      textSent: (this.props.totals.details.outbound_text || this.props.totals.details.outbound_text === 0) ? parseInt(this.props.totals.details.outbound_text) : 'N/A',
+      unreadText: (this.props.totals.details.unread_text || this.props.totals.details.unread_text === 0) ? parseInt(this.props.totals.details.unread_text) : 'N/A',
+      emailSent: (this.props.totals.details.outbound_emails || this.props.totals.details.outbound_emails === 0) ? parseInt(this.props.totals.details.outbound_emails) : 'N/A',
     };
 
     return (
