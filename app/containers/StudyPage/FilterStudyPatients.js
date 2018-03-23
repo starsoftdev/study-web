@@ -3,7 +3,6 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Debounce } from 'react-throttle';
