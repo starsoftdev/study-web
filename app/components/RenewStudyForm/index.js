@@ -405,7 +405,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                       </div>
                     </div>
                     {
-                      <div className="field-row">
+                      <div className="field-row global-invisible-item">
                         <strong className="label">
                           <label>CALL TRACKING: $247</label>
                         </strong>
