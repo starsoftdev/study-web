@@ -8,8 +8,6 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 
 import {
-  FETCH_PATIENT_SIGN_UPS,
-  FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   GET_REPORTS_LIST,
   GET_REPORTS_LIST_SUCCESS,
   GET_REPORTS_LIST_ERROR,
@@ -76,24 +74,6 @@ function reportViewPageReducer(state = initialState, action) {
   let foundIndex = null;
   let copy = null;
   switch (action.type) {
-    case FETCH_PATIENT_SIGN_UPS:
-      return {
-        ...state,
-        patientSignUps: {
-          today: 'N/A',
-          yesterday: 'N/A',
-          total: 'N/A',
-        },
-      };
-    case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
-      return {
-        ...state,
-        patientSignUps: {
-          today: action.payload.today,
-          yesterday: action.payload.yesterday,
-          total: action.payload.total,
-        },
-      };
     case GET_REPORTS_LIST:
       if (action.offset === 0) {
         newReportsList = [];
