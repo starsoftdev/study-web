@@ -234,7 +234,7 @@ function* fetchStudyStats(action) {
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceIds = JSON.stringify(sourceId);
+      options.query.sourceIds = sourceId;
     }
     const response = yield call(request, requestURL, options);
     yield put(studyStatsFetched(response));
@@ -268,7 +268,7 @@ function* fetchPatientCategories() {
     const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, null, null, [{ group:'StudyKIK', id:'1_', label:'none' }]);
+    yield call(fetchPatients, studyId, null, null, 1);
   } catch (e) {
     const errorMessage = get(e, 'message', 'Something went wrong while fetching patient categories. Please try again later.');
     toastr.error('', errorMessage);
@@ -445,7 +445,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
       queryParams.campaignId = campaignId;
     }
     if (sourceId) {
-      queryParams.sourceIds = JSON.stringify(sourceId);
+      queryParams.sourceIds = sourceId;
     }
     if (text) {
       queryParams.text = text;
