@@ -5,8 +5,6 @@
  */
 
 import {
-  FETCH_PATIENT_SIGN_UPS,
-  FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   GET_REPORTS_LIST,
   GET_REPORTS_LIST_SUCCESS,
   GET_REPORTS_LIST_ERROR,
@@ -24,22 +22,6 @@ import {
   GET_CATEGORY_NOTES_ERROR,
   CLEAR_REPORT_LIST,
 } from './constants';
-
-export function fetchPatientSignUps(currentUser, protocolNumber, sourceId) {
-  return {
-    type: FETCH_PATIENT_SIGN_UPS,
-    currentUser,
-    protocolNumber,
-    sourceId,
-  };
-}
-
-export function fetchPatientSignUpsSucceeded(payload) {
-  return {
-    type: FETCH_PATIENT_SIGN_UPS_SUCCEESS,
-    payload,
-  };
-}
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
   return {
