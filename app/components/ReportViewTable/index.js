@@ -101,7 +101,7 @@ export class ReportViewTable extends React.Component {
   }
 
   loadItems() {
-    if (!this.props.reportsList.fetching) {
+    if (!this.props.reportsList.fetching && this.props.paginationOptions.hasMoreItems) {
       this.props.loadReports(false);
     }
   }
