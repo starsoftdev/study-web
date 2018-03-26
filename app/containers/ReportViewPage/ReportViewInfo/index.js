@@ -53,7 +53,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 </li>
                 <li>
                   <span className="sub-title report-font-fix">TOTAL</span>
-                  <strong className="number">{totalSignUps}</strong>
+                  <strong className="number">{totalSignUps || 'N/A'}</strong>
                 </li>
               </ul>
             </div>
