@@ -73,8 +73,8 @@ export function* fetchReportsWorker(action) {
     const response = yield call(request, requestURL);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
 
