@@ -10,7 +10,6 @@ import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 
 import {
-  FETCH_PATIENT_SIGN_UPS,
   GET_REPORTS_LIST,
   CHANGE_PROTOCOL_STATUS,
   EXPORT_STUDIES,
@@ -27,7 +26,6 @@ import {
   getReportsTotalsError,
   getCategoryNotesSuccess,
   getCategoryNotesError,
-  fetchPatientSignUpsSucceeded,
 } from './actions';
 
 
@@ -37,7 +35,6 @@ export function* reportViewPageSaga() {
   const watcherC = yield fork(exportStudiesWatcher);
   const watcherD = yield fork(fetchReportsTotalsWatcher);
   const watcherE = yield fork(getCategoryNotesWatcher);
-  const watcherF = yield fork(fetchPatientSignUpsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -46,47 +43,6 @@ export function* reportViewPageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
-  yield cancel(watcherF);
-}
-
-export function* fetchPatientSignUpsWatcher() {
-  yield* takeLatest(FETCH_PATIENT_SIGN_UPS, fetchPatientSignUpsWorker);
-}
-
-export function* fetchPatientSignUpsWorker(action) {
-  try {
-    let requestURL = '';
-    let timezone = action.currentUser.timezone;
-    const protocolNumber = action.protocolNumber;
-    const sourceId = action.sourceId;
-
-    if (action.currentUser.roleForClient && action.currentUser.roleForClient.client_id) {
-      requestURL = `${API_URL}/clients/${action.currentUser.roleForClient.client_id}/patientSignUps`;
-      if (!action.currentUser.roleForClient.isAdmin) {
-        timezone = action.currentUser.roleForClient.site.timezone;
-      }
-    } else {
-      requestURL = `${API_URL}/sponsorRoles/${action.currentUser.roleForSponsor.id}/patientSignUps`;
-    }
-
-    const params = {
-      method: 'GET',
-      query: {
-        timezone,
-        protocolNumber,
-        sourceId,
-      },
-    };
-    const response = yield call(request, requestURL, params);
-
-    yield put(fetchPatientSignUpsSucceeded(response));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
-    toastr.error('', errorMessage);
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
 }
 
 export function* fetchReportsWatcher() {
@@ -117,13 +73,14 @@ export function* fetchReportsWorker(action) {
     const response = yield call(request, requestURL);
 
     let hasMore = true;
-    const page = (offset / 10) + 1;
-    if (response.length < 10) {
+    const page = (offset / 50) + 1;
+    if (response.length < 50) {
       hasMore = false;
     }
 
     yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
+    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
     yield put(getReportsListError(err));
   }
 }
@@ -207,6 +164,7 @@ export function* fetchReportsTotalsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(response));
   } catch (err) {
+    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
     yield put(getReportsTotalsError(err));
   }
 }

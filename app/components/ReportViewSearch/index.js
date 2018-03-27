@@ -240,6 +240,7 @@ export class ReportViewSearch extends React.Component {
           </div>
           <div className="pull-left custom-select">
             <Field
+              className="report-page-source-select"
               name="source"
               component={ReactSelect}
               placeholder="Select Source"

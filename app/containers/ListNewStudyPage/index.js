@@ -207,7 +207,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     if (formValues.callTracking) {
       addOns.push({
-        title: 'Call Tracking',
+        title: 'Media Tracking',
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,

@@ -1,15 +1,15 @@
 /**
-*
-* ResetPasswordForm
-*
-*/
+ *
+ * ResetPasswordForm
+ *
+ */
 
 import React from 'react';
 import { browserHistory } from 'react-router';
 import inViewport from 'in-viewport';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import { toastr } from 'react-redux-toastr';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import Input from '../../components/Input';
@@ -19,8 +19,7 @@ import resetPasswordFormValidator from './validator';
   form: 'resetPassword',
   validate: resetPasswordFormValidator,
 })
-class ResetPasswordForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
-
+class ResetPasswordForm extends React.Component {
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func,
@@ -28,6 +27,7 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     resetPasswordSuccess: React.PropTypes.bool,
     submitting: React.PropTypes.bool.isRequired,
     change: React.PropTypes.func,
+    reCaptcha: React.PropTypes.string,
   };
 
   constructor(props) {
@@ -71,13 +71,19 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { submitting, resetPasswordSuccess } = this.props;
-    const buttonValue = (resetPasswordSuccess) ? 'back to login' : 'submit';
-    const submitHandler = (resetPasswordSuccess) ? this.redirect : (e) => {
-      e.preventDefault();
-      this.props.handleSubmit();
-      this.recaptcha.reset();
-    };
+    const { submitting, resetPasswordSuccess, reCaptcha } = this.props;
+    const buttonValue = resetPasswordSuccess ? 'back to login' : 'submit';
+    const submitHandler = resetPasswordSuccess
+      ? this.redirect
+      : e => {
+        e.preventDefault();
+        if (!reCaptcha) {
+          toastr.error('', 'Validate recaptcha!');
+          return;
+        }
+        this.props.handleSubmit();
+        this.recaptcha.reset();
+      };
 
     let formContent = (
       <div className="field-row clearfix area">
@@ -97,7 +103,9 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
           bsClass="form-control input-lg"
         />
         <ReCAPTCHA
-          ref={(ref) => { this.recaptcha = ref; }}
+          ref={ref => {
+            this.recaptcha = ref;
+          }}
           sitekey={SITE_KEY}
           onChange={this.onChange}
           className="recaptcha-wrapper"
@@ -106,15 +114,17 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
     );
 
     if (resetPasswordSuccess) {
-      formContent =
-        (<p className="replace-text">
-          We've sent password reset instructions to your email. Check your inbox and follow the link.
-        </p>);
+      formContent = (
+        <p className="replace-text">
+          We've sent password reset instructions to your email. Check your inbox
+          and follow the link.
+        </p>
+      );
     }
 
     return (
       <form
-        ref={(animatedForm) => {
+        ref={animatedForm => {
           this.animatedForm = animatedForm;
         }}
         onSubmit={submitHandler}
@@ -137,8 +147,12 @@ class ResetPasswordForm extends React.Component { // eslint-disable-line react/p
   }
 }
 
-const mapStateToProps = createStructuredSelector({
+const selector = formValueSelector('resetPassword');
+
+const mapStateToProps = state => ({
+  reCaptcha: selector(state, 'reCaptcha'),
 });
+
 function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change('resetPassword', name, value)),
