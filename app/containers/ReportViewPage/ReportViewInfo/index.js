@@ -8,7 +8,6 @@ import graphImage from '../../../assets/images/graph.svg';
 export class ReportViewInfo extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    patientSignUps: PropTypes.object,
     reportsList: PropTypes.object,
     totals: PropTypes.object,
     openPQSModal: PropTypes.func,
@@ -16,12 +15,17 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
 
 
   render() {
-    const { patientSignUps } = this.props;
     const totals = {
-      textSent: this.props.totals.details.outbound_text ? parseInt(this.props.totals.details.outbound_text) : 'N/A',
-      unreadText: this.props.totals.details.unread_text ? parseInt(this.props.totals.details.unread_text) : 'N/A',
-      emailSent: this.props.totals.details.outbound_emails ? parseInt(this.props.totals.details.outbound_emails) : 'N/A',
+      textSent: (this.props.totals.details.outbound_text || this.props.totals.details.outbound_text === 0) ? parseInt(this.props.totals.details.outbound_text) : 'N/A',
+      unreadText: (this.props.totals.details.unread_text || this.props.totals.details.unread_text === 0) ? parseInt(this.props.totals.details.unread_text) : 'N/A',
+      emailSent: (this.props.totals.details.outbound_emails || this.props.totals.details.outbound_emails === 0) ? parseInt(this.props.totals.details.outbound_emails) : 'N/A',
+
+      count_today: (this.props.totals.details.count_today || this.props.totals.details.count_today === 0) ? parseInt(this.props.totals.details.count_today) : 'N/A',
+      count_yesterday: (this.props.totals.details.count_yesterday || this.props.totals.details.count_yesterday === 0) ? parseInt(this.props.totals.details.count_yesterday) : 'N/A',
     };
+
+    const totalSignUps = parseInt(this.props.totals.details.count_not_contacted) + parseInt(this.props.totals.details.dnq) + parseInt(this.props.totals.details.action_needed) + parseInt(this.props.totals.details.scheduled)
+                         + parseInt(this.props.totals.details.consented) + parseInt(this.props.totals.details.screen_failed) + parseInt(this.props.totals.details.randomized) + parseInt(this.props.totals.details.call_attempted);
 
     return (
       <div className="infoarea row">
@@ -41,15 +45,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
               <ul className="list-inline text-center list-activities alt">
                 <li>
                   <span className="sub-title report-font-fix">YESTERDAY</span>
-                  <strong className="number">{patientSignUps.yesterday}</strong>
+                  <strong className="number">{totals.count_yesterday}</strong>
                 </li>
                 <li>
                   <span className="sub-title report-font-fix">TODAY</span>
-                  <strong className="number">{patientSignUps.today}</strong>
+                  <strong className="number">{totals.count_today}</strong>
                 </li>
                 <li>
                   <span className="sub-title report-font-fix">TOTAL</span>
-                  <strong className="number">{patientSignUps.total}</strong>
+                  <strong className="number">{totalSignUps || 'N/A'}</strong>
                 </li>
               </ul>
             </div>

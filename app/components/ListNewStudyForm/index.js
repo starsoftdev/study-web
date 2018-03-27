@@ -402,9 +402,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           {
-            <div className="tracking-source">
+            <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>CALL TRACKING: $247</label></strong>
+                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}

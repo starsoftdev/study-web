@@ -644,7 +644,7 @@ export class BillingPage extends Component {
                 onClick={this.handleClick}
               >
                 <i className="icomoon-time" />
-                <h3><span>Patient Call Tracking</span></h3>
+                <h3><span>Patient Media Tracking</span></h3>
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
@@ -652,7 +652,7 @@ export class BillingPage extends Component {
                 </div>
                 <div className="area">
                   <strong className="h3">
-                    Patient Call Tracking
+                    Patient Media Tracking
                   </strong>
                   <p>
                     Your site will never miss a patient who is calling about your trial on

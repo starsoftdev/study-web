@@ -27,7 +27,6 @@ class StudyActionButtons extends Component {
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
     currentUser: PropTypes.any,
-    sourceMapped: PropTypes.array,
   };
   constructor(props) {
     super(props);
@@ -142,7 +141,7 @@ class StudyActionButtons extends Component {
               </a>
             </Modal.Header>
             <Modal.Body>
-              <AddPatientForm onClose={this.closeAddPatientModal} sourceMapped={this.props.sourceMapped} />
+              <AddPatientForm onClose={this.closeAddPatientModal} />
             </Modal.Body>
           </Modal>
         </div>
