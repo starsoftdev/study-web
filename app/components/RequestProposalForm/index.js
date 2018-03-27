@@ -254,7 +254,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           {
             <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>CALL TRACKING: $247</label></strong>
+                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}
