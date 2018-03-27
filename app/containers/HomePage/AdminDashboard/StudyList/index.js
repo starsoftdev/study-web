@@ -490,7 +490,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             className="pull-left"
             data-class="btn-deactivate"
             onClick={() => this.showCallTrackingModal(true)}
-          > Call Tracking </Button>
+          > Media Tracking </Button>
           <Button
             bsStyle="primary"
             className="pull-left"
