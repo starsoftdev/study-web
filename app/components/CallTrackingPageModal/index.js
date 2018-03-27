@@ -122,7 +122,7 @@ export class CallTrackingPageModal extends React.Component {
           <div className="slider-area">
             <div className="head">
               <div className="inner-head">
-                <strong className="title">Call Tracking</strong>
+                <strong className="title">Media Tracking</strong>
                 <a className="btn-right-arrow" onClick={this.onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
@@ -134,7 +134,7 @@ export class CallTrackingPageModal extends React.Component {
               <div className="frame">
                 <div className="field-row">
                   <strong className="label">
-                    <label>CALL TRACKING</label>
+                    <label>MEDIA TRACKING</label>
                   </strong>
                   <div className="field">
                     <Field
