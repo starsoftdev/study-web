@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const SentryCliPlugin = require('@sentry/webpack-plugin');
 
 const plugins = [
   new webpack.HotModuleReplacementPlugin(),
@@ -23,6 +24,14 @@ const plugins = [
     templateContent: templateContent('corporate/index.html')
   }),
 ];
+
+if (process.env.ENABLE_SENTRY_PLUGIN && process.env.ENABLE_SENTRY_PLUGIN !== 'false'){
+  plugins.push(new SentryCliPlugin({
+    include: '.',
+    ignoreFile: '.sentrycliignore',
+    ignore: ['node_modules', 'webpack.config.js'],
+  }))
+}
 
 module.exports = require('./webpack.base.babel')({
   entry: {
