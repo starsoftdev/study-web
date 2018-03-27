@@ -347,7 +347,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
     const { change } = this.props;
     const sources = _.cloneDeep(this.props.sources);
-    const defaultSource = _.find(sources, (s) => { return s.type === 'StudyKIK'; });
+    const defaultSource = sources.find(s => { return s.type === 'StudyKIK'; });
     let filters = _.cloneDeep(this.props.filtersFormValues);
 
     if ((value && key) || (key === 'campaign') || (key === 'source')) {
@@ -714,7 +714,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             paginationOptions={this.props.paginationOptions}
             filtersFormValues={filtersFormValues}
             five9List={this.props.five9List}
-            initialValues={{ 'source-search': defaultSource.id }}
+            initialValues={{ 'source-search': defaultSource.id, 'campaign-search': 1 }}
           />
         </StickyContainer>
       </div>
