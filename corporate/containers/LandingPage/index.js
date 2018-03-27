@@ -91,9 +91,6 @@ export class LandingPage extends React.Component {
     }
 
     if (subscribedFromLanding) {
-      if (subscribedFromLanding.email.trim().toLowerCase() !== 'testing@studykik.com') {
-        // sendThankYouEmail(subscribedFromLanding);
-      }
       browserHistory.push('/thankyou');
     }
   }
