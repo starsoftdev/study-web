@@ -14,7 +14,7 @@ import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
 
-const formName = 'landing';
+const formName = 'LandingPage';
 
 const mapStateToProps = createStructuredSelector({});
 
@@ -36,11 +36,13 @@ const mapDispatchToProps = (dispatch) => ({
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    landing: React.PropTypes.object,
-    subscriptionError: React.PropTypes.object,
     blur: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
     handleSubmit: React.PropTypes.func.isRequired,
+    landing: React.PropTypes.object,
+    onSubmit: React.PropTypes.func.isRequired,
+    subscriptionError: React.PropTypes.object,
+    submitting: React.PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -93,7 +95,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { landing, handleSubmit, subscriptionError } = this.props;
+    const { landing, handleSubmit, subscriptionError, submitting } = this.props;
 
     const city = (landing.city) ? landing.city : '';
     const state = (landing.state) ? landing.state : '';
@@ -146,7 +148,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
     return (
       <form
-        action="#"
         className="form-study text-center landing-form fs-hide"
         noValidate="novalidate"
         onSubmit={handleSubmit}
@@ -190,8 +191,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           />
           {phoneInput}
           <div className="field-row fixed-height">
-            <input className="btn btn-default hidden input-lg" value="Reset" type="reset" />
-            <input className="btn btn-default btn-block input-lg" value={signupButtonText} type="submit" />
+            <input className="btn btn-default btn-block input-lg" disabled={submitting} value={signupButtonText} type="submit" />
           </div>
           {!landing.hideClickToCall &&
             <div className="field-row">
