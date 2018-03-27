@@ -215,7 +215,7 @@ export class RequestProposalCart extends Component {
 
     if (formValues.callTracking) {
       products.push({
-        title: 'Call Tracking',
+        title: 'Media Tracking',
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
