@@ -1,5 +1,6 @@
 export default values => {
   const leadSourceErrors = [];
+  const isUrlValid = (str) => { return /^\w+$/.test(str); };
 
   if (values.leadSource) {
     values.leadSource.forEach((lead, index) => {
@@ -23,6 +24,7 @@ export default values => {
           isGoogleUrlUnique = false;
         }
       });
+      let urlErrors = null;
       let messagingNumberErrors = null;
       let googleUrlErrors = null;
       if (!isUnique) {
@@ -32,8 +34,12 @@ export default values => {
         googleUrlErrors = { googleUrl : ['Google Url should be unique'] };
       }
 
-      if (!lead.source || !lead.source_name || messagingNumberErrors || googleUrlErrors) {
-        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors };
+      if (lead.url && !isUrlValid(lead.url)) {
+        urlErrors = { url : ['Url only allow letters and numbers'] };
+      }
+
+      if (!lead.source || !lead.source_name || messagingNumberErrors || googleUrlErrors || urlErrors) {
+        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors, ...urlErrors };
       }
     });
   }
