@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -549,20 +548,18 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
-      if (i === 1) {
-        campaignOptions.push({ label: '1', value: 1 });
-      } else {
-        campaignOptions.push({ label: i, value: i });
-      }
+      campaignOptions.push({ label: i, value: i });
     }
-    campaignOptions.push({ label: 'Current', value: 'current' });
+    if (totals.details && totals.details.current_campaign_count && totals.details.current_campaign_count > 0) {
+      campaignOptions.push({ label: 'Current', value: 'current' });
+    }
 
     campaignOptions = campaignOptions.reverse();
 
     const selectedStudies = studies.details.filter(s => s.selected);
 
     const sourcesOptions = [];
-    _.forEach((this.props.sources), (item) => {
+    this.props.sources.forEach(item => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
     sourcesOptions.unshift({ label: 'All', value: -1 });
@@ -617,8 +614,8 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                     </div>
                     <div className="select pull-left">
                       <Field
-                        name="data-search"
-                        className="data-search"
+                        name="campaign-search"
+                        className="campaign-search"
                         component={ReactSelect}
                         placeholder="Select Campaign"
                         searchPlaceholder="Search"
