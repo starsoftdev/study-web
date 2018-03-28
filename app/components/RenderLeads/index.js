@@ -37,6 +37,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     messagingNumbers: PropTypes.object,
     meta: PropTypes.object,
     sources: PropTypes.array,
+    landingPageUrl: PropTypes.string,
+    studyId: PropTypes.number,
   };
 
   componentWillMount() {
@@ -219,7 +221,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             <div className="field">
               <div
                 className="add-new-source"
-                onClick={() => fields.push({ isNew: true })}
+                onClick={() => fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId })}
               >
                 <i className="icomoon-icon_close" /> Add Lead Source
               </div>
