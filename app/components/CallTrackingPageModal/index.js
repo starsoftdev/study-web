@@ -109,7 +109,9 @@ export class CallTrackingPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, messagingNumbers } = this.props;
+    const { openModal, messagingNumbers, study } = this.props;
+    const landingPageUrl = study ? study.landingPageUrl : '';
+    const studyId = study ? study.study_id : null;
 
     return (
       <Collapse
@@ -150,6 +152,8 @@ export class CallTrackingPageModal extends React.Component {
                     formValues={this.props.formValues}
                     isAdmin messagingNumbers={messagingNumbers}
                     initialLeadSources={this.props.studyLeadSources.details}
+                    landingPageUrl={landingPageUrl}
+                    studyId={studyId}
                   />
                 </div>
                 <div className="field-row text-right">
