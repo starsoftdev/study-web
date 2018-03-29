@@ -39,6 +39,14 @@ const schema = {
       message: 'Invalid phone number',
     },
   },
+  mlpPhone: {
+    presence: false,
+    format: {
+      // must be a phone in a valid format
+      pattern: /^(?:(\+?\d{1,3}) ?)?(?:([\(]?\d+[\)]?)[ -])?(\d{1,5}[\- ]?\d{1,5})$/,
+      message: 'Invalid phone number',
+    },
+  },
   ifInterestedInstructions: {
     presence: false,
   },
