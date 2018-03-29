@@ -138,6 +138,7 @@ export class LandingPageModal extends React.Component {
           change('emailPlaceholder', landing.emailPlaceholder);
           change('phonePlaceholder', landing.phonePlaceholder);
           change('distance', landing.distance);
+          change('mlpPhone', normalizePhoneDisplay(landing.mlpPhone));
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
           change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
@@ -215,6 +216,7 @@ export class LandingPageModal extends React.Component {
 
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
+    formValues.mlpPhone = normalizePhoneForServer(formValues.mlpPhone);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
@@ -417,12 +419,24 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="new-patient-phone">Distance</label>
+                    <label htmlFor="new-patient-phone">MLP Distance</label>
                   </strong>
                   <div className="field">
                     <Field
                       type="text"
                       name="distance"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">MLP Phone</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="mlpPhone"
                       component={Input}
                     />
                   </div>
