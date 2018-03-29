@@ -4,6 +4,30 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
 
   static propTypes = {};
 
+  componentDidMount() {
+    // insert verasafe script
+    const vsScript = document.createElement('script');
+    vsScript.src = 'https://www.verasafe.com/trustseal/seal.js';
+    document.body.appendChild(vsScript);
+  }
+
+  handleVerasafeClick = () => {
+    const nonwin = (navigator.appName !== 'Microsoft Internet Explorer') ? 'yes' : 'no';
+    const vsLink = document.getElementById('verasafe');
+
+    window.open(vsLink.href.replace('windowlocationhost', window.location.hostname), 'VeraSafeTrustVerification', `location=${nonwin},scrollbars=yes,width=700,height=${screen.availHeight},menubar=no,toolbar=no`);
+
+    return false;
+  }
+
+  handleVerasafeRightClick = () => {
+    const d = new Date();
+
+    alert(`Copying Prohibited by Law - This image and all included logos are copyrighted by VeraSafe © ${d.getFullYear()}.`);
+
+    return false;
+  }
+
   render() {
     return (
       <main id="main">
@@ -184,6 +208,9 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
               with the VeraSafe Privacy Program Certification Criteria. The certification criteria require that participants maintain a high standard for data privacy
               and implement specific best practices pertaining to notice, onward transfer, choice, access, data security, data quality, recourse, and enforcement.
             </p>
+            <a id="verasafe" name="verasafelink" href="https://www.verasafe.com/index.php?option=com_content&view=article&id=19&uid=E078D133D989F27&host=windowlocationhost" target="_blank" onClick={this.handleVerasafeClick} onContextMenu={this.handleVerasafeRightClick}>
+              <img name="trustseal" alt="Privacy Seal" style={{ border:0 }} src="https://d5fmvefcyrh0p.cloudfront.net/classic-trust-seal/privacy-seal-classic-140px-blue.png" />
+            </a>
             <hr className="divider" />
             <h3>Dispute Resolution</h3>
             <p>
@@ -224,4 +251,5 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
       </main>
     );
   }
+
 }
