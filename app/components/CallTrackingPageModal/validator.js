@@ -1,5 +1,6 @@
 export default values => {
   const leadSourceErrors = [];
+  const isUrlValid = (str) => { return /^\w+$/.test(str); };
 
   if (values.leadSource) {
     values.leadSource.forEach((lead, index) => {
@@ -27,6 +28,7 @@ export default values => {
           isNameUnique = false;
         }
       });
+      let urlErrors = null;
       let messagingNumberErrors = null;
       let googleUrlErrors = null;
       let sourceNameErrors = null;
@@ -39,9 +41,12 @@ export default values => {
       if (!isNameUnique) {
         sourceNameErrors = { source_name : ['Source name should be unique'] };
       }
+      if (lead.url && !isUrlValid(lead.url)) {
+        urlErrors = { url : ['Url only allow letters and numbers'] };
+      }
 
-      if (!lead.source || !lead.source_name || messagingNumberErrors || googleUrlErrors || sourceNameErrors) {
-        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors, ...sourceNameErrors };
+      if (!lead.source || !lead.source_name || messagingNumberErrors || googleUrlErrors || urlErrors || sourceNameErrors) {
+        leadSourceErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors, ...urlErrors, ...sourceNameErrors };
       }
     });
   }
