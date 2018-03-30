@@ -127,6 +127,7 @@ function studyPageReducer(state = initialState, action) {
               source: { value: item.source_id, label: item.type },
               source_name: item.source_name,
               studySourceId: item.studySourceId,
+              isLeadSource: item.isLeadSource,
             };
           }),
           fetching: false,
