@@ -204,7 +204,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       value: -1,
     }].concat(creditCardOptions);
 
-    if (this.props.currentUser && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient.client && this.props.currentUser.roleForClient.client.isPayByCheckEnabled === true) {
+    if (this.props.currentUser && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient.client && this.props.currentUser.roleForClient.client.isPayByCheckEnabled === true) {
       creditCardOptions.push({
         label: 'Pay By Check',
         value: 'payByCheck',
