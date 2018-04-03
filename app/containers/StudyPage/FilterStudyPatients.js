@@ -172,6 +172,7 @@ class FilterStudyPatientsForm extends Component {
               options={sourceOptions}
               disabled={submitting || loading}
               placeholder="Select Source"
+              clearable={false}
               onChange={(event) => this.searchPatient(event, 'source')}
             />
           </div>
