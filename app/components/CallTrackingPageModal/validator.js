@@ -21,10 +21,10 @@ export default values => {
         if (indexInner !== index && leadInner.messagingNumber && lead.messagingNumber && leadInner.messagingNumber.value && lead.messagingNumber.value && leadInner.messagingNumber.value === lead.messagingNumber.value) {
           isUnique = false;
         }
-        if (indexInner !== index && leadInner.url && lead.url && leadInner.url === lead.url) {
+        if (indexInner !== index && leadInner.url && lead.url && leadInner.url.toLowerCase() === lead.url.toLowerCase()) {
           isGoogleUrlUnique = false;
         }
-        if (indexInner !== index && leadInner.source_name && lead.source_name && leadInner.source_name === lead.source_name) {
+        if (indexInner !== index && leadInner.source_name && lead.source_name && leadInner.source_name.toLowerCase() === lead.source_name.toLowerCase()) {
           isNameUnique = false;
         }
       });

@@ -106,7 +106,7 @@ export default class EditInformationModal extends React.Component {
         // set the tagged indications for the study
         this.taggedIndicationsForStudy = nextProps.taggedIndicationsForStudy.details.map(item => ({
           label: item.name,
-          value: item.indication_id,
+          value: item.id,
         }));
       } else if (!openModal && nextProps.openModal) {
         const { fetchAllStudyEmailNotificationsDashboard, fetchCustomNotificationEmails, fetchMessagingNumbersDashboard, fetchTaggedIndicationsForStudy, study } = this.props;

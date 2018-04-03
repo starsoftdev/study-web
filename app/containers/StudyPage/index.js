@@ -243,7 +243,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
     let defaultSource = '';
-    const sourceOptions = this.props.studySources.details.map(studySource => {
+    const sourceOptions = this.props.studySources.details.filter(s => !s.isLeadSource).map(studySource => {
       if (studySource.source.type === 'StudyKIK') {
         defaultSource = studySource.source.value;
       }

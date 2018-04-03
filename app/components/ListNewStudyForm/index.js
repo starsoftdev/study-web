@@ -38,8 +38,6 @@ import {
   showSiteLocationModal,
 } from '../../containers/ListNewStudyPage/actions';
 
-import { parseTimezone } from '../../utils/time';
-
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
   leadsCount: selectLeadsCount(),
@@ -189,7 +187,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     const { currentUserClientId, saveSite } = this.props;
     saveSite(currentUserClientId, null, {
       ...siteData,
-      timezone: parseTimezone(siteData.timezone),
+      timezone: siteData.timezoneUnparsed,
     });
     saveSite(currentUserClientId, null, siteData);
   }
