@@ -7,8 +7,10 @@ import Input from '../../../components/Input';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
+import formValidator from './validator';
 
-@reduxForm({ form: 'dashboardEditClientAdminsForm' })
+
+@reduxForm({ form: 'dashboardEditClientAdminsForm', validate: formValidator })
 
 export class EditClientAdminsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
