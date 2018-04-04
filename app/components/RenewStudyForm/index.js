@@ -289,7 +289,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
     if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
-        title: 'Call Tracking',
+        title: 'Media Tracking',
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -405,9 +405,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                       </div>
                     </div>
                     {
-                      <div className="field-row">
+                      <div className="field-row global-invisible-item">
                         <strong className="label">
-                          <label>CALL TRACKING: $247</label>
+                          <label>MEDIA TRACKING: $247</label>
                         </strong>
                         <div className="field">
                           <Field

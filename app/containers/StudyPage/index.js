@@ -79,7 +79,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id, [{ group:'StudyKIK', id:'1_', label:'none' }]);
+    fetchStudy(params.id, 1);     // fetch STUDYKIK source by default = 1
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
 
@@ -242,18 +242,16 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     campaignOptions.unshift({ label: 'All', value: -1 });
-    const sortedSources = _.sortBy(sources, ['orderNumber']);
     let defaultSource = '';
-    const sourceOptions = sortedSources.map(source => {
-      if (source.type === 'StudyKIK') {
-        defaultSource = source.id;
+    const sourceOptions = this.props.studySources.details.filter(s => !s.isLeadSource).map(studySource => {
+      if (studySource.source.type === 'StudyKIK') {
+        defaultSource = studySource.source.value;
       }
       return {
-        label: source.type,
-        value: source.id,
+        label: studySource.source.label,
+        value: studySource.source.value,
       };
     });
-    sourceOptions.unshift({ label: 'All', value: -1 });
     const siteLocation = site.name;
     let sponsor = 'None';
     if (study.sponsor) {
@@ -270,7 +268,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     const totalCountByGroups = {};
     const sourceMapped = this.props.studySources.details.map((studySource) => {
       const isStudySourceNameSet = !!studySource.source_name;
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
+      const sourceName = studySource.source_name ? `- ${studySource.source_name}` : studySource.source.label;
       const group = studySource.source.label;
       if (totalCountByGroups[group]) {
         totalCountByGroups[group]++;
@@ -286,7 +284,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     totalCountByGroups.all = sourceMapped.length;
-    sourceMapped.unshift({ label: 'All', id: '-1', group: 'All' });
 
     return (
       <div className="container-fluid no-padding">

@@ -22,8 +22,8 @@ import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -45,8 +45,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     categoryNotes: PropTypes.object,
     notesPaginationOptions: PropTypes.object,
     patientSignUps: PropTypes.object,
-    fetchPatientSignUps: PropTypes.func,
     fetchSources: PropTypes.func,
+    clearReportList: PropTypes.func,
   };
 
   constructor(props) {
@@ -86,10 +86,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.fetchSources();
   }
 
-  componentDidMount() {
-    const { currentUser } = this.props;
-    const protocolNumber = this.props.location.query.protocol || null;
-    this.props.fetchPatientSignUps(currentUser, protocolNumber, 1);
+  componentWillUnmount() {
+    this.props.clearReportList();
   }
 
   getPercentageObject(item) {
@@ -125,7 +123,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsTotals(filters);
     this.props.getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
-    this.props.fetchPatientSignUps(currentUser, protocolNumber, (filters.source ? filters.source : null));
   }
 
   loadReports(isSort, sort, direction) {
@@ -280,7 +277,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 }
 
 const mapStateToProps = createStructuredSelector({
-  patientSignUps: selectPatientSignUps(),
   currentUser: selectCurrentUser(),
   reportsList: selectReportsList(),
   formValues: selectSearchReportsFormValues(),
@@ -298,9 +294,9 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
-    fetchPatientSignUps: (params, protocolNumber, sourceId) => dispatch(fetchPatientSignUps(params, protocolNumber, sourceId)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
     fetchSources: () => dispatch(fetchSources()),
+    clearReportList: () => dispatch(clearReportList()),
   };
 }
 
