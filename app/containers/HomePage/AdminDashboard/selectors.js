@@ -94,9 +94,9 @@ const selectFacebookLandingPageUpdateProcess = () => createSelector(
   substate => substate.updateFacebookLandingPageProcess
 );
 
-const selectChangeStudyAddProcess = () => createSelector(
+const selectChangeStudyAdProcess = () => createSelector(
   selectDashboardPageDomain(),
-  substate => substate.changeStudyAddProcess
+  substate => substate.changeStudyAdProcess
 );
 
 const selectUpdatedStudyAd = () => createSelector(
@@ -191,7 +191,7 @@ export {
   selectThankYouPageUpdateProcess,
   selectUpdatePatientThankYouEmailProcess,
   selectLandingPageUpdateProcess,
-  selectChangeStudyAddProcess,
+  selectChangeStudyAdProcess,
   selectMessagingNumbers,
   selectUpdatedStudyAd,
   selectRemovedStudyAdId,

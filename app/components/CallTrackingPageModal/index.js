@@ -109,7 +109,9 @@ export class CallTrackingPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, messagingNumbers } = this.props;
+    const { openModal, messagingNumbers, study } = this.props;
+    const landingPageUrl = study ? study.landingPageUrl : '';
+    const studyId = study ? study.study_id : null;
 
     return (
       <Collapse
@@ -122,7 +124,7 @@ export class CallTrackingPageModal extends React.Component {
           <div className="slider-area">
             <div className="head">
               <div className="inner-head">
-                <strong className="title">Call Tracking</strong>
+                <strong className="title">Media Tracking</strong>
                 <a className="btn-right-arrow" onClick={this.onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
@@ -134,7 +136,7 @@ export class CallTrackingPageModal extends React.Component {
               <div className="frame">
                 <div className="field-row">
                   <strong className="label">
-                    <label>CALL TRACKING</label>
+                    <label>MEDIA TRACKING</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -150,6 +152,8 @@ export class CallTrackingPageModal extends React.Component {
                     formValues={this.props.formValues}
                     isAdmin messagingNumbers={messagingNumbers}
                     initialLeadSources={this.props.studyLeadSources.details}
+                    landingPageUrl={landingPageUrl}
+                    studyId={studyId}
                   />
                 </div>
                 <div className="field-row text-right">

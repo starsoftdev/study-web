@@ -3,21 +3,18 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Debounce } from 'react-throttle';
 import Button from 'react-bootstrap/lib/Button';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
-import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
 import StudyActionButtons from './StudyActionButtons';
 
 import { fetchPatients, setSelectedStudySources } from './actions';
 
 @reduxForm({ form: 'filterStudyPatients' })
 class FilterStudyPatientsForm extends Component {
-
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -34,7 +31,9 @@ class FilterStudyPatientsForm extends Component {
     studyName: PropTypes.string,
     setSelectedStudySources: PropTypes.func,
     sourceMapped: PropTypes.array,
+    sourceOptions: PropTypes.array,
     totalCountByGroups: PropTypes.object,
+    initialValues: PropTypes.object,
   };
   static defaultProps = {
     submitting: false,
@@ -43,13 +42,9 @@ class FilterStudyPatientsForm extends Component {
   constructor(props) {
     super(props);
     this.searchPatient = this.searchPatient.bind(this);
-    this.groupHeaderClicked = this.groupHeaderClicked.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.groupClearClicked = this.groupClearClicked.bind(this);
     this.state = {
       campaign: null,
-      selectedGroups: ['StudyKIK'],
-      selectedStudySources: [{ group:'StudyKIK', id:'1_', label:'none' }],
     };
   }
 
@@ -76,7 +71,6 @@ class FilterStudyPatientsForm extends Component {
     let newCampaign = campaign;
 
     let newSource = source;
-
     /* nulling the values if all is selected */
     if (campaign === -1) {
       newCampaign = null;
@@ -87,56 +81,10 @@ class FilterStudyPatientsForm extends Component {
     if (type === 'search') {
       fetchPatients(studyId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
-      if (!event) { // clearAll
-        this.setState({ selectedGroups: [] });
-        this.setState({ selectedStudySources: [] });
-      } else {
-        this.setState({ selectedStudySources: event });
-      }
-      /* -1 means all was selected */
       if (event === -1 || !event) {
         fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
       } else {
-        const groupsCopy = _.clone(this.state.selectedGroups);
-        const indexesToRemove = [];
-
-        /* Check whether we need to add some headers selections */
-        const totalSelectedCountByGroups = {};
-        for (const item of event) {
-          if (totalSelectedCountByGroups[item.group]) {
-            totalSelectedCountByGroups[item.group]++;
-          } else {
-            totalSelectedCountByGroups[item.group] = 1;
-          }
-        }
-        totalSelectedCountByGroups.all = event.length;
-
-        _.forEach((totalSelectedCountByGroups), (value, key) => {
-          if (this.props.totalCountByGroups[key] === value && groupsCopy.indexOf(key) === -1) {
-            groupsCopy.push(key);
-          }
-          if (this.props.totalCountByGroups[key] > value && groupsCopy.indexOf(key) !== -1) {
-            // indexesToRemove.push(this.state.selectedGroups.indexOf(key));
-          }
-        });
-
-        /* Check whether we need to clean some headers selections */
-        for (const group of this.state.selectedGroups) {
-          const result = _.find(event, (item) => (item.group === group));
-          if (!result) {
-            indexesToRemove.push(this.state.selectedGroups.indexOf(group));
-          }
-        }
-
-        for (let i = indexesToRemove.length - 1; i >= 0; i--) { groupsCopy.splice(indexesToRemove[i], 1); }
-
-        if (totalSelectedCountByGroups.all === this.props.totalCountByGroups.all && this.state.selectedGroups.indexOf('All') === -1) {
-          groupsCopy.push('All');
-        }
-
-        this.setState({ selectedGroups: groupsCopy });
-
         fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
         fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
       }
@@ -155,83 +103,6 @@ class FilterStudyPatientsForm extends Component {
     }
   }
 
-  groupHeaderClicked(group) {
-    const { fetchPatients, fetchStudyStats, studyId, campaign, search } = this.props;
-    let newCampaign = campaign;
-    if (campaign === -1) {
-      newCampaign = null;
-    }
-    if (this.state.selectedGroups.indexOf(group) === -1) {
-      let selectedGroups = [];
-      if (group !== 'All') {
-        selectedGroups = [...this.state.selectedGroups, group];
-      }
-
-      const selectedValues = [];
-      _.forEach(this.props.sourceMapped, (item) => {
-        if (group === 'All') {
-          selectedValues.push(item);
-          selectedGroups.push(item.group);
-        } else if (group === item.group) {
-          selectedValues.push(item);
-        }
-      });
-
-      if ([...this.state.selectedStudySources, ...selectedValues].length === this.props.totalCountByGroups.all && selectedGroups.indexOf('All') === -1) {
-        selectedGroups.push('All');
-      }
-
-      this.setState({ selectedGroups });
-      if (group === 'All') {
-        selectedValues.shift(); // remove "All" item
-        this.setState({ selectedStudySources: selectedValues });
-        fetchPatients(studyId, search, newCampaign, selectedValues);
-        fetchStudyStats(studyId, newCampaign, selectedValues);
-      } else {
-        this.setState({ selectedStudySources: [...this.state.selectedStudySources, ...selectedValues] });
-        fetchPatients(studyId, search, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
-        fetchStudyStats(studyId, newCampaign, [...this.state.selectedStudySources, ...selectedValues]);
-      }
-    }
-    this.sourceSelectContainer.click(); // fake click to close the dropdown
-  }
-
-  groupClearClicked(group) {
-    const { fetchPatients, fetchStudyStats, studyId, campaign, search } = this.props;
-    let newCampaign = campaign;
-    if (campaign === -1) {
-      newCampaign = null;
-    }
-    if (group === 'All') {
-      this.setState({ selectedStudySources: [], selectedGroups: [] });
-      fetchPatients(studyId, search, newCampaign, []);
-      fetchStudyStats(studyId, newCampaign, []);
-    } else {
-      const selectedGroups = _.clone(this.state.selectedGroups);
-      const selectedValues = _.clone(this.state.selectedStudySources);
-
-      selectedGroups.splice(this.state.selectedGroups.indexOf(group), 1);
-
-      const indexToRemove = [];
-      _.forEach(selectedValues, (item, index) => {
-        if (group === item.group) {
-          indexToRemove.push(index);
-        }
-      });
-
-      for (let i = indexToRemove.length - 1; i >= 0; i--) { selectedValues.splice(indexToRemove[i], 1); }
-
-      if (selectedGroups.indexOf('All') !== -1) {
-        selectedGroups.splice(selectedGroups.indexOf('All'), 1);
-      }
-
-      this.setState({ selectedStudySources: selectedValues, selectedGroups });
-      fetchPatients(studyId, search, newCampaign, selectedValues);
-      fetchStudyStats(studyId, newCampaign, selectedValues);
-    }
-    this.sourceSelectContainer.click(); // fake click to close the dropdown
-  }
-
   render() {
     const {
       campaignOptions,
@@ -240,36 +111,10 @@ class FilterStudyPatientsForm extends Component {
       studyId,
       search,
       campaign,
-      source,
       ePMS,
       studyName,
+      sourceOptions,
     } = this.props;
-    const itemTemplate = (controlSelectedValue) => {
-      return (<div key={controlSelectedValue.value} className={`${controlSelectedValue.isStudySourceNameSet ? 'studySourceSelectOption' : 'hiddenSelectOption studySourceSelectOption'}`}>
-        {controlSelectedValue.label}
-        <i className="close-icon icomoon-icon_close" />
-      </div>);
-    };
-
-    const selectedItemsTemplate = (controlSelectedValue) => {
-      if (controlSelectedValue.length === 1) {
-        return (<div className="truncate">
-          {controlSelectedValue[0].studySourceId ? controlSelectedValue[0].label : controlSelectedValue[0].group}
-        </div>);
-      }
-      return (<div>
-        {controlSelectedValue.length} item(s) selected
-      </div>);
-    };
-
-    const groupHeaderTemplate = (group) => {
-      const isGroupSelected = this.state.selectedGroups.indexOf(group);
-      return <div className={`${(isGroupSelected === -1) ? 'inner-heading' : 'selected inner-heading'}`} onClick={() => { this.groupHeaderClicked(group); }}>{group}<i onClick={(e) => { e.preventDefault(); e.stopPropagation(); this.groupClearClicked(group); }} className="close-icon icomoon-icon_close" /></div>;
-    };
-
-    const selectedValues = this.state.selectedStudySources;
-
-    const sourceMapped = this.props.sourceMapped;
 
     /* changing the source for display purposes only */
     return (
@@ -278,10 +123,8 @@ class FilterStudyPatientsForm extends Component {
           studyId={studyId}
           search={search}
           campaign={campaign}
-          source={source}
           ePMS={ePMS}
           studyName={studyName}
-          sourceMapped={this.props.sourceMapped}
         />
         <div className="fields-holder">
           <div className="search-area pull-left no-left-padding">
@@ -313,7 +156,7 @@ class FilterStudyPatientsForm extends Component {
               options={campaignOptions}
               disabled={submitting || loading}
               placeholder="Select Campaign"
-              onChange={(event, val) => this.searchPatient(val, 'campaign')}
+              onChange={(event) => this.searchPatient(event, 'campaign')}
             />
           </div>
           <div
@@ -324,22 +167,13 @@ class FilterStudyPatientsForm extends Component {
           >
             <Field
               name="source"
-              component={ReactMultiSelect}
+              component={ReactSelect}
+              className="field"
+              options={sourceOptions}
+              disabled={submitting || loading}
               placeholder="Select Source"
-              searchPlaceholder="Search"
-              searchable
-              optionLabelKey="label"
-              includeAllOption={false}
-              multiple
-              onChange={(val) => this.searchPatient(val, 'source')}
-              customOptionTemplateFunction={itemTemplate}
-              customSelectedValueTemplateFunction={selectedItemsTemplate}
-              customGroupHeadingTemplateFunction={groupHeaderTemplate}
-              dataSource={sourceMapped}
-              customSearchIconClass="icomoon-icon_search2"
-              groupBy="group"
-              initialValue={selectedValues}
-              className="studySourceMultiSelect"
+              clearable={false}
+              onChange={(event) => this.searchPatient(event, 'source')}
             />
           </div>
         </div>

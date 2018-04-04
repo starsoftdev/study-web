@@ -182,7 +182,7 @@ export class ReportViewSearch extends React.Component {
     const statusOptions = [
       {
         label: 'All',
-        value: 'all',
+        value: 'All',
       },
       {
         label: 'Active',
@@ -240,6 +240,7 @@ export class ReportViewSearch extends React.Component {
           </div>
           <div className="pull-left custom-select">
             <Field
+              className="report-page-source-select"
               name="source"
               component={ReactSelect}
               placeholder="Select Source"

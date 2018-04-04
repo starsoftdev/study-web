@@ -8,7 +8,7 @@ import LogRocket from 'logrocket';
 
 import { getItem, removeItem } from '../app/utils/localStorage';
 
-import configureStore from '../app/store';
+import configureStore from './store';
 
 import { default as Corporate } from './containers/Corporate';
 import { default as Home } from './containers/HomePage';
