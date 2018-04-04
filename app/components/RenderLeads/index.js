@@ -60,7 +60,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
       sourceOptions = _.sortBy(sources, (item) => {
         return item.orderNumber;
       }).filter(source => {
-        return source.type !== 'Database' && source.type !== 'StudyKIK';
+        return source.type !== 'Database' && (this.props.isAdmin || source.type !== 'StudyKIK');
       }).map(source => ({
         label: source.type,
         value: source.id,
