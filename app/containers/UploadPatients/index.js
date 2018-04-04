@@ -7,14 +7,8 @@ import { touch, reset } from 'redux-form';
 import _ from 'lodash';
 
 import CenteredModal from '../../components/CenteredModal/index';
-import { fetchIndications, fetchSources, fetchClientSites } from '../../containers/App/actions';
-import {
-  selectCurrentUser,
-  selectSiteLocations,
-  selectSources,
-  selectIndications,
-  selectClientSites,
-} from '../App/selectors';
+import { fetchIndications, fetchClientSites } from '../../containers/App/actions';
+import { selectCurrentUser, selectSiteLocations, selectIndications, selectClientSites } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectAddProtocolProcessStatus } from './selectors';
 import { selectSocket } from '../../containers/GlobalNotifications/selectors';
@@ -41,7 +35,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     fetchHistory: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchClientSites: PropTypes.func,
-    fetchSources: PropTypes.func,
     fetchPatients: PropTypes.func,
     addProtocol: PropTypes.func,
     fullSiteLocations: PropTypes.object,
@@ -49,7 +42,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     currentUser: PropTypes.object.isRequired,
     sites: PropTypes.array,
     indications: PropTypes.array,
-    sources: PropTypes.array,
     formSyncErrors: PropTypes.object,
     touchFields: PropTypes.func,
     touchAddProtocolFields: PropTypes.func,
@@ -95,9 +87,8 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
   }
 
   componentWillMount() {
-    const { fetchIndications, fetchSources, fetchClientSites, currentUser, fetchHistory } = this.props;
+    const { fetchIndications, fetchClientSites, currentUser, fetchHistory } = this.props;
     fetchIndications();
-    fetchSources();
     fetchClientSites(currentUser.roleForClient.client_id);
     fetchHistory(currentUser.roleForClient.client_id);
   }
@@ -278,7 +269,6 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
       this.setState({ lastAddedProtocolNumber: data.protocolNumber });
       addProtocol(params);
     } else {
-      console.log('addProtocol', err, data);
       touchAddProtocolFields();
     }
   }
@@ -296,19 +286,12 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
     const { indications, fullSiteLocations, addProtocolProcess } = this.props;
     const { isImporting, uploadResult, uploadProgress, revertProgress } = this.state;
 
-    const defaultSource = _.find(this.props.sources, (item) => (item.type === 'Database'));
-    const initialValues = {};
-    if (defaultSource) {
-      initialValues.source = defaultSource.id;
-    }
-
     return (
       <div className="container-fluid">
         <section className="patient-upload">
           <Helmet title="Patient Database - StudyKIK" />
           <h2 className="main-heading">Upload Patients</h2>
-
-          {(this.props.sources.length > 0) && <UploadPatientsForm
+          <UploadPatientsForm
             onSubmit={this.onSubmitForm}
             revertProgress={revertProgress}
             uploadProgress={uploadProgress}
@@ -321,9 +304,7 @@ export class UploadPatientsPage extends Component { // eslint-disable-line react
             showProtocolModal={this.switchShowAddProtocolModal}
             lastAddedSiteLocation={this.state.lastAddedSiteLocation}
             lastAddedProtocolNumber={this.state.lastAddedProtocolNumber}
-            initialValues={initialValues}
-            sources={this.props.sources}
-          />}
+          />
         </section>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.switchShowAddProtocolModal}>
           <Modal.Header>
@@ -350,7 +331,6 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   sites: selectSiteLocations(),
   indications: selectIndications(),
-  sources: selectSources(),
   formSyncErrors: selectSyncErrors(formName),
   fullSiteLocations : selectClientSites(),
   addProtocolProcess: selectAddProtocolProcessStatus(),
@@ -365,7 +345,6 @@ function mapDispatchToProps(dispatch) {
     fetchIndications: () => dispatch(fetchIndications()),
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     fetchHistory: (userId) => dispatch(fetchHistory(userId)),
-    fetchSources: () => dispatch(fetchSources()),
     notifyEmptyRowRequiredError: (hasEmpty) => dispatch(emptyRowRequiredError(hasEmpty)),
     notifyValidationError: (hasError) => dispatch(validationError(hasError)),
     fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),

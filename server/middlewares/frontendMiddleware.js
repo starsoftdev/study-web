@@ -5,6 +5,7 @@ const request = require('request');
 const compression = require('compression');
 const pug = require('pug');
 const Promise = require('bluebird');
+const lookup = require('country-code-lookup');
 const PagesService = require('../services/pages.service');
 const getLandingPageLocals = require('../views/landing-page.locals');
 
@@ -69,8 +70,16 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       const templateStr = file.toString();
       const viewPath = path.join(__dirname, '../views/landing-page.pug');
       const locals = getLandingPageLocals(landing);
+      const ipcountry = req.headers['cf-ipcountry'] || null;
+      let country = null;
       const ssrContent = pug.compileFile(viewPath)(locals);
-
+      if (ipcountry) {
+        country = lookup.byIso(ipcountry) ? lookup.byIso(ipcountry).internet : null;
+      }
+      // to avoid issue with alpha-2 GB code of UK
+      if (ipcountry === 'UK') {
+        country = 'GB';
+      }
       const facebookDescription = `Interested in a ${locals.title.replace(/study/gi, 'Research Study')}? Click this Link and Sign Up for more information. Your local research site will call you with more information.`;
 
       // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
@@ -91,6 +100,10 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
         .replace(
           '<meta property="og:url" content="">',
           `<meta property="og:url" content="${req.url}">`
+        )
+        .replace(
+          '<meta property="ipcountry" content="">',
+          `<meta property="ipcountry" content="${(country) || 'US'}">`
         );
       res.send(result);
     } catch (e) {
@@ -139,6 +152,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
 
   app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
+
+  app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
@@ -204,6 +219,8 @@ const addProdMiddlewares = (app, options) => {
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
 
   app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
+
+  app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 

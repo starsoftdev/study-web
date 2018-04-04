@@ -22,6 +22,16 @@
   }
 }
 
+.global-invisible-item{
+  display: none !important;
+}
+
+.report-page-source-select{
+  .Select-clear-zone{
+    display: none !important;
+  }
+}
+
 .truncate{
   white-space: nowrap;
   overflow: hidden;
@@ -35,6 +45,19 @@
 
 .study-source-link:focus {
   color: #00afef !important;
+}
+
+.report-page-totals-container{
+  position: relative;
+  .report-page-total-loading-container{
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    top: 66px;
+    position: absolute;
+    z-index: 10;
+    padding-top: 27px;
+  }
 }
 
 .studySourceMultiSelect{

@@ -17,7 +17,7 @@ const customValidators = [
   {
     name: 'validFile',
     validator: (value, options) => {
-      const fileTypes = options && options.length > 0 ? options : ['images'];
+      const fileTypes = options.allowedFileTypes && options.allowedFileTypes.length > 0 ? options.allowedFileTypes : ['images'];
       let allowedMimeTypes = [];
       if (fileTypes.indexOf('images') !== -1) {
         allowedMimeTypes = allowedMimeTypes.concat(['image/png', 'image/jpeg', 'image/svg+xml', 'image/gif']);
@@ -31,10 +31,10 @@ const customValidators = [
       if (value && value.length > 0) {
         const file = value[0];
         if (!file.type) {
-          return 'unknown file format, try uploading an image or a pdf file.';
+          return options.message || 'unknown file format, try uploading an image or a pdf file.';
         }
         if (allowedMimeTypes.indexOf(file.type.toLowerCase()) === -1) {
-          return 'file format not allowed, try uploading an image or a pdf file.';
+          return options.message || 'file format not allowed, try uploading an image or a pdf file.';
         }
       }
       return null;

@@ -18,7 +18,7 @@ import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 import CenteredModal from '../../components/CenteredModal/index';
-import StudyAddForm from '../../components/StudyAddForm';
+import StudyAdForm from '../../components/StudyAdForm';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { fetchLanding } from '../../containers/App/actions';
@@ -26,14 +26,14 @@ import { selectLanding } from '../../containers/App/selectors';
 import {
   updateLandingPage,
   resetLandingPageState,
-  changeStudyAdd,
-  resetChangeStudyAddState,
+  changeStudyAd,
+  resetChangeStudyAdState,
   removeStudyAd,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
   selectLandingPageUpdateProcess,
   selectUpdatedStudyAd,
-  selectChangeStudyAddProcess,
+  selectChangeStudyAdProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
 import formValidator, { fields } from './validator';
 
@@ -45,8 +45,8 @@ function mapDispatchToProps(dispatch) {
     blur: (field, value) => dispatch(blur(formName, field, value)),
     submitForm: (values) => dispatch(updateLandingPage(values)),
     resetState: () => dispatch(resetLandingPageState()),
-    resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
-    submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+    resetChangeAdState: () => dispatch(resetChangeStudyAdState()),
+    submitStudyAd: (values) => dispatch(changeStudyAd(values)),
     removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
     fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
     resetForm: () => dispatch(reset(formName)),
@@ -69,14 +69,14 @@ export class LandingPageModal extends React.Component {
     blur: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
     resetState: React.PropTypes.func.isRequired,
-    resetChangeAddState: React.PropTypes.func.isRequired,
+    resetChangeAdState: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     studies: React.PropTypes.any,
     newList: React.PropTypes.any,
     landing: React.PropTypes.object,
     updateLandingPageProcess: React.PropTypes.any,
-    changeStudyAddProcess: React.PropTypes.any,
-    submitStudyAdd: React.PropTypes.func.isRequired,
+    changeStudyAdProcess: React.PropTypes.any,
+    submitStudyAd: React.PropTypes.func.isRequired,
     removeStudyAd: React.PropTypes.func.isRequired,
     touchFields: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
@@ -89,11 +89,11 @@ export class LandingPageModal extends React.Component {
     this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateCode = this.updateCode.bind(this);
-    this.openStudyAddModal = this.openStudyAddModal.bind(this);
-    this.closeStudyAddModal = this.closeStudyAddModal.bind(this);
+    this.openStudyAdModal = this.openStudyAdModal.bind(this);
+    this.closeStudyAdModal = this.closeStudyAdModal.bind(this);
     this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
-    this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
+    this.uploadStudyAd = this.uploadStudyAd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.removeStudyAd = this.removeStudyAd.bind(this);
 
@@ -102,7 +102,7 @@ export class LandingPageModal extends React.Component {
       selected: null,
       landing: null,
       landingFetched: false,
-      studyAddModalOpen: false,
+      studyAdModalOpen: false,
       studyPreviewModalOpen: false,
       initialValuesEntered: false,
       updatedStudyAd: null,
@@ -110,7 +110,7 @@ export class LandingPageModal extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding, updatedStudyAd, resetChangeAddState } = this.props;
+    const { resetState, onClose, fetchLanding, updatedStudyAd, resetChangeAdState } = this.props;
 
     if (newProps.studies) {
       for (const study of newProps.studies) {
@@ -136,7 +136,9 @@ export class LandingPageModal extends React.Component {
           change('instructions', landing.instructions);
           change('fullNamePlaceholder', landing.fullNamePlaceholder);
           change('emailPlaceholder', landing.emailPlaceholder);
-          change('phonePlaceholder', normalizePhoneDisplay(landing.phonePlaceholder));
+          change('phonePlaceholder', landing.phonePlaceholder);
+          change('distance', landing.distance);
+          change('mlpPhone', normalizePhoneDisplay(landing.mlpPhone));
           change('signupButtonText', landing.signupButtonText);
           change('clickToCallButtonText', landing.clickToCallButtonText);
           change('clickToCallButtonNumber', normalizePhoneDisplay(landing.clickToCallButtonNumber));
@@ -171,17 +173,17 @@ export class LandingPageModal extends React.Component {
       this.onHide();
     }
 
-    if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
-      this.closeStudyAddModal();
-      resetChangeAddState();
+    if (newProps.changeStudyAdProcess.error && this.state.studyAdModalOpen) {
+      this.closeStudyAdModal();
+      resetChangeAdState();
     }
 
-    if (!newProps.changeStudyAddProcess.saving && newProps.changeStudyAddProcess.success) {
+    if (!newProps.changeStudyAdProcess.saving && newProps.changeStudyAdProcess.success) {
       if (newProps.updatedStudyAd && newProps.updatedStudyAd !== updatedStudyAd) {
         this.setState({ updatedStudyAd: newProps.updatedStudyAd });
       }
 
-      this.closeStudyAddModal();
+      this.closeStudyAdModal();
     }
   }
 
@@ -197,7 +199,7 @@ export class LandingPageModal extends React.Component {
       landingFetched: false,
       initialValuesEntered: false,
     }, () => {
-      this.closeStudyAddModal();
+      this.closeStudyAdModal();
       resetForm();
       onClose();
     });
@@ -214,7 +216,7 @@ export class LandingPageModal extends React.Component {
 
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
-    formValues.phonePlaceholder = normalizePhoneForServer(formValues.phonePlaceholder);
+    formValues.mlpPhone = normalizePhoneForServer(formValues.mlpPhone);
     const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
@@ -229,12 +231,12 @@ export class LandingPageModal extends React.Component {
     this.setState({ code: newCode });
   }
 
-  closeStudyAddModal() {
-    this.setState({ studyAddModalOpen: false });
+  closeStudyAdModal() {
+    this.setState({ studyAdModalOpen: false });
   }
 
-  openStudyAddModal() {
-    this.setState({ studyAddModalOpen: true });
+  openStudyAdModal() {
+    this.setState({ studyAdModalOpen: true });
   }
 
   closeStudyPreviewModal() {
@@ -245,24 +247,24 @@ export class LandingPageModal extends React.Component {
     this.setState({ studyPreviewModalOpen: true });
   }
 
-  uploadStudyAdd(e) {
+  uploadStudyAd(e) {
     if (e.type !== 'application/pdf') {
       e.toBlob((blob) => {
-        this.props.submitStudyAdd({ file: blob, study_id: this.state.selected.study_id });
+        this.props.submitStudyAd({ file: blob, study_id: this.state.selected.study_id });
       });
     } else {
-      this.props.submitStudyAdd({ file: e, study_id: this.state.selected.study_id });
+      this.props.submitStudyAd({ file: e, study_id: this.state.selected.study_id });
     }
   }
 
   removeStudyAd() {
     this.props.removeStudyAd(this.state.selected.study_id);
-    this.closeStudyAddModal();
+    this.closeStudyAdModal();
   }
 
 
   render() {
-    const { openModal, onClose, changeStudyAddProcess } = this.props;
+    const { openModal, onClose, changeStudyAdProcess } = this.props;
     let fileSrc = null;
 
     if (this.state.landing && !this.state.updatedStudyAd) {
@@ -359,10 +361,9 @@ export class LandingPageModal extends React.Component {
                   </strong>
                   <div className="field">
                     <Field
-                      type="tel"
+                      type="text"
                       name="phonePlaceholder"
                       component={Input}
-                      onBlur={this.onPhoneBlur}
                       required
                     />
                   </div>
@@ -418,6 +419,30 @@ export class LandingPageModal extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
+                    <label htmlFor="new-patient-phone">MLP Distance</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="distance"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
+                    <label htmlFor="new-patient-phone">MLP Phone</label>
+                  </strong>
+                  <div className="field">
+                    <Field
+                      type="text"
+                      name="mlpPhone"
+                      component={Input}
+                    />
+                  </div>
+                </div>
+                <div className="field-row">
+                  <strong className="label">
                     <label htmlFor="new-patient-phone">Study Ad</label>
                   </strong>
                   <div className="field">
@@ -433,7 +458,7 @@ export class LandingPageModal extends React.Component {
                     }
                     <a
                       className="btn btn-gray upload-btn"
-                      onClick={this.openStudyAddModal}
+                      onClick={this.openStudyAdModal}
                     >
                       update study ad
                     </a>
@@ -560,21 +585,21 @@ export class LandingPageModal extends React.Component {
           <Modal
             className="study-add-modal avatar-modal"
             dialogComponentClass={CenteredModal}
-            show={this.state.studyAddModalOpen}
-            onHide={this.closeStudyAddModal}
+            show={this.state.studyAdModalOpen}
+            onHide={this.closeStudyAdModal}
             backdrop
             keyboard
           >
             <Modal.Header>
               <Modal.Title>UPDATE STUDY AD</Modal.Title>
-              <a className="lightbox-close close" onClick={this.closeStudyAddModal}>
+              <a className="lightbox-close close" onClick={this.closeStudyAdModal}>
                 <i className="icomoon-icon_close" />
               </a>
             </Modal.Header>
             <Modal.Body>
-              <StudyAddForm
-                handleSubmit={this.uploadStudyAdd}
-                changeStudyAddProcess={changeStudyAddProcess}
+              <StudyAdForm
+                handleSubmit={this.uploadStudyAd}
+                changeStudyAdProcess={changeStudyAdProcess}
                 removeStudyAd={this.removeStudyAd}
               />
             </Modal.Body>
@@ -610,7 +635,7 @@ const mapStateToProps = createStructuredSelector({
   newList: selectValues(formName),
   landing: selectLanding(),
   updateLandingPageProcess: selectLandingPageUpdateProcess(),
-  changeStudyAddProcess: selectChangeStudyAddProcess(),
+  changeStudyAdProcess: selectChangeStudyAdProcess(),
   updatedStudyAd: selectUpdatedStudyAd(),
 });
 

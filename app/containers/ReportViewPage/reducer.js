@@ -8,7 +8,6 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 
 import {
-  FETCH_PATIENT_SIGN_UPS_SUCCEESS,
   GET_REPORTS_LIST,
   GET_REPORTS_LIST_SUCCESS,
   GET_REPORTS_LIST_ERROR,
@@ -23,13 +22,14 @@ import {
   GET_CATEGORY_NOTES,
   GET_CATEGORY_NOTES_ERROR,
   GET_CATEGORY_NOTES_SUCCESS,
+  CLEAR_REPORT_LIST,
 } from './constants';
 
 const initialState = {
   patientSignUps: {
-    today: 0,
-    yesterday: 0,
-    total: 0,
+    today: 'N/A',
+    yesterday: 'N/A',
+    total: 'N/A',
   },
   reportsList: {
     details: [],
@@ -68,19 +68,12 @@ function reportViewPageReducer(state = initialState, action) {
   let newNotesList = [];
   const reportsCopy = _.cloneDeep(state.reportsList.details);
   const notesCopy = _.cloneDeep(state.categoryNotes.details);
+  let page = null;
+  let hasMoreItems = null;
 
   let foundIndex = null;
   let copy = null;
   switch (action.type) {
-    case FETCH_PATIENT_SIGN_UPS_SUCCEESS:
-      return {
-        ...state,
-        patientSignUps: {
-          today: action.payload.today,
-          yesterday: action.payload.yesterday,
-          total: action.payload.total,
-        },
-      };
     case GET_REPORTS_LIST:
       if (action.offset === 0) {
         newReportsList = [];
@@ -103,18 +96,25 @@ function reportViewPageReducer(state = initialState, action) {
         },
       };
     case GET_REPORTS_LIST_SUCCESS:
-      _.forEach(action.payload, (item, index) => {
-        const level = item.current_level ? item.current_level : item.last_level;
-        const levelDateFrom = item.date_from ? moment(item.date_from).tz(item.timezone).format('MM/DD/YY') : '';
-        const levelDateTo = item.date_to ? moment(item.date_to).tz(item.timezone).format('MM/DD/YY') : '';
+      page = action.page;
+      hasMoreItems = action.hasMoreItems;
+      if (action.payload.length > 0) {
+        _.forEach(action.payload, (item, index) => {
+          const level = item.current_level ? item.current_level : item.last_level;
+          const levelDateFrom = item.date_from ? moment(item.date_from).tz(item.timezone).format('MM/DD/YY') : '';
+          const levelDateTo = item.date_to ? moment(item.date_to).tz(item.timezone).format('MM/DD/YY') : '';
 
-        reports.push({ ...item, level, levelDateFrom, levelDateTo, count_index: index });
-      });
+          reports.push({ ...item, level, levelDateFrom, levelDateTo, count_index: index });
+        });
 
-      if (action.page === 1) {
-        newReportsList = reports;
+        if (action.page === 1) {
+          newReportsList = reports;
+        } else {
+          newReportsList = reportsCopy.concat(reports);
+        }
       } else {
-        newReportsList = reportsCopy.concat(reports);
+        page = 1;
+        hasMoreItems = false;
       }
 
       return {
@@ -127,8 +127,8 @@ function reportViewPageReducer(state = initialState, action) {
         paginationOptions: {
           activeSort: state.paginationOptions.activeSort,
           activeDirection: state.paginationOptions.activeDirection,
-          hasMoreItems: action.hasMoreItems,
-          page: action.page,
+          hasMoreItems,
+          page,
         },
       };
     case GET_REPORTS_LIST_ERROR:
@@ -261,6 +261,15 @@ function reportViewPageReducer(state = initialState, action) {
           details: [],
           fetching: false,
           error: action.payload,
+        },
+      };
+    case CLEAR_REPORT_LIST:
+      return {
+        ...state,
+        reportsList: {
+          details: [],
+          fetching: false,
+          error: null,
         },
       };
     default:
