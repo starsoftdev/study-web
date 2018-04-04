@@ -66,11 +66,13 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
           if (newProps.newList.postalCode) {
             this.h3Text = `There ${newProps.total > 1 ? 'are' : 'is'} ${newProps.total} ${newProps.total > 1 ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
           }
-          scroller.scrollTo('scrollTarget', {
-            duration: 800,
-            smooth: true,
-            offset: -160,
-          });
+          if (!this.props.trials.details) {
+            scroller.scrollTo('scrollTarget', {
+              duration: 800,
+              smooth: true,
+              offset: -160,
+            });
+          }
         } else {
           this.h3Text = 'There are no studies';
           if (newProps.newList.postalCode) {
