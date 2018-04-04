@@ -163,8 +163,12 @@ export function* resetPassword() {
       yield call(request, requestURL, params);
       yield put(resetPasswordSuccess());
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
-      toastr.error('', errorMessage);
+      if (err && err.message === 'Email not found') {
+        toastr.error('', 'Error! This email address was not found.');
+      } else {
+        const errorMessage = get(err, 'message', 'Something went wrong!');
+        toastr.error('', errorMessage);
+      }
     }
   }
 }

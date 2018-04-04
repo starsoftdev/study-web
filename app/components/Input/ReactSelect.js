@@ -22,6 +22,7 @@ function ReactSelect({
   tooltipEnabled,
   meta: { touched, error, active },
   clearValueText,
+  clearable,
   ...rest
 }) {
   const hasError = touched && error && !active;
@@ -57,6 +58,7 @@ function ReactSelect({
       clearValueText={clearValueText || 'Clear Selection'}
       openOnClick
       openOnFocus
+      clearable={clearable}
       {...rest}
     />
   );
@@ -92,6 +94,7 @@ ReactSelect.propTypes = {
   objectValue: PropTypes.bool,
   tooltipEnabled: PropTypes.bool,
   clearValueText: PropTypes.string,
+  clearable: PropTypes.bool,
 };
 
 export default ReactSelect;

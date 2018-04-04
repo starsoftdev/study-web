@@ -72,6 +72,8 @@
     ]
   },
   "dependencies": {
+    "@sentry/cli": "^1.30.3",
+    "@sentry/webpack-plugin": "^1.4.0",
     "assets-webpack-plugin": "^3.5.1",
     "babel-core": "6.13.2",
     "babel-eslint": "^7.1.1",
@@ -92,6 +94,7 @@
     "classnames": "^2.2.5",
     "compression": "1.6.2",
     "cors": "^2.8.3",
+    "country-code-lookup": "0.0.9",
     "coveralls": "2.11.12",
     "cross-env": "2.0.0",
     "css-loader": "0.23.1",
@@ -176,6 +179,7 @@
     "react-infinite-scroller": "^1.0.14",
     "react-inlinesvg": "^0.6.0",
     "react-intl": "2.1.3",
+    "react-intl-tel-input": "^4.3.4",
     "react-md-editor": "^0.2.2",
     "react-parallax": "^1.2.2",
     "react-redux": "4.4.5",

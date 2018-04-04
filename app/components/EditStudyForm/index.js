@@ -15,15 +15,15 @@ import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../c
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
 import { setEmailNotifications } from '../../containers/HomePage/actions';
 import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
-import StudyAddForm from '../../components/StudyAddForm';
+import StudyAdForm from '../../components/StudyAdForm';
 
 import {
-  changeStudyAdd,
+  changeStudyAd,
   removeStudyAd,
-  resetChangeStudyAddState,
+  resetChangeStudyAdState,
 } from '../../containers/HomePage/AdminDashboard/actions';
 import {
-  selectChangeStudyAddProcess,
+  selectChangeStudyAdProcess,
   selectUpdatedStudyAd,
   selectRemovedStudyAdId,
 } from '../../containers/HomePage/AdminDashboard/selectors';
@@ -37,9 +37,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchClientAdmins: (id) => dispatch(fetchClientAdmins(id)),
   change: (name, value) => dispatch(change(formName, name, value)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
-  submitStudyAdd: (values) => dispatch(changeStudyAdd(values)),
+  submitStudyAd: (values) => dispatch(changeStudyAd(values)),
   removeStudyAd: (studyId) => dispatch(removeStudyAd(studyId)),
-  resetChangeAddState: () => dispatch(resetChangeStudyAddState()),
+  resetChangeAdState: () => dispatch(resetChangeStudyAdState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
   fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
@@ -56,7 +56,7 @@ const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
   updatedStudyAd: selectUpdatedStudyAd(),
   removedStudyAdId: selectRemovedStudyAdId(),
-  changeStudyAddProcess: selectChangeStudyAddProcess(),
+  changeStudyAdProcess: selectChangeStudyAdProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),
   studyLeadSources: selectStudyLeadSources(),
@@ -93,12 +93,12 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     addEmailNotificationUser: PropTypes.func,
     clientAdmins: PropTypes.object,
     fetchClientAdmins: PropTypes.func.isRequired,
-    submitStudyAdd: PropTypes.func.isRequired,
+    submitStudyAd: PropTypes.func.isRequired,
     removeStudyAd: PropTypes.func.isRequired,
-    changeStudyAddProcess: PropTypes.any,
+    changeStudyAdProcess: PropTypes.any,
     updatedStudyAd: PropTypes.any,
     removedStudyAdId: PropTypes.number,
-    resetChangeAddState: PropTypes.func.isRequired,
+    resetChangeAdState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
     fetchStudyLeadSources: PropTypes.func.isRequired,
@@ -116,11 +116,11 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     this.addEmailNotificationSubmit = this.addEmailNotificationSubmit.bind(this);
     this.selectAll = this.selectAll.bind(this);
     this.selectEmail = this.selectEmail.bind(this);
-    this.openStudyAddModal = this.openStudyAddModal.bind(this);
-    this.closeStudyAddModal = this.closeStudyAddModal.bind(this);
+    this.openStudyAdModal = this.openStudyAdModal.bind(this);
+    this.closeStudyAdModal = this.closeStudyAdModal.bind(this);
     this.openStudyPreviewModal = this.openStudyPreviewModal.bind(this);
     this.closeStudyPreviewModal = this.closeStudyPreviewModal.bind(this);
-    this.uploadStudyAdd = this.uploadStudyAdd.bind(this);
+    this.uploadStudyAd = this.uploadStudyAd.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.removeStudyAd = this.removeStudyAd.bind(this);
 
@@ -129,7 +129,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     this.state = {
       updatedStudyAd: null,
       addEmailModalShow: false,
-      studyAddModalOpen: false,
+      studyAdModalOpen: false,
       studyPreviewModalOpen: false,
       exposureLevel: null,
       campaignLength: null,
@@ -149,7 +149,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   componentWillReceiveProps(newProps) {
-    const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAddState } = this.props;
+    const { clientAdmins, clientSites, change, selectedStudyId, studyLevels, studies, setEmailNotifications, emailNotifications, resetChangeAdState } = this.props;
 
     if (newProps.selectedStudyId && newProps.selectedStudyId !== selectedStudyId) {
       const fields = [];
@@ -227,9 +227,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       change('emailNotifications', newProps.emailNotifications);
     }
 
-    if (newProps.changeStudyAddProcess.error && this.state.studyAddModalOpen) {
-      this.closeStudyAddModal();
-      resetChangeAddState();
+    if (newProps.changeStudyAdProcess.error && this.state.studyAdModalOpen) {
+      this.closeStudyAdModal();
+      resetChangeAdState();
     }
 
     if (newProps.updatedStudyAd && this.state.updatedStudyAd !== newProps.updatedStudyAd) {
@@ -238,8 +238,8 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         currentStudy.image = newProps.updatedStudyAd;
       }
       this.setState({ updatedStudyAd: newProps.updatedStudyAd, currentStudy });
-      if (this.state.studyAddModalOpen) {
-        this.closeStudyAddModal();
+      if (this.state.studyAdModalOpen) {
+        this.closeStudyAdModal();
       }
     }
   }
@@ -260,7 +260,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     const resetState = {
       updatedStudyAd: null,
       addEmailModalShow: false,
-      studyAddModalOpen: false,
+      studyAdModalOpen: false,
       studyPreviewModalOpen: false,
       exposureLevel: null,
       campaignLength: null,
@@ -277,7 +277,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
   }
 
   handleCloseModal() {
-    this.props.resetChangeAddState();
+    this.props.resetChangeAdState();
     this.resetState();
     this.props.onHide(false);
   }
@@ -356,13 +356,13 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     }
   }
 
-  closeStudyAddModal() {
-    this.setState({ studyAddModalOpen: false });
+  closeStudyAdModal() {
+    this.setState({ studyAdModalOpen: false });
     this.props.onShow();
   }
 
-  openStudyAddModal() {
-    this.setState({ studyAddModalOpen: true });
+  openStudyAdModal() {
+    this.setState({ studyAdModalOpen: true });
     this.props.onHide(true);
   }
 
@@ -374,24 +374,24 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     this.setState({ studyPreviewModalOpen: true });
   }
 
-  uploadStudyAdd(e) {
+  uploadStudyAd(e) {
     const { selectedStudyId } = this.props;
     if (e.type !== 'application/pdf') {
       e.toBlob((blob) => {
-        this.props.submitStudyAdd({ file: blob, study_id: selectedStudyId });
+        this.props.submitStudyAd({ file: blob, study_id: selectedStudyId });
       });
     } else {
-      this.props.submitStudyAdd({ file: e, study_id: selectedStudyId });
+      this.props.submitStudyAd({ file: e, study_id: selectedStudyId });
     }
   }
 
   removeStudyAd() {
     this.props.removeStudyAd(this.state.currentStudy.id);
-    this.closeStudyAddModal();
+    this.closeStudyAdModal();
   }
 
   renderEmailList() {
-    const { change, formValues } = this.props;
+    const { change, formValues, currentUser } = this.props;
 
     return (
       <div className="emails-list-holder">
@@ -403,13 +403,14 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           addEmailNotification={this.addEmailNotificationClick}
           closeEmailNotification={this.closeAddEmailModal}
           emailFields={this.state.emailFields}
+          currentUser={currentUser}
         />
       </div>
     );
   }
 
   render() {
-    const { editedStudy, changeStudyAddProcess, removedStudyAdId } = this.props;
+    const { editedStudy, changeStudyAdProcess, removedStudyAdId } = this.props;
     const image = (this.state.currentStudy && this.state.currentStudy.image) ? this.state.currentStudy.image : null;
     const fileSrc = (removedStudyAdId && removedStudyAdId === this.state.currentStudy.id) ? null : image || this.state.updatedStudyAd;
     const preview =
@@ -489,7 +490,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                           }
                           <a
                             className="btn btn-gray upload-btn"
-                            onClick={this.openStudyAddModal}
+                            onClick={this.openStudyAdModal}
                           >
                             update study ad
                           </a>
@@ -540,21 +541,21 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
         <Modal
           className="study-add-modal avatar-modal"
           dialogComponentClass={CenteredModal}
-          show={this.state.studyAddModalOpen}
-          onHide={this.closeStudyAddModal}
+          show={this.state.studyAdModalOpen}
+          onHide={this.closeStudyAdModal}
           backdrop
           keyboard
         >
           <Modal.Header>
             <Modal.Title>UPDATE STUDY AD</Modal.Title>
-            <a className="lightbox-close close" onClick={this.closeStudyAddModal}>
+            <a className="lightbox-close close" onClick={this.closeStudyAdModal}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
-            <StudyAddForm
-              handleSubmit={this.uploadStudyAdd}
-              changeStudyAddProcess={changeStudyAddProcess}
+            <StudyAdForm
+              handleSubmit={this.uploadStudyAd}
+              changeStudyAdProcess={changeStudyAdProcess}
               removeStudyAd={this.removeStudyAd}
             />
           </Modal.Body>

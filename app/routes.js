@@ -423,21 +423,27 @@ export default function createRoutes(store) {
       path: '/app/study/:id',
       name: 'studyPage',
       getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('./containers/StudyPage/reducer'),
-          System.import('./containers/StudyPage/sagas'),
-          System.import('./containers/StudyPage'),
-        ]);
+        if (isNaN(nextState.params.id)) {
+          System.import('./containers/NotFoundPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+        } else {
+          const importModules = Promise.all([
+            System.import('./containers/StudyPage/reducer'),
+            System.import('./containers/StudyPage/sagas'),
+            System.import('./containers/StudyPage'),
+          ]);
 
-        const renderRoute = loadModule(cb);
+          const renderRoute = loadModule(cb);
 
-        importModules.then(([reducer, sagas, component]) => {
-          injectReducer('studyPage', reducer.default);
-          injectSagas(sagas.default);
-          renderRoute(component);
-        });
+          importModules.then(([reducer, sagas, component]) => {
+            injectReducer('studyPage', reducer.default);
+            injectSagas(sagas.default);
+            renderRoute(component);
+          });
 
-        importModules.catch(errorLoading);
+          importModules.catch(errorLoading);
+        }
       },
     }, {
       onEnter: redirectToLogin,
@@ -818,6 +824,27 @@ export default function createRoutes(store) {
 
         importModules.then(([reducer, sagas, component]) => {
           injectReducer('dashboardPortalsPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      onEnter: redirectToLogin,
+      path: '/app/dashboard-reset-password',
+      name: 'dashboardResetPasswordPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/DashboardResetPasswordPage/reducer'),
+          System.import('./containers/DashboardResetPasswordPage/sagas'),
+          System.import('./containers/DashboardResetPasswordPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('dashboardResetPasswordPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });

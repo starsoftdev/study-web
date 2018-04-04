@@ -281,7 +281,7 @@ export default class SearchPatientsForm extends Component {
                   options={siteOptions}
                   selectedValue={defaultSiteLocation}
                   disabled={sitesDropdownDisabled}
-                  onChange={(e, val) => this.initSearch(val, 'site')}
+                  onChange={(val) => this.initSearch(val, 'site')}
                 />
               </div>
             </div>
@@ -299,7 +299,7 @@ export default class SearchPatientsForm extends Component {
                   optionLabelKey="label"
                   multiple
                   includeAllOption
-                  onChange={(e, val) => this.initSearch(val, 'includeIndication')}
+                  onChange={(val) => this.initSearch(val, 'includeIndication')}
                   customOptionTemplateFunction={itemTemplate}
                   customSelectedValueTemplateFunction={selectedItemsTemplate}
                   dataSource={finalIncludeIndication}
@@ -322,7 +322,7 @@ export default class SearchPatientsForm extends Component {
                   optionLabelKey="label"
                   multiple
                   includeAllOption
-                  onChange={(e, val) => this.initSearch(val, 'excludeIndication')}
+                  onChange={(val) => this.initSearch(val, 'excludeIndication')}
                   customOptionTemplateFunction={itemTemplate}
                   customSelectedValueTemplateFunction={selectedItemsTemplate}
                   dataSource={finalExcludeIndication}
@@ -342,7 +342,7 @@ export default class SearchPatientsForm extends Component {
                   placeholder="Select Gender"
                   options={genderOptions}
                   disabled={patients.fetching}
-                  onChange={(e, val) => this.initSearch(val, 'gender')}
+                  onChange={(val) => this.initSearch(val, 'gender')}
                 />
               </div>
             </div>
@@ -359,7 +359,7 @@ export default class SearchPatientsForm extends Component {
                   placeholder="Select Status"
                   options={statusOptions}
                   disabled={patients.fetching}
-                  onChange={(e, val) => this.initSearch(val, 'status')}
+                  onChange={(val) => this.initSearch(val, 'status')}
                 />
               </div>
             </div>
@@ -375,7 +375,7 @@ export default class SearchPatientsForm extends Component {
                   placeholder="Select Source"
                   options={sourceOptions}
                   disabled={patients.fetching}
-                  onChange={(e, val) => this.initSearch(val, 'source')}
+                  onChange={(val) => this.initSearch(val, 'source')}
                 />
               </div>
             </div>
@@ -393,7 +393,7 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('age', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e, val) => {
+                    onChange={(val) => {
                       this.initSearch(val, 'ageFrom');
                     }}
                   />
@@ -406,7 +406,7 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('age', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e, val) => {
+                    onChange={(val) => {
                       this.initSearch(val, 'ageTo');
                     }}
                   />
@@ -428,7 +428,7 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'from')}
                     disabled={patients.fetching}
-                    onChange={(e, val) => {
+                    onChange={(val) => {
                       this.initSearch(val, 'bmiFrom');
                     }}
                   />
@@ -441,7 +441,7 @@ export default class SearchPatientsForm extends Component {
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'to')}
                     disabled={patients.fetching}
-                    onChange={(e, val) => {
+                    onChange={(val) => {
                       this.initSearch(val, 'bmiTo');
                     }}
                   />
