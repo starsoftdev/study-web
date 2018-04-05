@@ -133,7 +133,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
           <div className="container-fluid">
 
             <h1 className="logo pull-left">
-              <Link to="/">
+              <Link to="/app">
                 <img src={studykikLogo} width="214" height="31" alt="logo" />
               </Link>
             </h1>

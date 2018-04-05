@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
@@ -48,8 +48,18 @@ const selectUpgradeStudyFormNotesValue = () => createSelector(
 const selectUpgradeStudyFormLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'upgradeStudy.values.leads', []);
+    const leads = get(substate, 'upgradeStudy.values.leadSource', []);
     return leads.length;
+  }
+);
+
+const selectUpgradeStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const regFieldsArr = get(substate, 'upgradeStudy.registeredFields', []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
   }
 );
 
@@ -62,4 +72,5 @@ export {
   selectUpgradeStudyFormCallTrackingValue,
   selectUpgradeStudyFormNotesValue,
   selectUpgradeStudyFormLeadsCount,
+  selectUpgradeStudyFields,
 };

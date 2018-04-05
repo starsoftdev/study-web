@@ -4,20 +4,22 @@ import { createStructuredSelector } from 'reselect';
 import { Field, FieldArray, reduxForm, change, reset } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import _, { find } from 'lodash';
+import moment from 'moment-timezone';
 
-import { CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import { CALL_TRACKING_PRICE, CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
 import Input from '../../components/Input';
+import DatePicker from '../../components/Input/DatePicker';
 import ReactSelect from '../../components/Input/ReactSelect';
 import Toggle from '../../components/Input/Toggle';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { saveCard } from '../../containers/App/actions';
-import { selectStudyLevels, selectAvailPhoneNumbers, selectCurrentUserClientId, selectSavedCard } from '../../containers/App/selectors';
+import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '../../containers/App/selectors';
 import { selectSelectedIndicationLevelPrice } from '../../containers/HomePage/selectors';
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
-import RenderLeads from './renderLeads';
+import RenderLeads from '../../components/RenderLeads';
 import formValidator from './validator';
 
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
@@ -29,7 +31,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     selectedIndicationLevelPrice: PropTypes.object,
     callTracking: PropTypes.bool,
     leadsCount: PropTypes.number,
-    availPhoneNumbers: PropTypes.array,
     selectedStudy: PropTypes.object,
     savedCard: PropTypes.object,
     show: PropTypes.bool,
@@ -40,6 +41,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
     currentUserStripeCustomerId: PropTypes.string,
+    formValues: PropTypes.object,
   };
 
   constructor(props) {
@@ -53,13 +55,14 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleExposureChoose = this.handleExposureChoose.bind(this);
+    this.handleCampaignLengthChoose = this.handleCampaignLengthChoose.bind(this);
     this.handleQualificationChoose = this.handleQualificationChoose.bind(this);
-    this.handleCallChoose = this.handleCallChoose.bind(this);
     this.state = {
       level: null,
+      campaignLength: null,
       patientQualificationSuite: false,
-      callTracking: false,
       addCardModalOpenU: false,
+      isCallTrackingAlreadySet: false,
     };
   }
 
@@ -69,6 +72,10 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     if (newProps.selectedStudy) {
+      if (!this.state.campaignLength) {
+        this.setState({ campaignLength: newProps.selectedStudy.campaignLength || 1 });
+        this.props.dispatch(change('upgradeStudy', 'campaignLength', newProps.selectedStudy.campaignLength || 1));
+      }
       const { patientQualificationSuite } = newProps.selectedStudy;
       if (patientQualificationSuite === 'On' || patientQualificationSuite === true) {
         this.props.dispatch(change('upgradeStudy', 'addPatientQualificationSuite', true));
@@ -80,6 +87,20 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
     if (!newProps.savedCard.saving && this.props.savedCard.saving && this.state.addCardModalOpenU) {
       this.closeAddCardModal();
+    }
+
+    if (!this.props.selectedStudy && newProps.selectedStudy) {
+      if (newProps.selectedStudy.callTracking) {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', true));
+        this.setState({
+          isCallTrackingAlreadySet: true,
+        });
+      } else {
+        this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+        this.setState({
+          isCallTrackingAlreadySet: false,
+        });
+      }
     }
   }
 
@@ -97,8 +118,8 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   resetState() {
     const resetState = {
       level: null,
+      campaignLength: null,
       patientQualificationSuite: false,
-      callTracking: false,
     };
 
     this.setState(resetState, () => {
@@ -118,21 +139,21 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     this.props.onHide(true);
   }
 
-  handleExposureChoose(e) {
+  handleExposureChoose(val) {
     this.setState({
-      level: e,
+      level: val,
     });
   }
 
-  handleQualificationChoose(e) {
+  handleCampaignLengthChoose(val) {
     this.setState({
-      patientQualificationSuite: e,
+      campaignLength: val,
     });
   }
 
-  handleCallChoose(e) {
+  handleQualificationChoose(val) {
     this.setState({
-      callTracking: e,
+      patientQualificationSuite: val,
     });
   }
 
@@ -141,11 +162,14 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice, selectedStudy } = this.props;
-    const { level, callTracking, patientQualificationSuite } = this.state;
+    const { studyLevels, selectedIndicationLevelPrice, selectedStudy, callTracking } = this.props;
+    const { level, patientQualificationSuite } = this.state;
     const addOns = [];
 
-    const campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
+    let campaignLength = (selectedStudy && selectedStudy.campaignlength) ? parseInt(selectedStudy.campaignlength) : null;
+    if (selectedStudy && !selectedStudy.level_id) {
+      campaignLength = this.state.campaignLength;
+    }
 
     if (level && campaignLength) {
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
@@ -169,9 +193,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (callTracking) {
+    if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
-        title: 'Call Tracking',
+        title: 'Media Tracking',
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -182,7 +206,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { studyLevels, selectedIndicationLevelPrice, callTracking, availPhoneNumbers, selectedStudy } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, callTracking, selectedStudy, formValues } = this.props;
     let patientQualificationSuite = false;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
 
@@ -211,7 +235,6 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
       value = topLevel.id;
       isDisabled = true;
     }
-
     const addOns = this.generateUpgradeStudyShoppingCartAddOns();
 
     return (
@@ -236,75 +259,106 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
               <div className="pull-left col">
                 <div className="scroll jcf--scrollable">
                   <div className="holder-inner">
-                    <form className="form-upgrade-study">
-                      <div className="upgrade-study form-fields">
-                        <div className="field-row">
-                          <strong className="label">
-                            <label>UPGRADE LEVEL</label>
-                          </strong>
-                          <div className="field">
-                            <Field
-                              name="level"
-                              className="with-loader-disabled-for-now"
-                              component={ReactSelect}
-                              placeholder="Select Upgrade"
-                              onChange={this.handleExposureChoose}
-                              options={filteredLevels}
-                              selectedValue={value || undefined}
-                              disabled={selectedIndicationLevelPrice.fetching || isDisabled}
-                            />
-                            {selectedIndicationLevelPrice.fetching &&
-                            (
-                              <span className="hide">
-                                <LoadingSpinner showOnlyIcon size={20} />
-                              </span>
-                            )
-                            }
-                          </div>
+                    <div className="upgrade-study form-fields">
+                      <div className="field-row">
+                        <strong className={`label ${(!selectedStudy || !selectedStudy.level_id) ? 'required' : ''}`}>
+                          <label>UPGRADE LEVEL</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="level"
+                            className="with-loader-disabled-for-now"
+                            component={ReactSelect}
+                            placeholder="Select Upgrade"
+                            onChange={this.handleExposureChoose}
+                            options={filteredLevels}
+                            selectedValue={value || undefined}
+                            disabled={selectedIndicationLevelPrice.fetching || isDisabled}
+                          />
+                          {selectedIndicationLevelPrice.fetching &&
+                          (
+                            <span className="hide">
+                              <LoadingSpinner showOnlyIcon size={20} />
+                            </span>
+                          )
+                          }
                         </div>
-                        <div className="field-row">
-                          <strong className="label"><label>Patient qualification <br />
-                            Suite: ${qualificationSuitePrice / 100}</label></strong>
-                          <div className="field">
-                            <Field
-                              name="addPatientQualificationSuite"
-                              disabled={patientQualificationSuite === 'On' || patientQualificationSuite === true}
-                              component={Toggle}
-                              onChange={this.handleQualificationChoose}
-                            />
-                          </div>
-                        </div>
-                        {false &&
+                      </div>
+                      {(!selectedStudy || !selectedStudy.level_id) &&
+                      (
+                        <div>
                           <div className="field-row">
-                            <strong className="label">
-                              <label>CALL TRACKING: $247</label>
-                            </strong>
+                            <strong className="label required"><label>Campaign Length</label></strong>
                             <div className="field">
                               <Field
-                                name="callTracking"
-                                component={Toggle}
-                                onChange={this.handleCallChoose}
+                                id="campaign-length"
+                                name="campaignLength"
+                                component={ReactSelect}
+                                placeholder="Select Campaign Length"
+                                onChange={this.handleCampaignLengthChoose}
+                                options={CAMPAIGN_LENGTH_LIST}
                               />
                             </div>
                           </div>
-                        }
-                        {callTracking &&
-                          <FieldArray name="leads" component={RenderLeads} availPhoneNumbers={availPhoneNumbers} />
-                        }
-                        <div className="field-row label-top">
+                          <div className="field-row">
+                            <strong className="label required"><label>Start Date</label></strong>
+                            <div className="field">
+                              <Field
+                                id="start-date"
+                                name="startDate"
+                                component={DatePicker}
+                                className="form-control datepicker-input"
+                                initialDate={moment()}
+                                minDate={moment()}
+                                canNotSetTBD
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                      }
+                      <div className="field-row">
+                        <strong className="label"><label>Patient qualification <br />
+                          Suite: ${qualificationSuitePrice / 100}</label></strong>
+                        <div className="field">
+                          <Field
+                            name="addPatientQualificationSuite"
+                            disabled={patientQualificationSuite === 'On' || patientQualificationSuite === true}
+                            component={Toggle}
+                            onChange={this.handleQualificationChoose}
+                          />
+                        </div>
+                      </div>
+                      {
+                        <div className="field-row global-invisible-item">
                           <strong className="label">
-                            <label>NOTES</label>
+                            <label>MEDIA TRACKING: $247</label>
                           </strong>
                           <div className="field">
                             <Field
-                              name="notes"
-                              component={Input}
-                              componentClass="textarea"
+                              name="callTracking"
+                              component={Toggle}
+                              disabled={this.state.isCallTrackingAlreadySet}
                             />
                           </div>
                         </div>
+                      }
+                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
+                        <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                      }
+                      <div className="field-row label-top">
+                        <strong className="label">
+                          <label>NOTES</label>
+                        </strong>
+                        <div className="field">
+                          <Field
+                            name="notes"
+                            component={Input}
+                            componentClass="textarea"
+                          />
+                        </div>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -334,7 +388,6 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   callTracking: selectUpgradeStudyFormCallTrackingValue(),
   leadsCount: selectUpgradeStudyFormLeadsCount(),
-  availPhoneNumbers: selectAvailPhoneNumbers(),
   savedCard: selectSavedCard(),
 });
 

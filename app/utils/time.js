@@ -9,7 +9,7 @@ export function formatTimezone(timezone, city) {
     return timezone;
   }
 
-  if (moment().tz(timezone).isValid) {
+  if (moment.tz.zone(timezone)) {
     const zoneAbb = moment().tz(timezone).zoneAbbr();
     return `(${zoneAbb}) ${city || ''}`;
   }
