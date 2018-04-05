@@ -220,7 +220,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   handleSubmit(searchFilter, loadMore) {
     const { params: { id }, paginationOptions } = this.props;
-    const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 0;
+    const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 1;
     const campaignId = searchFilter.campaignId || searchFilter.campaign;
     let skip = 0;
     if (loadMore) {
