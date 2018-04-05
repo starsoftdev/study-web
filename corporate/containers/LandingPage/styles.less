@@ -35,39 +35,79 @@
 }
 
 .landing-form {
-  margin: 0 auto 50px;
+  margin: 0 auto 40px;
+  z-index: 10;
+  position: relative;
 
   .field-row {
     position: relative;
     width: 100%;
     height: 60px;
 
-    @media screen and (max-width: 1023px) {
-      height: 50px;
-    }
+    &.fixed-height {
 
-    @media screen and (max-width: 767px) {
-      height: 40px;
-    }
+      @media screen and (max-width: @desktop) {
+        height: 50px;
+      }
 
+      @media screen and (max-width: @xs) {
+        height: 40px;
+      }
+    }
 
     input[name="phone"] {
       position: absolute;
 
       &.length-1 {
-        padding-left: 100px;
+        padding-left: 140px;
       }
 
       &.length-2 {
-        padding-left: 105px;
+        padding-left: 150px;
       }
 
       &.length-3 {
-        padding-left: 115px;
+        padding-left: 165px;
       }
 
       &.length-4 {
-        padding-left: 125px;
+        padding-left: 175px;
+      }
+
+      @media screen and (max-width: @desktop) {
+        &.length-1 {
+          padding-left: 120px;
+        }
+
+        &.length-2 {
+          padding-left: 130px;
+        }
+
+        &.length-3 {
+          padding-left: 145px;
+        }
+
+        &.length-4 {
+          padding-left: 155px;
+        }
+      }
+
+      @media screen and (max-width: @xs) {
+        &.length-1 {
+          padding-left: 115px;
+        }
+
+        &.length-2 {
+          padding-left: 125px;
+        }
+
+        &.length-3 {
+          padding-left: 135px;
+        }
+
+        &.length-4 {
+          padding-left: 145px;
+        }
       }
     }
 
@@ -79,9 +119,22 @@
       right: 0;
 
       .selected-flag {
+        outline: none;
+        padding: 0 0 0 16px;
 
         .selected-dial-code {
-          padding-right: 35px;
+          padding: 0 55px 0 35px;
+          font-size: 21px;
+
+          @media screen and (max-width: @desktop) {
+            padding: 0 45px 0 35px;
+            font-size: 18px;
+          }
+
+          @media screen and (max-width: @xs) {
+            padding: 0 40px 0 35px;
+            font-size: 16px;
+          }
         }
 
         .iti-arrow {
@@ -91,13 +144,57 @@
           height: 0;
           width: 0;
           border-top-color: #00afef;
-          border-width: 10px 10px 0;
+          border-width: 14px 14px 0;
+          margin-top: -7px;
+          right: 16px;
+
+          @media screen and (max-width: @desktop) {
+            margin: -5px 0 0;
+            border-width: 10px 10px 0;
+          }
+
+          @media screen and (max-width: @xs) {
+            margin: -3px 0 0;
+            border-width: 6px 6px 0;
+          }
+
+          &.up {
+            border-bottom-color: #00afef;
+            border-width: 0 14px 14px;
+
+            @media screen and (max-width: @desktop) {
+              border-width: 0 10px 10px;
+            }
+
+            @media screen and (max-width: @xs) {
+              border-width: 0 6px 6px;
+            }
+          }
         }
       }
 
       .country-list {
         width: 100%;
-        margin: 0 -1px;
+        margin: 1px -1px;
+        font-size: 21px;
+        overflow-x: hidden;
+        // max-height: 190px;
+
+        @media screen and (max-width: @desktop) {
+          font-size: 18px;
+        }
+
+        @media screen and (max-width: @xs) {
+          font-size: 16px;
+        }
+
+        li.highlight {
+          background-color: #00AFEF;
+
+          span {
+            color: #FFF;
+          }
+        }
       }
 
       input {

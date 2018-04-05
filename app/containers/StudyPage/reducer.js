@@ -23,7 +23,6 @@ import {
   FETCH_STUDY_VIEWS_SUCCESS,
   FETCH_STUDY_CALLS_SUCCESS,
   FETCH_STUDY_STATS_SUCCESS,
-  FETCH_SOURCES_SUCCESS,
   FETCH_STUDY_SUCCESS,
   REMOVE_PATIENT_INDICATION_SUCCESS,
   SHOW_SCHEDULED_MODAL,
@@ -59,8 +58,15 @@ import {
   FETCH_EMAILS,
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
+  SET_SELECTED_STUDY_SOURCES,
   PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
+
+import {
+  FETCH_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES_SUCCESS,
+  FETCH_STUDY_SOURCES_ERROR,
+} from '../App/constants';
 
 const initialState = {
   stats: {},
@@ -88,6 +94,12 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  studySources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  selectedStudySources: [],
   paginationOptions: {
     hasMoreItems: true,
     page: 1,
@@ -98,6 +110,47 @@ function studyPageReducer(state = initialState, action) {
   let hasMoreItems;
 
   switch (action.type) {
+    case SET_SELECTED_STUDY_SOURCES:
+      return {
+        ...state,
+        selectedStudySources: action.list,
+      };
+    case FETCH_STUDY_SOURCES:
+      return {
+        ...state,
+        studySources: {
+          details: state.studySources.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studySources: {
+          details: action.payload.map((item) => {
+            return {
+              source: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId,
+              isLeadSource: item.isLeadSource,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_SOURCES_ERROR:
+      return {
+        ...state,
+        studySources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
         ...state,
@@ -308,11 +361,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         site: action.payload,
-      };
-    case FETCH_SOURCES_SUCCESS:
-      return {
-        ...state,
-        sources: action.payload,
       };
     case FETCH_STUDY_SUCCESS:
       return {

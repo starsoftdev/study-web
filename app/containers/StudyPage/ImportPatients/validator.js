@@ -32,6 +32,9 @@ const schema = {
       message: 'Invalid phone number',
     },
   },
+  source: {
+    presence: true,
+  },
 };
 
 const fields = Object.keys(schema);

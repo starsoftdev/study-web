@@ -3,9 +3,6 @@
  * ReportViewPage constants
  *
  */
-export const FETCH_PATIENT_SIGN_UPS = 'app/ReportViewPage/FETCH_PATIENT_SIGN_UPS';
-export const FETCH_PATIENT_SIGN_UPS_SUCCEESS = 'app/ReportViewPage/FETCH_PATIENT_SIGN_UPS_SUCCEESS';
-
 export const GET_REPORTS_LIST = 'app/ReportViewPage/GET_REPORTS_LIST';
 export const GET_REPORTS_LIST_SUCCESS = 'app/ReportViewPage/GET_REPORTS_LIST_SUCCESS';
 export const GET_REPORTS_LIST_ERROR = 'app/ReportViewPage/GET_REPORTS_LIST_ERROR';
@@ -25,3 +22,5 @@ export const EXPORT_STUDIES = 'app/ReportViewPage/EXPORT_STUDIES';
 export const GET_CATEGORY_NOTES = 'app/ReportViewPage/GET_CATEGORY_NOTES';
 export const GET_CATEGORY_NOTES_SUCCESS = 'app/ReportViewPage/GET_CATEGORY_NOTES_SUCCESS';
 export const GET_CATEGORY_NOTES_ERROR = 'app/ReportViewPage/GET_CATEGORY_NOTES_ERROR';
+
+export const CLEAR_REPORT_LIST = 'app/ReportViewPage/CLEAR_REPORT_LIST';

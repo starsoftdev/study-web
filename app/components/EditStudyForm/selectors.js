@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
 
 /**
  * Direct selector to the routing state domain
@@ -16,8 +16,19 @@ const selectEditStudyFormStudyAdValue = () => createSelector(
   substate => get(substate, 'editStudy.values.studyAd', null)
 );
 
+const selectEditStudyFields = () => createSelector(
+  selectFormDomain(),
+  (substate) => {
+    const regFieldsArr = get(substate, 'editStudy.registeredFields', []);
+    return map(regFieldsArr, (item) => {
+      return item.name;
+    });
+  }
+);
+
 export default selectFormDomain;
 export {
   selectEditStudyFormRecruitmentPhoneValue,
   selectEditStudyFormStudyAdValue,
+  selectEditStudyFields,
 };

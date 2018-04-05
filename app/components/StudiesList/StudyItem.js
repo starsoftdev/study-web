@@ -31,6 +31,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
     siteId: PropTypes.number,
     siteTimezone: PropTypes.string,
     url: PropTypes.string,
+    level_id: PropTypes.number,
   };
 
   constructor(props) {
@@ -112,7 +113,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{orderNumber}</span>
         </td>
         <td className="indication">
-          <a data-for={`indication-${orderNumber}`} data-tip={studyId} href={landingHref} className="tooltip-element landig-link" target="_blank">{indication.name}</a>
+          <a data-for={`indication-${orderNumber}`} data-tip={studyId} href={landingHref} className="tooltip-element landing-link" target="_blank">{indication.name}</a>
           <ReactTooltip id={`indication-${orderNumber}`} type="info" class="tooltipClass wide" delayHide={500} effect="solid" />
         </td>
         <td className="location">
@@ -139,7 +140,7 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <div className="btns-slide pull-right">
             <div className="btns">
               <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable} onClick={this.onRenewClick}>Renew</Button>
+              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable || !this.props.level_id} onClick={this.onRenewClick}>Renew</Button>
               <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable || status === 'Inactive'} onClick={this.onUpgradeClick}>Upgrade</Button>
               <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
             </div>

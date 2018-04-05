@@ -60,7 +60,7 @@ export class LandingPage extends React.Component {
   componentWillMount() {
     const { splat } = this.props.params;
     if (!isNaN(parseInt(splat))) {
-      this.props.fetchLanding(splat);
+      this.props.fetchLanding(splat, this.props.location.query.utm);
     } else {
       this.props.clearLanding();
       browserHistory.push('/');
@@ -75,7 +75,7 @@ export class LandingPage extends React.Component {
     if (landing) {
       const urlPart = landing.url;
 
-      if (urlPart.toLowerCase().replace(/ /ig, '-') !== siteLocation) {
+      if (urlPart.toLowerCase().replace(/ /ig, '-') !== siteLocation.toLowerCase()) {
         invalidSite = true;
       }
 
@@ -91,9 +91,6 @@ export class LandingPage extends React.Component {
     }
 
     if (subscribedFromLanding) {
-      if (subscribedFromLanding.email.trim().toLowerCase() !== 'testing@studykik.com') {
-        // sendThankYouEmail(subscribedFromLanding);
-      }
       browserHistory.push('/thankyou');
     }
   }
@@ -118,6 +115,11 @@ export class LandingPage extends React.Component {
       phone: normalizePhoneForServer(params.phone, code),
       landing_page_id: landing.id,
     };
+
+    if (this.props.location.query && this.props.location.query.utm) {
+      data.utm = this.props.location.query.utm;
+    }
+
     this.props.subscribeFromLanding(data);
   }
 
@@ -176,7 +178,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchLanding: (studyId) => dispatch(fetchLanding(studyId)),
+    fetchLanding: (studyId, utm) => dispatch(fetchLanding(studyId, utm)),
     subscribeFromLanding: (params) => dispatch(subscribeFromLanding(params)),
     patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
     sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
