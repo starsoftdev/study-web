@@ -396,6 +396,7 @@ function studyPageReducer(state = initialState, action) {
           views: action.payload.views,
           calls: action.payload.countReceived,
           callsDuration: action.payload.totalDuration,
+          totalReferrals: action.payload.totalReferrals,
           referrals: action.payload.totalReferrals,
         },
       };
