@@ -20,7 +20,7 @@ import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } 
 import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
-import { selectListNewStudyFormValues, selectListNewStudyFormError, selectGetListNewStudyFormErrors } from '../../components/ListNewStudyForm/selectors';
+import { selectGetListNewStudyFormErrors, selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';
 import { fields as newStudyFields } from '../../components/ListNewStudyForm/validator';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
@@ -64,6 +64,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     saveSite: PropTypes.func,
     hasErrors: PropTypes.bool,
     listNewStudyFormErrors: PropTypes.object,
+    newStudyFields: PropTypes.array,
     availPhoneNumbers: PropTypes.array,
     currentUser: PropTypes.object,
     formSubmissionStatus: PropTypes.object,
@@ -206,7 +207,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     if (formValues.callTracking) {
       addOns.push({
-        title: 'Call Tracking',
+        title: 'Media Tracking',
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,

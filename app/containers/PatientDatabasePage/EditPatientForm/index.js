@@ -15,10 +15,11 @@ import Input from '../../../components/Input/index';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../components/Input/Checkbox';
-import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
+import { clearStudySources, fetchStudySources } from '../../App/actions';
+import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { fetchFilteredProtcols, addPatientIndication, removePatientIndication, updatePatientIndication } from '../actions';
-import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient } from '../selectors';
+import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient, selectStudySources } from '../selectors';
 import formValidator from './validator';
 
 const formName = 'PatientDatabase.EditPatientModal';
@@ -32,7 +33,7 @@ const mapStateToProps = createStructuredSelector({
   savedPatient: selectSavedPatient(),
   hasError: selectSyncErrorBool(formName),
   sites: selectSiteLocations(),
-  sources: selectSources(),
+  studySources: selectStudySources(),
   protocols: selectProtocols(formName),
 });
 
@@ -40,9 +41,11 @@ const mapDispatchToProps = dispatch => ({
   addPatientIndication: (patientId, indicationId, studyId) => dispatch(addPatientIndication(patientId, indicationId, studyId)),
   blur: (field, value) => dispatch(blur(formName, field, value)),
   change: (name, value) => dispatch(change(formName, name, value)),
+  clearStudySources: () => dispatch(clearStudySources()),
+  fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
+  fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
   removePatientIndication: (patientId, indicationId) => dispatch(removePatientIndication(patientId, indicationId)),
   updatePatientIndication: (patientId, indicationId, studyId) => dispatch(updatePatientIndication(patientId, indicationId, studyId)),
-  fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
 });
 
 @reduxForm({ form: formName, validate: formValidator })
@@ -54,7 +57,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     currentUser: React.PropTypes.object,
     change: PropTypes.func.isRequired,
     formValues: React.PropTypes.object,
+    clearStudySources: React.PropTypes.func.isRequired,
     fetchFilteredProtcols: React.PropTypes.func.isRequired,
+    fetchStudySources: React.PropTypes.func.isRequired,
     indications: PropTypes.array,
     initialValues: PropTypes.object,
     isFetchingProtocols: React.PropTypes.bool.isRequired,
@@ -66,7 +71,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     updatePatientIndication: PropTypes.func.isRequired,
     savedPatient: PropTypes.object,
     sites: PropTypes.array,
-    sources: PropTypes.array,
+    studySources: PropTypes.object,
     hasError: PropTypes.bool,
     onSubmit: PropTypes.func,
     handleSubmit: PropTypes.func,
@@ -88,7 +93,10 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   componentDidMount() {
-    const { initialValues, fetchFilteredProtcols, currentUser } = this.props;
+    const { currentUser, initialValues, fetchFilteredProtcols, fetchStudySources } = this.props;
+    if (initialValues.protocol) {
+      fetchStudySources(initialValues.protocol);
+    }
     if (initialValues.site) {
       fetchFilteredProtcols(currentUser.roleForClient.id, initialValues.site);
     }
@@ -159,7 +167,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
 
   selectProtocol(studyId) {
     if (studyId) {
-      const { change, formValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
+      const { change, fetchStudySources, formValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
+      // fetch the study sources for the sources dropdown
+      fetchStudySources(studyId);
       const protocol = _.find(protocols, { studyId });
       const indicationInList = _.find(formValues.indications, { id: protocol.indicationId });
       if (indicationInList) {
@@ -186,6 +196,9 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         change('indications', indicationArray);
         addPatientIndication(formValues.id, protocol.indicationId, studyId);
       }
+    } else {
+      const { clearStudySources } = this.props;
+      clearStudySources();
     }
   }
 
@@ -216,7 +229,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, isFetchingProtocols, protocols, sites, sources, patientCategories, loading, submitting, savedPatient } = this.props;
+    const { formValues, formValues: { dobDay, dobMonth, dobYear }, indications, initialValues, isFetchingProtocols, protocols, sites, studySources, patientCategories, loading, submitting, savedPatient } = this.props;
     const indicationOptions = indications.map(indicationIterator => ({
       label: indicationIterator.name,
       value: indicationIterator.id,
@@ -230,10 +243,14 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    const sourceOptions = sources.map(source => ({
-      label: source.type,
-      value: source.id,
-    }));
+
+    const sourceOptions = studySources.details.filter(s => !s.isLeadSource).map((studySource) => {
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
+      return {
+        label: sourceName,
+        value: studySource.studySourceId,
+      };
+    });
     const statusOptions = patientCategories.details.map(patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
@@ -423,7 +440,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>Protocol</label>
+            <label>* Protocol</label>
           </strong>
           <Field
             name="protocol"
