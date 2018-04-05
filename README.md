@@ -133,3 +133,10 @@ In addition, it is best practice if the absolute imports are before the relative
 - [Socket.io](http://socket.io/) for real time communication features
 - [Sentry](https://sentry.io) for production crash logging
 - [Webpack](https://github.com/webpack/webpack) for asset management and production builds.
+
+#### Drag and Drop with virtual scrolling
+
+We're using `react-virtual-list` to implement virtual scrolling. We have issues implementing drag and drop with virtual scrolling since the library recreates react-dom elements for virtual lists dynamically.
+
+The state of drag context is not updating properly.
+
