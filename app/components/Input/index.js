@@ -75,7 +75,7 @@ function Input({
           onBlur(event);
         }
       }}
-      onKeyDown={(event, key) => {
+      onKeyDown={(event) => {
         if (event.keyCode === 13) {
           input.onBlur(event);
           if (onBlur) {
