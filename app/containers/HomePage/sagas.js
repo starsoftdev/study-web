@@ -38,7 +38,7 @@ import {
   CHANGE_STUDY_STATUS,
   UPDATE_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE,
-  CHANGE_STUDY_ADD,
+  CHANGE_STUDY_AD,
   REMOVE_STUDY_AD,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_PATIENT_THANK_YOU_EMAIL,
@@ -51,6 +51,7 @@ import {
   FETCH_CAMPAIGNS_BY_STUDY,
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
+  EDIT_STUDY_LEAD_SOURCES,
 } from './AdminDashboard/constants';
 
 import {
@@ -79,8 +80,8 @@ import {
   updatePatientThankYouEmailError,
   fetchMessagingNumbersDashboardSuccess,
   fetchMessagingNumbersDashboardError,
-  changeStudyAddSuccess,
-  changeStudyAddError,
+  changeStudyAdSuccess,
+  changeStudyAdError,
   updateTwilioNumbersSuccess,
   updateTwilioNumbersError,
   clearFilters,
@@ -107,6 +108,8 @@ import {
   fetchFive9ListError,
   removeStudyAdSuccess,
   removeStudyAdError,
+  editStudyLeadSourcesSuccess,
+  editStudyLeadSourcesError,
 } from './AdminDashboard/actions';
 
 import {
@@ -519,7 +522,7 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     const requestURL = `${API_URL}/upgradeLevelSkus/getPrice`;
     const params = {
       query: {
-        fromLevel,
+        fromLevel: fromLevel || 0,
         toLevel,
       },
     };
@@ -563,6 +566,7 @@ export function* renewStudyWorker(action) {
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
+      callTracking: formValues.callTracking,
     }));
     onClose();
   } catch (err) {
@@ -599,6 +603,7 @@ export function* upgradeStudyWorker(action) {
     toastr.success('Upgrade Study', 'The request has been submitted successfully');
     response.newLevelId = formValues.level;
     response.studyId = studyId;
+    response.callTracking = formValues.callTracking;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
@@ -624,13 +629,17 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'emailNotifications') {
+      if (index !== 'emailNotifications' && index !== 'leadSource') {
         data.append(index, value);
       }
     });
     data.append('id', studyId);
     if (options.emailNotifications) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
+    }
+
+    if (options.leadSource) {
+      data.append('leadSource', JSON.stringify(options.leadSource));
     }
 
     const params = {
@@ -780,7 +789,7 @@ export function* fetchStudiesDashboardWorker(action) {
       hasMore = false;
     }
 
-    if (response.studies.length === 0) {
+    if (response.studies.length === 0 && offset === 0) {
       toastr.error('', 'Error! No studies found.');
     }
 
@@ -998,11 +1007,11 @@ export function* updateLandingPageWorker(action) {
   }
 }
 
-export function* changeStudyAddWatcher() {
-  yield* takeLatest(CHANGE_STUDY_ADD, changeStudyAddWorker);
+export function* changeStudyAdWatcher() {
+  yield* takeLatest(CHANGE_STUDY_AD, changeStudyAdWorker);
 }
 
-export function* changeStudyAddWorker(action) {
+export function* changeStudyAdWorker(action) {
   const { payload } = action;
 
   try {
@@ -1019,10 +1028,10 @@ export function* changeStudyAddWorker(action) {
 
     const response = yield call(request, requestURL, options);
     toastr.success('', 'Success! Study ad has been updated.');
-    yield put(changeStudyAddSuccess(response));
+    yield put(changeStudyAdSuccess(response));
   } catch (err) {
     toastr.error('', 'Error! Unable to read file. Please try a different one.');
-    yield put(changeStudyAddError(err));
+    yield put(changeStudyAdError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1234,6 +1243,37 @@ export function* deleteCampaignWorker(action) {
   }
 }
 
+export function* editStudyLeadSourcesWatcher() {
+  yield* takeLatest(EDIT_STUDY_LEAD_SOURCES, editStudyLeadSourcesWorker);
+}
+
+export function* editStudyLeadSourcesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({
+        leadSources: action.leadSources,
+        callTracking: action.callTracking,
+      }),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(editStudyLeadSourcesSuccess(action.leadSources));
+      toastr.success('', 'The request has been submitted successfully.');
+    } else {
+      yield put(editStudyLeadSourcesError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(editStudyLeadSourcesError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 
 let watcherD = false;
 let watcherF = false;
@@ -1268,12 +1308,13 @@ export function* homePageSaga() {
   const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
-  const changeStudyAddWatcher1 = yield fork(changeStudyAddWatcher);
+  const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
   const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
   const updateTwilioNumbersWatcher1 = yield fork(updateTwilioNumbersWatcher);
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
+  const editStudyLeadSourcesWatcher1 = yield fork(editStudyLeadSourcesWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1320,12 +1361,13 @@ export function* homePageSaga() {
     yield cancel(updateFacebookLandingPageWatcher1);
     yield cancel(updateThankYouPageWatcher1);
     yield cancel(updatePatientThankYouEmailWatcher1);
-    yield cancel(changeStudyAddWatcher1);
+    yield cancel(changeStudyAdWatcher1);
     yield cancel(fetchMessagingNumbersWatcher1);
     yield cancel(updateTwilioNumbersWatcher1);
     yield cancel(fetchCampaignsByStudyWatcher1);
     yield cancel(editCampaignWatcher1);
     yield cancel(deleteCampaignWatcher1);
+    yield cancel(editStudyLeadSourcesWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);

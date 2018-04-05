@@ -2,20 +2,19 @@
  * Created by mike on 10/9/16.
  */
 import React from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, Field, reduxForm, touch } from 'redux-form';
+import { blur, Field, reduxForm, touch, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../components/Input/index';
-import ReactSelect from '../../../components/Input/ReactSelect';
 import { submitAddPatient } from '../actions';
-import { selectStudyId, selectAddPatientStatus } from '../selectors';
+import { selectStudyId, selectAddPatientStatus, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'addPatient';
@@ -33,6 +32,9 @@ class AddPatientForm extends React.Component {
     onClose: React.PropTypes.func.isRequired,
     sources: React.PropTypes.array.isRequired,
     touchFields: React.PropTypes.func.isRequired,
+    changeField: React.PropTypes.func.isRequired,
+    sourceMapped: React.PropTypes.array,
+    studySources: React.PropTypes.object,
   };
 
   constructor(props) {
@@ -60,19 +62,22 @@ class AddPatientForm extends React.Component {
     patient.client_id = clientId;
     /* normalizing the phone number */
     patient.phone = normalizePhoneForServer(newPatient.phone);
-    patient.source_id = newPatient.source;
+    patient.studySourceId = newPatient.source;
     delete patient.source;
     submitAddPatient(studyId, patient, onClose);
   }
 
   render() {
-    const { addPatientStatus, sources } = this.props;
-    const uploadSources = _.clone(sources);
-    uploadSources.shift();
-    const sourceOptions = uploadSources.map(source => ({
-      label: source.type,
-      value: source.id,
-    }));
+    const { addPatientStatus, studySources } = this.props;
+
+    const sourceOptions = studySources.details.filter(s => !s.isLeadSource).map((studySource) => {
+      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
+      return {
+        label: sourceName,
+        value: studySource.studySourceId,
+      };
+    });
+
     return (
       <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
         <div className="field-row">
@@ -156,6 +161,7 @@ const mapStateToProps = createStructuredSelector({
   newPatient: selectValues(formName),
   studyId: selectStudyId(),
   sources: selectSources(),
+  studySources: selectStudySources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -163,6 +169,7 @@ function mapDispatchToProps(dispatch) {
     blur: (field, value) => dispatch(blur(formName, field, value)),
     submitAddPatient: (studyId, patient, onClose) => dispatch(submitAddPatient(studyId, patient, onClose)),
     touchFields: () => dispatch(touch(formName, ...fields)),
+    changeField: (field, value) => dispatch(change(formName, field, value)),
   };
 }
 

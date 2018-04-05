@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { forEach, filter } from 'lodash';
 import { Field } from 'redux-form';
+import classNames from 'classnames';
 
 import Checkbox from '../../components/Input/Checkbox';
 
@@ -13,6 +14,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
     addEmailNotification: PropTypes.func,
     closeEmailNotification: PropTypes.func,
     emailFields: PropTypes.array,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -49,7 +51,10 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   }
 
   addEmailNotificationClick() {
-    this.props.addEmailNotification();
+    const { addEmailNotification, currentUser } = this.props;
+    if (currentUser.roleForClient.isAdmin) {
+      addEmailNotification();
+    }
   }
 
   closeAddEmailModal() {
@@ -78,7 +83,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { fields, formValues } = this.props;
+    const { fields, formValues, currentUser } = this.props;
     const fLength = fields.length;
     let frLength;
     if (formValues.emailNotifications) {
@@ -122,7 +127,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
           }
         </ul>
         <div className="btn-holder">
-          <a className="add-new-email lightbox-opener" onClick={this.addEmailNotificationClick}>Add Email Notification</a>
+          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.roleForClient.isAdmin}>Add Email Notification</a>
         </div>
       </div>
     );
