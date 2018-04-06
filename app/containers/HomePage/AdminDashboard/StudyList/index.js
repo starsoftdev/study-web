@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import classNames from 'classnames';
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
@@ -17,6 +16,7 @@ import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 import { selectValues } from '../../../../common/selectors/form.selector';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
+import CallTrackingPageModal from '../../../../components/CallTrackingPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
@@ -117,6 +117,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     this.showPatientThankYouPageModal = this.showPatientThankYouPageModal.bind(this);
     this.showLeadGenPageModal = this.showLeadGenPageModal.bind(this);
     this.showCampaignPageModal = this.showCampaignPageModal.bind(this);
+    this.showCallTrackingModal = this.showCallTrackingModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -150,6 +151,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
       showPatientThankYouPageModal: false,
       showLeadGenPageModal: false,
       showCampaignPageModal: false,
+      showCallTrackingModal:false,
       addEmailModalShow: false,
       isFixedBottomScroll: false,
       fixedScrollWidth: false,
@@ -257,6 +259,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -274,6 +277,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -291,6 +295,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: true,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -325,6 +330,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: false,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -342,6 +348,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
         showPatientThankYouPageModal: false,
         showLeadGenPageModal: false,
         showCampaignPageModal: true,
+        showCallTrackingModal: false,
       });
     } else {
       this.setState({
@@ -350,18 +357,35 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     }
   }
 
-  campaignChanged(e) {
-    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('campaign', e);
-    this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'campaign');
+  showCallTrackingModal(visible) {
+    if (visible) {
+      this.setState({
+        showEditInformationModal: false,
+        showLandingPageModal: false,
+        showThankYouPageModal: false,
+        showPatientThankYouPageModal: false,
+        showCampaignPageModal: false,
+        showCallTrackingModal: true,
+      });
+    } else {
+      this.setState({
+        showCallTrackingModal: false,
+      });
+    }
   }
 
-  sourceChanged(e) {
+  campaignChanged(val) {
     const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
-    setFilterFormValues('source', e);
+    setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(e, 'source');
+    fetchStudiesAccordingToFilters(val, 'campaign');
+  }
+
+  sourceChanged(val) {
+    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    setFilterFormValues('source', val);
+    this.toggleAllStudies(false);
+    fetchStudiesAccordingToFilters(val, 'source');
   }
 
   addEmailNotificationClick(custom = false) {
@@ -464,6 +488,12 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             bsStyle="primary"
             className="pull-left"
             data-class="btn-deactivate"
+            onClick={() => this.showCallTrackingModal(true)}
+          > Media Tracking </Button>
+          <Button
+            bsStyle="primary"
+            className="pull-left"
+            data-class="btn-deactivate"
             onClick={() => this.showLeadGenPageModal(true)}
           > LEAD GEN </Button>
           <Button
@@ -478,12 +508,6 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             data-class="btn-deactivate"
             onClick={() => this.showEditInformationModal(true)}
           > Info </Button>
-          <Button
-            bsStyle="primary"
-            className="pull-left"
-            data-class="btn-deactivate"
-            onClick={this.adSetStudies}
-          > Ad Set </Button>
           <Button
             bsStyle="primary"
             className="pull-left"
@@ -524,20 +548,18 @@ export default class StudyList extends React.Component { // eslint-disable-line 
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
-      if (i === 1) {
-        campaignOptions.push({ label: '1', value: 1 });
-      } else {
-        campaignOptions.push({ label: i, value: i });
-      }
+      campaignOptions.push({ label: i, value: i });
     }
-    campaignOptions.push({ label: 'Current', value: 'current' });
+    if (totals.details && totals.details.current_campaign_count && totals.details.current_campaign_count > 0) {
+      campaignOptions.push({ label: 'Current', value: 'current' });
+    }
 
     campaignOptions = campaignOptions.reverse();
 
     const selectedStudies = studies.details.filter(s => s.selected);
 
     const sourcesOptions = [];
-    _.forEach((this.props.sources), (item) => {
+    this.props.sources.forEach(item => {
       sourcesOptions.push({ label: item.type, value: item.id });
     });
     sourcesOptions.unshift({ label: 'All', value: -1 });
@@ -592,8 +614,8 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                     </div>
                     <div className="select pull-left">
                       <Field
-                        name="data-search"
-                        className="data-search"
+                        name="campaign-search"
+                        className="campaign-search"
                         component={ReactSelect}
                         placeholder="Select Campaign"
                         searchPlaceholder="Search"
@@ -934,6 +956,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                 this.showCampaignPageModal(false);
               }}
               openModal={this.state.showCampaignPageModal}
+              study={selectedStudies[0]}
+            />
+            <CallTrackingPageModal
+              onClose={() => {
+                this.showCallTrackingModal(false);
+              }}
+              openModal={this.state.showCallTrackingModal}
               study={selectedStudies[0]}
             />
             <Modal

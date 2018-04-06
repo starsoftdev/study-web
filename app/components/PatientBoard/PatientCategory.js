@@ -37,7 +37,7 @@ const patientTarget = {
         // store the scheduled patient information temporarily since the user could cancel out of their category movement
         // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
         props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, category.id);
-      } else {
+      } else if (item.patientCategoryId !== category.id) {
         props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, category.id, item.id, patientId);
       }
     };

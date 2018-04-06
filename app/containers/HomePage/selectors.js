@@ -90,6 +90,12 @@ const selectSearchProtocolsFormValues = () => createSelector(
   (substate) => get(substate, 'searchProtocols.values', {})
 );
 
+const selectStudyLeadSources = () => createSelector(
+  selectHomePageDomain(),
+  (substate) => substate.studyLeadSources
+);
+
+
 export default selectHomePage;
 export {
   selectHomePageDomain,
@@ -109,4 +115,5 @@ export {
   selectHomePageClientAdmins,
   selectQueryParams,
   selectEditStudyEmailNotifications,
+  selectStudyLeadSources,
 };

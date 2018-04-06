@@ -52,7 +52,7 @@ class StudyStats extends React.Component {
               </div>
               <div className="box same-height-left">
                 <i className="icomoon-user-in" />
-                <strong className="number">{stats.referrals ? stats.referrals : 0}</strong>
+                <strong className="number">{stats.totalReferrals || 0}</strong>
                 <h3>TOTAL PATIENT REFERRALS</h3>
               </div>
             </Col>

@@ -92,7 +92,6 @@ export class PatientThankYouEmailModal extends React.Component {
     }
 
     if (!newProps.updatePatientThankYouEmailProcess.saving && newProps.updatePatientThankYouEmailProcess.success) {
-      fetchLanding(this.state.selected.study_id);
       resetState();
       onClose();
     }
@@ -122,12 +121,6 @@ export class PatientThankYouEmailModal extends React.Component {
   }
 
   render() {
-    /* const initText =
-      'Hi Oliver Queen, Thanks for signing up for this research study! ' +
-      'Please call (226) 646-2764 to schedule your appointment today and tell them Studykik sent you! ' +
-      'Healthcare will be changed globally by your participation.  ' +
-      'Thank you, StudyKIK'; */
-
     const { openModal, onClose } = this.props;
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('patient-thankyou-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>

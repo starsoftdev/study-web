@@ -54,13 +54,13 @@ import {
   UPDATE_LANDING_PAGE_SUCCESS,
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
-  CHANGE_STUDY_ADD,
-  CHANGE_STUDY_ADD_SUCCESS,
-  CHANGE_STUDY_ADD_ERROR,
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
-  RESET_CHANGE_STUDY_ADD_STATE,
+  RESET_CHANGE_STUDY_AD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
@@ -93,6 +93,9 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  EDIT_STUDY_LEAD_SOURCES,
+  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
+  EDIT_STUDY_LEAD_SOURCES_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -264,23 +267,23 @@ export function resetLandingPageState() {
   };
 }
 
-export function changeStudyAdd(payload) {
+export function changeStudyAd(payload) {
   return {
-    type: CHANGE_STUDY_ADD,
+    type: CHANGE_STUDY_AD,
     payload,
   };
 }
 
-export function changeStudyAddSuccess(payload) {
+export function changeStudyAdSuccess(payload) {
   return {
-    type: CHANGE_STUDY_ADD_SUCCESS,
+    type: CHANGE_STUDY_AD_SUCCESS,
     payload,
   };
 }
 
-export function changeStudyAddError(payload) {
+export function changeStudyAdError(payload) {
   return {
-    type: CHANGE_STUDY_ADD_ERROR,
+    type: CHANGE_STUDY_AD_ERROR,
     payload,
   };
 }
@@ -305,9 +308,9 @@ export function removeStudyAdError() {
   };
 }
 
-export function resetChangeStudyAddState() {
+export function resetChangeStudyAdState() {
   return {
-    type: RESET_CHANGE_STUDY_ADD_STATE,
+    type: RESET_CHANGE_STUDY_AD_STATE,
   };
 }
 
@@ -717,6 +720,29 @@ export function deleteCampaignSuccess(payload) {
 export function deleteCampaignError(payload) {
   return {
     type: DELETE_CAMPAIGN_ERROR,
+    payload,
+  };
+}
+
+export function editStudyLeadSources(studyId, leadSources, callTracking) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES,
+    studyId,
+    leadSources,
+    callTracking,
+  };
+}
+
+export function editStudyLeadSourcesSuccess(payload) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function editStudyLeadSourcesError(payload) {
+  return {
+    type: EDIT_STUDY_LEAD_SOURCES_ERROR,
     payload,
   };
 }
