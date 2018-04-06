@@ -21,7 +21,7 @@ class StudyActionButtons extends Component {
   static propTypes = {
     campaign: PropTypes.number,
     search: PropTypes.string,
-    source: PropTypes.any,
+    source: PropTypes.number,
     studyId: PropTypes.number.isRequired,
     exportPatients: PropTypes.func,
     ePMS: PropTypes.bool,

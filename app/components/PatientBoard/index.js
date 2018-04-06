@@ -37,7 +37,7 @@ import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../contai
 import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/StudyPage/selectors';
 import PatientCategory from './PatientCategory';
-import { selectValues } from '../../common/selectors/form.selector';
+
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)
@@ -75,10 +75,6 @@ class PatientBoard extends React.Component {
     ePMS: React.PropTypes.bool,
     fetchingPatients: React.PropTypes.any,
     updatePatientSuccess: React.PropTypes.func,
-    loadMore: React.PropTypes.func,
-    paginationOptions: React.PropTypes.object,
-    studyPatientsFilter: React.PropTypes.object,
-    patientCategoriesTotals: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -97,7 +93,6 @@ class PatientBoard extends React.Component {
     this.resetFormsValues = this.resetFormsValues.bind(this);
     this.onPatientScheduleSubmit = this.onPatientScheduleSubmit.bind(this);
     this.handleDateChange = this.handleDateChange.bind(this);
-    this.loadItems = this.loadItems.bind(this);
   }
 
   componentDidMount() {
@@ -246,17 +241,11 @@ class PatientBoard extends React.Component {
 
   handleScroll(event) {
     let scrollTop;
-    let scrollBottom;
     if (event.target.scrollingElement) {
       scrollTop = event.target.scrollingElement.scrollTop;
-      scrollBottom = scrollTop + window.innerHeight;
     } else {
       // for firefox compatibility
       scrollTop = event.pageY;
-      scrollBottom = scrollTop + window.innerHeight;
-    }
-    if (scrollBottom >= event.target.scrollingElement.scrollHeight) {
-      this.loadItems();
     }
     this.setState({
       stick: scrollTop >= 654,
@@ -275,14 +264,8 @@ class PatientBoard extends React.Component {
     }
   }
 
-  loadItems() {
-    if (this.props.paginationOptions.hasMoreItems && !this.props.fetchingPatients) {
-      this.props.loadMore(this.props.studyPatientsFilter, true);
-    }
-  }
-
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -290,16 +273,7 @@ class PatientBoard extends React.Component {
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
               {patientCategories.map(patientCategory => (
-                <PatientCategory
-                  key={patientCategory.id}
-                  patientCategoriesTotals={patientCategoriesTotals}
-                  category={patientCategory}
-                  onPatientClick={this.onPatientClick}
-                  onPatientTextClick={this.onPatientTextClick}
-                  onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
-                  hasMoreItems={paginationOptions.hasMoreItems}
-                  loadMore={this.loadMore}
-                />
+                <PatientCategory key={patientCategory.id} category={patientCategory} onPatientClick={this.onPatientClick} onPatientTextClick={this.onPatientTextClick} onPatientDraggedToScheduled={this.onPatientDraggedToScheduled} />
               ))}
             </ul>
           </nav>
@@ -329,7 +303,6 @@ const mapStateToProps = createStructuredSelector({
   studyId: Selector.selectStudyId(),
   selectedDate: Selector.selectSelectedDate(),
   currentUser: selectCurrentUser(),
-  studyPatientsFilter: selectValues('filterStudyPatients'),
 });
 
 const mapDispatchToProps = (dispatch) => (

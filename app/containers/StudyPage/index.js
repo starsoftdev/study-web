@@ -59,9 +59,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     studyStatsFetched: React.PropTypes.func.isRequired,
     studyViewsStatFetched: React.PropTypes.func.isRequired,
     studySources: React.PropTypes.object,
-    paginationOptions: React.PropTypes.object,
-    patientCategoriesTotals: React.PropTypes.array,
-    patientBoardLoading: React.PropTypes.bool,
   };
 
   static defaultProps = {
@@ -218,24 +215,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     }
   }
 
-  handleSubmit(searchFilter, loadMore) {
-    const { params: { id }, paginationOptions } = this.props;
-    const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 1;
-    const campaignId = searchFilter.campaignId || searchFilter.campaign;
-    let skip = 0;
-    if (loadMore) {
-      skip = paginationOptions.page * 50;
-    }
-
-    if (paginationOptions.hasMoreItems) {
-      this.props.fetchPatients(id, searchFilter.text, campaignId, sourceId, skip);
-    }
+  handleSubmit(searchFilter) {
+    const { params: { id } } = this.props;
+    this.props.fetchPatients(id, searchFilter.text, searchFilter.campaignId, searchFilter.sourceId);
   }
 
   render() {
-    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy,
-      campaigns, patientCategories, protocol, site, sources, study, stats,
-      fetchingPatients, params, paginationOptions, patientCategoriesTotals, patientBoardLoading } = this.props;
+    const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy, campaigns, patientCategories, protocol, site, sources, study, stats, fetchingPatients, params } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -312,11 +298,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             </p>
           </header>
           <FilterStudyPatients
-            patientBoardLoading={patientBoardLoading}
             campaignOptions={campaignOptions}
             sourceOptions={sourceOptions}
             fetchStudy={fetchStudy}
             fetchStudyStats={fetchStudyStats}
+            handleSubmit={this.handleSubmit}
             ePMS={ePMS}
             studyName={studyName}
             initialValues={{ source: defaultSource }}
@@ -325,14 +311,11 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           />
           <StudyStats stats={stats} />
           <PatientBoard
-            patientCategoriesTotals={patientCategoriesTotals}
             patientCategories={patientCategories}
             fetchingPatients={fetchingPatients}
             site={site}
             params={params}
             ePMS={ePMS}
-            loadMore={this.handleSubmit}
-            paginationOptions={paginationOptions}
           />
         </section>
       </div>
@@ -343,7 +326,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 const mapStateToProps = createStructuredSelector({
   campaigns: Selector.selectCampaigns(),
   fetchingPatients: Selector.selectFetchingPatients(),
-  patientBoardLoading: Selector.selectPatientBoardLoading(),
   fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
   fetchingStudy: Selector.selectFetchingStudy(),
   patientCategories: Selector.selectPatientCategories(),
@@ -352,18 +334,16 @@ const mapStateToProps = createStructuredSelector({
   protocol: Selector.selectProtocol(),
   study: Selector.selectStudy(),
   stats: Selector.selectStudyStats(),
-  patientCategoriesTotals: Selector.selectPatientCategoriesTotals(),
   socket: selectSocket(),
   sitePatients: selectSitePatients(),
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
-  paginationOptions: Selector.selectPaginationOptions(),
   studySources: Selector.selectStudySources(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
+    fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
     downloadReport: (reportName) => dispatch(downloadReport(reportName)),
     fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
     fetchStudy: (studyId, sourceId) => dispatch(fetchStudy(studyId, sourceId)),

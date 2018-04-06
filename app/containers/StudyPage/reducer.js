@@ -12,7 +12,6 @@ import {
   EXPORT_PATIENTS_SUCCESS,
   FETCHING_STUDY,
   FETCH_CAMPAIGNS_SUCCESS,
-  FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
   FETCH_PATIENT_DETAILS_SUCCESS,
@@ -59,7 +58,6 @@ import {
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
   SET_SELECTED_STUDY_SOURCES,
-  PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
 
 import {
@@ -70,7 +68,6 @@ import {
 
 const initialState = {
   stats: {},
-  patientCategoriesTotals: [],
   carousel: {
     note: true,
     text: false,
@@ -100,14 +97,10 @@ const initialState = {
     error: null,
   },
   selectedStudySources: [],
-  paginationOptions: {
-    hasMoreItems: true,
-    page: 1,
-  },
 };
 
 function studyPageReducer(state = initialState, action) {
-  let hasMoreItems;
+  let totalReferrals = 0;
 
   switch (action.type) {
     case SET_SELECTED_STUDY_SOURCES:
@@ -165,50 +158,35 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         fetchingStudy: true,
       };
-    case FETCH_PATIENTS:
-      return {
-        ...state,
-        fetchingPatients: true,
-      };
     case FETCH_PATIENTS_SUCCESS:
-      hasMoreItems = action.payload.length > 0;
+      for (const category of action.payload) {
+        totalReferrals += category.patients.length;
+      }
+
       return {
         ...state,
         patientCategories: state.patientCategories.map(patientCategory => {
           const tempCategory = _.find(action.payload, category => (
             category.id === patientCategory.id
           ));
-          let patients = [];
           // try to find the category in the payload
           // if it's not found, clear the patient list
           if (tempCategory) {
             // return the payload as the mapping
-            if (action.skip !== 0) {
-              patients = patientCategory.patients.concat(tempCategory.patients);
-            } else {
-              patients = tempCategory.patients;
-            }
             return {
               ...patientCategory,
-              patients,
+              patients: tempCategory.patients,
             };
           }
-
-          if (action.skip !== 0) {
-            patients = patientCategory.patients;
-          } else {
-            patients = [];
-          }
-
           return {
             ...patientCategory,
-            patients,
+            patients: [],
           };
         }),
         fetchingPatients: false,
-        paginationOptions: {
-          hasMoreItems,
-          page: action.page,
+        stats: {
+          ...state.stats,
+          referrals: totalReferrals,
         },
       };
     case FETCH_PATIENTS_ERROR:
@@ -396,14 +374,7 @@ function studyPageReducer(state = initialState, action) {
           views: action.payload.views,
           calls: action.payload.countReceived,
           callsDuration: action.payload.totalDuration,
-          totalReferrals: action.payload.totalReferrals,
-          referrals: action.payload.totalReferrals,
         },
-      };
-    case PATIENT_CATEGORIES_TOTALS_FETCHED:
-      return {
-        ...state,
-        patientCategoriesTotals: action.payload,
       };
     case SET_STUDY_ID:
       return {
