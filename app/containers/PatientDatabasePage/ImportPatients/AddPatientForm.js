@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
 });
 
-@reduxForm({ form: formName, validate: formValidator })
+@reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AddPatientForm extends React.Component {
   static propTypes = {
