@@ -5,7 +5,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { blur, change, Field, reduxForm, touch } from 'redux-form';
+import { blur, change, Field, reduxForm, touch, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
@@ -38,6 +38,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
+  reset: (form) => dispatch(reset(form)),
   change: (field, value) => dispatch(change(formName, field, value)),
   fetchFilteredProtcols: (clientId, siteId) => dispatch(fetchFilteredProtcols(clientId, siteId)),
   submitAddPatient: (patient, onClose) => dispatch(submitAddPatient(patient, onClose)),
@@ -45,7 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
 });
 
-@reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
+@reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false, keepDirtyOnReinitialize: true })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AddPatientForm extends React.Component {
   static propTypes = {
@@ -67,6 +68,7 @@ export default class AddPatientForm extends React.Component {
     switchShowAddProtocolModal: React.PropTypes.func.isRequired,
     protocols: React.PropTypes.array,
     fetchStudySources: React.PropTypes.func.isRequired,
+    reset: React.PropTypes.func.isRequired,
     studySources: React.PropTypes.object,
   };
 
@@ -82,6 +84,16 @@ export default class AddPatientForm extends React.Component {
     this.changeSiteLocation = this.changeSiteLocation.bind(this);
     this.addPatient = this.addPatient.bind(this);
     this.selectProtocol = this.selectProtocol.bind(this);
+  }
+
+  componentWillMount() {
+    const { newPatient } = this.props;
+    if (newPatient.site) {
+      this.setState({ siteLocation: newPatient.site });
+    }
+    if (newPatient.protocol) {
+      this.setState({ selectedStudyId: newPatient.protocol });
+    }
   }
 
   onPhoneBlur(event) {
@@ -104,7 +116,7 @@ export default class AddPatientForm extends React.Component {
 
   addPatient(event) {
     event.preventDefault();
-    const { currentUser, formError, onClose, newPatient, submitAddPatient, touchFields } = this.props;
+    const { currentUser, formError, onClose, newPatient, submitAddPatient, touchFields, reset } = this.props;
 
     if (formError) {
       touchFields();
@@ -128,6 +140,7 @@ export default class AddPatientForm extends React.Component {
     patient.studySourceId = newPatient.source;
     delete patient.source;
     submitAddPatient(patient, onClose);
+    reset(formName);
   }
 
   selectProtocol(studyId) {
