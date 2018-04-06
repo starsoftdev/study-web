@@ -22,8 +22,9 @@ import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, fetchPatientSignUps, getCategoryNotes } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectPatientSignUps, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { fetchSources } from '../../containers/App/actions';
 
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -44,7 +45,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     categoryNotes: PropTypes.object,
     notesPaginationOptions: PropTypes.object,
     patientSignUps: PropTypes.object,
-    fetchPatientSignUps: PropTypes.func,
+    fetchSources: PropTypes.func,
+    clearReportList: PropTypes.func,
   };
 
   constructor(props) {
@@ -58,7 +60,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentCategoryStudyId: false,
       currentDnqStudyId: false,
       showPQSModal: false,
-      defaultSource: 1,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -77,18 +78,16 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    const filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
-    filters.source = this.state.defaultSource;
+    const filters = { source: 1, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
+    this.props.fetchSources();
   }
 
-  componentDidMount() {
-    const { currentUser } = this.props;
-    const protocolNumber = this.props.location.query.protocol || null;
-    this.props.fetchPatientSignUps(currentUser, protocolNumber);
+  componentWillUnmount() {
+    this.props.clearReportList();
   }
 
   getPercentageObject(item) {
@@ -120,7 +119,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
-    filters.source = this.state.defaultSource;
     this.setState({ filters });
 
     this.props.getReportsTotals(filters);
@@ -196,6 +194,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       notes = <div className="text-center btn-default-padding">No notes.</div>;
     }
 
+    const searchInitialValues = { source: 1 };
 
     return (
       <div className="container-fluid sponsor-portal report-view-page">
@@ -225,6 +224,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           location={this.props.location}
           currentUser={this.props.currentUser}
           formValues={this.props.formValues}
+          initialValues={searchInitialValues}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
@@ -277,7 +277,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 }
 
 const mapStateToProps = createStructuredSelector({
-  patientSignUps: selectPatientSignUps(),
   currentUser: selectCurrentUser(),
   reportsList: selectReportsList(),
   formValues: selectSearchReportsFormValues(),
@@ -295,8 +294,9 @@ function mapDispatchToProps(dispatch) {
     sortReportsSuccess: (reports) => dispatch(sortReportsSuccess(reports)),
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
-    fetchPatientSignUps: (params, protocolNumber) => dispatch(fetchPatientSignUps(params, protocolNumber)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
+    fetchSources: () => dispatch(fetchSources()),
+    clearReportList: () => dispatch(clearReportList()),
   };
 }
 

@@ -564,7 +564,7 @@ export class BillingPage extends Component {
                 <div className="area">
                   <strong className="h3">Instant Patient Email and Text Message w/Site Phone</strong>
                   <p>
-                    Once a patient signs up for your clinical trial, the receive an instant text message and
+                    Once a patient signs up for your clinical trial, they receive an instant text message and
                     email notification with your site’s contact information &amp; a question asking when is
                     the best time to call them for a pre-screening phone call.
                   </p>
@@ -644,7 +644,7 @@ export class BillingPage extends Component {
                 onClick={this.handleClick}
               >
                 <i className="icomoon-time" />
-                <h3><span>Patient Call Tracking</span></h3>
+                <h3><span>Patient Media Tracking</span></h3>
               </a>
               <div className="dropdown-menu" aria-labelledby="dLabel">
                 <div className="img-holder">
@@ -652,7 +652,7 @@ export class BillingPage extends Component {
                 </div>
                 <div className="area">
                   <strong className="h3">
-                    Patient Call Tracking
+                    Patient Media Tracking
                   </strong>
                   <p>
                     Your site will never miss a patient who is calling about your trial on
