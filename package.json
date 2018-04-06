@@ -196,8 +196,6 @@
     "react-throttle": "^0.3.0",
     "react-toggle-button": "git+https://github.com/studykik/react-toggle-button.git#403d0722819f0b7b94698cf61b2ecc82a8eb2b6b",
     "react-tooltip": "^3.3.0",
-    "react-virtual-list": "^2.2.3",
-    "react-virtualized": "^9.18.0",
     "react-youtube": "^7.4.0",
     "redux": "3.5.2",
     "redux-form": "~6.1.1",
