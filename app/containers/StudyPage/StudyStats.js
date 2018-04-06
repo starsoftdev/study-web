@@ -40,7 +40,7 @@ class StudyStats extends React.Component {
       <div className={classNames('stats', { active: this.state.open })}>
         <div className="head">
           <h2>STATS</h2>
-          <span className="opener" onClick={this.onToggle}></span>
+          <span className="opener" onClick={this.onToggle} />
         </div>
         <Collapse className="infoarea" in={this.state.open}>
           <Row>
@@ -52,7 +52,7 @@ class StudyStats extends React.Component {
               </div>
               <div className="box same-height-left">
                 <i className="icomoon-user-in" />
-                <strong className="number">{stats.referrals ? stats.referrals : 0}</strong>
+                <strong className="number">{stats.totalReferrals || 0}</strong>
                 <h3>TOTAL PATIENT REFERRALS</h3>
               </div>
             </Col>
