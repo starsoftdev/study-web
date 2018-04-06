@@ -11,7 +11,7 @@ import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
 
-import { fetchPatients, fetchPatientCategoriesTotals, setSelectedStudySources } from './actions';
+import { fetchPatients, setSelectedStudySources } from './actions';
 
 @reduxForm({ form: 'filterStudyPatients' })
 class FilterStudyPatientsForm extends Component {
@@ -19,7 +19,6 @@ class FilterStudyPatientsForm extends Component {
     campaignOptions: PropTypes.array.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func.isRequired,
-    fetchPatientCategoriesTotals: PropTypes.func.isRequired,
     fetchStudy: PropTypes.func.isRequired,
     fetchStudyStats: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
@@ -35,7 +34,6 @@ class FilterStudyPatientsForm extends Component {
     sourceOptions: PropTypes.array,
     totalCountByGroups: PropTypes.object,
     initialValues: PropTypes.object,
-    patientBoardLoading: PropTypes.bool,
   };
   static defaultProps = {
     submitting: false,
@@ -53,22 +51,6 @@ class FilterStudyPatientsForm extends Component {
   componentWillMount() {
   }
 
-  componentWillReceiveProps(newProps) {
-    const { patientBoardLoading, fetchPatientCategoriesTotals, studyId, campaign, source } = this.props;
-    let newCampaign = campaign;
-    let newSource = source;
-    /* nulling the values if all is selected */
-    if (campaign === -1) {
-      newCampaign = null;
-    }
-    if (source === -1) {
-      newSource = null;
-    }
-
-    if (patientBoardLoading && !newProps.patientBoardLoading) {
-      fetchPatientCategoriesTotals(studyId, newCampaign, newSource);
-    }
-  }
 
   onSubmit(event) {
     event.preventDefault();
@@ -81,11 +63,11 @@ class FilterStudyPatientsForm extends Component {
     if (source === -1) {
       newSource = null;
     }
-    fetchPatients(studyId, search, newCampaign, newSource, null);
+    fetchPatients(studyId, search, newCampaign, newSource);
   }
 
   searchPatient(event, type) {
-    const { fetchPatients, fetchPatientCategoriesTotals, fetchStudyStats, studyId, campaign, source, search } = this.props;
+    const { fetchPatients, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
     let newSource = source;
@@ -97,16 +79,14 @@ class FilterStudyPatientsForm extends Component {
       newSource = null;
     }
     if (type === 'search') {
-      fetchPatients(studyId, event.target.value, newCampaign, newSource, null);
+      fetchPatients(studyId, event.target.value, newCampaign, newSource);
     } else if (type === 'source') {
       if (event === -1 || !event) {
-        fetchPatients(studyId, search, newCampaign, null, null);
+        fetchPatients(studyId, search, newCampaign, null);
         fetchStudyStats(studyId, newCampaign, null);
-        fetchPatientCategoriesTotals(studyId, newCampaign, null);
       } else {
         fetchPatients(studyId, search, newCampaign, (event !== null ? event : 1));
         fetchStudyStats(studyId, newCampaign, (event !== null ? event : 1));
-        fetchPatientCategoriesTotals(studyId, newCampaign, (event !== null ? event : 1));
       }
     } else {
       /* -1 means all was selected */
@@ -114,13 +94,11 @@ class FilterStudyPatientsForm extends Component {
         campaign: event,
       });
       if (event === -1) {
-        fetchPatients(studyId, search, null, newSource, null);
+        fetchPatients(studyId, search, null, newSource);
         fetchStudyStats(studyId, null, newSource);
-        fetchPatientCategoriesTotals(studyId, null, newSource);
       } else {
-        fetchPatients(studyId, search, event, newSource, null);
+        fetchPatients(studyId, search, event, newSource);
         fetchStudyStats(studyId, event, newSource);
-        fetchPatientCategoriesTotals(studyId, event, newSource);
       }
     }
   }
@@ -215,8 +193,7 @@ const mapStateToProps = (state) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
-    fetchPatientCategoriesTotals: (studyId, campaignId, sourceId) => dispatch(fetchPatientCategoriesTotals(studyId, campaignId, sourceId)),
+    fetchPatients: (studyId, text, campaignId, sourceId) => dispatch(fetchPatients(studyId, text, campaignId, sourceId)),
     setSelectedStudySources: (list) => dispatch(setSelectedStudySources(list)),
   };
 }
