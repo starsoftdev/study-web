@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 
 import {
   FETCH_NOTE,
@@ -54,15 +55,15 @@ import {
   UPDATE_LANDING_PAGE_ERROR,
   RESET_LANDING_PAGE_STATE,
 
-  CHANGE_STUDY_ADD,
-  CHANGE_STUDY_ADD_SUCCESS,
-  CHANGE_STUDY_ADD_ERROR,
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
 
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
 
-  RESET_CHANGE_STUDY_ADD_STATE,
+  RESET_CHANGE_STUDY_AD_STATE,
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
@@ -88,6 +89,7 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
+  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
 } from './constants';
 
 import {
@@ -97,6 +99,9 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -148,7 +153,7 @@ const initialState = {
     saving: false,
     error: null,
   },
-  changeStudyAddProcess: {
+  changeStudyAdProcess: {
     success: false,
     saving: false,
     error: null,
@@ -205,6 +210,11 @@ const initialState = {
     deleting: false,
     error: false,
   },
+  studyLeadSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
   updatedStudyAd: null,
   removedStudyAd: null,
   levels: [],
@@ -225,6 +235,64 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
+
+    case FETCH_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: state.studyLeadSources.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              source: { value: item.source_id, label: item.type },
+              source_name: item.source_name,
+              studySourceId: item.studySourceId,
+              landingPageId: item.landingPageId,
+              recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
+              messagingNumber: item.phoneNumberId ? { value: item.phoneNumberId, label:item.phoneNumber } : null,
+              googleUrl: item.googleUrl,
+              url: item.url,
+              studyId: item.studyId,
+              landingPageUrl: item.landingPageUrl,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
+    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+
+    case EDIT_STUDY_LEAD_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyLeadSources: {
+          details: action.payload.map((item) => {
+            return {
+              ...item,
+            };
+          }),
+          fetching: false,
+          error: null,
+        },
+      };
+
     case FETCH_STUDY_INDICATION_TAG:
       return {
         ...state,
@@ -841,31 +909,31 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD:
+    case CHANGE_STUDY_AD:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: true,
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD_SUCCESS:
+    case CHANGE_STUDY_AD_SUCCESS:
       return {
         ...state,
         updatedStudyAd: action.payload.imgSrc,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: true,
           saving: false,
           error: null,
         },
       };
-    case CHANGE_STUDY_ADD_ERROR:
+    case CHANGE_STUDY_AD_ERROR:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: false,
           error: true,
@@ -887,11 +955,11 @@ export default function dashboardPageReducer(state = initialState, action) {
         ...state,
         removedStudyAdId: null,
       };
-    case RESET_CHANGE_STUDY_ADD_STATE:
+    case RESET_CHANGE_STUDY_AD_STATE:
       return {
         ...state,
         updatedStudyAd: null,
-        changeStudyAddProcess: {
+        changeStudyAdProcess: {
           success: false,
           saving: false,
           error: null,

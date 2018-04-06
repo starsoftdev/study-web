@@ -22,7 +22,7 @@ import ReactSelect from '../../components/Input/ReactSelect';
 import RenderLeads from '../../components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from '../../components/EditSiteForm/index';
-import { selectCurrentUserClientId, selectSavedSite } from '../../containers/App/selectors';
+import { selectCurrentUserClientId, selectSavedSite, selectCurrentUser } from '../../containers/App/selectors';
 import { selectAddNotificationProcess } from '../../containers/ListNewStudyPage/selectors';
 import {
   selectCallTracking,
@@ -38,14 +38,13 @@ import {
   showSiteLocationModal,
 } from '../../containers/ListNewStudyPage/actions';
 
-import { parseTimezone } from '../../utils/time';
-
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
   leadsCount: selectLeadsCount(),
   currentUserClientId: selectCurrentUserClientId(),
   addNotificationProcess: selectAddNotificationProcess(),
   savedSite: selectSavedSite(),
+  currentUser: selectCurrentUser(),
 });
 
 const formName = 'listNewStudy';
@@ -83,6 +82,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
     currentUserClientId: PropTypes.number,
+    currentUser: PropTypes.object,
     availPhoneNumbers: PropTypes.array,
     addNotificationProcess: PropTypes.object,
     savedSite: PropTypes.object,
@@ -187,13 +187,13 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     const { currentUserClientId, saveSite } = this.props;
     saveSite(currentUserClientId, null, {
       ...siteData,
-      timezone: parseTimezone(siteData.timezone),
+      timezone: siteData.timezoneUnparsed,
     });
     saveSite(currentUserClientId, null, siteData);
   }
 
   render() {
-    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels } = this.props;
+    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels, currentUser } = this.props;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
       id: row.id,
@@ -232,6 +232,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
                         hideAddEmailModal={hideAddEmailModal}
                         addEmailNotificationUser={addEmailNotificationUser}
                         currentUserClientId={currentUserClientId}
+                        currentUser={currentUser}
                       />
                     </div>
 
@@ -398,10 +399,10 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             />
           </div>
 
-          {false &&
-            <div className="tracking-source">
+          {
+            <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>CALL TRACKING: $247</label></strong>
+                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}
@@ -412,7 +413,11 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           }
 
           {callTracking &&
-            <FieldArray name="leadSource" component={RenderLeads} availPhoneNumbers={this.props.availPhoneNumbers} />
+            <FieldArray
+              name="leadSource"
+              component={RenderLeads}
+              formValues={formValues}
+            />
           }
 
           <div className="field-row">
@@ -437,8 +442,6 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               />
             </div>
           </div>
-
-
         </div>
 
         <Modal dialogComponentClass={CenteredModal} show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>

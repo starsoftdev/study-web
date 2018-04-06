@@ -2,12 +2,11 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
-import _, { find } from 'lodash';
+import _ from 'lodash';
 import { touch, reset } from 'redux-form';
 import ReactTooltip from 'react-tooltip';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE } from '../../common/constants';
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { fetchLevels, saveCard, fetchClientAdmins } from '../../containers/App/actions';
@@ -15,14 +14,12 @@ import { selectCurrentUser, selectStudyLevels, selectCurrentUserStripeCustomerId
 import { fetchIndicationLevelPrice, clearIndicationLevelPrice, renewStudy, upgradeStudy, editStudy, setActiveSort, sortSuccess, fetchUpgradeStudyPrice, fetchStudies } from '../../containers/HomePage/actions';
 import { selectStudies, selectSelectedIndicationLevelPrice, selectRenewedStudy, selectUpgradedStudy, selectEditedStudy, selectPaginationOptions, selectHomePageClientAdmins } from '../../containers/HomePage/selectors';
 import { selectSyncErrorBool } from '../../common/selectors/form.selector';
-import { selectRenewStudyFormValues, selectRenewStudyFormError } from '../../components/RenewStudyForm/selectors';
-import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError } from '../../components/UpgradeStudyForm/selectors';
+import { selectRenewStudyFormValues, selectRenewStudyFormError, selectRenewStudyFields } from '../../components/RenewStudyForm/selectors';
+import { selectUpgradeStudyFormValues, selectUpgradeStudyFormError, selectUpgradeStudyFields } from '../../components/UpgradeStudyForm/selectors';
+import { selectEditStudyFields } from '../../components/EditStudyForm/selectors';
 import RenewStudyForm from '../../components/RenewStudyForm/index';
 import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
 import EditStudyForm from '../../components/EditStudyForm';
-import { upgradeStudyFields } from '../../components/UpgradeStudyForm/validator';
-import { renewStudyFields } from '../../components/RenewStudyForm/validator';
-import { editStudyFields } from '../../components/EditStudyForm/validator';
 import StudyItem from './StudyItem';
 import pqsImage from '../../assets/images/pqs.png';
 
@@ -39,9 +36,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     editStudy: PropTypes.func,
     editedStudy: PropTypes.object,
     editStudyFormError: PropTypes.bool,
+    editStudyFields: PropTypes.array,
     paginationOptions: React.PropTypes.object,
     renewStudyFormError: PropTypes.bool,
     renewStudyFormValues: PropTypes.object,
+    renewStudyFields: PropTypes.array,
     renewedStudy: PropTypes.object,
     renewStudy: PropTypes.func,
     reset: PropTypes.func.isRequired,
@@ -61,6 +60,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     upgradeStudy: PropTypes.func,
     upgradedStudy: PropTypes.object,
     upgradeStudyFormValues: PropTypes.object,
+    upgradeStudyFields: PropTypes.array,
     upgradeStudyFormError: PropTypes.bool,
     saveCard: PropTypes.func,
     clearIndicationLevelPrice: PropTypes.func,
@@ -329,10 +329,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleRenewStudyFormSubmit() {
     const { currentUserStripeCustomerId, renewStudyFormValues, renewStudy, renewStudyFormError, shoppingCartFormValues, shoppingCartFormError,
-      touchRenewStudy, touchShoppingCart } = this.props;
+      touchRenewStudy, touchShoppingCart, renewStudyFields } = this.props;
 
     if (renewStudyFormError || shoppingCartFormError) {
-      touchRenewStudy();
+      touchRenewStudy(renewStudyFields);
       touchShoppingCart();
       return;
     }
@@ -388,15 +388,23 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
   handleUpgradeStudyFormSubmit() {
     const { shoppingCartFormError, shoppingCartFormValues, upgradeStudyFormError, touchUpgradeStudy, touchShoppingCart,
-      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy } = this.props;
+      currentUserStripeCustomerId, upgradeStudyFormValues, upgradeStudy, upgradeStudyFields } = this.props;
 
     if (upgradeStudyFormError || shoppingCartFormError) {
-      touchUpgradeStudy();
+      touchUpgradeStudy(upgradeStudyFields);
       touchShoppingCart();
       return;
     }
 
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+    const pqsIsSelected = (selectedStudy.patientQualificationSuite === 'Off' && upgradeStudyFormValues.addPatientQualificationSuite);
+    const levelIsSelected = upgradeStudyFormValues.level;
+    const callTrackingIsSelected = (!selectedStudy.callTracking && upgradeStudyFormValues.callTracking);
+
+    if (!pqsIsSelected && !levelIsSelected && !callTrackingIsSelected) {
+      return;
+    }
+
     if (!upgradeStudyFormValues.level) {
       upgradeStudyFormValues.level = selectedStudy.level_id;
     }
@@ -435,6 +443,11 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       });
     }
 
+    let campaignLength = selectedStudy.campaignlength;
+    if (upgradeStudyFields.indexOf('campaignLength') !== -1) {
+      campaignLength = upgradeStudyFormValues.campaignLength;
+    }
+
     upgradeStudy(this.state.selectedStudyId, shoppingCartFormValues, {
       ...selectedStudy,
       ...upgradeStudyFormValues,
@@ -448,7 +461,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
       indicationName: this.state.indicationName,
       locationName: this.state.locationName,
       exposureLevelName: studyLevel.label,
-      campaignlength: selectedStudy.campaignlength,
+      campaignlength: campaignLength,
       client_id: this.props.currentUser.roleForClient.client_id,
       name: '',
       studyNotificationEmails: emailNotificationArray,
@@ -456,73 +469,13 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   handleEditStudyFormSubmit(params) {
-    const { editStudyFormError, touchEditStudy } = this.props;
+    const { editStudyFormError, touchEditStudy, editStudyFields } = this.props;
     if (editStudyFormError) {
-      touchEditStudy();
+      touchEditStudy(editStudyFields);
       return;
     }
 
     this.props.editStudy(this.state.selectedStudyId, { ...params, clientId: this.props.currentUserClientId });
-  }
-
-  generateRenewStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { exposureLevel, campaignLength, condenseTwoWeeks, callTracking } = this.props.renewStudyFormValues;
-    const addOns = [];
-
-    if (exposureLevel && campaignLength) {
-      if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
-        const foundExposureLevel = find(studyLevels, { id: exposureLevel });
-        const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
-        const durationString = (condenseTwoWeeks) ? '2 Weeks' : monthLength.label;
-
-        addOns.push({
-          title: `${durationString} ${foundExposureLevel.type}`,
-          price: selectedIndicationLevelPrice.details,
-          quantity: monthLength.value,
-          total: selectedIndicationLevelPrice.details * monthLength.value,
-        });
-      }
-    }
-    if (callTracking) {
-      addOns.push({
-        title: 'Call Tracking',
-        price: CALL_TRACKING_PRICE,
-        quantity: 1,
-        total: CALL_TRACKING_PRICE,
-      });
-    }
-
-    return addOns;
-  }
-
-  generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice } = this.props;
-    const { level, callTracking } = this.props.upgradeStudyFormValues;
-    const addOns = [];
-
-    if (level) {
-      if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
-        const foundLevel = find(studyLevels, { id: level });
-
-        addOns.push({
-          title: `${foundLevel.type}`,
-          price: selectedIndicationLevelPrice.details,
-          quantity: 1,
-          total: selectedIndicationLevelPrice.details,
-        });
-      }
-    }
-    if (callTracking) {
-      addOns.push({
-        title: 'Call Tracking',
-        price: CALL_TRACKING_PRICE,
-        quantity: 1,
-        total: CALL_TRACKING_PRICE,
-      });
-    }
-
-    return addOns;
   }
 
   sortBy(ev) {
@@ -653,7 +606,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
   }
 
   render() {
-    const { studies } = this.props;
+    const { studies, upgradeStudyFormValues, renewStudyFormValues } = this.props;
 
     let selectedStudy = null; studies.details.forEach((item) => {
       if (item.studyId === this.state.selectedStudyId) {
@@ -711,6 +664,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               manualDisableSubmit={this.props.renewedStudy.submitting}
               validateAndSubmit={this.handleRenewStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+              formValues={renewStudyFormValues}
             />
             <UpgradeStudyForm
               selectedStudy={selectedStudy}
@@ -720,6 +674,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
               manualDisableSubmit={this.props.upgradedStudy.submitting}
               validateAndSubmit={this.handleUpgradeStudyFormSubmit}
               currentUserStripeCustomerId={this.props.currentUserStripeCustomerId}
+              formValues={upgradeStudyFormValues}
             />
             <EditStudyForm
               selectedStudyId={this.state.selectedStudyId}
@@ -746,6 +701,7 @@ const mapStateToProps = createStructuredSelector({
   renewedStudy: selectRenewedStudy(),
   renewStudyFormValues: selectRenewStudyFormValues(),
   renewStudyFormError: selectRenewStudyFormError(),
+  renewStudyFields: selectRenewStudyFields(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   shoppingCartFormError: selectShoppingCartFormError(),
   shoppingCartFormValues: selectShoppingCartFormValues(),
@@ -753,7 +709,9 @@ const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
   upgradeStudyFormValues: selectUpgradeStudyFormValues(),
   upgradeStudyFormError: selectUpgradeStudyFormError(),
+  upgradeStudyFields: selectUpgradeStudyFields(),
   upgradedStudy: selectUpgradedStudy(),
+  editStudyFields: selectEditStudyFields(),
   currentUserClientId: selectCurrentUserClientId(),
   sites: selectClientSites(),
   clientAdmins: selectHomePageClientAdmins(),
@@ -771,9 +729,9 @@ function mapDispatchToProps(dispatch) {
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     sortSuccess: (payload) => dispatch(sortSuccess(payload)),
     reset: (formName) => dispatch(reset(formName)),
-    touchEditStudy: () => dispatch(touch('editStudy', ...editStudyFields)),
-    touchRenewStudy: () => dispatch(touch('renewStudy', ...renewStudyFields)),
-    touchUpgradeStudy: () => dispatch(touch('upgradeStudy', ...upgradeStudyFields)),
+    touchEditStudy: (fields) => dispatch(touch('editStudy', ...fields)),
+    touchRenewStudy: (fields) => dispatch(touch('renewStudy', ...fields)),
+    touchUpgradeStudy: (fields) => dispatch(touch('upgradeStudy', ...fields)),
     touchShoppingCart: () => dispatch(touch('shoppingCart', ...shoppingCartFields)),
     upgradeStudy: (studyId, cartValues, formValues) => dispatch(upgradeStudy(studyId, cartValues, formValues)),
     fetchStudies: (currentUser, searchParams) => dispatch(fetchStudies(currentUser, searchParams)),

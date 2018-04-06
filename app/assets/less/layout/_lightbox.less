@@ -481,10 +481,6 @@ input:focus {
     .field {
       width: 65.6%;
     }
-
-    .link-delete {
-      margin: 0 0 0 -5px;
-    }
   }
 
   .scroll {
@@ -599,6 +595,15 @@ input:focus {
         color: #76daff;
         text-decoration: underline;
         cursor: pointer;
+      }
+
+      &[disabled] {
+        color: darken(#999, 10%);
+        cursor: not-allowed;
+
+        &:hover {
+          text-decoration: none;
+        }
       }
     }
   }

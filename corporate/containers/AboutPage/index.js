@@ -35,12 +35,10 @@ export default class AboutPage extends React.Component { // eslint-disable-line 
             <h2 className="main-heading small-font">studykik is where you can find clinical trials near you!</h2>
             <div
               className="video"
-              data-view="fadeInUp"
-              ref={(slideInFirst) => { this.slideInFirst = slideInFirst; }}
             >
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
-                <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MsDuAeJ2DZ8"></iframe>
+                <iframe className="youtube-player" type="text/html" width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MsDuAeJ2DZ8?wmode=opaque"></iframe>
               </div>
             </div>
             <div

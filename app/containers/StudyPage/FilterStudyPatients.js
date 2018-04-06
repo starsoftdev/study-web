@@ -11,14 +11,13 @@ import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
 
-import { fetchPatients, fetchPatientCategoriesTotals } from './actions';
+import { fetchPatients, fetchPatientCategoriesTotals, setSelectedStudySources } from './actions';
 
 @reduxForm({ form: 'filterStudyPatients' })
 class FilterStudyPatientsForm extends Component {
-
   static propTypes = {
     campaignOptions: PropTypes.array.isRequired,
-    sourceOptions: PropTypes.array.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func.isRequired,
     fetchPatientCategoriesTotals: PropTypes.func.isRequired,
     fetchStudy: PropTypes.func.isRequired,
@@ -31,6 +30,11 @@ class FilterStudyPatientsForm extends Component {
     studyId: PropTypes.number.isRequired,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
+    setSelectedStudySources: PropTypes.func,
+    sourceMapped: PropTypes.array,
+    sourceOptions: PropTypes.array,
+    totalCountByGroups: PropTypes.object,
+    initialValues: PropTypes.object,
     patientBoardLoading: PropTypes.bool,
   };
   static defaultProps = {
@@ -83,6 +87,7 @@ class FilterStudyPatientsForm extends Component {
   searchPatient(event, type) {
     const { fetchPatients, fetchPatientCategoriesTotals, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
+
     let newSource = source;
     /* nulling the values if all is selected */
     if (campaign === -1) {
@@ -94,8 +99,7 @@ class FilterStudyPatientsForm extends Component {
     if (type === 'search') {
       fetchPatients(studyId, event.target.value, newCampaign, newSource, null);
     } else if (type === 'source') {
-      /* -1 means all was selected */
-      if (event === -1) {
+      if (event === -1 || !event) {
         fetchPatients(studyId, search, newCampaign, null, null);
         fetchStudyStats(studyId, newCampaign, null);
         fetchPatientCategoriesTotals(studyId, newCampaign, null);
@@ -124,16 +128,16 @@ class FilterStudyPatientsForm extends Component {
   render() {
     const {
       campaignOptions,
-      sourceOptions,
       submitting,
       loading,
       studyId,
       search,
       campaign,
-      source,
       ePMS,
       studyName,
+      sourceOptions,
     } = this.props;
+
     /* changing the source for display purposes only */
     return (
       <form className="form-search clearfix" onSubmit={this.onSubmit}>
@@ -141,7 +145,6 @@ class FilterStudyPatientsForm extends Component {
           studyId={studyId}
           search={search}
           campaign={campaign}
-          source={source}
           ePMS={ePMS}
           studyName={studyName}
         />
@@ -178,7 +181,12 @@ class FilterStudyPatientsForm extends Component {
               onChange={(event) => this.searchPatient(event, 'campaign')}
             />
           </div>
-          <div className="custom-select pull-left no-right-padding">
+          <div
+            className="custom-select pull-left no-right-padding"
+            ref={(sourceSelectContainer) => {
+              this.sourceSelectContainer = sourceSelectContainer;
+            }}
+          >
             <Field
               name="source"
               component={ReactSelect}
@@ -186,7 +194,8 @@ class FilterStudyPatientsForm extends Component {
               options={sourceOptions}
               disabled={submitting || loading}
               placeholder="Select Source"
-              onChange={event => this.searchPatient(event, 'source')}
+              clearable={false}
+              onChange={(event) => this.searchPatient(event, 'source')}
             />
           </div>
         </div>
@@ -208,6 +217,7 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
     fetchPatientCategoriesTotals: (studyId, campaignId, sourceId) => dispatch(fetchPatientCategoriesTotals(studyId, campaignId, sourceId)),
+    setSelectedStudySources: (list) => dispatch(setSelectedStudySources(list)),
   };
 }
 
