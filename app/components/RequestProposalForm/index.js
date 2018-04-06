@@ -7,14 +7,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Field, FieldArray, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
 import moment from 'moment-timezone';
 import DatePicker from '../../components/Input/DatePicker';
 
 import Input from '../../components/Input';
 import Toggle from '../../components/Input/Toggle';
 import ReactSelect from '../../components/Input/ReactSelect';
-import RenderLeads from '../../components/RenderLeads';
 
 import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 import {
@@ -92,7 +91,6 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
 
   render() {
     const { siteLocations, indications, studyLevels, currentUser } = this.props;
-    const { callTracking } = this.props;
 
     const isAdmin = currentUser && (currentUser.roleForClient && currentUser.roleForClient.name) === 'Super Admin';
     let bDisabled = true;
@@ -253,10 +251,10 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
             />
           </div>
 
-          {false &&
-            <div className="tracking-source">
+          {
+            <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>CALL TRACKING: $247</label></strong>
+                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}
@@ -264,10 +262,6 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
                 />
               </div>
             </div>
-          }
-
-          {callTracking &&
-            <FieldArray name="leads" component={RenderLeads} />
           }
 
           <div className="field-row">

@@ -1,6 +1,6 @@
 /**
 *
-* StudyAddForm
+* StudyAdForm
 *
 */
 
@@ -18,14 +18,14 @@ import './styles.less';
 
 @reduxForm(
   {
-    form: 'studyAddForm',
+    form: 'studyAdForm',
     validate: null,
   })
-class StudyAddForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     error: React.PropTypes.object,
-    changeStudyAddProcess: React.PropTypes.object,
+    changeStudyAdProcess: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     reset: React.PropTypes.func.isRequired,
     pristine: React.PropTypes.bool.isRequired,
@@ -160,7 +160,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
   render() {
     let width;
     let height;
-    const { changeStudyAddProcess } = this.props;
+    const { changeStudyAdProcess } = this.props;
     const { manualDisable } = this.state;
     if (this.state.selectedImageWidth) {
       // calculate the ratio
@@ -179,7 +179,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
       height = 350;
     }
 
-    const submitButtonText = (changeStudyAddProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
+    const submitButtonText = (changeStudyAdProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
 
     return (
       <form className="form-lightbox" onSubmit={this.handleSave}>
@@ -257,7 +257,7 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
             <button
               type="submit"
               className={manualDisable ? 'btn btn-gray' : 'btn btn-default'}
-              disabled={manualDisable || changeStudyAddProcess.saving}
+              disabled={manualDisable || changeStudyAdProcess.saving}
             >
               {submitButtonText}
             </button>
@@ -270,4 +270,4 @@ class StudyAddForm extends React.Component { // eslint-disable-line react/prefer
 const mapStateToProps = createStructuredSelector({
 });
 
-export default connect(mapStateToProps, null)(StudyAddForm);
+export default connect(mapStateToProps, null)(StudyAdForm);

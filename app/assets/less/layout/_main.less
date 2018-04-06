@@ -16,6 +16,81 @@
   pointer-events: none !important;
 }
 
+.special-cursor-text{
+  input{
+    cursor: text !important;
+  }
+}
+
+.global-invisible-item{
+  display: none !important;
+}
+
+.report-page-source-select{
+  .Select-clear-zone{
+    display: none !important;
+  }
+}
+
+.truncate{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.study-source-link:hover{
+  text-decoration: underline;
+  color: #76daff;
+}
+
+.study-source-link:focus {
+  color: #00afef !important;
+}
+
+.report-page-totals-container{
+  position: relative;
+  .report-page-total-loading-container{
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    top: 66px;
+    position: absolute;
+    z-index: 10;
+    padding-top: 27px;
+  }
+}
+
+.studySourceMultiSelect{
+  .r-ss-option-group-heading{
+    background-color: #ffffff !important;
+    border: none !important;
+    padding: 0 !important;
+    .inner-heading{
+      padding: .5rem .25rem;
+    }
+    &:hover{
+      background-color: #00AFEF !important;
+      color: #FFF !important;
+    }
+  }
+  .studySourceSelectOption{
+    padding: 7px;
+  }
+  .hiddenSelectOption{
+    display: none;
+  }
+  .r-ss-dropdown-option{
+    padding: 0 !important;
+  }
+  .r-ss-option-group-heading{
+    font-size: 18px !important;
+  }
+}
+
+.studySourceMultiSelectShort{
+  width: 65%;
+}
+
 .field-before-dst-label{
   margin-bottom: 5px !important;
 }
@@ -2928,6 +3003,7 @@ th, .th {
   &:hover {
     color: #999;
     outline: none;
+    cursor: pointer;
   }
 
   &:before {
