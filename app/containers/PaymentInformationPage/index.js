@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Helmet from 'react-helmet';
+import { toastr } from 'react-redux-toastr';
+
 import { selectCurrentUser, selectCards, selectSavedCard } from '../../containers/App/selectors';
 import PaymentMethodsForm from '../../components/PaymentMethodsForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
@@ -73,6 +75,10 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
   }
 
   showCreditCardModal() {
+    if (this.props.creditCards.details && this.props.creditCards.details.data && this.props.creditCards.details.data.length >= 10) {
+      toastr.error('', 'Error! Too many cards on file.');
+      return;
+    }
     this.setState({ showAddCreditCardModal: true });
   }
 
