@@ -154,7 +154,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           bsClass="form-control input-lg"
         />
         <div className="field-row clearfix area">
-          <div className="pull-left">
+          <div className="pull-left hidden">
             <span
               className="jcf-checkbox jcf-unchecked"
               ref={(checkbox) => {
