@@ -80,7 +80,7 @@ export class TrialsArticle extends Component {
       info = (
         <div className="info comming-soon">
           <h4>{trial.landingtitle || trial.name}</h4>
-          <span>Coming Soon </span>
+          <span>Coming Soon</span>
         </div>
       );
     }
