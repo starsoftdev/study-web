@@ -5,16 +5,15 @@ import { reset } from 'redux-form';
 import { Well, Collapse } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import {
-  clearClinicalTrialsSearch,
-} from '../../../../app/containers/App/actions';
+import { clearClinicalTrialsSearch } from '../../../../app/containers/App/actions';
+import { translate } from '../../../../common/utilities/localization';
 
 const menuItems = [
-  { text: 'Study search', link: '/' },
-  { text: 'List your trials', link: '/list-your-trials' },
-  { text: 'About', link: '/about' },
-  { text: 'Blog', link: '/blog' },
-  { text: 'Contact', link: '/contact' },
+  { text: translate('corporate.component.header.nav.search'), link: '/' },
+  { text: translate('corporate.component.header.nav.list'), link: '/list-your-trials' },
+  { text: translate('corporate.component.header.nav.about'), link: '/about' },
+  { text: translate('corporate.component.header.nav.blog'), link: '/blog' },
+  { text: translate('corporate.component.header.nav.contact'), link: '/contact' },
 ];
 
 export class NavBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
