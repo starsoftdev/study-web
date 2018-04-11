@@ -186,7 +186,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
       if (err) {
         res.sendStatus(404);
       } else {
-        res.send(404, file.toString());
+        res.status(404).send(file.toString());
       }
     });
   });
@@ -249,7 +249,7 @@ const addProdMiddlewares = (app, options) => {
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
-    res.sendStatus(404).send(path.resolve(outputPath, 'corporate.html'));
+    res.satus(404).send(path.resolve(outputPath, 'corporate.html'));
   });
 
   app.get('*', (req, res) => {
