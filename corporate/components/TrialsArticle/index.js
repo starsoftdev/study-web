@@ -16,6 +16,7 @@ export class TrialsArticle extends Component {
     isShow: PropTypes.func,
     index: PropTypes.number,
     trial: PropTypes.object,
+    landingcoming: PropTypes.bool,
     addr: PropTypes.any,
   };
 
@@ -41,7 +42,7 @@ export class TrialsArticle extends Component {
   }
 
   render() {
-    const { index, addr, trial } = this.props;
+    const { index, addr, trial, landingcoming } = this.props;
     const landingHref = `/${trial.study_id}-${trial.url_part.toLowerCase().replace(/ /ig, '-')}`;
     const md = new Remarkable();
 
@@ -60,6 +61,30 @@ export class TrialsArticle extends Component {
 
     const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A');
 
+    let info = (
+      <div className="info">
+        <h4>{trial.landingtitle || trial.name}</h4>
+        <address>
+          <i className="icomoon-map-marker" /> {(location !== null) ? location : 'N/A'}
+        </address>
+        <p className="distance">
+          <i className="icomoon-car" /> {distance}
+        </p>
+        <span className="tel">
+          <i className="icomoon-phone" /> {(phoneNumber !== null) ? formatPhone(phoneNumber) : 'N/A'}
+        </span>
+      </div>
+    );
+
+    if (landingcoming) {
+      info = (
+        <div className="info comming-soon">
+          <h4>{trial.landingtitle || trial.name}</h4>
+          <span>Coming Soon</span>
+        </div>
+      );
+    }
+
     return (
       <article
         key={index}
@@ -77,18 +102,7 @@ export class TrialsArticle extends Component {
               className={classNames('img-responsive', { placeholder: !trial.image })}
             />
           </div>
-          <div className="info">
-            <h4>{trial.landingtitle || trial.name}</h4>
-            <address>
-              <i className="icomoon-map-marker" /> {(location !== null) ? location : 'N/A'}
-            </address>
-            <p className="distance">
-              <i className="icomoon-car" /> {distance}
-            </p>
-            <span className="tel">
-              <i className="icomoon-phone" /> {(phoneNumber !== null) ? formatPhone(phoneNumber) : 'N/A'}
-            </span>
-          </div>
+          {info}
           <div className="desc">
             {landingDescription ? (
               <div className="custom-description" dangerouslySetInnerHTML={{ __html: markdown }} />
