@@ -119,80 +119,66 @@ class GetProposalModal extends React.Component {
               noValidate="novalidate"
             >
               <div className="field-row">
-                <strong className="label required">
-                  <label> full name </label>
-                </strong>
                 <Field
                   name="name"
+                  placeholder="Full Name"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label> company </label>
-                </strong>
                 <Field
                   name="company"
+                  placeholder="Company"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label> email </label>
-                </strong>
                 <Field
                   name="email"
+                  placeholder="Email"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label> phone </label>
-                </strong>
                 <Field
                   name="phone"
+                  placeholder="Phone"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                   onBlur={this.onPhoneBlur}
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label>Indication</label>
-                </strong>
                 <Field
                   name="indicationId"
                   component={ReactSelect}
                   placeholder="Select Indication"
                   options={indications}
-                  className="field"
+                  className="field-row"
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label>Exposure Level</label>
-                </strong>
                 <Field
                   name="exposureLevel"
                   component={ReactSelect}
                   placeholder="Select Exposure Level"
                   options={studyLevels}
-                  className="field"
+                  className="field-row"
                 />
               </div>
               <div className="text-right">
