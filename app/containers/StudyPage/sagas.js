@@ -236,7 +236,7 @@ function* fetchStudyStats(action) {
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceIds = sourceId;
+      options.query.sourceId = sourceId;
     }
     const response = yield call(request, requestURL, options);
     yield put(studyStatsFetched(response));
