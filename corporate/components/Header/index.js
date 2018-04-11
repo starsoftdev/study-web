@@ -8,9 +8,8 @@ import classNames from 'classnames';
 import NavBar from './NavBar';
 import LoggedUserMenu from './LoggedUserMenu';
 
-import {
-  clearClinicalTrialsSearch,
-} from '../../../app/containers/App/actions';
+import { clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
 
 import studyKikLogo from '../../assets/images/logo.svg';
 
@@ -104,7 +103,7 @@ export class Header extends React.Component { // eslint-disable-line react/prefe
                 </button>
               }
               <Link to="/login" className={classNames('btn btn-default btn-login', { invisible: isLoginPage || isLoggedIn })}>
-                <span className="hidden-xs">LOGIN</span>
+                <span className="hidden-xs">{translate('corporate.component.header.login')}</span>
                 <Glyphicon glyph="log-in" className="visible-xs-* hidden-sm hidden-md hidden-lg" />
               </Link>
               <div className={classNames('logo-holder', { loginPage: isLoginPage })}>

@@ -1,0 +1,17 @@
+{
+    "common.layout.title": "StudyKIK",
+
+    "corporate.component.footer.copyright": "© StudyKIK ${year}. All rights reserved.",
+    "corporate.component.footer.privacy": "Privacy Policy",
+    "corporate.component.footer.terms": "Terms & Conditions",
+
+    "corporate.component.header.login": "Login",
+    "corporate.component.header.nav.search": "Study Search",
+    "corporate.component.header.nav.list": "List Your Trials",
+    "corporate.component.header.nav.about": "About",
+    "corporate.component.header.nav.blog": "Blog",
+    "corporate.component.header.nav.contact": "Contact",
+
+    "corporate.page.about.header": "StudyKIK is where you can find clinical trials near you!",
+    "corporate.page.about.copy": "Being able to find a research study has never been easier! StudyKIK is the leading website where clinical trial companies list their studies and eager volunteers find them to sign up instantly. It has never been easier to search and find clinical trials of all therapeutic types! Give it a try... you may be surprised with the studies you find! StudyKIK's mission is to change lives by helping new treatments come to market faster and to enable anyone who wants to volunteer for a research study to easily search, find, and sign up!"
+}
