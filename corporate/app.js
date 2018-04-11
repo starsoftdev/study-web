@@ -46,6 +46,10 @@ const redirectLogin = () => {
   location.href = '/login';
 };
 
+const redirect404 = () => {
+  location.href = '/404';
+};
+
 const routes = {
   path: '/',
   component: Corporate,
@@ -91,7 +95,8 @@ const routes = {
     { path: '/pl', component: Home },
     { path: '/uk', component: Home },
     { path: '/hu', component: Home },
-    { path: '*', component: NotFound },
+    { path: '/404', component: NotFound },
+    { path: '*', component: NotFound, onEnter: redirect404 },
   ],
 };
 
