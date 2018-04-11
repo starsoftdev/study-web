@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { translate } from '../../../../common/utilities/localization';
 
 const menuItems = [
-  { text: 'Privacy Policy', link: '/privacy-policy' },
-  { text: 'Terms & Conditions', link: '/terms-and-conditions' },
+  { text: translate('corporate.component.footer.privacy'), link: '/privacy-policy' },
+  { text: translate('corporate.component.footer.terms'), link: '/terms-and-conditions' },
 ];
 
 function FooterNavBar() {
