@@ -107,53 +107,45 @@ class ListNowModal extends React.Component {
               noValidate="novalidate"
             >
               <div className="field-row">
-                <strong className="label required">
-                  <label htmlFor="import-patient-email"> full name </label>
-                </strong>
                 <Field
                   name="name"
+                  placeholder="Full Name"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label htmlFor="import-patient-phone"> company </label>
-                </strong>
                 <Field
                   name="company"
+                  placeholder="Company"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label htmlFor="import-patient-phone"> email </label>
-                </strong>
                 <Field
                   name="email"
                   component={Input}
+                  placeholder="Email"
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                 />
               </div>
               <div className="field-row">
-                <strong className="label required">
-                  <label htmlFor="import-patient-phone"> phone </label>
-                </strong>
                 <Field
                   name="phone"
+                  placeholder="Phone"
                   component={Input}
                   type="text"
-                  className="field"
+                  className="field-row"
                   id=""
                   required
                   onBlur={this.onPhoneBlur}
