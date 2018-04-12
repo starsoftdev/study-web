@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
+import { getPostalCodePattern } from '../../../app/common/helper/functions';
 
 @reduxForm({
   form: 'find-studies',
@@ -111,6 +112,11 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       indications.unshift({ id: -1, name: 'All' });
     }
     const isUS = this.state.countryCode === 'us';
+    const countryCode = this.state.countryCode ? this.state.countryCode : '';
+    const pattern = getPostalCodePattern(countryCode);
+    const reg = new RegExp(pattern);
+    const postal = value => (value && !reg.test(value) ? 'Invalid postal code' : undefined);
+
     return (
       <form
         ref={(animatedForm) => { this.animatedForm = animatedForm; }}
@@ -152,7 +158,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               <Field
                 name="postalCode"
                 type="text"
-                maxLength="5"
+                validate={postal}
                 component={Input}
                 placeholder="Postal Code"
                 className="field-row"
