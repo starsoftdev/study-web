@@ -155,7 +155,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                 <span
                   className="delete-source-type icomoon-icon_trash"
                   onClick={() => {
-                    this.deleteSourceType(index)
+                    this.deleteSourceType(index);
                   }}
                 />
               </div>
