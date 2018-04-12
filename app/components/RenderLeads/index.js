@@ -41,6 +41,14 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     studyId: PropTypes.number,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    this.deleteSourceType = this.deleteSourceType.bind(this);
+  }
+
   componentWillMount() {
     const { fields, sources, fetchSources } = this.props;
     if (fields.length === 0) {
@@ -48,6 +56,27 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     }
     if (sources.length === 0) {
       fetchSources();
+    }
+  }
+
+  deleteSourceType(index) {
+    const { fields, initialLeadSources, formValues } = this.props;
+    let initObject = null;
+
+    if (initialLeadSources && initialLeadSources.length > 0) {
+      initObject = _.find(initialLeadSources, (o) => {
+        if (formValues.leadSource && formValues.leadSource[index]) {
+          return (o.studySourceId === formValues.leadSource[index].studySourceId);
+        } else {
+          return false;
+        }
+      });
+    }
+
+    if (initObject) {
+      console.log('deleteSourceType', index, initObject);
+    } else {
+      fields.remove(index);
     }
   }
 
@@ -122,6 +151,12 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   options={sourceOptions}
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
+                />
+                <span
+                  className="delete-source-type icomoon-icon_trash"
+                  onClick={() => {
+                    this.deleteSourceType(index)
+                  }}
                 />
               </div>
               {

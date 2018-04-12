@@ -150,7 +150,8 @@ export class CallTrackingPageModal extends React.Component {
                     name="leadSource"
                     component={RenderLeads}
                     formValues={this.props.formValues}
-                    isAdmin messagingNumbers={messagingNumbers}
+                    isAdmin
+                    messagingNumbers={messagingNumbers}
                     initialLeadSources={this.props.studyLeadSources.details}
                     landingPageUrl={landingPageUrl}
                     studyId={studyId}
