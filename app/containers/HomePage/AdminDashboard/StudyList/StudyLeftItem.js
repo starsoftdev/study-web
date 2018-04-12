@@ -70,6 +70,19 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
     const ae = item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A';
 
+
+    const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);
+    const campaignDateTo = moment(item.campaign_dateto).tz(item.timezone);
+    const totalDays = campaignDateTo.diff(campaignDateFrom, 'days');
+    let daysRan = moment.utc().diff(campaignDateFrom, 'days');
+    if (daysRan < 0) {
+      daysRan = 0;
+    }
+    if (daysRan > totalDays) {
+      daysRan = totalDays;
+    }
+    const percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100
+
     return (
       <tr
         onMouseEnter={(e) => this.mouseOverRow(e, item.study_id)}
@@ -103,13 +116,10 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td className="list">
           <ul className="list-unstyled">
             <li><span><a href={landingHref} className="landing-link" target="_blank">{item.study_id}</a></span></li>
-            <li><span>{`${(item.percent || item.percent === 0) ? `${item.percent}%` : ''}`}</span></li>
-
+            <li><span>{percent.toFixed(2)}%</span></li>
             <li><span>{maxLength(sm, 15)}</span></li>
             <li><span>{maxLength(bd, 15)}</span></li>
             <li><span>{maxLength(ae, 15)}</span></li>
-
-            {/* <li><span className={`color ${studyInfo.color.toLowerCase()}`}>{studyInfo.color}</span></li> */}
             <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : ''}`}</span></li>
           </ul>
         </td>
