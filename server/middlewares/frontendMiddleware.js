@@ -68,10 +68,6 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       const landing = await PagesService.fetchLanding(landingId);
       const file = await readFile(fs, templatePath);
       const templateStr = file.toString();
-      if (req.url !== `/${landingId}-${landing.url}`) {
-        res.redirect('/404');
-        return;
-      }
       const viewPath = path.join(__dirname, '../views/landing-page.pug');
       const locals = getLandingPageLocals(landing);
       const ipcountry = req.headers['cf-ipcountry'] || null;
@@ -181,16 +177,6 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
 
-  app.get('/404', (req, res) => {
-    fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
-      if (err) {
-        res.sendStatus(404);
-      } else {
-        res.status(404).send(file.toString());
-      }
-    });
-  });
-
   app.get('*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
@@ -247,10 +233,6 @@ const addProdMiddlewares = (app, options) => {
   });
 
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
-
-  app.get('/404', (req, res) => {
-    res.status(404).send(path.resolve(outputPath, 'corporate.html'));
-  });
 
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(outputPath, 'corporate.html'));
