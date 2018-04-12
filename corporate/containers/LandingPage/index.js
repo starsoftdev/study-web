@@ -87,7 +87,7 @@ export class LandingPage extends React.Component {
 
     if (invalidSite || landingError) {
       this.props.clearLanding();
-      browserHistory.push('/');
+      browserHistory.push('/404');
     }
 
     if (subscribedFromLanding) {
