@@ -80,6 +80,10 @@ import {
 } from '../../components/GlobalPMSModal/selectors';
 
 import {
+  selectCards,
+} from '../../containers/App/selectors';
+
+import {
   indicationsFetched,
   indicationsFetchingError,
   sourcesFetched,
@@ -407,22 +411,26 @@ export function* fetchCardsWatcher() {
 export function* saveCardWatcher() {
   while (true) {
     const { clientId, customerId, cardData } = yield take(SAVE_CARD);
+    const cards = yield select(selectCards());
 
-    try {
-      const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/saveCard`;
-      const options = {
-        method: 'POST',
-        body: JSON.stringify(cardData),
-      };
-
-      const response = yield call(request, requestURL, options);
-
-      toastr.success('', 'Success! Your card has been added.');
-      yield put(cardSaved(response));
-    } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-      toastr.error('', errorMessage);
-      yield put(cardSavingError(err));
+    if (cards && cards.details && cards.details.data.length >= 10) {
+      toastr.error('', 'Error! Too many cards on file.');
+      yield put(cardSavingError(new Error('Error! Too many cards on file.')));
+    } else {
+      try {
+        const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/saveCard`;
+        const options = {
+          method: 'POST',
+          body: JSON.stringify(cardData),
+        };
+        const response = yield call(request, requestURL, options);
+        toastr.success('', 'Success! Your card has been added.');
+        yield put(cardSaved(response));
+      } catch (err) {
+        const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+        toastr.error('', errorMessage);
+        yield put(cardSavingError(err));
+      }
     }
   }
 }
