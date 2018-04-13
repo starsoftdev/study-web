@@ -6,6 +6,7 @@
  * desc: dictionary management for all supported locales
  * notes: uses app-settings.json as the source of truth
  */
+'use strict';
 
 import * as settings from '../../settings/app-settings.json';
 
@@ -28,20 +29,20 @@ export function createDictionaries() {
       // determine locale files
       const languageFile = localeSplit[0];
       const countryFile = `${localeSplit[0]}-${localeSplit[1]}`;
-      const subsetFile = (localeSplit.length === 3) ? locale : null;
+      const dialectFile = (localeSplit.length === 3) ? locale : null;
 
       // require locale files
       let language = {};
       let country = {};
-      let subset = {};
+      let dialect = {};
       try { language = require(`../../locales/${languageFile}.json`); } catch (err) {}
       try { country = require(`../../locales/${countryFile}.json`); } catch (err) {}
-      if (subsetFile) {
-        try { subset = require(`../../locales/${subsetFile}.json`); } catch (err) {}
+      if (dialectFile) {
+        try { dialect = require(`../../locales/${dialectFile}.json`); } catch (err) {}
       }
 
       // create locale dictionary
-      dictionaries[locale] = Object.assign({}, language, country, subset);
+      dictionaries[locale] = Object.assign({}, language, country, dialect);
     });
   }
 
