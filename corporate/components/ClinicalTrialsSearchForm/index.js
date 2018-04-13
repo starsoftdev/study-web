@@ -3,14 +3,12 @@ import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
 
-import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
 import { getPostalCodePattern } from '../../../app/common/helper/functions';
 
 @reduxForm({
   form: 'find-studies',
-  // validate: ClinicalTrialsSearchFormValidator,
 })
 
 export class ClinicalTrialsSearchForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
