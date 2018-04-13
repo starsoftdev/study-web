@@ -184,6 +184,7 @@
     "react-parallax": "^1.2.2",
     "react-redux": "4.4.5",
     "react-redux-toastr": "^7.1.5",
+    "react-responsive": "^4.1.0",
     "react-router": "2.6.1",
     "react-router-redux": "4.0.5",
     "react-router-scroll": "0.2.1",
