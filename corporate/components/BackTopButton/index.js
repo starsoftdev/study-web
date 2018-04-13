@@ -14,7 +14,7 @@ export default class BackToTopButton extends Component {
 
   render() {
     return (
-      <ScrollUp showUnder={160} style={{ right: 100, bottom: 10 }}>
+      <ScrollUp showUnder={160} style={{ right: 25, bottom: 55, zIndex: 999 }}>
         <svg viewBox="0 0 216 216" className="btn-back-top">
           <use href="#pc-svgicon-arrow-up"></use>
         </svg>
