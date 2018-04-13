@@ -128,6 +128,11 @@ export const selectFetchingStudy = () => createSelector(
   (subState) => subState.fetchingStudy
 );
 
+export const selectPaginationOptions = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.paginationOptions
+);
+
 export const selectFetchingPatients = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.fetchingPatients
@@ -194,9 +199,19 @@ export const selectScheduledFormInitialized = () => createSelector(
   (subState) => subState.scheduledFormInitialized
 );
 
+export const selectPatientCategoriesTotals = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.patientCategoriesTotals
+);
+
 export const selectFetchingPatientsError = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.fetchingPatientsError
+);
+
+export const selectPatientBoardLoading = () => createSelector(
+  selectStudyPageDomain(),
+  (subState) => subState.patientBoardLoading
 );
 
 export const selectSchedulePatientFormValues = () => createSelector(
