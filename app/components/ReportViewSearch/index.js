@@ -116,14 +116,17 @@ export class ReportViewSearch extends React.Component {
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
+    const startDate = moment(range.startDate).utc();
+    let endDate = moment(range.endDate).utc();
 
-    const startDate = range.startDate.utc().format('YYYY-MM-DD HH:mm:ss');
-    const endDate = range.endDate.utc().format('YYYY-MM-DD HH:mm:ss');
-    const uiStartDate = range.startDate.utc().format('MM/DD/YY');
-    const uiEndDate = range.endDate.utc().format('MM/DD/YY');
+    if (!endDate.isAfter(startDate)) {
+      endDate = endDate.add(1, 'days');
+    }
+    const uiStartDate = startDate.format('MM/DD/YY');
+    const uiEndDate = endDate.format('MM/DD/YY');
 
-    this.props.dispatch(change('searchReports', 'startDate', startDate));
-    this.props.dispatch(change('searchReports', 'endDate', endDate));
+    this.props.dispatch(change('searchReports', 'startDate', startDate.format('YYYY-MM-DD HH:mm:ss')));
+    this.props.dispatch(change('searchReports', 'endDate', endDate.format('YYYY-MM-DD HH:mm:ss')));
 
     this.setState({
       selectedTime: {
