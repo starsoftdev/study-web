@@ -23,8 +23,8 @@ export default class NotFound extends React.Component { // eslint-disable-line r
           <div className="img-holder">
             <img src={img1} alt="img4" className="img-responsive" />
           </div>
-          <h3 className="text-center">The page you found does not Exist.</h3>
-          <h2 className="text-center">HELP DECIDE THE I.T. TEAMS FATE.</h2>
+          <h3 className="text-center">Page not found.</h3>
+          <h2 className="text-center">HELP DECIDE THE TECH TEAMS' FATE.</h2>
         </div>
         <div className="container">
           <div className="buttons text-center">

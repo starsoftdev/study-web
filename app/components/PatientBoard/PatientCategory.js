@@ -10,7 +10,8 @@ import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 import classNames from 'classnames';
-import moment from 'moment';
+import { List, AutoSizer, WindowScroller } from 'react-virtualized';
+import VirtualList from 'react-virtual-list';
 
 import * as Selector from '../../containers/StudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -97,6 +98,7 @@ const collect = (connect, monitor) => ({
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
+    itemType: React.PropTypes.any,
     study: React.PropTypes.object.isRequired,
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
@@ -108,6 +110,7 @@ class PatientCategory extends React.Component {
     isOver: React.PropTypes.bool.isRequired,
     onPatientTextClick: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
+    patientCategoriesTotals: React.PropTypes.array,
   };
 
   constructor(props) {
@@ -130,6 +133,14 @@ class PatientCategory extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.itemType === 'patient' && !this.props.itemType) {
+      return false;
+    }
+
+    return true;
+  }
+
   componentDidUpdate() {
     if (this.state.columnWidth === '') {
       this.handleResize();
@@ -146,40 +157,84 @@ class PatientCategory extends React.Component {
     this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
   }
 
-  renderPatients() {
+  rowRenderer = ({ key, index, style }) => {
     const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
+    const patient = category.patients[index];
+    return (
+      <Patient
+        key={key}
+        category={category}
+        currentUser={this.props.currentUser}
+        currentPatientId={currentPatientId}
+        patient={patient}
+        unreadMessageCount={patient.unreadMessageCount}
+        currentSite={currentSite}
+        onPatientClick={onPatientClick}
+        onPatientTextClick={onPatientTextClick}
+        style={style}
+      />
+    );
+  }
 
+  myList = ({
+    virtual,
+    itemHeight,
+  }) => (
+    <ul className="list-unstyled auto-height" style={virtual.style}>
+      {virtual.items.map(patient => (
+        <Patient
+          key={patient.id}
+          category={this.props.category}
+          currentUser={this.props.currentUser}
+          currentPatientId={this.props.currentPatientId}
+          patient={patient}
+          unreadMessageCount={patient.unreadMessageCount}
+          currentSite={this.props.currentSite}
+          onPatientClick={this.props.onPatientClick}
+          onPatientTextClick={this.props.onPatientTextClick}
+          style={{ height: itemHeight }}
+        />
+      ))}
+    </ul>
+  );
+
+  renderWithReactVirtualized = (count) => (
+    <WindowScroller>
+      {({ height, isScrolling, onChildScroll, scrollTop }) => (
+        <AutoSizer disableHeight>
+          {({ width }) => (
+            <List
+              autoHeight
+              height={height}
+              width={width}
+              isScrolling={isScrolling}
+              onScroll={onChildScroll}
+              rowCount={count}
+              rowHeight={120}
+              rowRenderer={this.rowRenderer}
+              scrollTop={scrollTop}
+            />
+          )}
+        </AutoSizer>
+      )}
+    </WindowScroller>
+  );
+
+  renderWithVirutalList = () => {
+
+  }
+
+  renderPatients() {
+    const { category } = this.props;
     if (category.patients.length > 0) {
-      const getLastUpdate = (patient) => {
-        const tempMax = moment.max(moment(patient.createdAt), moment(patient.updatedAt));
-        if (patient.lastTextMessage && patient.lastTextMessage.dateCreated) {
-          return moment.max(tempMax, moment(patient.lastTextMessage.dateCreated));
-        }
-
-        return tempMax;
-      };
-
-      // sort the patients into the categories
-      const sorted = _.orderBy(category.patients, (patient) => getLastUpdate(patient), 'desc');
-
+      const MyVirtualList = VirtualList()(this.myList);
       return (
         <div className="slide">
           <div className="slide-holder">
-            <ul className="list-unstyled">
-              {sorted.map(patient => (
-                <Patient
-                  key={patient.id}
-                  category={category}
-                  currentUser={this.props.currentUser}
-                  currentPatientId={currentPatientId}
-                  patient={patient}
-                  unreadMessageCount={patient.unreadMessageCount}
-                  currentSite={currentSite}
-                  onPatientClick={onPatientClick}
-                  onPatientTextClick={onPatientTextClick}
-                />
-                ))}
-            </ul>
+            <MyVirtualList
+              items={category.patients}
+              itemHeight={178}
+            />
           </div>
         </div>
       );
@@ -188,7 +243,10 @@ class PatientCategory extends React.Component {
   }
 
   render() {
-    const { category, connectDropTarget } = this.props;
+    const { category, connectDropTarget, patientCategoriesTotals } = this.props;
+    const total = _.find(patientCategoriesTotals, item => (
+      item.patientCategoryId === category.id
+    ));
 
     const openerStyle = {
       width: this.state.columnWidth,
@@ -202,7 +260,7 @@ class PatientCategory extends React.Component {
         className={classNames({ active: this.state.hover, hover: this.state.hover })}
       >
         <span className="opener" style={openerStyle}>
-          <strong className="number">{category.patients.length}</strong>
+          <strong className="number">{(total) ? total.count : 0}</strong>
           <span className="text">{category.name}</span>
         </span>
         {this.renderPatients()}
