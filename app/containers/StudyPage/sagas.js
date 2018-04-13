@@ -38,6 +38,7 @@ GENERATE_PATIENT_REFERRAL,
 DOWNLOAD_PATIENT_REFERRAL,
 SUBMIT_EMAIL,
 FETCH_EMAILS,
+FETCH_PATIENT_CATEGORIES_TOTALS,
 } from './constants';
 
 import {
@@ -72,6 +73,7 @@ import {
   emailsFetched,
   emailsFetchError,
   fetchEmails,
+  patientCategoriesTotalsFetched,
 } from './actions';
 
 // Bootstrap sagas
@@ -234,10 +236,41 @@ function* fetchStudyStats(action) {
       options.query.campaignId = campaignId;
     }
     if (sourceId) {
-      options.query.sourceIds = sourceId;
+      options.query.sourceId = sourceId;
     }
     const response = yield call(request, requestURL, options);
     yield put(studyStatsFetched(response));
+  } catch (e) {
+    if (e.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+function* fetchPatientCategoriesTotals(action) {
+  const authToken = getItem('auth_token');
+  if (!authToken) {
+    return;
+  }
+  // listen for the latest FETCH_STUDY action
+  const { studyId, campaignId, sourceId } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/${studyId}/patientCategoriesTotals`;
+    const options = {
+      method: 'GET',
+    };
+    if (campaignId || sourceId) {
+      options.query = {};
+    }
+    if (campaignId) {
+      options.query.campaignId = campaignId;
+    }
+    if (sourceId) {
+      options.query.sourceId = sourceId;
+    }
+    const response = yield call(request, requestURL, options);
+    yield put(patientCategoriesTotalsFetched(response));
   } catch (e) {
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -428,12 +461,12 @@ export function* downloadReferral() {
 export function* fetchPatientsSaga() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId } = yield take(FETCH_PATIENTS);
-    yield call(fetchPatients, studyId, text, campaignId, sourceId);
+    const { studyId, text, campaignId, sourceId, skip } = yield take(FETCH_PATIENTS);
+    yield call(fetchPatients, studyId, text, campaignId, sourceId, skip);
   }
 }
 
-function* fetchPatients(studyId, text, campaignId, sourceId) {
+function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
   const authToken = getItem('auth_token');
   if (!authToken) {
     return;
@@ -450,13 +483,26 @@ function* fetchPatients(studyId, text, campaignId, sourceId) {
     if (text) {
       queryParams.text = text;
     }
+    const limit = 50;
+    const offset = skip || 0;
+    const filter = {
+      limit,
+    };
+
+    if (offset > 0) {
+      filter.offset = offset;
+    }
+
+    queryParams.filter = JSON.stringify(filter);
     const queryString = composeQueryString(queryParams);
     const requestURL = `${API_URL}/studies/${studyId}/patients?${queryString}`;
     const response = yield call(request, requestURL, {
       method: 'GET',
     });
+
+    const page = 1 + (offset / 50);
     // populate the patients
-    yield put(patientsFetched(response));
+    yield put(patientsFetched(response, page, limit, offset));
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
@@ -1081,6 +1127,8 @@ export function* fetchStudySaga() {
     const watcherX = yield fork(downloadReferral);
     const watcherY = yield fork(generateReferral);
     const watcherZ = yield fork(submitEmailBlast);
+    const watcherPatientCategoriesTotals = yield fork(takeLatest, FETCH_STUDY, fetchPatientCategoriesTotals);
+    const watcherFetchPatientCategoriesTotals = yield fork(takeLatest, FETCH_PATIENT_CATEGORIES_TOTALS, fetchPatientCategoriesTotals);
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
@@ -1110,6 +1158,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherX);
     yield cancel(watcherY);
     yield cancel(watcherZ);
+    yield cancel(watcherPatientCategoriesTotals);
+    yield cancel(watcherFetchPatientCategoriesTotals);
     yield cancel(deletePatientWatcher);
     yield cancel(watcherEmail);
     yield cancel(watcherEmailsFetch);
