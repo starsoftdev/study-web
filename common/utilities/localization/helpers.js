@@ -6,25 +6,9 @@
  * desc: utilities for internationalization of translated languages
  * note: file is dependent upon two globals: 1. dictionaries and 2. user locale
  */
+'use strict';
 
-
-// TODO: optimize once we support more than one locale...
-// - need to determine how to handle globals
-// - make sure dictionaries build 1x only (no race conditions)
-// - store dictionaries somewhere accessible to entire app (window||redux||file)
-// - make sure dictionaries are available to all components (not just containers)
-// - check if user locale supported, otherwise fallback to settings.locales.DEFAULT
-// ......................................................
-import { createDictionaries } from './dictionaries';
-import * as settings from '../../settings/app-settings.json';
-
-// globals
-const dictionaries = createDictionaries();
-const userLocale = 'en-us';
-
-// check if user locale supported
-const locale = (settings.locales.SUPPORTED.indexOf(userLocale) !== -1) ? userLocale : settings.locales.DEFAULT;
-// ......................................................
+import { locale, dictionaries } from './globals';
 
 
 /**
