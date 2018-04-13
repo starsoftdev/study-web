@@ -2,13 +2,18 @@ import React, { PropTypes } from 'react';
 import { Field, reduxForm, change } from 'redux-form';
 import inViewport from 'in-viewport';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { toastr } from 'react-redux-toastr';
 
 import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
+import { selectSyncErrors } from '../../../app/common/selectors/form.selector';
 
+const formName = 'find-studies';
 @reduxForm({
-  form: 'find-studies',
+  form: formName,
   validate: ClinicalTrialsSearchFormValidator,
 })
 
@@ -21,12 +26,14 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     countryCode: PropTypes.string,
     indication: PropTypes.string,
     initialValues: PropTypes.object,
+    formErrors: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
     this.watcher = null;
 
+    this.onSubmit = this.onSubmit.bind(this);
     this.setVisible = this.setVisible.bind(this);
     this.state = {
       countryCode: props.initialValues.countryCode ? props.initialValues.countryCode : 'us',
@@ -42,14 +49,26 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     this.watcher.dispose();
   }
 
+  onSubmit(ev) {
+    ev.preventDefault();
+    const { formErrors, handleSubmit } = this.props;
+    if (Object.keys(formErrors).length) {
+      if (formErrors.postalCode) {
+        toastr.error('', 'Error! Invalid postal code.');
+      }
+      return;
+    }
+    handleSubmit(ev);
+  }
+
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
   }
 
+
   render() {
     const {
-      handleSubmit,
       indications,
       individual,
     } = this.props;
@@ -117,7 +136,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
         className="form-find-studies"
         data-formvalidation=""
         data-view="fadeInUp"
-        onSubmit={handleSubmit}
+        onSubmit={this.onSubmit}
       >
         <div className="field-row">
           <div className={classNames({ row: !isUS })}>
@@ -152,7 +171,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               <Field
                 name="postalCode"
                 type="text"
-                maxLength="5"
+                maxLength="10"
                 component={Input}
                 placeholder="Postal Code"
                 className="field-row"
@@ -191,4 +210,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
   }
 }
 
-export default ClinicalTrialsSearchForm;
+
+const mapStateToProps = createStructuredSelector({
+  formErrors: selectSyncErrors(formName),
+});
+
+export default connect(mapStateToProps, null)(ClinicalTrialsSearchForm);
