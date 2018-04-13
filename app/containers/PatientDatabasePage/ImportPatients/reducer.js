@@ -1,7 +1,10 @@
+import { map, cloneDeep } from 'lodash';
+
 import {
   FETCH_FILTERED_PROTOCOLS,
   FETCH_FILTERED_PROTOCOLS_SUCCESS,
   FETCH_FILTERED_PROTOCOLS_ERROR,
+  ADD_PROTOCOL_SUCCESS,
 } from '../constants';
 
 const initialState = {
@@ -12,6 +15,7 @@ const initialState = {
 };
 
 export default function addPatientReducer(state = initialState, action) {
+  const protocols = map(state.protocols.details, cloneDeep);
   switch (action.type) {
     case FETCH_FILTERED_PROTOCOLS:
       return {
@@ -26,6 +30,15 @@ export default function addPatientReducer(state = initialState, action) {
         ...state,
         protocols: {
           details: action.payload,
+          fetching: false,
+        },
+      };
+    case ADD_PROTOCOL_SUCCESS:
+      protocols.push(action.payload);
+      return {
+        ...state,
+        protocols: {
+          details: protocols,
           fetching: false,
         },
       };
