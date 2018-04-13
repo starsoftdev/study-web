@@ -10,7 +10,7 @@ import { getPostalCodePattern } from '../../../app/common/helper/functions';
 
 @reduxForm({
   form: 'find-studies',
-  validate: ClinicalTrialsSearchFormValidator,
+  // validate: ClinicalTrialsSearchFormValidator,
 })
 
 export class ClinicalTrialsSearchForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -32,7 +32,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     this.state = {
       countryCode: props.initialValues.countryCode ? props.initialValues.countryCode : 'us',
     };
-    change('find-studies', 'countryCode', this.props.countryCode);
+    change('find-studies', 'countryCode', this.state.countryCode);
   }
 
   componentDidMount() {
