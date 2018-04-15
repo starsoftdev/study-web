@@ -9,6 +9,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Select from 'react-select';
 import classNames from 'classnames';
 import MediaQuery from 'react-responsive';
+import './styles.less';
 
 function ReactSelect({
   input,
@@ -81,7 +82,7 @@ function ReactSelect({
       <option value="" disabled>{placeholder}</option>
       {
         optionsToRender.map((item) => {
-          return (<option value={item.value}>{item.label}</option>);
+          return (<option key={item.value} value={item.value}>{item.label}</option>);
         })
       }
     </select>
