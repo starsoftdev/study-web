@@ -245,7 +245,7 @@ class PatientCategory extends React.Component {
   render() {
     const { category, connectDropTarget, patientCategoriesTotals } = this.props;
     const total = _.find(patientCategoriesTotals, item => (
-      item.patient_category_id === category.id
+      item.patientCategoryId === category.id
     ));
 
     const openerStyle = {
