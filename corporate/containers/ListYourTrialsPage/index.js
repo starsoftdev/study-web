@@ -35,6 +35,7 @@ import computerImg from '../../assets/images/computer-img.png';
 import FindOutPatientsForm from '../../components/FindOutPatientsForm';
 import ListNowModal from '../../components/ListNowModal';
 import GetProposalModal from '../../components/GetProposalModal';
+import BackToTopButton from '../../components/BackTopButton';
 
 import {
   findOutPatients,
@@ -632,7 +633,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
             </div>
           </Parallax>
         </section>
-
+        <BackToTopButton />
         <ListNowModal show={this.state.listNowOpen} onHide={this.toggleListNow} />
         <GetProposalModal show={this.state.getProposalOpen} onHide={this.toggleGetProposal} />
       </div>

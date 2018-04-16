@@ -5164,7 +5164,7 @@ div[data-percentage],
     background: #fff;
     margin: 0 -2px 30px 0;
     border: solid 2px #ccc;
-    
+
     ul {
       margin: 0;
       padding: 0;
@@ -5193,7 +5193,7 @@ div[data-percentage],
               color: #fff;
             }
           }
-          
+
           a.has-counter {
             background: #fff;
 
@@ -5228,13 +5228,7 @@ div[data-percentage],
       display: block;
       color: #181818;
       padding: 11px 13px;
-      // &:before {
-      //   opacity: 0;
-      //   content: '';
-      //   .position(3px);
-      //   background: #00afef;
-      //   transition: all 0.25s ease;
-      // }
+      transition: unset;
       > * {
         z-index: 2;
         position: relative;
@@ -5251,6 +5245,9 @@ div[data-percentage],
       }
       &.bottom {
         padding-top: 0;
+        time {
+          transition: unset;
+        }
       }
     }
     .phone,
