@@ -159,6 +159,21 @@ const selectDashboardDeleteCampaignProcess = () => createSelector(
   (substate) => substate.deleteCampaignProcess
 );
 
+const selectEditStudyLeadSourcesProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.editStudyLeadSourcesProcess
+);
+
+const selectDashboardDeleteStudyLeadSourceProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.deleteStudyLeadSourceProcess
+);
+
+const selectDeletedLeadSource = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.deletedLeadSource
+);
+
 const selectDashboardfive9List = () => createSelector(
   selectDashboardPageDomain(),
   (substate) => substate.five9List
@@ -203,4 +218,7 @@ export {
   selectDashboardfive9List,
   selectFacebookLandingPageUpdateProcess,
   selectStudyLeadSources,
+  selectEditStudyLeadSourcesProcess,
+  selectDashboardDeleteStudyLeadSourceProcess,
+  selectDeletedLeadSource,
 };
