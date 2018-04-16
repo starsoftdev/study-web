@@ -249,7 +249,7 @@ const addProdMiddlewares = (app, options) => {
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
-    res.status(404).send(path.resolve(outputPath, 'corporate.html'));
+    res.status(404).sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 
   app.get('*', (req, res) => {
