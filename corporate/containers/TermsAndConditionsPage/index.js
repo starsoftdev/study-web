@@ -1,4 +1,5 @@
 import React from 'react';
+import BackToTopButton from '../../components/BackTopButton';
 
 export default class TermsAndConditionsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -148,6 +149,7 @@ export default class TermsAndConditionsPage extends React.Component { // eslint-
             </p>
           </section>
         </div>
+        <BackToTopButton />
       </div>
     );
   }

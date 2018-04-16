@@ -170,6 +170,7 @@ class GetProposalModal extends React.Component {
                   placeholder="Select Indication"
                   options={indications}
                   className="field-row"
+                  mobileEnabled
                 />
               </div>
               <div className="field-row">
@@ -179,6 +180,7 @@ class GetProposalModal extends React.Component {
                   placeholder="Select Exposure Level"
                   options={studyLevels}
                   className="field-row"
+                  mobileEnabled
                 />
               </div>
               <div className="text-right">
