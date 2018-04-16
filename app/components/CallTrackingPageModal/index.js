@@ -7,18 +7,24 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm, change, FieldArray, touch } from 'redux-form';
+import { Field, reduxForm, change, FieldArray, touch, reset } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 
 import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues, selectSyncErrorBool, selectFormFieldNames } from '../../common/selectors/form.selector';
-import { selectStudyLeadSources, selectMessagingNumbers } from '../../containers/HomePage/AdminDashboard/selectors';
+import {
+  selectStudyLeadSources,
+  selectMessagingNumbers,
+  selectEditStudyLeadSourcesProcess,
+  selectDashboardDeleteStudyLeadSourceProcess,
+  selectDeletedLeadSource,
+} from '../../containers/HomePage/AdminDashboard/selectors';
 import { fetchStudyLeadSources } from '../../containers/App/actions';
 import RenderLeads from '../../components/RenderLeads';
 import formValidator from './validator';
-import { fetchMessagingNumbersDashboard, editStudyLeadSources } from '../../containers/HomePage/AdminDashboard/actions';
+import { fetchMessagingNumbersDashboard, editStudyLeadSources, deleteStudyLeadSource } from '../../containers/HomePage/AdminDashboard/actions';
 
 const formName = 'callTrackingPageForm';
 
@@ -33,6 +39,11 @@ export class CallTrackingPageModal extends React.Component {
     study: PropTypes.object,
     studyLeadSources: PropTypes.object,
     fetchStudyLeadSources: PropTypes.func,
+    editStudyLeadSourcesProcess: PropTypes.object,
+    deletedLeadSource: PropTypes.object,
+    deleteStudyLeadSource: PropTypes.func,
+    deleteStudyLeadSourceProcess: PropTypes.object,
+    resetForm: PropTypes.func,
     formValues: PropTypes.object,
     onClose: PropTypes.func.isRequired,
     openModal: PropTypes.bool.isRequired,
@@ -57,6 +68,7 @@ export class CallTrackingPageModal extends React.Component {
 
     this.submitCallTrackingForm = this.submitCallTrackingForm.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.initForm = this.initForm.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -80,11 +92,21 @@ export class CallTrackingPageModal extends React.Component {
     if (this.props.messagingNumbers.fetching && !newProps.messagingNumbers.fetching) {
       this.setState({ isNumbersFetched: true });
     }
+
+    if (!newProps.editStudyLeadSourcesProcess.saving && this.props.editStudyLeadSourcesProcess.saving) {
+      this.props.onClose();
+    }
   }
 
   onClose() {
-    const { onClose } = this.props;
+    const { onClose, resetForm } = this.props;
     onClose();
+    resetForm();
+  }
+
+  initForm() {
+    this.props.resetForm();
+    this.props.change('leadSource', [{ source: null }]);
   }
 
   submitCallTrackingForm(e) {
@@ -109,7 +131,7 @@ export class CallTrackingPageModal extends React.Component {
   }
 
   render() {
-    const { openModal, messagingNumbers, study } = this.props;
+    const { openModal, messagingNumbers, study, editStudyLeadSourcesProcess } = this.props;
     const landingPageUrl = study ? study.landingPageUrl : '';
     const studyId = study ? study.study_id : null;
 
@@ -153,13 +175,18 @@ export class CallTrackingPageModal extends React.Component {
                     isAdmin
                     messagingNumbers={messagingNumbers}
                     initialLeadSources={this.props.studyLeadSources.details}
+                    deleteStudyLeadSource={this.props.deleteStudyLeadSource}
+                    fetchStudyLeadSources={this.props.fetchStudyLeadSources}
+                    deleteStudyLeadSourceProcess={this.props.deleteStudyLeadSourceProcess}
+                    deletedLeadSource={this.props.deletedLeadSource}
+                    initForm={this.initForm}
                     landingPageUrl={landingPageUrl}
                     studyId={studyId}
                   />
                 </div>
                 <div className="field-row text-right">
                   <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                    {false
+                    {editStudyLeadSourcesProcess.saving
                       ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                       : <span>Update</span>
                     }
@@ -176,6 +203,9 @@ export class CallTrackingPageModal extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   studyLeadSources: selectStudyLeadSources(),
+  editStudyLeadSourcesProcess: selectEditStudyLeadSourcesProcess(),
+  deleteStudyLeadSourceProcess: selectDashboardDeleteStudyLeadSourceProcess(),
+  deletedLeadSource: selectDeletedLeadSource(),
   formValues: selectValues(formName),
   callTrackingFormError: selectSyncErrorBool(formName),
   callTrackingFields: selectFormFieldNames(formName),
@@ -185,6 +215,8 @@ function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
+    deleteStudyLeadSource: (studyId, studySourceId, leadSource) => dispatch(deleteStudyLeadSource(studyId, studySourceId, leadSource)),
+    resetForm: () => dispatch(reset(formName)),
     touchCallTracking: (fields) => dispatch(touch(formName, ...fields)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
     editStudyLeadSources: (studyId, leadSources, callTracking) => dispatch(editStudyLeadSources(studyId, leadSources, callTracking)),
