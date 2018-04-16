@@ -510,7 +510,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     return (
       <div className="container-fluid admin-dashboard">
         <div className="fixed-header clearfix">
-          <h2 className="main-heading pull-left">STUDYKIK DASHBOARD</h2>
+          <h2 className="main-heading pull-left">DASHBOARD</h2>
           <div className="filters-btns pull-right">
             <Button
               bsStyle="primary"
