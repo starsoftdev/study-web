@@ -55,7 +55,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const { formErrors, handleSubmit } = this.props;
     if (Object.keys(formErrors).length) {
       if (formErrors.postalCode) {
-        toastr.error('', 'Error! Invalid postal code.');
+        toastr.error('', formErrors.postalCode);
       }
       return;
     }
@@ -134,7 +134,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const countryCode = this.state.countryCode ? this.state.countryCode : '';
     const pattern = getPostalCodePattern(countryCode);
     const reg = new RegExp(pattern);
-    const postal = value => (value && !reg.test(value) ? 'Invalid postal code' : undefined);
+    const postal = value => (value && !reg.test(value) ? 'Error! Invalid postal code.' : undefined);
 
     return (
       <form
