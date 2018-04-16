@@ -68,10 +68,6 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       const landing = await PagesService.fetchLanding(landingId);
       const file = await readFile(fs, templatePath);
       const templateStr = file.toString();
-      if (req.url !== `/${landingId}-${landing.url}`) {
-        res.redirect('/404');
-        return;
-      }
       const viewPath = path.join(__dirname, '../views/landing-page.pug');
       const locals = getLandingPageLocals(landing);
       const ipcountry = req.headers['cf-ipcountry'] || null;
@@ -111,7 +107,11 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
         );
       res.send(result);
     } catch (e) {
-      res.send(e.message);
+      if (e.statusCode === 404) {
+        res.redirect('/404');
+        return;
+      }
+      console.log(e);
     }
   });
 };
@@ -249,7 +249,7 @@ const addProdMiddlewares = (app, options) => {
   reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
-    res.status(404).send(path.resolve(outputPath, 'corporate.html'));
+    res.status(404).sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 
   app.get('*', (req, res) => {
