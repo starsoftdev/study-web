@@ -12,6 +12,7 @@ const schema = {
     },
   },
   site_address: { presence: true },
+  landingPageUrl: { presence: true },
 };
 
 const editStudyFields = Object.keys(schema);
