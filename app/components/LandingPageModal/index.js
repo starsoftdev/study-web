@@ -154,7 +154,7 @@ export class LandingPageModal extends React.Component {
 
           this.setState({
             initialValuesEntered: true,
-            code: landing.description || null,
+            code: landing.description || '',
           });
         }
       });
