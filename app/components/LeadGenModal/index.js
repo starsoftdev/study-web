@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Form from 'react-bootstrap/lib/Form';
+import _ from 'lodash';
 
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset, change, blur } from 'redux-form';
@@ -61,78 +62,62 @@ export class LeadGenModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      selected: null,
-      landing: null,
-      landingFetched: false,
       initialValuesEntered: false,
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { onClose, fetchLanding } = this.props;
+  componentWillMount() {
+    const { studies, fetchLanding } = this.props;
 
-    if (newProps.studies) {
-      for (const study of newProps.studies) {
-        if (study.selected) {
-          this.setState({
-            selected: study,
-          });
-        }
+    if (studies) {
+      const selected = _.find(studies, { selected: true });
+      if (selected) {
+        fetchLanding(selected.study_id);
       }
     }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { onClose, change } = this.props;
 
     if (newProps.landing) {
-      this.setState({
-        landingFetched: true,
-        landing: newProps.landing,
-      }, () => {
-        const landing = newProps.landing;
+      const landing = newProps.landing;
 
-        if (!this.state.initialValuesEntered) {
-          const { change } = this.props;
+      if (!this.state.initialValuesEntered) {
+        this.setState({
+          initialValuesEntered: true,
+        }, () => {
           change('facebookPageId', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.facebookPageId : '');
           change('facebookPageToken', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.facebookPageToken : '');
           change('facebookFormName', landing.facebookLandingForm ? landing.facebookLandingForm.facebookFormName : '');
           change('facebookFormId', landing.facebookLandingForm ? landing.facebookLandingForm.id : null);
           change('facebookPageInnerId', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.id : null);
-        }
-      });
-    }
-
-    if (this.state.selected && newProps.openModal && !this.state.landingFetched) {
-      fetchLanding(this.state.selected.study_id);
+        });
+      }
     }
 
     if ((this.props.updateFacebookLandingPageProcess.saving && !newProps.updateFacebookLandingPageProcess.saving) && newProps.updateFacebookLandingPageProcess.success) {
       onClose();
     }
-
-    if (!newProps.openModal && this.props.openModal) {
-      this.onHide();
-    }
   }
 
-  onHide() {
-    const { onClose } = this.props;
-    this.setState({
-      landingFetched: false,
-      initialValuesEntered: false,
-    }, () => {
-      onClose();
-    });
+  componentWillUnmount() {
+    const { onClose, resetForm } = this.props;
+    resetForm();
+    onClose();
   }
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, submitForm } = this.props;
+    const { formError, newList, submitForm, studies } = this.props;
+    const selected = _.find(studies, { selected: true });
     if (formError) {
       return;
     }
-    const list = Object.assign({ studyId: this.state.selected.study_id }, newList);
+    const list = Object.assign({ studyId: selected.study_id }, newList);
 
     submitForm(list);
   }
