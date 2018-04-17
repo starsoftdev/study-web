@@ -177,7 +177,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               <Field
                 name="postalCode"
                 type="text"
-                maxLength="10"
                 validate={postal}
                 component={Input}
                 placeholder="Postal Code"
