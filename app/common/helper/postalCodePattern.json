@@ -3,7 +3,7 @@
     "id":"1",
     "abbreviation":"US",
     "name":"United States",
-    "regex":"\\d{5}([ \\-]?\\d{4})$"
+    "regex":"^\\d{5}(?:[-\\s]\\d{4})?$"
   },
   {
     "id":"39",
