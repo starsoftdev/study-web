@@ -917,37 +917,53 @@ export default class StudyList extends React.Component { // eslint-disable-line 
               openModal={this.state.showEditInformationModal}
               study={selectedStudies[0]}
             />
-            <LandingPageModal
-              isOnTop={this.state.landingPageOnTop}
-              onClose={() => {
-                this.showLandingPageModal(false);
-              }}
-              openModal={this.state.showLandingPageModal}
-              studies={studies.details}
-            />
-            <ThankYouPageModal
-              isOnTop={this.state.thankYouPageOnTop}
-              onClose={() => {
-                this.showThankYouPageModal(false);
-              }}
-              openModal={this.state.showThankYouPageModal}
-              studies={studies.details}
-            />
-            <PatientThankYouEmailModal
-              isOnTop={this.state.patientThankYouEmailPageOnTop}
-              onClose={() => {
-                this.showPatientThankYouPageModal(false);
-              }}
-              openModal={this.state.showPatientThankYouPageModal}
-              studies={studies.details}
-            />
-            <LeadGenModal
-              onClose={() => {
-                this.showLeadGenPageModal(false);
-              }}
-              openModal={this.state.showLeadGenPageModal}
-              studies={studies.details}
-            />
+            {this.state.showLandingPageModal &&
+              (
+                <LandingPageModal
+                  isOnTop={this.state.landingPageOnTop}
+                  onClose={() => {
+                    this.showLandingPageModal(false);
+                  }}
+                  openModal={this.state.showLandingPageModal}
+                  studies={studies.details}
+                />
+              )
+            }
+            {this.state.showThankYouPageModal &&
+              (
+                <ThankYouPageModal
+                  isOnTop={this.state.thankYouPageOnTop}
+                  onClose={() => {
+                    this.showThankYouPageModal(false);
+                  }}
+                  openModal={this.state.showThankYouPageModal}
+                  studies={studies.details}
+                />
+              )
+            }
+            {this.state.showPatientThankYouPageModal &&
+              (
+                <PatientThankYouEmailModal
+                  isOnTop={this.state.patientThankYouEmailPageOnTop}
+                  onClose={() => {
+                    this.showPatientThankYouPageModal(false);
+                  }}
+                  openModal={this.state.showPatientThankYouPageModal}
+                  studies={studies.details}
+                />
+              )
+            }
+            {this.state.showLeadGenPageModal &&
+              (
+                <LeadGenModal
+                  onClose={() => {
+                    this.showLeadGenPageModal(false);
+                  }}
+                  openModal={this.state.showLeadGenPageModal}
+                  studies={studies.details}
+                />
+              )
+            }
             <CampaignPageModal
               five9List={this.props.five9List}
               isOnTop={this.state.campaignPageOnTop}
