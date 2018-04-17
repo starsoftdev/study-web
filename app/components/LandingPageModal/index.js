@@ -126,7 +126,7 @@ export class LandingPageModal extends React.Component {
       if (!this.state.initialValuesEntered) {
         this.setState({
           initialValuesEntered: true,
-          code: landing.description || null,
+          code: landing.description || '',
         }, () => {
           change('title', landing.title);
           change('locationMask', landing.locationMask);
