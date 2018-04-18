@@ -7,6 +7,7 @@ import mixpanel from 'mixpanel-browser';
 import LogRocket from 'logrocket';
 
 import { getItem, removeItem } from '../app/utils/localStorage';
+import { setBodyClasses } from '../common/utilities/localization';
 
 import configureStore from './store';
 
@@ -101,6 +102,10 @@ const routes = {
 };
 
 const render = () => {
+  // set html body classes
+  setBodyClasses();
+
+  // render application
   ReactDOM.render(
     <Provider store={store}>
       <Router
