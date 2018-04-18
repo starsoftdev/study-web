@@ -21,6 +21,7 @@ import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
 import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
+import { default as PQS } from './containers/PQS';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as ComingSoon } from './containers/ComingSoon';
 import { default as BillingPage } from './containers/BillingPage';
@@ -70,6 +71,7 @@ const routes = {
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
     { path: '/privacy-policy', component: PrivacyPolicyPage },
+    { path: '/PQS', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication', component: Indication },

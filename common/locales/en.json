@@ -4,6 +4,7 @@
     "corporate.component.footer.copyright": "© StudyKIK ${year}. All rights reserved.",
     "corporate.component.footer.privacy": "Privacy Policy",
     "corporate.component.footer.terms": "Terms & Conditions",
+    "corporate.component.footer.pqs": "Patient Qualification Suite",
 
     "corporate.component.header.login": "Login",
     "corporate.component.header.nav.search": "Study Search",
