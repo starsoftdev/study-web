@@ -3,6 +3,9 @@
  */
 
 import libPhoneNumber from 'google-libphonenumber';
+import _ from 'lodash';
+import * as postalCodePattern from './postalCodePattern.json';
+
 const PNF = libPhoneNumber.PhoneNumberFormat;
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 
@@ -59,4 +62,12 @@ export function normalizePhoneDisplay(value, data = null) {
     }
     return (data) ? onlyNums : `+${onlyNums}`;
   }
+}
+
+export function getPostalCodePattern(countryCode) {
+  const foundCountry = _.find(postalCodePattern, ['abbreviation', countryCode.toUpperCase()]);
+  if (foundCountry) {
+    return foundCountry.regex;
+  }
+  return '';
 }

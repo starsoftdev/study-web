@@ -10,6 +10,7 @@ import { Field, reduxForm, reset, touch, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
+import _ from 'lodash';
 
 import Input from '../Input/index';
 import LoadingSpinner from '../LoadingSpinner';
@@ -47,48 +48,38 @@ export class PatientThankYouEmailModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      selected: null,
-      landingFetched: false,
       initialValuesEntered: false,
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding } = this.props;
+  componentWillMount() {
+    const { studies, fetchLanding } = this.props;
 
-    if (newProps.studies) {
-      for (const study of newProps.studies) {
-        if (study.selected) {
-          this.setState({
-            selected: study,
-          });
-        }
+    if (studies) {
+      const selected = _.find(studies, { selected: true });
+      if (selected) {
+        fetchLanding(selected.study_id);
       }
     }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetState, onClose, change } = this.props;
 
     if (newProps.landing) {
-      this.setState({
-        landingFetched: true,
-      }, () => {
-        const thankYouPage = newProps.landing.thankYouPage;
+      const thankYouPage = newProps.landing.thankYouPage;
 
-        if (!this.state.initialValuesEntered && thankYouPage) {
-          const { change } = this.props;
+      if (!this.state.initialValuesEntered && thankYouPage) {
+        this.setState({
+          initialValuesEntered: true,
+        }, () => {
           change('thankYouEmailBlock', thankYouPage.thankYouEmailBlock);
           change('thankYouEmailSubject', thankYouPage.thankYouEmailSubject);
-          this.setState({
-            initialValuesEntered: true,
-          });
-        }
-      });
-    }
-
-    if (this.state.selected && newProps.openModal && !this.state.landingFetched) {
-      fetchLanding(this.state.selected.study_id);
+        });
+      }
     }
 
     if (!newProps.updatePatientThankYouEmailProcess.saving && newProps.updatePatientThankYouEmailProcess.success) {
@@ -97,26 +88,22 @@ export class PatientThankYouEmailModal extends React.Component {
     }
   }
 
-  onHide() {
+  componentWillUnmount() {
     const { onClose, resetForm } = this.props;
-    this.setState({
-      landingFetched: false,
-      initialValuesEntered: false,
-    }, () => {
-      resetForm();
-      onClose();
-    });
+    resetForm();
+    onClose();
   }
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, touchFields, submitForm } = this.props;
+    const { formError, newList, touchFields, submitForm, studies } = this.props;
+    const selected = _.find(studies, { selected: true });
     if (formError) {
       touchFields();
       return;
     }
 
-    const list = Object.assign({ studyId: this.state.selected.study_id }, newList);
+    const list = Object.assign({ studyId: selected.study_id }, newList);
     submitForm(list);
   }
 

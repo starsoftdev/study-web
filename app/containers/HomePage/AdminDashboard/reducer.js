@@ -89,7 +89,13 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
+  EDIT_STUDY_LEAD_SOURCES,
   EDIT_STUDY_LEAD_SOURCES_SUCCESS,
+  EDIT_STUDY_LEAD_SOURCES_ERROR,
+
+  DELETE_STUDY_LEAD_SOURCE,
+  DELETE_STUDY_LEAD_SOURCE_ERROR,
+  DELETE_STUDY_LEAD_SOURCE_SUCCESS,
 } from './constants';
 
 import {
@@ -210,6 +216,18 @@ const initialState = {
     deleting: false,
     error: false,
   },
+  deletedLeadSource: {
+    index: null,
+    details: null,
+  },
+  deleteStudyLeadSourceProcess: {
+    deleting: false,
+    error: false,
+  },
+  editStudyLeadSourcesProcess: {
+    saving: false,
+    error: false,
+  },
   studyLeadSources: {
     details: [],
     fetching: false,
@@ -262,6 +280,7 @@ export default function dashboardPageReducer(state = initialState, action) {
               url: item.url,
               studyId: item.studyId,
               landingPageUrl: item.landingPageUrl,
+              patientsCount: parseInt(item.patientsCount),
             };
           }),
           fetching: false,
@@ -279,9 +298,22 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
 
+    case EDIT_STUDY_LEAD_SOURCES:
+      return {
+        ...state,
+        editStudyLeadSourcesProcess: {
+          saving: true,
+          error: false,
+        },
+      };
+
     case EDIT_STUDY_LEAD_SOURCES_SUCCESS:
       return {
         ...state,
+        editStudyLeadSourcesProcess: {
+          saving: false,
+          error: false,
+        },
         studyLeadSources: {
           details: action.payload.map((item) => {
             return {
@@ -290,6 +322,54 @@ export default function dashboardPageReducer(state = initialState, action) {
           }),
           fetching: false,
           error: null,
+        },
+      };
+
+    case EDIT_STUDY_LEAD_SOURCES_ERROR:
+      return {
+        ...state,
+        editStudyLeadSourcesProcess: {
+          saving: false,
+          error: true,
+        },
+      };
+
+    case DELETE_STUDY_LEAD_SOURCE:
+      return {
+        ...state,
+        deleteStudyLeadSourceProcess: {
+          deleting: true,
+          error: false,
+        },
+        deletedLeadSource: {
+          index: null,
+          details: null,
+        },
+      };
+
+    case DELETE_STUDY_LEAD_SOURCE_SUCCESS:
+      return {
+        ...state,
+        deleteStudyLeadSourceProcess: {
+          deleting: false,
+          error: false,
+        },
+        deletedLeadSource: {
+          index: action.index,
+          details: action.leadSource,
+        },
+      };
+
+    case DELETE_STUDY_LEAD_SOURCE_ERROR:
+      return {
+        ...state,
+        deleteStudyLeadSourceProcess: {
+          deleting: false,
+          error: true,
+        },
+        deletedLeadSource: {
+          index: null,
+          details: null,
         },
       };
 

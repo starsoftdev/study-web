@@ -96,6 +96,9 @@ import {
   EDIT_STUDY_LEAD_SOURCES,
   EDIT_STUDY_LEAD_SOURCES_SUCCESS,
   EDIT_STUDY_LEAD_SOURCES_ERROR,
+  DELETE_STUDY_LEAD_SOURCE,
+  DELETE_STUDY_LEAD_SOURCE_SUCCESS,
+  DELETE_STUDY_LEAD_SOURCE_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -743,6 +746,29 @@ export function editStudyLeadSourcesSuccess(payload) {
 export function editStudyLeadSourcesError(payload) {
   return {
     type: EDIT_STUDY_LEAD_SOURCES_ERROR,
+    payload,
+  };
+}
+
+export function deleteStudyLeadSource(leadSource, index) {
+  return {
+    type: DELETE_STUDY_LEAD_SOURCE,
+    leadSource,
+    index,
+  };
+}
+
+export function deleteStudyLeadSourceSuccess(leadSource, index) {
+  return {
+    type: DELETE_STUDY_LEAD_SOURCE_SUCCESS,
+    leadSource,
+    index,
+  };
+}
+
+export function deleteStudyLeadSourceError(payload) {
+  return {
+    type: DELETE_STUDY_LEAD_SOURCE_ERROR,
     payload,
   };
 }
