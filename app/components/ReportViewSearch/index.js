@@ -9,9 +9,12 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import Tooltip from 'react-bootstrap/lib/Tooltip';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
+import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import { exportStudies } from '../../containers/ReportViewPage/actions';
 import { getItem } from '../../utils/localStorage';
@@ -61,6 +64,9 @@ export class ReportViewSearch extends React.Component {
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
+    this.includeNotes = this.includeNotes.bind(this);
+
+    this.preventDownload = false;
   }
 
   componentWillReceiveProps() {
@@ -141,16 +147,31 @@ export class ReportViewSearch extends React.Component {
 
   download(ev) {
     ev.preventDefault();
-    const { exportStudies, currentUser, formValues } = this.props;
-    const protocolNumber = this.props.location.query.protocol || null;
-    const indication = this.props.location.query.indication || null;
-    const cro = this.props.location.query.cro || null;
-    const messaging = this.props.location.query.messaging || null;
+    if (!this.preventDownload) {
+      const { exportStudies, currentUser, formValues } = this.props;
+      const protocolNumber = this.props.location.query.protocol || null;
+      const indication = this.props.location.query.indication || null;
+      const cro = this.props.location.query.cro || null;
+      const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
-    filters = _.assign(filters, this.props.formValues, formValues);
+      let filters = {
+        sponsorRoleId: currentUser.roleForSponsor.id,
+        protocol: protocolNumber,
+        indication,
+        cro,
+        messaging,
+        timezone: currentUser.timezone,
+      };
+      filters = _.assign(filters, this.props.formValues, formValues);
 
-    exportStudies(filters);
+      exportStudies(filters);
+    } else {
+      this.preventDownload = false;
+    }
+  }
+
+  includeNotes() {
+    this.preventDownload = true;
   }
 
   renderDateFooter() {
@@ -205,12 +226,38 @@ export class ReportViewSearch extends React.Component {
       endDate = moment();
     }
 
+    const tooltip = (
+      <Tooltip
+        id="download-tooltip"
+        className="download-report-tooltip"
+      >
+        Check to include notes in the report
+      </Tooltip>
+    );
+
     return (
       <div className="search-controls form-search clearfix">
         <div className="btns-area pull-right full-width">
           {/* TODO: remove tmp styles */}
           <div className="col pull-right">
-            <a className="btn btn-primary lightbox-opener" onClick={this.download}><i className="icon-icon_download" /> download</a>
+            <OverlayTrigger
+              placement="top"
+              overlay={tooltip}
+            >
+              <a className="btn btn-primary lightbox-opener" onClick={this.download}>
+                <span className="btn-body">
+                  <i className="icon-icon_download" /> download
+                </span>
+                <i className="icomoon-icon_pencil-edit" />
+                <Field
+                  name="includeNotes"
+                  component={Checkbox}
+                  type="checkbox"
+                  className="pull-right include-notes"
+                  onChange={this.includeNotes}
+                />
+              </a>
+            </OverlayTrigger>
           </div>
           <div className="col pull-right">
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
