@@ -18,3 +18,20 @@ export function validatorFactory(schema) {
     return errors || {};
   };
 }
+
+export function asyncValidatorFactory(asyncSchema) {
+  // adding custom validators
+  forEach(customValidators, item => validator.validators[item.name] = item.validator);
+
+  return values => {
+    return new Promise(resolve => {
+      validator.async(values, asyncSchema).then(() => resolve()).catch(err => {
+        const asyncErrors = {}
+        forEach(err, (item, key) =>
+          asyncErrors[key] = item[0]
+        );
+        resolve(asyncErrors);
+      });
+    });
+  };
+}
