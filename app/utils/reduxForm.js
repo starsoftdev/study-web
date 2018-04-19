@@ -26,7 +26,7 @@ export function asyncValidatorFactory(asyncSchema) {
   return values => {
     return new Promise(resolve => {
       validator.async(values, asyncSchema).then(() => resolve()).catch(err => {
-        const asyncErrors = {}
+        const asyncErrors = {};
         forEach(err, (item, key) =>
           asyncErrors[key] = item[0]
         );
