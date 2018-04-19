@@ -3,13 +3,13 @@
     "id":"1",
     "abbreviation":"US",
     "name":"United States",
-    "regex":"^\\d{5}(?:[-\\s]\\d{4})?$"
+    "regex":"^\\d{5}(-\\d{4})?$"
   },
   {
     "id":"39",
     "abbreviation":"CA",
     "name":"Canada",
-    "regex":"^[A-Za-z]\\d[A-Za-z]([ -]?\\d[A-Za-z]\\d)$"
+    "regex":"^[A-Za-z]\\d[A-Za-z](\\s\\d[A-Za-z]\\d)?$"
   },
   {
     "id":"14",
@@ -207,7 +207,7 @@
     "id":"31",
     "abbreviation":"BR",
     "name":"Brazil",
-    "regex":"^\\d{5}(\\-?\\d{4})?$"
+    "regex":"^\\d{5}(-\\d{4})?$"
   },
   {
     "id":"33",
@@ -357,7 +357,7 @@
     "id":"55",
     "abbreviation":"CZ",
     "name":"Czech Republic",
-    "regex":"^\\d{3}([ \\-]?\\d{2})?$"
+    "regex":"^\\d{3}(\\s\\d{2})?$"
   },
   {
     "id":"56",
@@ -459,7 +459,7 @@
     "id":"72",
     "abbreviation":"FR",
     "name":"France",
-    "regex":"\\d{5}"
+    "regex":"^\\d{5}$"
   },
   {
     "id":"73",
@@ -495,7 +495,7 @@
     "id":"79",
     "abbreviation":"DE",
     "name":"Germany",
-    "regex":"\\d{5}"
+    "regex":"^\\d{5}$"
   },
   {
     "id":"80",
@@ -597,7 +597,7 @@
     "id":"94",
     "abbreviation":"HU",
     "name":"Hungary",
-    "regex":"\\d{4}"
+    "regex":"^\\d{4}$"
   },
   {
     "id":"95",
@@ -651,7 +651,7 @@
     "id":"100",
     "abbreviation":"IT",
     "name":"Italy",
-    "regex":"\\d{5}"
+    "regex":"^\\d{5}$"
   },
   {
     "id":"243",
@@ -669,7 +669,7 @@
     "id":"102",
     "abbreviation":"JP",
     "name":"Japan",
-    "regex":"^\\d{4}(-?\\d{3})?$"
+    "regex":"^\\d{3}(-\\d{4})?$"
   },
   {
     "id":"244",
@@ -1065,7 +1065,7 @@
     "id":"163",
     "abbreviation":"PL",
     "name":"Poland",
-    "regex":"^\\d{2}(-?\\d{3})?$"
+    "regex":"^\\d{2}(-\\d{3})?$"
   },
   {
     "id":"164",
