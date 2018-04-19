@@ -5,7 +5,7 @@ import { translate } from '../../../../common/utilities/localization';
 const menuItems = [
   { text: translate('corporate.component.footer.privacy'), link: '/privacy-policy' },
   { text: translate('corporate.component.footer.terms'), link: '/terms-and-conditions' },
-  { text: translate('corporate.component.footer.pqs'), link: '/PQS' },
+  { text: translate('corporate.component.footer.pqs'), link: '/pqs' },
 ];
 
 function FooterNavBar() {
