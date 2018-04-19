@@ -71,7 +71,7 @@ const routes = {
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
     { path: '/privacy-policy', component: PrivacyPolicyPage },
-    { path: '/PQS', component: PQS },
+    { path: '/pqs', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication', component: Indication },
