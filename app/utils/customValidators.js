@@ -1,3 +1,5 @@
+import request from './request';
+
 const customValidators = [
   {
     name: 'emailDomain',
@@ -38,6 +40,37 @@ const customValidators = [
         }
       }
       return null;
+    },
+  },
+  {
+    name: 'asyncValidUSZipCode',
+    validator: (value, options, key, attributes) => {
+      return new Promise((resolve) => {
+        if (attributes.countryCode && attributes.countryCode !== 'us') {
+          resolve();
+          return;
+        }
+        const filterObj = {
+          where: {
+            postalCode: value,
+          },
+        };
+
+        const params = {
+          method: 'GET',
+          query: {
+            filter: JSON.stringify(filterObj),
+          },
+        };
+        const requestURL = `${API_URL}/us`;
+        request(requestURL, params).then((res) => {
+          if (res.length) {
+            resolve();
+          } else {
+            resolve('Invalid US postal code.');
+          }
+        });
+      });
     },
   },
 ];
