@@ -8,7 +8,9 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import InfiniteScroll from 'react-infinite-scroller';
 import classNames from 'classnames';
+import ReactTooltip from 'react-tooltip';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import pqsImage from '../../assets/images/pqs.png';
 
 @reduxForm({ form: 'reportListForm' })
 
@@ -139,7 +141,10 @@ export class ReportViewTable extends React.Component {
           </td>
           <td>{item.level}</td>
           <td>
-            <span className={item.is_active ? 'button on' : 'button off'}>{item.is_active ? 'ON' : 'OFF'}</span>
+            <span>{item.is_active ? 'Active' : 'Inactive'}</span>
+          </td>
+          <td className={classNames('patient-messaging-suite', { off: (!item.pqs_cur && !item.pqs_last) })}>
+            <span className="patient-messaging-suite-status">{(item.pqs_cur || item.pqs_last) ? 'On' : 'Off'}</span>
           </td>
         </tr>
       );
@@ -203,6 +208,10 @@ export class ReportViewTable extends React.Component {
                     <th data-sort="principalinvestigatorfirstname" className={`th ${(this.props.paginationOptions.activeSort === 'principalinvestigatorfirstname') ? this.props.paginationOptions.activeDirection : ''}`}>PRINCIPAL INVESTIGATOR <i className="caret-arrow" /></th>
                     <th data-sort="level" className={`th ${(this.props.paginationOptions.activeSort === 'level') ? this.props.paginationOptions.activeDirection : ''}`}>LISTING <i className="caret-arrow" /></th>
                     <th data-sort="is_active" className={`th ${(this.props.paginationOptions.activeSort === 'is_active') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS <i className="caret-arrow" /></th>
+                    <th className="default-cursor">
+                      <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip="Patient Qualification Suite" />
+                      <ReactTooltip id="pqs-logo" type="info" class="tooltipClass wide" effect="solid" />
+                    </th>
                   </tr>
                 </thead>
               </table>
