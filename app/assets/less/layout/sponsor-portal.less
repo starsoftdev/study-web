@@ -334,7 +334,7 @@
   .table-area {
     .clearfix;
     position: relative;
-    padding: 0 0 0 600px;
+    padding: 0 0 17px 675px;
 
     .table-scroll-wrap {
       overflow-x: scroll;
@@ -382,7 +382,7 @@
     .table-left {
       top: 0;
       left: 0;
-      width: 600px;
+      width: 675px;
       position: absolute;
 
       .table .number {
@@ -570,13 +570,13 @@
     }
 
     @media screen and (max-width: @psd) {
-      padding-left: 530px;
+      padding-left: 600px;
       .reports & {
         padding: 0 0 0 530px;
       }
 
       .table-left {
-        width: 530px;
+        width: 600px;
       }
 
       .table-right .table {
@@ -605,6 +605,9 @@
       &:nth-child(4) {
         width: 140px;
       }
+      &:nth-child(5) {
+        width: 75px;
+      }
     }
 
     @media screen and(max-width: @psd) {
@@ -620,6 +623,9 @@
         }
         &:nth-child(4) {
           width: 140px;
+        }
+        &:nth-child(5) {
+          width: 70px;
         }
       }
     }
