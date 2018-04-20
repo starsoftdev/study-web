@@ -6,18 +6,16 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
 
-import { ClinicalTrialsSearchFormValidator, AsyncClinicalTrialsSearchFormValidator } from './validator';
+import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
 import Input from '../../../app/components/Input';
-import { selectSyncErrors, selectAsyncErrors } from '../../../app/common/selectors/form.selector';
+import { selectSyncErrors } from '../../../app/common/selectors/form.selector';
 import { getPostalCodePattern } from '../../../app/common/helper/functions';
 
 const formName = 'find-studies';
 @reduxForm({
   form: formName,
   validate: ClinicalTrialsSearchFormValidator,
-  asyncValidate: AsyncClinicalTrialsSearchFormValidator,
-  asyncBlurFields: ['postalCode'],
 })
 
 export class ClinicalTrialsSearchForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -30,7 +28,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     indication: PropTypes.string,
     initialValues: PropTypes.object,
     formErrors: PropTypes.object,
-    asyncFormErrors: PropTypes.object,
   };
 
   constructor(props) {
@@ -55,10 +52,10 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
   onSubmit(ev) {
     ev.preventDefault();
-    const { formErrors, asyncFormErrors, handleSubmit } = this.props;
-    if (Object.keys(formErrors).length || Object.keys(asyncFormErrors).length) {
-      if (formErrors.postalCode || asyncFormErrors.postalCode) {
-        toastr.error('', 'Error! Invalid postal code.');
+    const { formErrors, handleSubmit } = this.props;
+    if (Object.keys(formErrors).length) {
+      if (formErrors.postalCode) {
+        toastr.error('', formErrors.postalCode);
       }
       return;
     }
@@ -137,7 +134,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const countryCode = this.state.countryCode ? this.state.countryCode : '';
     const pattern = getPostalCodePattern(countryCode);
     const reg = new RegExp(pattern);
-    const postal = value => (value && !reg.test(value) ? 'Invalid postal code.' : undefined);
+    const postal = value => (value && !reg.test(value) ? 'Error! Invalid postal code.' : undefined);
 
     return (
       <form
@@ -222,7 +219,6 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
 const mapStateToProps = createStructuredSelector({
   formErrors: selectSyncErrors(formName),
-  asyncFormErrors: selectAsyncErrors(formName),
 });
 
 export default connect(mapStateToProps, null)(ClinicalTrialsSearchForm);

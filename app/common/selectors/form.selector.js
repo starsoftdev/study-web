@@ -33,11 +33,6 @@ export const selectSyncErrors = (formName) => createSelector(
   (substate) => get(substate, `${formName}.syncErrors`, {})
 );
 
-export const selectAsyncErrors = (formName) => createSelector(
-  selectFormDomain(),
-  (substate) => get(substate, `${formName}.asyncErrors`, {})
-);
-
 export const selectSyncErrorBool = (formName) => createSelector(
   selectFormDomain(),
   (substate) => {
