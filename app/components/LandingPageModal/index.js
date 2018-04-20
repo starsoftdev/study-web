@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import Editor from 'react-md-editor';
+import RichTextEditor from 'react-rte';
 import Form from 'react-bootstrap/lib/Form';
 import _ from 'lodash';
 
@@ -98,7 +98,7 @@ export class LandingPageModal extends React.Component {
     this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.state = {
-      code: null,
+      code: RichTextEditor.createEmptyValue(),
       studyAdModalOpen: false,
       studyPreviewModalOpen: false,
       initialValuesEntered: false,
@@ -126,7 +126,7 @@ export class LandingPageModal extends React.Component {
       if (!this.state.initialValuesEntered) {
         this.setState({
           initialValuesEntered: true,
-          code: landing.description || '',
+          code: RichTextEditor.createValueFromString(landing.description, 'markdown') || RichTextEditor.createEmptyValue(),
         }, () => {
           change('title', landing.title);
           change('locationMask', landing.locationMask);
@@ -196,11 +196,11 @@ export class LandingPageModal extends React.Component {
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
     formValues.mlpPhone = normalizePhoneForServer(formValues.mlpPhone);
-    const list = Object.assign({ studyId: selected.study_id, description: this.state.code }, formValues);
+    const list = Object.assign({ studyId: selected.study_id, description: this.state.code.toString('markdown') }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
     }
-    if (list.locationMask === undefined && landing.locationMask !== list.locationMask) {
+    if (list.locationMask === undefined && landing && landing.locationMask !== list.locationMask) {
       list.locationMask = null;
     }
     submitForm(list);
@@ -253,6 +253,27 @@ export class LandingPageModal extends React.Component {
     } else {
       fileSrc = this.state.updatedStudyAd;
     }
+    const toolbarConfig = {
+      // Optionally specify the groups to display (displayed in the order listed).
+      display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN'],
+      INLINE_STYLE_BUTTONS: [
+        { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
+        { label: 'Italic', style: 'ITALIC' },
+        { label: 'Underline', style: 'UNDERLINE' },
+      ],
+      BLOCK_TYPE_DROPDOWN: [
+        { label: 'Normal', style: 'unstyled' },
+        { label: 'H1', style: 'header-one' },
+        { label: 'H2', style: 'header-two' },
+        { label: 'H3', style: 'header-three' },
+      ],
+      BLOCK_TYPE_BUTTONS: [
+        { label: 'UL', style: 'unordered-list-item' },
+        { label: 'OL', style: 'ordered-list-item' },
+        { label: '"', style: 'blockquote' },
+      ],
+    };
+
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('landing-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
@@ -448,8 +469,12 @@ export class LandingPageModal extends React.Component {
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Text</label>
                   </strong>
-                  <div className="field">
-                    <Editor value={this.state.code} onChange={this.updateCode} />
+                  <div className="field rich-text-editor-container">
+                    <RichTextEditor
+                      value={this.state.code}
+                      onChange={this.updateCode}
+                      toolbarConfig={toolbarConfig}
+                    />
                   </div>
                 </div>
                 <div className="field-row">
