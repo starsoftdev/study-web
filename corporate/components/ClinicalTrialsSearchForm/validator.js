@@ -1,4 +1,4 @@
-import { validatorFactory, asyncValidatorFactory } from '../../../app/utils/reduxForm';
+import { validatorFactory } from '../../../app/utils/reduxForm';
 
 const schema = {
   postalCode: { presence: false },
@@ -6,12 +6,4 @@ const schema = {
   indicationId: { presence: false },
 };
 
-const asyncSchema = {
-  countryCode: { presence: false },
-  postalCode: {
-    asyncValidUSZipCode: true,
-  },
-};
-
-export const ClinicalTrialsSearchFormValidator = validatorFactory(schema);
-export const AsyncClinicalTrialsSearchFormValidator = asyncValidatorFactory(asyncSchema);
+export default validatorFactory(schema);
