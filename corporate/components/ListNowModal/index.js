@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import Form from 'react-bootstrap/lib/Form';
 import Input from '../../../app/components/Input/index';
+import ReactSelect from '../../../app/components/Input/ReactSelect';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
@@ -79,6 +80,22 @@ class ListNowModal extends React.Component {
   }
 
   render() {
+    const companyTypes = [{
+      id: 1,
+      name: 'Company Type',
+    }, {
+      id: 2,
+      name: 'CRO',
+    }, {
+      id: 3,
+      name: 'Research Site',
+    }, {
+      id: 4,
+      name: 'Sponsor',
+    }, {
+      id: 5,
+      name: 'Vendor / Media',
+    }];
     return (
       <Modal
         show={this.props.show}
@@ -109,7 +126,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder="Full Name"
+                  placeholder="*Full Name"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -120,9 +137,20 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder="Company"
+                  placeholder="*Company Name"
                   component={Input}
                   type="text"
+                  className="field-row"
+                  id=""
+                  required
+                />
+              </div>
+              <div className="field-row">
+                <Field
+                  name="companyType"
+                  placeholder="*Company Type"
+                  component={ReactSelect}
+                  options={companyTypes}
                   className="field-row"
                   id=""
                   required
@@ -132,7 +160,7 @@ class ListNowModal extends React.Component {
                 <Field
                   name="email"
                   component={Input}
-                  placeholder="Email"
+                  placeholder="*Email"
                   type="text"
                   className="field-row"
                   id=""
@@ -142,7 +170,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder="Phone"
+                  placeholder="*Phone"
                   component={Input}
                   type="text"
                   className="field-row"
