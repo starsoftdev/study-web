@@ -85,6 +85,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     fetchNote: PropTypes.func,
     fetchStudyCampaignsDashboard: PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: PropTypes.func.isRequired,
+    updateFilters: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object,
     five9List: PropTypes.object,
     allCustomNotificationEmails: PropTypes.object,
@@ -228,7 +229,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   loadItems() {
-    this.props.fetchStudiesAccordingToFilters(null, null, true);
+    this.props.fetchStudiesAccordingToFilters(null, null, true, null);
   }
 
   showDateRangeModal() {
@@ -375,17 +376,17 @@ export default class StudyList extends React.Component { // eslint-disable-line 
   }
 
   campaignChanged(val) {
-    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    const { setFilterFormValues, updateFilters } = this.props;
     setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(val, 'campaign');
+    updateFilters(val, 'campaign');
   }
 
   sourceChanged(val) {
-    const { setFilterFormValues, fetchStudiesAccordingToFilters } = this.props;
+    const { setFilterFormValues, updateFilters } = this.props;
     setFilterFormValues('source', val);
     this.toggleAllStudies(false);
-    fetchStudiesAccordingToFilters(val, 'source');
+    updateFilters(val, 'source');
   }
 
   addEmailNotificationClick(custom = false) {
