@@ -17,6 +17,22 @@ import {
 } from '../../../app/containers/App/actions';
 
 const formName = 'listNowForm';
+const companyTypes = [{
+  id: 1,
+  name: 'Company Type',
+}, {
+  id: 2,
+  name: 'CRO',
+}, {
+  id: 3,
+  name: 'Research Site',
+}, {
+  id: 4,
+  name: 'Sponsor',
+}, {
+  id: 5,
+  name: 'Vendor / Media',
+}];
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -80,22 +96,6 @@ class ListNowModal extends React.Component {
   }
 
   render() {
-    const companyTypes = [{
-      id: 1,
-      name: 'Company Type',
-    }, {
-      id: 2,
-      name: 'CRO',
-    }, {
-      id: 3,
-      name: 'Research Site',
-    }, {
-      id: 4,
-      name: 'Sponsor',
-    }, {
-      id: 5,
-      name: 'Vendor / Media',
-    }];
     return (
       <Modal
         show={this.props.show}
