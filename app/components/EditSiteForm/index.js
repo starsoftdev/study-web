@@ -7,7 +7,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, blur } from 'redux-form';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-import { selectSavedSite, selectTimezone } from '../../containers/App/selectors';
+import { selectFormsTempTimezone, selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import FormGeosuggest from '../../components/Input/Geosuggest';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -20,7 +20,7 @@ const formName = 'editSite';
 const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
   formValues: selectEditSiteFormValues(),
-  timezone: selectTimezone(),
+  tempTimezone: selectFormsTempTimezone(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -71,7 +71,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
     initialValues: PropTypes.object,
     formValues: PropTypes.object,
     getTimezone: PropTypes.func,
-    timezone: PropTypes.string,
+    tempTimezone: PropTypes.string,
   };
 
   constructor(props) {
@@ -85,10 +85,10 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   componentWillReceiveProps(newProps) {
-    const { change, timezone, formValues } = this.props;
-    if (newProps.timezone && newProps.timezone !== timezone) {
-      change('timezone', formatTimezone(newProps.timezone, formValues.city));
-      change('timezoneUnparsed', newProps.timezone);
+    const { change, tempTimezone, formValues } = this.props;
+    if (newProps.tempTimezone && newProps.tempTimezone !== tempTimezone) {
+      change('timezone', formatTimezone(newProps.tempTimezone, formValues.city));
+      change('timezoneUnparsed', newProps.tempTimezone);
 
       this.setState({ fetchingTimezone: false });
     }
