@@ -114,6 +114,7 @@ import {
 
   CLINICAL_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
+  CLINICAL_TRIALS_SEARCH_ERROR,
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
@@ -446,6 +447,17 @@ export default function appReducer(state = initialState, action) {
           details: trialsCollection,
           total: action.payload.total,
           wrongPostalCode: action.payload.wrongPostalCode,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLINICAL_TRIALS_SEARCH_ERROR:
+      baseDataInnerState = {
+        trials: {
+          details: cloneDeep(state.baseData.trials.details),
+          total: state.baseData.trials.total,
+          wrongPostalCode: state.baseData.trials.wrongPostalCode,
           fetching: false,
           error: null,
         },
