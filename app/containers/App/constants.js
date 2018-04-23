@@ -202,9 +202,9 @@ export const FETCH_PATIENT_CATEGORIES              = 'App/FETCH_PATIENT_CATEGORI
 export const FETCH_PATIENT_CATEGORIES_ERROR        = 'App/FETCH_PATIENT_CATEGORIES_ERROR';
 export const PATIENT_CATEGORIES_FETCHED            = 'App/PATIENT_CATEGORIES_FETCHED';
 
-export const GET_TIMEZONE = 'GET_TIMEZONE';
-export const GET_TIMEZONE_SUCCESS = 'GET_TIMEZONE_SUCCESS';
-export const GET_TIMEZONE_ERROR = 'GET_TIMEZONE_ERROR';
+export const GET_TIMEZONE                          = 'GET_TIMEZONE';
+export const GET_TIMEZONE_SUCCESS                  = 'GET_TIMEZONE_SUCCESS';
+export const GET_TIMEZONE_ERROR                    = 'GET_TIMEZONE_ERROR';
 
 export const CLEAR_STUDY_SOURCES                   = 'App/CLEAR_STUDY_SOURCES';
 export const FETCH_STUDY_SOURCES                   = 'App/FETCH_STUDY_SOURCES';
