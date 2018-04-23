@@ -126,7 +126,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder="*Full Name"
+                  placeholder="* Full Name"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -137,7 +137,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder="*Company Name"
+                  placeholder="* Company Name"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -148,7 +148,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="companyType"
-                  placeholder="*Company Type"
+                  placeholder="* Company Type"
                   component={ReactSelect}
                   options={companyTypes}
                   className="field-row"
@@ -160,7 +160,7 @@ class ListNowModal extends React.Component {
                 <Field
                   name="email"
                   component={Input}
-                  placeholder="*Email"
+                  placeholder="* Email"
                   type="text"
                   className="field-row"
                   id=""
@@ -170,7 +170,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder="*Phone"
+                  placeholder="* Phone"
                   component={Input}
                   type="text"
                   className="field-row"
