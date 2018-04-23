@@ -312,9 +312,9 @@ const selectSavedSite = () => createSelector(
   (substate) => get(substate, 'baseData.savedSite', {})
 );
 
-const selectTimezone = () => createSelector(
+const selectFormsTempTimezone = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.timezone', {})
+  (substate) => get(substate, 'baseData.formsTempTimezone', '')
 );
 
 const selectSavedUser = () => createSelector(
@@ -484,7 +484,7 @@ export {
   selectCreditsPrice,
 
   selectChangeTimezoneState,
-  selectTimezone,
+  selectFormsTempTimezone,
 
   selectLanding,
   selectLandingIsFetching,
