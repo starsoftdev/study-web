@@ -61,7 +61,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     formValues: React.PropTypes.object,
     changeUsersTimezone: React.PropTypes.func,
     getTimezone: React.PropTypes.func,
-    timezone: React.PropTypes.string,
+    tempTimezone: React.PropTypes.string,
     handleSubmit: React.PropTypes.func,
     dispatch: React.PropTypes.func,
     initialValues: React.PropTypes.object,
@@ -83,14 +83,14 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(newProps) {
-    const { timezone, dispatch, formValues, initialValues } = this.props;
+    const { tempTimezone, dispatch, formValues, initialValues } = this.props;
 
     if (!newProps.changePasswordResult.passwordChanging && this.props.changePasswordResult.passwordChanging && newProps.changePasswordResult.success) {
       this.closeResetPasswordModal();
     }
-    if (newProps.timezone && newProps.timezone !== timezone) {
-      dispatch(change('profile', 'timezone', formatTimezone(newProps.timezone, formValues.city)));
-      dispatch(change('profile', 'timezoneUnparsed', newProps.timezone));
+    if (newProps.tempTimezone && newProps.tempTimezone !== tempTimezone) {
+      dispatch(change('profile', 'timezone', formatTimezone(newProps.tempTimezone, formValues.city)));
+      dispatch(change('profile', 'timezoneUnparsed', newProps.tempTimezone));
     }
     if (initialValues && !initialValues.address) {
       this.props.initialValues.timezone = '';
