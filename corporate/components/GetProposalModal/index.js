@@ -121,7 +121,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder="Full Name"
+                  placeholder="*Full Name"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -132,7 +132,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder="Company"
+                  placeholder="*Company"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -143,7 +143,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="email"
-                  placeholder="Email"
+                  placeholder="*Email"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -154,7 +154,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder="Phone"
+                  placeholder="*Phone"
                   component={Input}
                   type="text"
                   className="field-row"
@@ -167,7 +167,7 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="indicationId"
                   component={ReactSelect}
-                  placeholder="Select Indication"
+                  placeholder="*Select Indication"
                   options={indications}
                   className="field-row"
                   mobileEnabled
@@ -177,7 +177,7 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="exposureLevel"
                   component={ReactSelect}
-                  placeholder="Select Exposure Level"
+                  placeholder="*Select Exposure Level"
                   options={studyLevels}
                   className="field-row"
                   mobileEnabled
