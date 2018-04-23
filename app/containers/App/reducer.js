@@ -297,7 +297,7 @@ const initialState = {
     },
     cnsSubmitProcess: {},
     patientCategories: [],
-    timezone: 'America/New_York',
+    formsTempTimezone: '',
   },
 };
 
@@ -1476,17 +1476,17 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_TIMEZONE:
       baseDataInnerState = {
-        timezone: '',
+        formsTempTimezone: '',
       };
       break;
     case GET_TIMEZONE_SUCCESS:
       baseDataInnerState = {
-        timezone: action.payload.timezone,
+        formsTempTimezone: action.payload.timezone,
       };
       break;
     case GET_TIMEZONE_ERROR:
       baseDataInnerState = {
-        timezone: '',
+        formsTempTimezone: '',
       };
       break;
     default:
