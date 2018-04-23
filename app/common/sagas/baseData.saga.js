@@ -1090,7 +1090,7 @@ function* listNowSite(action) {
       body: JSON.stringify(params),
     };
 
-    if (size === 4) {
+    if (size >= 5) {
       const response = yield call(request, requestURL, options);
       toastr.success('', 'Thank you for submitting your information.');
       yield put(listSiteNowSuccess(response));
