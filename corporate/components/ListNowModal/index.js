@@ -19,18 +19,15 @@ import {
 const formName = 'listNowForm';
 const companyTypes = [{
   id: 1,
-  name: 'Company Type',
-}, {
-  id: 2,
   name: 'CRO',
 }, {
-  id: 3,
+  id: 2,
   name: 'Research Site',
 }, {
-  id: 4,
+  id: 3,
   name: 'Sponsor',
 }, {
-  id: 5,
+  id: 4,
   name: 'Vendor / Media',
 }];
 
