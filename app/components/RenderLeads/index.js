@@ -151,8 +151,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             }
           }
 
-          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
-          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
+          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">UTM #{(index + 1)}</a> : `UTM #${(index + 1)}`;
+          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Media Url #{(index + 1)}</a> : `Media Url #${(index + 1)}`;
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
@@ -161,7 +161,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
                 <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}>
-                  <label>Source Type #{(index + 1)}</label>
+                  <label>Media Type #{(index + 1)}</label>
                 </strong>
                 <Field
                   name={`${lead}.source`}
@@ -186,7 +186,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Source Name #{(index + 1)}</label></strong>
+                    <strong className="label required"><label>Media Name #{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.source_name`}
                       component={Input}
@@ -284,7 +284,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                 className="add-new-source"
                 onClick={() => fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId })}
               >
-                <i className="icomoon-icon_close" /> Add Lead Source
+                <i className="icomoon-icon_close" /> Add Media
               </div>
             </div>
           </div>
