@@ -1077,7 +1077,7 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     yield put(clinicalTrialsSearchSuccess(response));
   } catch (err) {
     yield put(clinicalTrialsSearchError(err));
-    if (err.message === 'Invalid US postal code.') {
+    if (err.message.indexOf('postal code.') !== -1) {
       toastr.error('', err.message);
     }
   }
