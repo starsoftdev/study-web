@@ -11,7 +11,7 @@ import Helmet from 'react-helmet';
 
 import ProfileForm from '../../components/ProfileForm';
 import { selectChangePasswordResult, selectOtherUser, selectProfileFormValues } from '../../containers/ProfilePage/selectors';
-import { selectCurrentUser, selectUserRoleType, selectTimezone } from '../../containers/App/selectors';
+import { selectCurrentUser, selectUserRoleType, selectFormsTempTimezone } from '../../containers/App/selectors';
 import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
 import { changeUsersTimezone, getTimezone } from '../../containers/App/actions';
 import { formatTimezone } from '../../utils/time';
@@ -29,7 +29,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
     userRoleType: PropTypes.string,
     changeUsersTimezone: React.PropTypes.func,
     getTimezone: React.PropTypes.func,
-    timezone: React.PropTypes.string,
+    tempTimezone: React.PropTypes.string,
   }
 
   constructor(props) {
@@ -93,7 +93,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
                   formValues={this.props.formValues}
                   changeUsersTimezone={this.props.changeUsersTimezone}
                   getTimezone={this.props.getTimezone}
-                  timezone={this.props.timezone}
+                  tempTimezone={this.props.tempTimezone}
                   onSubmit={this.updateUsersTimezone}
                 />;
               })()}
@@ -111,7 +111,7 @@ const mapStateToProps = createStructuredSelector({
   userRoleType: selectUserRoleType(),
   otherUser: selectOtherUser(),
   formValues: selectProfileFormValues(),
-  timezone: selectTimezone(),
+  tempTimezone: selectFormsTempTimezone(),
 });
 
 function mapDispatchToProps(dispatch) {
