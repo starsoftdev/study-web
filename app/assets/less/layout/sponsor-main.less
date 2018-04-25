@@ -39,7 +39,34 @@
       }
 
       .dropdown-menu {
+        border-radius: 0 0 4px 4px;
+        background-color: #fff;
+        border: 2px solid #ccc;
+        border-top-color: #e6e6e6;
+        box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+        box-sizing: border-box;
+        margin: 0;
+        padding: 2px;
+        max-height: 200px;
+        position: absolute;
+        left: 0;
+        top: 100%;
         width: 100%;
+        z-index: 1;
+        -webkit-overflow-scrolling: touch;
+
+        li {
+          a {
+            padding: 5px 10px;
+          }
+
+          &.active, &:hover {
+            a {
+              background-color: #00afef;
+              color: #fff;
+            }
+          }
+        }
       }
     }
 		
