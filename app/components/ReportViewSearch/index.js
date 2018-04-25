@@ -231,18 +231,10 @@ export class ReportViewSearch extends React.Component {
               id="split-button-basic"
               onClick={this.download}
             >
-              <MenuItem
-                eventKey={false}
-                onSelect={this.select}
-                active={!this.state.downloadNotes}
-              >
+              <MenuItem eventKey={false} onSelect={this.select}>
                 Without Notes
               </MenuItem>
-              <MenuItem
-                eventKey
-                onSelect={this.select}
-                active={this.state.downloadNotes}
-              >
+              <MenuItem eventKey onSelect={this.select}>
                 With Notes
               </MenuItem>
             </SplitButton>
