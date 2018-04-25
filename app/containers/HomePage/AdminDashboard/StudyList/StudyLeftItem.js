@@ -70,7 +70,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
     const ae = item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A';
 
-
+    // campaign_datefrom and campaign_dateto can be null, if it set to TBD
     const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);
     const campaignDateTo = moment(item.campaign_dateto).tz(item.timezone);
     const totalDays = campaignDateTo.diff(campaignDateFrom, 'days');
@@ -81,7 +81,16 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     if (daysRan > totalDays) {
       daysRan = totalDays;
     }
-    const percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100;
+
+    // handle case when campaign dates is set to TBD or when campaign_count is null
+    let percent;
+    if (item.campaign_datefrom === null || item.campaign_dateto === null) {
+      percent = null;
+    } else if (item.campaign_count === null) {
+      percent = 0;
+    } else {
+      percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100;
+    }
 
     return (
       <tr
@@ -116,11 +125,11 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
         <td className="list">
           <ul className="list-unstyled">
             <li><span><a href={landingHref} className="landing-link" target="_blank">{item.study_id}</a></span></li>
-            <li><span>{percent.toFixed(2)}%</span></li>
+            <li><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
             <li><span>{maxLength(sm, 15)}</span></li>
             <li><span>{maxLength(bd, 15)}</span></li>
             <li><span>{maxLength(ae, 15)}</span></li>
-            <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : ''}`}</span></li>
+            <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
         </td>
         <td>
