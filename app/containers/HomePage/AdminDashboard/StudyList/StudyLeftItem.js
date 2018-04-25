@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
-import _ from 'lodash';
 
 import Toggle from '../../../../components/Input/Toggle';
 import { selectHoverRowIndex } from '../selectors';
@@ -82,13 +81,15 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     if (daysRan > totalDays) {
       daysRan = totalDays;
     }
-    let percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100;
 
     // handle case when campaign dates is set to TBD or when campaign_count is null
-    if (_.isNaN(totalDays) || _.isNaN(daysRan)) {
+    let percent;
+    if (item.campaign_datefrom === null || item.campaign_dateto === null) {
       percent = null;
     } else if (item.campaign_count === null) {
       percent = 0;
+    } else {
+      percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100;
     }
 
     return (
