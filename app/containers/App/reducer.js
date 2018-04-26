@@ -114,6 +114,7 @@ import {
 
   CLINICAL_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
+  CLINICAL_TRIALS_SEARCH_ERROR,
   CLEAR_CLINICAL_TRIALS_SEARCH,
   LIST_SITE_NOW_SUCCESS,
   RESET_LIST_SITE_NOW_SUCCESS,
@@ -297,7 +298,7 @@ const initialState = {
     },
     cnsSubmitProcess: {},
     patientCategories: [],
-    timezone: 'America/New_York',
+    formsTempTimezone: '',
   },
 };
 
@@ -446,6 +447,17 @@ export default function appReducer(state = initialState, action) {
           details: trialsCollection,
           total: action.payload.total,
           wrongPostalCode: action.payload.wrongPostalCode,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case CLINICAL_TRIALS_SEARCH_ERROR:
+      baseDataInnerState = {
+        trials: {
+          details: cloneDeep(state.baseData.trials.details),
+          total: state.baseData.trials.total,
+          wrongPostalCode: state.baseData.trials.wrongPostalCode,
           fetching: false,
           error: null,
         },
@@ -1476,17 +1488,17 @@ export default function appReducer(state = initialState, action) {
       break;
     case GET_TIMEZONE:
       baseDataInnerState = {
-        timezone: '',
+        formsTempTimezone: '',
       };
       break;
     case GET_TIMEZONE_SUCCESS:
       baseDataInnerState = {
-        timezone: action.payload.timezone,
+        formsTempTimezone: action.payload.timezone,
       };
       break;
     case GET_TIMEZONE_ERROR:
       baseDataInnerState = {
-        timezone: '',
+        formsTempTimezone: '',
       };
       break;
     default:
