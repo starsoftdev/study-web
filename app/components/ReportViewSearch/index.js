@@ -9,6 +9,8 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import SplitButton from 'react-bootstrap/lib/SplitButton';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
@@ -40,6 +42,7 @@ export class ReportViewSearch extends React.Component {
     super(props);
 
     this.state = {
+      downloadNotes: false,
       socketBinded: false,
       searchTimer: null,
       showPopup: false,
@@ -61,6 +64,7 @@ export class ReportViewSearch extends React.Component {
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
+    this.select = this.select.bind(this);
   }
 
   componentWillReceiveProps() {
@@ -139,18 +143,29 @@ export class ReportViewSearch extends React.Component {
     });
   }
 
-  download(ev) {
-    ev.preventDefault();
+  download() {
     const { exportStudies, currentUser, formValues } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    let filters = {
+      includeNotes: this.state.downloadNotes,
+      sponsorRoleId: currentUser.roleForSponsor.id,
+      protocol: protocolNumber,
+      indication,
+      cro,
+      messaging,
+      timezone: currentUser.timezone,
+    };
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
+  }
+
+  select(ev) {
+    this.setState({ downloadNotes: ev });
   }
 
   renderDateFooter() {
@@ -210,7 +225,19 @@ export class ReportViewSearch extends React.Component {
         <div className="btns-area pull-right full-width">
           {/* TODO: remove tmp styles */}
           <div className="col pull-right">
-            <a className="btn btn-primary lightbox-opener" onClick={this.download}><i className="icon-icon_download" /> download</a>
+            <SplitButton
+              bsStyle="primary"
+              title="download"
+              id="split-button-basic"
+              onClick={this.download}
+            >
+              <MenuItem eventKey={false} onSelect={this.select}>
+                Without Notes
+              </MenuItem>
+              <MenuItem eventKey onSelect={this.select}>
+                With Notes
+              </MenuItem>
+            </SplitButton>
           </div>
           <div className="col pull-right">
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
