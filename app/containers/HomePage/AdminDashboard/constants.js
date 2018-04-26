@@ -128,3 +128,7 @@ export const FETCH_FIVE_9_LIST_ERROR                     = 'DashboardPage/FETCH_
 export const EDIT_STUDY_LEAD_SOURCES                     = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES';
 export const EDIT_STUDY_LEAD_SOURCES_SUCCESS             = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_SUCCESS';
 export const EDIT_STUDY_LEAD_SOURCES_ERROR               = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_ERROR';
+
+export const DELETE_STUDY_LEAD_SOURCE                     = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES';
+export const DELETE_STUDY_LEAD_SOURCE_SUCCESS             = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES_SUCCESS';
+export const DELETE_STUDY_LEAD_SOURCE_ERROR               = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES_ERROR';

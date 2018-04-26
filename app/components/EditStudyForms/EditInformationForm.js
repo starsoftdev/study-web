@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Overlay from 'react-bootstrap/lib/Overlay';
 import { createStructuredSelector } from 'reselect';
+import { toastr } from 'react-redux-toastr';
 
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
 import Toggle from '../../components/Input/Toggle';
@@ -37,7 +38,7 @@ import {
   removeTaggedIndicationForStudy,
   updateDashboardStudy,
 } from '../../containers/HomePage/AdminDashboard/actions';
-import { selectInitialValues, selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
+import { selectInitialValues, selectSyncErrorBool, selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
 import IndicationOverlay from './IndicationOverlay';
 import formValidator from './validator';
 
@@ -46,6 +47,7 @@ const formName = 'Dashboard.EditStudyForm';
 const mapStateToProps = createStructuredSelector({
   cro: selectCro(),
   formError: selectSyncErrorBool(formName),
+  formErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
   indications: selectIndications(),
   initialFormValues: selectInitialValues(formName),
@@ -88,6 +90,7 @@ export default class EditInformationForm extends React.Component {
     cro: PropTypes.array.isRequired,
     fetchAllStudyEmailNotificationsDashboard: PropTypes.func.isRequired,
     formError: PropTypes.bool.isRequired,
+    formErrors: PropTypes.object,
     formValues: PropTypes.object,
     initialValues: PropTypes.object.isRequired,
     indications: PropTypes.array.isRequired,
@@ -170,7 +173,7 @@ export default class EditInformationForm extends React.Component {
 
   updateDashboardStudy(event) {
     event.preventDefault();
-    const { formError, formValues, initialFormValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
+    const { formError, formErrors, formValues, initialFormValues, startSubmit, stopSubmit, updateDashboardStudy } = this.props;
     if (!formError) {
       startSubmit();
       // diff the updated form values
@@ -207,6 +210,8 @@ export default class EditInformationForm extends React.Component {
         }
       }
       updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
+    } else if (formErrors.landingPageUrl) {
+      toastr.error('', 'Error! Study Url is required.');
     }
   }
 
@@ -290,7 +295,7 @@ export default class EditInformationForm extends React.Component {
               </div>
             </div>
             <div className="field-row">
-              <strong className="label">
+              <strong className="label required">
                 <label htmlFor="new-patient-first-name">STUDY URL</label>
               </strong>
               <div className="field">

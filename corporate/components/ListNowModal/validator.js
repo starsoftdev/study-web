@@ -11,6 +11,11 @@ const schema = {
       message: '^Company cannot be blank',
     },
   },
+  companyType: {
+    presence: {
+      message: '^Company Type cannot be blank',
+    },
+  },
   email: {
     presence: {
       message: '^Email cannot be blank',

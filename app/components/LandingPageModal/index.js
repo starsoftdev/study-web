@@ -5,8 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import Editor from 'react-md-editor';
+import RichTextEditor from 'react-rte';
 import Form from 'react-bootstrap/lib/Form';
+import _ from 'lodash';
 
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset, touch, change, blur } from 'redux-form';
@@ -86,7 +87,6 @@ export class LandingPageModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.updateCode = this.updateCode.bind(this);
     this.openStudyAdModal = this.openStudyAdModal.bind(this);
@@ -98,10 +98,7 @@ export class LandingPageModal extends React.Component {
     this.removeStudyAd = this.removeStudyAd.bind(this);
 
     this.state = {
-      code: null,
-      selected: null,
-      landing: null,
-      landingFetched: false,
+      code: RichTextEditor.createEmptyValue(),
       studyAdModalOpen: false,
       studyPreviewModalOpen: false,
       initialValuesEntered: false,
@@ -109,28 +106,28 @@ export class LandingPageModal extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding, updatedStudyAd, resetChangeAdState } = this.props;
+  componentWillMount() {
+    const { studies, fetchLanding } = this.props;
 
-    if (newProps.studies) {
-      for (const study of newProps.studies) {
-        if (study.selected) {
-          this.setState({
-            selected: study,
-          });
-        }
+    if (studies) {
+      const selected = _.find(studies, { selected: true });
+      if (selected) {
+        fetchLanding(selected.study_id);
       }
     }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetState, onClose, updatedStudyAd, resetChangeAdState, change } = this.props;
 
     if (newProps.landing) {
-      this.setState({
-        landingFetched: true,
-        landing: newProps.landing,
-      }, () => {
-        const landing = newProps.landing;
+      const landing = newProps.landing;
 
-        if (!this.state.initialValuesEntered) {
-          const { change } = this.props;
+      if (!this.state.initialValuesEntered) {
+        this.setState({
+          initialValuesEntered: true,
+          code: RichTextEditor.createValueFromString(landing.description, 'markdown') || RichTextEditor.createEmptyValue(),
+        }, () => {
           change('title', landing.title);
           change('locationMask', landing.locationMask);
           change('instructions', landing.instructions);
@@ -151,26 +148,13 @@ export class LandingPageModal extends React.Component {
           change('facebookUrl', landing.facebookUrl);
           change('isSendInitialMessageText', landing.isSendInitialMessageText);
           change('displayAlways', landing.displayAlways);
-
-          this.setState({
-            initialValuesEntered: true,
-            code: landing.description || null,
-          });
-        }
-      });
-    }
-
-    if (this.state.selected && newProps.openModal && !this.state.landingFetched) {
-      fetchLanding(this.state.selected.study_id);
+        });
+      }
     }
 
     if (!newProps.updateLandingPageProcess.saving && newProps.updateLandingPageProcess.success) {
       resetState();
       onClose();
-    }
-
-    if (!newProps.openModal && this.props.openModal) {
-      this.onHide();
     }
 
     if (newProps.changeStudyAdProcess.error && this.state.studyAdModalOpen) {
@@ -187,28 +171,23 @@ export class LandingPageModal extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const { onClose, resetForm } = this.props;
+    this.closeStudyAdModal();
+    resetForm();
+    onClose();
+  }
+
   onPhoneBlur(event) {
     const { blur } = this.props;
     const formattedPhoneNumber = normalizePhoneDisplay(event.target.value);
     blur(event.target.name, formattedPhoneNumber);
   }
 
-  onHide() {
-    const { onClose, resetForm } = this.props;
-    this.setState({
-      landingFetched: false,
-      initialValuesEntered: false,
-    }, () => {
-      this.closeStudyAdModal();
-      resetForm();
-      onClose();
-    });
-  }
-
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, touchFields, submitForm } = this.props;
-    const { landing } = this.state;
+    const { formError, newList, touchFields, submitForm, studies, landing } = this.props;
+    const selected = _.find(studies, { selected: true });
     if (formError) {
       touchFields();
       return;
@@ -217,11 +196,11 @@ export class LandingPageModal extends React.Component {
     const formValues = newList;
     formValues.clickToCallButtonNumber = normalizePhoneForServer(formValues.clickToCallButtonNumber);
     formValues.mlpPhone = normalizePhoneForServer(formValues.mlpPhone);
-    const list = Object.assign({ studyId: this.state.selected.study_id, description: this.state.code }, formValues);
+    const list = Object.assign({ studyId: selected.study_id, description: this.state.code.toString('markdown') }, formValues);
     if (list.isSendInitialMessageText === undefined) {
       list.isSendInitialMessageText = false;
     }
-    if (list.locationMask === undefined && landing.locationMask !== list.locationMask) {
+    if (list.locationMask === undefined && landing && landing.locationMask !== list.locationMask) {
       list.locationMask = null;
     }
     submitForm(list);
@@ -248,31 +227,53 @@ export class LandingPageModal extends React.Component {
   }
 
   uploadStudyAd(e) {
+    const selected = _.find(this.props.studies, { selected: true });
     if (e.type !== 'application/pdf') {
       e.toBlob((blob) => {
-        this.props.submitStudyAd({ file: blob, study_id: this.state.selected.study_id });
+        this.props.submitStudyAd({ file: blob, study_id: selected.study_id });
       });
     } else {
-      this.props.submitStudyAd({ file: e, study_id: this.state.selected.study_id });
+      this.props.submitStudyAd({ file: e, study_id: selected.study_id });
     }
   }
 
   removeStudyAd() {
-    this.props.removeStudyAd(this.state.selected.study_id);
+    const selected = _.find(this.props.studies, { selected: true });
+    this.props.removeStudyAd(selected.study_id);
     this.closeStudyAdModal();
   }
 
 
   render() {
-    const { openModal, onClose, changeStudyAdProcess } = this.props;
+    const { openModal, onClose, changeStudyAdProcess, landing } = this.props;
     let fileSrc = null;
 
-    if (this.state.landing && !this.state.updatedStudyAd) {
-      const landing = this.state.landing;
+    if (landing && !this.state.updatedStudyAd) {
       fileSrc = landing.imgSrc;
     } else {
       fileSrc = this.state.updatedStudyAd;
     }
+    const toolbarConfig = {
+      // Optionally specify the groups to display (displayed in the order listed).
+      display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN'],
+      INLINE_STYLE_BUTTONS: [
+        { label: 'Bold', style: 'BOLD', className: 'custom-css-class' },
+        { label: 'Italic', style: 'ITALIC' },
+        { label: 'Underline', style: 'UNDERLINE' },
+      ],
+      BLOCK_TYPE_DROPDOWN: [
+        { label: 'Normal', style: 'unstyled' },
+        { label: 'H1', style: 'header-one' },
+        { label: 'H2', style: 'header-two' },
+        { label: 'H3', style: 'header-three' },
+      ],
+      BLOCK_TYPE_BUTTONS: [
+        { label: 'UL', style: 'unordered-list-item' },
+        { label: 'OL', style: 'ordered-list-item' },
+        { label: '"', style: 'blockquote' },
+      ],
+    };
+
     return (
       <Collapse dimension="width" in={openModal} timeout={250} className={classNames('landing-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
         <div>
@@ -468,8 +469,12 @@ export class LandingPageModal extends React.Component {
                   <strong className="label">
                     <label htmlFor="new-patient-phone">Text</label>
                   </strong>
-                  <div className="field">
-                    <Editor value={this.state.code} onChange={this.updateCode} />
+                  <div className="field rich-text-editor-container">
+                    <RichTextEditor
+                      value={this.state.code}
+                      onChange={this.updateCode}
+                      toolbarConfig={toolbarConfig}
+                    />
                   </div>
                 </div>
                 <div className="field-row">

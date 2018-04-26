@@ -57,6 +57,7 @@ import {
 
 const PieChart = rd3.PieChart;
 const LineChart = rd3.LineChart;
+const formName = 'dashboardFilters';
 
 const mapStateToProps = createStructuredSelector({
   allCustomNotificationEmails: selectAllCustomNotificationEmails(),
@@ -93,7 +94,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
   fetchTotalsDashboard: (params, limit, offset) => dispatch(fetchTotalsDashboard(params, limit, offset)),
   fetchUsersByRole: () => dispatch(fetchUsersByRole()),
-  resetForm: () => dispatch(reset('dashboardFilters')),
+  resetForm: () => dispatch(reset(formName)),
   updateTwilioNumbers: () => dispatch(updateTwilioNumbers()),
   clearCampaignFilter: () => dispatch(reset('campaignFilter')),
 });
@@ -172,6 +173,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.nearbyFilterSubmit = this.nearbyFilterSubmit.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
     this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
+    this.updateFilters = this.updateFilters.bind(this);
   }
 
   componentWillMount() {
@@ -187,9 +189,15 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      modalFilters: newProps.filtersFormValues,
-    });
+    const filters = _.cloneDeep(newProps.filtersFormValues);
+    const equal = _.isEqual(filters, this.props.filtersFormValues);
+    if (!equal) {
+      if (filters.address && !filters.address.value) {
+        filters.address = [];
+      }
+
+      this.fetchStudiesAccordingToFilters(null, null, false, filters);
+    }
   }
 
   addFilter(options) {
@@ -221,32 +229,25 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   removeFilter(filter) {
     const { customFilters } = this.state;
     const { change, filtersFormValues } = this.props;
+    const filters = _.cloneDeep(filtersFormValues);
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
 
       change('dashboardFilters', 'search', []);
-    }
-
-    if (filter.name === 'percentage') {
+    } else if (filter.name === 'percentage') {
       change('dashboardFilters', 'percentage', []);
-    }
-
-    if (filter.name === 'nearbyStudies') {
+    } else if (filter.name === 'nearbyStudies') {
       change('dashboardFilters', 'nearbyStudies', []);
-    }
-
-    if (filter.name === 'address') {
+    } else if (filter.name === 'address') {
       change('dashboardFilters', 'address', []);
-    }
+    } else if (filters[filter.name]) {
+      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
+      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
 
-    if (filtersFormValues[filter.name]) {
-      pullAt(filtersFormValues[filter.name], findIndex(filtersFormValues[filter.name], ['label', filter.value]));
-      pullAt(filtersFormValues[filter.name], findIndex(filtersFormValues[filter.name], ['label', 'All']));
+      change('dashboardFilters', filter.name, filters[filter.name]);
     }
-
-    this.fetchStudiesAccordingToFilters();
   }
 
   openFiltersModal() {
@@ -344,11 +345,15 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     return newFilters;
   }
 
-  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
-    const { change } = this.props;
+  updateFilters(key, value) {
+    this.props.change('dashboardFilters', key, value);
+  }
+
+  fetchStudiesAccordingToFilters(value, key, fetchByScroll, filtersFormValues) {
+    const { change, totals } = this.props;
     const sources = _.cloneDeep(this.props.sources);
     const defaultSource = sources.find(s => { return s.type === 'StudyKIK'; });
-    let filters = _.cloneDeep(this.props.filtersFormValues);
+    let filters = filtersFormValues || _.cloneDeep(this.props.filtersFormValues);
 
     if ((value && key) || (key === 'campaign') || (key === 'source')) {
       const newFilterValues = _.cloneDeep(value);
@@ -389,13 +394,14 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     if (isEmpty) {
       this.props.clearFilters();
     } else if (_.isEqual(this.state.prevTotalsFilters, filters)) {
-      if (this.state.prevOffset !== offset) {
+      if (this.state.prevOffset !== offset || _.isEmpty(totals.details)) {
+        this.props.fetchTotalsDashboard(filters, limit, offset);
         this.props.fetchStudiesDashboard(filters, limit, offset);
         this.setState({ prevOffset: offset });
       }
     } else {
       this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
-      this.props.fetchTotalsDashboard(filters, 50, 0);
+      this.props.fetchTotalsDashboard(filters, limit, offset);
       this.props.fetchStudiesDashboard(filters, limit, offset);
       this.setState({ prevOffset: offset });
     }
@@ -409,7 +415,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   percentageFilterSubmit(e) {
     const { change } = this.props;
     change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e });
-    this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.percentage, arg: e }, 'percentage');
   }
 
   nearbyFilterChange(e) {
@@ -420,19 +425,16 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   nearbyFilterSubmit(e) {
     const { change } = this.props;
     change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e });
-    this.fetchStudiesAccordingToFilters({ ...this.props.filtersFormValues.nearbyStudies, arg: e }, 'nearbyStudies');
   }
 
   searchFilterSubmit(e) {
     const { change } = this.props;
     change('dashboardFilters', 'search', { value: e });
-    this.fetchStudiesAccordingToFilters({ value: e }, 'search');
   }
 
   addressFilterSubmit(e) {
     const { change } = this.props;
     change('dashboardFilters', 'address', { value: e });
-    this.fetchStudiesAccordingToFilters({ value: e }, 'address');
   }
 
   renderDateFooter() {
@@ -510,7 +512,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     return (
       <div className="container-fluid admin-dashboard">
         <div className="fixed-header clearfix">
-          <h2 className="main-heading pull-left">STUDYKIK DASHBOARD</h2>
+          <h2 className="main-heading pull-left">DASHBOARD</h2>
           <div className="filters-btns pull-right">
             <Button
               bsStyle="primary"
@@ -541,7 +543,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
                     <FiltersForm
                       handleSubmit={this.addUser}
                       initialValues={filtersFormValues}
-                      fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+                      updateFilters={this.updateFilters}
                       levels={this.props.levels}
                       siteNames={this.props.siteNames}
                       siteLocations={this.props.siteLocations}
@@ -704,6 +706,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
           <StudyList
             totals={this.props.totals}
             fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+            updateFilters={this.updateFilters}
             levels={this.props.levels}
             sources={this.props.sources}
             addEmailNotificationUser={this.props.addEmailNotificationUser}

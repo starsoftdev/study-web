@@ -52,6 +52,7 @@ import {
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
   EDIT_STUDY_LEAD_SOURCES,
+  DELETE_STUDY_LEAD_SOURCE,
 } from './AdminDashboard/constants';
 
 import {
@@ -110,6 +111,8 @@ import {
   removeStudyAdError,
   editStudyLeadSourcesSuccess,
   editStudyLeadSourcesError,
+  deleteStudyLeadSourceSuccess,
+  deleteStudyLeadSourceError,
 } from './AdminDashboard/actions';
 
 import {
@@ -1274,6 +1277,31 @@ export function* editStudyLeadSourcesWorker(action) {
   }
 }
 
+export function* deleteStudyLeadSourceWatcher() {
+  yield* takeLatest(DELETE_STUDY_LEAD_SOURCE, deleteStudyLeadSourceWorker);
+}
+
+export function* deleteStudyLeadSourceWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.leadSource.studyId}/deleteStudyLeadSource`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({
+        studySourceId: action.leadSource.studySourceId,
+      }),
+    };
+    yield call(request, requestURL, params);
+    yield put(deleteStudyLeadSourceSuccess(action.leadSource, action.index));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(deleteStudyLeadSourceError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 
 let watcherD = false;
 let watcherF = false;
@@ -1315,6 +1343,7 @@ export function* homePageSaga() {
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
   const editStudyLeadSourcesWatcher1 = yield fork(editStudyLeadSourcesWatcher);
+  const deleteStudyLeadSourceWatcher1 = yield fork(deleteStudyLeadSourceWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1368,6 +1397,7 @@ export function* homePageSaga() {
     yield cancel(editCampaignWatcher1);
     yield cancel(deleteCampaignWatcher1);
     yield cancel(editStudyLeadSourcesWatcher1);
+    yield cancel(deleteStudyLeadSourceWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);
