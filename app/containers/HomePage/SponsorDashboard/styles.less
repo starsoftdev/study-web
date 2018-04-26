@@ -24,7 +24,7 @@
       display: inline-block;
       height: 70px;
       border-bottom: 1px solid #ddd;
-      padding: 10px;
+      padding: 10px 9px;
       vertical-align: top;
       font-size: 15px;
       .name {
@@ -43,8 +43,11 @@
         overflow: hidden;
         a {
           white-space: nowrap;
+          &:hover, &:active {
+            color: #76daff;
+          }
         }
-        &.link {
+        &.url {
           color: #00afef;
           cursor: pointer;
           &:hover {
@@ -77,15 +80,19 @@
       }
       &.pqs {
         width: 8%;
+        .name {
+          overflow: visible;
+        }
       }
       &.start-date {
-        width: 13%;
+        width: 12%;
       }
       &.end-date {
-        width: 13%;
+        width: 12%;
       }
       &.last-login {
-        width: 15%;
+        width: 17%;
+        white-space: nowrap;
       }
 
       &.new-patient {
@@ -124,6 +131,23 @@
       }
     }
 
+    .see-more-btn {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: #ddd;
+      color: #000;
+      height: 60px;
+      text-align: center;
+      padding: 17px;
+      width: 100%;
+      outline: none;
+      &:hover {
+        background: #ccc;
+      }
+    }
+
     @media screen and(max-width: 1530px) {
       .box-element {
         padding: 13px 6px;
@@ -133,6 +157,10 @@
         .value {
           font-size: 14px;
         }
+      }
+      .see-more-btn {
+        font-size: 16px;
+        padding-top: 18px;
       }
     }
 
@@ -146,21 +174,9 @@
           font-size: 13px;
         }
       }
-    }
-
-    .see-more-btn {
-      display: block;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      background: #ddd;
-      color: #000;
-      height: 60px;
-      text-align: center;
-      padding: 15px;
-      width: 100%;
-      &:hover {
-        background: #ccc;
+      .see-more-btn {
+        font-size: 14px;
+        padding-top: 20px;
       }
     }
   }
