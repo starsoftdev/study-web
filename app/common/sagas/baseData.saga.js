@@ -1077,6 +1077,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     yield put(clinicalTrialsSearchSuccess(response));
   } catch (err) {
     yield put(clinicalTrialsSearchError(err));
+    if (err.message.indexOf('postal code.') !== -1) {
+      toastr.error('', err.message);
+    }
   }
 }
 
@@ -1090,7 +1093,7 @@ function* listNowSite(action) {
       body: JSON.stringify(params),
     };
 
-    if (size === 4) {
+    if (size >= 5) {
       const response = yield call(request, requestURL, options);
       toastr.success('', 'Thank you for submitting your information.');
       yield put(listSiteNowSuccess(response));

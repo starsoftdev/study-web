@@ -8,6 +8,7 @@ import { scroller, Element } from 'react-scroll';
 import TrialsArticle from '../../components/TrialsArticle';
 import ClinicalTrialsSearchForm from '../../components/ClinicalTrialsSearchForm';
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
+import BackToTopButton from '../../components/BackTopButton';
 import '../../../app/components/LoadingSpinner/styles.less';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
 import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
@@ -180,6 +181,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             </div>
           </div>
         </div>
+        <BackToTopButton />
       </div>
     );
   }

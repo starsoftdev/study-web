@@ -15,6 +15,7 @@ import {
 } from '../../../app/containers/App/selectors';
 
 import Input from '../../../app/components/Input/index';
+import BackToTopButton from '../../components/BackTopButton';
 
 import {
   newContact,
@@ -223,6 +224,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
             </div>
           </form>
         </div>
+        <BackToTopButton />
       </div>
     );
   }

@@ -31,6 +31,11 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     fields: PropTypes.object,
     formValues: PropTypes.object,
     fetchSources: PropTypes.func,
+    initForm: PropTypes.func,
+    deleteStudyLeadSource: PropTypes.func,
+    fetchStudyLeadSources: PropTypes.func,
+    deleteStudyLeadSourceProcess: PropTypes.object,
+    deletedLeadSource: PropTypes.object,
     isAdmin: PropTypes.bool,
     isClientEditForm: PropTypes.bool,
     initialLeadSources: PropTypes.array,
@@ -41,6 +46,14 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     studyId: PropTypes.number,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    this.deleteSourceType = this.deleteSourceType.bind(this);
+  }
+
   componentWillMount() {
     const { fields, sources, fetchSources } = this.props;
     if (fields.length === 0) {
@@ -48,6 +61,37 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     }
     if (sources.length === 0) {
       fetchSources();
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.deleteStudyLeadSourceProcess.deleting && this.props.deleteStudyLeadSourceProcess.deleting && newProps.deletedLeadSource.details) {
+      newProps.fields.remove(newProps.deletedLeadSource.index);
+    }
+
+    if (newProps.fields.length === 0) {
+      newProps.initForm();
+    }
+  }
+
+  deleteSourceType(index) {
+    const { fields, initialLeadSources, formValues, deleteStudyLeadSource } = this.props;
+    let initObject = null;
+
+    if (initialLeadSources && initialLeadSources.length > 0) {
+      initObject = _.find(initialLeadSources, (o) => {
+        if (formValues.leadSource && formValues.leadSource[index]) {
+          return (o.studySourceId === formValues.leadSource[index].studySourceId);
+        } else {
+          return false;
+        }
+      });
+    }
+
+    if (initObject) {
+      deleteStudyLeadSource(initObject, index);
+    } else {
+      fields.remove(index);
     }
   }
 
@@ -74,6 +118,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           let landingHref = null;
           let googleHref = null;
           let initObject = null;
+          let patientsExists = false;
 
           if (initialLeadSources && initialLeadSources.length > 0) {
             initObject = _.find(initialLeadSources, (o) => {
@@ -83,6 +128,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                 return false;
               }
             });
+          }
+
+          if (initObject && initObject.patientsCount > 0) {
+            patientsExists = true;
           }
 
           let messagingNumbersOptions = [];
@@ -102,8 +151,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             }
           }
 
-          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">Url #{(index + 1)}</a> : `Url #${(index + 1)}`;
-          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Google Url #{(index + 1)}</a> : `Google Url #${(index + 1)}`;
+          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">UTM #{(index + 1)}</a> : `UTM #${(index + 1)}`;
+          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Media Url #{(index + 1)}</a> : `Media Url #${(index + 1)}`;
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
@@ -112,7 +161,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
                 <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}>
-                  <label>Source Type #{(index + 1)}</label>
+                  <label>Media Type #{(index + 1)}</label>
                 </strong>
                 <Field
                   name={`${lead}.source`}
@@ -123,11 +172,21 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
+                {
+                  !patientsExists && (
+                    <span
+                      className="delete-source-type icomoon-icon_trash"
+                      onClick={() => {
+                        this.deleteSourceType(index);
+                      }}
+                    />
+                  )
+                }
               </div>
               {
                 showName && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Source Name #{(index + 1)}</label></strong>
+                    <strong className="label required"><label>Media Name #{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.source_name`}
                       component={Input}
@@ -225,7 +284,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                 className="add-new-source"
                 onClick={() => fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId })}
               >
-                <i className="icomoon-icon_close" /> Add Lead Source
+                <i className="icomoon-icon_close" /> Add Media
               </div>
             </div>
           </div>

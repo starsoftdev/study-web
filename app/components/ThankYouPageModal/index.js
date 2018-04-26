@@ -10,6 +10,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset, touch, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
+import _ from 'lodash';
 
 import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
@@ -49,38 +50,35 @@ export class ThankYouPageModal extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onHide = this.onHide.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
-      selected: null,
-      landingFetched: false,
       initialValuesEntered: false,
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    const { resetState, onClose, fetchLanding } = this.props;
+  componentWillMount() {
+    const { studies, fetchLanding } = this.props;
 
-    if (newProps.studies) {
-      for (const study of newProps.studies) {
-        if (study.selected) {
-          this.setState({
-            selected: study,
-          });
-        }
+    if (studies) {
+      const selected = _.find(studies, { selected: true });
+      if (selected) {
+        fetchLanding(selected.study_id);
       }
     }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetState, onClose, change } = this.props;
 
     if (newProps.landing) {
-      this.setState({
-        landingFetched: true,
-      }, () => {
-        const landing = newProps.landing;
-        const thankYouPage = landing.thankYouPage;
+      const landing = newProps.landing;
+      const thankYouPage = landing.thankYouPage;
 
-        if (!this.state.initialValuesEntered) {
-          const { change } = this.props;
+      if (!this.state.initialValuesEntered) {
+        this.setState({
+          initialValuesEntered: true,
+        }, () => {
           change('thankyouFor', thankYouPage.thankyouFor);
           change('youWillBe', thankYouPage.youWillBe);
           change('herIsThe', thankYouPage.herIsThe);
@@ -91,53 +89,38 @@ export class ThankYouPageModal extends React.Component {
           change('visitOurWebsiteText', thankYouPage.visitOurWebsiteText);
           change('websiteLink', thankYouPage.websiteLink);
           change('cns', thankYouPage.cns);
-          this.setState({
-            initialValuesEntered: true,
-          });
-        }
-      });
-    }
-
-    if (this.state.selected && newProps.openModal && !this.state.landingFetched) {
-      fetchLanding(this.state.selected.study_id);
+        });
+      }
     }
 
     if (!newProps.thankYouPageUpdateProcess.saving && newProps.thankYouPageUpdateProcess.success) {
       resetState();
       onClose();
     }
-
-    if (!newProps.openModal && this.props.openModal) {
-      this.onHide();
-    }
   }
 
-  onHide() {
+  componentWillUnmount() {
     const { onClose, resetForm } = this.props;
-    this.setState({
-      landingFetched: false,
-      initialValuesEntered: false,
-    }, () => {
-      resetForm();
-      onClose();
-    });
+    resetForm();
+    onClose();
   }
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, touchFields, submitForm } = this.props;
+    const { formError, newList, touchFields, submitForm, studies } = this.props;
+    const selected = _.find(studies, { selected: true });
     if (formError) {
       touchFields();
       return;
     }
 
-    const list = Object.assign({ studyId: this.state.selected.study_id }, newList);
+    const list = Object.assign({ studyId: selected.study_id }, newList);
     list.cns = newList.cns || null;
     submitForm(list);
   }
 
   render() {
-    const { openModal } = this.props;
+    const { openModal, onClose } = this.props;
 
     return (
       <Collapse dimension="width" in={openModal} timeout={0} className={classNames('thankyou-slider', (this.props.isOnTop > 0 ? 'slider-on-top' : ''))}>
@@ -146,7 +129,7 @@ export class ThankYouPageModal extends React.Component {
             <div className="head">
               <div className="inner-head">
                 <strong className="title">Thank You Page</strong>
-                <a className="btn-right-arrow" onClick={this.onHide}><i className="glyphicon glyphicon-menu-right" /></a>
+                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
               </div>
             </div>
             <Form

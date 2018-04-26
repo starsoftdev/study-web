@@ -7,7 +7,7 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-import { selectSavedSite, selectTimezone } from '../../containers/App/selectors';
+import { selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -22,7 +22,6 @@ const mapStateToProps = createStructuredSelector({
   savedSite: selectSavedSite(),
   formValues: selectAddProtocolFormValues(),
   formErrors: selectAddProtocolFormError(),
-  timezone: selectTimezone(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
