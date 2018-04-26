@@ -32,6 +32,12 @@
       .dropdown-toggle {
         border-left: none;
 
+        .caret {
+          border-top: 5px dashed;
+          border-right: 5px solid transparent;
+          border-left: 5px solid transparent;
+        }
+
         &.focus,
         &:focus{
           border-color: #00afef;
@@ -52,7 +58,7 @@
         left: 0;
         top: 100%;
         width: 100%;
-        z-index: 1;
+        z-index: 10;
         -webkit-overflow-scrolling: touch;
 
         li {
