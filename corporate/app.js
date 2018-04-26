@@ -7,6 +7,7 @@ import mixpanel from 'mixpanel-browser';
 import LogRocket from 'logrocket';
 
 import { getItem, removeItem } from '../app/utils/localStorage';
+import { setBodyClasses } from '../common/utilities/localization';
 
 import configureStore from './store';
 
@@ -20,6 +21,7 @@ import { default as ContactPage } from './containers/ContactPage';
 import { default as ListYourTrialsPage } from './containers/ListYourTrialsPage';
 import { default as TermsAndConditionsPage } from './containers/TermsAndConditionsPage';
 import { default as PrivacyPolicyPage } from './containers/PrivacyPolicyPage';
+import { default as PQS } from './containers/PQS';
 import { default as LandingPage } from './containers/LandingPage';
 import { default as ComingSoon } from './containers/ComingSoon';
 import { default as BillingPage } from './containers/BillingPage';
@@ -69,6 +71,7 @@ const routes = {
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
     { path: '/privacy-policy', component: PrivacyPolicyPage },
+    { path: '/pqs', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication', component: Indication },
@@ -101,6 +104,10 @@ const routes = {
 };
 
 const render = () => {
+  // set html body classes
+  setBodyClasses();
+
+  // render application
   ReactDOM.render(
     <Provider store={store}>
       <Router

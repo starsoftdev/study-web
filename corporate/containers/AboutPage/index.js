@@ -2,6 +2,7 @@ import React from 'react';
 import inViewport from 'in-viewport';
 import { translate } from '../../../common/utilities/localization';
 import videoPlaceholder from '../../assets/images/video-placeholder.png';
+import BackToTopButton from '../../components/BackTopButton';
 
 export default class AboutPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -51,6 +52,7 @@ export default class AboutPage extends React.Component { // eslint-disable-line 
             </div>
           </div>
         </div>
+        <BackToTopButton />
       </main>
     );
   }

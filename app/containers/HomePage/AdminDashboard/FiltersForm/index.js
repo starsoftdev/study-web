@@ -76,7 +76,7 @@ const filterOptions = {
     {
       id: 1,
       label: 'Find',
-      value: 'find',
+      value: null,
     },
   ],
 
@@ -103,7 +103,7 @@ const filterOptions = {
 class FiltersForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    fetchStudiesAccordingToFilters: PropTypes.func,
+    updateFilters: PropTypes.func,
     handleSubmit: PropTypes.func,
     initialValues: PropTypes.object || PropTypes.arrayOf(PropTypes.object),
     levels: PropTypes.array,
@@ -117,7 +117,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
   };
 
   initSearch(value, key) {
-    this.props.fetchStudiesAccordingToFilters(value, key);
+    this.props.updateFilters(key, value);
   }
 
   render() {
