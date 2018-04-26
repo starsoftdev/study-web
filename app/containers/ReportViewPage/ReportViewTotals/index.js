@@ -30,15 +30,15 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         {this.props.totals.fetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>}
         <ul className="list-inline list-stats">
           <li>
-            <strong className="heading"><span>NOT<br /> CONTACTED</span></strong>
+            <strong className="heading"><span>NEW<br /> PATIENT</span></strong>
             <strong className="number"><span>{totals.count_not_contacted}<span className="small">{`(${percentage.count_not_contacted_p}%)`}</span></span></strong>
           </li>
           <li>
-            <strong className="heading"><span>CALL<br /> ATTEMPTED</span></strong>
+            <strong className="heading"><span>CALL / TEXT<br /> ATTEMPTED</span></strong>
             <strong className="number"><span>{totals.call_attempted}<span className="small">{`(${percentage.call_attempted_p}%)`}</span></span></strong>
           </li>
           <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
-            <strong className="heading"><span>DNQ</span></strong>
+            <strong className="heading"><span>DNQ / NOT<br /> INTERESTED</span></strong>
             <strong className="number pointer"><span>{totals.dnq}<span className="small">{`(${percentage.dnq_p}%)`}</span></span></strong>
           </li>
           <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
