@@ -13,6 +13,7 @@ import { selectLoginError, selectLoginFormSubmitState } from '../../../app/conta
 import loginFormValidator, { fields } from './validator';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { selectNewPassword } from '../../../app/containers/ResetPasswordPage/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'login';
 @reduxForm({
@@ -73,7 +74,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
       touchFields();
       return;
     } else if (failedCount >= 3 && !formValues.reCaptcha) {
-      toastr.error('', 'Validate recaptcha!');
+      toastr.error('', translate('corporate.page.login.loginForm.reCaptchaError'));
       return;
     }
     // this.recaptcha.execute();
@@ -112,6 +113,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
   render() {
     const { loginFormSubmitState, loginError, loginPassword, newUser } = this.props;
     const code = loginError ? loginError.code : null;
+    const messageData = { newUser: (newUser ? '' : 'new') };
 
     return (
       <form
@@ -123,28 +125,38 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         data-view="fadeInUp"
         onSubmit={this.submitLoginForm}
       >
-        <h2 className="main-heading">ACCOUNT LOGIN</h2>
+        <h2 className="main-heading">
+          {translate('corporate.page.login.loginForm.header')}
+        </h2>
         {code === 'LOGIN_FAILED' &&
-        <Alert bsStyle="danger">
-          <p>The email or password is incorrect!</p>
-        </Alert>
+          <Alert bsStyle="danger">
+            <p>
+              {translate('corporate.page.login.loginForm.loginFailedMessage')}
+            </p>
+          </Alert>
         }
         {code === 'USER_LOCKED' &&
-        <Alert bsStyle="danger">
-          <p>Your account has been locked upon 6 failed login attempts. Please try again in 30 minutes or you can contact a StudyKIK Representative.</p>
-        </Alert>
+          <Alert bsStyle="danger">
+            <p>
+              {translate('corporate.page.login.loginForm.loginLockedMessage')}
+            </p>
+          </Alert>
         }
         {loginPassword &&
-        <div>
-          <p>Your {newUser ? '' : 'new'} password is: <span id="new_password">{loginPassword}</span></p>
-          <p>Make sure to save this in a safe place. If you'd like to create a new custom password, please visit the Profile page.</p>
-        </div>
+          <div>
+            <p>
+              {translate('corporate.page.login.loginForm.newOrRestoredPasswordMessage', messageData)} <span id="new_password">{loginPassword}</span>
+            </p>
+            <p>
+              {translate('corporate.page.login.loginForm.newOrRestoredPasswordWarning')}
+            </p>
+          </div>
         }
         <Field
           name="email"
           type="text"
           component={Input}
-          placeholder="* Email"
+          placeholder={translate('corporate.page.login.loginForm.placeholder1')}
           className="field-row"
           bsClass="form-control input-lg"
         />
@@ -152,7 +164,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
           name="password"
           type="password"
           component={Input}
-          placeholder="* Password"
+          placeholder={translate('corporate.page.login.loginForm.placeholder2')}
           className="field-row"
           bsClass="form-control input-lg"
         />
@@ -171,13 +183,15 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
                 onChange={this.toggleCheckbox}
               />
             </span>
-            <label htmlFor="remember">Remember Me</label>
+            <label htmlFor="remember">
+              {translate('corporate.page.login.loginForm.rememberLink')}
+            </label>
           </div>
           <Link
             to="/reset-password"
             className="link pull-right"
           >
-            Forgot Password?
+            {translate('corporate.page.login.loginForm.forgotPassword')}
           </Link>
         </div>
         {
@@ -185,7 +199,9 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         }
         <div className="field-row">
           <input
-            disabled={loginFormSubmitState} type="submit" value="submit"
+            disabled={loginFormSubmitState}
+            type="submit"
+            value={translate('corporate.page.login.loginForm.submitButtonText')}
             className="btn btn-default btn-block input-lg"
           />
         </div>
