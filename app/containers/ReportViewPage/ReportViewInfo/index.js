@@ -15,17 +15,27 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
 
 
   render() {
-    const totals = {
-      textSent: (this.props.totals.details.outbound_text || this.props.totals.details.outbound_text === 0) ? parseInt(this.props.totals.details.outbound_text) : 'N/A',
-      unreadText: (this.props.totals.details.unread_text || this.props.totals.details.unread_text === 0) ? parseInt(this.props.totals.details.unread_text) : 'N/A',
-      emailSent: (this.props.totals.details.outbound_emails || this.props.totals.details.outbound_emails === 0) ? parseInt(this.props.totals.details.outbound_emails) : 'N/A',
-
-      count_today: (this.props.totals.details.count_today || this.props.totals.details.count_today === 0) ? parseInt(this.props.totals.details.count_today) : 'N/A',
-      count_yesterday: (this.props.totals.details.count_yesterday || this.props.totals.details.count_yesterday === 0) ? parseInt(this.props.totals.details.count_yesterday) : 'N/A',
+    let totals = {
+      textSent: 'N/A',
+      unreadText: 'N/A',
+      emailSent: 'N/A',
+      count_today: 'N/A',
+      count_yesterday: 'N/A',
     };
+    let totalSignUps = 0;
+    if (this.props.totals.details[this.props.totals.source]) {
+      totals = {
+        textSent: (this.props.totals.details[this.props.totals.source].outbound_text || this.props.totals.details[this.props.totals.source].outbound_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_text) : 'N/A',
+        unreadText: (this.props.totals.details[this.props.totals.source].unread_text || this.props.totals.details[this.props.totals.source].unread_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].unread_text) : 'N/A',
+        emailSent: (this.props.totals.details[this.props.totals.source].outbound_emails || this.props.totals.details[this.props.totals.source].outbound_emails === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_emails) : 'N/A',
 
-    const totalSignUps = parseInt(this.props.totals.details.count_not_contacted) + parseInt(this.props.totals.details.dnq) + parseInt(this.props.totals.details.action_needed) + parseInt(this.props.totals.details.scheduled)
-                         + parseInt(this.props.totals.details.consented) + parseInt(this.props.totals.details.screen_failed) + parseInt(this.props.totals.details.randomized) + parseInt(this.props.totals.details.call_attempted);
+        count_today: (this.props.totals.details[this.props.totals.source].count_today || this.props.totals.details[this.props.totals.source].count_today === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_today) : 'N/A',
+        count_yesterday: (this.props.totals.details[this.props.totals.source].count_yesterday || this.props.totals.details[this.props.totals.source].count_yesterday === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_yesterday) : 'N/A',
+      };
+
+      totalSignUps = parseInt(this.props.totals.details[this.props.totals.source].count_not_contacted) + parseInt(this.props.totals.details[this.props.totals.source].dnq) + parseInt(this.props.totals.details[this.props.totals.source].action_needed) + parseInt(this.props.totals.details[this.props.totals.source].scheduled)
+      + parseInt(this.props.totals.details[this.props.totals.source].consented) + parseInt(this.props.totals.details[this.props.totals.source].screen_failed) + parseInt(this.props.totals.details[this.props.totals.source].randomized) + parseInt(this.props.totals.details[this.props.totals.source].call_attempted);
+    }
 
     return (
       <div className="infoarea row">

@@ -20,7 +20,6 @@ import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
-import { selectSources } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -35,7 +34,6 @@ export class ReportViewSearch extends React.Component {
     reportsList: PropTypes.object,
     socket: React.PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
-    sources: PropTypes.array,
   }
 
   constructor(props) {
@@ -190,13 +188,6 @@ export class ReportViewSearch extends React.Component {
 
   render() {
     const { selectedTime, predefined } = this.state;
-    const sourceOptions = this.props.sources.map((item) => {
-      return {
-        label: item.type,
-        value: item.id,
-      };
-    });
-
     const statusOptions = [
       {
         label: 'All',
@@ -268,16 +259,6 @@ export class ReportViewSearch extends React.Component {
               onChange={(e) => this.initSearch(e, 'status')}
             />
           </div>
-          <div className="pull-left custom-select">
-            <Field
-              className="report-page-source-select"
-              name="source"
-              component={ReactSelect}
-              placeholder="Select Source"
-              options={sourceOptions}
-              onChange={(e) => this.initSearch(e, 'source')}
-            />
-          </div>
         </div>
         <Modal
           id="date-range"
@@ -323,7 +304,6 @@ export class ReportViewSearch extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
-  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {
