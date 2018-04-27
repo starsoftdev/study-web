@@ -21,11 +21,10 @@ import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
 import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
-
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -47,6 +46,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     patientSignUps: PropTypes.object,
     fetchSources: PropTypes.func,
     clearReportList: PropTypes.func,
+    sources: PropTypes.array,
   };
 
   constructor(props) {
@@ -69,6 +69,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.loadNotesItems = this.loadNotesItems.bind(this);
     this.openPQSModal = this.openPQSModal.bind(this);
     this.closePQSModal = this.closePQSModal.bind(this);
+    this.getMoreTotals = this.getMoreTotals.bind(this);
   }
 
   componentWillMount() {
@@ -107,6 +108,21 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     };
 
     return result;
+  }
+
+  getMoreTotals() {
+    const { currentUser, sources } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
+    for (const source of sources) {
+      let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+      filters = _.assign(filters, this.props.formValues, {
+        source: source.id,
+      });
+      this.props.getReportsTotals(filters);
+    }
   }
 
   searchReports(searchFilter) {
@@ -206,6 +222,14 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             </div>
           </div>
         </section>
+        <ReportViewSearch
+          searchReports={this.searchReports}
+          reportsList={this.props.reportsList}
+          location={this.props.location}
+          currentUser={this.props.currentUser}
+          formValues={this.props.formValues}
+          initialValues={searchInitialValues}
+        />
         <ReportViewInfo
           patientSignUps={this.props.patientSignUps}
           reportsList={this.props.reportsList}
@@ -215,16 +239,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         <ReportViewTotals
           reportsList={this.props.reportsList}
           getPercentageObject={this.getPercentageObject}
+          getMoreTotals={this.getMoreTotals}
           totals={this.props.totals}
           openNotesModal={this.openNotesModal}
-        />
-        <ReportViewSearch
-          searchReports={this.searchReports}
-          reportsList={this.props.reportsList}
-          location={this.props.location}
-          currentUser={this.props.currentUser}
-          formValues={this.props.formValues}
-          initialValues={searchInitialValues}
+          sources={this.props.sources}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
@@ -285,6 +303,7 @@ const mapStateToProps = createStructuredSelector({
   totals: selectReportsTotals(),
   categoryNotes: selectCategoryNotes(),
   notesPaginationOptions: selectNotesPaginationOptions(),
+  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {
