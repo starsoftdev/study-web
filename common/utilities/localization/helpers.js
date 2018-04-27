@@ -42,7 +42,7 @@ export function translate(key, data = null) {
 function formatString(text, data) {
   // regEx matches ES6 template syntax and submatches inner text
   // e.g. match = ${name}, submatch = name
-  const regEx = /\${([a-z0-9\.]+)}/ig;
+  const regEx = /\${([A-Za-z0-9\.]+)}/g;
 
   return text.replace(regEx, (match, submatch) => {
     let newText;
