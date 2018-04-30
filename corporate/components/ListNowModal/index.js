@@ -10,6 +10,7 @@ import ReactSelect from '../../../app/components/Input/ReactSelect';
 import CenteredModal from '../../../app/components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { translate } from '../../../common/utilities/localization';
 import formValidator, { fields } from './validator';
 
 import {
@@ -19,16 +20,16 @@ import {
 const formName = 'listNowForm';
 const companyTypes = [{
   id: 1,
-  name: 'CRO',
+  name: translate('corporate.page.trials.listNowModal.companyType1'),
 }, {
   id: 2,
-  name: 'Research Site',
+  name: translate('corporate.page.trials.listNowModal.companyType2'),
 }, {
   id: 3,
-  name: 'Sponsor',
+  name: translate('corporate.page.trials.listNowModal.companyType3'),
 }, {
   id: 4,
-  name: 'Vendor / Media',
+  name: translate('corporate.page.trials.listNowModal.companyType4'),
 }];
 
 function mapDispatchToProps(dispatch) {
@@ -104,7 +105,7 @@ class ListNowModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>list now</strong>
+            <strong>{translate('corporate.page.trials.listNowModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
@@ -112,9 +113,7 @@ class ListNowModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <span className="text">
-              Please provide your information below and a StudyKIK Project Manager will contact you shortly to get your study listed!
-            </span>
+            <span className="text">{translate('corporate.page.trials.listNowModal.text')}</span>
             <Form
               className="form-lightbox"
               onSubmit={this.handleSubmit}
@@ -123,7 +122,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder="* Full Name"
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholder1')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -134,7 +133,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder="* Company Name"
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholder2')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -145,7 +144,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="companyType"
-                  placeholder="* Company Type"
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholder3')}
                   component={ReactSelect}
                   options={companyTypes}
                   className="field-row"
@@ -157,7 +156,7 @@ class ListNowModal extends React.Component {
                 <Field
                   name="email"
                   component={Input}
-                  placeholder="* Email"
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholder4')}
                   type="text"
                   className="field-row"
                   id=""
@@ -167,7 +166,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder="* Phone"
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholder5')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -177,7 +176,7 @@ class ListNowModal extends React.Component {
                 />
               </div>
               <div className="text-right">
-                <Button type="submit" disabled={false}>Submit</Button>
+                <Button type="submit" disabled={false}>{translate('corporate.page.trials.listNowModal.submitButton')}</Button>
               </div>
             </Form>
           </div>
