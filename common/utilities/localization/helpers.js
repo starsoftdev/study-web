@@ -19,7 +19,7 @@ import { locale, dictionaries } from './globals';
  * @param  {object} data  data object (optional)
  * @return {string}       translated string || error
  */
-export function translate(key, data = null) {
+export function translate(key, data) {
   const dictionary = dictionaries[locale] || {};
 
     // if dictionary key exists, return translated text

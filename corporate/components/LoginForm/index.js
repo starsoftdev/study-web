@@ -125,9 +125,7 @@ export class LoginForm extends React.Component { // eslint-disable-line react/pr
         data-view="fadeInUp"
         onSubmit={this.submitLoginForm}
       >
-        <h2 className="main-heading">
-          {translate('corporate.page.login.loginForm.header')}
-        </h2>
+        <h2 className="main-heading">{translate('corporate.page.login.loginForm.header')}</h2>
         {code === 'LOGIN_FAILED' &&
           <Alert bsStyle="danger">
             <p>
