@@ -241,7 +241,7 @@
   .list-stats {
     width: 100%;
     display: table;
-    margin: 0 0 30px;
+    margin: 0;
     text-align: center;
     table-layout: fixed;
 
@@ -252,18 +252,15 @@
       cursor: default;
     }
 
-    li.hover,
-    li:hover {
-
-      .number {
-        color: #fff;
-        &:before {
-          height: 100%;
-          transition-duration: 0.25s;
-        }
-        &.pointer {
-          cursor: pointer;
-        }
+    .number.hover,
+    .number:hover {
+      color: #fff;
+      &:before {
+        height: 100%;
+        transition-duration: 0.25s;
+      }
+      &.pointer {
+        cursor: pointer;
       }
     }
 
