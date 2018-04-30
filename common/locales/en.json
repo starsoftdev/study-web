@@ -27,6 +27,15 @@
     "corporate.page.login.loginForm.toastMessageFailed": "Login Failed!",
     "corporate.page.login.loginForm.submitButtonText": "submit",
 
+    "corporate.page.resetPassword.resetPasswordForm.header": "Reset Password",
+    "corporate.page.resetPassword.resetPasswordForm.buttonValue1": "back to login",
+    "corporate.page.resetPassword.resetPasswordForm.buttonValue2": "submit",
+    "corporate.page.resetPassword.resetPasswordForm.recaptcha": "Validate recaptcha!",
+    "corporate.page.resetPassword.resetPasswordForm.placeholder": "* Email",
+    "corporate.page.resetPassword.resetPasswordForm.replaceText": "We've sent password reset instructions to your email. Check your inbox and follow the link.",
+    "corporate.page.resetPassword.resetPasswordForm.toastMessageNotFound": "Error! This email address was not found.",
+    "corporate.page.resetPassword.resetPasswordForm.defaultErrorMessage": "Something went wrong!",
+
     "corporate.page.about.header": "StudyKIK is where you can find clinical trials near you!",
     "corporate.page.about.copy": "Being able to find a research study has never been easier! StudyKIK is the leading website where clinical trial companies list their studies and eager volunteers find them to sign up instantly. It has never been easier to search and find clinical trials of all therapeutic types! Give it a try... you may be surprised with the studies you find! StudyKIK's mission is to change lives by helping new treatments come to market faster and to enable anyone who wants to volunteer for a research study to easily search, find, and sign up!",
 
