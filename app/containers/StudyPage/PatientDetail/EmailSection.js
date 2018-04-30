@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import classNames from 'classnames';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { reduxForm, change, reset } from 'redux-form';
@@ -117,12 +116,11 @@ class EmailSection extends React.Component {
     const { active, change, emails } = this.props;
     const { compose, noEmailsFetched } = this.state;
     return (
-      <div className={classNames((!active ? 'emails-tab' : ''), { active })}>
+      <div className={`item emails-info ${active ? 'active' : ''}`}>
         {(!compose) &&
         <EmailSectionList
           switchCompose={this.switchCompose}
           emails={emails}
-          active={active}
         />
         }
 
@@ -130,7 +128,6 @@ class EmailSection extends React.Component {
         <EmailSectionSendForm
           submitEmailBlast={this.submitEmailBlast}
           switchCompose={this.switchCompose}
-          active={active}
           change={change}
           noBackBtn={noEmailsFetched}
         />
