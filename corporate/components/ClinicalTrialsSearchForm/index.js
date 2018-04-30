@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
-import _ from 'lodash';
 
 import ClinicalTrialsSearchFormValidator from './validator';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
@@ -129,9 +128,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       },
     ];
 
-    const localeIndications = _.map(indications, indication => ({
+    const localeIndications = indications.map(indication => ({
       id: indication.id,
-      name: translate(`indication.id${indication.id}`),
+      name: translate(`common.indication.id${indication.id}`),
     }));
 
     if (localeIndications.length > 0 && localeIndications[0].id !== -1) {
