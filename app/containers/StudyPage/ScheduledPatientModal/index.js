@@ -55,7 +55,7 @@ class ScheduledPatientModal extends React.Component {
     currentUser: React.PropTypes.object,
     handleSubmit: React.PropTypes.func.isRequired,
     handleDateChange: React.PropTypes.func.isRequired,
-    submittingSchedule: React.PropTypes.bool.isRequired,
+    submittingSchedule: React.PropTypes.object.isRequired,
     initialize: React.PropTypes.func.isRequired,
     scheduledFormInitialized: React.PropTypes.bool,
     setScheduledFormInitialized: React.PropTypes.func.isRequired,
@@ -137,7 +137,7 @@ class ScheduledPatientModal extends React.Component {
         >
           <Modal.Header>
             <Modal.Title>SCHEDULE PATIENT</Modal.Title>
-            <a className="lightbox-close close" onClick={onHide} disabled={submittingSchedule}>
+            <a className="lightbox-close close" onClick={onHide} disabled={submittingSchedule.submitting}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
@@ -223,7 +223,7 @@ class ScheduledPatientModal extends React.Component {
                     <label className="reminder-label"> Text Reminder</label>
                   </div>
                 </div>
-                <input type="submit" className="btn btn-default pull-right" value="Submit" disabled={submittingSchedule} />
+                <input type="submit" className="btn btn-default pull-right" value="Submit" disabled={submittingSchedule.submitting} />
               </div>
             </form>
           </Modal.Body>
