@@ -193,6 +193,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
             placeholder="Select Distance"
             options={distances}
             className="field-lg"
+            mobileEnabled
           />
         </div>
         {
@@ -204,6 +205,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               placeholder="Select Indication"
               options={indications}
               className="field-lg"
+              mobileEnabled
             />
           </div>
         }
