@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
@@ -50,6 +51,14 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           randomized: (props.totals.details[source].randomized || props.totals.details[source].randomized === 0) ? parseInt(props.totals.details[source].randomized) : 'N/A',
           call_attempted: (props.totals.details[source].call_attempted || props.totals.details[source].call_attempted === 0) ? parseInt(props.totals.details[source].call_attempted) : 'N/A',
         };
+
+        let total = 0;
+        _.forEach(totals, val => {
+          if (val !== 'N/A') {
+            total += parseInt(val);
+          }
+        });
+        totals.total = total;
       }
       const percentage = props.getPercentageObject(totals);
 
@@ -94,12 +103,26 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     const { expanded } = this.state;
     if (values.length > 0) {
       if (!expanded) {
-        return (<strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}><span>{values[0].totals[field]}<span className="small">{`(${values[0].percentage[`${field}_p`]}%)`}</span></span></strong>);
+        return (
+          <strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
+            <span>
+              { values[0].totals[field] }
+              { field !== 'total' && <span className="small">{`(${values[0].percentage[`${field}_p`]}%)`}</span> }
+            </span>
+          </strong>
+        );
       } else {
         return (
           <div>
             {
-              values.map((value, index) => (<strong key={index} className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}><span>{value.totals[field]}<span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span></span></strong>))
+              values.map((value, index) => (
+                <strong key={index} className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
+                  <span>
+                    { value.totals[field] }
+                    { field !== 'total' && <span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span> }
+                  </span>
+                </strong>)
+              )
             }
           </div>
         );
@@ -149,6 +172,10 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <li>
             <strong className="heading"><span>RANDOMIZED</span></strong>
             { this.renderValues(totalValues, 'randomized') }
+          </li>
+          <li>
+            <strong className="heading"><span>TOTAL</span></strong>
+            { this.renderValues(totalValues, 'total') }
           </li>
         </ul>
         <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? 'See less' : 'See more'}</a>
