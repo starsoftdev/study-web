@@ -307,6 +307,8 @@ class PatientBoard extends React.Component {
             onClose={this.closePatientModal}
             params={params}
             ePMS={ePMS}
+            patientCategories={patientCategories}
+            onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
           />
           <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
@@ -25,7 +24,6 @@ const mapStateToProps = createStructuredSelector({
 class EmailSectionSendForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: React.PropTypes.func.isRequired,
-    active: React.PropTypes.any,
     submitEmailBlast: React.PropTypes.func.isRequired,
     switchCompose: React.PropTypes.func.isRequired,
     noBackBtn: React.PropTypes.bool,
@@ -43,10 +41,10 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
   }
 
   render() {
-    const { active, submitEmailBlast, switchCompose, noBackBtn, clientCredits } = this.props;
+    const { submitEmailBlast, switchCompose, noBackBtn, clientCredits } = this.props;
     const disabled = (clientCredits.details.emailCredits === 0 || clientCredits.details.emailCredits === null);
     return (
-      <Form onSubmit={submitEmailBlast} className={classNames('item emails-info', { active })}>
+      <Form onSubmit={submitEmailBlast} className="item emails-info">
         <div className="emails-info-holder">
           <div className="sender-field-holder">
             <div className="sender-field-prev">
@@ -77,7 +75,7 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
             placeholder="Type message..."
           />
         </div>
-        <div className="textarea">
+        <div className="btns-section">
           {!noBackBtn &&
             <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
           }
