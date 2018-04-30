@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { translate } from '../../../../common/utilities/localization';
+
 import './style.less';
 
 export default class CallDiv extends React.Component {
@@ -8,7 +10,7 @@ export default class CallDiv extends React.Component {
       <div className="cc-container">
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            New Patient
+            {translate('container.page.callcenter.heading.newpatient')}
           </div>
           <div className="cc-box">
             <span>Patient Name</span>
@@ -25,7 +27,7 @@ export default class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            Call1
+            {translate('container.page.callcenter.heading.call')}1
           </div>
           <div className="cc-box">
             <span>Patient Name</span>
@@ -42,7 +44,7 @@ export default class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            Call2
+            {translate('container.page.callcenter.heading.call')}2
           </div>
           <div className="cc-box">
             <span>Patient Name</span>
@@ -59,7 +61,7 @@ export default class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            Call3
+            {translate('container.page.callcenter.heading.call')}3
           </div>
           <div className="cc-box">
             <span>Patient Name</span>
@@ -76,7 +78,7 @@ export default class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            Meetings
+            {translate('container.page.callcenter.heading.meetings')}
           </div>
           <div className="cc-box">
             <span>Patient Name</span>
