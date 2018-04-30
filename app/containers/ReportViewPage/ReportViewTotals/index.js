@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import classNames from 'classnames';
+
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 export class ReportViewTotals extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -92,12 +94,12 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     const { expanded } = this.state;
     if (values.length > 0) {
       if (!expanded) {
-        return (<strong className="number"><span>{values[0].totals[field]}<span className="small">{`(${values[0].percentage[`${field}_p`]}%)`}</span></span></strong>);
+        return (<strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}><span>{values[0].totals[field]}<span className="small">{`(${values[0].percentage[`${field}_p`]}%)`}</span></span></strong>);
       } else {
         return (
           <div>
             {
-              values.map((value, index) => (<strong key={index} className="number"><span>{value.totals[field]}<span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span></span></strong>))
+              values.map((value, index) => (<strong key={index} className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}><span>{value.totals[field]}<span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span></span></strong>))
             }
           </div>
         );
