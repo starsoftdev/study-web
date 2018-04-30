@@ -10,6 +10,7 @@ import { map } from 'lodash';
 import { Link } from 'react-router';
 
 import ReactSelect from '../../components/Input/ReactSelect';
+import { translate } from '../../../common/utilities/localization';
 import studykikLogo from '../../assets/images/logo.svg';
 
 import CallDiv from './CallDiv/';
@@ -38,7 +39,7 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
             <Field
               name="ccUser"
               component={ReactSelect}
-              placeholder="Select User"
+              placeholder={translate('common.layout.placeholder.selectuser')}
               options={siteOptions}
               disabled={false}
               className="field"
@@ -46,7 +47,7 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
             <Field
               name="ccFilter"
               component={ReactSelect}
-              placeholder="Select Filter"
+              placeholder={translate('common.layout.placeholder.selectuser')}
               options={siteOptions}
               disabled={false}
               className="field"
@@ -55,7 +56,7 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
               <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />
               </Button>
-              <input name="query" type="text" className="form-control keyword-search" placeholder="Search" />
+              <input name="query" type="text" className="form-control keyword-search" placeholder={translate('common.layout.placeholder.search')} />
             </div>
           </div>
         </form>
@@ -63,17 +64,17 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
         <div className="cc-article">
           <div className="col-xs-4 ccDiv-txt">
             <div className="ccDiv-content">
-              Texts
+              {translate('container.page.callcenter.heading.texts')}
             </div>
           </div>
           <div className="col-xs-4 ccDiv-rot">
             <div className="ccDiv-content">
-              Rotting
+              {translate('container.page.callcenter.heading.rotting')}
             </div>
           </div>
           <div className="col-xs-4 ccDiv-sch">
             <div className="ccDiv-content">
-              Sched
+              {translate('container.page.callcenter.heading.sched')}
             </div>
           </div>
         </div>
