@@ -42,7 +42,6 @@ export class ReportViewSearch extends React.Component {
     super(props);
 
     this.state = {
-      downloadNotes: false,
       socketBinded: false,
       searchTimer: null,
       showPopup: false,
@@ -65,6 +64,8 @@ export class ReportViewSearch extends React.Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
     this.select = this.select.bind(this);
+
+    this.downloadNotes = false;
   }
 
   componentWillReceiveProps() {
@@ -151,7 +152,7 @@ export class ReportViewSearch extends React.Component {
     const messaging = this.props.location.query.messaging || null;
 
     let filters = {
-      includeNotes: this.state.downloadNotes,
+      includeNotes: this.downloadNotes,
       sponsorRoleId: currentUser.roleForSponsor.id,
       protocol: protocolNumber,
       indication,
@@ -162,10 +163,12 @@ export class ReportViewSearch extends React.Component {
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
+    this.downloadNotes = false;
   }
 
   select(ev) {
-    this.setState({ downloadNotes: ev });
+    this.downloadNotes = ev;
+    this.download();
   }
 
   renderDateFooter() {
