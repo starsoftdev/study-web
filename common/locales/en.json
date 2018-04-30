@@ -13,6 +13,20 @@
     "corporate.component.header.nav.blog": "Blog",
     "corporate.component.header.nav.contact": "Contact",
 
+    "corporate.page.login.loginForm.header": "account login",
+    "corporate.page.login.loginForm.placeholder1": "* Email",
+    "corporate.page.login.loginForm.placeholder2": "* Password",
+    "corporate.page.login.loginForm.loginFailedMessage": "The email or password is incorrect!",
+    "corporate.page.login.loginForm.loginLockedMessage": "Your account has been locked upon 6 failed login attempts. Please try again in 30 minutes or you can contact a StudyKIK Representative.",
+    "corporate.page.login.loginForm.reCaptchaError": "Validate recaptcha!",
+    "corporate.page.login.loginForm.rememberLink": "Remember Me",
+    "corporate.page.login.loginForm.forgotPassword": "Forgot Password?",
+    "corporate.page.login.loginForm.newOrRestoredPasswordMessage": "Your ${newUser} password is:",
+    "corporate.page.login.loginForm.newOrRestoredPasswordWarning": "Make sure to save this in a safe place. If you'd like to create a new custom password, please visit the Profile page.",
+    "corporate.page.login.loginForm.toastMessageSuccessful": "Login successful!",
+    "corporate.page.login.loginForm.toastMessageFailed": "Login Failed!",
+    "corporate.page.login.loginForm.submitButtonText": "submit",
+
     "corporate.page.about.header": "StudyKIK is where you can find clinical trials near you!",
     "corporate.page.about.copy": "Being able to find a research study has never been easier! StudyKIK is the leading website where clinical trial companies list their studies and eager volunteers find them to sign up instantly. It has never been easier to search and find clinical trials of all therapeutic types! Give it a try... you may be surprised with the studies you find! StudyKIK's mission is to change lives by helping new treatments come to market faster and to enable anyone who wants to volunteer for a research study to easily search, find, and sign up!",
 
