@@ -146,7 +146,7 @@ export class PatientDetailModal extends React.Component {
 
   renderTagSection() {
     const { carousel, currentPatientCategory } = this.props;
-    return <TagSection active={carousel.other} currentPatientCategory={currentPatientCategory} /> ;
+    return <TagSection active={carousel.other} currentPatientCategory={currentPatientCategory} />;
   }
 
   renderPatientDetail() {
