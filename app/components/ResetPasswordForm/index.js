@@ -13,6 +13,7 @@ import { toastr } from 'react-redux-toastr';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import Input from '../../components/Input';
+import { translate } from '../../../common/utilities/localization';
 import resetPasswordFormValidator from './validator';
 
 @reduxForm({
@@ -72,13 +73,14 @@ class ResetPasswordForm extends React.Component {
 
   render() {
     const { submitting, resetPasswordSuccess, reCaptcha } = this.props;
-    const buttonValue = resetPasswordSuccess ? 'back to login' : 'submit';
+    const buttonValue = resetPasswordSuccess ? translate('corporate.page.resetPassword.resetPasswordForm.buttonValue1') :
+      translate('corporate.page.resetPassword.resetPasswordForm.buttonValue2');
     const submitHandler = resetPasswordSuccess
       ? this.redirect
       : e => {
         e.preventDefault();
         if (!reCaptcha) {
-          toastr.error('', 'Validate recaptcha!');
+          toastr.error('', translate('corporate.page.resetPassword.resetPasswordForm.recaptcha'));
           return;
         }
         this.props.handleSubmit();
@@ -91,7 +93,7 @@ class ResetPasswordForm extends React.Component {
           name="email"
           type="text"
           component={Input}
-          placeholder="* Email"
+          placeholder={translate('corporate.page.resetPassword.resetPasswordForm.placeholder')}
           className="field-row"
           bsClass="form-control input-lg"
         />
@@ -115,10 +117,7 @@ class ResetPasswordForm extends React.Component {
 
     if (resetPasswordSuccess) {
       formContent = (
-        <p className="replace-text">
-          We've sent password reset instructions to your email. Check your inbox
-          and follow the link.
-        </p>
+        <p className="replace-text">{translate('corporate.page.resetPassword.resetPasswordForm.replaceText')} </p>
       );
     }
 
@@ -132,7 +131,7 @@ class ResetPasswordForm extends React.Component {
         data-formvalidation="true"
         data-view="fadeInUp"
       >
-        <h2 className="main-heading">Reset Password</h2>
+        <h2 className="main-heading">{translate('corporate.page.resetPassword.resetPasswordForm.header')}</h2>
         {formContent}
         <div className="field-row">
           <input
