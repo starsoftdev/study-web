@@ -13,6 +13,7 @@ import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../app/com
 import formValidator, { fields } from './validator';
 import { fetchIndications, fetchLevels, getProposal } from '../../../app/containers/App/actions';
 import { selectIndications, selectStudyLevels } from '../../../app/containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'getProposalForm';
 
@@ -91,6 +92,22 @@ class GetProposalModal extends React.Component {
   render() {
     const { indications, studyLevels } = this.props;
 
+    const localeIndications = indications.map(indication => ({
+      id: indication.id,
+      name: translate(`common.indication.id${indication.id}`),
+    }));
+
+    const localeStudyLevels = studyLevels.map(studyLevel => ({
+      id: studyLevel.id,
+      name: translate('corporate.page.trials.getProposalModal.studyLevel', {
+        name: studyLevel.name,
+        price: studyLevel.price,
+        posts: studyLevel.posts,
+        texts: studyLevel.texts,
+        emailCredits: studyLevel.emailCredits,
+      }),
+    }));
+
     return (
       <Modal
         show={this.props.show}
@@ -102,7 +119,7 @@ class GetProposalModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>get proposal</strong>
+            <strong>{translate('corporate.page.trials.getProposalModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
@@ -110,9 +127,7 @@ class GetProposalModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="scroll-holder jcf--scrollable">
-            <span className="text">
-              Please provide your information below and a StudyKIK Project Manager will contact you shortly!
-            </span>
+            <span className="text">{translate('corporate.page.trials.getProposalModal.text')}</span>
             <Form
               className="form-lightbox"
               onSubmit={this.handleSubmit}
@@ -121,7 +136,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder="* Full Name"
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder1')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -132,7 +147,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder="* Company"
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder2')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -143,7 +158,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="email"
-                  placeholder="* Email"
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder3')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -154,7 +169,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder="* Phone"
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder4')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -167,8 +182,8 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="indicationId"
                   component={ReactSelect}
-                  placeholder="* Select Indication"
-                  options={indications}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder5')}
+                  options={localeIndications}
                   className="field-row"
                   mobileEnabled
                 />
@@ -177,14 +192,14 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="exposureLevel"
                   component={ReactSelect}
-                  placeholder="* Select Exposure Level"
-                  options={studyLevels}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder6')}
+                  options={localeStudyLevels}
                   className="field-row"
                   mobileEnabled
                 />
               </div>
               <div className="text-right">
-                <Button type="submit" disabled={false}>Submit</Button>
+                <Button type="submit" disabled={false}>{translate('corporate.page.trials.getProposalModal.submitButton')}</Button>
               </div>
             </Form>
           </div>
