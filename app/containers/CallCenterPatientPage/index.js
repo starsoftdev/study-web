@@ -13,7 +13,7 @@ const questionnaireUrl = 'https://s3-us-west-2.amazonaws.com/static-assets.study
 
 const formName = 'callCenterPatientPage';
 @reduxForm({ form: formName })
-class CallCenterPatientPage extends Component { // eslint-disable-line react/prefer-stateless-function
+class CallCenterPatientPage extends Component {
   state = {
     carouselIndex: 0,
   };
