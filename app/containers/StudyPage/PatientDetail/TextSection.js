@@ -263,6 +263,8 @@ class TextSection extends React.Component {
         {this.renderText()}
         <div className="textarea">
           {this.renderTextArea(disabled || unsubscribed || !ePMS)}
+        </div>
+        <div className="btns-section">
           <span className="remaining-counter">
             {`${maxCharacters - enteredCharactersLength}`}
           </span>
