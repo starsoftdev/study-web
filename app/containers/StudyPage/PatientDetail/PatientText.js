@@ -26,7 +26,7 @@ class PatientText extends React.Component {
   renderProfileImage() {
     const { currentPatient, textMessage } = this.props;
     /* eslint-disable global-require */
-    if (textMessage.user) {
+    if (textMessage.user && textMessage.user.profileImageURL) {
       return (
         <img alt="" src={textMessage.user.profileImageURL} />
       );
