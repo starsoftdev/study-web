@@ -1,12 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
 import moment from 'moment-timezone';
 
 class EmailSectionList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     switchCompose: React.PropTypes.func.isRequired,
     emails: React.PropTypes.object,
-    active: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -43,12 +41,12 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { switchCompose, active, emails } = this.props;
+    const { switchCompose, emails } = this.props;
     const { preview, selected } = this.state;
 
     return (
-      <div className={classNames('item emails-info', { active })}>
-        <section className="emails-info-holder">
+      <div className="emails-info-holder">
+        <section>
           {(emails.details.length > 0 && !preview) &&
             emails.details.map((email, index) =>
               <article className="post-email-alert" key={index} onClick={() => { this.enablePreview(email); }}>
@@ -90,7 +88,7 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
             </article>
           }
         </section>
-        <div className="textarea">
+        <div className="btns-section">
           {preview && <input type="button" value="back" className="btn btn-gray-outline left" onClick={this.disablePreview} />}
           {!preview && <input type="submit" value="compose" className="btn btn-default pull-right" onClick={switchCompose} />}
         </div>
