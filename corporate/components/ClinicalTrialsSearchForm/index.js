@@ -75,55 +75,55 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
       individual,
     } = this.props;
     const distances = [
-      { id: 10, name: translate('corporate.page.home.searchForm.distancesDropdownTitle', { miles: 10 }) },
-      { id: 50, name: translate('corporate.page.home.searchForm.distancesDropdownTitle', { miles: 50 }) },
-      { id: 100, name: translate('corporate.page.home.searchForm.distancesDropdownTitle', { miles: 100 }) },
-      { id: 250, name: translate('corporate.page.home.searchForm.distancesDropdownTitle', { miles: 250 }) },
+      { id: 10, name: translate('corporate.page.home.clinicalTrialsSearchForm.distancesDropdownTitle', { miles: 10 }) },
+      { id: 50, name: translate('corporate.page.home.clinicalTrialsSearchForm.distancesDropdownTitle', { miles: 50 }) },
+      { id: 100, name: translate('corporate.page.home.clinicalTrialsSearchForm.distancesDropdownTitle', { miles: 100 }) },
+      { id: 250, name: translate('corporate.page.home.clinicalTrialsSearchForm.distancesDropdownTitle', { miles: 250 }) },
     ];
 
     const countries = [
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.br'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.br'),
         id: 'br',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.ca'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.ca'),
         id: 'ca',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.cz'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.cz'),
         id: 'cz',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.fr'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.fr'),
         id: 'fr',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.de'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.de'),
         id: 'de',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.hu'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.hu'),
         id: 'hu',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.it'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.it'),
         id: 'it',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.jp'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.jp'),
         id: 'jp',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.pl'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.pl'),
         id: 'pl',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.uk'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.uk'),
         id: 'uk',
       },
       {
-        name: translate('corporate.page.home.searchForm.countriesDropdownList.us'),
+        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.us'),
         id: 'us',
       },
     ];
@@ -140,7 +140,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
     const countryCode = this.state.countryCode ? this.state.countryCode : '';
     const pattern = getPostalCodePattern(countryCode);
     const reg = new RegExp(pattern);
-    const postal = value => (value && !reg.test(value) ? translate('corporate.page.home.searchForm.invalidPostalCodeMessage') : undefined);
+    const postal = value => (value && !reg.test(value) ? translate('corporate.page.home.clinicalTrialsSearchForm.invalidPostalCodeMessage') : undefined);
 
     return (
       <form
@@ -158,7 +158,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                 <Field
                   name="countryCode"
                   component={ReactSelect}
-                  placeholder={translate('corporate.page.home.searchForm.placeholder1')}
+                  placeholder={translate('corporate.page.home.clinicalTrialsSearchForm.placeholderCountry')}
                   options={countries}
                   className="field-lg country-code"
                   selectedValue={this.state.countryCode}
@@ -185,7 +185,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                 type="text"
                 validate={postal}
                 component={Input}
-                placeholder={translate('corporate.page.home.searchForm.placeholder2')}
+                placeholder={translate('corporate.page.home.clinicalTrialsSearchForm.placeholderPostalCode')}
                 className="field-row"
                 bsClass="form-control input-lg"
               />
@@ -196,7 +196,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
           <Field
             name="distance"
             component={ReactSelect}
-            placeholder={translate('corporate.page.home.searchForm.placeholder3')}
+            placeholder={translate('corporate.page.home.clinicalTrialsSearchForm.placeholderDistance')}
             options={distances}
             className="field-lg"
             mobileEnabled
@@ -208,7 +208,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
             <Field
               name="indicationId"
               component={ReactSelect}
-              placeholder={translate('corporate.page.home.searchForm.placeholder4')}
+              placeholder={translate('corporate.page.home.clinicalTrialsSearchForm.placeholderIndication')}
               options={localeIndications}
               className="field-lg"
               mobileEnabled
@@ -219,7 +219,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
           <input
             type="submit"
             className="btn btn-default btn-block input-lg"
-            value={translate('corporate.page.home.searchForm.submitButtonText')}
+            value={translate('corporate.page.home.clinicalTrialsSearchForm.submitButtonText')}
           />
         </div>
       </form>
