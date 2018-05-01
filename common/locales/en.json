@@ -75,6 +75,11 @@
     "corporate.page.login.loginForm.toastMessageFailed": "Login Failed!",
     "corporate.page.login.loginForm.submitButtonText": "submit",
 
+    "corporate.page.notFound.intro1": "Page not found.",
+    "corporate.page.notFound.intro2": "HELP DECIDE THE TECH TEAMS' FATE.",
+    "corporate.page.notFound.btn1": "FIRE THEM",
+    "corporate.page.notFound.btn2": "LET THEM LIVE",
+
     "corporate.page.pqs.header": "StudyKIK’s Patient Qualification Suite",
     "corporate.page.pqs.intro1": "If your campaign has the Patient Qualification Suite, we're doing the work for you! Sit back, relax, and wait. We contact all new patients within 24 hours of when they sign up for your study (during the business week).",
     "corporate.page.pqs.intro2": "To avoid confusing potential patients, please do not contact patients until they have been pre-screened and moved to the \"Action Needed\" column in your portal. We will  live transfer the patient to your site (optional) and will also send you an email every time someone has been successfully pre-screened.",
