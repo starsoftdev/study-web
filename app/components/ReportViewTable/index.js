@@ -32,9 +32,8 @@ export class ReportViewTable extends React.Component {
 
   render() {
     const { reportsList, getPercentageObject, openNotesModal, paginationOptions, totals } = this.props;
-
-    const inActive = totals.details.total_inactive ? parseInt(totals.details.total_inactive) : 0;
-    const active = totals.details.total_active ? parseInt(totals.details.total_active) : 0;
+    const inActive = (totals.details[totals.source] && totals.details[totals.source].total_inactive) ? parseInt(totals.details[totals.source].total_inactive) : 0;
+    const active = (totals.details[totals.source] && totals.details[totals.source].total_active) ? parseInt(totals.details[totals.source].total_active) : 0;
     const total = inActive + active;
 
     return (

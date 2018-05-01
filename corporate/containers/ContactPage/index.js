@@ -27,6 +27,7 @@ import img17 from '../../assets/images/img17.svg';
 import img18 from '../../assets/images/img18.svg';
 import imgWifi from '../../assets/images/wifi.svg';
 import formValidator, { fields } from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'contactForm';
 
@@ -131,8 +132,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
       <div id="main">
         <div className="container">
           <h2 className="main-heading alt text-center small-font">
-            STUDYKIK IS DEDICATED TO HELPING PEOPLE FIND CLINICAL TRIALS IN THEIR AREA. IF YOU WISH TO HAVE VOLUNTEERS
-            FIND YOUR CLINICAL TRIALS, <Link to="/list-your-trials">CLICK HERE</Link>
+            {translate('corporate.page.contactPage.mainHeader')}, <Link to="/list-your-trials">{translate('corporate.page.contactPage.mainHeaderUrlText')}</Link>
           </h2>
           <form
             ref={(animatedForm) => { this.animatedForm = animatedForm; }}
@@ -143,25 +143,25 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
             onSubmit={this.handleSubmit}
           >
             <div className="form-holder">
-              <p className="text-center txt-green">To speak with one of our friendly staff members, please contact us.</p>
+              <p className="text-center txt-green">{translate('corporate.page.contactPage.formHeader')}</p>
               <div className="row contact-info">
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icomoon-phone txt-orange" /> PHONE</h3>
+                  <h3 className="txt-orange"><i className="icomoon-phone txt-orange" /> {translate('corporate.page.contactPage.phone')}</h3>
                   <a href="tel:8776272509">877.627.2509</a>
                 </div>
                 <div className="col-xs-4">
-                  <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange" /> LOCATION</h3>
+                  <h3 className="txt-orange"><i className="icomoon-map-marker txt-orange" /> {translate('corporate.page.contactPage.location')}</h3>
                   <address>1675 Scenic Ave <br /> Suite 150 <br /> Costa Mesa, Ca 92626</address>
                 </div>
                 <div className="col-xs-4 pull-right col">
 
-                  <h3 className="txt-orange"><i className="icomoon-envelope txt-orange" /> EMAIL</h3>
+                  <h3 className="txt-orange"><i className="icomoon-envelope txt-orange" /> {translate('corporate.page.contactPage.email')}</h3>
                   <a href="mailto:info@studykik.com" className="email">info@studykik.com</a>
                 </div>
               </div>
               <Field
                 name="name"
-                placeholder="* Full Name"
+                placeholder={translate('corporate.page.contactPage.namePlaceholder')}
                 component={Input}
                 type="text"
                 className="field"
@@ -171,7 +171,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
               />
               <Field
                 name="email"
-                placeholder="* Email"
+                placeholder={translate('corporate.page.contactPage.emailPlaceholder')}
                 component={Input}
                 type="email"
                 className="field"
@@ -181,7 +181,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
               />
               <Field
                 name="phone"
-                placeholder="* Mobile Phone"
+                placeholder={translate('corporate.page.contactPage.phonePlaceholder')}
                 component={Input}
                 type="tel"
                 className="field"
@@ -192,7 +192,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
               />
               <Field
                 name="message"
-                placeholder="* Message"
+                placeholder={translate('corporate.page.contactPage.messagePlaceholder')}
                 component={Input}
                 className="field"
                 bsClass="form-control input-lg"
@@ -211,7 +211,7 @@ export default class ContactPage extends React.Component { // eslint-disable-lin
                 className="field"
                 bsClass="form-control input-lg"
               />
-              <input type="submit" className="btn btn-default btn-block input-lg" value="Submit" />
+              <input type="submit" className="btn btn-default btn-block input-lg" value={translate('corporate.page.contactPage.submit')} />
               <div className="image left">
                 <Isvg src={img17} className="svg" width="351" height="437" />
                 <span className="wifi">
