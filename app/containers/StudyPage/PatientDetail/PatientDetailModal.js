@@ -18,7 +18,6 @@ import NotesSection from './NotesSection';
 import TextSection from './TextSection';
 import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
-import TagSection from './TagSection';
 import { normalizePhoneDisplay } from '../../../common/helper/functions';
 import {
   showScheduledModal,
@@ -26,7 +25,6 @@ import {
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   switchToEmailSectionDetail,
-  switchToOtherSectionDetail,
   readStudyPatientMessages,
   updatePatientSuccess,
 } from '../actions';
@@ -68,17 +66,13 @@ export class PatientDetailModal extends React.Component {
     super(props);
     this.onSelectText = this.onSelectText.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
-    this.renderTagSection = this.renderTagSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
     this.renderScheduledTime = this.renderScheduledTime.bind(this);
     this.state = {
       showScheduledPatientModal: false,
-    };
-    this.onSelectText = this.onSelectText.bind(this);
-
-    this.state = {
       socketBinded: false,
     };
+    this.onSelectText = this.onSelectText.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -138,15 +132,10 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection initialValues={formattedPatient} site={site} params={params} />
+        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} />
       );
     }
     return null;
-  }
-
-  renderTagSection() {
-    const { carousel, currentPatientCategory } = this.props;
-    return <TagSection active={carousel.other} currentPatientCategory={currentPatientCategory} />;
   }
 
   renderPatientDetail() {
@@ -195,7 +184,7 @@ export class PatientDetailModal extends React.Component {
 
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
-      socket, switchToNoteSection, switchToEmailSection, switchToOtherSection, currentPatientNotes } = this.props;
+      socket, switchToNoteSection, switchToEmailSection, currentPatientNotes } = this.props;
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
@@ -231,7 +220,6 @@ export class PatientDetailModal extends React.Component {
                     <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
                     <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
-                    <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Tag</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
                     <NotesSection
@@ -243,7 +231,6 @@ export class PatientDetailModal extends React.Component {
                     />
                     <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
                     <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
-                    {this.renderTagSection()}
                   </div>
                 </div>
               </div>
@@ -273,7 +260,6 @@ const mapDispatchToProps = (dispatch) => ({
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
-  switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
