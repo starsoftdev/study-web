@@ -138,9 +138,7 @@ class TagSection extends React.Component {
                 >
                   <Button
                     bsStyle="primary"
-                    ref={(target) => (
-                      this.target = target
-                    )}
+                    ref={(target) => (this.target = target)}
                     onClick={this.toggleIndicationPopover}
                   >
                     + Add Indication

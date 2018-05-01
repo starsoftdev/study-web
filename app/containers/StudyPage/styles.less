@@ -674,8 +674,10 @@
             .content {
               border-bottom: 1px solid #636363;
               flex: 1;
+              position: relative;
+              top: -3px;
               span {
-                padding: 0 0 5px 0;
+                padding: 0 0 5px;
                 color: #636363;
               }
             }
@@ -684,6 +686,20 @@
       }
     }
   }
+}
+
+/* fix for one signal bell icon position */
+
+.modal-open {
+  #onesignal-bell-launcher {
+    margin-bottom: 50px;
+  }
+}
+
+/* fix for modal width on windows */
+
+.full-page-modal.patient-details-modal.fade.in.modal.modal-frame {
+  padding-left: 0 !important;
 }
 
 .full-page-modal {
@@ -710,6 +726,7 @@
       }
     }
     .modal-body {
+      width: 100vw;
       padding: 0;
       max-height: 100vh;
       .right-section {
@@ -763,11 +780,6 @@
               .item.emails-info {
                 height: 100%;
                 padding-bottom: 0;
-                section {
-                  article:last-child {
-                    border-bottom: none;
-                  }
-                }
                 .btns-section {
                   position: absolute;
                   bottom: -60px;
@@ -803,10 +815,13 @@
         strong.title {
           display: block;
           margin-bottom: 10px;
-          border-top: 2px solid black;
+          border-top: 1px solid #ddd;
           padding-top: 40px;
           position: relative;
           top: -20px;
+        }
+        .item.others {
+          padding-bottom: 30px;
         }
       }
     }
@@ -828,7 +843,7 @@
       color: #101010;
       border-width: 0;
       font-weight: 700;
-      .size(25%, auto);
+      .size(33.33%, auto);
       border-radius: 0;
       margin: 0 0 -2px;
       .font(21px, 26px);
@@ -1007,7 +1022,53 @@
         }
       }
 
-      .message-box{
+      .post-email-alert {
+        border-width: 0 0 1px;
+        padding: 18px 0 15px 65px;
+        min-height: auto;
+        .img-holder {
+          top: 10px;
+          left: 15px;
+          width: 40px;
+        }
+        .author {
+          display: inline-block;
+          font-weight: 600;
+          width: 180px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin: 0;
+          vertical-align: top;
+          overflow: hidden;
+          padding: 0 5px 0 0;
+        }
+
+        .email-content-preview {
+          width: calc(~"100% - 180px");
+          display: inline-block;
+          margin: 0;
+          padding-right: 160px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          .subject {
+            display: inline;
+            font-weight: 600;
+            padding: 0;
+            margin: 0;
+            vertical-align: top;
+          }
+        }
+        time {
+          color: #949ca1;
+          font-size: 14px;
+          position: absolute;
+          right: 10px;
+          top: 20px;
+        }
+      }
+
+      .message-box {
         height: 100%;
       }
 
