@@ -199,6 +199,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
             placeholder={translate('corporate.page.home.searchForm.placeholder3')}
             options={distances}
             className="field-lg"
+            mobileEnabled
           />
         </div>
         {
@@ -210,6 +211,7 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
               placeholder={translate('corporate.page.home.searchForm.placeholder4')}
               options={localeIndications}
               className="field-lg"
+              mobileEnabled
             />
           </div>
         }
