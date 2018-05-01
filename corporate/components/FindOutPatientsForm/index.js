@@ -73,7 +73,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="fullName"
                 type="text"
                 component={Input}
-                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholder1')}
+                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholderFullName')}
                 className="field-wrapper"
                 bsClass="form-control input-lg"
               />
@@ -81,7 +81,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="email"
                 type="text"
                 component={Input}
-                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholder2')}
+                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholderEmail')}
                 className="field-wrapper"
                 bsClass="form-control input-lg"
               />
@@ -89,7 +89,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="company"
                 type="text"
                 component={Input}
-                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholder3')}
+                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholderCompany')}
                 className="field-wrapper"
                 bsClass="form-control input-lg"
               />
@@ -97,7 +97,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="postalCode"
                 type="text"
                 component={Input}
-                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholder4')}
+                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholderPostalCode')}
                 className="field-wrapper"
                 bsClass="form-control input-lg"
               />
@@ -105,7 +105,7 @@ export class FindOutPatientsForm extends React.Component { // eslint-disable-lin
                 name="indication"
                 type="text"
                 component={Input}
-                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholder5')}
+                placeholder={translate('corporate.page.trials.findOutPatientsForm.placeholderIndication')}
                 className="field-wrapper"
                 bsClass="form-control input-lg"
                 onFocus={this.focusField}
