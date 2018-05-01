@@ -13,6 +13,7 @@ import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
 import { fetchPatientMessagesSucceeded } from '../../containers/HomePage/actions';
 import { setItem } from '../../utils/localStorage';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   FETCH_INDICATIONS,
@@ -1157,10 +1158,10 @@ function* newContact(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    toastr.success('', 'Thank you for submitting your information.');
+    toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
     yield put(newContactSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);
   }
 }
