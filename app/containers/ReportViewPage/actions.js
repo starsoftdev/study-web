@@ -100,9 +100,10 @@ export function getReportsTotals(searchParams) {
   };
 }
 
-export function getReportsTotalsSuccess(payload) {
+export function getReportsTotalsSuccess(source, payload) {
   return {
     type: GET_REPORTS_TOTALS_SUCCESS,
+    source,
     payload,
   };
 }
