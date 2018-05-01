@@ -20,16 +20,16 @@ import {
 const formName = 'listNowForm';
 const companyTypes = [{
   id: 1,
-  name: translate('corporate.page.trials.listNowModal.companyType1'),
+  name: translate('corporate.page.trials.listNowModal.companyTypeCro'),
 }, {
   id: 2,
-  name: translate('corporate.page.trials.listNowModal.companyType2'),
+  name: translate('corporate.page.trials.listNowModal.companyTypeResearchSite'),
 }, {
   id: 3,
-  name: translate('corporate.page.trials.listNowModal.companyType3'),
+  name: translate('corporate.page.trials.listNowModal.companyTypeSponsor'),
 }, {
   id: 4,
-  name: translate('corporate.page.trials.listNowModal.companyType4'),
+  name: translate('corporate.page.trials.listNowModal.companyTypeVendorMedia'),
 }];
 
 function mapDispatchToProps(dispatch) {
@@ -122,7 +122,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder={translate('corporate.page.trials.listNowModal.placeholder1')}
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholderFullName')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -133,7 +133,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder={translate('corporate.page.trials.listNowModal.placeholder2')}
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholderCompanyName')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -144,7 +144,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="companyType"
-                  placeholder={translate('corporate.page.trials.listNowModal.placeholder3')}
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholderCompanyType')}
                   component={ReactSelect}
                   options={companyTypes}
                   className="field-row"
@@ -156,7 +156,7 @@ class ListNowModal extends React.Component {
                 <Field
                   name="email"
                   component={Input}
-                  placeholder={translate('corporate.page.trials.listNowModal.placeholder4')}
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholderEmail')}
                   type="text"
                   className="field-row"
                   id=""
@@ -166,7 +166,7 @@ class ListNowModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder={translate('corporate.page.trials.listNowModal.placeholder5')}
+                  placeholder={translate('corporate.page.trials.listNowModal.placeholderPhone')}
                   component={Input}
                   type="text"
                   className="field-row"

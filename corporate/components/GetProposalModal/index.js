@@ -136,7 +136,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="name"
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder1')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderFullName')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -147,7 +147,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="company"
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder2')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderCompany')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -158,7 +158,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="email"
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder3')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderEmail')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -169,7 +169,7 @@ class GetProposalModal extends React.Component {
               <div className="field-row">
                 <Field
                   name="phone"
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder4')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderPhone')}
                   component={Input}
                   type="text"
                   className="field-row"
@@ -182,7 +182,7 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="indicationId"
                   component={ReactSelect}
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder5')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderSelectIndication')}
                   options={localeIndications}
                   className="field-row"
                   mobileEnabled
@@ -192,7 +192,7 @@ class GetProposalModal extends React.Component {
                 <Field
                   name="exposureLevel"
                   component={ReactSelect}
-                  placeholder={translate('corporate.page.trials.getProposalModal.placeholder6')}
+                  placeholder={translate('corporate.page.trials.getProposalModal.placeholderSelectExposureLevel')}
                   options={localeStudyLevels}
                   className="field-row"
                   mobileEnabled

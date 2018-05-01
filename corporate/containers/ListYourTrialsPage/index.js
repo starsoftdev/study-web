@@ -133,7 +133,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
             <div className="container">
               <h2 className="main-heading text-center"><span className="text">{translate('corporate.page.trials.header')}</span></h2>
               <div className="info">
-                <a className="btn btn-deep btn-block" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton1')}</a>
+                <a className="btn btn-deep btn-block" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButtonExclamation')}</a>
                 <a className="btn btn-deep btn-block small" onClick={this.toggleGetProposal}>{translate('corporate.page.trials.getProposalButton')}</a>
                 <div className="img-holder">
                   <Isvg src={img1} className="img-responsive svg" width="200" height="284" />
@@ -146,26 +146,26 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
         <section className="about-us text-center">
           <div className="container">
             <h1>
-              {translate('corporate.page.trials.logoTextPart1')} <strong className="sub-logo">
+              {translate('corporate.page.trials.logoTextPartWhatIs')} <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
               </strong> ?
             </h1>
-            <h2>{translate('corporate.page.trials.intro1')}</h2>
+            <h2>{translate('corporate.page.trials.introAboutUs')}</h2>
             <div className="video" data-view-del="fadeInUp">
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
                 <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MsDuAeJ2DZ8"></iframe>
               </div>
             </div>
-            <p>{translate('corporate.page.trials.text1')}</p>
+            <p>{translate('corporate.page.trials.textAboutUs')}</p>
           </div>
         </section>
         <section className="steps text-center">
           <header>
             <h1>
-              {translate('corporate.page.trials.logoTextPart2')} <strong className="sub-logo">
+              {translate('corporate.page.trials.logoTextPartHow')} <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
-              </strong> {translate('corporate.page.trials.logoTextPart3')}
+              </strong> {translate('corporate.page.trials.logoTextPartWorks')}
             </h1>
           </header>
           <div className="container">
@@ -174,9 +174,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>{translate('corporate.page.trials.intro2')}</h2>
+                <h2>{translate('corporate.page.trials.stepPatientCommunity')}</h2>
               </div>
-              <p>{translate('corporate.page.trials.text2')}</p>
+              <p>{translate('corporate.page.trials.textPatientCommunity')}</p>
               <div className="img-holder">
                 <img src={img4} width="709" height="323" alt="img4" className="img-responsive" />
                 <div className="hidden">
@@ -194,13 +194,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               </span>
               <div className="box">
                 <h2>
-                  {translate('corporate.page.trials.intro3')}
+                  {translate('corporate.page.trials.stepPatientsLearn')}
                   <span className="logo">
                     <img src={logo} alt="StudyKiK" />
                   </span>
                 </h2>
               </div>
-              <p>{translate('corporate.page.trials.text3')}</p>
+              <p>{translate('corporate.page.trials.textPatientsLearn')}</p>
               <div className="img-holder">
                 <img src={img6} width="687" height="494" alt="img6" className="img-responsive" />
               </div>
@@ -210,9 +210,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>{translate('corporate.page.trials.intro4')}</h2>
+                <h2>{translate('corporate.page.trials.stepPatientsSignUp')}</h2>
               </div>
-              <p>{translate('corporate.page.trials.text4')}</p>
+              <p>{translate('corporate.page.trials.textPatientsSignUp')}</p>
               <div className="img-holder">
                 <img src={img7} width="1038" height="510" alt="img7" className="img-responsive img-group" />
               </div>
@@ -225,9 +225,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="logo-holder">
                   <img src={logo3} alt="StudyKiK" width="337" height="78" className="img-responsive center-block" />
                 </div>
-                <h2>{translate('corporate.page.trials.intro5')}</h2>
+                <h2>{translate('corporate.page.trials.stepPatientMessagingSuite')}</h2>
               </div>
-              <p>{translate('corporate.page.trials.text5')}</p>
+              <p>{translate('corporate.page.trials.textPatientMessagingSuite')}</p>
               <div className="img-holder">
                 <img src={img8} width="588" height="470" alt="img8" className="img-responsive pull-left" />
                 <img src={computerImg} width="1000" alt="computerImg" className="img-responsive pull-right" />
@@ -238,9 +238,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>{translate('corporate.page.trials.intro6')}</h2>
+                <h2>{translate('corporate.page.trials.stepEnrolled')}</h2>
               </div>
-              <p>{translate('corporate.page.trials.text6')}</p>
+              <p>{translate('corporate.page.trials.textEnrolled')}</p>
               <div className="img-holder">
                 <img src={img10} width="942" height="593" alt="img10" className="img-responsive" />
               </div>
@@ -250,7 +250,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>{translate('corporate.page.trials.intro7')}</h2>
+                <h2>{translate('corporate.page.trials.stepConnects')}</h2>
               </div>
               <div className="img-holder map">
                 <img src={map} width="1403" height="750" alt="map" className="img-responsive" />
@@ -259,7 +259,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
           </div>
         </section>
         <section className="listings container">
-          <h2>{translate('corporate.page.trials.intro8')}</h2>
+          <h2>{translate('corporate.page.trials.stepListing')}</h2>
           <div className="row">
             <div className="col-xs-12 col-sm-6 blue dropdown">
               <a
@@ -268,15 +268,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-search" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing1Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingBlueTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img11} alt="img11" width="563" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner1Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner1Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingBlueInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingBlueInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -287,15 +287,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-sign" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing2Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightBlueTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img12} alt="img12" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner2Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner2Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightBlueInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightBlueInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -306,15 +306,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-right" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing3Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightOrangeTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img13} alt="img13" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner3Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner3Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightOrangeInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightOrangeInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -325,15 +325,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-mobile" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing4Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingOrangeTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img14} alt="img14" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner4Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner4Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingOrangeInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingOrangeInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -344,15 +344,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-lock2" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing5Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingGreenTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img15} alt="img15" width="334" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner5Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner5Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingGreenInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingGreenInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -363,15 +363,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-time" />
-                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listing6Title') }} /></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightGreenTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img16} alt="img16" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">{translate('corporate.page.trials.listingInner6Title')}</strong>
-                  <p>{translate('corporate.page.trials.listingInner6Text')}</p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightGreenInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightGreenInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -381,8 +381,8 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
           <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={500}>
             <div className="container">
               <header>
-                <h1>{translate('corporate.page.trials.intro9')}</h1>
-                <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.text7') }} />
+                <h1>{translate('corporate.page.trials.stepToGetStarted')}</h1>
+                <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.textConnects') }} />
               </header>
               <div className="row">
                 <div className="col-xs-6 col-sm-4 col-lg-2">
@@ -394,7 +394,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond1} width="85" alt="package description" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level1')}</h2>
+                    <h2>{translate('corporate.page.trials.levelRuby')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 108 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 5297 }) }} />
                     <div className="note">
@@ -403,7 +403,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       </span>
                     </div>
                     <div className="btn-block text-center">
-                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton2')}</span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -416,11 +416,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level2')}</h2>
+                    <h2>{translate('corporate.page.trials.levelDiamond')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 64 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 3297 }) }} />
                     <div className="btn-block text-center">
-                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton2')}</span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -433,11 +433,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond3} width="79" alt="package description" className="img3" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level3')}</h2>
+                    <h2>{translate('corporate.page.trials.levelPlatinum')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 32 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 1797 }) }} />
                     <div className="btn-block text-center">
-                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton2')}</span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -450,16 +450,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond4} width="72" alt="package description" className="img4" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level4')}</h2>
+                    <h2>{translate('corporate.page.trials.levelGold')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 10 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 797 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -472,11 +467,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond5} width="70" alt="package description" className="img5" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level5')}</h2>
+                    <h2>{translate('corporate.page.trials.levelSilver')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 3 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 297 }) }} />
                     <div className="btn-block text-center">
-                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton2')}</span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -489,16 +484,16 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond6} width="70" alt="package description" className="img6" />
                     </div>
-                    <h2>{translate('corporate.page.trials.level6')}</h2>
+                    <h2>{translate('corporate.page.trials.levelBronze')}</h2>
                     <p>{translate('corporate.page.trials.postsCount', { count: 1 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 97 }) }} />
                     <div className="btn-block text-center">
-                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton2')}</span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
               </div>
-              <a className="btn btn-deep" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton1')}</a>
+              <a className="btn btn-deep" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButtonExclamation')}</a>
               <p>{translate('corporate.page.trials.info')}</p>
             </div>
           </Parallax>
