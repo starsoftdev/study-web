@@ -165,9 +165,9 @@ export function* resetPassword() {
       yield put(resetPasswordSuccess());
     } catch (err) {
       if (err && err.message === 'Email not found') {
-        toastr.error('', 'Error! This email address was not found.');
+        toastr.error('', translate('corporate.page.resetPassword.resetPasswordForm.toastMessageNotFound'));
       } else {
-        const errorMessage = get(err, 'message', 'Something went wrong!');
+        const errorMessage = get(err, 'message', translate('corporate.page.resetPassword.resetPasswordForm.defaultErrorMessage'));
         toastr.error('', errorMessage);
       }
     }
