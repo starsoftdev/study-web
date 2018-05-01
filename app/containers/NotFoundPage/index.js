@@ -13,6 +13,7 @@ import React from 'react';
 
 import img1 from '../../assets/images/404.png';
 import img2 from '../../assets/images/img20.png';
+import { translate } from '../../../common/utilities/localization';
 
 export default class NotFound extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -23,8 +24,8 @@ export default class NotFound extends React.Component { // eslint-disable-line r
           <div className="img-holder">
             <img src={img1} alt="img4" className="img-responsive" />
           </div>
-          <h3 className="text-center">Page not found.</h3>
-          <h2 className="text-center">HELP DECIDE THE TECH TEAMS' FATE.</h2>
+          <h3 className="text-center">{translate('corporate.page.notFound.intro1')}</h3>
+          <h2 className="text-center">{translate('corporate.page.notFound.intro2')}</h2>
         </div>
         <div className="container">
           <div className="buttons text-center">
@@ -33,7 +34,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
                 className="btn-default btn-fire btn"
                 onClick={this.toggleListNow}
               >
-                FIRE THEM
+                {translate('corporate.page.notFound.btn1')}
               </span>
             </a>
             <a href="/app" >
@@ -41,7 +42,7 @@ export default class NotFound extends React.Component { // eslint-disable-line r
                 className="btn-default btn-live btn"
                 onClick={this.toggleListNow}
               >
-                LET THEM LIVE
+                {translate('corporate.page.notFound.btn2')}
               </span>
             </a>
           </div>
