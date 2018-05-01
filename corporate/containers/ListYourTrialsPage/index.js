@@ -48,6 +48,7 @@ import {
   selectListSiteNowSuccess,
   selectGetProposalSuccess,
 } from '../../../app/containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 import './styles.less';
 
@@ -130,22 +131,10 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
         <div className="clinical-trils">
           <div className="intro">
             <div className="container">
-              <h2 className="main-heading text-center"><span className="text">LIST YOUR CLINICAL TRIALS</span></h2>
+              <h2 className="main-heading text-center"><span className="text">{translate('corporate.page.trials.header')}</span></h2>
               <div className="info">
-                <a
-
-                  className="btn btn-deep btn-block"
-                  onClick={this.toggleListNow}
-                >
-                  LIST NOW!
-                </a>
-                <a
-
-                  className="btn btn-deep btn-block small"
-                  onClick={this.toggleGetProposal}
-                >
-                  GET PROPOSAL
-                </a>
+                <a className="btn btn-deep btn-block" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButtonExclamation')}</a>
+                <a className="btn btn-deep btn-block small" onClick={this.toggleGetProposal}>{translate('corporate.page.trials.getProposalButton')}</a>
                 <div className="img-holder">
                   <Isvg src={img1} className="img-responsive svg" width="200" height="284" />
                 </div>
@@ -157,35 +146,26 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
         <section className="about-us text-center">
           <div className="container">
             <h1>
-              WHAT IS <strong className="sub-logo">
+              {translate('corporate.page.trials.logoTextPartWhatIs')} <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
               </strong> ?
             </h1>
-            <h2>Scroll down to view our various patient enrollment listing options.</h2>
+            <h2>{translate('corporate.page.trials.introAboutUs')}</h2>
             <div className="video" data-view-del="fadeInUp">
               <div>
                 <img src={videoPlaceholder} width="608" height="283" alt="video" className="video-placeholder" />
                 <iframe width="854" height="480" frameBorder="0" allowFullScreen="true" src="https://www.youtube.com/embed/MsDuAeJ2DZ8"></iframe>
               </div>
             </div>
-            <p>
-              StudyKIK is a website where patients can find and sign up for clinical trials with ease. These patients find StudyKIK
-              through our robust social community pages on Facebook, Twitter, Instagram, Pinterest, and more! Patients also find
-              your Clinical Research Recruitment through search engines like Google, Bing, &amp; Yahoo. Every clinical trial listed on
-              StudyKIK benefits from the millions of patients across social media and search engines in almost every therapeutic
-              area in all phases including: Respiratory, Immunology, CNS, Cardiology, Endocrinology, Gastroenterology, Healthy
-              Volunteer, Dermatology, Rheumatology, Urology, and much more! Patient traffic is filtered using our proprietary
-              targeting software so that only patients in a geographic radius of your site that match your inclusion &amp; exclusion
-              criteria will find your clinical trial.
-            </p>
+            <p>{translate('corporate.page.trials.textAboutUs')}</p>
           </div>
         </section>
         <section className="steps text-center">
           <header>
             <h1>
-              How <strong className="sub-logo">
+              {translate('corporate.page.trials.logoTextPartHow')} <strong className="sub-logo">
                 <img src={logo2} alt="StudyKiK" width="274" height="42" className="img-responsive" />
-              </strong> Works
+              </strong> {translate('corporate.page.trials.logoTextPartWorks')}
             </h1>
           </header>
           <div className="container">
@@ -194,14 +174,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>Patient Communities on <br /> Social Media</h2>
+                <h2>{translate('corporate.page.trials.stepPatientCommunity')}</h2>
               </div>
-              <p>
-                StudyKIK builds and connects patient community groups throughout various
-                social media platforms. Patients are educated about clinical trials and then
-                filtered from our social community pages based on distance from site, study
-                criteria &amp; patient demographic.
-              </p>
+              <p>{translate('corporate.page.trials.textPatientCommunity')}</p>
               <div className="img-holder">
                 <img src={img4} width="709" height="323" alt="img4" className="img-responsive" />
                 <div className="hidden">
@@ -219,17 +194,13 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
               </span>
               <div className="box">
                 <h2>
-                  PatientS LEARN about clinical trials <br /> and
-                  ARE redirected to
+                  {translate('corporate.page.trials.stepPatientsLearn')}
                   <span className="logo">
                     <img src={logo} alt="StudyKiK" />
                   </span>
                 </h2>
               </div>
-              <p>
-                Once part of the StudyKIK social community, patients have the ability to be informed of qualifying
-                studies and are sent to mobile StudyKIK listing pages with IRB approved information.
-              </p>
+              <p>{translate('corporate.page.trials.textPatientsLearn')}</p>
               <div className="img-holder">
                 <img src={img6} width="687" height="494" alt="img6" className="img-responsive" />
               </div>
@@ -239,14 +210,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>
-                  PATIENTS Sign Up and ARE passed directly to the Research sites
-                </h2>
+                <h2>{translate('corporate.page.trials.stepPatientsSignUp')}</h2>
               </div>
-              <p>
-                Once a patient signs up, their contact information is sent to your site via email
-                as well as added to your “MyStudyKIK Portal”. Patient receives site contact via text message &amp; email.
-              </p>
+              <p>{translate('corporate.page.trials.textPatientsSignUp')}</p>
               <div className="img-holder">
                 <img src={img7} width="1038" height="510" alt="img7" className="img-responsive img-group" />
               </div>
@@ -259,17 +225,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <div className="logo-holder">
                   <img src={logo3} alt="StudyKiK" width="337" height="78" className="img-responsive center-block" />
                 </div>
-                <h2>
-                  The research site will use the "Patient Messaging Suite" to set up phone appointments
-                </h2>
+                <h2>{translate('corporate.page.trials.stepPatientMessagingSuite')}</h2>
               </div>
-              <p>
-                StudyKIK provides you the ability to have text message conversations
-                from your desktop computer with patients. Text messaging is the preferred method
-                of communication for over 84% of patients. You will be able to set phone screening appointments,
-                re-engage patients, send appointment reminders, and much more via text
-                message all through your MyStudyKIK Portal!
-              </p>
+              <p>{translate('corporate.page.trials.textPatientMessagingSuite')}</p>
               <div className="img-holder">
                 <img src={img8} width="588" height="470" alt="img8" className="img-responsive pull-left" />
                 <img src={computerImg} width="1000" alt="computerImg" className="img-responsive pull-right" />
@@ -280,12 +238,9 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>Patient becomes enrolled</h2>
+                <h2>{translate('corporate.page.trials.stepEnrolled')}</h2>
               </div>
-              <p>
-                With the end goal being an enrolled clinical trial, StudyKIK provided your site
-                with the tools needed to make that process as easy as possible.
-              </p>
+              <p>{translate('corporate.page.trials.textEnrolled')}</p>
               <div className="img-holder">
                 <img src={img10} width="942" height="593" alt="img10" className="img-responsive" />
               </div>
@@ -295,9 +250,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 <img src={arrow} alt="&nbsp;" width="33" height="79" className="svg" />
               </span>
               <div className="box">
-                <h2>
-                  STUDYKIK CONNECTS OVER 1100+ RESEARCH SITES WITH THOUSANDS OF PATIENTS ACROSS THE WORLD!
-                </h2>
+                <h2>{translate('corporate.page.trials.stepConnects')}</h2>
               </div>
               <div className="img-holder map">
                 <img src={map} width="1403" height="750" alt="map" className="img-responsive" />
@@ -306,7 +259,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
           </div>
         </section>
         <section className="listings container">
-          <h2>EACH LISTING INCLUDES</h2>
+          <h2>{translate('corporate.page.trials.stepListing')}</h2>
           <div className="row">
             <div className="col-xs-12 col-sm-6 blue dropdown">
               <a
@@ -315,19 +268,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-search" />
-                <h3>
-                  <span>Exposure to StudyKIK Patient<br /> Enrollment Search</span>
-                </h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingBlueTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img11} alt="img11" width="563" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">Exposure to StudyKIK Patient Enrollment Search</strong>
-                  <p>
-                    Patients are able to easily search and find safe and approved clinical trials on studykik.com.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingBlueInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingBlueInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -338,23 +287,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-sign" />
-                <h3>
-                  <span>
-                    Instant SIGN-UP Notifications<br /> to Your Site
-                  </span>
-                </h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightBlueTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img12} alt="img12" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">
-                    Instant SIGN-UP Notifications to Your Site
-                  </strong>
-                  <p>
-                    Patient contact information sent automatically via email and to your site's MyStudyKIK Portal upon sign up.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightBlueInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightBlueInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -365,21 +306,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-right" />
-                <h3>
-                  <span>Instant Patient Email and <br /> Text Message w/Site Phone</span>
-                </h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightOrangeTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img13} alt="img13" width="509" className="img-responsive" />
                 </div>
                 <div className="area">
-                  <strong className="h3">Instant Patient Email and Text Message w/Site Phone</strong>
-                  <p>
-                    Once a patient signs up for your clinical trial, they receive an instant text message and
-                    email notification with your site’s contact information &amp; a question asking when is
-                    the best time to call them for a pre-screening phone call.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightOrangeInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightOrangeInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -390,22 +325,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-mobile" />
-                <h3>
-                  <span>Mobile Friendly Study Page</span>
-                </h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingOrangeTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img14} alt="img14" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">
-                    Mobile-Friendly Study Page
-                  </strong>
-                  <p>
-                    Mobile-friendly study pages make it easier for patients to sign up whether
-                    from a smartphone, tablet or other handheld device.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingOrangeInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingOrangeInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -416,24 +344,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-lock2" />
-                <h3>
-                  <span>
-                    Proprietary Filtering System <br /> for Quality Patient Reach
-                  </span>
-                </h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingGreenTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img15} alt="img15" width="334" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">
-                    STUDYKIK’S Filtering System for Quality Patient Reach
-                  </strong>
-                  <p>
-                    Patients are filtered from our social media community pages
-                    based on distance from site, study criteria &amp; patient demographic.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingGreenInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingGreenInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -444,22 +363,15 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                 onClick={this.handleClick}
               >
                 <i className="icomoon-time" />
-                <h3><span>Patient Media Tracking</span></h3>
+                <h3><span dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.listingLightGreenTitle') }} /></h3>
               </a>
               <div className="dropdown-menu">
                 <div className="img-holder">
                   <img src={img16} alt="img16" width="350" className="img-responsive center-block" />
                 </div>
                 <div className="area">
-                  <strong className="h3">
-                    Patient Media Tracking
-                  </strong>
-                  <p>
-                    Your site will never miss a patient who is calling about your trial on
-                    the weekends or after hours because StudyKIK tracks all phone calls and
-                    notifies your site about the missed call. This allows sites to call patients back &amp; answer
-                    questions that may have prior to screening.
-                  </p>
+                  <strong className="h3">{translate('corporate.page.trials.listingLightGreenInnerTitle')}</strong>
+                  <p>{translate('corporate.page.trials.listingLightGreenInnerText')}</p>
                 </div>
               </div>
             </div>
@@ -469,13 +381,8 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
           <Parallax bgImage={bg1} bgWidth="auto" bgHeight="1090px" strength={500}>
             <div className="container">
               <header>
-                <h1>
-                  TO GET STARTED
-                </h1>
-                <p>
-                  Choose the number of posts on StudyKIK's social communities you would
-                  like your study <br /> to receive, each post receives 1 to 2 patient referrals on average*.
-                </p>
+                <h1>{translate('corporate.page.trials.stepToGetStarted')}</h1>
+                <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.textConnects') }} />
               </header>
               <div className="row">
                 <div className="col-xs-6 col-sm-4 col-lg-2">
@@ -487,23 +394,16 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond1} width="85" alt="package description" />
                     </div>
-                    <h2>RUBY</h2>
-                    <p>108 Posts</p>
-                    <strong className="price">
-                      $5297 <span>/MONTH</span>
-                    </strong>
+                    <h2>{translate('corporate.page.trials.levelRuby')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 108 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 5297 }) }} />
                     <div className="note">
                       <span>
                         Most <br /> Exposure &amp; <br /> Patients
                       </span>
                     </div>
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -516,18 +416,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond2} width="91" alt="package description" className="img2" />
                     </div>
-                    <h2>DIAMOND</h2>
-                    <p>64 Posts</p>
-                    <strong className="price">
-                      $3297 <span>/MONTH</span>
-                    </strong>
+                    <h2>{translate('corporate.page.trials.levelDiamond')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 64 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 3297 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -540,16 +433,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond3} width="79" alt="package description" className="img3" />
                     </div>
-                    <h2>PLATINUM</h2>
-                    <p>32 Posts</p>
-                    <strong className="price">$1797 <span>/MONTH</span></strong>
+                    <h2>{translate('corporate.page.trials.levelPlatinum')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 32 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 1797 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -562,16 +450,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond4} width="72" alt="package description" className="img4" />
                     </div>
-                    <h2>GOLD</h2>
-                    <p>10 Posts</p>
-                    <strong className="price">$797 <span>/MONTH</span></strong>
+                    <h2>{translate('corporate.page.trials.levelGold')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 10 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 797 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -584,16 +467,11 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond5} width="70" alt="package description" className="img5" />
                     </div>
-                    <h2>SILVER</h2>
-                    <p>3 Posts</p>
-                    <strong className="price">$297 <span>/MONTH</span></strong>
+                    <h2>{translate('corporate.page.trials.levelSilver')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 3 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 297 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
@@ -606,30 +484,17 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                     <div className="img-holder">
                       <img src={diamond6} width="70" alt="package description" className="img6" />
                     </div>
-                    <h2>BRONZE</h2>
-                    <p>1 Posts</p>
-                    <strong className="price">$97 <span>/MONTH</span></strong>
+                    <h2>{translate('corporate.page.trials.levelBronze')}</h2>
+                    <p>{translate('corporate.page.trials.postsCount', { count: 1 })}</p>
+                    <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 97 }) }} />
                     <div className="btn-block text-center">
-                      <span
-                        className="btn-default btn"
-                        onClick={this.toggleListNow}
-                      >
-                        List Now
-                      </span>
+                      <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>
                     </div>
                   </a>
                 </div>
               </div>
-              <a
-
-                className="btn btn-deep"
-                onClick={this.toggleListNow}
-              >
-                LIST NOW!
-              </a>
-              <p>
-                *30 day listings, no contracts. Results may vary based on location and indication.
-              </p>
+              <a className="btn btn-deep" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButtonExclamation')}</a>
+              <p>{translate('corporate.page.trials.info')}</p>
             </div>
           </Parallax>
         </section>
