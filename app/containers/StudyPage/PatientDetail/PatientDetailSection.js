@@ -204,6 +204,7 @@ class PatientDetailSection extends React.Component {
               options={categories}
               disabled={submitting}
               placeholder="Select Category"
+              clearable={false}
             />
           </div>
         </div>
