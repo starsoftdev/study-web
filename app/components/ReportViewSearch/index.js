@@ -20,7 +20,6 @@ import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
-import { selectSources } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -35,14 +34,12 @@ export class ReportViewSearch extends React.Component {
     reportsList: PropTypes.object,
     socket: React.PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
-    sources: PropTypes.array,
   }
 
   constructor(props) {
     super(props);
 
     this.state = {
-      downloadNotes: false,
       socketBinded: false,
       searchTimer: null,
       showPopup: false,
@@ -65,6 +62,8 @@ export class ReportViewSearch extends React.Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
     this.select = this.select.bind(this);
+
+    this.downloadNotes = false;
   }
 
   componentWillReceiveProps() {
@@ -151,7 +150,7 @@ export class ReportViewSearch extends React.Component {
     const messaging = this.props.location.query.messaging || null;
 
     let filters = {
-      includeNotes: this.state.downloadNotes,
+      includeNotes: this.downloadNotes,
       sponsorRoleId: currentUser.roleForSponsor.id,
       protocol: protocolNumber,
       indication,
@@ -162,10 +161,12 @@ export class ReportViewSearch extends React.Component {
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
+    this.downloadNotes = false;
   }
 
   select(ev) {
-    this.setState({ downloadNotes: ev });
+    this.downloadNotes = ev;
+    this.download();
   }
 
   renderDateFooter() {
@@ -190,13 +191,6 @@ export class ReportViewSearch extends React.Component {
 
   render() {
     const { selectedTime, predefined } = this.state;
-    const sourceOptions = this.props.sources.map((item) => {
-      return {
-        label: item.type,
-        value: item.id,
-      };
-    });
-
     const statusOptions = [
       {
         label: 'All',
@@ -268,16 +262,6 @@ export class ReportViewSearch extends React.Component {
               onChange={(e) => this.initSearch(e, 'status')}
             />
           </div>
-          <div className="pull-left custom-select">
-            <Field
-              className="report-page-source-select"
-              name="source"
-              component={ReactSelect}
-              placeholder="Select Source"
-              options={sourceOptions}
-              onChange={(e) => this.initSearch(e, 'source')}
-            />
-          </div>
         </div>
         <Modal
           id="date-range"
@@ -323,7 +307,6 @@ export class ReportViewSearch extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
-  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {
