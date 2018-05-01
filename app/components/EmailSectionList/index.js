@@ -53,15 +53,12 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                 <div className="img-holder">
                   {this.renderProfileImage(email)}
                 </div>
-                <strong className="subject">
-                  {email.subject}
-                </strong>
-                <div className="email-content">
-                  <p>{email.body.split('\n').map((i, k) => <span key={k}>{i}<br /></span>)}</p>
-                </div>
                 <strong className="author">
                   {`${email.first_name} ${(email.last_name) ? email.last_name : ''}`}
                 </strong>
+                <p className="email-content-preview">
+                  <strong className="subject">{email.subject}</strong> - {email.body.replace('\n', ' ')}
+                </p>
                 <time dateTime={email.date_sent}>
                   {moment.tz(email.date_sent, email.timezone).format('MM/DD/YY [at] h:mm A')}
                 </time>
