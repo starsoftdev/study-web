@@ -13,6 +13,7 @@ import '../../../app/components/LoadingSpinner/styles.less';
 import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
 import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
 import { selectValues } from '../../../app/common/selectors/form.selector';
+import { translate } from '../../../common/utilities/localization';
 
 export class Home extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -63,9 +64,16 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
     if (newProps.trials !== this.props.trials) {
       if (newProps.trials.details) {
         if (newProps.trials.details.length > 0) {
-          this.h3Text = `There ${newProps.total > 1 ? 'are' : 'is'} ${newProps.total} ${newProps.total > 1 ? 'studies' : 'study'}`;
+          const messageData = {
+            preTotal: (newProps.total > 1 ? 'are' : 'is'),
+            postTotal: (newProps.total > 1 ? 'studies' : 'study'),
+            total: newProps.total,
+          };
+          this.h3Text = translate('corporate.page.home.h3TextType1', messageData);
           if (newProps.newList.postalCode) {
-            this.h3Text = `There ${newProps.total > 1 ? 'are' : 'is'} ${newProps.total} ${newProps.total > 1 ? 'studies' : 'study'} within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
+            messageData.postalCode = newProps.newList.postalCode;
+            messageData.distance = newProps.newList.distance || 50;
+            this.h3Text = translate('corporate.page.home.h3TextType2', messageData);
           }
           if (!this.props.trials.details) {
             scroller.scrollTo('scrollTarget', {
@@ -75,15 +83,19 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             });
           }
         } else {
-          this.h3Text = 'There are no studies';
+          this.h3Text = translate('corporate.page.home.h3TextType3');
           if (newProps.newList.postalCode) {
-            this.h3Text = `There are no studies within ${newProps.newList.distance || 50} miles of ${newProps.newList.postalCode}`;
+            const messageData = {
+              distance: (newProps.newList.distance || 50),
+              postalCode: newProps.newList.postalCode,
+            };
+            this.h3Text = translate('corporate.page.home.h3TextType4', messageData);
           }
         }
       }
 
       if (newProps.trials.wrongPostalCode) {
-        this.h3Text = 'Invalid postal code';
+        this.h3Text = translate('corporate.page.home.h3TextType5');
       }
     }
   }
@@ -163,7 +175,7 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             className="main-heading text-center alt"
             data-view="fadeInUp"
           >
-            <span className="text">INSTANTLY SEARCH FOR A CLINICAL TRIAL!</span>
+            <span className="text">{translate('corporate.page.home.header')}</span>
           </h2>
           <ClinicalTrialsSearchForm
             indications={indications}
@@ -173,7 +185,11 @@ export class Home extends Component { // eslint-disable-line react/prefer-statel
             }}
           />
           <div className="articles-holder relative">
-            <Element name="scrollTarget"><h3 className="text-center text-uppercase">{this.h3Text}</h3></Element>
+            <Element name="scrollTarget">
+              <h3 className="text-center text-uppercase">
+                {this.h3Text}
+              </h3>
+            </Element>
             {trials.fetching && <LoadingSpinner showOnlyIcon={false} noMessage />}
             <div className={classNames('row', { hidden: (!trials || !trials.details || trials.details.length <= 0) })}>
               {(trials.details && trials.details.length > 0) && studiesList}

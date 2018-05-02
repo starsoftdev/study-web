@@ -9,6 +9,8 @@ import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import SplitButton from 'react-bootstrap/lib/SplitButton';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
@@ -18,7 +20,6 @@ import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
-import { selectSources } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -33,7 +34,6 @@ export class ReportViewSearch extends React.Component {
     reportsList: PropTypes.object,
     socket: React.PropTypes.any,
     toastrActions: React.PropTypes.object.isRequired,
-    sources: PropTypes.array,
   }
 
   constructor(props) {
@@ -61,6 +61,9 @@ export class ReportViewSearch extends React.Component {
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
+    this.select = this.select.bind(this);
+
+    this.downloadNotes = false;
   }
 
   componentWillReceiveProps() {
@@ -139,18 +142,31 @@ export class ReportViewSearch extends React.Component {
     });
   }
 
-  download(ev) {
-    ev.preventDefault();
+  download() {
     const { exportStudies, currentUser, formValues } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    let filters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    let filters = {
+      includeNotes: this.downloadNotes,
+      sponsorRoleId: currentUser.roleForSponsor.id,
+      protocol: protocolNumber,
+      indication,
+      cro,
+      messaging,
+      timezone: currentUser.timezone,
+    };
     filters = _.assign(filters, this.props.formValues, formValues);
 
     exportStudies(filters);
+    this.downloadNotes = false;
+  }
+
+  select(ev) {
+    this.downloadNotes = ev;
+    this.download();
   }
 
   renderDateFooter() {
@@ -175,13 +191,6 @@ export class ReportViewSearch extends React.Component {
 
   render() {
     const { selectedTime, predefined } = this.state;
-    const sourceOptions = this.props.sources.map((item) => {
-      return {
-        label: item.type,
-        value: item.id,
-      };
-    });
-
     const statusOptions = [
       {
         label: 'All',
@@ -210,7 +219,19 @@ export class ReportViewSearch extends React.Component {
         <div className="btns-area pull-right full-width">
           {/* TODO: remove tmp styles */}
           <div className="col pull-right">
-            <a className="btn btn-primary lightbox-opener" onClick={this.download}><i className="icon-icon_download" /> download</a>
+            <SplitButton
+              bsStyle="primary"
+              title="download"
+              id="split-button-basic"
+              onClick={this.download}
+            >
+              <MenuItem eventKey={false} onSelect={this.select}>
+                Without Notes
+              </MenuItem>
+              <MenuItem eventKey onSelect={this.select}>
+                With Notes
+              </MenuItem>
+            </SplitButton>
           </div>
           <div className="col pull-right">
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}><i className="icomoon-icon_calendar" /> {timeButtonText}</a>
@@ -239,16 +260,6 @@ export class ReportViewSearch extends React.Component {
               placeholder="Select Study Status"
               options={statusOptions}
               onChange={(e) => this.initSearch(e, 'status')}
-            />
-          </div>
-          <div className="pull-left custom-select">
-            <Field
-              className="report-page-source-select"
-              name="source"
-              component={ReactSelect}
-              placeholder="Select Source"
-              options={sourceOptions}
-              onChange={(e) => this.initSearch(e, 'source')}
             />
           </div>
         </div>
@@ -296,7 +307,6 @@ export class ReportViewSearch extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   socket: selectSocket(),
-  sources: selectSources(),
 });
 
 function mapDispatchToProps(dispatch) {
