@@ -4,7 +4,7 @@ import { translate } from '../../../../common/utilities/localization';
 
 import './style.less';
 
-export default class CallDiv extends React.Component {
+export default class CallDiv extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <div className="cc-container">

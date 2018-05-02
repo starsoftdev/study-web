@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import FileUpload from './FileUpload';
 import defaultMaleImage from '../../assets/images/Default-User-Img-Dr-Full.png';
 import defaultFemaleImage from '../../assets/images/Default-User-Img-Dr-Girl.png';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm(
   {
@@ -168,7 +169,7 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
             <FileUpload id="avatar_file" handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
             <div className="info">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text">Drag and drop <br /> image here</span>
+              <span className="text" dangerouslySetInnerHTML={{ __html: translate('corporate.page.profile.profileImageForm.dragAndDrop') }} />
             </div>
           </div>
 
@@ -185,19 +186,19 @@ class ProfileImageForm extends React.Component { // eslint-disable-line react/pr
             null
           }
           <div className="field-row">
-            <strong className="label required"><label htmlFor="clinicaltrialGovLink">Upload Image</label></strong>
+            <strong className="label required"><label htmlFor="clinicaltrialGovLink">{translate('corporate.page.profile.profileImageForm.labelUploadImage')}</label></strong>
             <div className="field">
-              <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
+              <label htmlFor="avatar_file" data-text="Browse" data-hover-text={translate('corporate.page.profile.profileImageForm.browseValue')} className="btn btn-gray upload-btn" />
             </div>
           </div>
           <div className="field-row">
-            <a className="link" onClick={this.useDefaultMaleImage}>Use Default Male Image</a>
+            <a className="link" onClick={this.useDefaultMaleImage}>{translate('corporate.page.profile.profileImageForm.defaultMale')}</a>
           </div>
           <div className="field-row">
-            <a className="link" onClick={this.useDefaultFemaleImage}>Use Default Female Image</a>
+            <a className="link" onClick={this.useDefaultFemaleImage}>{translate('corporate.page.profile.profileImageForm.defaultFemale')}</a>
           </div>
           <div className="text-right">
-            <input type="button" className="btn btn-default" onClick={this.handleSave} value="update" />
+            <input type="button" className="btn btn-default" onClick={this.handleSave} value={translate('corporate.page.profile.profileImageForm.buttonValue')} />
           </div>
         </div>
       </form>

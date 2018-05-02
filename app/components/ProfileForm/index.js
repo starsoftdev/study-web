@@ -19,6 +19,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import profileFormValidator from './validator';
 import { formatTimezone } from '../../utils/time';
 import FormGeosuggest from '../../components/Input/Geosuggest';
+import { translate } from '../../../common/utilities/localization';
 
 const toShortCode = country => {
   switch (country) {
@@ -207,7 +208,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
     return (
       <form onSubmit={this.props.handleSubmit}>
         <div className="field-row label-top file-img active">
-          <strong className="label"><label htmlFor="profile-img">PROFILE IMAGE</label></strong>
+          <strong className="label"><label htmlFor="profile-img">{translate('corporate.page.profile.profileImg')}</label></strong>
           <div className="field">
             <div className="profile-image">
               <label htmlFor="profile-img" className="image">
@@ -222,18 +223,19 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         <div className="field-row">
           <strong className="label" />
           <div className="field">
-            <a className="btn btn-gray upload-btn" onClick={this.openProfileImageModal}>Update Profile Image</a>
+            <a className="btn btn-gray upload-btn" onClick={this.openProfileImageModal}>{translate('corporate.page.profile.updateProfileImage')}</a>
           </div>
         </div>
 
         <div className="field-row">
-          <strong className="label"><label>NAME</label></strong>
+          <strong className="label"><label>{translate('corporate.page.profile.profileName')}</label></strong>
           <div className="field">
             <div className="row">
               <Field
                 name="firstName"
                 component={Input}
                 type="text"
+                placeholder={translate('corporate.page.profile.placeholderFirstName')}
                 className="col pull-left"
                 isDisabled
               />
@@ -241,7 +243,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
                 name="lastName"
                 component={Input}
                 type="text"
-                placeholder="Last Name"
+                placeholder={translate('corporate.page.profile.placeholderLastName')}
                 className="col pull-right"
                 isDisabled
               />
@@ -250,13 +252,13 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         </div>
 
         <div className="field-row fs-hide">
-          <strong className="label"><label>Email</label></strong>
+          <strong className="label"><label>{translate('corporate.page.profile.profileEmail')}</label></strong>
           <Field
             name="email"
             component={Input}
             disabled="true"
             type="text"
-            placeholder="Email"
+            placeholder={translate('corporate.page.profile.placeholderEmail')}
             className="field"
             isDisabled
           />
@@ -264,7 +266,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
           <div className="field-row fs-hide">
-            <strong className="label required"><label>Address</label></strong>
+            <strong className="label required"><label>{translate('corporate.page.profile.profileAddress')}</label></strong>
             <div className="field">
               <Field
                 name="address"
@@ -280,7 +282,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
           <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
-            <strong className="label"><label>Time Zone</label></strong>
+            <strong className="label"><label>{translate('corporate.page.profile.profileTimeZone')}</label></strong>
             <div className="field">
               <Field
                 name="timezone"
@@ -295,18 +297,18 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           (isDst === true) &&
           <div className="field-row">
             <strong className="label"><label>&nbsp;</label></strong>
-            <div className="field dst-label">This time zone currently observes daylight savings.</div>
+            <div className="field dst-label">{translate('corporate.page.profile.profileDstLabel')}</div>
           </div>
         }
         <div className="field-row">
           <strong className="label"><label>PASSWORD</label></strong>
-          <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>EDIT</a>
+          <a className="btn btn-primary" onClick={this.openResetPasswordModal} disabled={!me}>{translate('corporate.page.profile.profileEdit')}</a>
         </div>
         {
           !(userRoleType === 'dashboard' || (currentUser.roleForClient && currentUser.roleForClient.site_id != null)) &&
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row">
-              <span>Update</span>
+              <span>{translate('corporate.page.profile.profileUpdate')}</span>
             </button>
           </div>
         }
@@ -319,7 +321,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>CHANGE PASSWORD</Modal.Title>
+            <Modal.Title>{translate('corporate.page.profile.changePasswordModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeResetPasswordModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -337,7 +339,7 @@ class ProfileForm extends React.Component { // eslint-disable-line react/prefer-
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>UPDATE PROFILE IMAGE</Modal.Title>
+            <Modal.Title>{translate('corporate.page.profile.updateProfileImageModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeProfileImageModal}>
               <i className="icomoon-icon_close" />
             </a>
