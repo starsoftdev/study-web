@@ -28,7 +28,7 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
     siteOptions.unshift({ label: 'All', value: '0' });
 
     return (
-      <div id="main" className="not-found-page">
+      <div id="callcentermain" className="not-found-page">
         <form action="#" className="form-search clearfix">
           <h1 className="logo pull-left">
             <Link to="/app">
