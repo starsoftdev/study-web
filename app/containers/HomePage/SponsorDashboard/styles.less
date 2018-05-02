@@ -1,2 +1,213 @@
 .sponsor-portal {
+  .report-stats {
+    .stats-span {
+      display: inline-block;
+      font-weight: 600;
+      margin: 0 30px 0 0;
+      color: #101010;
+    }
+  }
+  .elements-box {
+    border: 3px solid #f78e1e;
+    position: relative;
+    background: #fff;
+    padding: 0 10px 58px;
+    margin: 10px auto 30px;
+    overflow: hidden;
+    min-width: 940px;
+    &.collapsed {
+      height: 205px;
+      padding-bottom: 0;
+    }
+    .box-element {
+      box-sizing: border-box;
+      display: inline-block;
+      height: 70px;
+      border-bottom: 1px solid #ddd;
+      padding: 10px 9px;
+      vertical-align: top;
+      font-size: 15px;
+      .name {
+        font-weight: bold;
+        display: block;
+        text-align: left;
+        margin-bottom: 7px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .value {
+        display: block;
+        text-align: left;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        a {
+          white-space: nowrap;
+          &:hover, &:active {
+            color: #76daff;
+          }
+        }
+        &.url {
+          color: #00afef;
+          cursor: pointer;
+          &:hover {
+            color: #76daff;
+          }
+        }
+        .patient-messaging-suite-status {
+          color: #a0cf67;
+          &.off {
+            color: #f78e1e;
+          }
+        }
+        .small {
+          padding-left: 5px;
+          position: relative;
+          top: -1px;
+        }
+      }
+      &.order {
+        width: 5%;
+      }
+      &.pi {
+        width: 24%;
+      }
+      &.listing {
+        width: 11%;
+      }
+      &.status {
+        width: 11%;
+      }
+      &.pqs {
+        width: 8%;
+        .name {
+          overflow: visible;
+        }
+      }
+      &.start-date {
+        width: 12%;
+      }
+      &.end-date {
+        width: 12%;
+      }
+      &.last-login {
+        width: 17%;
+        white-space: nowrap;
+      }
+
+      &.new-patient {
+        width: 10%;
+      }
+      &.text-attempted {
+        width: 16%;
+      }
+      &.dnq {
+        width: 16%;
+      }
+      &.action-needed {
+        width: 12%;
+      }
+      &.scheduled {
+        width: 9%;
+      }
+      &.consented {
+        width: 9%;
+      }
+      &.screen-failed {
+        width: 11%;
+      }
+      &.randomized {
+        width: 10%;
+      }
+      &.total {
+        width: 7%;
+      }
+
+      &.text-sent {
+        padding: 10px 45px 10px 15px;
+      }
+      &.text-received, &.unread-text, &.email-sent {
+        padding: 10px 45px;
+      }
+    }
+
+    .see-more-btn {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      background: #ddd;
+      color: #000;
+      height: 60px;
+      text-align: center;
+      padding: 17px;
+      width: 100%;
+      outline: none;
+      &:hover {
+        background: #ccc;
+      }
+    }
+
+    @media screen and(max-width: 1530px) {
+      .box-element {
+        padding: 13px 6px;
+        .name {
+          font-size: 12px;
+        }
+        .value {
+          font-size: 14px;
+        }
+      }
+      .see-more-btn {
+        font-size: 16px;
+        padding-top: 18px;
+      }
+    }
+
+    @media screen and(max-width: 1300px) {
+      .box-element {
+        padding: 15px 5px;
+        .name {
+          font-size: 11px;
+        }
+        .value {
+          font-size: 13px;
+        }
+      }
+      .see-more-btn {
+        font-size: 14px;
+        padding-top: 20px;
+      }
+    }
+  }
+
+  .report-page-totals-container {
+    .see-more-btn {
+      display: block;
+      bottom: 0;
+      left: 0;
+      background: #ddd;
+      color: #000;
+      height: 60px;
+      text-align: center;
+      padding: 17px;
+      width: 100%;
+      outline: none;
+      margin-bottom: 30px;
+
+      &:hover {
+        background: #ccc;
+      }
+
+      @media screen and(max-width: 1530px) {
+        font-size: 16px;
+        padding-top: 18px;
+      }
+  
+      @media screen and(max-width: 1300px) {
+        font-size: 14px;
+        padding-top: 20px;
+      }
+    }
+  }
 }
