@@ -52,7 +52,6 @@ export class PatientDetailModal extends React.Component {
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     switchToEmailSection: React.PropTypes.func.isRequired,
-    switchToOtherSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
