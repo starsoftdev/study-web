@@ -916,11 +916,11 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify(params),
       };
       const response = yield call(request, requestURL, reqParams);
-      toastr.success('Time Zone', 'Your time zone has been updated successfully!');
+      toastr.success('Time Zone', translate('corporate.page.profile.updateProfileToastrSuccess'));
       moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not update timezone');
+      const errorMessage = get(err, 'message', translate('corporate.page.profile.updateProfileToastrError'));
       toastr.error('', errorMessage);
       yield put(changeUsersTimezoneError(err));
     }
