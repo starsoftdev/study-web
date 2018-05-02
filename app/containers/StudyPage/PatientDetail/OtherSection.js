@@ -95,7 +95,7 @@ class OtherSection extends React.Component {
     }
 
     const { currentPatient } = newProps;
-    if (currentPatient && (currentPatient !== this.props.currentPatient)) {
+    if (currentPatient && (currentPatient !== this.props.currentPatient || !this.state.initialValues)) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
         const dob = moment(currentPatient.dob);
