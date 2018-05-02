@@ -13,6 +13,7 @@ import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
 import { fetchPatientMessagesSucceeded } from '../../containers/HomePage/actions';
 import { setItem } from '../../utils/localStorage';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   FETCH_INDICATIONS,
@@ -1041,10 +1042,10 @@ function* postFindOutPatients(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    toastr.success('', 'Thank you for submitting your information.');
+    toastr.success('', translate('corporate.page.trials.findOutPatientsForm.toastrSuccess'));
     yield put(findOutPatientsPosted(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    const errorMessage = get(err, 'message', translate('corporate.page.trials.findOutPatientsForm.toastrDefaultError'));
     toastr.error('', errorMessage);
     yield put(findOutPatientsError(err));
   }
@@ -1077,6 +1078,9 @@ function* searchClinicalTrials(action) { // eslint-disable-line prefer-template
     yield put(clinicalTrialsSearchSuccess(response));
   } catch (err) {
     yield put(clinicalTrialsSearchError(err));
+    if (err.message.indexOf('postal code.') !== -1) {
+      toastr.error('', err.message);
+    }
   }
 }
 
@@ -1092,13 +1096,13 @@ function* listNowSite(action) {
 
     if (size >= 5) {
       const response = yield call(request, requestURL, options);
-      toastr.success('', 'Thank you for submitting your information.');
+      toastr.success('', translate('corporate.page.trials.listNowModal.toastrSuccess'));
       yield put(listSiteNowSuccess(response));
     } else {
-      toastr.error('', 'All fields required.');
+      toastr.error('', translate('corporate.page.trials.listNowModal.toastrError'));
     }
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    const errorMessage = get(err, 'message', translate('corporate.page.trials.listNowModal.toastrDefaultError'));
     toastr.error('', errorMessage);
   }
 }
@@ -1115,13 +1119,13 @@ function* getProposal(action) {
 
     if (size === 6) {
       const response = yield call(request, requestURL, options);
-      toastr.success('', 'Thank you for submitting your information.');
+      toastr.success('', translate('corporate.page.trials.getProposalModal.toastrSuccess'));
       yield put(getProposalSuccess(response));
     } else {
-      toastr.error('', 'All fields required.');
+      toastr.error('', translate('corporate.page.trials.getProposalModal.toastrError'));
     }
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    const errorMessage = get(err, 'message', translate('corporate.page.trials.getProposalModal.toastrDefaultError'));
     toastr.error('', errorMessage);
   }
 }
@@ -1154,10 +1158,10 @@ function* newContact(action) {
     };
 
     const response = yield call(request, requestURL, options);
-    toastr.success('', 'Thank you for submitting your information.');
+    toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
     yield put(newContactSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request.');
+    const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);
   }
 }

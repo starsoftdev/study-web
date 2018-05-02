@@ -207,7 +207,7 @@
     "id":"31",
     "abbreviation":"BR",
     "name":"Brazil",
-    "regex":"^\\d{5}(-\\d{4})?$"
+    "regex":"^\\d{5}(-\\d{3})?$"
   },
   {
     "id":"33",

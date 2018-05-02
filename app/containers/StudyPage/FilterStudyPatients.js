@@ -57,13 +57,17 @@ class FilterStudyPatientsForm extends Component {
     const { patientBoardLoading, fetchPatientCategoriesTotals, studyId, campaign, source } = this.props;
     let newCampaign = campaign;
     let newSource = source;
-    /* nulling the values if all is selected */
+    // nulling the values if all is selected
     if (campaign === -1) {
       newCampaign = null;
     }
     if (source === -1) {
       newSource = null;
+    } else if (source !== 0 && !source) {
+      // we should use source with id 1 by default
+      newSource = 1;
     }
+
 
     if (patientBoardLoading && !newProps.patientBoardLoading) {
       fetchPatientCategoriesTotals(studyId, newCampaign, newSource);

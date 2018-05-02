@@ -5,9 +5,11 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
-import Collapse from 'react-bootstrap/lib/Collapse';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import Modal from 'react-bootstrap/lib/Modal';
+
+import CenteredModal from '../../../components/CenteredModal/index';
 import { SchedulePatientModalType } from '../../../common/constants/index';
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
@@ -23,7 +25,6 @@ import {
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   switchToEmailSectionDetail,
-  switchToOtherSectionDetail,
   readStudyPatientMessages,
   updatePatientSuccess,
 } from '../actions';
@@ -57,6 +58,8 @@ export class PatientDetailModal extends React.Component {
     deleteMessagesCountStat: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     updatePatientSuccess: React.PropTypes.func,
+    patientCategories: React.PropTypes.array,
+    onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -67,12 +70,9 @@ export class PatientDetailModal extends React.Component {
     this.renderScheduledTime = this.renderScheduledTime.bind(this);
     this.state = {
       showScheduledPatientModal: false,
-    };
-    this.onSelectText = this.onSelectText.bind(this);
-
-    this.state = {
       socketBinded: false,
     };
+    this.onSelectText = this.onSelectText.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -113,7 +113,6 @@ export class PatientDetailModal extends React.Component {
       currentPatientCategory,
     } = this.props;
     readStudyPatientMessages(currentPatient.id);
-    // markAsReadPatientMessages(currentPatient.id);
     deleteMessagesCountStat(currentPatient.unreadMessageCount);
     updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
       unreadMessageCount: 0,
@@ -122,7 +121,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { carousel, currentPatient, currentPatientCategory, site, params } = this.props;
+    const { currentPatient, currentPatientCategory, site, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -133,25 +132,33 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection active={carousel.other} initialValues={formattedPatient} site={site} params={params} />
+        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} />
       );
     }
     return null;
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory, site, currentUser } = this.props;
+    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <PatientDetailSection initialValues={formattedPatient} site={site} currentUser={currentUser} />
+        <PatientDetailSection
+          initialValues={formattedPatient}
+          site={site}
+          studyId={studyId}
+          currentUser={currentUser}
+          patientCategories={patientCategories}
+          onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
+        />
       );
     }
     return null;
   }
+
   renderScheduledTime() {
     const { currentPatientCategory, currentPatient, currentUser, showScheduledModal, site } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
@@ -177,51 +184,60 @@ export class PatientDetailModal extends React.Component {
 
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
-      socket, switchToNoteSection, switchToEmailSection, switchToOtherSection, currentPatientNotes } = this.props;
+      socket, switchToNoteSection, switchToEmailSection, currentPatientNotes } = this.props;
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
     }
     return (
-      <Collapse
-        dimension="width"
-        in={openPatientModal}
-        timeout={250}
-        className="patients-list-form"
+      <Modal
+        className="full-page-modal patient-details-modal"
+        show={openPatientModal}
+        onHide={onClose}
+        dialogComponentClass={CenteredModal}
+        backdrop
+        keyboard
       >
-        <div className="form-area">
-          <div className="form-head">
-            <strong className="title">{currentPatientCategory ? currentPatientCategory.name : null}</strong>
+        <Modal.Header>
+          <Modal.Title>
+            <strong>{currentPatientCategory ? currentPatientCategory.name : null}</strong>
             {this.renderScheduledTime()}
-            <a className="btn-close" onClick={onClose}>
-              <i className="glyphicon glyphicon-menu-right" />
-            </a>
-          </div>
-          {this.renderPatientDetail()}
-          <div className="column">
-            <div id="carousel-example-generic" className="carousel slide popup-slider">
-              <ol className="carousel-indicators">
-                <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
-                <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
-                <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
-                <li className={classNames({ active: carousel.other })} onClick={switchToOtherSection}>Info</li>
-              </ol>
-              <div className="carousel-inner" role="listbox">
-                <NotesSection
-                  active={carousel.note}
-                  currentUser={currentUser}
-                  currentPatient={formattedPatient}
-                  notes={currentPatientNotes}
-                  studyId={studyId}
-                />
-                <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
-                {this.renderOtherSection()}
+          </Modal.Title>
+          <a className="lightbox-close close" onClick={onClose}>
+            <i className="icomoon-icon_close" />
+          </a>
+        </Modal.Header>
+        <Modal.Body className="lightbox-card form-lightbox">
+          <div className="patients-list-form">
+            <div className="left-section">
+              {this.renderPatientDetail()}
+              {this.renderOtherSection()}
+            </div>
+            <div className="right-section">
+              <div className="column">
+                <div id="carousel-example-generic" className={`carousel slide popup-slider ${carousel.other ? 'full-height' : ''}`}>
+                  <ol className="carousel-indicators">
+                    <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
+                    <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
+                    <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
+                  </ol>
+                  <div className="carousel-inner" role="listbox">
+                    <NotesSection
+                      active={carousel.note}
+                      currentUser={currentUser}
+                      currentPatient={formattedPatient}
+                      notes={currentPatientNotes}
+                      studyId={studyId}
+                    />
+                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                    <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Collapse>
+        </Modal.Body>
+      </Modal>
     );
   }
 }
@@ -244,7 +260,6 @@ const mapDispatchToProps = (dispatch) => ({
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
   switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
-  switchToOtherSection: () => dispatch(switchToOtherSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
