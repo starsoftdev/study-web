@@ -2,6 +2,7 @@
   "name": "studykik-web",
   "version": "1.6.0",
   "description": "StudyKIK Web Client",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/studykik/web.git"
