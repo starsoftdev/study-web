@@ -1,5 +1,5 @@
 import React from 'react';
-import { takeLatest } from 'redux-saga';
+import { takeLatest, takeEvery } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { actions as toastrActions, toastr } from 'react-redux-toastr';
@@ -148,7 +148,7 @@ export function* exportStudiesWorker(action) {
 }
 
 export function* fetchReportsTotalsWatcher() {
-  yield* takeLatest(GET_REPORTS_TOTALS, fetchReportsTotalsWorker);
+  yield* takeEvery(GET_REPORTS_TOTALS, fetchReportsTotalsWorker);
 }
 
 export function* fetchReportsTotalsWorker(action) {
@@ -162,7 +162,7 @@ export function* fetchReportsTotalsWorker(action) {
       requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp`;
     }
     const response = yield call(request, requestURL);
-    yield put(getReportsTotalsSuccess(response));
+    yield put(getReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
     toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
     yield put(getReportsTotalsError(err));

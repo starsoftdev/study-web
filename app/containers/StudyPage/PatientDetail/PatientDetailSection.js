@@ -12,10 +12,15 @@ import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import Checkbox from '../../../components/Input/Checkbox';
 import Input from '../../../components/Input/index';
-import { submitPatientUpdate } from '../actions';
+import {
+  setCurrentPatientCategoryId, setCurrentPatientId, submitMovePatientBetweenCategories,
+  submitPatientUpdate,
+} from '../actions';
+import { selectPatientBoardLoading, selectSubmittingSchedule } from '../selectors';
 import formValidator from './detailValidator';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
+import ReactSelect from '../../../components/Input/ReactSelect';
 
 const formName = 'PatientDetailModal.Detail';
 
@@ -29,25 +34,47 @@ class PatientDetailSection extends React.Component {
     blur: React.PropTypes.func,
     initialValues: React.PropTypes.object,
     reset: React.PropTypes.func,
+    setCurrentPatientCategoryId: React.PropTypes.func,
+    setCurrentPatientId: React.PropTypes.func,
     submitting: React.PropTypes.bool.isRequired,
+    submittingSchedule: React.PropTypes.object,
     submitPatientUpdate: React.PropTypes.func.isRequired,
+    submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
     formValues: React.PropTypes.object,
     formDidChange: React.PropTypes.bool,
+    patientBoardLoading: React.PropTypes.bool,
     site: React.PropTypes.object,
     currentUser: React.PropTypes.object,
+    patientCategories: React.PropTypes.array,
+    onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
+    studyId: React.PropTypes.number.isRequired,
   };
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      openScheduledModal: false,
+    };
+    this.targetCategory = null;
+
     this.onReset = this.onReset.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (this.targetCategory && ((newProps.patientBoardLoading && !this.props.patientBoardLoading) ||
+      (newProps.submittingSchedule.submitting && !this.props.submittingSchedule.submitting && !newProps.submittingSchedule.error))) {
+      this.props.setCurrentPatientCategoryId(this.targetCategory);
+      this.props.setCurrentPatientId(this.props.initialValues.id);
+      this.targetCategory = null;
+    }
+  }
+
   onReset() {
-    const { reset } = this.props;
-    reset();
+    this.props.reset();
   }
 
   onPhoneBlur(event) {
@@ -60,7 +87,8 @@ class PatientDetailSection extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate } = this.props;
+    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate, submitMovePatientBetweenCategories,
+      onPatientDraggedToScheduled, studyId } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
       // change the phone number to be formatted for display
       const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
@@ -74,6 +102,14 @@ class PatientDetailSection extends React.Component {
         phone: phoneNumber,
         unsubscribed: formValues.unsubscribed,
       });
+      if (initialValues.patientCategoryId !== formValues.patientCategoryId) {
+        if (formValues.patientCategoryId === 5) {
+          onPatientDraggedToScheduled(initialValues.id, initialValues.patientCategoryId, formValues.patientCategoryId);
+        } else {
+          submitMovePatientBetweenCategories(studyId, initialValues.patientCategoryId, formValues.patientCategoryId, initialValues.id, null);
+        }
+        this.targetCategory = formValues.patientCategoryId;
+      }
     }
     reset(formName);
   }
@@ -92,12 +128,13 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { submitting, initialValues, site, currentUser } = this.props;
+    const { submitting, initialValues, site, currentUser, patientCategories } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
     const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+    const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
 
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
@@ -156,6 +193,21 @@ class PatientDetailSection extends React.Component {
             />
           </div>
         </div>
+        <div className="field-row">
+          <strong className="label required">
+            <label htmlFor="new-patient-phone">Category</label>
+          </strong>
+          <div className="field patient-category">
+            <Field
+              name="patientCategoryId"
+              component={ReactSelect}
+              options={categories}
+              disabled={submitting}
+              placeholder="Select Category"
+              clearable={false}
+            />
+          </div>
+        </div>
 
         <div className="field-row">
           <strong className="label">
@@ -199,12 +251,17 @@ const mapStateToProps = createStructuredSelector({
   formSyncErrors: selectSyncErrors(formName),
   formValues: selectValues(formName),
   formDidChange: selectFormDidChange(formName),
+  patientBoardLoading: selectPatientBoardLoading(),
+  submittingSchedule: selectSubmittingSchedule(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   blur: (field, value) => dispatch(blur(formName, field, value)),
   reset: () => dispatch(reset(formName)),
   submitPatientUpdate: (patientId, patientCategoryId, fields) => dispatch(submitPatientUpdate(patientId, patientCategoryId, fields)),
+  submitMovePatientBetweenCategories: (studyId, fromCategoryId, toCategoryId, patientId, afterPatientId) => dispatch(submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId, afterPatientId)),
+  setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
+  setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientDetailSection);

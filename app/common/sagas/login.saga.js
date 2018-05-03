@@ -12,6 +12,7 @@ import { toastr, actions as toastrActions } from 'react-redux-toastr';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
 import FaSpinner from 'react-icons/lib/fa/spinner';
+import { translate } from '../../../common/utilities/localization';
 import { selectLocationState } from '../../containers/App/selectors';
 
 import request from '../../utils/request';
@@ -87,7 +88,7 @@ export function* authorize(data) {
     const toastrOptions = {
       id: 'loginSuccessToastr',
       type: 'success',
-      message: 'Login successful!',
+      message: translate('corporate.page.login.loginForm.toastMessageSuccessful'),
       options: {
         timeOut: 0,
         icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
@@ -103,7 +104,7 @@ export function* authorize(data) {
   } catch (err) {
     // dispatch LOGIN_ERROR action
     yield put(loginError(err));
-    toastr.error('', 'Login Failed!');
+    toastr.error('', translate('corporate.page.login.loginForm.toastMessageFailed'));
   } finally {
     // because this generator task is asyc, it is possible to
     // send a logout action before the user gets logged in
@@ -164,9 +165,9 @@ export function* resetPassword() {
       yield put(resetPasswordSuccess());
     } catch (err) {
       if (err && err.message === 'Email not found') {
-        toastr.error('', 'Error! This email address was not found.');
+        toastr.error('', translate('corporate.page.resetPassword.resetPasswordForm.toastMessageNotFound'));
       } else {
-        const errorMessage = get(err, 'message', 'Something went wrong!');
+        const errorMessage = get(err, 'message', translate('corporate.page.resetPassword.resetPasswordForm.defaultErrorMessage'));
         toastr.error('', errorMessage);
       }
     }
