@@ -433,23 +433,6 @@
 }
 
 .patients-list-form {
-  top: 2px;
-  right: 0;
-  width: 0;
-  margin: 0 0 6px -100%;
-  position: relative;
-  float: right;
-  background: #fff;
-  outline: 2px solid #f78e1e;
-  transition: width 0.25s linear;
-  &.in {
-    z-index: 1001;
-    width: 590px;
-  }
-  .form-area {
-    width: 590px;
-    border: solid 2px #f78e1e;
-  }
   .btn-close {
     top: 50%;
     right: 15px;
@@ -628,7 +611,7 @@
   .note-msg {
     margin: 25px;
     position: relative;
-    
+
     .note {
       border: 2px solid #636363;
       color: #101010;
@@ -691,8 +674,10 @@
             .content {
               border-bottom: 1px solid #636363;
               flex: 1;
+              position: relative;
+              top: -3px;
               span {
-                padding: 0 0 5px 0;
+                padding: 0 0 5px;
                 color: #636363;
               }
             }
@@ -703,6 +688,145 @@
   }
 }
 
+/* fix for one signal bell icon position */
+
+.modal-open {
+  #onesignal-bell-launcher {
+    margin-bottom: 50px;
+  }
+}
+
+/* fix for modal width on windows */
+
+.full-page-modal.patient-details-modal.fade.in.modal.modal-frame {
+  padding-left: 0 !important;
+}
+
+.full-page-modal {
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    .modal-header {
+      border-bottom: none;
+      .modal-title strong {
+        color: #fff;
+        font-size: 21px;
+        text-transform: uppercase;
+        padding-right: 20px;
+      }
+      .modal-opener {
+        color: #101010;
+        cursor: pointer;
+        font-weight: normal;
+        font-size: 18px;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    .modal-body {
+      width: 100vw;
+      padding: 0;
+      max-height: 100vh;
+      .right-section {
+        width: auto;
+        height: calc(~"100vh - 61px");
+        padding: 20px;
+        overflow: hidden;
+        .column {
+          height: 100%;
+          #carousel-example-generic {
+            height: calc(~"100% - 60px");
+            border: 2px solid #f78e1e;
+            &.full-height {
+              height: 100%;
+            }
+            .carousel-inner {
+              height: calc(~"100% - 40px");
+              overflow: visible;
+              .item.note, .item.text {
+                height: 100%;
+                padding: 0;
+                .postarea {
+                  height: 80%;
+                }
+                .textarea {
+                  height: 20%;
+                  .textarea-holder, textarea {
+                    height: 100%;
+                  }
+                  textarea {
+                    padding-right: 25px;
+                  }
+                }
+                .save-btn {
+                  position: absolute;
+                  right: 0;
+                  bottom: -60px;
+                }
+              }
+              .item.text {
+                .btns-section {
+                  position: absolute;
+                  right: 0;
+                  bottom: -60px;
+                }
+                .remaining-counter {
+                  top: 7px;
+                  right: 110px;
+                }
+              }
+              .item.emails-info {
+                height: 100%;
+                padding-bottom: 0;
+                .btns-section {
+                  position: absolute;
+                  bottom: -60px;
+                  right: 0;
+                  width: 100%;
+                }
+              }
+              .item.others {
+                padding: 20px;
+                height: 100%;
+                .item-holder {
+                  max-height: none;
+                  height: 100%;
+                  .sub-holder {
+                    padding: 0;
+                    .label {
+                      width: 34%;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      .left-section {
+        height: calc(~"100vh - 61px");
+        overflow: auto;
+        width: 40%;
+        min-width: 450px;
+        max-width: 700px;
+        float: left;
+        strong.title {
+          display: block;
+          margin-bottom: 10px;
+          border-top: 1px solid #ddd;
+          padding-top: 40px;
+          position: relative;
+          top: -20px;
+        }
+        .item.others {
+          padding-bottom: 30px;
+        }
+      }
+    }
+  }
+}
 .popup-slider {
   .carousel-indicators {
     margin: 0;
@@ -719,7 +843,7 @@
       color: #101010;
       border-width: 0;
       font-weight: 700;
-      .size(25%, auto);
+      .size(33.33%, auto);
       border-radius: 0;
       margin: 0 0 -2px;
       .font(21px, 26px);
@@ -794,13 +918,8 @@
       }
     }
   }
-  .emails-tab {
-    display: none;
-  }
   .emails-info {
     background: #fff;
-    padding: 0 0 85px;
-    height: 427px;
 
     .emails-info-holder {
       width: 100%;
@@ -903,7 +1022,53 @@
         }
       }
 
-      .message-box{
+      .post-email-alert {
+        border-width: 0 0 1px;
+        padding: 18px 0 15px 65px;
+        min-height: auto;
+        .img-holder {
+          top: 10px;
+          left: 15px;
+          width: 40px;
+        }
+        .author {
+          display: inline-block;
+          font-weight: 600;
+          width: 180px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          margin: 0;
+          vertical-align: top;
+          overflow: hidden;
+          padding: 0 5px 0 0;
+        }
+
+        .email-content-preview {
+          width: calc(~"100% - 180px");
+          display: inline-block;
+          margin: 0;
+          padding-right: 160px;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          .subject {
+            display: inline;
+            font-weight: 600;
+            padding: 0;
+            margin: 0;
+            vertical-align: top;
+          }
+        }
+        time {
+          color: #949ca1;
+          font-size: 14px;
+          position: absolute;
+          right: 10px;
+          top: 20px;
+        }
+      }
+
+      .message-box {
         height: 100%;
       }
 

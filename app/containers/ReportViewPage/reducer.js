@@ -38,6 +38,7 @@ const initialState = {
   },
   totals: {
     details: {},
+    source: 1,
     fetching: false,
     error: null,
   },
@@ -73,6 +74,7 @@ function reportViewPageReducer(state = initialState, action) {
 
   let foundIndex = null;
   let copy = null;
+  const details = _.cloneDeep(state.totals.details);
   switch (action.type) {
     case GET_REPORTS_LIST:
       if (action.offset === 0) {
@@ -144,16 +146,19 @@ function reportViewPageReducer(state = initialState, action) {
       return {
         ...state,
         totals: {
-          details: {},
+          details: state.totals.details,
+          source: state.totals.source,
           fetching: true,
           error: null,
         },
       };
     case GET_REPORTS_TOTALS_SUCCESS:
+      details[action.source] = action.payload;
       return {
         ...state,
         totals: {
-          details: action.payload,
+          details,
+          source: state.totals.source,
           fetching: false,
           error: null,
         },
@@ -163,6 +168,7 @@ function reportViewPageReducer(state = initialState, action) {
         ...state,
         totals: {
           details: {},
+          source: state.totals.source,
           fetching: false,
           error: action.payload,
         },
