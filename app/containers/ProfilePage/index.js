@@ -15,6 +15,7 @@ import { selectCurrentUser, selectUserRoleType, selectFormsTempTimezone } from '
 import { changePassword, changeImage, fetchOtherUser } from '../../containers/ProfilePage/actions';
 import { changeUsersTimezone, getTimezone } from '../../containers/App/actions';
 import { formatTimezone } from '../../utils/time';
+import { translate } from '../../../common/utilities/localization';
 
 export class ProfilePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -69,7 +70,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
       <div className="container-fluid">
         <Helmet title="Profile - StudyKIK" />
         <section>
-          <h2 className="main-heading">PROFILE</h2>
+          <h2 className="main-heading">{translate('corporate.page.profile.mainHeading')}</h2>
           <div className="row profile form-study">
 
             <div className="col-xs-6 form-holder">
