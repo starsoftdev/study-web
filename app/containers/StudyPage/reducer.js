@@ -83,7 +83,10 @@ const initialState = {
     adding: false,
   },
   fetchingPatientsError: {},
-  submittingSchedule:false,
+  submittingSchedule: {
+    submitting: false,
+    error: null,
+  },
   submittingEmail:false,
   deletePatientProcess: {
     isDeleting: false,
@@ -496,7 +499,10 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_SCHEDULE:
       return {
         ...state,
-        submittingSchedule: true,
+        submittingSchedule: {
+          submitting: true,
+          error: null,
+        },
       };
     case SUBMIT_SCHEDULE_SUCCEEDED:
       return {
@@ -522,7 +528,10 @@ function studyPageReducer(state = initialState, action) {
 
           return category;
         }),
-        submittingSchedule: false,
+        submittingSchedule: {
+          submitting: false,
+          error: null,
+        },
         scheduledFormInitialized: false,
         openScheduledModal: false,
         currentPatientId: state.openPatientModal ? state.currentPatientId : -1,
@@ -530,7 +539,10 @@ function studyPageReducer(state = initialState, action) {
     case SUBMIT_SCHEDULE_FAILED:
       return {
         ...state,
-        submittingSchedule: false,
+        submittingSchedule: {
+          submitting: false,
+          error: action.payload || 'undefined error',
+        },
       };
     case SET_SCHEDULED_FORM_INITIALIZED:
       return {

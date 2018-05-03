@@ -8,6 +8,7 @@ import { push } from 'react-router-redux';
 import inViewport from 'in-viewport';
 import Remarkable from 'remarkable';
 import { formatPhone } from '../../../app/common/helper/functions';
+import { translate } from '../../../common/utilities/localization';
 
 import studyKikLogo from '../../assets/images/logo.svg';
 
@@ -58,8 +59,8 @@ export class TrialsArticle extends Component {
     const markdown = md.render(landingDescription);
 
     const phoneNumber = trial.mlpphone || trial.recruitment_phone || null;
-
-    const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? `${trial.distance} Miles` : 'N/A');
+    const messageData = { distance: trial.distance };
+    const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? translate('corporate.page.home.trialsArticle.distance', messageData) : 'N/A');
 
     let info = (
       <div className="info">
@@ -80,7 +81,7 @@ export class TrialsArticle extends Component {
       info = (
         <div className="info comming-soon">
           <h4>{trial.landingtitle || trial.name}</h4>
-          <span>Coming Soon</span>
+          <span>{translate('corporate.page.home.trialsArticle.comingSoon')}</span>
         </div>
       );
     }
@@ -114,7 +115,9 @@ export class TrialsArticle extends Component {
             }
           </div>
           <div className="btn-holder">
-            <span className="btn btn-default">Learn More</span>
+            <span className="btn btn-default">
+              {translate('corporate.page.home.trialsArticle.learnMore')}
+            </span>
           </div>
         </a>
       </article>
