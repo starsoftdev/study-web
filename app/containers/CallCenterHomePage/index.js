@@ -37,15 +37,15 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
           </h1>
           <div className="search-area">
             <Field
-              name="ccUser"
+              name="ccFilter"
               component={ReactSelect}
-              placeholder={translate('common.layout.placeholder.selectuser')}
+              placeholder={translate('common.layout.placeholder.selectfilter')}
               options={siteOptions}
               disabled={false}
               className="field"
             />
             <Field
-              name="ccFilter"
+              name="ccUser"
               component={ReactSelect}
               placeholder={translate('common.layout.placeholder.selectuser')}
               options={siteOptions}
