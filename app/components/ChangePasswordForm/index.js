@@ -8,6 +8,7 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import changePasswordFormValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm(
   {
@@ -33,7 +34,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
 
 
         <div className="field-row">
-          <strong className="label required"><label>OLD PASSWORD</label></strong>
+          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelOldPassword')}</label></strong>
           <Field
             name="old_password"
             component={Input}
@@ -45,7 +46,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label required"><label>NEW PASSWORD</label></strong>
+          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelNewPassword')}</label></strong>
           <Field
             name="new_password"
             component={Input}
@@ -57,7 +58,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label required"><label>CONFIRM PASSWORD</label></strong>
+          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelConfirmPassword')}</label></strong>
           <Field
             name="new_password_confirm"
             component={Input}
