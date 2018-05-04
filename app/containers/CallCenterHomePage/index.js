@@ -8,10 +8,13 @@ import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import { map } from 'lodash';
 import { Link } from 'react-router';
+import Modal from 'react-bootstrap/lib/Modal';
 
+import CenteredModal from '../../components/CenteredModal';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
 import studykikLogo from '../../assets/images/logo.svg';
+import FiltersForm from './FiltersForm/';
 
 import CallDiv from './CallDiv/';
 import CallCalendar from './CallCalendar/';
@@ -22,6 +25,21 @@ const formName = 'callCenterHomePage';
 @reduxForm({ form: formName })
 
 export default class CallCenterHomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      addUserModalOpen: false,
+    };
+  }
+
+  openFiltersModal() {
+    this.setState({ addUserModalOpen: true });
+  }
+
+  closeFiltersModal() {
+    this.setState({ addUserModalOpen: false });
+  }
 
   render() {
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
@@ -36,16 +54,28 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
             </Link>
           </h1>
           <div className="search-area">
+            <div className="field">
+              <Button bsStyle="primary" onClick={(e) => this.openFiltersModal(e)}>
+                {translate('container.page.callcenter.btn.filters')}
+              </Button>
+            </div>
+            <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+              <Modal.Header>
+                <Modal.Title>{translate('container.page.callcenter.btn.filters')}</Modal.Title>
+                <a className="lightbox-close close" onClick={(e) => this.closeFiltersModal(e)}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <div className="holder clearfix">
+                  <div className="form-lightbox">
+                    <FiltersForm />
+                  </div>
+                </div>
+              </Modal.Body>
+            </Modal>
             <Field
               name="ccUser"
-              component={ReactSelect}
-              placeholder={translate('common.layout.placeholder.selectuser')}
-              options={siteOptions}
-              disabled={false}
-              className="field"
-            />
-            <Field
-              name="ccFilter"
               component={ReactSelect}
               placeholder={translate('common.layout.placeholder.selectuser')}
               options={siteOptions}
