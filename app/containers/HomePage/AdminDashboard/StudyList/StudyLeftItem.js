@@ -91,6 +91,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
     } else {
       percent = ((item.campaign_count || 0) / (item.goal || 1)) * (totalDays / daysRan) * 100;
     }
+    percent = isFinite(percent) ? percent : 0;
 
     return (
       <tr

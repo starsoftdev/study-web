@@ -852,6 +852,14 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/app/cc/home',
+      name: 'callCenterHomePage',
+      getComponent(nextState, cb) {
+        System.import('./containers/CallCenterHomePage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
