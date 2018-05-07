@@ -388,13 +388,16 @@
     "portals.component.globalPMSModal.chatForm.sendBtn": "Send",
 
     "portals.component.globalPMSModal.patientItem.noMessage": "No message yet",
+    "portals.component.globalPMSModal.patientItem.dateMask": "MM/DD/YYYY [at] h:mm A",
 
     "portals.component.globalPMSModal.callItem.missedCallFrom": "Missed call from",
     "portals.component.globalPMSModal.callItem.callEndedDuration": "Call ended, duration",
     "portals.component.globalPMSModal.callItem.callFrom": "Call from",
+    "portals.component.globalPMSModal.callItem.dateMask": "MM/DD/YYYY [at] h:mm A",
 
     "portals.component.globalPMSModal.messageItem.stopMessage": "This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.",
     "portals.component.globalPMSModal.messageItem.startMessage": "This patient is able to receive text messages.",
+    "portals.component.globalPMSModal.messageItem.dateMask": "M/DD/YYYY [at] h:mm:ss A",
 
 
     "portals.component.renderLeads.utm": "UTM #",
@@ -479,6 +482,7 @@
 
     "portals.component.topHeaderBar.notificationBox.title": "NOTIFICATIONS",
     "portals.component.topHeaderBar.notificationBox.seeAll": "See All",
+    "portals.component.topHeaderBar.notificationBox.dateMask": "MM/DD/YY [at] h:mm A",
 
     "portals.component.topHeaderBar.helpMenu.helpSupport": "Help and Support",
     "portals.component.topHeaderBar.helpMenu.tutorials": "Tutorials",
@@ -571,6 +575,9 @@
     "portals.client.component.studiesList.studyItem.renewBtn": "Renew",
     "portals.client.component.studiesList.studyItem.upgradeBtn": "Upgrade",
     "portals.client.component.studiesList.studyItem.editBtn": "Edit",
+    "portals.client.component.studiesList.studyItem.dateMask": "MM/DD/YY",
+
+    "common.component.input.datePickerDisplay.dateMask": "MM/DD/YY",
 
     "common.constants.on": "On",
     "common.constants.off": "Off",
@@ -620,8 +627,6 @@
     "common.exposureLevel.id4": "Platinum",
     "common.exposureLevel.id5": "Diamond",
     "common.exposureLevel.id6": "Ruby",
-
-    "common.timeString.at": "at",
 
     "common.indication.id1": "Abnormal Bleeding",
     "common.indication.id2": "Acid Reflux",

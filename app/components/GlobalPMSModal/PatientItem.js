@@ -35,7 +35,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
     const timezone = this.props.timezone || currentUser.timezone;
 
     const lastDate = (new Date(patientData.last_message_date ? patientData.last_message_date : patientData.created_at));
-    const lastDateFormatted = moment(lastDate).tz(timezone).format(`MM/DD/YYYY [${translate('common.timeString.at')}] h:mm A`);
+    const lastDateFormatted = moment(lastDate).tz(timezone).format(translate('portals.component.globalPMSModal.patientItem.dateMask'));
     return (
       <li className={patientSelected === true ? 'active' : ''} onClick={this.selectPatient}>
         <a className="tab-opener">
