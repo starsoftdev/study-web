@@ -172,6 +172,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                         if (individual) {
                           path += `/indication/${this.props.indication}`;
                         }
+                        if (!path) {
+                          path = '/'; // fallback to the US page
+                        }
                         window.location.href = path;
                       });
                     }
