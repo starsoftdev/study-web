@@ -29,6 +29,7 @@ import {
   getAvatarUrl,
   eventMessage,
 } from '../../../containers/NotificationsPage';
+import { translate } from '../../../../common/utilities/localization';
 
 
 class NotificationBox extends React.Component {
@@ -69,7 +70,7 @@ class NotificationBox extends React.Component {
   }
 
   parseNotificationTime(time, timezone) {
-    return moment(time).tz(timezone).format('MM/DD/YY [at] h:mm A');
+    return moment(time).tz(timezone).format(`MM/DD/YY [${translate('common.timeString.at')}] h:mm A`);
   }
 
   render() {
@@ -95,7 +96,7 @@ class NotificationBox extends React.Component {
         {this.state.dropdownOpen &&
         <div className="notifications-drop slide">
           <div className="well">
-            <strong className="title">NOTIFICATIONS</strong>
+            <strong className="title">{translate('portals.component.topHeaderBar.notificationBox.title')}</strong>
 
             {this.props.notifications.length > 0 &&
               <div className="jcf-scrollable">
@@ -130,7 +131,7 @@ class NotificationBox extends React.Component {
 
             <div className="btn-block text-center">
               <Link onClick={this.seeAllClick} className="hover-underline" to="/app/notifications">
-                See All
+                {translate('portals.component.topHeaderBar.notificationBox.seeAll')}
               </Link>
             </div>
           </div>
