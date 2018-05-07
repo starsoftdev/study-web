@@ -84,9 +84,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       return '';
     }
     if (!timezone) {
-      return moment(date).utc().format('MM/DD/YYYY');
+      return moment(date).utc().format(translate('portals.client.component.studiesList.studyItem.dateMask'));
     }
-    return moment(date).tz(timezone).format('MM/DD/YYYY');
+    return moment(date).tz(timezone).format(translate('portals.client.component.studiesList.studyItem.dateMask'));
   }
 
   render() {

@@ -70,7 +70,7 @@ class NotificationBox extends React.Component {
   }
 
   parseNotificationTime(time, timezone) {
-    return moment(time).tz(timezone).format(`MM/DD/YY [${translate('common.timeString.at')}] h:mm A`);
+    return moment(time).tz(timezone).format(translate('portals.component.topHeaderBar.notificationBox.dateMask'));
   }
 
   render() {

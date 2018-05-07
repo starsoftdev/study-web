@@ -17,7 +17,7 @@ export default class DatePickerDisplay extends Component {
   }
 
   static defaultProps = {
-    dateStyle: 'MM/DD/YY',
+    dateStyle: translate('common.component.input.datePickerDisplay.dateMask'),
   }
 
   render() {
