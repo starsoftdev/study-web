@@ -5,6 +5,7 @@ import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   connectionEstablished,
@@ -248,7 +249,7 @@ export function* sendStudyPatientMessages() {
         cb(err, data);
       });
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('portals.component.globalPMSModal.sendMessageToastrError'));
       toastr.error('', errorMessage);
     }
   }

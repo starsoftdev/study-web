@@ -4,6 +4,7 @@ import { Field } from 'redux-form';
 import classNames from 'classnames';
 
 import Checkbox from '../../components/Input/Checkbox';
+import { translate } from '../../../common/utilities/localization';
 
 class RenderEmailsList extends Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -106,7 +107,7 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
             className="field-active"
             onChange={this.selectAll}
           />
-          <strong className="email">RECEIVE EMAIL NOTIFICATION</strong>
+          <strong className="email">{translate('portals.component.editStudyForm.renderEmailsList.receiveEmailNotification')}</strong>
         </div>
 
         <ul className="list-unstyled list-emails">
@@ -127,7 +128,9 @@ class RenderEmailsList extends Component { // eslint-disable-line react/prefer-s
           }
         </ul>
         <div className="btn-holder">
-          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.roleForClient.isAdmin}>Add Email Notification</a>
+          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.roleForClient.isAdmin}>
+            {translate('portals.component.editStudyForm.renderEmailsList.addEmailNotification')}
+          </a>
         </div>
       </div>
     );
