@@ -415,8 +415,8 @@ export function* saveCardWatcher() {
     const cards = yield select(selectCards());
 
     if (cards && cards.details && cards.details.data.length >= 10) {
-      toastr.error('', 'Error! Too many cards on file.');
-      yield put(cardSavingError(new Error('Error! Too many cards on file.')));
+      toastr.error('', translate('corporate.page.paymentInformation.manyCardsError'));
+      yield put(cardSavingError(new Error(translate('corporate.page.paymentInformation.manyCardsError'))));
     } else {
       try {
         const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/saveCard`;
@@ -425,10 +425,10 @@ export function* saveCardWatcher() {
           body: JSON.stringify(cardData),
         };
         const response = yield call(request, requestURL, options);
-        toastr.success('', 'Success! Your card has been added.');
+        toastr.success('', translate('corporate.page.paymentInformation.addNewCardForm.toastrSuccess'));
         yield put(cardSaved(response));
       } catch (err) {
-        const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+        const errorMessage = get(err, 'message', translate('corporate.page.paymentInformation.addNewCardForm.toastrDefaultError'));
         toastr.error('', errorMessage);
         yield put(cardSavingError(err));
       }
@@ -451,10 +451,10 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('', 'Success! You have removed your card.');
+      toastr.success('', translate('corporate.page.paymentInformation.cardItem.toastrSuccess'));
       yield put(cardDeleted(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('corporate.page.paymentInformation.cardItem.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(cardDeletingError(err));
     }
