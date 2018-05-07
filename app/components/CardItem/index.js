@@ -5,6 +5,7 @@
 */
 
 import React, { PropTypes } from 'react';
+import { translate } from '../../../common/utilities/localization';
 
 
 class CardItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -80,7 +81,7 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
             <button className="btn btn-primary btn-remove-card pull-right" onClick={this.removeItem} disabled={isRemoving}>
               {isRemoving
                 ? <span></span>
-                : <span>Remove</span>
+                : <span>{translate('corporate.page.paymentInformation.cardItem.buttonRemove')}</span>
               }
             </button>
           </div>
