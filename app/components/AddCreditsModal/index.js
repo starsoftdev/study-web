@@ -38,6 +38,7 @@ import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../..
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { selectAddCreditsFormValues, selectAddCreditsFormError } from './selectors';
 import validator, { addCreditsFields } from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({
   form: 'addCredits',
@@ -273,7 +274,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
     if (this.state.quantity > 0 || this.state.emailQuantity > 0) {
       addCredits(currentUser.roleForClient.client_id, currentUser.roleForClient.client.stripeCustomerId, data);
     } else {
-      toastr.error('Error!', 'No products selected.');
+      toastr.error(translate('portals.component.addCreditsModal.toastrErrorTitle'), translate('portals.component.addCreditsModal.noProductsSelectedToastrError'));
     }
   }
 
@@ -281,13 +282,13 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
   render() {
     const { siteLocations } = this.props;
     if (!_.find(siteLocations, (o) => o.id === 'add-new-location')) {
-      siteLocations.push({ id: 'add-new-location', name: 'Add Site Location' });
+      siteLocations.push({ id: 'add-new-location', name: translate('portals.component.addCreditsModal.addSiteLocation') });
     }
     const products = [];
 
     if (this.state.quantity > 0) {
       products.push({
-        title: '100 Text Credits',
+        title: `100 ${translate('portals.component.addCreditsModal.textCredits')}`,
         quantity: this.state.quantity,
         price: this.state.price,
         total: this.state.quantity * this.props.creditsPrice.price,
@@ -296,7 +297,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
     if (this.state.emailQuantity > 0) {
       products.push({
-        title: '500 Email Credits',
+        title: `500 ${translate('portals.component.addCreditsModal.emailCredits')}`,
         quantity: this.state.emailQuantity,
         price: this.state.price,
         total: this.state.emailQuantity * this.props.creditsPrice.price,
@@ -315,7 +316,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Add Credits</Modal.Title>
+            <Modal.Title>{translate('portals.component.addCreditsModal.title')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -329,11 +330,11 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                       <div className="form-fields">
 
                         <div className="field-row extra-style">
-                          <strong className="label required"><label>Site Location</label></strong>
+                          <strong className="label required"><label>{translate('portals.component.addCreditsModal.siteLocationLabel')}</label></strong>
                           <Field
                             name="siteLocation"
                             component={ReactSelect}
-                            placeholder="Select Site Location"
+                            placeholder={translate('portals.component.addCreditsModal.siteLocationPlaceholder')}
                             options={siteLocations}
                             className="field"
                             onChange={this.handleSiteLocationChoose}
@@ -342,18 +343,17 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
                         <div className="field-row overflow">
                           <span className="message">
-                            Location selection will appear on invoice for accounting purposes.
-                            Credits are added to all accounts.
+                            {translate('portals.component.addCreditsModal.siteLocationDisclaimer')}
                           </span>
                         </div>
 
                         <div className="field-row">
-                          <strong className="label required"><label htmlFor="quantity">Text Credits</label></strong>
+                          <strong className="label required"><label htmlFor="quantity">{translate('portals.component.addCreditsModal.textCreditsLabel')}</label></strong>
                           <div className="field">
                             <span className="jcf-number parent-active">
                               <input
                                 type="text"
-                                value={`${this.state.quantity * 100} Text Credits ($${(this.state.quantity * this.props.creditsPrice.price) / 100})`}
+                                value={`${this.state.quantity * 100} ${translate('portals.component.addCreditsModal.textCreditsValue')} ($${(this.state.quantity * this.props.creditsPrice.price) / 100})`}
                                 id="quantity"
                                 className="form-control jcf-real-element field-active"
                                 name="quantity"
@@ -367,12 +367,12 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
 
                         <div className="field-row">
-                          <strong className="label required"><label htmlFor="emailQuantity">Email Credits</label></strong>
+                          <strong className="label required"><label htmlFor="emailQuantity">{translate('portals.component.addCreditsModal.emailCreditsLabel')}</label></strong>
                           <div className="field">
                             <span className="jcf-number parent-active">
                               <input
                                 type="text"
-                                value={`${this.state.emailQuantity * 500} Email Credits ($${(this.state.emailQuantity * this.props.creditsPrice.price) / 100})`}
+                                value={`${this.state.emailQuantity * 500} ${translate('portals.component.addCreditsModal.emailCreditsValue')} ($${(this.state.emailQuantity * this.props.creditsPrice.price) / 100})`}
                                 id="emailQuantity"
                                 className="form-control jcf-real-element field-active"
                                 name="emailQuantity"
@@ -409,7 +409,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
 
         <Modal dialogComponentClass={CenteredModal} show={this.state.showSiteLocationModal} onHide={this.closeAddSiteModal}>
           <Modal.Header>
-            <Modal.Title>ADD SITE LOCATION</Modal.Title>
+            <Modal.Title>{translate('portals.component.addCreditsModal.addSiteLocationTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
               <i className="icomoon-icon_close" />
             </a>
