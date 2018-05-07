@@ -20,7 +20,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
 
     const timezone = this.props.timezone || currentUser.timezone;
 
-    const cdate = moment(cts).tz(timezone).format(`MM/DD/YY [${translate('common.timeString.at')}] h:mm A`);
+    const cdate = moment(cts).tz(timezone).format(translate('portals.component.globalPMSModal.callItem.dateMask'));
 
     let containerClassName = 'post-holder call';
     // todo remove and put back Anonymous behavior
