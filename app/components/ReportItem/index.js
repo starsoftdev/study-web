@@ -96,11 +96,11 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
         </div>
         <div className="box-element dnq">
           <span className="name">DNQ / NOT INTERESTED</span>
-          <span className="value link" onClick={() => { openNotesModal(item.study_id, 'Not Qualified / Not Interested', 'DNQ'); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span>
+          <span className="value url" onClick={() => { openNotesModal(item.study_id, 'Not Qualified / Not Interested', 'DNQ'); }}>{item.dnq || 0}<span className="small">{`(${percentage.dnq_p}%)`}</span></span>
         </div>
         <div className="box-element action-needed">
           <span className="name">ACTION NEEDED</span>
-          <span className="value link" onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>{item.action_needed || 0}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span>
+          <span className="value url" onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>{item.action_needed || 0}<span className="small">{`(${percentage.action_needed_p}%)`}</span></span>
         </div>
         <div className="box-element scheduled">
           <span className="name">SCHEDULED</span>
@@ -112,7 +112,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
         </div>
         <div className="box-element screen-failed">
           <span className="name">SCREEN FAILED</span>
-          <span className="value link" onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span>
+          <span className="value url" onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>{item.screen_failed || 0}<span className="small">{`(${percentage.screen_failed_p}%)`}</span></span>
         </div>
         <div className="box-element randomized">
           <span className="name">RANDOMIZED</span>
