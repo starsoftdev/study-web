@@ -40,15 +40,15 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
     if (userRoleType === 'client') {
       menuItemsGroupA = [
         { upperText: translate('portals.component.sideNavBar.home'), link: '/app', icon: 'icomoon-icon_house_alt' },
-        { upperText: translate('portals.component.sideNavBar.listNewStudy'), link: '/app/list-new-study', icon: 'icomoon-screen' },
+        { upperText: translate('portals.component.sideNavBar.listNewStudy'), link: '/app/list-new-study', icon: 'icomoon-icon_new' },
         { upperText: translate('portals.component.sideNavBar.orderAdCreation'), link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
-        { upperText: translate('portals.component.sideNavBar.requestProposal'), link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: translate('portals.component.sideNavBar.requestProposal'), link: '/app/request-proposal', icon: 'icomoon-icon_note' },
         { upperText: translate('portals.component.sideNavBar.refer'), link: '/app/refer', icon: 'icomoon-signout' },
       ];
       menuItemsGroupB = [
         { upperText: translate('portals.component.sideNavBar.calendar'), link: '/app/calendar', icon: 'icomoon-icon_calendar' },
         { upperText: translate('portals.component.sideNavBar.manage'), lowerText: translate('portals.component.sideNavBar.manageLowerText'), link: '/app/sites-users', icon: 'icomoon-icon_group' },
-        { upperText: translate('portals.component.sideNavBar.patientDB'), link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
+        { upperText: translate('portals.component.sideNavBar.patientDB'), link: '/app/patient-database', icon: 'icomoon-icon_database' },
         { upperText: translate('portals.component.sideNavBar.rewards'), link: '/app/rewards', icon: 'icomoon-gift' },
         { upperText: translate('portals.component.sideNavBar.badges'), link: '/app/badges', icon: 'icomoon-star' },
       ];
