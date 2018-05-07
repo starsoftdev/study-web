@@ -21,6 +21,7 @@ import RenewStudyForm from '../../components/RenewStudyForm/index';
 import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
 import EditStudyForm from '../../components/EditStudyForm';
 import StudyItem from './StudyItem';
+import { translate } from '../../../common/utilities/localization';
 import pqsImage from '../../assets/images/pqs.png';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -168,7 +169,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (newLevelOfUpgradeStudy !== oldLevelOfUpgradeStudy) {
       if (newLevelOfUpgradeStudy) {
-        const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
+        const selectedStudy = this.props.studies.details.find(o => (o.studyId === this.state.selectedStudyId));
         this.props.fetchUpgradeStudyPrice(selectedStudy.level_id, newLevelOfUpgradeStudy);
       } else {
         this.props.clearIndicationLevelPrice();
@@ -343,9 +344,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
 
     const emailNotificationArray = [];
-    _.forEach(this.props.sites.details, (site) => {
-      _.forEach(site.roles, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user_id));
+    this.props.sites.details.forEach(site => {
+      site.roles.forEach(role => {
+        const isChecked = eSelectedStudy.studyNotificationEmails.find(item => (item.user_id === role.user_id));
         if (isChecked && role.user) {
           emailNotificationArray.push({
             firstName: role.user.firstName,
@@ -358,8 +359,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (this.props.clientAdmins) {
       // add admin users to the list
-      _.forEach(this.props.clientAdmins.details, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
+      this.props.clientAdmins.details.forEach(role => {
+        const isChecked = eSelectedStudy.studyNotificationEmails.find(item => (item.user_id === role.userId));
         if (isChecked && role) {
           emailNotificationArray.push({
             firstName: role.firstName,
@@ -414,10 +415,10 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const eSelectedStudy = _.find(eSelectedSite.studies, (o) => (o.id === this.state.selectedStudyId));
 
     const emailNotificationArray = [];
-    _.forEach(this.props.sites.details, (site) => {
-      _.forEach(site.roles, (role) => {
+    this.props.sites.details.forEach(site => {
+      site.roles.forEach(role => {
         if (role.user) {
-          const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.user.id));
+          const isChecked = eSelectedStudy.studyNotificationEmails.find(item => (item.user_id === role.user.id));
           if (isChecked) {
             emailNotificationArray.push({
               firstName: role.user.firstName,
@@ -431,8 +432,8 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
 
     if (this.props.clientAdmins) {
       // add admin users to the list
-      _.forEach(this.props.clientAdmins.details, (role) => {
-        const isChecked = _.find(eSelectedStudy.studyNotificationEmails, (item) => (item.user_id === role.userId));
+      this.props.clientAdmins.details.forEach(role => {
+        const isChecked = eSelectedStudy.studyNotificationEmails.find(item => (item.user_id === role.userId));
         if (isChecked) {
           emailNotificationArray.push({
             firstName: role.firstName,
@@ -621,18 +622,18 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
             <div className="table-responsive">
               <table className="table has-absolute-caption">
                 <caption className="absolute-caption">
-                  <span className="pull-left">Study Status</span>
+                  <span className="pull-left">{translate('portals.client.component.studiesList.tableTitle')}</span>
                   <span className="pull-right">
                     <span className="inner-info">
-                      <span className="info-label">ACTIVE</span>
+                      <span className="info-label">{translate('portals.client.component.studiesList.active')}</span>
                       <span className="info-value">{studies.active || 0}</span>
                     </span>
                     <span className="inner-info">
-                      <span className="info-label">INACTIVE</span>
+                      <span className="info-label">{translate('portals.client.component.studiesList.inactive')}</span>
                       <span className="info-value">{studies.inactive || 0}</span>
                     </span>
                     <span className="inner-info">
-                      <span className="info-label">TOTAL</span>
+                      <span className="info-label">{translate('portals.client.component.studiesList.total')}</span>
                       <span className="info-value">{studies.total || 0}</span>
                     </span>
                   </span>
@@ -640,17 +641,38 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
                 <thead>
                   <tr>
                     <th className="default-cursor">#<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>LOCATION<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>SPONSOR<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.indication')}
+                      <i className="caret-arrow" />
+                    </th>
+                    <th onClick={this.sortBy} data-sort="location" className={(this.props.paginationOptions.activeSort === 'location') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.location')}
+                      <i className="caret-arrow" />
+                    </th>
+                    <th onClick={this.sortBy} data-sort="sponsor" className={(this.props.paginationOptions.activeSort === 'sponsor') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.sponsor')}
+                      <i className="caret-arrow" />
+                    </th>
+                    <th onClick={this.sortBy} data-sort="protocol" className={(this.props.paginationOptions.activeSort === 'protocol') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.protocol')}
+                      <i className="caret-arrow" />
+                    </th>
                     <th className="default-cursor">
-                      <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip="Patient Qualification Suite" />
+                      <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip={translate('portals.client.component.studiesList.pqs')} />
                       <ReactTooltip id="pqs-logo" type="info" class="tooltipClass wide" effect="solid" />
                     </th>
-                    <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>STATUS<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>START DATE<i className="caret-arrow" /></th>
-                    <th onClick={this.sortBy} data-sort="endDate" className={(this.props.paginationOptions.activeSort === 'endDate') ? this.props.paginationOptions.activeDirection : ''}>END DATE<i className="caret-arrow" /></th>
+                    <th onClick={this.sortBy} data-sort="status" className={(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.status')}
+                      <i className="caret-arrow" />
+                    </th>
+                    <th onClick={this.sortBy} data-sort="startDate" className={(this.props.paginationOptions.activeSort === 'startDate') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.startDate')}
+                      <i className="caret-arrow" />
+                    </th>
+                    <th onClick={this.sortBy} data-sort="endDate" className={(this.props.paginationOptions.activeSort === 'endDate') ? this.props.paginationOptions.activeDirection : ''}>
+                      {translate('portals.client.component.studiesList.endDate')}
+                      <i className="caret-arrow" />
+                    </th>
                   </tr>
                 </thead>
                 {this.renderStudiesTable()}
