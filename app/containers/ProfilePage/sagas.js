@@ -6,6 +6,7 @@ import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   passwordChanged,
@@ -40,10 +41,10 @@ export function* changePassword() {
       const response = yield call(request, requestURL, params);
 
       yield put(passwordChanged(response));
-      toastr.success('', 'You have successfully changed your password.');
+      toastr.success('', translate('corporate.page.profile.changePasswordForm.changePasswordToastrSuccess'));
       yield put(logout());
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('corporate.page.profile.changePasswordForm.changePasswordToastrError'));
       toastr.error('', errorMessage);
       yield put(passwordChangingError(err));
       if (err.status === 401) {
@@ -69,10 +70,11 @@ export function* changeImage() {
       };
       const response = yield call(request, requestURL, params);
       yield put(imageChanged(response));
-      toastr.success('', 'You have successfully updated your profile image!');
+      toastr.success('', translate('corporate.page.profile.profileImageForm.changeImageToastrSuccess'));
     } catch (err) {
       yield put(imageChangingError(err));
-      toastr.error('Error!');
+      const errorMessage = get(err, 'message', translate('corporate.page.profile.profileImageForm.changeImageToastrError'));
+      toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
       }
