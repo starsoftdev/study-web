@@ -144,7 +144,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         if (!countryCode) {
           countryCode = _.find(val.types, (o) => (o === 'country'));
           if (countryCode) {
-            change('countryCode', val.short_name);
+            change('countryCode', val.short_name === 'GB' ? 'UK' : val.short_name);
           }
         }
         if (!postalCode) {
