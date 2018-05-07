@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FileUpload from './FileUpload';
+import { translate } from '../../../common/utilities/localization';
 
 import './styles.less';
 
@@ -123,7 +124,7 @@ class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-
 
   handleFileChange(img, width, height) {
     if (width > 2000 || height > 2000) {
-      toastr.error('', 'Error! The image size is too large. The maximum supported size is 2000x2000 pixels.');
+      toastr.error('', translate('portals.component.studyAdForm.maxSizeExceededToastrError'));
     }
     this.setState({
       selectedImage: img,
@@ -179,7 +180,7 @@ class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-
       height = 350;
     }
 
-    const submitButtonText = (changeStudyAdProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : 'update';
+    const submitButtonText = (changeStudyAdProcess.saving) ? <LoadingSpinner showOnlyIcon size={20} /> : translate('portals.component.studyAdForm.updateBtn');
 
     return (
       <form className="form-lightbox" onSubmit={this.handleSave}>
@@ -202,7 +203,7 @@ class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-
               image={this.state.selectedImage}
             />
             <br />
-            Zoom:
+            {translate('portals.component.studyAdForm.zoom')}
             <input
               name="scale"
               type="range"
@@ -220,7 +221,7 @@ class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-
             <FileUpload id="avatar_file" showPdfPreview={this.showPdfPreview} clearPreview={this.clearPreview} handleFileChange={this.handleFileChange} handleDragEnter={this.onDragEnterHandler} handleDragLeave={this.onDragLeaveHandler} />
             <div className="info">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text">Drag and drop <br /> image here</span>
+              <span className="text" dangerouslySetInnerHTML={{ __html: translate('portals.component.studyAdForm.uploadZoneText') }}></span>
             </div>
           </div>
 
@@ -245,13 +246,18 @@ class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-
             null
           }
           <div className="field-row">
-            <strong className="label required"><label htmlFor="clinicaltrialGovLink">Upload Image</label></strong>
+            <strong className="label required"><label htmlFor="clinicaltrialGovLink">{translate('portals.component.studyAdForm.uploadImageLabel')}</label></strong>
             <div className="field">
-              <label htmlFor="avatar_file" data-text="Browse" data-hover-text="Browse" className="btn btn-gray upload-btn" />
+              <label
+                htmlFor="avatar_file"
+                data-text={translate('portals.component.studyAdForm.browseLabel')}
+                data-hover-text={translate('portals.component.studyAdForm.browseLabel')}
+                className="btn btn-gray upload-btn"
+              />
             </div>
           </div>
           <div className="field-row">
-            <a className="link" onClick={this.props.removeStudyAd}>Remove Image</a>
+            <a className="link" onClick={this.props.removeStudyAd}>{translate('portals.component.studyAdForm.removeImage')}</a>
           </div>
           <div className="text-right">
             <button

@@ -6,6 +6,7 @@
 
 import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
+import { translate } from '../../../common/utilities/localization';
 
 export default class DatePickerDisplay extends Component {
   static propTypes = {
@@ -24,7 +25,7 @@ export default class DatePickerDisplay extends Component {
 
     delete rest.meta;
     delete rest.initialDate;
-    const inputValue = (input.value === '') ? 'To Be Determined' : moment(input.value).format(dateStyle);
+    const inputValue = (input.value === '') ? translate('common.constants.tbd') : moment(input.value).format(dateStyle);
     const inputComponent = (
       <input
         type="text"

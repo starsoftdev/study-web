@@ -23,6 +23,8 @@ import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import Money from '../../components/Money';
 import { fetchCoupon, clearCoupon, fetchCards, saveCard } from '../../containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
+
 const formName = 'shoppingCart';
 
 const mapStateToProps = createStructuredSelector({
@@ -170,7 +172,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const title = this.props.title || 'Order Summary';
+    const title = this.props.title || translate('portals.component.shoppingCartForm.defaultTitle');
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
     const { addOns, coupon, couponId, change, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit, clearCoupon } = this.props;
@@ -200,13 +202,13 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
       }));
     }
     creditCardOptions = [{
-      label: 'Add New Card',
+      label: translate('portals.component.shoppingCartForm.addNewCardLabel'),
       value: -1,
     }].concat(creditCardOptions);
 
     if (this.props.currentUser && this.props.currentUser.roleForClient && this.props.currentUser.roleForClient.client && this.props.currentUser.roleForClient.client.isPayByCheckEnabled === true) {
       creditCardOptions.push({
-        label: 'Pay By Check',
+        label: translate('portals.component.shoppingCartForm.payByCheckLabel'),
         value: 'payByCheck',
       });
     }
@@ -220,7 +222,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
               <Field
                 name="creditCard"
                 component={ReactSelect}
-                placeholder="Select Credit Card"
+                placeholder={translate('portals.component.shoppingCartForm.selectCardLabel')}
                 options={creditCardOptions}
                 disabled={cards.fetching || submitting}
                 onChange={this.onSelectCard}
@@ -234,7 +236,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 keyboard
               >
                 <Modal.Header>
-                  <Modal.Title>Add New Card</Modal.Title>
+                  <Modal.Title>{translate('portals.component.shoppingCartForm.addNewCard')}</Modal.Title>
                   <a className="lightbox-close close" onClick={this.closeAddNewCardModal}>
                     <i className="icomoon-icon_close" />
                   </a>
@@ -266,10 +268,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>PRODUCT <i className="caret-arrow" /></th>
-                    <th className="right">PRICE <i className="caret-arrow" /></th>
-                    <th className="right">QTY <i className="caret-arrow" /></th>
-                    <th className="right">TOTAL <i className="caret-arrow" /></th>
+                    <th>{translate('portals.component.shoppingCartForm.product')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.shoppingCartForm.price')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.shoppingCartForm.qty')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.shoppingCartForm.total')} <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -293,7 +295,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                     name="couponId"
                     component={Input}
                     type="text"
-                    placeholder="Coupon"
+                    placeholder={translate('portals.component.shoppingCartForm.couponPlaceholder')}
                     className={classNames({ couponSelected })}
                     onBlur={this.onFetchCoupon}
                   />
@@ -305,19 +307,19 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 disabled={coupon.fetching || submitting}
               >
                 {couponSelected
-                  ? <span>Remove</span>
-                  : <span>Apply</span>
+                  ? <span>{translate('portals.component.shoppingCartForm.removeCoupon')}</span>
+                  : <span>{translate('portals.component.shoppingCartForm.applyCoupon')}</span>
                 }
               </Button>
             </div>
 
             <div className="total clearfix">
-              <span className="heading">Subtotal</span>
+              <span className="heading">{translate('portals.component.shoppingCartForm.subtotalLabel')}</span>
               <Money value={subTotal / 100} className="price subtotal-price" />
             </div>
 
             <div className="total discount clearfix">
-              <span className="heading">discount</span>
+              <span className="heading">{translate('portals.component.shoppingCartForm.discountLabel')}</span>
               {coupon.fetching
                 ? <span className="price">
                   <LoadingSpinner showOnlyIcon size={20} className="price" />
@@ -327,7 +329,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
             </div>
 
             <div className="total grand-total clearfix">
-              <strong className="heading">Total</strong>
+              <strong className="heading">{translate('portals.component.shoppingCartForm.totalLabel')}</strong>
               <Money value={total / 100} className="price total-price" />
             </div>
 
@@ -348,7 +350,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
                 validateAndSubmit(ev);
               }}
             >
-              <span>Submit</span>
+              <span>{translate('portals.component.shoppingCartForm.submitBtn')}</span>
               {(manualDisableSubmit) &&
                 <span className="pull-right"><LoadingSpinner showOnlyIcon size={20} /></span>
               }
