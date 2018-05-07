@@ -62,7 +62,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
           </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time>{moment(cts).tz(timezone).format(`M/DD/YYYY [${translate('common.timeString.at')}] h:mm:ss A`)}</time>
+        <time>{moment(cts).tz(timezone).format(translate('portals.component.globalPMSModal.messageItem.dateMask'))}</time>
       </div>
     );
   }
