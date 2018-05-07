@@ -42,15 +42,15 @@ class SideNavBar extends React.Component {
     if (userRoleType === 'client') {
       menuItemsGroupA = [
         { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-screen' },
+        { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-icon_new' },
         { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
-        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
+        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-icon_note' },
         { upperText: 'Refer', link: '/app/refer', icon: 'icomoon-signout' },
       ];
       menuItemsGroupB = [
         { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
         { upperText: 'Manage', lowerText: 'Sites / Users', link: '/app/sites-users', icon: 'icomoon-icon_group' },
-        { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
+        { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_database' },
         { upperText: 'Rewards', link: '/app/rewards', icon: 'icomoon-gift' },
         { upperText: 'Badges', link: '/app/badges', icon: 'icomoon-star' },
       ];
