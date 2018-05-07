@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 import defaultUserImage from '../../assets/images/Default-User-Img.png';
 import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
@@ -34,7 +35,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
         senderImage = this.props.currentUser.profileImageURL;
       }
       if (messageData.user) {
-        senderName = (!messageData.twilioTextMessage.isProxyMessage) ? messageData.user.firstName.concat(' '.concat(messageData.user.lastName || '')) : 'StudyKIK';
+        senderName = (!messageData.twilioTextMessage.isProxyMessage) ? messageData.user.firstName.concat(' '.concat(messageData.user.lastName || '')) : translate('common.layout.title');
       }
     } else {
       if (messageData.patient.gender === 'Female') {
@@ -46,9 +47,9 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
     }
 
     if (messageData.twilioTextMessage.isStopMessage) {
-      addon = <span className="stop-list-notification">This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.</span>;
+      addon = <span className="stop-list-notification"></span>;
     } else if (messageData.twilioTextMessage.isStartMessage) {
-      addon = <span className="stop-list-notification">This patient is able to receive text messages.</span>;
+      addon = <span className="stop-list-notification">{translate('portals.component.globalPMSModal.messageItem.startMessage')}</span>;
     }
 
     return (
@@ -61,7 +62,7 @@ class MessageItem extends Component { // eslint-disable-line react/prefer-statel
           </p>
         </div>
         <strong className="email">{senderName}</strong>
-        <time>{moment(cts).tz(timezone).format('M/DD/YYYY [at] h:mm:ss A')}</time>
+        <time>{moment(cts).tz(timezone).format(`M/DD/YYYY [${translate('common.timeString.at')}] h:mm:ss A`)}</time>
       </div>
     );
   }

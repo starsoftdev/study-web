@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectSelectedUser, selectCurrentUser } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 class CallItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -19,7 +20,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
 
     const timezone = this.props.timezone || currentUser.timezone;
 
-    const cdate = moment(cts).tz(timezone).format('MM/DD/YY [at] h:mm A');
+    const cdate = moment(cts).tz(timezone).format(`MM/DD/YY [${translate('common.timeString.at')}] h:mm A`);
 
     let containerClassName = 'post-holder call';
     // todo remove and put back Anonymous behavior
@@ -46,7 +47,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
             return (
               <div className="global-pms-chat-call-record-text" data-post="1">
                 <i className="icomoon-icon-incoming" />
-                <div>Missed call from {senderName}.</div>
+                <div>{translate('portals.component.globalPMSModal.callItem.missedCallFrom')} {senderName}.</div>
                 <time >{cdate}</time>
               </div>
             );
@@ -56,7 +57,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
             return (
               <div className="global-pms-chat-call-record-text" data-post="1">
                 <i className="icomoon-icon-call-end" />
-                <div>Call ended, duration {durationStr}.</div>
+                <div>{translate('portals.component.globalPMSModal.callItem.callEndedDuration')} {durationStr}.</div>
                 <time >{cdate}</time>
               </div>
             );
@@ -64,7 +65,7 @@ class CallItem extends Component { // eslint-disable-line react/prefer-stateless
           return (
             <div className="global-pms-chat-call-record-text" data-post="1">
               <i className="icomoon-icon-outgoing" />
-              <div>Call from {senderName}.</div>
+              <div>{translate('portals.component.globalPMSModal.callItem.callFrom')} {senderName}.</div>
               <time >{cdate}</time>
             </div>
           );
