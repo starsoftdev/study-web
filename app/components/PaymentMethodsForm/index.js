@@ -9,6 +9,7 @@ import moment from 'moment-timezone';
 import _ from 'lodash';
 
 import CardItem from '../../components/CardItem';
+import { translate } from '../../../common/utilities/localization';
 
 class PaymentMethodsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -75,7 +76,7 @@ class PaymentMethodsForm extends React.Component { // eslint-disable-line react/
       <div>
         <div className="table-holder payment-table-holder">
           <header>
-            <h2>MANAGE PAYMENT METHODS</h2>
+            <h2>{translate('client.component.paymentMethodsForm.header')}</h2>
           </header>
           <table className="table table-payment-info">
             <colgroup>
@@ -86,10 +87,10 @@ class PaymentMethodsForm extends React.Component { // eslint-disable-line react/
             </colgroup>
             <thead>
               <tr>
-                <th onClick={this.sortBy} data-sort="brand" className={(this.props.paginationOptions.activeSort === 'brand') ? this.props.paginationOptions.activeDirection : ''}>CARD TYPE <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="name" className={(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}>NAME ON CARD <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="last4" className={(this.props.paginationOptions.activeSort === 'last4') ? this.props.paginationOptions.activeDirection : ''}>LAST 4 DIGITS ON CARD <i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="expDate" className={(this.props.paginationOptions.activeSort === 'expDate') ? this.props.paginationOptions.activeDirection : ''}>EXPIRATION DATE <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="brand" className={(this.props.paginationOptions.activeSort === 'brand') ? this.props.paginationOptions.activeDirection : ''}>{translate('client.component.paymentMethodsForm.titleType')} <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="name" className={(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}>{translate('client.component.paymentMethodsForm.titleName')} <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="last4" className={(this.props.paginationOptions.activeSort === 'last4') ? this.props.paginationOptions.activeDirection : ''}>{translate('client.component.paymentMethodsForm.titleLastDigits')} <i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="expDate" className={(this.props.paginationOptions.activeSort === 'expDate') ? this.props.paginationOptions.activeDirection : ''}>{translate('client.component.paymentMethodsForm.titleExpiration')} <i className="caret-arrow" /></th>
                 <th></th>
               </tr>
             </thead>

@@ -4,6 +4,16 @@
     "common.layout.placeholder.selectfilter": "Select Filter",
     "common.layout.placeholder.search": "Search",
 
+    "client.component.paymentMethodsForm.header": "MANAGE PAYMENT METHODS",
+    "client.component.paymentMethodsForm.titleType": "card type",
+    "client.component.paymentMethodsForm.titleName": "name on card",
+    "client.component.paymentMethodsForm.titleLastDigits": "last 4 digits on card",
+    "client.component.paymentMethodsForm.titleExpiration": "expiration date",
+
+    "client.component.cardItem.buttonRemove": "Remove",
+    "client.component.cardItem.toastrSuccess": "Success! You have removed your card.",
+    "client.component.cardItem.toastrDefaultError": "Something went wrong while submitting your request.",
+
     "client.component.receiptsTable.date": "Date",
     "client.component.receiptsTable.siteName": "Site name",
     "client.component.receiptsTable.invoiceNumber": "Invoice number",
@@ -46,6 +56,11 @@
     "client.component.profileImageForm.changeImageToastrError": "Something went wrong!",
 
     "client.page.profile.mainHeading": "profile",
+
+    "client.page.paymentInformation.header": "payment information",
+    "client.page.paymentInformation.newCard": "+ add new card",
+    "client.page.paymentInformation.manyCardsError": "Error! Too many cards on file.",
+    "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
 
@@ -136,7 +151,6 @@
     "container.page.callcenter.heading.meetings": "Meeetings",
     "container.page.callcenter.heading.calendar": "Calendar",
     "container.page.callcenter.btn.filters": "Filters",
-
 
     "corporate.page.privacyPolicy.header": "privacy policy",
     "corporate.page.privacyPolicy.headerText": "StudyKIK respects your privacy and will never sell or trade personal information provided on this Website. Maintaining trust is paramount to us.",
