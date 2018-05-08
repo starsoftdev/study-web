@@ -13,30 +13,31 @@ import InfiniteScroll from 'react-infinite-scroller';
 import Money from '../../components/Money';
 import Checkbox from '../../components/Input/Checkbox';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 
 const headers = [
   {
-    text: 'Date',
+    text: translate('client.component.receiptsTable.date'),
     sort: 'created',
   },
   {
-    text: 'Site name',
+    text: translate('client.component.receiptsTable.siteName'),
     sort: 'site_name',
   },
   {
-    text: 'Invoice number',
+    text: translate('client.component.receiptsTable.invoiceNumber'),
     sort: 'invoice_id',
   },
   {
-    text: 'Protocol number',
+    text: translate('client.component.receiptsTable.protocolNumber'),
     sort: 'protocol_number',
   },
   {
-    text: 'Payment type',
+    text: translate('client.component.receiptsTable.paymentType'),
     sort: 'payment_type',
   },
   {
-    text: 'Total',
+    text: translate('client.component.receiptsTable.total'),
     sort: 'total',
   },
 ];
@@ -289,7 +290,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             <td><span>{siteName}</span></td>
             <td>{invoiceIdLink}</td>
             <td>{receipt.protocol_number || ''}</td>
-            <td>{receipt.isPayByCheck ? 'Check' : 'Card'}</td>
+            <td>{receipt.isPayByCheck ? translate('client.component.receiptsTable.check') : translate('client.component.receiptsTable.card')}</td>
             <td><Money value={receipt.total / 100} className="price" /></td>
           </tr>
         );
