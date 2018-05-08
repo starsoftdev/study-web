@@ -4,6 +4,7 @@ import { take, put, fork, cancel, call } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
 import request from '../../utils/request';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   proposalsReceived,
@@ -64,7 +65,7 @@ export function* getProposals() {
 
       yield put(proposalsReceived(resultArr, hasMore, page));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'We encountered an error loading proposals. Please try again later.');
+      const errorMessage = get(err, 'message', translate('portals.component.proposalsTable.loadProposalsToastrError'));
       toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -85,9 +86,9 @@ export function* createPdf() {
 
       const response = yield call(request, requestURL, params);
       yield put(pdfCreated(response));
-      toastr.success('', 'Success! DPF created.');
+      toastr.success('', translate('portals.component.proposalsTable.createProposalPdfToastrSuccess'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('portals.component.proposalsTable.createProposalPdfToastrError'));
       toastr.error('', errorMessage);
       if (payload.cb && typeof payload.cb === 'function') {
         payload.cb(err, null);
@@ -127,7 +128,7 @@ export function* getPdf() {
         }
       });
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('portals.component.proposalsTable.getProposalPdfToastrError'));
       toastr.error('', errorMessage);
       payload.cb(err, null);
       if (err.status === 401) {
@@ -152,7 +153,7 @@ export function* showPdf() {
       const response = yield call(request, requestURL, params);
       window.open(response.url, '_blank');
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('portals.component.proposalsTable.showProposalPdfToastrError'));
       toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
