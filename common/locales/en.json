@@ -10,6 +10,8 @@
     "client.component.receiptsTable.protocolNumber": "Protocol number",
     "client.component.receiptsTable.paymentType": "Payment type",
     "client.component.receiptsTable.total": "Total",
+    "client.component.receiptsTable.check": "Check",
+    "client.component.receiptsTable.card": "Card",
 
     "client.component.profileForm.profileImg": "profile image",
     "client.component.profileForm.profileEmail": "email",
