@@ -77,7 +77,7 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
 
   showCreditCardModal() {
     if (this.props.creditCards.details && this.props.creditCards.details.data && this.props.creditCards.details.data.length >= 10) {
-      toastr.error('', translate('corporate.page.paymentInformation.manyCardsError'));
+      toastr.error('', translate('client.page.paymentInformation.manyCardsError'));
       return;
     }
     this.setState({ showAddCreditCardModal: true });
@@ -102,11 +102,11 @@ export class PaymentInformationPage extends React.Component { // eslint-disable-
         <div className="container-fluid">
           <Helmet title="Payment Information - StudyKIK" />
           <section className="payment-information">
-            <h2 className="main-heading">{translate('corporate.page.paymentInformation.header')}</h2>
+            <h2 className="main-heading">{translate('client.page.paymentInformation.header')}</h2>
 
             <div>
               <div className="btn-block text-right">
-                <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>{translate('corporate.page.paymentInformation.newCard')}</a>
+                <a className="btn btn-primary lightbox-opener" onClick={this.showCreditCardModal}>{translate('client.page.paymentInformation.newCard')}</a>
               </div>
               <AddCreditCardModal addCreditCard={this.onSaveCard} showModal={this.state.showAddCreditCardModal} closeModal={this.closeAddCredtCardModal} />
             </div>
