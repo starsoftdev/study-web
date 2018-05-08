@@ -83,6 +83,10 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
     const countries = [
       {
+        name: translate('common.countryName.au'),
+        id: 'au',
+      },
+      {
         name: translate('common.countryName.br'),
         id: 'br',
       },
