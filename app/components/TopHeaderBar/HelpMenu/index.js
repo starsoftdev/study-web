@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
 import { Link } from 'react-router';
+import { translate } from '../../../../common/utilities/localization';
+
 class HelpMenu extends React.Component {
 
   constructor(props) {
@@ -34,8 +36,8 @@ class HelpMenu extends React.Component {
         <div className={`help-menu ${HelpMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/app/help-support" onClick={() => this.handleClickOutside()}>Help and Support</Link></li>
-              <li><Link to="/app/tutorials" onClick={() => this.handleClickOutside()}>Tutorials</Link></li>
+              <li><Link to="/app/help-support" onClick={() => this.handleClickOutside()}>{translate('portals.component.topHeaderBar.helpMenu.helpSupport')}</Link></li>
+              <li><Link to="/app/tutorials" onClick={() => this.handleClickOutside()}>{translate('portals.component.topHeaderBar.helpMenu.tutorials')}</Link></li>
             </ul>
           </div>
         </div>
