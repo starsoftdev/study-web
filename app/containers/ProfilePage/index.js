@@ -70,7 +70,7 @@ export class ProfilePage extends React.Component { // eslint-disable-line react/
       <div className="container-fluid">
         <Helmet title="Profile - StudyKIK" />
         <section>
-          <h2 className="main-heading">{translate('corporate.page.profile.mainHeading')}</h2>
+          <h2 className="main-heading">{translate('client.page.profile.mainHeading')}</h2>
           <div className="row profile form-study">
 
             <div className="col-xs-6 form-holder">
