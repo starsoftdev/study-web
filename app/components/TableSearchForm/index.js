@@ -14,6 +14,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'ProposalForm';
 @reduxForm({ form: formName })
@@ -83,7 +84,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
-      const format = 'MMM D, YYYY';
+      const format = translate('portals.component.tableSearchForm.dateMask');
       if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
         return (
           <span className="time">
@@ -101,7 +102,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
   }
 
   render() {
-    const siteLocations = [{ name: 'All', value: '0' }].concat(this.props.siteLocations);
+    const siteLocations = [{ name: translate('portals.component.tableSearchForm.allLabel'), value: '0' }].concat(this.props.siteLocations);
     const { currentUser } = this.props;
     const state = this.state;
 
@@ -122,13 +123,13 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <button className={`btn btn-primary pull-right ${this.props.downloadBtnDisabled ? 'disabled' : ''}`} onClick={this.createPdf}>
-              <i className="icomoon-icon_download" /> DOWNLOAD
+              <i className="icomoon-icon_download" /> {translate('portals.component.tableSearchForm.downloadBtn')}
             </button>
           </div>
 
           <div className="col pull-right">
             <a className="btn btn-primary lightbox-opener" onClick={this.showPopup}>
-              <i className="icomoon-icon_calendar" /> DATE RANGE
+              <i className="icomoon-icon_calendar" /> {translate('portals.component.tableSearchForm.dateRangeBtn')}
             </a>
           </div>
         </div>
@@ -143,7 +144,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
                 component={Input}
                 id="search"
                 name="search"
-                placeholder="Search"
+                placeholder={translate('portals.component.tableSearchForm.searchPlaceholder')}
                 onChange={(event) => this.props.search(event, 'search')}
               />
             </div>
@@ -152,7 +153,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
             <Field
               name="site"
               component={ReactSelect}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.component.tableSearchForm.sitePlaceholder')}
               options={siteLocations}
               selectedValue={defaultValue || undefined}
               className="field"
@@ -171,7 +172,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Date Range</Modal.Title>
+            <Modal.Title>{translate('portals.component.tableSearchForm.dateRangeModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.hidePopup}>
               <i className="icomoon-icon_close" />
             </a>
@@ -191,7 +192,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
                 <div className="btn-block text-right">
                   {this.renderDateFooter()}
                   <Button onClick={this.changeRange}>
-                    Submit
+                    {translate('portals.component.tableSearchForm.submitBtn')}
                   </Button>
                 </div>
               </div>
