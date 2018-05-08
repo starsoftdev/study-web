@@ -22,7 +22,7 @@ class AddCreditCardModal extends React.Component { // eslint-disable-line react/
     return (
       <Modal dialogComponentClass={CenteredModal} show={this.props.showModal} onHide={this.props.closeModal}>
         <Modal.Header>
-          <Modal.Title>{translate('corporate.page.paymentInformation.header')}</Modal.Title>
+          <Modal.Title>{translate('portals.component.addCreditCardModal.modalTitle')}</Modal.Title>
           <a className="lightbox-close close" onClick={this.props.closeModal}>
             <i className="icomoon-icon_close" />
           </a>

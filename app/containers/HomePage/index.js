@@ -29,6 +29,7 @@ import SearchProtocolsForm from './SearchProtocolsForm';
 import ProtocolsList from './ProtocolsList';
 import StudiesList from '../../components/StudiesList';
 import { ACTIVE_STATUS_VALUE } from './constants';
+import { translate } from '../../../common/utilities/localization';
 
 export class HomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -140,7 +141,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const bDisabled = purchasable ? null : true;
     return (
       <div className="home-page">
-        <Helmet title="Home - StudyKIK" />
+        <Helmet title={translate('portals.page.homePage.helmetTitle')} />
         {userRoleType === 'client' &&
           (
           <div className="container-fluid">
@@ -154,7 +155,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
                 initialValues={{ status: ACTIVE_STATUS_VALUE }}
               />
               <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
-                + List New Study
+                {translate('portals.page.homePage.listNewStudyBtn')}
               </button>
             </div>
             <div className="table-holder form-group">
@@ -170,8 +171,6 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
               <SponsorDashboard location={this.props.location} />
               <div className="search-studies-panel clearfix form-group">
                 <SearchProtocolsForm onSubmit={this.searchProtocols} />
-                {/* <Link to="/app/add-credits" className="btn btn-primary btn-list-new-study pull-right"><i className="icomoon-icon_creditcard" /> Add Credits</Link> */}
-                {/* <Link to="/app/list-new-study" className="btn btn-primary btn-list-new-study pull-right">+ List New Protocol</Link> */}
               </div>
               <ProtocolsList
                 loadProtocols={this.loadProtocols}

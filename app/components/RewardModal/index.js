@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import { find } from 'lodash';
+import { translate } from '../../../common/utilities/localization';
 
 import CenteredModal from '../../components/CenteredModal/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -94,12 +95,19 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
     if (selectedSite && selectedSite !== '0') {
       const siteDetail = find(this.props.sites, { id: selectedSite });
       return (
-        <label htmlFor="select-rewards" className="text-capitalize">{siteDetail.name} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></label>
+        <label
+          htmlFor="select-rewards" className="text-capitalize"
+          dangerouslySetInnerHTML={{ __html: translate('portals.component.rewardModal.hasKIKs', { site: siteDetail.name, total: `${rewardsBalance[selectedSite]}` }) }}
+        />
       );
     }
 
     return (
-      <label htmlFor="select-rewards" className="text-capitalize"><strong>{rewardsBalance[0]} Total KIKs</strong></label>
+      <label htmlFor="select-rewards" className="text-capitalize">
+        <strong>
+          {rewardsBalance[0]} {translate('portals.component.rewardModal.totalKIKs')}
+        </strong>
+      </label>
     );
   }
 
@@ -118,7 +126,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>SELECT REWARD</Modal.Title>
+            <Modal.Title>{translate('portals.component.rewardModal.modalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closeModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -131,7 +139,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                     <Field
                       name="siteId"
                       component={ReactSelect}
-                      placeholder="Select Site Location"
+                      placeholder={translate('portals.component.rewardModal.sitePlaceholder')}
                       options={this.props.siteLocations}
                       className="field"
                     />
@@ -162,7 +170,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                         value="1"
                         checked={this.state.card === '1'}
                       />
-                      <div className="text">75 KIKs = $25 Starbucks Gift Card</div>
+                      <div className="text">{translate('portals.component.rewardModal.KIKsOption1')}</div>
                     </label>
                   </li>
                   <li>
@@ -175,7 +183,7 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                         value="2"
                         checked={this.state.card === '2'}
                       />
-                      <div className="text">225 KIKs = $75 Amazon Gift Card</div>
+                      <div className="text">{translate('portals.component.rewardModal.KIKsOption2')}</div>
                     </label>
                   </li>
                   <li>
@@ -188,12 +196,12 @@ class RewardModal extends React.Component { // eslint-disable-line react/prefer-
                         value="3"
                         checked={this.state.card === '3'}
                       />
-                      <div className="text"> 1,797 KIKs = $1,797 StudyKIK Platinum Listing</div>
+                      <div className="text">{translate('portals.component.rewardModal.KIKsOption3')}</div>
                     </label>
                   </li>
                 </ul>
                 <div className="btn-block text-right">
-                  <a className="lightbox-close btn btn-primary" onClick={handleSubmit}>Redeem</a>
+                  <a className="lightbox-close btn btn-primary" onClick={handleSubmit}>{translate('portals.component.rewardModal.redeemBtn')}</a>
                 </div>
               </div>
             </div>

@@ -362,11 +362,11 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
     let isEmpty = true;
 
-    _.forEach(filters, (filter, key) => {
+    _.forEach(filters, (filter, k) => {
       const initFilter = _.cloneDeep(filter);
-      if (key !== 'search' && key !== 'percentage' && key !== 'campaign' && key !== 'source' && key !== 'nearbyStudies' && key !== 'address') {
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'nearbyStudies' && k !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
-        filters[key] = withoutAll;
+        filters[k] = withoutAll;
       }
 
       if (!_.isEmpty(initFilter)) {
