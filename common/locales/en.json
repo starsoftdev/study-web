@@ -368,6 +368,10 @@
     "portals.component.editStudyForm.renderEmailsList.receiveEmailNotification": "RECEIVE EMAIL NOTIFICATION",
     "portals.component.editStudyForm.renderEmailsList.addEmailNotification": "Add Email Notification",
 
+    "portals.component.emailTutorialSlider.previousBtn": "Previous",
+    "portals.component.emailTutorialSlider.nextBtn": "Next",
+    "portals.component.emailTutorialSlider.finishBtn": "Finish",
+
     "portals.component.studyAdForm.maxSizeExceededToastrError": "Error! The image size is too large. The maximum supported size is 2000x2000 pixels.",
     "portals.component.studyAdForm.updateBtn": "update",
     "portals.component.studyAdForm.zoom": "Zoom:",
@@ -543,6 +547,20 @@
     "portals.page.notificationsPage.fetchNotificationToastrError": "Something went wrong while fetching notifications",
 
     "portals.page.proposals.pageTitle": "PROPOSALS",
+
+    "portals.page.videoPage.pageTitle": "Tutorials",
+    "portals.page.videoPage.homepage": "Homepage",
+    "portals.page.videoPage.profile": "Profile",
+    "portals.page.videoPage.sitesAndUsers": "Sites and Users",
+    "portals.page.videoPage.viewPatients": "View Patients",
+    "portals.page.videoPage.renewStudy": "Renew a Study",
+    "portals.page.videoPage.upgradeStudy": "Upgrade a Study",
+    "portals.page.videoPage.pms": "Patient messaging suite",
+    "portals.page.videoPage.patientDb": "Patient Database",
+    "portals.page.videoPage.calendar": "Calendar",
+    "portals.page.videoPage.irbAd": "IRB Ad",
+    "portals.page.videoPage.proposal": "Proposal",
+    "portals.page.videoPage.emailCredits": "Email Credits",
 
 
     "portals.client.component.homePage.dashboard.title1": "PATIENT <br /> SIGN UPS",

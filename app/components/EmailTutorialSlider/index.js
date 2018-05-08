@@ -7,6 +7,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import _ from 'lodash';
+import { translate } from '../../../common/utilities/localization';
 
 import img1 from '../../assets/images/email_tutorial_1.png';
 import img2 from '../../assets/images/email_tutorial_2.png';
@@ -59,7 +60,7 @@ class EmailTutorialSlider extends React.Component { // eslint-disable-line react
         <div className="nav">
           <div className="row">
             <div className="col-xs-4 text-left">
-              { step > 0 && <a className="lightbox-close btn btn-gray-outline" onClick={handlePrev}>Previous</a> }
+              { step > 0 && <a className="lightbox-close btn btn-gray-outline" onClick={handlePrev}>{translate('portals.component.emailTutorialSlider.previousBtn')}</a> }
             </div>
             <div className="col-xs-4 text-center dotnav">
               <ul className="dotnav-dots">
@@ -72,7 +73,9 @@ class EmailTutorialSlider extends React.Component { // eslint-disable-line react
             {
               (!this.props.noFinishButton || step < this.images.length - 1) && (
                 <div className="col-xs-4 text-right">
-                  <a className="lightbox-close btn btn-primary" onClick={handleNext}>{ step < this.images.length - 1 ? 'Next' : 'Finish'}</a>
+                  <a className="lightbox-close btn btn-primary" onClick={handleNext}>
+                    { step < this.images.length - 1 ? translate('portals.component.emailTutorialSlider.nextBtn') : translate('portals.component.emailTutorialSlider.finishBtn')}
+                  </a>
                 </div>
               )
             }
