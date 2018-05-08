@@ -41,10 +41,10 @@ export function* changePassword() {
       const response = yield call(request, requestURL, params);
 
       yield put(passwordChanged(response));
-      toastr.success('', translate('corporate.page.profile.changePasswordForm.changePasswordToastrSuccess'));
+      toastr.success('', translate('client.component.changePasswordForm.changePasswordToastrSuccess'));
       yield put(logout());
     } catch (err) {
-      const errorMessage = get(err, 'message', translate('corporate.page.profile.changePasswordForm.changePasswordToastrError'));
+      const errorMessage = get(err, 'message', translate('client.component.changePasswordForm.changePasswordToastrError'));
       toastr.error('', errorMessage);
       yield put(passwordChangingError(err));
       if (err.status === 401) {
@@ -70,10 +70,10 @@ export function* changeImage() {
       };
       const response = yield call(request, requestURL, params);
       yield put(imageChanged(response));
-      toastr.success('', translate('corporate.page.profile.profileImageForm.changeImageToastrSuccess'));
+      toastr.success('', translate('client.component.profileImageForm.changeImageToastrSuccess'));
     } catch (err) {
       yield put(imageChangingError(err));
-      const errorMessage = get(err, 'message', translate('corporate.page.profile.profileImageForm.changeImageToastrError'));
+      const errorMessage = get(err, 'message', translate('client.component.profileImageForm.changeImageToastrError'));
       toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
