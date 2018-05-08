@@ -37,11 +37,6 @@ export default class AddNewCardForm extends Component { // eslint-disable-line r
   render() {
     const { savedCard, handleSubmit } = this.props;
 
-    const localeMonthOptions = monthOptions.map(month => ({
-      value: month.value,
-      label: translate(`corporate.page.paymentInformation.addNewCardForm.moth${month.label}`),
-    }));
-
     return (
       <form className="form-add-new-card fs-hide" onSubmit={handleSubmit}>
         <div className="add-new-card scroll-holder jcf--scrollable">
@@ -96,7 +91,7 @@ export default class AddNewCardForm extends Component { // eslint-disable-line r
                     name="expirationMonth"
                     component={ReactSelect}
                     placeholder={translate('portals.component.addNewCardForm.monthPlaceholder')}
-                    options={localeMonthOptions}
+                    options={monthOptions}
                     disabled={savedCard.saving}
                   />
                 </div>

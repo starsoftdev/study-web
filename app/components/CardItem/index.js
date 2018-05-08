@@ -81,7 +81,7 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
             <button className="btn btn-primary btn-remove-card pull-right" onClick={this.removeItem} disabled={isRemoving}>
               {isRemoving
                 ? <span></span>
-                : <span>{translate('corporate.page.paymentInformation.cardItem.buttonRemove')}</span>
+                : <span>{translate('client.component.cardItem.buttonRemove')}</span>
               }
             </button>
           </div>

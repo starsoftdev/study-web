@@ -451,10 +451,10 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('', translate('corporate.page.paymentInformation.cardItem.toastrSuccess'));
+      toastr.success('', translate('client.component.cardItem.toastrSuccess'));
       yield put(cardDeleted(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', translate('corporate.page.paymentInformation.cardItem.toastrDefaultError'));
+      const errorMessage = get(err, 'message', translate('client.component.cardItem.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(cardDeletingError(err));
     }
