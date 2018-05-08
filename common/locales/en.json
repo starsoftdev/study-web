@@ -299,7 +299,7 @@
     "corporate.page.trials.getProposalModal.toastrSuccess": "Thank you for submitting your information.",
     "corporate.page.trials.getProposalModal.toastrError": "All fields required.",
     "corporate.page.trials.getProposalModal.toastrDefaultError": "Something went wrong while submitting your request.",
-  
+
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
     "portals.component.addCreditsModal.toastrErrorTitle": "Error!",
@@ -399,6 +399,17 @@
     "portals.component.globalPMSModal.messageItem.startMessage": "This patient is able to receive text messages.",
     "portals.component.globalPMSModal.messageItem.dateMask": "M/DD/YYYY [at] h:mm:ss A",
 
+    "portals.component.proposalsTable.dateColumn": "Date",
+    "portals.component.proposalsTable.siteColumn": "Site name",
+    "portals.component.proposalsTable.proposalColumn": "Proposal number",
+    "portals.component.proposalsTable.protocolColumn": "Protocol number",
+    "portals.component.proposalsTable.totalColumn": "Total",
+    "portals.component.proposalsTable.dateMask": "MM/DD/YY",
+    "portals.component.proposalsTable.loadProposalsToastrError": "We encountered an error loading proposals. Please try again later.",
+    "portals.component.proposalsTable.createProposalPdfToastrSuccess": "Success! DPF created.",
+    "portals.component.proposalsTable.createProposalPdfToastrError": "Something went wrong!",
+    "portals.component.proposalsTable.getProposalPdfToastrError": "Something went wrong!",
+    "portals.component.proposalsTable.showProposalPdfToastrError": "Something went wrong!",
 
     "portals.component.renderLeads.utm": "UTM #",
     "portals.component.renderLeads.mediaUrl": "Media Url #",
@@ -475,6 +486,15 @@
     "portals.component.sideNavBar.badges": "Badges",
     "portals.component.sideNavBar.siteManager": "StudyKIK Site Manager",
 
+    "portals.component.tableSearchForm.downloadBtn": "DOWNLOAD",
+    "portals.component.tableSearchForm.dateRangeBtn": "DATE RANGE",
+    "portals.component.tableSearchForm.searchPlaceholder": "Search",
+    "portals.component.tableSearchForm.sitePlaceholder": "Select Site Location",
+    "portals.component.tableSearchForm.allLabel": "All",
+    "portals.component.tableSearchForm.dateRangeModalTitle": "Date Range",
+    "portals.component.tableSearchForm.submitBtn": "Submit",
+    "portals.component.tableSearchForm.dateMask": "MMM D, YYYY",
+
     "portals.component.topHeaderBar.comingSoon": "Coming Soon",
     "portals.component.topHeaderBar.textCredits": "Text Credits",
     "portals.component.topHeaderBar.emailCredits": "Email Credits",
@@ -510,6 +530,9 @@
 
     "portals.page.homePage.helmetTitle": "Home - StudyKIK",
     "portals.page.homePage.listNewStudyBtn": "+ List New Study",
+
+    "portals.page.proposals.pageTitle": "PROPOSALS",
+
 
     "portals.client.component.homePage.dashboard.title1": "PATIENT <br /> SIGN UPS",
     "portals.client.component.homePage.dashboard.title2": "PATIENT<br /> MESSAGES",
