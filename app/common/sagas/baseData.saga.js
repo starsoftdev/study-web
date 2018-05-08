@@ -320,7 +320,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', 'Error! Invalid coupon code.');
+      toastr.error('', translate('portals.component.shoppingCartForm.invalidCouponToastrError'));
     }
   }
 }
@@ -381,13 +381,13 @@ export function* redeemWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Redeem Reward', 'The request has been submitted successfully');
+      toastr.success(translate('portals.component.rewardModal.redeemToastrSuccessTitle'), translate('portals.component.rewardModal.redeemToastrSuccessMessage'));
       yield put(redeemSuccess(response));
 
       // Clear the form values
       yield put(reset('rewardRedemptions'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.rewardModal.redeemToastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(redeemError(err));
     }
@@ -415,8 +415,8 @@ export function* saveCardWatcher() {
     const cards = yield select(selectCards());
 
     if (cards && cards.details && cards.details.data.length >= 10) {
-      toastr.error('', translate('corporate.page.paymentInformation.manyCardsError'));
-      yield put(cardSavingError(new Error(translate('corporate.page.paymentInformation.manyCardsError'))));
+      toastr.error('', translate('portals.component.addNewCardForm.saveCardToastrError'));
+      yield put(cardSavingError(new Error('Error! Too many cards on file.')));
     } else {
       try {
         const requestURL = `${API_URL}/clients/${clientId}/payments/${customerId}/saveCard`;
@@ -425,10 +425,10 @@ export function* saveCardWatcher() {
           body: JSON.stringify(cardData),
         };
         const response = yield call(request, requestURL, options);
-        toastr.success('', translate('corporate.page.paymentInformation.addNewCardForm.toastrSuccess'));
+        toastr.success('', translate('portals.component.addNewCardForm.saveCardToastrSuccess'));
         yield put(cardSaved(response));
       } catch (err) {
-        const errorMessage = get(err, 'message', translate('corporate.page.paymentInformation.addNewCardForm.toastrDefaultError'));
+        const errorMessage = get(err, 'message', translate('portals.component.addNewCardForm.saveCardToastrOtherError'));
         toastr.error('', errorMessage);
         yield put(cardSavingError(err));
       }
@@ -774,8 +774,8 @@ export function* saveSiteWatcher() {
       let options = null;
       data.client_id = clientId;
 
-      let messageHeader = 'Edit Site Location';
-      let message = 'The site location has been updated successfully!';
+      let messageHeader = translate('portals.component.editSiteForm.editSiteSuccessToastrTitle');
+      let message = translate('portals.component.editSiteForm.editSiteSuccessToastrMessage');
       if (id) {
         requestURL = `${API_URL}/sites/${id}/updateSite`;
         options = {
@@ -783,8 +783,8 @@ export function* saveSiteWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add Site Location';
-        message = 'Site Location added successfully!';
+        messageHeader = translate('portals.component.editSiteForm.addSiteSuccessToastrTitle');
+        message = translate('portals.component.editSiteForm.addSiteSuccessToastrMessage');
         requestURL = `${API_URL}/sites`;
         options = {
           method: 'POST',
@@ -797,7 +797,7 @@ export function* saveSiteWatcher() {
       toastr.success(messageHeader, message);
       yield put(siteSaved(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.editSiteForm.errorToastrMessage'));
       toastr.error('', errorMessage);
       yield put(siteSavingError(err));
     }
