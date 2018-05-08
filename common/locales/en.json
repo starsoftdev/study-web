@@ -55,6 +55,17 @@
     "client.component.profileImageForm.changeImageToastrSuccess": "You have successfully updated your profile image!",
     "client.component.profileImageForm.changeImageToastrError": "Something went wrong!",
 
+    "client.component.helpAndSupportForm.labelSiteLocation": "site location",
+    "client.component.helpAndSupportForm.placeholderSiteLocation": "Select Site Location",
+    "client.component.helpAndSupportForm.labelName": "name",
+    "client.component.helpAndSupportForm.placeholderFirstName": "First Name",
+    "client.component.helpAndSupportForm.placeholderLastName": "Last Name",
+    "client.component.helpAndSupportForm.labelEmail": "email",
+    "client.component.helpAndSupportForm.labelMessage": "message",
+    "client.component.helpAndSupportForm.submitBtn": "submit",
+    "client.component.helpAndSupportForm.toastrThankYouMessage": "Thank you for submitting your request.",
+    "client.component.helpAndSupportForm.toastrErrorMessage": "Something went wrong while submitting your request.",
+
     "client.page.profile.mainHeading": "profile",
 
     "client.page.paymentInformation.header": "payment information",
@@ -63,6 +74,9 @@
     "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
+
+    "client.page.helpSupport.header": "Help and Support",
+    "client.page.helpSupport.friendlyStaff": "To speak with one of our friendly staff members, please contact us.",
 
     "corporate.component.footer.copyright": "© StudyKIK ${year}. All rights reserved.",
     "corporate.component.footer.privacy": "Privacy Policy",
