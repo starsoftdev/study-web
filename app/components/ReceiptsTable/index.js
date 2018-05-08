@@ -290,7 +290,7 @@ class ReceiptsTable extends Component { // eslint-disable-line react/prefer-stat
             <td><span>{siteName}</span></td>
             <td>{invoiceIdLink}</td>
             <td>{receipt.protocol_number || ''}</td>
-            <td>{receipt.isPayByCheck ? 'Check' : 'Card'}</td>
+            <td>{receipt.isPayByCheck ? translate('client.component.receiptsTable.check') : translate('client.component.receiptsTable.card')}</td>
             <td><Money value={receipt.total / 100} className="price" /></td>
           </tr>
         );
