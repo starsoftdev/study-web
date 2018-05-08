@@ -13,30 +13,31 @@ import InfiniteScroll from 'react-infinite-scroller';
 import Money from '../../components/Money';
 import Checkbox from '../../components/Input/Checkbox';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 
 const headers = [
   {
-    text: 'Date',
+    text: translate('client.component.receiptsTable.date'),
     sort: 'created',
   },
   {
-    text: 'Site name',
+    text: translate('client.component.receiptsTable.siteName'),
     sort: 'site_name',
   },
   {
-    text: 'Invoice number',
+    text: translate('client.component.receiptsTable.invoiceNumber'),
     sort: 'invoice_id',
   },
   {
-    text: 'Protocol number',
+    text: translate('client.component.receiptsTable.protocolNumber'),
     sort: 'protocol_number',
   },
   {
-    text: 'Payment type',
+    text: translate('client.component.receiptsTable.paymentType'),
     sort: 'payment_type',
   },
   {
-    text: 'Total',
+    text: translate('client.component.receiptsTable.total'),
     sort: 'total',
   },
 ];
