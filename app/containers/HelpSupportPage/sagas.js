@@ -1,5 +1,5 @@
 
-// /* eslint-disable no-constant-condition, consistent-return */
+/* eslint-disable no-constant-condition, consistent-return */
 
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
@@ -8,6 +8,7 @@ import { reset } from 'redux-form';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   formSubmitted,
@@ -35,13 +36,13 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Thank you for submitting your request.');
+      toastr.success(translate('client.component.helpAndSupportForm.toastrThankYouMessage'));
       yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('helpAndSupport'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.helpAndSupportForm.toastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       if (err.status === 401) {
