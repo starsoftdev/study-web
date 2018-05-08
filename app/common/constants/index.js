@@ -26,17 +26,17 @@ export const CALL_TRACKING_PRICE = 24700;
 
 export const MONTH_OPTIONS = [
   { label: translate('common.constants.jan'), value: 1 },
-  { label: translate('common.constants.Feb'), value: 2 },
-  { label: translate('common.constants.Mar'), value: 3 },
-  { label: translate('common.constants.Apr'), value: 4 },
-  { label: translate('common.constants.May'), value: 5 },
-  { label: translate('common.constants.Jun'), value: 6 },
-  { label: translate('common.constants.Jul'), value: 7 },
-  { label: translate('common.constants.Aug'), value: 8 },
-  { label: translate('common.constants.Sep'), value: 9 },
-  { label: translate('common.constants.Oct'), value: 10 },
-  { label: translate('common.constants.Nov'), value: 11 },
-  { label: translate('common.constants.Dec'), value: 12 },
+  { label: translate('common.constants.feb'), value: 2 },
+  { label: translate('common.constants.mar'), value: 3 },
+  { label: translate('common.constants.apr'), value: 4 },
+  { label: translate('common.constants.may'), value: 5 },
+  { label: translate('common.constants.jun'), value: 6 },
+  { label: translate('common.constants.jul'), value: 7 },
+  { label: translate('common.constants.aug'), value: 8 },
+  { label: translate('common.constants.sep'), value: 9 },
+  { label: translate('common.constants.oct'), value: 10 },
+  { label: translate('common.constants.nov'), value: 11 },
+  { label: translate('common.constants.dec'), value: 12 },
 ];
 
 const thisYear = new Date().getFullYear();
