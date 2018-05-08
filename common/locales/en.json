@@ -503,6 +503,8 @@
     "portals.component.topHeaderBar.notificationBox.title": "NOTIFICATIONS",
     "portals.component.topHeaderBar.notificationBox.seeAll": "See All",
     "portals.component.topHeaderBar.notificationBox.dateMask": "MM/DD/YY [at] h:mm A",
+    "portals.component.topHeaderBar.notificationBox.fetchUnreadCountToastrError": "Something went wrong while fetching unreadNotificationsCount",
+    "portals.component.topHeaderBar.notificationBox.markReadToastrError": "Something went wrong marking notifications read",
 
     "portals.component.topHeaderBar.helpMenu.helpSupport": "Help and Support",
     "portals.component.topHeaderBar.helpMenu.tutorials": "Tutorials",
@@ -530,6 +532,15 @@
 
     "portals.page.homePage.helmetTitle": "Home - StudyKIK",
     "portals.page.homePage.listNewStudyBtn": "+ List New Study",
+
+    "portals.page.notificationsPage.pageTitle": "NOTIFICATIONS",
+    "portals.page.notificationsPage.tableTitle": "HISTORY",
+    "portals.page.notificationsPage.descriptionColumn": "DESCRIPTION",
+    "portals.page.notificationsPage.dateColumn": "DATE",
+    "portals.page.notificationsPage.timeColumn": "TIME",
+    "portals.page.notificationsPage.dateMask": "MM/DD/YY",
+    "portals.page.notificationsPage.timeMask": "hh:mm A",
+    "portals.page.notificationsPage.fetchNotificationToastrError": "Something went wrong while fetching notifications",
 
     "portals.page.proposals.pageTitle": "PROPOSALS",
 
