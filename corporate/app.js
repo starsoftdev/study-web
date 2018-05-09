@@ -88,6 +88,7 @@ const routes = {
     { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
+    { path: '/at', component: Home },
     { path: '/au', component: Home },
     { path: '/br', component: Home },
     { path: '/ca', component: Home },
