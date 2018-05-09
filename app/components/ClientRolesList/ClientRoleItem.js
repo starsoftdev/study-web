@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectSelectedUser } from '../../containers/App/selectors';
 import { fetchUser } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 
 class ClientRoleItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -42,25 +43,25 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
     const isSuperAdmin = (name === 'Super Admin');
 
     if (isSuperAdmin) {
-      accessStr = 'ADMIN';
+      accessStr = translate('client.component.clientRolesItem.accessAdmin');
       cEdit = true;
     } else if (canPurchase && canRedeemRewards) {
-      accessStr = 'ALL ACCESS';
+      accessStr = translate('client.component.clientRolesItem.accessAll');
       if (currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) {
         cEdit = true;
       }
     } else if (canPurchase && !canRedeemRewards) {
-      accessStr = 'PURCHASE';
+      accessStr = translate('client.component.clientRolesItem.accessPurchase');
       if (currentUser.roleForClient.canPurchase) {
         cEdit = true;
       }
     } else if (!canPurchase && canRedeemRewards) {
-      accessStr = 'REWARDS';
+      accessStr = translate('client.component.clientRolesItem.accessRewards');
       if (currentUser.roleForClient.canRedeemRewards) {
         cEdit = true;
       }
     } else {
-      accessStr = 'SITE LOCATION';
+      accessStr = translate('client.component.clientRolesItem.accessSiteLocation');
       if ((currentUser.roleForClient.canPurchase && currentUser.roleForClient.canRedeemRewards) ||
         (!currentUser.roleForClient.canPurchase && !currentUser.roleForClient.canRedeemRewards)) {
         cEdit = true;
@@ -88,7 +89,7 @@ class ClientRoleItem extends Component { // eslint-disable-line react/prefer-sta
             >
               {(this.currentUserIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Edit</span>
+                : <span>{translate('client.component.clientRolesItem.editBtn')}</span>
               }
             </button>
           }
