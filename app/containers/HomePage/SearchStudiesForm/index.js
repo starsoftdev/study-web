@@ -127,7 +127,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
             <Field
               name="status"
               component={ReactSelect}
-              placeholder={translate('portals.client.component.homePage.searchStudiesForm.statusPlaceHolder')}
+              placeholder={translate('portals.client.component.homePage.searchStudiesForm.statusPlaceholder')}
               options={statusOptions}
               onChange={(e) => this.performSearch(e, 'status')}
               disabled={clientSites.fetching || studies.fetching}
