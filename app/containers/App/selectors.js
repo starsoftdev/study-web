@@ -88,7 +88,10 @@ const selectValidSiteLocations = () => createSelector(
 
 const selectIndications = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.indications', [])
+  (substate) => {
+    const indications = get(substate, 'baseData.indications', []);
+    return indications.map(e => ({ ...e, name: translate(`common.indication.id${e.id}`) }));
+  }
 );
 
 const selectSources = () => createSelector(
