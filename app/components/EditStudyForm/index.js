@@ -16,6 +16,7 @@ import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../commo
 import { setEmailNotifications } from '../../containers/HomePage/actions';
 import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
 import StudyAdForm from '../../components/StudyAdForm';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   changeStudyAd,
@@ -435,7 +436,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Edit Information</Modal.Title>
+            <Modal.Title>{translate('portals.component.editStudyForm.modalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.handleCloseModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -448,7 +449,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                     <div className="edit-study form-fields">
                       <div className="field-row">
                         <strong className="label">
-                          <label>EXPOSURE LEVEL</label>
+                          <label>{translate('portals.component.editStudyForm.exposureLevelLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field
@@ -461,7 +462,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                       </div>
                       <div className="field-row">
                         <strong className="label required">
-                          <label>RECRUITMENT PHONE</label>
+                          <label>{translate('portals.component.editStudyForm.recruitmentPhoneLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field
@@ -474,7 +475,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                       </div>
                       <div className="field-row">
                         <strong className="label">
-                          <label>EMAIL NOTIFICATIONS</label>
+                          <label>{translate('portals.component.editStudyForm.emailNotificationsLabel')}</label>
                         </strong>
                         <div className="field">
                           {this.renderEmailList()}
@@ -482,7 +483,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                       </div>
                       <div className="field-row">
                         <strong className="label">
-                          <label>STUDY AD</label>
+                          <label>{translate('portals.component.editStudyForm.studyAdLabel')}</label>
                         </strong>
                         <div className="field">
                           { fileSrc &&
@@ -492,13 +493,9 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                             className="btn btn-gray upload-btn"
                             onClick={this.openStudyAdModal}
                           >
-                            update study ad
+                            {translate('portals.component.editStudyForm.updateAdBtn')}
                           </a>
                           {/* TODO need to put an error message up so that people know to upload a file. */}
-                          {/* formError
-                          ? <div className="has-error">{formErrors.studyAd}</div>
-                          : null
-                          */}
                         </div>
                       </div>
 
@@ -510,7 +507,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
                         >
                           {editedStudy.submitting
                             ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                            : <span>Update</span>
+                            : <span>{translate('portals.component.editStudyForm.updateBtn')}</span>
                           }
                         </button>
                       </div>
@@ -529,7 +526,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
+            <Modal.Title>{translate('portals.component.editStudyForm.addEmailNotificationModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -547,7 +544,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>UPDATE STUDY AD</Modal.Title>
+            <Modal.Title>{translate('portals.component.editStudyForm.updateStudyAdModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeStudyAdModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -569,7 +566,7 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Image Preview</Modal.Title>
+            <Modal.Title>{translate('portals.component.editStudyForm.imagePreviewModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeStudyPreviewModal}>
               <i className="icomoon-icon_close" />
             </a>

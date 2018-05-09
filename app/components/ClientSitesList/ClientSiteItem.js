@@ -6,6 +6,7 @@ import { fetchSite, fetchUser } from '../../containers/App/actions';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { formatTimezone } from '../../utils/time';
+import { translate } from '../../../common/utilities/localization';
 
 class ClientSiteItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -97,7 +98,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
     return (
       <td className="assigned-users">
         <div className="toggle-assigned-users">
-          <span>ASSIGNED USERS ({allAssignedUsers.length ? allAssignedUsers.length : 0})</span>
+          <span>{translate('client.component.clientSiteItem.assignedUsers')} ({allAssignedUsers.length ? allAssignedUsers.length : 0})</span>
           {(this.state.assignedUsersCollapsed && !shouldBeOpened)
             ? <a className="btn toggle toggle-plus" onClick={this.toggleAssignedUsers} />
             : <a className="btn toggle toggle-minus" onClick={this.toggleAssignedUsers} />
@@ -134,7 +135,7 @@ class ClientSiteItem extends Component { // eslint-disable-line react/prefer-sta
           <button type="button" className="btn btn-primary btn-edit-site pull-right" onClick={this.editSite} disabled={(this.currentSiteIsBeingFetched() || this.props.bDisabled)}>
             {(this.currentSiteIsBeingFetched())
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-              : <span>Edit</span>
+              : <span>{translate('client.component.clientSiteItem.editBtn')}</span>
             }
           </button>
         </td>

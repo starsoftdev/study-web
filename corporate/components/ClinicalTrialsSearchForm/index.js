@@ -83,47 +83,63 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
 
     const countries = [
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.br'),
+        name: translate('common.countryName.au'),
+        id: 'au',
+      },
+      {
+        name: translate('common.countryName.br'),
         id: 'br',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.ca'),
+        name: translate('common.countryName.ca'),
         id: 'ca',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.cz'),
+        name: translate('common.countryName.cz'),
         id: 'cz',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.fr'),
+        name: translate('common.countryName.fr'),
         id: 'fr',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.de'),
+        name: translate('common.countryName.de'),
         id: 'de',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.hu'),
+        name: translate('common.countryName.hu'),
         id: 'hu',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.it'),
+        name: translate('common.countryName.it'),
         id: 'it',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.jp'),
+        name: translate('common.countryName.jp'),
         id: 'jp',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.pl'),
+        name: translate('common.countryName.mx'),
+        id: 'mx',
+      },
+      {
+        name: translate('common.countryName.nz'),
+        id: 'nz',
+      },
+      {
+        name: translate('common.countryName.pl'),
         id: 'pl',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.uk'),
+        name: translate('common.countryName.pr'),
+        id: 'pr',
+      },
+      {
+        name: translate('common.countryName.uk'),
         id: 'uk',
       },
       {
-        name: translate('corporate.page.home.clinicalTrialsSearchForm.countriesDropdownList.us'),
+        name: translate('common.countryName.us'),
         id: 'us',
       },
     ];
@@ -171,6 +187,9 @@ export class ClinicalTrialsSearchForm extends React.Component { // eslint-disabl
                         }
                         if (individual) {
                           path += `/indication/${this.props.indication}`;
+                        }
+                        if (!path) {
+                          path = '/'; // fallback to the US page
                         }
                         window.location.href = path;
                       });

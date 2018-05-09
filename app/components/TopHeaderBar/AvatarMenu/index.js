@@ -7,6 +7,7 @@ import enhanceWithClickOutside from 'react-click-outside';
 import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 import FeedbackWidget from '../../../../common/utilities/feedback';
 import { selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../../containers/App/selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 
 class AvatarMenu extends React.Component {
@@ -70,16 +71,16 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><a onClick={this.handleCustomerFeedbackClick}>Customer Feedback</a></li>
-              <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>PROFILE</Link></li>
-              <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>PAYMENT INFORMATION</Link></li>
+              <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.profile')}</Link></li>
+              <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.paymentInfo')}</Link></li>
               { userRoleType === 'client' &&
-                <li><Link to="/app/receipts" onClick={this.handleClickOutside}>RECEIPTS</Link></li>
+                <li><Link to="/app/receipts" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.receipts')}</Link></li>
               }
               { userRoleType === 'client' &&
-                <li><Link to="/app/proposals" onClick={this.handleClickOutside}>PROPOSALS</Link></li>
+                <li><Link to="/app/proposals" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.proposals')}</Link></li>
               }
               { userRoleType !== 'client' &&
-                <li><Link to="/app/receipts-project-agreements" onClick={this.handleClickOutside}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
+                <li><Link to="/app/receipts-project-agreements" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.receiptsProjectAgreements')}</Link></li>
               }
               <a
                 onClick={() => {
@@ -87,7 +88,7 @@ class AvatarMenu extends React.Component {
                   this.handleClickOutside();
                 }}
               >
-                LOG OUT
+                {translate('portals.component.topHeaderBar.avatarMenu.logOut')}
               </a>
             </ul>
           </div>
