@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
+import { translate } from '../../../../common/utilities/localization';
 import RewardListItem from './RewardListItem';
 
 class RewardsList extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -79,7 +80,7 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
     return (
       <div>
         <header>
-          <h2>REWARDS HISTORY</h2>
+          <h2>{translate('client.component.rewardsList.header')}</h2>
         </header>
         <table className="table">
           <colgroup>
@@ -91,11 +92,21 @@ class RewardsList extends Component { // eslint-disable-line react/prefer-statel
           </colgroup>
           <thead>
             <tr>
-              <th onClick={this.sortBy} data-sort="description" className={(this.props.paginationOptions.activeSort === 'description') ? this.props.paginationOptions.activeDirection : ''}>DESCRIPTION <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>DATE <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>TIME <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>AMOUNT <i className="caret-arrow" /></th>
-              <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>BALANCE<i className="caret-arrow" /></th>
+              <th onClick={this.sortBy} data-sort="description" className={(this.props.paginationOptions.activeSort === 'description') ? this.props.paginationOptions.activeDirection : ''}>
+                {translate('client.component.rewardsList.tableDescription')} <i className="caret-arrow" />
+              </th>
+              <th onClick={this.sortBy} data-sort="date" className={(this.props.paginationOptions.activeSort === 'date') ? this.props.paginationOptions.activeDirection : ''}>
+                {translate('client.component.rewardsList.tableDate')} <i className="caret-arrow" />
+              </th>
+              <th onClick={this.sortBy} data-sort="time" className={(this.props.paginationOptions.activeSort === 'time') ? this.props.paginationOptions.activeDirection : ''}>
+                {translate('client.component.rewardsList.tableTime')} <i className="caret-arrow" />
+              </th>
+              <th onClick={this.sortBy} data-sort="points" className={(this.props.paginationOptions.activeSort === 'points') ? this.props.paginationOptions.activeDirection : ''}>
+                {translate('client.component.rewardsList.tableAmount')} <i className="caret-arrow" />
+              </th>
+              <th onClick={this.sortBy} data-sort="balance" className={(this.props.paginationOptions.activeSort === 'balance') ? this.props.paginationOptions.activeDirection : ''}>
+                {translate('client.component.rewardsList.tableBalance')}<i className="caret-arrow" />
+              </th>
             </tr>
           </thead>
           <tbody>
