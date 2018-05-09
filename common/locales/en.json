@@ -672,6 +672,7 @@
     "portals.component.sideNavBar.rewards": "Rewards",
     "portals.component.sideNavBar.badges": "Badges",
     "portals.component.sideNavBar.siteManager": "StudyKIK Site Manager",
+    "portals.component.sideNavBar.customerFeedback": "Customer Feedback",
 
     "portals.component.studyAdForm.maxSizeExceededToastrError": "Error! The image size is too large. The maximum supported size is 2000x2000 pixels.",
     "portals.component.studyAdForm.updateBtn": "update",
@@ -701,9 +702,11 @@
     "portals.component.topHeaderBar.notificationBox.fetchUnreadCountToastrError": "Something went wrong while fetching unreadNotificationsCount",
     "portals.component.topHeaderBar.notificationBox.markReadToastrError": "Something went wrong marking notifications read",
 
+    "portals.component.topHeaderBar.helpMenu.customerFeedback": "Customer Feedback",
     "portals.component.topHeaderBar.helpMenu.helpSupport": "Help and Support",
     "portals.component.topHeaderBar.helpMenu.tutorials": "Tutorials",
 
+    "portals.component.topHeaderBar.avatarMenu.customerFeedback": "CUSTOMER FEEDBACK",
     "portals.component.topHeaderBar.avatarMenu.profile": "PROFILE",
     "portals.component.topHeaderBar.avatarMenu.paymentInfo": "PAYMENT INFORMATION",
     "portals.component.topHeaderBar.avatarMenu.receipts": "RECEIPTS",
