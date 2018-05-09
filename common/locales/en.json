@@ -504,6 +504,24 @@
     "portals.component.globalPMSModal.messageItem.startMessage": "This patient is able to receive text messages.",
     "portals.component.globalPMSModal.messageItem.dateMask": "M/DD/YYYY [at] h:mm:ss A",
 
+    "portals.component.irbAdCreationForm.siteLabel": "SITE LOCATION",
+    "portals.component.irbAdCreationForm.sitePlaceholder": "Select Site Location",
+    "portals.component.irbAdCreationForm.indicationLabel": "INDICATION",
+    "portals.component.irbAdCreationForm.indicationPlaceholder": "Select Indication",
+    "portals.component.irbAdCreationForm.irbNameLabel": "IRB NAME",
+    "portals.component.irbAdCreationForm.irbEmailLabel": "IRB EMAIL",
+    "portals.component.irbAdCreationForm.compensationLabel": "COMPENSATION AMOUNT",
+    "portals.component.irbAdCreationForm.clinicalTrialsLinkLabel": "CLINICALTRIALS.GOV LINK",
+    "portals.component.irbAdCreationForm.uploadBlindedProtocolLabel": "UPLOAD BLINDED PROTOCOL",
+    "portals.component.irbAdCreationForm.browseBtn": "Browse",
+    "portals.component.irbAdCreationForm.browseBtnHoverText": "Attach File",
+    "portals.component.irbAdCreationForm.notesLabel": "NOTES",
+    "portals.component.irbAdCreationForm.fetchIrbAdCreationErrorToastr": "Something went wrong while fetching the irb ad creation",
+    "portals.component.irbAdCreationForm.fetchIrbProductListErrorToastr": "Can not fetch IrbAd Product List",
+    "portals.component.irbAdCreationForm.submitSuccessToastrTitle": "IRB Ad Creation",
+    "portals.component.irbAdCreationForm.submitSuccessToastrMessage": "The request has been submitted successfully",
+    "portals.component.irbAdCreationForm.submitErrorToastrMessage": "Something went wrong while submitting your request",
+
     "portals.component.listNewStudyForm.addSiteOption": "Add Site Location",
     "portals.component.listNewStudyForm.siteLabel": "Site Location",
     "portals.component.listNewStudyForm.sitePlaceholder": "Select Site Location",
@@ -678,6 +696,9 @@
     "portals.page.homePage.helmetTitle": "Home - StudyKIK",
     "portals.page.homePage.listNewStudyBtn": "+ List New Study",
 
+    "portals.page.irbAdCreationPage.helmetTitle": "Order IRB Ad Creation - StudyKIK",
+    "portals.page.irbAdCreationPage.pageTitle": "ORDER IRB AD CREATION",
+
     "portals.page.listNewStudyPage.helmetTitle": "List New Study - StudyKIK",
     "portals.page.listNewStudyPage.pageTitle": "LIST NEW STUDY",
     "portals.page.listNewStudyPage.fileFormatToastrError": "Error! The selected file is in the wrong format.",
@@ -847,6 +868,8 @@
     "common.exposureLevel.id4": "Platinum",
     "common.exposureLevel.id5": "Diamond",
     "common.exposureLevel.id6": "Ruby",
+
+    "common.irbAdProductList.id1": "IRB Ad Creation",
 
     "common.indication.id1": "Abnormal Bleeding",
     "common.indication.id2": "Acid Reflux",
