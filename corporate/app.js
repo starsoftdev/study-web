@@ -100,6 +100,7 @@ const routes = {
     { path: '/uk', component: Home },
     { path: '/hu', component: Home },
     { path: '/pr', component: Home },
+    { path: '/mx', component: Home },
     { path: '/nz', component: Home },
     { path: '/404', component: NotFound },
     { path: '*', component: NotFound, onEnter: redirect404 },
