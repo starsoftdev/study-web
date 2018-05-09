@@ -120,6 +120,19 @@
     "client.component.referForm.referToastrErrorMessage": "Something went wrong while submitting your request",
     "client.component.referForm.btnValue": "submit",
 
+    "client.component.rewardForm.placeholderSiteLocation": "Select Site Location",
+
+    "client.component.rewardsList.header": "REWARDS HISTORY",
+    "client.component.rewardsList.tableDescription": "description",
+    "client.component.rewardsList.tableDate": "date",
+    "client.component.rewardsList.tableTime": "time",
+    "client.component.rewardsList.tableAmount": "amount",
+    "client.component.rewardsList.tableBalance": "balance",
+
+    "client.component.rewardsItem.Kiks": "KIKs",
+    "client.component.rewardsItem.nowHas": "now has",
+    "client.component.rewardsItem.earned": "earned",
+
     "client.page.profile.mainHeading": "profile",
 
     "client.page.paymentInformation.header": "payment information",
@@ -128,6 +141,25 @@
     "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
+
+    "client.page.rewards.header": "rewards",
+    "client.page.rewards.total": "Total KIKs",
+    "client.page.rewards.amountKiks": "${siteName} Has <strong>${amount} KIKs</strong>",
+    "client.page.rewards.redeemBtn": "Redeem",
+    "client.page.rewards.redeemBtnHover": "Redeem Now",
+    "client.page.rewards.howTo": "HOW TO <br /> EARN KIKs",
+    "client.page.rewards.fillOutTitle": "FILL OUT ENROLLMENT DATA!",
+    "client.page.rewards.fillOutText": "For every study that you update your patient notes and status on weekly, you earn points",
+    "client.page.rewards.listingTitle": "Listing<br /> Studies!",
+    "client.page.rewards.listingText": "Every time you list a study, you earn points back",
+    "client.page.rewards.referralsTitle": "Referrals!",
+    "client.page.rewards.referralsText": "We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study or higher  with StudyKIK",
+    "client.page.rewards.levelRuby": "RUBY LISTING",
+    "client.page.rewards.levelDiamond": "DIAMOND LISTING",
+    "client.page.rewards.levelPlatinum": "PLATINUM LISTING",
+    "client.page.rewards.levelGold": "GOLD LISTING",
+    "client.page.rewards.referSponsor": "REFER A SPONSOR",
+    "client.page.rewards.referSite": "REFER A SITE",
 
     "client.page.refer.header": "refer",
     "client.page.refer.title": "Refer a new site<br /> or Sponsor/CRO<br /> project manager by <br /> entering their contact!",
