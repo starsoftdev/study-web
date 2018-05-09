@@ -120,7 +120,7 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
               <h2>{translate('portals.component.sideNavBar.siteManager')}</h2>
               <div className="area">
                 <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
-                <p className="feedback-link" onClick={this.handleCustomerFeedbackClick}>Customer Feedback</p>
+                <p className="feedback-link" onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.sideNavBar.customerFeedback')}</p>
               </div>
             </div>
           }

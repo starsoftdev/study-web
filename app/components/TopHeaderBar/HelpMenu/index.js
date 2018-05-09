@@ -54,7 +54,7 @@ class HelpMenu extends React.Component {
         <div className={`help-menu ${HelpMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><a onClick={this.handleCustomerFeedbackClick}>Customer Feedback</a></li>
+              <li><a onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.topHeaderBar.helpMenu.customerFeedback')}</a></li>
               <li><Link to="/app/help-support" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.helpMenu.helpSupport')}</Link></li>
               <li><Link to="/app/tutorials" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.helpMenu.tutorials')}</Link></li>
             </ul>
