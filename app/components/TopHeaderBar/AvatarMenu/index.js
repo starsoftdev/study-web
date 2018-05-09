@@ -1,16 +1,22 @@
-import React, { PropTypes } from 'react';
-import classNames from 'classnames';
+import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
-
-
 import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
+import FeedbackWidget from '../../../../common/utilities/feedback';
+import { selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../../containers/App/selectors';
+
 
 class AvatarMenu extends React.Component {
   static propTypes = {
-    handleLogoutClick: PropTypes.func.isRequired,
-    currentUser: PropTypes.any,
-    userRoleType: PropTypes.string,
+    handleLogoutClick: React.PropTypes.func.isRequired,
+    currentUser: React.PropTypes.any,
+    currentUserEmail: React.PropTypes.string,
+    currentUserFullName: React.PropTypes.string,
+    currentUserId: React.Proptypes.number,
+    userRoleType: React.PropTypes.string,
   };
 
   constructor(props) {
@@ -18,18 +24,26 @@ class AvatarMenu extends React.Component {
     this.state = {
       avatarMenuOpen: false,
     };
-    this.toggleAvatarMenuHandle = this.toggleAvatarMenuHandle.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
-  toggleAvatarMenuHandle() {
+  toggleAvatarMenuHandle = () => {
     this.setState({
       avatarMenuOpen: !this.state.avatarMenuOpen,
     });
   }
 
-  handleClickOutside() {
+  handleClickOutside = () => {
     this.setState({ avatarMenuOpen: false });
+  }
+
+  handleCustomerFeedbackClick = () => {
+    const feedbackWidget = new FeedbackWidget();
+    feedbackWidget.init({
+      clickTarget: 'AVATAR_MENU',
+      email: this.props.currentUserEmail,
+      name: this.props.currentUserFullName,
+      userId: this.props.currentUserId,
+    });
   }
 
   render() {
@@ -55,16 +69,17 @@ class AvatarMenu extends React.Component {
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/app/me/profile" onClick={() => this.handleClickOutside()}>PROFILE</Link></li>
-              <li className={paymentClassName}><Link to="/app/payment-information" onClick={() => this.handleClickOutside()}>PAYMENT INFORMATION</Link></li>
+              <li><a onClick={this.handleCustomerFeedbackClick}>Customer Feedback</a></li>
+              <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>PROFILE</Link></li>
+              <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>PAYMENT INFORMATION</Link></li>
               { userRoleType === 'client' &&
-                <li><Link to="/app/receipts" onClick={() => this.handleClickOutside()}>RECEIPTS</Link></li>
+                <li><Link to="/app/receipts" onClick={this.handleClickOutside}>RECEIPTS</Link></li>
               }
               { userRoleType === 'client' &&
-                <li><Link to="/app/proposals" onClick={() => this.handleClickOutside()}>PROPOSALS</Link></li>
+                <li><Link to="/app/proposals" onClick={this.handleClickOutside}>PROPOSALS</Link></li>
               }
               { userRoleType !== 'client' &&
-                <li><Link to="/app/receipts-project-agreements" onClick={() => this.handleClickOutside()}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
+                <li><Link to="/app/receipts-project-agreements" onClick={this.handleClickOutside}>RECEIPTS & PROJECT AGREEMENTS</Link></li>
               }
               <a
                 onClick={() => {
@@ -82,4 +97,13 @@ class AvatarMenu extends React.Component {
   }
 }
 
-export default enhanceWithClickOutside(AvatarMenu);
+const mapStateToProps = createStructuredSelector({
+  currentUserEmail: selectCurrentUserEmail(),
+  currentUserFullName: selectCurrentUserFullName(),
+  currentUserId: selectCurrentUserId(),
+});
+
+const mapDispatchToProps = () => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(enhanceWithClickOutside(AvatarMenu));
