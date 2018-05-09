@@ -66,6 +66,46 @@
     "client.component.helpAndSupportForm.toastrThankYouMessage": "Thank you for submitting your request.",
     "client.component.helpAndSupportForm.toastrErrorMessage": "Something went wrong while submitting your request.",
 
+    "client.component.editUserForm.labelPurchase": "purchase",
+    "client.component.editUserForm.labelRewards": "rewards",
+    "client.component.editUserForm.labelName": "name",
+    "client.component.editUserForm.labelEmail": "email",
+    "client.component.editUserForm.labelSiteLocation": "site location",
+    "client.component.editUserForm.placeholderSiteLocation": "Select Site Location",
+    "client.component.editUserForm.placeholderFirstName": "First Name",
+    "client.component.editUserForm.placeholderLastName": "Last Name",
+    "client.component.editUserForm.btnUpdate": "Update",
+    "client.component.editUserForm.btnSubmit": "Submit",
+    "client.component.editUserForm.toastrHeaderEditUser": "Edit User",
+    "client.component.editUserForm.toastrMessageEditUser": "The user has been updated successfully!",
+    "client.component.editUserForm.toastrHeaderAddUser": "Add User",
+    "client.component.editUserForm.toastrMessageAddUser": "User added successfully!",
+    "client.component.editUserForm.toastrErrorMessage": "Something went wrong while submitting your request.",
+
+    "client.component.clientRolesList.caption": "admins",
+    "client.component.clientRolesList.tableName": "name",
+    "client.component.clientRolesList.tableEmail": "email",
+    "client.component.clientRolesList.tableAccess": "access",
+    "client.component.clientRolesList.editUserModalTitle": "Edit User",
+
+    "client.component.clientRolesItem.editBtn": "Edit",
+    "client.component.clientRolesItem.accessAdmin": "ADMIN",
+    "client.component.clientRolesItem.accessAll": "ALL ACCESS",
+    "client.component.clientRolesItem.accessPurchase": "PURCHASE",
+    "client.component.clientRolesItem.accessRewards": "REWARDS",
+    "client.component.clientRolesItem.accessSiteLocation": "SITE LOCATION",
+
+    "client.component.clientSitesList.caption": "site locations",
+    "client.component.clientSitesList.tableName": "site name",
+    "client.component.clientSitesList.tablePhone": "site phone",
+    "client.component.clientSitesList.tableAddress": "site address",
+    "client.component.clientSitesList.tableTimeZone": "time zone",
+    "client.component.clientSitesList.editSiteLocationModalTitle": "Edit Site Location",
+    "client.component.clientSitesList.editUserModalTitle": "Edit User",
+
+    "client.component.clientSiteItem.assignedUsers": "ASSIGNED USERS",
+    "client.component.clientSiteItem.editBtn": "Edit",
+
     "client.page.profile.mainHeading": "profile",
 
     "client.page.paymentInformation.header": "payment information",
@@ -74,6 +114,15 @@
     "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
+
+    "client.page.sitesUsers.mainHeading": "manage sites / users",
+    "client.page.sitesUsers.placeholderSearch": "Search",
+    "client.page.sitesUsers.placeholderSiteLocation": "Select Site Location",
+    "client.page.sitesUsers.btnAddUser": "+ Add User",
+    "client.page.sitesUsers.btnAddSiteLocatio": "+ Add Site Location",
+    "client.page.sitesUsers.addUserModalTitle": "Add User",
+    "client.page.sitesUsers.addSiteLocationModalTitle": "Add Site Location",
+    "client.page.sitesUsers.siteLocationAllOption": "All",
 
     "client.page.helpSupport.header": "Help and Support",
     "client.page.helpSupport.friendlyStaff": "To speak with one of our friendly staff members, please contact us.",

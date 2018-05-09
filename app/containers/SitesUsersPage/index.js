@@ -23,6 +23,7 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 import { fetchClientSites, fetchClientRoles, saveSite, saveUser } from '../../containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'manageSiteUser';
 
@@ -217,7 +218,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       bDisabled = (currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin') ? null : true;
     }
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
+    siteOptions.unshift({ label: translate('client.page.sitesUsers.siteLocationAllOption'), value: '0' });
 
     if (currentUser.roleForClient) {
       if (currentUser.roleForClient.canPurchase) {
@@ -233,7 +234,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
       <div className="sites-users-page">
         <div className="container-fluid">
           <Helmet title="Manage Sites / Users - StudyKIK" />
-          <h2 className="main-heading">MANAGE SITES / USERS</h2>
+          <h2 className="main-heading">{translate('client.page.sitesUsers.mainHeading')}</h2>
           <div className="search-sites-users-panel form-group">
             <form action="#" className="form-search clearfix" onSubmit={this.handleSubmit}>
               <div className="fields-holder pull-left">
@@ -242,7 +243,13 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     <Button className="btn-enter" type="submit">
                       <i className="icomoon-icon_search2" />
                     </Button>
-                    <input name="query" onChange={this.handleUserQueryChange} type="text" className="form-control keyword-search" placeholder="Search" />
+                    <input
+                      name="query"
+                      onChange={this.handleUserQueryChange}
+                      type="text"
+                      className="form-control keyword-search"
+                      placeholder={translate('client.page.sitesUsers.placeholderSearch')}
+                    />
                   </div>
                 </div>
                 <div className="search-area pull-left">
@@ -250,7 +257,7 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                     <Field
                       name="siteLocation"
                       component={ReactSelect}
-                      placeholder="Select Site Location"
+                      placeholder={translate('client.page.sitesUsers.placeholderSiteLocation')}
                       options={siteOptions}
                       disabled={bDisabled}
                       className="field"
@@ -262,11 +269,11 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
               <section className="btns-area pull-right">
                 <div className="col pull-right">
                   <button type="button" className="btn btn-primary" onClick={this.openAddUserModal} disabled={bDisabled}>
-                    + Add User
+                    {translate('client.page.sitesUsers.btnAddUser')}
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
                     <Modal.Header>
-                      <Modal.Title>Add User</Modal.Title>
+                      <Modal.Title>{translate('client.page.sitesUsers.addUserModalTitle')}</Modal.Title>
                       <a className="lightbox-close close" onClick={this.closeAddUserModal}>
                         <i className="icomoon-icon_close" />
                       </a>
@@ -288,11 +295,11 @@ export class SitesUsersPage extends Component { // eslint-disable-line react/pre
                 </div>
                 <div className="col pull-right">
                   <button type="button" className="btn btn-primary" onClick={this.openAddSiteModal} disabled={bDisabled}>
-                    + Add Site Location
+                    {translate('client.page.sitesUsers.btnAddSiteLocatio')}
                   </button>
                   <Modal dialogComponentClass={CenteredModal} className="new-site" id="new-site" show={this.state.addSiteModalOpen} onHide={this.closeAddSiteModal}>
                     <Modal.Header>
-                      <Modal.Title>Add Site Location</Modal.Title>
+                      <Modal.Title>{translate('client.page.sitesUsers.addSiteLocationModalTitle')}</Modal.Title>
                       <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
                         <i className="icomoon-icon_close" />
                       </a>
