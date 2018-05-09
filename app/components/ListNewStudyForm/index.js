@@ -30,6 +30,7 @@ import {
 } from './selectors';
 import { addEmailNotificationUser } from '../../containers/App/actions';
 import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   hideAddEmailModal,
@@ -193,22 +194,23 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues, hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels, currentUser } = this.props;
+    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues,
+      hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels, currentUser } = this.props;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
       id: row.id,
       name: row.name,
     }));
-    siteLocations.push({ id: 'add-new-location', name: 'Add Site Location' });
+    siteLocations.push({ id: 'add-new-location', name: translate('portals.component.listNewStudyForm.addSiteOption') });
     return (
       <div className="form-study">
         <div className="form-fields">
           <div className="field-row">
-            <strong className="label required"><label>Site Location</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.siteLabel')}</label></strong>
             <Field
               name="siteLocation"
               component={ReactSelect}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.component.listNewStudyForm.sitePlaceholder')}
               options={siteLocations}
               className="field"
               onChange={this.handleSiteLocationChoose}
@@ -219,7 +221,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             if (formValues.siteLocation && formValues.siteLocation !== 'add-new-location') {
               return (
                 <div className="field-row label-top">
-                  <strong className="label"><label>EMAIL NOTIFICATIONS</label></strong>
+                  <strong className="label"><label>{translate('portals.component.listNewStudyForm.emailNotifications')}</label></strong>
                   <div className="field">
                     <div className="emails-list-holder">
                       <FieldArray
@@ -244,7 +246,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           })()}
 
           <div className="field-row">
-            <strong className="label required"><label>RECRUITMENT PHONE</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.phoneLabel')}</label></strong>
             <Field
               name="recruitmentPhone"
               component={Input}
@@ -255,20 +257,25 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Indication</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.indicationLabel')}</label></strong>
             <Field
               name="indication_id"
               component={ReactSelect}
-              placeholder="Select Indication"
+              placeholder={translate('portals.component.listNewStudyForm.indicationPlaceholder')}
               options={indications}
               className="field"
             />
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD STUDY AD</label></strong>
+            <strong className="label"><label htmlFor="clinicaltrialGovLink">{translate('portals.component.listNewStudyForm.adLabel')}</label></strong>
             <div className="field">
-              <label htmlFor="study_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn" />
+              <label
+                htmlFor="study_file"
+                data-text={translate('portals.component.listNewStudyForm.browseBtn')}
+                data-hover-text={translate('portals.component.listNewStudyForm.browseBtnHover')}
+                className="btn btn-gray upload-btn"
+              />
               <Field
                 id="study_file"
                 name="file"
@@ -281,7 +288,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>PROTOCOL</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.protocolLabel')}</label></strong>
             <Field
               name="protocolNumber"
               component={Input}
@@ -291,7 +298,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>SPONSOR NAME</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.sponsorLabel')}</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -301,7 +308,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.listNewStudyForm.sponsorEmailLabel')}</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -311,7 +318,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Name</label></strong>
+            <strong className="label"><label>{translate('portals.component.listNewStudyForm.croNameLabel')}</label></strong>
             <Field
               name="croContactName"
               component={Input}
@@ -321,7 +328,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.listNewStudyForm.croEmailLabel')}</label></strong>
             <Field
               name="croContactEmail"
               component={Input}
@@ -331,7 +338,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>IRB Name</label></strong>
+            <strong className="label"><label>{translate('portals.component.listNewStudyForm.irbNameLabel')}</label></strong>
             <Field
               name="irbName"
               component={Input}
@@ -341,7 +348,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>IRB Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.listNewStudyForm.irbEmailLabel')}</label></strong>
             <Field
               name="irbEmail"
               component={Input}
@@ -351,22 +358,22 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Exposure Level</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.levelLabel')}</label></strong>
             <Field
               name="exposureLevel"
               component={ReactSelect}
-              placeholder="Select Exposure Level"
+              placeholder={translate('portals.component.listNewStudyForm.levelPlaceholder')}
               options={studyLevels}
               className="field"
             />
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Campaign Length</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.campaignLengthLabel')}</label></strong>
             <Field
               name="campaignLength"
               component={ReactSelect}
-              placeholder="Select Campaign Length"
+              placeholder={translate('portals.component.listNewStudyForm.campaignLengthPlaceholder')}
               options={CAMPAIGN_LENGTH_LIST}
               className="field"
             />
@@ -376,7 +383,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             if (formValues.campaignLength === 1) {
               return (
                 <div className="field-row">
-                  <strong className="label"><label>CONDENSE TO 2 WEEKS</label></strong>
+                  <strong className="label"><label>{translate('portals.component.listNewStudyForm.condense2WeeksLabel')}</label></strong>
                   <Field
                     name="condenseTwoWeeks"
                     component={Toggle}
@@ -389,8 +396,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           })()}
 
           <div className="field-row">
-            <strong className="label"><label>Patient qualification <br />
-              Suite: $897 </label>
+            <strong className="label">
+              <labe dangerouslySetInnerHTML={{ __html: `${translate('portals.component.listNewStudyForm.pqsLabel')} $897` }}l />
             </strong>
             <Field
               name="patientQualificationSuite"
@@ -402,7 +409,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           {
             <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
+                <strong className="label"><label>{translate('portals.component.listNewStudyForm.mediaTrackingLabel')} $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}
@@ -421,7 +428,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           }
 
           <div className="field-row">
-            <strong className="label required"><label>Start Date</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.startDateLabel')}</label></strong>
             <Field
               id="start-date"
               name="startDate"
@@ -433,7 +440,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row textarea">
-            <strong className="label"><label htmlFor="notes">NOTES</label></strong>
+            <strong className="label"><label htmlFor="notes">{translate('portals.component.listNewStudyForm.notesLabel')}</label></strong>
             <div className="field">
               <Field
                 name="description"
@@ -446,7 +453,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
         <Modal dialogComponentClass={CenteredModal} show={this.props.listNewStudyState.showAddSiteLocationModal} onHide={this.closeAddSiteModal}>
           <Modal.Header>
-            <Modal.Title>ADD SITE LOCATION</Modal.Title>
+            <Modal.Title>{translate('portals.component.listNewStudyForm.addSiteModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddSiteModal}>
               <i className="icomoon-icon_close" />
             </a>

@@ -899,7 +899,7 @@ export function* fetchIndicationLevelPriceWatcher() {
       const response = yield call(request, requestURL, params);
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
+      const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchLevelPriceErrorToastr'));
       toastr.error('', errorMessage);
       yield put(fetchIndicationLevelPriceError(err));
     }
@@ -967,7 +967,7 @@ export function* fetchClientAdminsWorker(action) {
 
     yield put(fetchClientAdminsSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
+    const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchClientAdminsToastrError'));
     toastr.error('', errorMessage);
     yield put(fetchClientAdminsError(err));
   }
