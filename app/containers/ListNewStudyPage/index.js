@@ -27,6 +27,7 @@ import { shoppingCartFields } from '../../components/ShoppingCartForm/validator'
 import { ComingSoon } from '../../components/ComingSoon';
 import { submitForm, hideSubmitFormModal, clearFormSubmissionData } from '../../containers/ListNewStudyPage/actions';
 import { selectListNewStudyPageDomain, selectFormSubmissionStatus, selectShowSubmitFormModal, selectIndicationLevelPrice, selectListNewStudyClientAdmins } from './selectors';
+import { translate } from '../../../common/utilities/localization';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 
@@ -132,7 +133,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     const { hasErrors, listNewStudyFormErrors, shoppingCartFormValues, shoppingCartFormError, touchNewStudy, touchShoppingCart } = this.props;
     if (hasErrors || shoppingCartFormError) {
       if (listNewStudyFormErrors && listNewStudyFormErrors.file) {
-        toastr.error('', 'Error! The selected file is in the wrong format.');
+        toastr.error('', translate('portals.page.listNewStudyPage.fileFormatToastrError'));
       }
       touchNewStudy();
       touchShoppingCart();
@@ -188,8 +189,9 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
 
     if (level && months && indicationLevelPrice) {
+      const levelLabel = translate(`common.exposureLevel.id${level.id}`);
       addOns.push({
-        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `2 Weeks ${level.type}` : `${months.label} ${level.type}`),
+        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `${translate('portals.page.listNewStudyPage.2weeks')} ${levelLabel}` : `${months.label} ${levelLabel}`),
         price: indicationLevelPrice,
         quantity: months.value,
         total: indicationLevelPrice * months.value,
@@ -198,7 +200,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     if (months && formValues.patientQualificationSuite) {
       addOns.push({
-        title: 'Patient Qualification Suite',
+        title: translate('portals.page.listNewStudyPage.pqs'),
         price: QUALIFICATION_SUITE_PRICE,
         quantity: months.value,
         total: QUALIFICATION_SUITE_PRICE * months.value,
@@ -207,7 +209,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
 
     if (formValues.callTracking) {
       addOns.push({
-        title: 'Media Tracking',
+        title: translate('portals.page.listNewStudyPage.mediaTracking'),
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -217,10 +219,10 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       <div>
         {(userRoleType === 'client' && purchasable) &&
           <StickyContainer className="container-fluid">
-            <Helmet title="List New Study - StudyKIK" />
+            <Helmet title={translate('portals.page.listNewStudyPage.helmetTitle')} />
             <section className="study-portal">
 
-              <h2 className="main-heading">LIST NEW STUDY</h2>
+              <h2 className="main-heading">{translate('portals.page.listNewStudyPage.pageTitle')}</h2>
 
               <div className="row form-study">
 
@@ -262,7 +264,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
               backdrop
             >
               <Modal.Header>
-                <Modal.Title>Processing payment</Modal.Title>
+                <Modal.Title>{translate('portals.page.listNewStudyPage.processPaymentModalTitle')}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 {(() => {
@@ -274,15 +276,15 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                   if (this.props.formSubmissionStatus.response) {
                     return (
                       <div className="text-center">
-                        <div className="study-submit-form-modal-text alert alert-success" role="alert">Study has been
-                          listed successfully.
+                        <div className="study-submit-form-modal-text alert alert-success" role="alert">
+                          {translate('portals.page.listNewStudyPage.listStudySuccessAlert')}
                         </div>
                         <button
                           onClick={this.goToStudyPage}
                           type="button"
                           className="study-submit-form-modal-button btn btn-success"
                         >
-                          Go To Study Page
+                          {translate('portals.page.listNewStudyPage.goToStudyBtn')}
                         </button>
                       </div>
                     );
@@ -294,14 +296,14 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
                           className="study-submit-form-modal-text alert alert-danger"
                           role="alert"
                         >
-                          {`Error occurred while submitting your request. ${this.props.formSubmissionStatus.error.message}`}
+                          {`${translate('portals.page.listNewStudyPage.listStudyErrorAlert')} ${this.props.formSubmissionStatus.error.message}`}
                         </div>
                         <button
                           onClick={this.closeSubmitFormModal}
                           type="button"
                           className="study-submit-form-modal-button btn btn-danger"
                         >
-                          OK
+                          {translate('portals.page.listNewStudyPage.okBtn')}
                         </button>
                       </div>
                     );
