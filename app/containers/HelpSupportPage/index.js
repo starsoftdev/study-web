@@ -27,6 +27,7 @@ import {
 
 import manImage from '../../assets/images/man.svg';
 import shadowImage from '../../assets/images/shadow.png';
+import { translate } from '../../../common/utilities/localization';
 
 export class HelpSupportPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -72,16 +73,12 @@ export class HelpSupportPage extends React.Component { // eslint-disable-line re
       <div className="container-fluid helpAndSupportPage">
         <Helmet title="Help and Support - StudyKIK" />
         <section className="study-portal">
-
-          <h2 className="main-heading">Help and Support</h2>
-
+          <h2 className="main-heading">{translate('client.page.helpSupport.header')}</h2>
           <div className="row form-study">
             <div className="refer-info pull-right">
               <div className="refer-holder">
                 <div className="textbox text-center pull-left">
-                  <strong className="title help-support-info">
-                    To speak with one of our friendly staff members, please contact us.
-                  </strong>
+                  <strong className="title help-support-info">{translate('client.page.helpSupport.friendlyStaff')}</strong>
                 </div>
                 <div className="img-holder pull-left">
                   <img src={manImage} alt="" width="256" />
@@ -89,7 +86,6 @@ export class HelpSupportPage extends React.Component { // eslint-disable-line re
                 </div>
               </div>
             </div>
-
             <div className="form-holder ovh">
               <HelpAndSupportForm siteLocations={siteLocations} onSubmit={this.onSubmitForm} currentUser={currentUser} />
             </div>

@@ -15,6 +15,7 @@ import { clearSelectedSite, clearSelectedUser,
   deleteUser, saveSite, saveUser } from '../../containers/App/actions';
 import ClientSiteItem from './ClientSiteItem';
 import { formatTimezone } from '../../utils/time';
+import { translate } from '../../../common/utilities/localization';
 
 class ClientSitesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -190,7 +191,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
       <ClientSiteItem {...item} key={index} userFilter={userFilterQuery} bDisabled={bDisabled} />
     ));
     const siteOptions = map(sortedClientSites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
+    siteOptions.unshift({ label: translate('client.page.sitesUsers.siteLocationAllOption'), value: '0' });
 
     const editSiteModalShown = this.editSiteModalShouldBeShown();
     const editUserModalShown = this.editUserModalShouldBeShown();
@@ -207,23 +208,23 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
           <div className="col-sm-12">
             <div className="table-responsive">
               <table className="table">
-                <caption>SITE LOCATIONS</caption>
+                <caption>{translate('client.component.clientSitesList.caption')}</caption>
                 <thead>
                   <tr>
                     <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
-                      <span>SITE NAME</span>
+                      <span>{translate('client.component.clientSitesList.tableName')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('phoneNumber')} onClick={() => { this.clickSortHandler('phoneNumber'); }}>
-                      <span>SITE PHONE</span>
+                      <span>{translate('client.component.clientSitesList.tablePhone')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('address')} onClick={() => { this.clickSortHandler('address'); }}>
-                      <span>SITE ADDRESS</span>
+                      <span>{translate('client.component.clientSitesList.tableAddress')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('timezone')} onClick={() => { this.clickSortHandler('timezone'); }}>
-                      <span>TIME ZONE</span>
+                      <span>{translate('client.component.clientSitesList.tableTimeZone')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th></th>
@@ -237,7 +238,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
             </div>
             <Modal dialogComponentClass={CenteredModal} className="edit-site" id="edit-site" show={editSiteModalShown} onHide={this.closeEditSiteModal}>
               <Modal.Header>
-                <Modal.Title>Edit Site Location</Modal.Title>
+                <Modal.Title>{translate('client.component.clientSitesList.editSiteLocationModalTitle')}</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeEditSiteModal}>
                   <i className="icomoon-icon_close" />
                 </a>
@@ -254,7 +255,7 @@ class ClientSitesList extends Component { // eslint-disable-line react/prefer-st
             </Modal>
             <Modal dialogComponentClass={CenteredModal} className="edit-user" id="edit-user" show={editUserModalShown} onHide={this.closeEditUserModal}>
               <Modal.Header>
-                <Modal.Title>Edit User</Modal.Title>
+                <Modal.Title>{translate('client.component.clientSitesList.editUserModalTitle')}</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeEditUserModal}>
                   <i className="icomoon-icon_close" />
                 </a>

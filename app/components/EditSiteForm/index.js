@@ -15,6 +15,8 @@ import { selectEditSiteFormValues } from './selectors';
 import formValidator from './validator';
 import { getTimezone } from '../../containers/App/actions';
 import { formatTimezone } from '../../utils/time';
+import { translate } from '../../../common/utilities/localization';
+
 const formName = 'editSite';
 
 const mapStateToProps = createStructuredSelector({
@@ -31,27 +33,27 @@ const mapDispatchToProps = (dispatch) => ({
 
 const toShortCode = country => {
   switch (country) {
-    case 'United States':
+    case translate('common.countryName.us'):
       return 'us';
-    case 'United Kingdom':
+    case translate('common.countryName.uk'):
       return 'uk';
-    case 'Brazil':
+    case translate('common.countryName.br'):
       return 'br';
-    case 'France':
+    case translate('common.countryName.fr'):
       return 'fr';
-    case 'Germany':
+    case translate('common.countryName.de'):
       return 'de';
-    case 'Hungary':
+    case translate('common.countryName.hu'):
       return 'hu';
-    case 'Italy':
+    case translate('common.countryName.it'):
       return 'it';
-    case 'Czech Republic':
+    case translate('common.countryName.cz'):
       return 'cz';
-    case 'Japan':
+    case translate('common.countryName.jp'):
       return 'jp';
-    case 'Poland':
+    case translate('common.countryName.pl'):
       return 'pl';
-    case 'Canada':
+    case translate('common.countryName.ca'):
       return 'ca';
     default:
       return 'us';
@@ -142,7 +144,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         if (!countryCode) {
           countryCode = _.find(val.types, (o) => (o === 'country'));
           if (countryCode) {
-            change('countryCode', val.short_name);
+            change('countryCode', val.short_name === 'GB' ? 'UK' : val.short_name);
           }
         }
         if (!postalCode) {
@@ -196,7 +198,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         <div className="edit-site form-fields">
           <div className="field-row">
             <strong className="label required">
-              <label>SITE NAME</label>
+              <label>{translate('portals.component.editSiteForm.nameLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -209,7 +211,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>SITE PHONE</label>
+              <label>{translate('portals.component.editSiteForm.phoneLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -223,7 +225,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>SITE ADDRESS</label>
+              <label>{translate('portals.component.editSiteForm.addressLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -238,7 +240,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>CITY</label>
+              <label>{translate('portals.component.editSiteForm.cityLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -251,7 +253,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>STATE / PROVINCE</label>
+              <label>{translate('portals.component.editSiteForm.stateLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -264,7 +266,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>COUNTRY</label>
+              <label>{translate('portals.component.editSiteForm.countryLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -277,7 +279,7 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label required">
-              <label>POSTAL CODE</label>
+              <label>{translate('portals.component.editSiteForm.postalCodeLabel')}</label>
             </strong>
             <div className="field">
               <Field
@@ -289,11 +291,11 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             </div>
           </div>
           <div className={classNames('field-row', { 'field-before-dst-label': (isDst) })}>
-            <strong className="label required"><label>Time Zone</label></strong>
+            <strong className="label required"><label>{translate('portals.component.editSiteForm.timezoneLabel')}</label></strong>
             <div className="field">
               <Field
                 name="timezone"
-                placeholder="Timezone"
+                placeholder={translate('portals.component.editSiteForm.timezonePlaceholder')}
                 component={Input}
                 type="text"
                 isDisabled
@@ -304,14 +306,14 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             (isDst === true) &&
             <div className="field-row">
               <strong className="label"><label>&nbsp;</label></strong>
-              <div className="field dst-label">This time zone currently observes daylight savings.</div>
+              <div className="field dst-label">{translate('portals.component.editSiteForm.timezoneInfo')}</div>
             </div>
           }
           <div className="btn-block text-right">
             <button type="submit" className="btn btn-default btn-add-row" disabled={submitButtonDisabled}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>{isEdit ? 'Update' : 'Submit'}</span>
+                : <span>{isEdit ? translate('portals.component.editSiteForm.updateBtn') : translate('portals.component.editSiteForm.submitBtn')}</span>
               }
             </button>
           </div>

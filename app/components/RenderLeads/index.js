@@ -15,6 +15,7 @@ import { selectSources } from '../../containers/App/selectors';
 
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
+import { translate } from '../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
@@ -151,8 +152,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             }
           }
 
-          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">UTM #{(index + 1)}</a> : `UTM #${(index + 1)}`;
-          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">Media Url #{(index + 1)}</a> : `Media Url #${(index + 1)}`;
+          const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">{translate('portals.component.renderLeads.utm')}{(index + 1)}</a> : `${translate('portals.component.renderLeads.utm')}${(index + 1)}`;
+          const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">{translate('portals.component.renderLeads.mediaUrl')}{(index + 1)}</a> : `${translate('portals.component.renderLeads.mediaUrl')}${(index + 1)}`;
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
@@ -161,13 +162,13 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
                 <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}>
-                  <label>Media Type #{(index + 1)}</label>
+                  <label>{translate('portals.component.renderLeads.mediaTypeLabel')}{(index + 1)}</label>
                 </strong>
                 <Field
                   name={`${lead}.source`}
                   component={ReactSelect}
                   objectValue
-                  placeholder="Select Source Type"
+                  placeholder={translate('portals.component.renderLeads.mediaTypePlaceholder')}
                   options={sourceOptions}
                   className="field"
                   disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
@@ -186,7 +187,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && (
                   <div className={classnames('field-row')}>
-                    <strong className="label required"><label>Media Name #{(index + 1)}</label></strong>
+                    <strong className="label required"><label>{translate('portals.component.renderLeads.mediaNameLabel')}{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.source_name`}
                       component={Input}
@@ -200,13 +201,13 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label"><label>Messaging Number #{(index + 1)}</label></strong>
+                    <strong className="label"><label>{translate('portals.component.renderLeads.messagingNumberLabel')}{(index + 1)}</label></strong>
                     <Field
                       className="field"
                       name={`${lead}.messagingNumber`}
                       component={ReactSelect}
-                      placeholder="Select Messaging Number"
-                      searchPlaceholder="Search"
+                      placeholder={translate('portals.component.renderLeads.messagingNumberPlaceholder')}
+                      searchPlaceholder={translate('portals.component.renderLeads.searchPlaceholder')}
                       searchable
                       objectValue
                       options={messagingNumbersOptions}
@@ -218,7 +219,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && this.props.isAdmin && (
                   <div className={classnames('field-row')}>
-                    <strong className="label"><label>Redirect Number #{(index + 1)}</label></strong>
+                    <strong className="label"><label>{translate('portals.component.renderLeads.redirectNumberLabel')}{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.recruitmentPhone`}
                       component={Input}
@@ -246,7 +247,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               {
                 showName && needToShowMessagingNumber && (
                   <div className={classnames('field-row')}>
-                    <strong className="label"><label>Messaging Number #{(index + 1)}</label></strong>
+                    <strong className="label"><label>{translate('portals.component.renderLeads.messagingNumberLabel')}{(index + 1)}</label></strong>
                     <Field
                       name={`${lead}.messagingNumber`}
                       component={Input}
@@ -284,7 +285,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                 className="add-new-source"
                 onClick={() => fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId })}
               >
-                <i className="icomoon-icon_close" /> Add Media
+                <i className="icomoon-icon_close" /> {translate('portals.component.renderLeads.addMedia')}
               </div>
             </div>
           </div>
