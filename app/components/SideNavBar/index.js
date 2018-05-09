@@ -2,23 +2,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import FeedbackWidget from '../../../common/utilities/feedback';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { selectUserRoleType, selectCurrentUser, selectCurrentUserClientId, selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../containers/App/selectors';
+import './styles.less';
 
-import {
-  selectCurrentUserClientId,
-  selectUserRoleType,
-  selectCurrentUser,
-} from '../../containers/App/selectors';
 
 class SideNavBar extends React.Component {
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
     currentUser: React.PropTypes.any,
+    currentUserEmail: React.PropTypes.string,
+    currentUserFullName: React.PropTypes.string,
+    currentUserId: React.Proptypes.number,
     location: React.PropTypes.object,
   };
 
-  componentDidMount() {
+  handleCustomerFeedbackClick = () => {
+    const feedbackWidget = new FeedbackWidget();
+    feedbackWidget.init({
+      clickTarget: 'SIDE_NAV_BAR',
+      email: this.props.currentUserEmail,
+      name: this.props.currentUserFullName,
+      userId: this.props.currentUserId,
+    });
   }
 
   render() {
@@ -111,6 +119,7 @@ class SideNavBar extends React.Component {
               <h2>StudyKIK Site Manager</h2>
               <div className="area">
                 <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
+                <p className="feedback-link" onClick={this.handleCustomerFeedbackClick}>Customer Feedback</p>
               </div>
             </div>
           }
@@ -121,9 +130,12 @@ class SideNavBar extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  userRoleType: selectUserRoleType(),
   currentUser: selectCurrentUser(),
+  currentUserClientId: selectCurrentUserClientId(),
+  currentUserEmail: selectCurrentUserEmail(),
+  currentUserFullName: selectCurrentUserFullName(),
+  currentUserId: selectCurrentUserId(),
+  userRoleType: selectUserRoleType(),
 });
 
 const mapDispatchToProps = () => ({

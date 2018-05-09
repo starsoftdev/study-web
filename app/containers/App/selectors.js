@@ -17,6 +17,21 @@ const selectCurrentUser = () => createSelector(
   (substate) => substate.userData
 );
 
+const selectCurrentUserEmail = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userData.email
+);
+
+const selectCurrentUserFullName = () => createSelector(
+  selectGlobal(),
+  (substate) => `${substate.userData.firstName} ${substate.userData.lastName}`
+);
+
+const selectCurrentUserId = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userData.id
+);
+
 const selectLoginError = () => createSelector(
   selectGlobal(),
   (substate) => substate.loginError
@@ -442,6 +457,9 @@ export {
   selectLoginFormSubmitState,
   selectUserRoleType,
   selectCurrentUserClientId,
+  selectCurrentUserEmail,
+  selectCurrentUserFullName,
+  selectCurrentUserId,
   selectCurrentUserStripeCustomerId,
 
   selectSites,
