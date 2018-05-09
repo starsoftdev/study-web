@@ -812,8 +812,8 @@ export function* saveUserWatcher() {
       let requestURL = null;
       let options = null;
 
-      let messageHeader = 'Edit User';
-      let message = 'The user has been updated successfully!';
+      let messageHeader = translate('client.component.editUserForm.toastrHeaderEditUser');
+      let message = translate('client.component.editUserForm.toastrMessageEditUser');
       if (id) {
         data.userId = id;
         requestURL = `${API_URL}/clients/${clientId}/updateUserWithClientRole`;
@@ -822,8 +822,8 @@ export function* saveUserWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add User';
-        message = 'User added successfully!';
+        messageHeader = translate('client.component.editUserForm.toastrHeaderAddUser');
+        message = translate('client.component.editUserForm.toastrMessageAddUser');
         requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
         options = {
           method: 'POST',
@@ -841,7 +841,7 @@ export function* saveUserWatcher() {
         yield put(userSaved(data.clientRole.siteId, response, messageHeader));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.editUserForm.toastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(userSavingError(err));
     }
