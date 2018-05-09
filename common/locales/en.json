@@ -12,7 +12,7 @@
 
     "client.component.cardItem.buttonRemove": "Remove",
     "client.component.cardItem.toastrSuccess": "Success! You have removed your card.",
-    "client.component.cardItem.toastrDefaultError": "Something went wrong while submitting your request.",
+    "client.component.cardItem.toastrDefaultError": "Something went wrong while submitting your request",
 
     "client.component.receiptsTable.date": "Date",
     "client.component.receiptsTable.siteName": "Site name",
@@ -106,6 +106,20 @@
     "client.component.clientSiteItem.assignedUsers": "ASSIGNED USERS",
     "client.component.clientSiteItem.editBtn": "Edit",
 
+    "client.component.referForm.labelSiteLocation": "site location",
+    "client.component.referForm.labelContactName": "contact name",
+    "client.component.referForm.labelContactEmail": "contact email",
+    "client.component.referForm.labelContactCompanyName": "contact company name",
+    "client.component.referForm.labelContactCompanyType": "contact company type",
+    "client.component.referForm.labelMessage": "message",
+    "client.component.referForm.placeholderSiteLocation": "Select Site Location",
+    "client.component.referForm.placeholderFirstName": "First Name",
+    "client.component.referForm.placeholderLastName": "Last Name",
+    "client.component.referForm.placeholderCompanyType": "Select Company Type",
+    "client.component.referForm.referToastrMessage": "The request has been submitted successfully",
+    "client.component.referForm.referToastrErrorMessage": "Something went wrong while submitting your request",
+    "client.component.referForm.btnValue": "submit",
+
     "client.page.profile.mainHeading": "profile",
 
     "client.page.paymentInformation.header": "payment information",
@@ -114,6 +128,10 @@
     "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
+
+    "client.page.refer.header": "refer",
+    "client.page.refer.title": "Refer a new site<br /> or Sponsor/CRO<br /> project manager by <br /> entering their contact!",
+    "client.page.refer.text": "When they list a Platinum Study or<br /> higher, you will receive 100 reward <br /> KIKs. If they list a multi-site (10+) <br /> central recruitment you will <br /> receive 300 <br /> reward KIKs!",
 
     "client.page.sitesUsers.mainHeading": "manage sites / users",
     "client.page.sitesUsers.placeholderSearch": "Search",
@@ -153,8 +171,8 @@
     "corporate.page.contactPage.phonePlaceholder": "* Mobile Phone",
     "corporate.page.contactPage.messagePlaceholder": "* Message",
     "corporate.page.contactPage.submit": "Submit",
-    "corporate.page.contactPage.toastrSuccessMessage": "Thank you for submitting your information.",
-    "corporate.page.contactPage.toastrErrorMessage": "Something went wrong while submitting your request.",
+    "corporate.page.contactPage.toastrSuccessMessage": "Thank you for submitting your information",
+    "corporate.page.contactPage.toastrErrorMessage": "Something went wrong while submitting your request",
 
     "corporate.page.home.header": "instantly search for a clinical trial!",
     "corporate.page.home.h3TextType1": "There ${preTotal} ${total} ${postTotal}",
@@ -361,7 +379,7 @@
     "corporate.page.trials.findOutPatientsForm.placeholderIndication": "* Indication",
     "corporate.page.trials.findOutPatientsForm.buttonText": "receive report",
     "corporate.page.trials.findOutPatientsForm.toastrSuccess": "Thank you for submitting your information.",
-    "corporate.page.trials.findOutPatientsForm.toastrDefaultError": "Something went wrong while submitting your request.",
+    "corporate.page.trials.findOutPatientsForm.toastrDefaultError": "Something went wrong while submitting your request",
     "corporate.page.trials.listNowModal.title": "list now",
     "corporate.page.trials.listNowModal.text": "Please provide your information below and a StudyKIK Project Manager will contact you shortly to get your study listed!",
     "corporate.page.trials.listNowModal.placeholderFullName": "* Full Name",
@@ -376,7 +394,7 @@
     "corporate.page.trials.listNowModal.companyTypeVendorMedia": "Vendor / Media",
     "corporate.page.trials.listNowModal.toastrSuccess": "Thank you for submitting your information.",
     "corporate.page.trials.listNowModal.toastrError": "All fields required.",
-    "corporate.page.trials.listNowModal.toastrDefaultError": "Something went wrong while submitting your request.",
+    "corporate.page.trials.listNowModal.toastrDefaultError": "Something went wrong while submitting your request",
     "corporate.page.trials.getProposalModal.title": "get proposal",
     "corporate.page.trials.getProposalModal.text": "Please provide your information below and a StudyKIK Project Manager will contact you shortly!",
     "corporate.page.trials.getProposalModal.placeholderFullName": "* Full Name",
@@ -389,7 +407,7 @@
     "corporate.page.trials.getProposalModal.submitButton": "Submit",
     "corporate.page.trials.getProposalModal.toastrSuccess": "Thank you for submitting your information.",
     "corporate.page.trials.getProposalModal.toastrError": "All fields required.",
-    "corporate.page.trials.getProposalModal.toastrDefaultError": "Something went wrong while submitting your request.",
+    "corporate.page.trials.getProposalModal.toastrDefaultError": "Something went wrong while submitting your request",
 
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
