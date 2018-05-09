@@ -59,14 +59,14 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
             <hr className="divider" />
             <h3>{translate('corporate.page.privacyPolicy.processingTitle')}</h3>
             <p>{translate('corporate.page.privacyPolicy.processingText')}</p>
-            <ul dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.processingListItemss') }} />
+            <ul dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.processingListItems') }} />
             <hr className="divider" />
             <h3>{translate('corporate.page.privacyPolicy.purposesTitle')}</h3>
             <p>{translate('corporate.page.privacyPolicy.purposesText')}</p>
             <ul dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.purposesListItems') }} />
             <hr className="divider" />
             <h3>{translate('corporate.page.privacyPolicy.cookiesTitle')}</h3>
-            <p>{translate('corporate.page.privacyPolicy.cookiesText')}</p>
+            <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.cookiesText') }} />
             <hr className="divider" />
             <h3>{translate('corporate.page.privacyPolicy.retentionTitle')}</h3>
             <p>{translate('corporate.page.privacyPolicy.retentionText')}</p>

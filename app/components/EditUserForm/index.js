@@ -10,6 +10,7 @@ import { selectEditUserFormSiteValue } from './selectors';
 import { selectSavedUser } from '../../containers/App/selectors';
 import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   savedUser: selectSavedUser(),
@@ -60,7 +61,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
         <div className="client-role">
           <div className="field-row">
             <strong className="label">
-              <label>PURCHASE</label>
+              <label>{translate('client.component.editUserForm.labelPurchase')}</label>
             </strong>
             <div className="field">
               <Field
@@ -72,7 +73,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>REWARDS</label>
+              <label>{translate('client.component.editUserForm.labelRewards')}</label>
             </strong>
             <div className="field">
               <Field
@@ -91,7 +92,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
         <div className="edit-user form-fields">
           <div className="field-row">
             <strong className="required label">
-              <label>NAME</label>
+              <label>{translate('client.component.editUserForm.labelName')}</label>
             </strong>
             <div className="field">
               <div className="row">
@@ -100,7 +101,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                     name="firstName"
                     component={Input}
                     type="text"
-                    placeholder="First Name"
+                    placeholder={translate('client.component.editUserForm.placeholderFirstName')}
                     disabled={savedUser.saving || deleting}
                   />
                 </div>
@@ -109,7 +110,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
                     name="lastName"
                     component={Input}
                     type="text"
-                    placeholder="Last Name"
+                    placeholder={translate('client.component.editUserForm.placeholderLastName')}
                     disabled={savedUser.saving || deleting}
                   />
                 </div>
@@ -118,7 +119,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="required label">
-              <label>EMAIL</label>
+              <label>{translate('client.component.editUserForm.labelEmail')}</label>
             </strong>
             <div className="field">
               <Field
@@ -131,13 +132,13 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
           </div>
           <div className="field-row">
             <strong className="required label">
-              <label>SITE LOCATION</label>
+              <label>{translate('client.component.editUserForm.labelSiteLocation')}</label>
             </strong>
             <div className="field">
               <Field
                 name="site"
                 component={ReactSelect}
-                placeholder="Select Site Location"
+                placeholder={translate('client.component.editUserForm.placeholderSiteLocation')}
                 options={siteOptions}
                 disabled={savedUser.saving || deleting || editSelf}
                 onChange={this.handleSelect}
@@ -157,7 +158,7 @@ class EditUserForm extends Component { // eslint-disable-line react/prefer-state
             <button type="submit" className="btn btn-default" disabled={savedUser.saving || deleting}>
               {savedUser.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                : <span>{isEdit ? 'Update' : 'Submit'}</span>
+                : <span>{isEdit ? translate('client.component.editUserForm.btnUpdate') : translate('client.component.editUserForm.btnSubmit')}</span>
               }
             </button>
           </div>

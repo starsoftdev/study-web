@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { get, map, pick, filter } from 'lodash';
 import moment from 'moment';
+import { translate } from '../../../common/utilities/localization';
 
 /**
  * Direct selector to the app state domain
@@ -102,7 +103,10 @@ const selectValidSiteLocations = () => createSelector(
 
 const selectIndications = () => createSelector(
   selectGlobal(),
-  (substate) => get(substate, 'baseData.indications', [])
+  (substate) => {
+    const indications = get(substate, 'baseData.indications', []);
+    return indications.map(e => ({ ...e, name: translate(`common.indication.id${e.id}`) }));
+  }
 );
 
 const selectSources = () => createSelector(
@@ -123,7 +127,10 @@ const selectStudyLevels = () => createSelector(
     return map(levels, e => (
       {
         id: e.id,
-        label: `${e.name} $${e.price} (${e.posts} Posts + ${e.texts} Text Credits + ${e.emailCredits} Email Credits)`,
+        label: `${translate(`common.exposureLevel.id${e.id}`)} $${e.price} (${e.posts}
+          ${translate('portals.component.renewStudyForm.posts')} +
+          ${e.texts} ${translate('portals.component.renewStudyForm.textCredits')} +
+          ${e.emailCredits} ${translate('portals.component.renewStudyForm.emailCredits')})`,
         type: e.name,
         stripeProductId: e.stripe_product_id,
         isTop: e.isTop,
