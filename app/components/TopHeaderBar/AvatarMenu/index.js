@@ -70,7 +70,7 @@ class AvatarMenu extends React.Component {
         <div className={`logged-user-drop avatar-menu ${avatarMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><a onClick={this.handleCustomerFeedbackClick}>Customer Feedback</a></li>
+              <li><a onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.topHeaderBar.avatarMenu.customerFeedback')}</a></li>
               <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.profile')}</Link></li>
               <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.paymentInfo')}</Link></li>
               { userRoleType === 'client' &&
