@@ -5,6 +5,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../components/CenteredModal/index';
+import { translate } from '../../../common/utilities/localization';
 
 class TextEmailBlastModal extends React.Component {
   static propTypes = {
@@ -30,7 +31,7 @@ class TextEmailBlastModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong>Text / Email Blast</strong>
+            <strong>{translate('client.component.textEmailBlastModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={onHide}>
             <i className="icomoon-icon_close" />
@@ -41,18 +42,18 @@ class TextEmailBlastModal extends React.Component {
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-icon_comment_alt" />
-                <span className="text">Text Blast</span>
+                <span className="text">{translate('client.component.textEmailBlastModal.textBlast')}</span>
               </div>
             </div>
           </span>
           <span className="or">
-            <span className="text">OR</span>
+            <span className="text">{translate('client.component.textEmailBlastModal.or')}</span>
           </span>
           <span className="modal-opener" onClick={toggleEmailBlast}>
             <div className="table">
               <div className="table-cell">
                 <i className="icomoon-envelop" />
-                <span className="text coming-soon-old">Email Blast</span>
+                <span className="text coming-soon-old">{translate('client.component.textEmailBlastModal.emailBlast')}</span>
                 <span className="text coming-soon-new" />
               </div>
             </div>

@@ -18,6 +18,7 @@ import { removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { selectCurrentUser, selectClientCredits } from '../../App/selectors';
 import { selectPatients, selectTotalPatients } from '../selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -110,7 +111,7 @@ class TextBlastModal extends React.Component {
 
   checkForCredits() {
     if ((this.state.total > this.props.clientCredits.details.customerCredits)) {
-      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      toastr.error('', translate('client.component.textBlastModal.toastrCreditsError'));
     }
   }
 
@@ -120,7 +121,7 @@ class TextBlastModal extends React.Component {
       return (
         <span className="emails-counter">
           <span className="counter">{this.state.total}</span>
-          <span className="text"> Patients</span>
+          <span className="text"> {translate('client.component.textBlastModal.patients')}</span>
         </span>
       );
     }
@@ -146,7 +147,7 @@ class TextBlastModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong className="title">Text Blast</strong>
+            <strong className="title">{translate('client.component.textBlastModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
@@ -158,7 +159,12 @@ class TextBlastModal extends React.Component {
               <div className="scroll-holder">
                 <div className="sub-holder">
                   <div className="subject-field">
-                    <FormControl type="text" className="recievers" placeholder="To" disabled />
+                    <FormControl
+                      type="text"
+                      className="recievers"
+                      placeholder={translate('client.component.textBlastModal.placeholderTo')}
+                      disabled
+                    />
                     {this.renderPatientCount()}
                   </div>
                   <Field
@@ -166,7 +172,7 @@ class TextBlastModal extends React.Component {
                     component={Input}
                     componentClass="textarea"
                     className="message"
-                    placeholder="Type a message..."
+                    placeholder={translate('client.component.textBlastModal.placeholderType')}
                     maxLength="160"
                     required
                     onChange={this.textAreaChange}
@@ -184,7 +190,7 @@ class TextBlastModal extends React.Component {
                       onClick={(e) => ((notEnoughCredits || disabled || enteredCharactersLength === 0) ? null : this.submitTextBlast(e))}
                       disabled={notEnoughCredits || disabled || enteredCharactersLength === 0}
                     >
-                      Send
+                      {translate('client.component.textBlastModal.send')}
                     </div>
                   </div>
                 </div>
