@@ -2,22 +2,33 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import FeedbackWidget from '../../../common/utilities/feedback';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { selectUserRoleType, selectCurrentUser, selectCurrentUserClientId, selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../containers/App/selectors';
 import { translate } from '../../../common/utilities/localization';
+import './styles.less';
 
-import {
-  selectCurrentUserClientId,
-  selectUserRoleType,
-  selectCurrentUser,
-} from '../../containers/App/selectors';
 
 class SideNavBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
     currentUser: React.PropTypes.any,
+    currentUserEmail: React.PropTypes.string,
+    currentUserFullName: React.PropTypes.string,
+    currentUserId: React.Proptypes.number,
     location: React.PropTypes.object,
   };
+
+  handleCustomerFeedbackClick = () => {
+    const feedbackWidget = new FeedbackWidget();
+    feedbackWidget.init({
+      clickTarget: 'SIDE_NAV_BAR',
+      email: this.props.currentUserEmail,
+      name: this.props.currentUserFullName,
+      userId: this.props.currentUserId,
+    });
+  }
 
   render() {
     const { userRoleType, currentUser } = this.props;
@@ -109,6 +120,7 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
               <h2>{translate('portals.component.sideNavBar.siteManager')}</h2>
               <div className="area">
                 <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
+                <p className="feedback-link" onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.sideNavBar.customerFeedback')}</p>
               </div>
             </div>
           }
@@ -119,9 +131,12 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  userRoleType: selectUserRoleType(),
   currentUser: selectCurrentUser(),
+  currentUserClientId: selectCurrentUserClientId(),
+  currentUserEmail: selectCurrentUserEmail(),
+  currentUserFullName: selectCurrentUserFullName(),
+  currentUserId: selectCurrentUserId(),
+  userRoleType: selectUserRoleType(),
 });
 
 const mapDispatchToProps = () => ({
