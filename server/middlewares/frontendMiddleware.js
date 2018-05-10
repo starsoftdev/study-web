@@ -109,9 +109,11 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
     } catch (e) {
       if (e.statusCode === 404) {
         res.redirect('/404');
-        return;
+      } else {
+        res.redirect('/503');
       }
-      console.log(e);
+
+      // console.log('here', e);
     }
   });
 };
@@ -193,6 +195,16 @@ const addDevMiddlewares = (app, webpackConfig) => {
     });
   });
 
+  app.get('/503', (req, res) => {
+    fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(503);
+      } else {
+        res.status(503).send(file.toString());
+      }
+    });
+  });
+
   app.get('*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
       if (err) {
@@ -254,6 +266,10 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/404', (req, res) => {
     res.status(404).sendFile(path.resolve(outputPath, 'corporate.html'));
+  });
+
+  app.get('/503', (req, res) => {
+    res.status(503).sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 
   app.get('*', (req, res) => {
