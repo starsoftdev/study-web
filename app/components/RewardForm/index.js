@@ -7,6 +7,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
+import { translate } from '../../../common/utilities/localization';
 import ReactSelect from '../../components/Input/ReactSelect';
 import formValidator from './validator';
 
@@ -31,7 +32,7 @@ class RewardForm extends Component { // eslint-disable-line react/prefer-statele
         <Field
           name="site"
           component={ReactSelect}
-          placeholder="Select Site Location"
+          placeholder={translate('client.component.rewardForm.placeholderSiteLocation')}
           options={nSiteLocation}
           className="field"
           disabled={!isAdmin}

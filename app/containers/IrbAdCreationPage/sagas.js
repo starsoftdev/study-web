@@ -3,6 +3,7 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
+import { translate } from '../../../common/utilities/localization';
 
 import request from '../../utils/request';
 
@@ -45,13 +46,13 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('IRB Ad Creation', 'The request has been submitted successfully');
+      toastr.success(translate('portals.component.irbAdCreationForm.submitSuccessToastrTitle'), translate('portals.component.irbAdCreationForm.submitSuccessToastrMessage'));
       yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('irbAdCreation'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.irbAdCreationForm.submitErrorToastrMessage'));
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       if (err.status === 401) {
@@ -71,7 +72,7 @@ export function* fetchIrbProductListWatcher() {
 
       yield put(fetchIrbProductListSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not fetch IrbAd Product List');
+      const errorMessage = get(err, 'message', translate('portals.component.irbAdCreationForm.fetchIrbProductListErrorToastr'));
       toastr.error('', errorMessage);
       yield put(fetchIrbProductListError(err));
       if (err.status === 401) {
@@ -91,7 +92,7 @@ export function* fetchIrbAdCreationWatcher() {
 
       yield put(fetchIrbAdCreationSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while fetching the irb ad creation');
+      const errorMessage = get(err, 'message', translate('portals.component.irbAdCreationForm.fetchIrbAdCreationErrorToastr'));
       toastr.error('', errorMessage);
       yield put(fetchIrbAdCreationError(err));
       if (err.status === 401) {
