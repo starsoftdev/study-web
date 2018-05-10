@@ -11,6 +11,7 @@ import { getItem } from '../../utils/localStorage';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { translate } from '../../../common/utilities/localization';
 import {
   ADD_PATIENT_INDICATION,
   REMOVE_PATIENT_INDICATION,
@@ -433,7 +434,7 @@ export function* updatePatientIndicationWatcher() {
       };
       yield call(request, requestURL, options);
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while updating indications.');
+      const errorMessage = get(err, 'message', translate('client.component.editPatientForm.toastrUpdateIndicationsErrorMessage'));
       toastr.error('', errorMessage);
       if (err.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -460,10 +461,10 @@ export function* savePatientWatcher() {
       };
       const response = yield call(request, requestURL, options);
 
-      toastr.success('Save Patient', 'Patient saved successfully!');
+      toastr.success('Save Patient', translate('client.component.patientsList.toastrSuccess'));
       yield put(patientSaved(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.patientsList.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(patientSavingError(err));
       if (err.status === 401) {
@@ -517,9 +518,9 @@ function* submitTextBlast() {
         body: JSON.stringify(reqParams),
       });
       onClose();
-      toastr.success('', 'Success! Your text blast have been sent.');
+      toastr.success('', translate('client.component.textBlastModal.toastrSuccess'));
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      const errorMessage = get(e, 'message', translate('client.component.textBlastModal.toastrDefaultError'));
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -579,9 +580,9 @@ function* submitEmailBlast() {
         body: JSON.stringify(reqParams),
       });
       onClose();
-      toastr.success('', 'Success! Your email blast have been sent.');
+      toastr.success('', translate('client.component.patientDatabaseEmailBlastModal.toastrSuccess'));
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while submitting the email blast. Please try again later.');
+      const errorMessage = get(e, 'message', translate('client.component.patientDatabaseEmailBlastModal.toastrDefaultError'));
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -607,7 +608,7 @@ function* importPatients() {
       yield put(submitAddPatientSuccess(response, payload.name));
       onClose();
     } catch (e) {
-      const errorMessage = get(e, 'message', 'Something went wrong while submitting the text blast. Please try again later.');
+      const errorMessage = get(e, 'message', 'Something went wrong while importing patients. Please try again later.');
       toastr.error('', errorMessage);
       yield put(submitAddPatientFailure());
       if (e.status === 401) {
@@ -633,7 +634,7 @@ function* submitAddPatient() {
         body: JSON.stringify(patient),
       });
       onClose();
-      toastr.success('Add Patient', 'Patient added successfully!');
+      toastr.success('Add Patient', translate('client.component.addPatientForm.toastrSuccess'));
       yield put(submitAddPatientSuccess(response));
     } catch (e) {
       let errorMessages;
@@ -646,7 +647,7 @@ function* submitAddPatient() {
           errorMessages = e.details.messages[0];
         }
       } else {
-        errorMessages = 'Something went wrong while adding a patient. Please try again later.';
+        errorMessages = translate('client.component.addPatientForm.toastrDefaultError');
       }
       toastr.error('', errorMessages);
       yield put(submitAddPatientFailure());
@@ -668,12 +669,12 @@ export function* addProtocolWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Add Protocol', 'The request has been submitted successfully');
+      toastr.success('Add Protocol', translate('client.component.addNewProtocolForm.toastrSuccess'));
       yield put(addProtocolSucceess(response));
 
       yield put(reset('addProtocol'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.addNewProtocolForm.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(addProtocolError(err));
       // if returns forbidden we remove the token from local storage
