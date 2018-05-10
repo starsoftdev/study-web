@@ -19,6 +19,7 @@ import { submitEmailBlast } from '../../containers/PatientDatabasePage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectCurrentUser, selectClientCredits } from '../../containers/App/selectors';
 import { selectPatients, selectTotalPatients } from '../../containers/PatientDatabasePage/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.EmailBlastModal';
 
@@ -87,7 +88,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
     const { formSyncErrors, formValues, submitEmailBlast, currentUser, clientCredits } = this.props;
     const emailCredits = clientCredits.details.emailCredits;
     if (this.state.total > emailCredits) {
-      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+      toastr.error('', translate('client.component.patientDatabaseEmailBlastModal.toastrCreditsError'));
     } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues, currentUser.roleForClient.id, currentUser, this.onClose);
     } else if (formSyncErrors.patients) {
@@ -107,7 +108,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
       return (
         <span className="emails-counter">
           <span className="counter">{this.state.total}</span>
-          <span className="text"> Patients</span>
+          <span className="text"> {translate('client.component.patientDatabaseEmailBlastModal.patients')}</span>
         </span>
       );
     }
@@ -130,7 +131,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
       >
         <Modal.Header>
           <Modal.Title>
-            <strong className="title">Email Blast</strong>
+            <strong className="title">{translate('client.component.patientDatabaseEmailBlastModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.onHide}>
             <i className="icomoon-icon_close" />
@@ -145,19 +146,24 @@ class PatientDatabaseEmailBlastModal extends React.Component {
               <div className="scroll-holder">
                 <div className="sub-holder">
                   <div className="subject-field to">
-                    <FormControl type="text" className="recievers" placeholder="To" disabled />
+                    <FormControl
+                      type="text"
+                      className="recievers"
+                      placeholder={translate('client.component.patientDatabaseEmailBlastModal.placeholderTo')}
+                      disabled
+                    />
                     {this.renderPatientCount()}
                   </div>
                   <div className="sender-field-holder">
                     <div className="sender-field-prev">
-                      From
+                      {translate('client.component.patientDatabaseEmailBlastModal.labelFrom')}
                     </div>
                     <Field
                       name="email"
                       component={Input}
                       className="sender-field"
                       type="text"
-                      placeholder="Enter your email address"
+                      placeholder={translate('client.component.patientDatabaseEmailBlastModal.placeholderEmailAddress')}
                     />
                   </div>
                   <Field
@@ -165,14 +171,14 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                     component={Input}
                     className="subject-field"
                     type="text"
-                    placeholder="Subject"
+                    placeholder={translate('client.component.patientDatabaseEmailBlastModal.placeholderSubject')}
                   />
                   <Field
                     name="message"
                     component={Input}
                     componentClass="textarea"
                     className="email-message"
-                    placeholder="Type a message..."
+                    placeholder={translate('client.component.patientDatabaseEmailBlastModal.placeholderMessage')}
                   />
                   <div className="footer">
                     <div
@@ -180,7 +186,7 @@ class PatientDatabaseEmailBlastModal extends React.Component {
                       onClick={(e) => this.submitEmailBlast(e)}
                       disabled={disabled}
                     >
-                      Send
+                      {translate('client.component.patientDatabaseEmailBlastModal.send')}
                     </div>
                   </div>
                 </div>
