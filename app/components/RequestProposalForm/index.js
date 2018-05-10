@@ -21,6 +21,7 @@ import {
   selectLeadsCount,
 } from './selectors';
 import formValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
@@ -43,7 +44,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
 
   constructor(props) {
     super(props);
-    this.campaignLengthChaged = this.campaignLengthChaged.bind(this);
+    this.campaignLengthChanged = this.campaignLengthChanged.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -83,7 +84,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     }
   }
 
-  campaignLengthChaged(campaignLength) {
+  campaignLengthChanged(campaignLength) {
     if (campaignLength !== 1) {
       this.props.dispatch(change('requestProposal', 'condenseTwoWeeks', false));
     }
@@ -109,11 +110,11 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
       <div className="form-study">
         <div className="form-fields">
           <div className="field-row">
-            <strong className="label required"><label>Site Location</label></strong>
+            <strong className="label required"><label>{translate('portals.component.requestProposalForm.siteLabel')}</label></strong>
             <Field
               name="site"
               component={ReactSelect}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.component.requestProposalForm.sitePlaceholder')}
               options={siteLocations}
               disabled={bDisabled}
               selectedValue={defaultValue || undefined}
@@ -122,18 +123,18 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Indication</label></strong>
+            <strong className="label required"><label>{translate('portals.component.requestProposalForm.indicationLabel')}</label></strong>
             <Field
               name="indication_id"
               component={ReactSelect}
-              placeholder="Select Indication"
+              placeholder={translate('portals.component.requestProposalForm.indicationPlaceholder')}
               options={indications}
               className="field"
             />
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Protocol</label></strong>
+            <strong className="label required"><label>{translate('portals.component.requestProposalForm.protocolLabel')}</label></strong>
             <Field
               name="protocol"
               component={Input}
@@ -143,7 +144,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Name</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.sponsorNameLabel')}</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -153,7 +154,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>Sponsor Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.sponsorEmailLabel')}</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -163,7 +164,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Name</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.croNameLabel')}</label></strong>
             <Field
               name="croName"
               component={Input}
@@ -173,7 +174,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>CRO Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.croEmailLabel')}</label></strong>
             <Field
               name="croEmail"
               component={Input}
@@ -183,7 +184,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>IRB Name</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.irbNameLabel')}</label></strong>
             <Field
               name="irbName"
               component={Input}
@@ -193,7 +194,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>IRB Email</label></strong>
+            <strong className="label"><label>{translate('portals.component.requestProposalForm.irbEmailLabel')}</label></strong>
             <Field
               name="irbEmail"
               component={Input}
@@ -203,25 +204,25 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Exposure Level</label></strong>
+            <strong className="label required"><label>{translate('portals.component.requestProposalForm.levelLabel')}</label></strong>
             <Field
               name="level_id"
               component={ReactSelect}
-              placeholder="Select Exposure Level"
+              placeholder={translate('portals.component.requestProposalForm.levelPlaceholder')}
               options={studyLevels}
               className="field"
             />
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>Campaign Length</label></strong>
+            <strong className="label required"><label>{translate('portals.component.requestProposalForm.campaignLengthLabel')}</label></strong>
             <Field
               name="campaignLength"
               component={ReactSelect}
-              placeholder="Select Campaign Length"
+              placeholder={translate('portals.component.requestProposalForm.campaignLengthPlaceholder')}
               options={CAMPAIGN_LENGTH_LIST}
               className="field"
-              onChange={this.campaignLengthChaged}
+              onChange={this.campaignLengthChanged}
             />
           </div>
 
@@ -229,7 +230,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
             if (this.props.formValues.campaignLength === 1) {
               return (
                 <div className="field-row">
-                  <strong className="label"><label>CONDENSE TO 2 WEEKS</label></strong>
+                  <strong className="label"><label>{translate('portals.component.requestProposalForm.condense2weeksLabel')}</label></strong>
                   <Field
                     name="condenseTwoWeeks"
                     component={Toggle}
@@ -242,8 +243,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           })()}
 
           <div className="field-row">
-            <strong className="label"><label>Patient qualification <br />
-              Suite: $897</label></strong>
+            <strong className="label"><label dangerouslySetInnerHTML={{ __html: `${translate('portals.component.requestProposalForm.pqsLabel')} $897` }} /></strong>
             <Field
               name="patientQualificationSuite"
               component={Toggle}
@@ -254,7 +254,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
           {
             <div className="tracking-source global-invisible-item">
               <div className="field-row">
-                <strong className="label"><label>MEDIA TRACKING: $247</label></strong>
+                <strong className="label"><label>{translate('portals.component.requestProposalForm.mediaTrackingLabel')} $247</label></strong>
                 <Field
                   name="callTracking"
                   component={Toggle}

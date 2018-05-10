@@ -121,7 +121,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
                 data-text={translate('portals.component.irbAdCreationForm.browseBtn')}
                 data-hover-text={translate('portals.component.irbAdCreationForm.browseBtnHoverText')}
                 className="btn btn-gray upload-btn"
-              ></label>
+              />
               <Field
                 id="irb_file"
                 name="file"
