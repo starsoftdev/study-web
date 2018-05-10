@@ -36,6 +36,7 @@ import {
 } from '../../containers/RequestProposalPage/selectors';
 
 import { fetchIndicationLevelPrice } from '../../containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
 
 export class RequestProposalCart extends Component {
   static propTypes = {
@@ -187,26 +188,18 @@ export class RequestProposalCart extends Component {
     const level = find(levels, { id: formValues.level_id });
     const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
     if (level && months && indicationLevelPrice) {
+      const levelLabel = translate(`common.exposureLevel.id${level.id}`);
       products.push({
-        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `2 Weeks ${level.name}` : `${months.label} ${level.name}`),
+        title: ((formValues.condenseTwoWeeks && months.value === 1) ? `${translate('portals.component.requestProposalCart.2weeks')} ${levelLabel}` : `${months.label} ${levelLabel}`),
         price: indicationLevelPrice,
         quantity: months.value,
         total: indicationLevelPrice * months.value,
       });
     }
 
-    // if (formValues.patientMessagingSuite) {
-    //   products.push({
-    //     title: 'Patient Messaging Suite',
-    //     price: MESSAGING_SUITE_PRICE,
-    //     quantity: 1,
-    //     total: MESSAGING_SUITE_PRICE,
-    //   });
-    // }
-
     if (formValues.patientQualificationSuite) {
       products.push({
-        title: 'Patient Qualification Suite',
+        title: translate('portals.component.requestProposalCart.pqs'),
         price: QUALIFICATION_SUITE_PRICE,
         quantity: months.value,
         total: QUALIFICATION_SUITE_PRICE * months.value,
@@ -215,7 +208,7 @@ export class RequestProposalCart extends Component {
 
     if (formValues.callTracking) {
       products.push({
-        title: 'Media Tracking',
+        title: translate('portals.component.requestProposalCart.mediaTracking'),
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -253,7 +246,7 @@ export class RequestProposalCart extends Component {
       <div className={formClassName}>
         <div className="shopping-cart order-summary order-summery scroll jcf--scrollabel">
           <div className="head">
-            <h3>Proposal Summary</h3>
+            <h3>{translate('portals.component.requestProposalCart.title')}</h3>
           </div>
           <div className="scroll-holder">
             <div className="table-holder">
@@ -266,10 +259,10 @@ export class RequestProposalCart extends Component {
                 </colgroup>
                 <thead>
                   <tr>
-                    <th>PRODUCT <i className="caret-arrow" /></th>
-                    <th className="right">PRICE <i className="caret-arrow" /></th>
-                    <th className="right">QTY <i className="caret-arrow" /></th>
-                    <th className="right">TOTAL <i className="caret-arrow" /></th>
+                    <th>{translate('portals.component.requestProposalCart.productColumn')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.requestProposalCart.priceColumn')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.requestProposalCart.qtyColumn')} <i className="caret-arrow" /></th>
+                    <th className="right">{translate('portals.component.requestProposalCart.totalColumn')} <i className="caret-arrow" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -303,7 +296,7 @@ export class RequestProposalCart extends Component {
                 :
                 <input
                   type="text"
-                  placeholder="Coupon"
+                  placeholder={translate('portals.component.requestProposalCart.couponPlaceholder')}
                   className="form-control"
                   value={this.state.couponId}
                   onChange={this.onCouponChange}
@@ -315,19 +308,19 @@ export class RequestProposalCart extends Component {
                 disabled={coupon.fetching || this.state.shoppingCartLoading}
               >
                 {couponSelected
-                  ? <span>Remove</span>
-                  : <span>Apply</span>
+                  ? <span>{translate('portals.component.requestProposalCart.removeBtn')}</span>
+                  : <span>{translate('portals.component.requestProposalCart.applyBtn')}</span>
                 }
               </button>
             </div>
 
             <div className="total clearfix">
-              <span className="heading">Subtotal</span>
+              <span className="heading">{translate('portals.component.requestProposalCart.subtotalLabel')}</span>
               <Money value={subTotal} className="price subtotal-price" />
             </div>
 
             <div className="total discount clearfix">
-              <span className="heading">discount</span>
+              <span className="heading">{translate('portals.component.requestProposalCart.discountLabel')}</span>
               {coupon.fetching
                 ? <span className="price">
                   <LoadingSpinner showOnlyIcon size={20} className="price" />
@@ -337,7 +330,7 @@ export class RequestProposalCart extends Component {
             </div>
 
             <div className="total grand-total clearfix">
-              <strong className="heading">Total</strong>
+              <strong className="heading">{translate('portals.component.requestProposalCart.totalLabel')}</strong>
               <Money value={total} className="price total-price" />
             </div>
 
@@ -345,7 +338,7 @@ export class RequestProposalCart extends Component {
               disabled={coupon.fetching}
               onClick={this.onSubmitForm}
             >
-              <span>Submit</span>
+              <span>{translate('portals.component.requestProposalCart.submitBtn')}</span>
               {(this.state.shoppingCartLoading) &&
               <span className="pull-right"><LoadingSpinner showOnlyIcon size={20} /></span>
               }
