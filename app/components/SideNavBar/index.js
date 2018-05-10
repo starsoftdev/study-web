@@ -16,7 +16,7 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
     currentUser: React.PropTypes.any,
     currentUserEmail: React.PropTypes.string,
     currentUserFullName: React.PropTypes.string,
-    currentUserId: React.Proptypes.number,
+    currentUserId: React.PropTypes.number,
     location: React.PropTypes.object,
   };
 
