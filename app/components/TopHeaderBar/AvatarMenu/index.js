@@ -16,7 +16,7 @@ class AvatarMenu extends React.Component {
     currentUser: React.PropTypes.any,
     currentUserEmail: React.PropTypes.string,
     currentUserFullName: React.PropTypes.string,
-    currentUserId: React.Proptypes.number,
+    currentUserId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
   };
 
