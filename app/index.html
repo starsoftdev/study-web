@@ -43,5 +43,10 @@
 <!-- A lot of magic happens in this file. HtmlWebpackPlugin automatically includes all assets (e.g. bundle.js, main.css) with the correct HTML tags, which is why they are missing in this HTML file. Don't add any assets here! (Check out webpackconfig.js if you want to know more) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.4/socket.io.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAVuKm0LozGMf4oQ2r6bbnqXxwuUfWGUmw&libraries=places"></script>
+
+<!-- AppTentive -->
+<script>(function(){var a=window.ApptentiveSDK=window.ApptentiveSDK||[];if(!a.version&&!a.loaded){a.loaded=!0;a.methods="buildDevice createConversation createMessage engage getInteractions identifyPerson setPageName".split(" ");a.factory=function(c){return function(){for(var b=arguments.length,d=Array(b),e=0;e<b;e++)d[e]=arguments[e];b=Array.prototype.slice.call(d);b.unshift(c);a.push(b);return a}};for(var c=0;c<a.methods.length;c++){var d=a.methods[c];a[d]=a.factory(d)}a.LOADER_VERSION="1.0.0"}})();</script>
+<script async src="https://sdk.apptentive.com/v1/apps/5ae0f571969df1a90e00002b/websdk"></script>
+
 </body>
 </html>
