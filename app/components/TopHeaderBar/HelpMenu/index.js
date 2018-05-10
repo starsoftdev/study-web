@@ -13,7 +13,7 @@ class HelpMenu extends React.Component {
   static propTypes = {
     currentUserEmail: React.PropTypes.string,
     currentUserFullName: React.PropTypes.string,
-    currentUserId: React.Proptypes.number,
+    currentUserId: React.PropTypes.number,
   };
 
   constructor(props) {
