@@ -252,6 +252,19 @@
     "client.component.textBlastModal.toastrSuccess": "Success! Your text blast have been sent.",
     "client.component.textBlastModal.toastrDefaultError": "Something went wrong while submitting the text blast. Please try again later.",
 
+    "client.component.rewardForm.placeholderSiteLocation": "Select Site Location",
+
+    "client.component.rewardsList.header": "REWARDS HISTORY",
+    "client.component.rewardsList.tableDescription": "description",
+    "client.component.rewardsList.tableDate": "date",
+    "client.component.rewardsList.tableTime": "time",
+    "client.component.rewardsList.tableAmount": "amount",
+    "client.component.rewardsList.tableBalance": "balance",
+
+    "client.component.rewardsItem.Kiks": "KIKs",
+    "client.component.rewardsItem.nowHas": "now has",
+    "client.component.rewardsItem.earned": "earned",
+
     "client.page.patientDatabase.mainHeading": "Patient Database",
 
     "client.page.profile.mainHeading": "profile",
@@ -262,6 +275,25 @@
     "client.page.paymentInformation.addCreditCardModal.header": "add new card",
 
     "client.page.receipts.header": "receipts",
+
+    "client.page.rewards.header": "rewards",
+    "client.page.rewards.total": "Total KIKs",
+    "client.page.rewards.amountKiks": "${siteName} Has <strong>${amount} KIKs</strong>",
+    "client.page.rewards.redeemBtn": "Redeem",
+    "client.page.rewards.redeemBtnHover": "Redeem Now",
+    "client.page.rewards.howTo": "HOW TO <br /> EARN KIKs",
+    "client.page.rewards.fillOutTitle": "FILL OUT ENROLLMENT DATA!",
+    "client.page.rewards.fillOutText": "For every study that you update your patient notes and status on weekly, you earn points",
+    "client.page.rewards.listingTitle": "Listing<br /> Studies!",
+    "client.page.rewards.listingText": "Every time you list a study, you earn points back",
+    "client.page.rewards.referralsTitle": "Referrals!",
+    "client.page.rewards.referralsText": "We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study or higher  with StudyKIK",
+    "client.page.rewards.levelRuby": "RUBY LISTING",
+    "client.page.rewards.levelDiamond": "DIAMOND LISTING",
+    "client.page.rewards.levelPlatinum": "PLATINUM LISTING",
+    "client.page.rewards.levelGold": "GOLD LISTING",
+    "client.page.rewards.referSponsor": "REFER A SPONSOR",
+    "client.page.rewards.referSite": "REFER A SITE",
 
     "client.page.refer.header": "refer",
     "client.page.refer.title": "Refer a new site<br /> or Sponsor/CRO<br /> project manager by <br /> entering their contact!",
@@ -638,6 +670,24 @@
     "portals.component.globalPMSModal.messageItem.startMessage": "This patient is able to receive text messages.",
     "portals.component.globalPMSModal.messageItem.dateMask": "M/DD/YYYY [at] h:mm:ss A",
 
+    "portals.component.irbAdCreationForm.siteLabel": "SITE LOCATION",
+    "portals.component.irbAdCreationForm.sitePlaceholder": "Select Site Location",
+    "portals.component.irbAdCreationForm.indicationLabel": "INDICATION",
+    "portals.component.irbAdCreationForm.indicationPlaceholder": "Select Indication",
+    "portals.component.irbAdCreationForm.irbNameLabel": "IRB NAME",
+    "portals.component.irbAdCreationForm.irbEmailLabel": "IRB EMAIL",
+    "portals.component.irbAdCreationForm.compensationLabel": "COMPENSATION AMOUNT",
+    "portals.component.irbAdCreationForm.clinicalTrialsLinkLabel": "CLINICALTRIALS.GOV LINK",
+    "portals.component.irbAdCreationForm.uploadBlindedProtocolLabel": "UPLOAD BLINDED PROTOCOL",
+    "portals.component.irbAdCreationForm.browseBtn": "Browse",
+    "portals.component.irbAdCreationForm.browseBtnHoverText": "Attach File",
+    "portals.component.irbAdCreationForm.notesLabel": "NOTES",
+    "portals.component.irbAdCreationForm.fetchIrbAdCreationErrorToastr": "Something went wrong while fetching the irb ad creation",
+    "portals.component.irbAdCreationForm.fetchIrbProductListErrorToastr": "Can not fetch IrbAd Product List",
+    "portals.component.irbAdCreationForm.submitSuccessToastrTitle": "IRB Ad Creation",
+    "portals.component.irbAdCreationForm.submitSuccessToastrMessage": "The request has been submitted successfully",
+    "portals.component.irbAdCreationForm.submitErrorToastrMessage": "Something went wrong while submitting your request",
+
     "portals.component.listNewStudyForm.addSiteOption": "Add Site Location",
     "portals.component.listNewStudyForm.siteLabel": "Site Location",
     "portals.component.listNewStudyForm.sitePlaceholder": "Select Site Location",
@@ -756,6 +806,7 @@
     "portals.component.sideNavBar.rewards": "Rewards",
     "portals.component.sideNavBar.badges": "Badges",
     "portals.component.sideNavBar.siteManager": "StudyKIK Site Manager",
+    "portals.component.sideNavBar.customerFeedback": "Customer Feedback",
 
     "portals.component.studyAdForm.maxSizeExceededToastrError": "Error! The image size is too large. The maximum supported size is 2000x2000 pixels.",
     "portals.component.studyAdForm.updateBtn": "update",
@@ -785,9 +836,11 @@
     "portals.component.topHeaderBar.notificationBox.fetchUnreadCountToastrError": "Something went wrong while fetching unreadNotificationsCount",
     "portals.component.topHeaderBar.notificationBox.markReadToastrError": "Something went wrong marking notifications read",
 
+    "portals.component.topHeaderBar.helpMenu.customerFeedback": "Customer Feedback",
     "portals.component.topHeaderBar.helpMenu.helpSupport": "Help and Support",
     "portals.component.topHeaderBar.helpMenu.tutorials": "Tutorials",
 
+    "portals.component.topHeaderBar.avatarMenu.customerFeedback": "CUSTOMER FEEDBACK",
     "portals.component.topHeaderBar.avatarMenu.profile": "PROFILE",
     "portals.component.topHeaderBar.avatarMenu.paymentInfo": "PAYMENT INFORMATION",
     "portals.component.topHeaderBar.avatarMenu.receipts": "RECEIPTS",
@@ -811,6 +864,9 @@
 
     "portals.page.homePage.helmetTitle": "Home - StudyKIK",
     "portals.page.homePage.listNewStudyBtn": "+ List New Study",
+
+    "portals.page.irbAdCreationPage.helmetTitle": "Order IRB Ad Creation - StudyKIK",
+    "portals.page.irbAdCreationPage.pageTitle": "ORDER IRB AD CREATION",
 
     "portals.page.listNewStudyPage.helmetTitle": "List New Study - StudyKIK",
     "portals.page.listNewStudyPage.pageTitle": "LIST NEW STUDY",
@@ -956,6 +1012,7 @@
     "common.constants.dec": "Dec",
 
     "common.countryName.au": "Australia",
+    "common.countryName.at": "Austria",
     "common.countryName.br": "Brazil",
     "common.countryName.ca": "Canada",
     "common.countryName.cz": "Czech Republic",
@@ -986,6 +1043,8 @@
     "common.exposureLevel.id4": "Platinum",
     "common.exposureLevel.id5": "Diamond",
     "common.exposureLevel.id6": "Ruby",
+
+    "common.irbAdProductList.id1": "IRB Ad Creation",
 
     "common.indication.id1": "Abnormal Bleeding",
     "common.indication.id2": "Acid Reflux",

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 import { findIndex } from 'lodash';
 
+import { translate } from '../../../../common/utilities/localization';
 import defaultImage from '../../../assets/images/site_location.png';
 
 class RewardListItem extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -43,7 +44,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
     const localTime = moment(created).tz(timezone);
     const date = localTime.format('MM/DD/YYYY');
     const time = localTime.format('hh:mm A');
-    const infoTag = (rewardData && rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} now has {balance} KIKs</p> : null;
+    const infoTag = (rewardData && rewardData.gift) ? <p>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null} {translate('client.component.rewardsItem.nowHas')} {balance} {translate('client.component.rewardsItem.Kiks')}</p> : null;
 
     let content = null;
     content = (
@@ -55,7 +56,7 @@ class RewardListItem extends Component { // eslint-disable-line react/prefer-sta
             </div>
             { points > 0 ?
               <div className="desc">
-                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> earned {points} KIKs</p>
+                <p><strong>{(rewardData && rewardData.siteLocationName) ? rewardData.siteLocationName : null}</strong> {translate('client.component.rewardsItem.earned')} {points} {translate('client.component.rewardsItem.Kiks')}</p>
                 <p>{(rewardData && rewardData.description) ? rewardData.description : null}</p>
                 {infoTag}
               </div>
