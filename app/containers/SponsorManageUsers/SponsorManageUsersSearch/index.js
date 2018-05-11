@@ -11,6 +11,7 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
 import { selectEditUserProcess, selectDeleteUserProcess, selectEditProtocolProcess } from '../selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 @reduxForm({ form: 'searchSponsorManageUsers' })
 
@@ -57,7 +58,6 @@ export class SponsorManageUsersSearch extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // this.props.filterProtocols(this.state.protocolName);
     this.props.filterAdmins(this.state.adminName);
   }
 
@@ -113,7 +113,7 @@ export class SponsorManageUsersSearch extends React.Component {
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <a disabled={!isAllowToEdit} className="btn btn-primary" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
-              + Add User
+              {translate('client.component.sponsorManageUsersSearch.btnAddUser')}
             </a>
           </div>
         </div>
@@ -128,7 +128,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 name="name"
                 component={Input}
                 type="text"
-                placeholder="Search"
+                placeholder={translate('client.component.sponsorManageUsersSearch.placeholderSearch')}
                 className="keyword-search"
                 onChange={this.handleAdminQueryChange}
               />
@@ -139,7 +139,7 @@ export class SponsorManageUsersSearch extends React.Component {
               <Field
                 name="protocol"
                 component={ReactSelect}
-                placeholder="Select Protocol"
+                placeholder={translate('client.component.sponsorManageUsersSearch.placeholderProtocol')}
                 options={[{ label: 'All', value: 'all' }].concat(options)}
                 onChange={this.handleProtocolQueryChange}
               />
@@ -149,7 +149,7 @@ export class SponsorManageUsersSearch extends React.Component {
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>
-            <Modal.Title>Add User</Modal.Title>
+            <Modal.Title>{translate('client.component.sponsorManageUsersSearch.addUserModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddUserModal}>
               <i className="icomoon-icon_close" />
             </a>
