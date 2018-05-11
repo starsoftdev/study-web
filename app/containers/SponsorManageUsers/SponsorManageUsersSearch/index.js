@@ -140,7 +140,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 name="protocol"
                 component={ReactSelect}
                 placeholder={translate('client.component.sponsorManageUsersSearch.placeholderProtocol')}
-                options={[{ label: 'All', value: 'all' }].concat(options)}
+                options={[{ label: translate('common.constants.all'), value: 'all' }].concat(options)}
                 onChange={this.handleProtocolQueryChange}
               />
             </div>
