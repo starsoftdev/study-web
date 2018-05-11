@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../../../containers/SponsorManageUsers/EditSponsorUserForm';
 import { selectEditUserProcess } from '../selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 class ExpandedItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -81,7 +82,7 @@ class ExpandedItem extends Component { // eslint-disable-line react/prefer-state
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>
-            <Modal.Title>Edit User</Modal.Title>
+            <Modal.Title>{translate('client.component.expandedItem.editUser')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddUserModal}>
               <i className="icomoon-icon_close" />
             </a>
