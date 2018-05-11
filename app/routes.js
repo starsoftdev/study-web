@@ -860,6 +860,14 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      path: '/app/cc/patient',
+      name: 'callCenterPatientPage',
+      getComponent(nextState, cb) {
+        System.import('./containers/CallCenterPatientPage')
+          .then(loadModule(cb))
+          .catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
