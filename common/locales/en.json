@@ -1088,6 +1088,7 @@
     "common.constants.all": "All",
     "common.constants.male": "Male",
     "common.constants.female": "Female",
+    "common.constants.success": "Success!",
 
     "common.constants.month.one": "Month",
     "common.constants.month.two": "Months",

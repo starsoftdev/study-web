@@ -48,9 +48,7 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
   render() {
     let studiesList = this.props.manageSponsorUsersData.studiesList;
 
-    // if (this.props.searchFormValues.protocol && this.props.searchFormValues.protocol !== 'all') {
     studiesList = _.filter(studiesList, this.props.filterMethod);
-    // }
 
     if (this.props.paginationOptionsProtocols.activeDirection && this.props.paginationOptionsProtocols.activeSort) {
       const dir = ((this.props.paginationOptionsProtocols.activeDirection === 'down') ? 'desc' : 'asc');
