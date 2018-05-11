@@ -77,9 +77,9 @@ export function* editSponsorUserWorker(action) {
 
     yield put(editSponsorUserSuccess(response));
     if (action.params.isNew) {
-      toastr.success('Success!', translate('client.page.sponsorManageUsers.toastrAddSuccess'));
+      toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrAddSuccess'));
     } else {
-      toastr.success('Success!', translate('client.page.sponsorManageUsers.toastrUpdateSuccess'));
+      toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrUpdateSuccess'));
     }
   } catch (err) {
     const errorMessage = get(err, 'message', translate('client.page.sponsorManageUsers.toastrUpdateDefaultError'));
@@ -105,7 +105,7 @@ export function* deleteSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(deleteSponsorUserSuccess(response));
-    toastr.success('Success!', translate('client.page.sponsorManageUsers.toastrDeleteSuccess'));
+    toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrDeleteSuccess'));
   } catch (err) {
     const errorMessage = get(err, 'message', translate('client.page.sponsorManageUsers.toastrDeleteDefaultError'));
     toastr.error('', errorMessage);
@@ -140,7 +140,7 @@ export function* editProtocolWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editProtocolSuccess(response));
-    toastr.success('Success!', translate('client.page.editProtocolForm.toastrSuccess'));
+    toastr.success(translate('common.constants.success'), translate('client.page.editProtocolForm.toastrSuccess'));
   } catch (err) {
     const errorMessage = get(err, 'message', translate('client.page.editProtocolForm.toastrDefaultError'));
     toastr.error('', errorMessage);
