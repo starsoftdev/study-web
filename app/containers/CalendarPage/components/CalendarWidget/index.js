@@ -11,10 +11,13 @@ import _ from 'lodash';
 import 'react-big-calendar/lib/less/styles.less';
 
 import { SchedulePatientModalType } from '../../../../common/constants';
+import { translate } from '../../../../../common/utilities/localization';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
-Calendar.momentLocalizer(moment); // or globalizeLocalizer
+Calendar.setLocalizer( // or globalizeLocalizer
+  Calendar.momentLocalizer(moment)
+);
 
 class CalendarWidget extends React.Component {
   static propTypes = {
@@ -75,7 +78,7 @@ class CalendarWidget extends React.Component {
       const timezone = site ? site.timezone : calendarTimezone;
       return {
         data: s,
-        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format('h:mm A (z)')}`,
+        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format(translate('portals.component.calendarPage.calendarWidget.patientDateMask'))}`,
         start: browserTime,
         end: browserTime,
       };
@@ -91,6 +94,11 @@ class CalendarWidget extends React.Component {
         evWrap[i].removeAttribute('title');
       }
     });
+    const calendarMessages = {
+      showMore: function showMore(total) {
+        return translate('portals.component.calendarPage.calendarWidget.nMore', { total });
+      },
+    };
 
     return (
       <div className={classnames('calendar-box', 'calendar-slider', { 'five-weeks': this.state.fiveWeeks })}>
@@ -100,6 +108,9 @@ class CalendarWidget extends React.Component {
           defaultDate={this.currentDate}
           culture="en"
           timezone={currentSite ? currentSite.timezone : calendarTimezone}
+          additionalColumnMarkup={translate('portals.component.calendarPage.calendarWidget.scheduledPatientsColumn')}
+          totalString={translate('portals.component.calendarPage.calendarWidget.totalText')}
+          messages={calendarMessages}
           onNavigate={(date) => {
             this.currentDate = date;
             this.handleFiveWeeksHeight(date);
