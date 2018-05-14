@@ -1,0 +1,77 @@
+#cc-patient-page {
+  padding: 10px;
+
+  .header {
+    display: flex;
+    justify-content: center;
+    position: relative;
+
+    .tab {
+      margin: 0 5px;
+      text-transform: none;
+    }
+
+    .form-search {
+      position: absolute;
+      right: 0;
+
+      .search-area {
+        width: inherit;
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    height: calc(~'100vh - 200px');
+    margin-top: 30px;
+
+    .info-container {
+      margin: 10px;
+      padding: 10px;
+
+      span {
+        display: block;
+      }
+    }
+
+    > div {
+      margin: 10px;
+    }
+
+    .left-section {
+      flex: 1;
+
+      .carousel-indicators {
+        li {
+          width: 50%;
+        }
+      }
+
+      .wrapper {
+        background: #fff;
+        border: 2px solid #f78e1e;
+      }
+
+      .site-location-info {
+        border-top: 2px solid #f78e1e;
+      }
+    }
+
+    .middle-section {
+      flex: 2;
+    }
+    
+    .right-section {
+      flex: 2;
+      background: #fff;
+      border: 2px solid #f78e1e;
+
+      .carousel-indicators {
+        li {
+          width: 25%;
+        }
+      }
+    }
+  }
+}
