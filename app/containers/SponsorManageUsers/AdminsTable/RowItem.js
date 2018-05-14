@@ -7,8 +7,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../../components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
 import { selectEditUserProcess } from '../selectors';
+import { translate } from '../../../../common/utilities/localization';
 
-class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
+class adminsRowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     item: PropTypes.object,
     editUser: PropTypes.func,
@@ -96,14 +97,14 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         <td className="col7">
           { (this.props.item.name !== 'Super Admin') &&
             <a disabled={!isAllowToEdit} className="btn btn-primary btn-edit-site pull-right" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
-              <span>Edit</span>
+              <span>{translate('client.component.adminsRowItem.edit')}</span>
             </a>
           }
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>
-            <Modal.Title>Edit User</Modal.Title>
+            <Modal.Title>{translate('client.component.adminsRowItem.editUser')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddUserModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -129,4 +130,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RowItem);
+export default connect(mapStateToProps, mapDispatchToProps)(adminsRowItem);
