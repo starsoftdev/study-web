@@ -65,7 +65,7 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
       ];
     } else {
       menuItemsGroupA = [
-        { upperText: translate('common.component.sideNavBar.home'), link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: translate('portals.component.sideNavBar.home'), link: '/app', icon: 'icomoon-icon_house_alt' },
         /* Commenting out those pages from sponsor portal until they are available
         { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
         { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
