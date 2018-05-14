@@ -736,10 +736,11 @@ export function editStudyLeadSources(studyId, leadSources, callTracking) {
   };
 }
 
-export function editStudyLeadSourcesSuccess(payload) {
+export function editStudyLeadSourcesSuccess(leadSources, studyId, callTracking) {
   return {
     type: EDIT_STUDY_LEAD_SOURCES_SUCCESS,
-    payload,
+    leadSources,
+    callTracking,
   };
 }
 
