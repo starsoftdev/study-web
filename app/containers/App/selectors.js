@@ -105,7 +105,7 @@ const selectIndications = () => createSelector(
   selectGlobal(),
   (substate) => {
     const indications = get(substate, 'baseData.indications', []);
-    return indications.map(e => ({ ...e, name: translate(`common.indication.id${e.id}`) }));
+    return indications.map(e => ({ ...e, originalName: e.name, name: translate(`common.indication.id${e.id}`) }));
   }
 );
 

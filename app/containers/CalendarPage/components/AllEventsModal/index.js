@@ -22,7 +22,6 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
       return false;
     }], [dir]);
   }
-  console.log('events', sorted);
   return (
     <Modal dialogComponentClass={CenteredModal} show={visible} onHide={handleCloseModal} id="all-patients-modal">
       <Modal.Header>
