@@ -6,6 +6,7 @@ import Select from 'react-select';
 import _ from 'lodash';
 
 import { addAllOption } from '../../../../components/Input/ReactSelect';
+import { translate } from '../../../../../common/utilities/localization';
 
 class FilterBar extends Component {
   static propTypes = {
@@ -111,12 +112,12 @@ class FilterBar extends Component {
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
-            value: i.name,
+            value: i.originalName,
             protocolOptions,
           };
         });
         indicationOptions = addAllOption(indicationOptions, {
-          label: 'All',
+          label: translate('portals.component.calendarPage.filterBar.all'),
           value: 'All',
           protocolOptions: addAllOption(_.flatten(sites.map(site => site.studies)).map(s => {
             const protocolNumber = _.find(protocols, { id: s.protocol_id });
@@ -152,12 +153,12 @@ class FilterBar extends Component {
           protocolOptions = addAllOption(protocolOptions);
           return {
             label: i.name,
-            value: i.name,
+            value: i.originalName,
             protocolOptions,
           };
         });
         indicationOptions = addAllOption(indicationOptions, {
-          label: 'All',
+          label: translate('portals.component.calendarPage.filterBar.all'),
           value: 'All',
           protocolOptions: addAllOption(selectedSite.studies.map(s => {
             const protocolNumber = _.find(protocols, { id: s.protocol_id });
@@ -240,7 +241,7 @@ class FilterBar extends Component {
               >
                 <i className="icomoon-icon_search2" />
               </Button>
-              <input type="search" id="search" className="form-control keyword-search" placeholder="Search"
+              <input type="search" id="search" className="form-control keyword-search" placeholder={translate('portals.component.calendarPage.filterBar.searchPlaceholder')}
                 onChange={(ev) => {
                   this.setState({
                     patientName: ev.target,
@@ -255,7 +256,7 @@ class FilterBar extends Component {
               className="form-control data-search"
               disabled={fetchingSites || !isAdmin || bDisabled}
               options={siteLocationOptions}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
               value={defaultValue}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
@@ -264,7 +265,7 @@ class FilterBar extends Component {
               disabled={fetchingSites || !isAdmin || bDisabled}
               options={siteLocationOptions}
               value={filter.siteLocation}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
             }
@@ -275,7 +276,7 @@ class FilterBar extends Component {
               value={filter.indication}
               options={this.state.indicationOptions}
               disabled={this.state.siteLocation === null}
-              placeholder="Select Indication"
+              placeholder={translate('portals.component.calendarPage.filterBar.indicationPlaceholder')}
               onChange={(option) => this.handleFilterChange('indication', option)}
             />
           </div>
@@ -285,7 +286,7 @@ class FilterBar extends Component {
               value={filter.protocol}
               options={this.state.protocolOptions}
               disabled={this.state.indication === null}
-              placeholder="Select Protocol"
+              placeholder={translate('portals.component.calendarPage.filterBar.protocolPlaceholder')}
               onChange={(option) => this.handleFilterChange('protocol', option)}
             />
           </div>
