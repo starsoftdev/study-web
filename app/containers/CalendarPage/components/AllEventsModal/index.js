@@ -6,6 +6,7 @@ import _ from 'lodash';
 import CenteredModal from '../../../../components/CenteredModal';
 
 import { SchedulePatientModalType } from '../../../../common/constants';
+import { translate } from '../../../../../common/utilities/localization';
 
 const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, setAllModalDeferred, sortBy, paginationOptions }) => {
   let sorted = events;
@@ -22,11 +23,10 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
       return false;
     }], [dir]);
   }
-  console.log('events', sorted);
   return (
     <Modal dialogComponentClass={CenteredModal} show={visible} onHide={handleCloseModal} id="all-patients-modal">
       <Modal.Header>
-        <Modal.Title>{moment(date).format('dddd, MMMM DD, YYYY')}</Modal.Title>
+        <Modal.Title>{moment(date).format(translate('portals.component.calendarPage.allEventsModal.modalTitleDateMask'))}</Modal.Title>
         <a className="lightbox-close close" onClick={handleCloseModal}>
           <i className="icomoon-icon_close" />
         </a>
@@ -34,10 +34,18 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
       <Modal.Body>
         <div className="scroll-holder jcf--scrollable">
           <div className="list-head clearfix">
-            <div onClick={sortBy} data-sort="patientName" className={(paginationOptions.activeSort === 'patientName') ? `${paginationOptions.activeDirection} col patient-name` : 'col patient-name'}>Patient <i className="caret-arrow" /></div>
-            <div className="col site-location hidden">Site Location <i className="caret-arrow" /></div>
-            <div className="col protocol hidden">Protocol <i className="caret-arrow" /></div>
-            <div onClick={sortBy} data-sort="time" className={(paginationOptions.activeSort === 'time') ? `${paginationOptions.activeDirection} col time` : 'col time'}>Time <i className="caret-arrow" /></div>
+            <div onClick={sortBy} data-sort="patientName" className={(paginationOptions.activeSort === 'patientName') ? `${paginationOptions.activeDirection} col patient-name` : 'col patient-name'}>
+              {translate('portals.component.calendarPage.allEventsModal.patientColumn')} <i className="caret-arrow" />
+            </div>
+            <div className="col site-location hidden">
+              {translate('portals.component.calendarPage.allEventsModal.siteColumn')} <i className="caret-arrow" />
+            </div>
+            <div className="col protocol hidden">
+              {translate('portals.component.calendarPage.allEventsModal.protocolColumn')} <i className="caret-arrow" />
+            </div>
+            <div onClick={sortBy} data-sort="time" className={(paginationOptions.activeSort === 'time') ? `${paginationOptions.activeDirection} col time` : 'col time'}>
+              {translate('portals.component.calendarPage.allEventsModal.timeColumn')} <i className="caret-arrow" />
+            </div>
           </div>
           <div className="patient-list">
             <div className="list-holder">
@@ -47,7 +55,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
                     <li key={index}>
                       <a className="btn btn-gray-outline lightbox-opener">
                         <span className="patient-name">{`${event.data.patient.firstName ? event.data.patient.firstName : ''} ${event.data.patient.lastName ? event.data.patient.lastName : ''}`}</span>
-                        <span className="time">{event.data.time.format('h:mm A (z)')}</span>
+                        <span className="time">{event.data.time.format(translate('portals.component.calendarPage.allEventsModal.timeMask'))}</span>
                         <span
                           className="btn btn-primary"
                           onClick={() => {
@@ -58,7 +66,7 @@ const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, s
                             handleEdit(SchedulePatientModalType.UPDATE, event);
                           }}
                         >
-                          edit
+                          {translate('portals.component.calendarPage.allEventsModal.editBtn')}
                         </span>
                       </a>
                     </li>
