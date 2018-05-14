@@ -11,10 +11,13 @@ import _ from 'lodash';
 import 'react-big-calendar/lib/less/styles.less';
 
 import { SchedulePatientModalType } from '../../../../common/constants';
+import { translate } from '../../../../../common/utilities/localization';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
-Calendar.momentLocalizer(moment); // or globalizeLocalizer
+Calendar.setLocalizer( // or globalizeLocalizer
+  Calendar.momentLocalizer(moment)
+);
 
 class CalendarWidget extends React.Component {
   static propTypes = {
@@ -75,7 +78,7 @@ class CalendarWidget extends React.Component {
       const timezone = site ? site.timezone : calendarTimezone;
       return {
         data: s,
-        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format('h:mm A (z)')}`,
+        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format(translate('portals.component.calendarPage.calendarWidget.patientDateMask'))}`,
         start: browserTime,
         end: browserTime,
       };
