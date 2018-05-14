@@ -684,6 +684,9 @@
     "portals.component.calendarPage.filterBar.all": "All",
 
     "portals.component.calendarPage.calendarWidget.patientDateMask": "h:mm A (z)",
+    "portals.component.calendarPage.calendarWidget.scheduledPatientsColumn": "SCHEDULED <br /> PATIENTS",
+    "portals.component.calendarPage.calendarWidget.totalText": "Total",
+    "portals.component.calendarPage.calendarWidget.nMore": "+ ${total} more",
 
     "portals.component.calendarPage.schedulePatientModal.title": "SCHEDULE PATIENT",
     "portals.component.calendarPage.schedulePatientModal.whenLabel": "* When",
@@ -717,6 +720,14 @@
     "portals.component.calendarPage.editScheduleModal.chooseDateModalTitle": "Choose Date",
     "portals.component.calendarPage.editScheduleModal.today": "Today:",
     "portals.component.calendarPage.editScheduleModal.displayMask": "dddd, MMMM Do, YYYY",
+
+    "portals.component.calendarPage.allEventsModal.modalTitleDateMask": "dddd, MMMM DD, YYYY",
+    "portals.component.calendarPage.allEventsModal.patientColumn": "Patient",
+    "portals.component.calendarPage.allEventsModal.siteColumn": "Site Location",
+    "portals.component.calendarPage.allEventsModal.protocolColumn": "Protocol",
+    "portals.component.calendarPage.allEventsModal.timeColumn": "Time",
+    "portals.component.calendarPage.allEventsModal.timeMask": "h:mm A (z)",
+    "portals.component.calendarPage.allEventsModal.editBtn": "edit",
 
     "portals.component.editSiteForm.nameLabel": "SITE NAME",
     "portals.component.editSiteForm.phoneLabel": "SITE PHONE",
