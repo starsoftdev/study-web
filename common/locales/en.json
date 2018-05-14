@@ -966,6 +966,9 @@
     "portals.component.upgradeStudyForm.pqsLabel": "Patient qualification <br />Suite: $${price}",
     "portals.component.upgradeStudyForm.notesLabel": "NOTES",
 
+    "portals.page.badgesPage.helmetTitle": "Badges - StudyKIK",
+    "portals.page.badgesPage.comingSoon": "COMING SOON",
+
     "portals.page.homePage.helmetTitle": "Home - StudyKIK",
     "portals.page.homePage.listNewStudyBtn": "+ List New Study",
 
