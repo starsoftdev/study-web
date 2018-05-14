@@ -168,7 +168,7 @@ export default class EditScheduleModal extends Component {
             id="edit-schedule-modal"
           >
             <Modal.Header>
-              <Modal.Title>{translate('portals.component.calendarPage.calendarWidget.editScheduleModal.title')}</Modal.Title>
+              <Modal.Title>{translate('portals.component.calendarPage.editScheduleModal.title')}</Modal.Title>
               <a className="lightbox-close close" onClick={onClose}>
                 <i className="icomoon-icon_close" />
               </a>
@@ -181,7 +181,7 @@ export default class EditScheduleModal extends Component {
                 <span className="site-location">{selectedCellInfo.data.sitelocation}</span>
                 <span className="protocol"><Link to={`/app/study/${selectedCellInfo.data.studyId}`}>{selectedCellInfo.data.protocolNumber}</Link></span>
                 <div className="field-row">
-                  <strong className="label">{translate('portals.component.calendarPage.calendarWidget.editScheduleModal.whenLabel')}</strong>
+                  <strong className="label">{translate('portals.component.calendarPage.editScheduleModal.whenLabel')}</strong>
                   <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
                     <Field
                       name="date"
@@ -193,7 +193,7 @@ export default class EditScheduleModal extends Component {
                 <div className="field-row">
                   <strong className="label required">
                     <label htmlFor="patient-time-edit">
-                      {translate('portals.component.calendarPage.calendarWidget.editScheduleModal.timeLabel')} {`(${moment.tz(this.state.initDate, timezone).format(translate('portals.component.calendarPage.calendarWidget.editScheduleModal.timezoneMask'))})`}
+                      {translate('portals.component.calendarPage.editScheduleModal.timeLabel')} {`(${moment.tz(this.state.initDate, timezone).format(translate('portals.component.calendarPage.editScheduleModal.timezoneMask'))})`}
                     </label>
                   </strong>
                   <div className="field">
@@ -203,7 +203,7 @@ export default class EditScheduleModal extends Component {
                           id="patient-time-edit"
                           name="hour"
                           component={ReactSelect}
-                          placeholder={translate('portals.component.calendarPage.calendarWidget.editScheduleModal.hoursPlaceholder')}
+                          placeholder={translate('portals.component.calendarPage.editScheduleModal.hoursPlaceholder')}
                           options={hourOptions}
                           className="visible-first-del min-height"
                           disabled={submitting}
@@ -214,7 +214,7 @@ export default class EditScheduleModal extends Component {
                           id="minutes2"
                           name="minute"
                           component={ReactSelect}
-                          placeholder={translate('portals.component.calendarPage.calendarWidget.editScheduleModal.minutesPlaceholder')}
+                          placeholder={translate('portals.component.calendarPage.editScheduleModal.minutesPlaceholder')}
                           options={minuteOptions}
                           className="visible-first-del min-height"
                           disabled={submitting}
@@ -225,7 +225,7 @@ export default class EditScheduleModal extends Component {
                           id="time-period2"
                           name="period"
                           component={ReactSelect}
-                          placeholder={translate('portals.component.calendarPage.calendarWidget.editScheduleModal.amPlaceholder')}
+                          placeholder={translate('portals.component.calendarPage.editScheduleModal.amPlaceholder')}
                           options={periodOptions}
                           className="visible-first"
                           disabled={submitting}
@@ -242,20 +242,20 @@ export default class EditScheduleModal extends Component {
                     component={Checkbox}
                     type="checkbox"
                   />
-                  <label className="text-reminder-label" htmlFor="text-reminder">{translate('portals.component.calendarPage.calendarWidget.editScheduleModal.textReminderLabel')}</label>
+                  <label className="text-reminder-label" htmlFor="text-reminder">{translate('portals.component.calendarPage.editScheduleModal.textReminderLabel')}</label>
                 </div>
                 <div className="btn-block text-right">
                   <input
                     type="button"
                     className="btn btn-gray-outline lightbox-opener"
                     disabled={submitting}
-                    value={submitting ? translate('portals.component.calendarPage.calendarWidget.editScheduleModal.deletingBtn') : translate('portals.component.calendarPage.calendarWidget.editScheduleModal.deleteBtn')}
+                    value={submitting ? translate('portals.component.calendarPage.editScheduleModal.deletingBtn') : translate('portals.component.calendarPage.editScheduleModal.deleteBtn')}
                     onClick={() => handleDelete(selectedCellInfo.data.id)}
                   />
                   <input
                     type="submit"
                     className="btn btn-default btn-update"
-                    value={submitting ? translate('portals.component.calendarPage.calendarWidget.editScheduleModal.updatingBtn') : translate('portals.component.calendarPage.calendarWidget.editScheduleModal.updateBtn')}
+                    value={submitting ? translate('portals.component.calendarPage.editScheduleModal.updatingBtn') : translate('portals.component.calendarPage.editScheduleModal.updateBtn')}
                   />
                 </div>
               </form>
@@ -272,7 +272,7 @@ export default class EditScheduleModal extends Component {
             keyboard
           >
             <Modal.Header>
-              <Modal.Title>{translate('portals.component.calendarPage.calendarWidget.editScheduleModal.chooseDateModalTitle')}</Modal.Title>
+              <Modal.Title>{translate('portals.component.calendarPage.editScheduleModal.chooseDateModalTitle')}</Modal.Title>
               <a className="lightbox-close close" onClick={() => { this.handleDatePickerClose(false); }}>
                 <i className="icomoon-icon_close" />
               </a>
@@ -285,7 +285,7 @@ export default class EditScheduleModal extends Component {
                 ref={(calendar) => { this.calendar = calendar; }}
               />
               <div className="current-date" onClick={this.navigateToday}>
-                {translate('portals.component.calendarPage.calendarWidget.editScheduleModal.today')} {currentDate.format(translate('portals.component.calendarPage.calendarWidget.editScheduleModal.displayMask'))}
+                {translate('portals.component.calendarPage.editScheduleModal.today')} {currentDate.format(translate('portals.component.calendarPage.editScheduleModal.displayMask'))}
               </div>
             </Modal.Body>
           </Modal>
