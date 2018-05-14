@@ -11,6 +11,7 @@ import { SchedulePatientModalType } from '../../../../common/constants';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import Checkbox from '../../../../components/Input/Checkbox';
 import CenteredModal from '../../../../components/CenteredModal';
+import { translate } from '../../../../../common/utilities/localization';
 
 import validator from './validator';
 
@@ -174,7 +175,7 @@ export default class SchedulePatientModal extends Component {
     return (
       <Modal dialogComponentClass={CenteredModal} show={modalType === SchedulePatientModalType.CREATE} onHide={handleCloseModal} id="add-schedule-modal">
         <Modal.Header>
-          <Modal.Title>SCHEDULE PATIENT</Modal.Title>
+          <Modal.Title>{translate('portals.component.calendarPage.schedulePatientModal.title')}</Modal.Title>
           <a className="lightbox-close close" onClick={handleCloseModal}>
             <i className="icomoon-icon_close" />
           </a>
@@ -182,13 +183,18 @@ export default class SchedulePatientModal extends Component {
         <Modal.Body>
           <form className="form-lightbox form-add-schedule show-on-select" onSubmit={handleSubmit}>
             <div className="field-row">
-              <strong className="label">* When</strong>
+              <strong className="label">{translate('portals.component.calendarPage.schedulePatientModal.whenLabel')}</strong>
               <div className="field">
-                <input type="text" className="form-control add-date scheduleTime" disabled value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).tz(currentUser.timezone).format('MM/DD/YY')} />
+                <input
+                  type="text"
+                  className="form-control add-date scheduleTime"
+                  disabled
+                  value={selectedCellInfo.selectedDate && moment(selectedCellInfo.selectedDate).tz(currentUser.timezone).format(translate('portals.component.calendarPage.schedulePatientModal.whenDateMask'))}
+                />
               </div>
             </div>
             <div className="field-row">
-              <strong className="label required"><label htmlFor="patient-time">Time</label></strong>
+              <strong className="label required"><label htmlFor="patient-time">{translate('portals.component.calendarPage.schedulePatientModal.timeLabel')}</label></strong>
               <div className="field">
                 <div className="col-holder row">
                   <div className="col pull-left hours">
@@ -196,7 +202,7 @@ export default class SchedulePatientModal extends Component {
                       id="patient-time"
                       name="hour"
                       component={ReactSelect}
-                      placeholder="Hours"
+                      placeholder={translate('portals.component.calendarPage.schedulePatientModal.hoursPlaceholder')}
                       options={hourOptions}
                       className="visible-first-del min-height"
                       disabled={submitting}
@@ -207,7 +213,7 @@ export default class SchedulePatientModal extends Component {
                       id="minutes"
                       name="minute"
                       component={ReactSelect}
-                      placeholder="Minutes"
+                      placeholder={translate('portals.component.calendarPage.schedulePatientModal.minutesPlaceholder')}
                       options={minuteOptions}
                       className="visible-first-del min-height"
                       disabled={submitting}
@@ -218,7 +224,7 @@ export default class SchedulePatientModal extends Component {
                       id="time-period"
                       name="period"
                       component={ReactSelect}
-                      placeholder="AM/PM"
+                      placeholder={translate('portals.component.calendarPage.schedulePatientModal.amPlaceholder')}
                       options={periodOptions}
                       className="visible-first"
                       disabled={submitting}
@@ -229,12 +235,12 @@ export default class SchedulePatientModal extends Component {
             </div>
 
             <div className="field-row">
-              <strong className="label required"><label htmlFor="popup-site-location">Site Location</label></strong>
+              <strong className="label required"><label htmlFor="popup-site-location">{translate('portals.component.calendarPage.schedulePatientModal.siteLabel')}</label></strong>
               <div className="field site-location">
                 <Field
                   name="siteLocation"
                   component={ReactSelect}
-                  placeholder="Select Site Location"
+                  placeholder={translate('portals.component.calendarPage.schedulePatientModal.sitePlaceholder')}
                   options={siteLocationOptions}
                   className="data-search"
                   disabled={submitting || this.props.fetchingSites || !isAdmin}
@@ -246,13 +252,13 @@ export default class SchedulePatientModal extends Component {
             </div>
 
             <div className="field-row">
-              <strong className="label required"><label htmlFor="popup-protocol">protocol</label></strong>
+              <strong className="label required"><label htmlFor="popup-protocol">{translate('portals.component.calendarPage.schedulePatientModal.protocolLabel')}</label></strong>
               <div className="field protocol">
                 <Field
                   id="popup-protocol"
                   name="protocol"
                   component={ReactSelect}
-                  placeholder="Select Protocol"
+                  placeholder={translate('portals.component.calendarPage.schedulePatientModal.protocolPlaceholder')}
                   options={protocolOptions}
                   className="data-search"
                   disabled={submitting || !this.state.siteLocation}
@@ -264,13 +270,13 @@ export default class SchedulePatientModal extends Component {
             </div>
 
             <div className="field-row patient-name">
-              <strong className="label required"><label htmlFor="patient">Patient</label></strong>
+              <strong className="label required"><label htmlFor="patient">{translate('portals.component.calendarPage.schedulePatientModal.patientLabel')}</label></strong>
               <div className="field">
                 <Field
                   id="patient"
                   name="patient"
                   component={ReactSelect}
-                  placeholder="Select Patient"
+                  placeholder={translate('portals.component.calendarPage.schedulePatientModal.patientPlaceholder')}
                   options={patientOptions}
                   className="data-search"
                   disabled={submitting || this.props.fetchingPatientsByStudy || !this.state.protocol}
@@ -289,12 +295,12 @@ export default class SchedulePatientModal extends Component {
                 component={Checkbox}
                 type="checkbox"
               />
-              <label className="text-reminder-label" htmlFor="text-reminder">Text Reminder</label>
+              <label className="text-reminder-label" htmlFor="text-reminder">{translate('portals.component.calendarPage.schedulePatientModal.textReminderLabel')}</label>
             </div>
 
             <div className="text-right">
-              <input type="reset" className="btn btn-gray-outline hidden" value="reset" />
-              <input type="submit" className="btn btn-default" value="Submit" disabled={submitting} />
+              <input type="reset" className="btn btn-gray-outline hidden" value={translate('portals.component.calendarPage.schedulePatientModal.resetBtn')} />
+              <input type="submit" className="btn btn-default" value={translate('portals.component.calendarPage.schedulePatientModal.submitBtn')} disabled={submitting} />
             </div>
           </form>
         </Modal.Body>
