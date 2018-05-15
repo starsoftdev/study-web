@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
+import { translate } from '../../../common/utilities/localization';
 
 class EmailSectionList extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -60,7 +61,7 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                   <strong className="subject">{email.subject}</strong> - {email.body.replace('\n', ' ')}
                 </p>
                 <time dateTime={email.date_sent}>
-                  {moment.tz(email.date_sent, email.timezone).format('MM/DD/YY [at] h:mm A')}
+                  {moment.tz(email.date_sent, email.timezone).format(translate('client.component.emailSectionList.dateMask'))}
                 </time>
               </article>
             )
@@ -80,14 +81,14 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
                 {`${selected.first_name} ${(selected.last_name) ? selected.last_name : ''}`}
               </strong>
               <time dateTime={selected.date_sent}>
-                {moment.tz(selected.date_sent, selected.timezone).format('MM/DD/YY [at] h:mm A')}
+                {moment.tz(selected.date_sent, selected.timezone).format(translate('client.component.emailSectionList.dateMask'))}
               </time>
             </article>
           }
         </section>
         <div className="btns-section">
-          {preview && <input type="button" value="back" className="btn btn-gray-outline left" onClick={this.disablePreview} />}
-          {!preview && <input type="submit" value="compose" className="btn btn-default pull-right" onClick={switchCompose} />}
+          {preview && <input type="button" value={translate('client.component.emailSectionList.back')} className="btn btn-gray-outline left" onClick={this.disablePreview} />}
+          {!preview && <input type="submit" value={translate('client.component.emailSectionList.compose')} className="btn btn-default pull-right" onClick={switchCompose} />}
         </div>
       </div>
     );
