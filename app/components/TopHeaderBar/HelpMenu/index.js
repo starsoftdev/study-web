@@ -1,26 +1,46 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { Link } from 'react-router';
 import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
-import { Link } from 'react-router';
+import FeedbackWidget from '../../../../common/utilities/feedback';
+import { selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../../containers/App/selectors';
+import { translate } from '../../../../common/utilities/localization';
+
+
 class HelpMenu extends React.Component {
+  static propTypes = {
+    currentUserEmail: React.PropTypes.string,
+    currentUserFullName: React.PropTypes.string,
+    currentUserId: React.PropTypes.number,
+  };
 
   constructor(props) {
     super(props);
     this.state = {
       HelpMenuOpen: false,
     };
-    this.toggleHelpMenuHandle = this.toggleHelpMenuHandle.bind(this);
-    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
-  toggleHelpMenuHandle() {
+  toggleHelpMenuHandle = () => {
     this.setState({
       HelpMenuOpen: !this.state.HelpMenuOpen,
     });
   }
 
-  handleClickOutside() {
+  handleClickOutside = () => {
     this.setState({ HelpMenuOpen: false });
+  }
+
+  handleCustomerFeedbackClick = () => {
+    const feedbackWidget = new FeedbackWidget();
+    feedbackWidget.init({
+      clickTarget: 'HELP_MENU',
+      email: this.props.currentUserEmail,
+      name: this.props.currentUserFullName,
+      userId: this.props.currentUserId,
+    });
   }
 
   render() {
@@ -34,8 +54,9 @@ class HelpMenu extends React.Component {
         <div className={`help-menu ${HelpMenuClassName}`}>
           <div className="well">
             <ul className="list-unstyled">
-              <li><Link to="/app/help-support" onClick={() => this.handleClickOutside()}>Help and Support</Link></li>
-              <li><Link to="/app/tutorials" onClick={() => this.handleClickOutside()}>Tutorials</Link></li>
+              <li><a onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.topHeaderBar.helpMenu.customerFeedback')}</a></li>
+              <li><Link to="/app/help-support" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.helpMenu.helpSupport')}</Link></li>
+              <li><Link to="/app/tutorials" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.helpMenu.tutorials')}</Link></li>
             </ul>
           </div>
         </div>
@@ -44,4 +65,13 @@ class HelpMenu extends React.Component {
   }
 }
 
-export default enhanceWithClickOutside(HelpMenu);
+const mapStateToProps = createStructuredSelector({
+  currentUserEmail: selectCurrentUserEmail(),
+  currentUserFullName: selectCurrentUserFullName(),
+  currentUserId: selectCurrentUserId(),
+});
+
+const mapDispatchToProps = () => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(enhanceWithClickOutside(HelpMenu));

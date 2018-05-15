@@ -5,6 +5,7 @@ import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 
 import request from '../../utils/request';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   connectionEstablished,
@@ -248,7 +249,7 @@ export function* sendStudyPatientMessages() {
         cb(err, data);
       });
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong!');
+      const errorMessage = get(err, 'message', translate('portals.component.globalPMSModal.sendMessageToastrError'));
       toastr.error('', errorMessage);
     }
   }
@@ -275,7 +276,7 @@ export function* fetchNotifications(action) {
     }
     yield put(fetchNotificationsSucceeded(response, hasMore, page, userId));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching notifications');
+    const errorMessage = get(err, 'message', translate('portals.page.notificationsPage.fetchNotificationToastrError'));
     toastr.error('', errorMessage);
   }
 }
@@ -287,7 +288,7 @@ export function* fetchUnreadNotificationsCount(action) {
 
     yield put(fetchUnreadNotificationsCountSucceeded(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching unreadNotificationsCount');
+    const errorMessage = get(err, 'message', translate('portals.component.topHeaderBar.notificationBox.fetchUnreadCountToastrError'));
     toastr.error('', errorMessage);
   }
 }
@@ -301,7 +302,7 @@ export function* markNotificationsReadWorker() {
     try {
       yield call(request, requestURL, params);
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong marking notifications read');
+      const errorMessage = get(err, 'message', translate('portals.component.topHeaderBar.notificationBox.markReadToastrError'));
       toastr.error('', errorMessage);
     }
   }

@@ -109,9 +109,11 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
     } catch (e) {
       if (e.statusCode === 404) {
         res.redirect('/404');
-        return;
+      } else {
+        res.redirect('/503');
       }
-      console.log(e);
+
+      // console.log('here', e);
     }
   });
 };
@@ -159,6 +161,8 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
 
+  app.get('/lv21', (req, res) => res.redirect(301, 'https://studykik.com/4004201-lv21'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   app.get('/app*', (req, res) => {
@@ -187,6 +191,16 @@ const addDevMiddlewares = (app, webpackConfig) => {
         res.sendStatus(404);
       } else {
         res.status(404).send(file.toString());
+      }
+    });
+  });
+
+  app.get('/503', (req, res) => {
+    fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(503);
+      } else {
+        res.status(503).send(file.toString());
       }
     });
   });
@@ -236,6 +250,8 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
 
+  app.get('/lv21', (req, res) => res.redirect(301, 'https://studykik.com/4004201-lv21'));
+
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
   // for loader.io verification
@@ -250,6 +266,10 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/404', (req, res) => {
     res.status(404).sendFile(path.resolve(outputPath, 'corporate.html'));
+  });
+
+  app.get('/503', (req, res) => {
+    res.status(503).sendFile(path.resolve(outputPath, 'corporate.html'));
   });
 
   app.get('*', (req, res) => {

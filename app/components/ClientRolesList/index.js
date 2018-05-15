@@ -10,6 +10,7 @@ import { selectCurrentUserClientId, selectSites, selectClientRoles, selectSelect
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
 import { clearSelectedUser, saveUser, deleteUser } from '../../containers/App/actions';
 import ClientRoleItem from './ClientRoleItem';
+import { translate } from '../../../common/utilities/localization';
 
 class ClientRolesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -218,19 +219,19 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
           <div className="col-sm-12">
             <div className="table-responsive">
               <table className="table">
-                <caption>ADMINS</caption>
+                <caption>{translate('client.component.clientRolesList.caption')}</caption>
                 <thead>
                   <tr>
                     <th className={this.getColumnSortClassName('name')} onClick={() => { this.clickSortHandler('name'); }}>
-                      <span>NAME</span>
+                      <span>{translate('client.component.clientRolesList.tableName')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('email')} onClick={() => { this.clickSortHandler('email'); }}>
-                      <span>EMAIL</span>
+                      <span>{translate('client.component.clientRolesList.tableEmail')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th className={this.getColumnSortClassName('access')} onClick={() => { this.clickSortHandler('access'); }}>
-                      <span>ACCESS</span>
+                      <span>{translate('client.component.clientRolesList.tableAccess')}</span>
                       <i className="caret-arrow" />
                     </th>
                     <th></th>
@@ -251,7 +252,7 @@ class ClientRolesList extends Component { // eslint-disable-line react/prefer-st
               keyboard
             >
               <Modal.Header>
-                <Modal.Title>Edit User</Modal.Title>
+                <Modal.Title>{translate('client.component.clientRolesList.editUserModalTitle')}</Modal.Title>
                 <a className="lightbox-close close" onClick={this.closeEditUserModal}>
                   <i className="icomoon-icon_close" />
                 </a>

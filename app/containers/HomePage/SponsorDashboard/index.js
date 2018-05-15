@@ -8,6 +8,7 @@ import { fetchPatientSignUps, fetchPrincipalInvestigatorTotals, fetchProtocols }
 import { selectPatientSignUps, selectPrincipalInvestigatorTotals } from '../selectors';
 
 import graphImage from '../../../assets/images/graph.svg';
+import { translate } from '../../../../common/utilities/localization';
 
 export class SponsorDashboard extends React.Component {
   static propTypes = {
@@ -48,7 +49,7 @@ export class SponsorDashboard extends React.Component {
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>
               <div className="textbox">
-                <h2>PATIENT <br />SIGN UPS</h2>
+                <h2 dangerouslySetInnerHTML={{ __html: translate('sponsor.page.sponsorDashboard.signUps') }} />
               </div>
             </div>
           </div>
@@ -56,15 +57,15 @@ export class SponsorDashboard extends React.Component {
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">TODAY</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterToday')}</span>
                   <strong className="number">{patientSignUps.today}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">YESTERDAY</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterYesterday')}</span>
                   <strong className="number">{patientSignUps.yesterday}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">TOTAL</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterTotal')}</span>
                   <strong className="number">{patientSignUps.total}</strong>
                 </li>
               </ul>
@@ -76,7 +77,7 @@ export class SponsorDashboard extends React.Component {
             <div className="box-holder">
               <i className="icomoon-doctor pull-left" />
               <div className="textbox">
-                <h2>Principal <br /> investigators</h2>
+                <h2 dangerouslySetInnerHTML={{ __html: translate('sponsor.page.sponsorDashboard.investigators') }} />
               </div>
             </div>
           </div>
@@ -84,15 +85,15 @@ export class SponsorDashboard extends React.Component {
             <div className="box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title">ACTIVE</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterActive')}</span>
                   <strong className="number">{principalInvestigatorTotals.active}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">INACTIVE</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterInactive')}</span>
                   <strong className="number">{principalInvestigatorTotals.inactive}</strong>
                 </li>
                 <li>
-                  <span className="sub-title">TOTAL</span>
+                  <span className="sub-title">{translate('sponsor.page.sponsorDashboard.counterTotal')}</span>
                   <strong className="number">{principalInvestigatorTotals.total}</strong>
                 </li>
               </ul>

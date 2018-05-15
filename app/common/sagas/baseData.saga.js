@@ -320,7 +320,7 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', 'Error! Invalid coupon code.');
+      toastr.error('', translate('portals.component.shoppingCartForm.invalidCouponToastrError'));
     }
   }
 }
@@ -381,13 +381,13 @@ export function* redeemWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Redeem Reward', 'The request has been submitted successfully');
+      toastr.success(translate('portals.component.rewardModal.redeemToastrSuccessTitle'), translate('portals.component.rewardModal.redeemToastrSuccessMessage'));
       yield put(redeemSuccess(response));
 
       // Clear the form values
       yield put(reset('rewardRedemptions'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.rewardModal.redeemToastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(redeemError(err));
     }
@@ -415,7 +415,7 @@ export function* saveCardWatcher() {
     const cards = yield select(selectCards());
 
     if (cards && cards.details && cards.details.data.length >= 10) {
-      toastr.error('', 'Error! Too many cards on file.');
+      toastr.error('', translate('portals.component.addNewCardForm.saveCardToastrError'));
       yield put(cardSavingError(new Error('Error! Too many cards on file.')));
     } else {
       try {
@@ -425,10 +425,10 @@ export function* saveCardWatcher() {
           body: JSON.stringify(cardData),
         };
         const response = yield call(request, requestURL, options);
-        toastr.success('', 'Success! Your card has been added.');
+        toastr.success('', translate('portals.component.addNewCardForm.saveCardToastrSuccess'));
         yield put(cardSaved(response));
       } catch (err) {
-        const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+        const errorMessage = get(err, 'message', translate('portals.component.addNewCardForm.saveCardToastrOtherError'));
         toastr.error('', errorMessage);
         yield put(cardSavingError(err));
       }
@@ -451,10 +451,10 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('', 'Success! You have removed your card.');
+      toastr.success('', translate('client.component.cardItem.toastrSuccess'));
       yield put(cardDeleted(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.cardItem.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(cardDeletingError(err));
     }
@@ -774,8 +774,8 @@ export function* saveSiteWatcher() {
       let options = null;
       data.client_id = clientId;
 
-      let messageHeader = 'Edit Site Location';
-      let message = 'The site location has been updated successfully!';
+      let messageHeader = translate('portals.component.editSiteForm.editSiteSuccessToastrTitle');
+      let message = translate('portals.component.editSiteForm.editSiteSuccessToastrMessage');
       if (id) {
         requestURL = `${API_URL}/sites/${id}/updateSite`;
         options = {
@@ -783,8 +783,8 @@ export function* saveSiteWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add Site Location';
-        message = 'Site Location added successfully!';
+        messageHeader = translate('portals.component.editSiteForm.addSiteSuccessToastrTitle');
+        message = translate('portals.component.editSiteForm.addSiteSuccessToastrMessage');
         requestURL = `${API_URL}/sites`;
         options = {
           method: 'POST',
@@ -797,7 +797,7 @@ export function* saveSiteWatcher() {
       toastr.success(messageHeader, message);
       yield put(siteSaved(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.editSiteForm.errorToastrMessage'));
       toastr.error('', errorMessage);
       yield put(siteSavingError(err));
     }
@@ -812,8 +812,8 @@ export function* saveUserWatcher() {
       let requestURL = null;
       let options = null;
 
-      let messageHeader = 'Edit User';
-      let message = 'The user has been updated successfully!';
+      let messageHeader = translate('client.component.editUserForm.toastrHeaderEditUser');
+      let message = translate('client.component.editUserForm.toastrMessageEditUser');
       if (id) {
         data.userId = id;
         requestURL = `${API_URL}/clients/${clientId}/updateUserWithClientRole`;
@@ -822,8 +822,8 @@ export function* saveUserWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add User';
-        message = 'User added successfully!';
+        messageHeader = translate('client.component.editUserForm.toastrHeaderAddUser');
+        message = translate('client.component.editUserForm.toastrMessageAddUser');
         requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
         options = {
           method: 'POST',
@@ -841,7 +841,7 @@ export function* saveUserWatcher() {
         yield put(userSaved(data.clientRole.siteId, response, messageHeader));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.editUserForm.toastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(userSavingError(err));
     }
@@ -899,7 +899,7 @@ export function* fetchIndicationLevelPriceWatcher() {
       const response = yield call(request, requestURL, params);
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
+      const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchLevelPriceErrorToastr'));
       toastr.error('', errorMessage);
       yield put(fetchIndicationLevelPriceError(err));
     }
@@ -916,11 +916,11 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify(params),
       };
       const response = yield call(request, requestURL, reqParams);
-      toastr.success('Time Zone', translate('corporate.page.profile.profileForm.updateProfileToastrSuccess'));
+      toastr.success('Time Zone', translate('client.component.profileForm.updateProfileToastrSuccess'));
       moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', translate('corporate.page.profile.profileForm.updateProfileToastrError'));
+      const errorMessage = get(err, 'message', translate('client.component.profileForm.updateProfileToastrError'));
       toastr.error('', errorMessage);
       yield put(changeUsersTimezoneError(err));
     }
@@ -967,7 +967,7 @@ export function* fetchClientAdminsWorker(action) {
 
     yield put(fetchClientAdminsSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
+    const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchClientAdminsToastrError'));
     toastr.error('', errorMessage);
     yield put(fetchClientAdminsError(err));
   }

@@ -28,6 +28,7 @@ import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
 import { logout } from '../../containers/LoginPage/actions';
+import { translate } from '../../../common/utilities/localization';
 
 class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -119,7 +120,7 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
         id={'ms-tooltip'}
         className="tooltop-inner"
       >
-        {'Coming Soon'}
+        {translate('portals.component.topHeaderBar.comingSoon')}
       </Tooltip>
     );
 
@@ -171,11 +172,11 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <div className="get-credits pull-left">
               <div>
-                <div>{credits} Text Credits</div>
-                <div>{emailCredits} Email Credits</div>
+                <div>{credits} {translate('portals.component.topHeaderBar.textCredits')}</div>
+                <div>{emailCredits} {translate('portals.component.topHeaderBar.emailCredits')}</div>
               </div>
               <div>
-                <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>+ ADD CREDITS</Button>
+                <Button disabled={!purchasable} onClick={this.showAddCreditsModal}>{translate('portals.component.topHeaderBar.addCredits')}</Button>
               </div>
             </div>
 
