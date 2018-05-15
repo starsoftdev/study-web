@@ -5,6 +5,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
+import { translate } from '../../../../common/utilities/localization';
 
 class PatientNote extends React.Component {
   static propTypes = {
@@ -57,28 +58,28 @@ class PatientNote extends React.Component {
             </div>
             <div className="info">
               <div className="info-line">
-                <span className="label"> Name: </span>
+                <span className="label"> {translate('client.component.patientNote.labelName')} </span>
                 <div className="content">
                   <span>
-                    {(note.user && (note.user.roleForClient || note.archivedAuthor)) ? `${note.user.firstName} ${note.user.lastName}` : 'StudyKIK'}
+                    {(note.user && (note.user.roleForClient || note.archivedAuthor)) ? `${note.user.firstName} ${note.user.lastName}` : translate('client.component.patientNote.studyKIK')}
                   </span>
                 </div>
               </div>
 
               <div className="info-line">
-                <span className="label"> Date: </span>
+                <span className="label"> {translate('client.component.patientNote.labelDate')} </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.createdAt, currentUser.timezone).format('MM/DD/YY')}
+                    {moment.tz(note.createdAt, currentUser.timezone).format(translate('client.component.patientNote.dateMask'))}
                   </span>
                 </div>
               </div>
 
               <div className="info-line">
-                <span className="label"> Time: </span>
+                <span className="label"> {translate('client.component.patientNote.labelTime')} </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.createdAt, currentUser.timezone).format('h:mm A')}
+                    {moment.tz(note.createdAt, currentUser.timezone).format(translate('client.component.patientNote.timeMask'))}
                   </span>
                 </div>
               </div>

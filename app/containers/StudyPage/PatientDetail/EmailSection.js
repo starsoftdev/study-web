@@ -16,6 +16,7 @@ import { selectCurrentUser } from '../../../containers/App/selectors';
 import EmailSectionList from '../../../components/EmailSectionList/index';
 import EmailSectionSendForm from '../../../components/EmailSectionSendForm/index';
 import formValidator from '../../../components/EmailSectionSendForm/validator';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Email';
 
@@ -94,7 +95,7 @@ class EmailSection extends React.Component {
     if (_.isEmpty(formSyncErrors) && currentPatient.email) {
       submitEmail(studyId, currentPatient.id, currentUser, formValues.email, formValues.message, formValues.subject);
     } else if (!currentPatient.email) {
-      toastr.error('', 'Error! Patient email field is empty.');
+      toastr.error('', translate('client.component.emailSection.toastrEmailError'));
     } else if (formSyncErrors.email) {
       toastr.error('', formSyncErrors.email);
     } else if (formSyncErrors.subject) {
