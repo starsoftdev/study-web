@@ -59,7 +59,7 @@ function formatString(text, data) {
       newText = getObjProp(data, props);
     }
 
-    return newText || match;
+    return (newText || newText === 0) ? newText : match;
   });
 };
 
