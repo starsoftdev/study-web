@@ -37,6 +37,7 @@ import {
 import { selectProtocols, selectCurrentUser } from '../../containers/App/selectors';
 import { selectValues } from '../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -244,13 +245,13 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
         <StickyContainer className="table-holder fixed-table">
           <Sticky className="fixed-table-sticky-header">
             <header className="fixed-table-head">
-              <h2 className="pull-left">SUBSCRIBED
+              <h2 className="pull-left">{translate('client.component.patientsList.tableHeadSubscribed')}
                 <span className="patient-count"> {total}</span>
               </h2>
-              <h2 className="pull-left">UNSUBSCRIBED
+              <h2 className="pull-left">{translate('client.component.patientsList.tableHeadUnsubscribed')}
                 <span className="patient-count"> {patients.totalUnsubscribed || 0}</span>
               </h2>
-              <h2 className="pull-left">TOTAL
+              <h2 className="pull-left">{translate('client.component.patientsList.tableHeadTotal')}
                 <span className="patient-count"> {(total + patients.totalUnsubscribed)}</span>
               </h2>
             </header>
@@ -268,15 +269,33 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                       />
                       <span>#<i className="caret-arrow" /></span>
                     </div>
-                    <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>NAME<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>PHONE<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>INDICATIONS<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>AGE<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>GENDER<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>BMI<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>STATUS<i className="caret-arrow" /></div>
-                    <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>SOURCE<i className="caret-arrow" /></div>
+                    <div onClick={this.sortBy} data-sort="firstName" className={`th ${(this.props.paginationOptions.activeSort === 'firstName') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleName')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleEmail')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="phone" className={`th ${(this.props.paginationOptions.activeSort === 'phone') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitlePhone')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="indication" className={`th ${(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleIndications')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="age" className={`th ${(this.props.paginationOptions.activeSort === 'age') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleAge')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="gender" className={`th ${(this.props.paginationOptions.activeSort === 'gender') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleGender')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="bmi" className={`th ${(this.props.paginationOptions.activeSort === 'bmi') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleBmi')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="status" className={`th ${(this.props.paginationOptions.activeSort === 'status') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleStatus')}<i className="caret-arrow" />
+                    </div>
+                    <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>
+                      {translate('client.component.patientsList.tableTitleSource')}<i className="caret-arrow" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -296,7 +315,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           >
             <Modal.Header>
               <Modal.Title>
-                <strong>Edit Patient Information</strong>
+                <strong>{translate('client.component.patientsList.editModalTitle')}</strong>
               </Modal.Title>
               <a className="close" onClick={this.closeEditPatientModal}>
                 <i className="icomoon-icon_close" />

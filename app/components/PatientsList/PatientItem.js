@@ -12,6 +12,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import { fetchPatient, addPatientsToTextBlast,
   removePatientFromTextBlast } from '../../containers/PatientDatabasePage/actions';
 import { selectValues } from '../../common/selectors/form.selector';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.TextBlastModal';
 
@@ -119,7 +120,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
         id={'ms-tooltip'}
         className="calendar-tooltip pd-page-unsubscibed-tooltip"
       >
-        UNSUBSCRIBED
+        {translate('client.component.patientItem.unsubscribed')}
       </Tooltip>
     );
     if (unsubscribed) {
@@ -188,7 +189,7 @@ class PatientItem extends Component { // eslint-disable-line react/prefer-statel
             <a className="btn btn-primary lightbox-opener" onClick={this.editPatient} disabled={(this.currentPatientIsBeingFetched())}>
               {(this.currentPatientIsBeingFetched())
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Edit</span>
+                : <span>{translate('client.component.patientItem.edit')}</span>
               }
             </a>
           </div>

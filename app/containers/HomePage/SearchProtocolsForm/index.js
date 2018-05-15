@@ -10,6 +10,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectSearchProtocolsFormError } from './selectors';
 import { selectProtocols, selectProtocolNumbers, selectIndications } from '../selectors';
 import formValidator from './validator';
+import { translate } from '../../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
@@ -33,16 +34,16 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
 
   render() {
     const { protocols, hasError, handleSubmit, protocolNumbers, indications } = this.props;
-    const protocolNumberOptions = [{ label: 'All', value: 'all' }].concat(protocolNumbers.details.map(row => ({
+    const protocolNumberOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(protocolNumbers.details.map(row => ({
       label: row.number,
       value: row.number,
     })));
-    const indicationOptions = [{ label: 'All', value: 'all' }].concat(indications.details.map(row => ({
+    const indicationOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(indications.details.map(row => ({
       label: row.name,
       value: row.id,
     })));
 
-    let croOptions = [{ label: 'All', value: 'all' }].concat(protocols.details.filter(protocol => ((
+    let croOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(protocols.details.filter(protocol => ((
       protocol.croName
     ))).map(row => ({
       label: row.croName,
@@ -57,10 +58,10 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
 
         <div className="btns-popups pull-right disabled-buttons-container">
           <div className="col pull-right">
-            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard" /> ADD CREDITS</button>
+            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard" /> {translate('sponsor.component.searchProtocolsForm.credits')}</button>
           </div>
           <div className="col pull-right">
-            <button disabled className="btn btn-primary download">+ List New Protocol</button>
+            <button disabled className="btn btn-primary download">{translate('sponsor.component.searchProtocolsForm.newProtocol')}</button>
           </div>
         </div>
         <div className="fields-holder clearfix">
@@ -68,7 +69,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
             <Field
               name="protocol"
               component={ReactSelect}
-              placeholder="Select Protocol"
+              placeholder={translate('sponsor.component.searchProtocolsForm.protocolPlaceholder')}
               options={protocolNumberOptions}
               disabled={protocols.fetching}
               onChange={(e) => { this.props.onSubmit({ protocol: e }); }}
@@ -78,7 +79,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
             <Field
               name="indication"
               component={ReactSelect}
-              placeholder="Select Indication"
+              placeholder={translate('sponsor.component.searchProtocolsForm.indicationPlaceholder')}
               options={indicationOptions}
               disabled={protocols.fetching}
               onChange={(e) => { this.props.onSubmit({ indication: e }); }}
@@ -88,7 +89,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
             <Field
               name="cro"
               component={ReactSelect}
-              placeholder="Select CRO"
+              placeholder={translate('sponsor.component.searchProtocolsForm.croPlaceholder')}
               options={croOptions}
               disabled={protocols.fetching}
               onChange={(e) => { this.props.onSubmit({ cro: e }); }}
@@ -98,7 +99,7 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
             <button type="submit" className="btn btn-primary btn-search" disabled={protocols.fetching || hasError}>
               {(protocols.fetching)
                 ? <LoadingSpinner showOnlyIcon size={20} />
-                : <span>Search</span>
+                : <span>{translate('sponsor.component.searchProtocolsForm.search')}</span>
               }
             </button>
           </div>

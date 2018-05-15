@@ -9,6 +9,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Select from 'react-select';
 import classNames from 'classnames';
 import MediaQuery from 'react-responsive';
+import { translate } from '../../../common/utilities/localization';
 import './styles.less';
 
 function ReactSelect({
@@ -58,7 +59,7 @@ function ReactSelect({
       multi={multi}
       simpleValue={!objectValue}
       autosize={false}
-      clearValueText={clearValueText || 'Clear Selection'}
+      clearValueText={clearValueText || translate('common.component.reactSelect.clear')}
       openOnClick
       openOnFocus
       clearable={clearable}
@@ -146,7 +147,7 @@ export default ReactSelect;
 
 export const addAllOption = (options, allOption) => {
   if (Array.isArray(options)) {
-    return [allOption || { label: 'All', value: 'All' }, ...options];
+    return [allOption || { label: translate('common.component.reactSelect.all'), value: 'All' }, ...options];
   }
   return options;
 };

@@ -4,6 +4,7 @@ import { toastr } from 'react-redux-toastr';
 import { reset } from 'redux-form';
 import _, { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
+import { translate } from '../../../common/utilities/localization';
 
 import request from '../../utils/request';
 
@@ -51,7 +52,7 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('List New Study', 'The request has been submitted successfully');
+      toastr.success(translate('portals.page.listNewStudyPage.submitSuccessToastrTitle'), translate('portals.page.listNewStudyPage.submitSuccessToastrMessage'));
       yield put(fetchClientCredits(formValues.user_id));
       yield put(formSubmitted(response));
 
@@ -59,9 +60,9 @@ export function* submitFormWatcher() {
       yield put(reset('listNewStudy'));
       yield put(reset('shoppingCart'));
     } catch (err) {
-      let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      let errorMessage = get(err, 'message', 'portals.page.listNewStudyPage.submitErrorToastr');
       if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
-        errorMessage = 'Error! Invalid coupon code.';
+        errorMessage = translate('portals.page.listNewStudyPage.couponErrorToastr');
       }
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));

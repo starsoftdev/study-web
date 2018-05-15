@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import helpAndSupportFormValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'helpAndSupport';
 const mapDispatchToProps = (dispatch) => ({
@@ -75,12 +76,12 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
       <form onSubmit={handleSubmit}>
         <div className="form-fields">
           <div className="field-row">
-            <strong className="label required"><label htmlFor="site-location">SITE LOCATION</label></strong>
+            <strong className="label required"><label>{translate('client.component.helpAndSupportForm.labelSiteLocation')}</label></strong>
             <div className="field">
               <Field
                 name="siteLocation"
                 component={ReactSelect}
-                placeholder="Select Site Location"
+                placeholder={translate('client.component.helpAndSupportForm.placeholderSiteLocation')}
                 options={siteLocations}
                 disabled={bDisabled}
                 selectedValue={defaultValue || undefined}
@@ -88,21 +89,21 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required"><label>NAME</label></strong>
+            <strong className="label required"><label>{translate('client.component.helpAndSupportForm.labelName')}</label></strong>
             <div className="field">
               <div className="row">
                 <Field
                   name="firstName"
                   component={Input}
                   type="text"
-                  placeholder="First Name"
+                  placeholder={translate('client.component.helpAndSupportForm.placeholderFirstName')}
                   className="col pull-left"
                 />
                 <Field
                   name="lastName"
                   component={Input}
                   type="text"
-                  placeholder="Last Name"
+                  placeholder={translate('client.component.helpAndSupportForm.placeholderLastName')}
                   className="col pull-right"
                 />
               </div>
@@ -110,7 +111,7 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>EMAIL</label></strong>
+            <strong className="label required"><label>{translate('client.component.helpAndSupportForm.labelEmail')}</label></strong>
             <Field
               name="email"
               component={Input}
@@ -120,7 +121,7 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
           </div>
 
           <div className="field-row textarea">
-            <strong className="label required"><label>Message</label></strong>
+            <strong className="label required"><label>{translate('client.component.helpAndSupportForm.labelMessage')}</label></strong>
             <Field
               name="message"
               component={Input}
@@ -132,7 +133,7 @@ class HelpAndSupportForm extends React.Component { // eslint-disable-line react/
           <div className="btn-block text-right">
             <input
               type="submit"
-              value="SUBMIT"
+              value={translate('client.component.helpAndSupportForm.submitBtn')}
               className="btn btn-default"
               disabled={submitting}
             />
