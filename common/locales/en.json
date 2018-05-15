@@ -1087,6 +1087,7 @@
     "portals.page.notificationsPage.timeMask": "hh:mm A",
     "portals.page.notificationsPage.fetchNotificationToastrError": "Something went wrong while fetching notifications",
 
+    "portals.page.projectAgreementsPage.helmetTitle": "Receipts & Project Agreements - StudyKIK",
     "portals.page.proposals.pageTitle": "PROPOSALS",
 
     "portals.page.requestProposalPage.helmetTitle": "Request Proposal - StudyKIK",
