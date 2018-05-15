@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
 import Button from 'react-bootstrap/lib/Button';
 import { formatPhone } from '../../common/helper/functions';
+import { translate } from '../../../common/utilities/localization';
 import DragTypes from './dragSourceTypes';
 
 /**
@@ -79,7 +80,7 @@ class Patient extends React.Component {
 
     if (lastTextMessage && lastTextMessage.dateCreated) {
       return (
-        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}</time>
+        <time dateTime={lastTextMessage.dateCreated}>{moment.tz(lastTextMessage.dateCreated, timezone).format(translate('client.component.patient.dateMask'))}</time>
       );
     }
     return null;
@@ -104,7 +105,7 @@ class Patient extends React.Component {
             </div>
             <div className="time">
               {this.renderUnreadMessageCount()}
-              <Button bsStyle="primary" className="btn-reply" onClick={() => { onPatientTextClick(category, patient); }}>Reply</Button>
+              <Button bsStyle="primary" className="btn-reply" onClick={() => { onPatientTextClick(category, patient); }}>{translate('client.component.patient.reply')}</Button>
               {this.renderTextCreatedDate()}
             </div>
           </div>
