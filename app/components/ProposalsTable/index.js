@@ -11,26 +11,27 @@ import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import Checkbox from '../../components/Input/Checkbox';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 
 const headers = [
   {
-    text: 'Date',
+    text: translate('portals.component.proposalsTable.dateColumn'),
     sort: 'date',
   },
   {
-    text: 'Site name',
+    text: translate('portals.component.proposalsTable.siteColumn'),
     sort: 'site',
   },
   {
-    text: 'Proposal number',
+    text: translate('portals.component.proposalsTable.proposalColumn'),
     sort: 'proposal',
   },
   {
-    text: 'Protocol number',
+    text: translate('portals.component.proposalsTable.protocolColumn'),
     sort: 'protocol',
   },
   {
-    text: 'Total',
+    text: translate('portals.component.proposalsTable.totalColumn'),
     sort: 'total',
   },
 ];
@@ -40,7 +41,7 @@ const formName = 'ProposalsTable.Proposals';
 class ProposalsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUser: PropTypes.object,
-    sites: PropTypes.arrary,
+    sites: PropTypes.array,
     selectCurrent: PropTypes.func,
     selectAll: PropTypes.func,
     range: PropTypes.any,
@@ -344,7 +345,7 @@ class ProposalsTable extends Component { // eslint-disable-line react/prefer-sta
       });
     }
     _.map(raw, (source, key) => {
-      const dateWrapper = moment(source.created).tz(timezone).format('MM/DD/YY');
+      const dateWrapper = moment(source.created).tz(timezone).format(translate('portals.component.proposalsTable.dateMask'));
       const sub = ((source.total % 100) === 0) ? '.00' : false;
 
       let proposalLink = source.id;

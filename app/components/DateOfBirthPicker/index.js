@@ -7,6 +7,7 @@ import { Field } from 'redux-form';
 import moment from 'moment-timezone';
 
 import ReactSelect from '../Input/ReactSelect';
+import { translate } from '../../../common/utilities/localization';
 
 class DateOfBirthPicker extends React.Component {
   static propTypes = {
@@ -48,7 +49,7 @@ class DateOfBirthPicker extends React.Component {
     }
     return (
       <div className="field-row">
-        <strong className="label"><label htmlFor="patient-dob">Date of Birth</label></strong>
+        <strong className="label"><label htmlFor="patient-dob">{translate('client.component.dateOfBirthPicker.label')}</label></strong>
         <div className="field">
           <div className="row">
             <div className="col-small pull-left">
@@ -58,7 +59,7 @@ class DateOfBirthPicker extends React.Component {
                 className="min-height"
                 options={monthOptions}
                 disabled={submitting || loading}
-                placeholder="Month"
+                placeholder={translate('client.component.dateOfBirthPicker.placeholderMonth')}
               />
             </div>
             <div className="col-small pull-left">
@@ -68,7 +69,7 @@ class DateOfBirthPicker extends React.Component {
                 className="min-height"
                 options={dayOptions}
                 disabled={submitting || loading}
-                placeholder="Day"
+                placeholder={translate('client.component.dateOfBirthPicker.placeholderDay')}
               />
             </div>
             <div className="col-small pull-left">
@@ -78,7 +79,7 @@ class DateOfBirthPicker extends React.Component {
                 className="min-height"
                 disabled={submitting || loading}
                 options={yearOptions}
-                placeholder="Year"
+                placeholder={translate('client.component.dateOfBirthPicker.placeholderYear')}
               />
             </div>
           </div>

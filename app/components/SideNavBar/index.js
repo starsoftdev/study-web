@@ -2,23 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
+import FeedbackWidget from '../../../common/utilities/feedback';
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
+import { selectUserRoleType, selectCurrentUser, selectCurrentUserClientId, selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
+import './styles.less';
 
-import {
-  selectCurrentUserClientId,
-  selectUserRoleType,
-  selectCurrentUser,
-} from '../../containers/App/selectors';
 
-class SideNavBar extends React.Component {
+class SideNavBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     currentUserClientId: React.PropTypes.number,
     userRoleType: React.PropTypes.string,
     currentUser: React.PropTypes.any,
+    currentUserEmail: React.PropTypes.string,
+    currentUserFullName: React.PropTypes.string,
+    currentUserId: React.PropTypes.number,
     location: React.PropTypes.object,
   };
 
-  componentDidMount() {
+  handleCustomerFeedbackClick = () => {
+    const feedbackWidget = new FeedbackWidget();
+    feedbackWidget.init({
+      clickTarget: 'SIDE_NAV_BAR',
+      email: this.props.currentUserEmail,
+      name: this.props.currentUserFullName,
+      userId: this.props.currentUserId,
+    });
   }
 
   render() {
@@ -41,22 +50,22 @@ class SideNavBar extends React.Component {
     let menuItemsGroupB;
     if (userRoleType === 'client') {
       menuItemsGroupA = [
-        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
-        { upperText: 'List New Study', link: '/app/list-new-study', icon: 'icomoon-screen' },
-        { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
-        { upperText: 'Request Proposal', link: '/app/request-proposal', icon: 'icomoon-doller' },
-        { upperText: 'Refer', link: '/app/refer', icon: 'icomoon-signout' },
+        { upperText: translate('portals.component.sideNavBar.home'), link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: translate('portals.component.sideNavBar.listNewStudy'), link: '/app/list-new-study', icon: 'icomoon-icon_new' },
+        { upperText: translate('portals.component.sideNavBar.orderAdCreation'), link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
+        { upperText: translate('portals.component.sideNavBar.requestProposal'), link: '/app/request-proposal', icon: 'icomoon-icon_note' },
+        { upperText: translate('portals.component.sideNavBar.refer'), link: '/app/refer', icon: 'icomoon-signout' },
       ];
       menuItemsGroupB = [
-        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage', lowerText: 'Sites / Users', link: '/app/sites-users', icon: 'icomoon-icon_group' },
-        { upperText: 'Patient Database', link: '/app/patient-database', icon: 'icomoon-icon_contacts' },
-        { upperText: 'Rewards', link: '/app/rewards', icon: 'icomoon-gift' },
-        { upperText: 'Badges', link: '/app/badges', icon: 'icomoon-star' },
+        { upperText: translate('portals.component.sideNavBar.calendar'), link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: translate('portals.component.sideNavBar.manage'), lowerText: translate('portals.component.sideNavBar.manageLowerText'), link: '/app/sites-users', icon: 'icomoon-icon_group' },
+        { upperText: translate('portals.component.sideNavBar.patientDB'), link: '/app/patient-database', icon: 'icomoon-icon_database' },
+        { upperText: translate('portals.component.sideNavBar.rewards'), link: '/app/rewards', icon: 'icomoon-gift' },
+        { upperText: translate('portals.component.sideNavBar.badges'), link: '/app/badges', icon: 'icomoon-star' },
       ];
     } else {
       menuItemsGroupA = [
-        { upperText: 'Home', link: '/app', icon: 'icomoon-icon_house_alt' },
+        { upperText: translate('portals.component.sideNavBar.home'), link: '/app', icon: 'icomoon-icon_house_alt' },
         /* Commenting out those pages from sponsor portal until they are available
         { upperText: 'List New Protocol', link: '/app/list-new-protocol', icon: 'icomoon-screen' },
         { upperText: 'Order IRB Ad Creation', link: '/app/order-irb-ad-creation', icon: 'icomoon-irb' },
@@ -65,8 +74,8 @@ class SideNavBar extends React.Component {
         */
       ];
       menuItemsGroupB = [
-        { upperText: 'Calendar', link: '/app/calendar', icon: 'icomoon-icon_calendar' },
-        { upperText: 'Manage Users', lowerText: '', link: '/app/manage-users', icon: 'icomoon-icon_group' },
+        { upperText: translate('portals.component.sideNavBar.calendar'), link: '/app/calendar', icon: 'icomoon-icon_calendar' },
+        { upperText: translate('portals.component.sideNavBar.manageUsers'), link: '/app/manage-users', icon: 'icomoon-icon_group' },
       ];
     }
     return (
@@ -108,9 +117,10 @@ class SideNavBar extends React.Component {
           {
             helpName &&
             <div className="helpline">
-              <h2>StudyKIK Site Manager</h2>
+              <h2>{translate('portals.component.sideNavBar.siteManager')}</h2>
               <div className="area">
                 <p>{helpName} <br /> <a>{helpPhone}</a> <br /> <a>{helpEmail}</a></p>
+                <p className="feedback-link" onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.sideNavBar.customerFeedback')}</p>
               </div>
             </div>
           }
@@ -121,9 +131,12 @@ class SideNavBar extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUserClientId: selectCurrentUserClientId(),
-  userRoleType: selectUserRoleType(),
   currentUser: selectCurrentUser(),
+  currentUserClientId: selectCurrentUserClientId(),
+  currentUserEmail: selectCurrentUserEmail(),
+  currentUserFullName: selectCurrentUserFullName(),
+  currentUserId: selectCurrentUserId(),
+  userRoleType: selectUserRoleType(),
 });
 
 const mapDispatchToProps = () => ({

@@ -10,6 +10,7 @@ import { push } from 'react-router-redux';
 import Helmet from 'react-helmet';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
@@ -72,8 +73,8 @@ const sanitize = (notifications) => notifications.map(n => {
   const { event_log } = n;
   const description = event_log.eventMessage.replace(/<strong>/g, '').replace(/<\/strong>/g, '');
 
-  const date = moment(event_log.created).format('MM/DD/YY');
-  const time = moment(event_log.created).format('hh:mm A');
+  const date = moment(event_log.created).format(translate('portals.page.notificationsPage.dateMask'));
+  const time = moment(event_log.created).format(translate('portals.page.notificationsPage.timeMask'));
 
   return {
     ...n,
@@ -174,11 +175,11 @@ export class NotificationsPage extends React.Component {
       <div className="container-fluid">
         <Helmet title="Notifications - StudyKIK" />
         <section className="rewards">
-          <h2 className="main-heading">NOTIFICATIONS</h2>
+          <h2 className="main-heading">{translate('portals.page.notificationsPage.pageTitle')}</h2>
 
           <section className="table-holder">
             <header>
-              <h2>HISTORY</h2>
+              <h2>{translate('portals.page.notificationsPage.tableTitle')}</h2>
             </header>
             <InfiniteScroll
               pageStart={0}
@@ -195,9 +196,15 @@ export class NotificationsPage extends React.Component {
                 </colgroup>
                 <thead>
                   <tr>
-                    <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>DESCRIPTION <i className="caret-arrow" /></th>
-                    <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>DATE <i className="caret-arrow" /></th>
-                    <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>TIME <i className="caret-arrow" /></th>
+                    <th className={classnames({ up: sortDescription === 1, down: sortDescription === 2 })} onClick={() => { this.sortBy('description'); }}>
+                      {translate('portals.page.notificationsPage.descriptionColumn')} <i className="caret-arrow" />
+                    </th>
+                    <th className={classnames({ up: sortDate === 1, down: sortDate === 2 })} onClick={() => { this.sortBy('date'); }}>
+                      {translate('portals.page.notificationsPage.dateColumn')} <i className="caret-arrow" />
+                    </th>
+                    <th className={classnames({ up: sortTime === 1, down: sortTime === 2 })} onClick={() => { this.sortBy('time'); }}>
+                      {translate('portals.page.notificationsPage.timeColumn')} <i className="caret-arrow" />
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

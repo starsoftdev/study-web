@@ -379,14 +379,14 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     const { setFilterFormValues, updateFilters } = this.props;
     setFilterFormValues('campaign', val);
     this.toggleAllStudies(false);
-    updateFilters(val, 'campaign');
+    updateFilters('campaign', val);
   }
 
   sourceChanged(val) {
     const { setFilterFormValues, updateFilters } = this.props;
     setFilterFormValues('source', val);
     this.toggleAllStudies(false);
-    updateFilters(val, 'source');
+    updateFilters('source', val);
   }
 
   addEmailNotificationClick(custom = false) {

@@ -10,6 +10,7 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import formValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({ form: 'irbAdCreation', validate: formValidator })
 class IrbAdCreationForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -46,31 +47,31 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
       <form className="form-study" onSubmit={handleSubmit}>
         <div className="form-fields">
           <div className="field-row">
-            <strong className="label required"><label htmlFor="site-location">SITE LOCATION</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('portals.component.irbAdCreationForm.siteLabel')}</label></strong>
             <div className="field">
               <Field
                 name="siteLocation"
                 component={ReactSelect}
-                placeholder="Select Site Location"
+                placeholder={translate('portals.component.irbAdCreationForm.sitePlaceholder')}
                 options={siteLocations}
               />
             </div>
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label htmlFor="indication">INDICATION</label></strong>
+            <strong className="label required"><label htmlFor="indication">{translate('portals.component.irbAdCreationForm.indicationLabel')}</label></strong>
             <div className="field">
               <Field
                 name="indication_id"
                 component={ReactSelect}
-                placeholder="Select Indication"
+                placeholder={translate('portals.component.irbAdCreationForm.indicationPlaceholder')}
                 options={indications}
               />
             </div>
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="name">IRB NAME</label></strong>
+            <strong className="label"><label htmlFor="name">{translate('portals.component.irbAdCreationForm.irbNameLabel')}</label></strong>
             <div className="field">
               <Field
                 name="irbName"
@@ -81,7 +82,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="email">IRB EMAIL</label></strong>
+            <strong className="label"><label htmlFor="email">{translate('portals.component.irbAdCreationForm.irbEmailLabel')}</label></strong>
             <div className="field">
               <Field
                 name="irbEmail"
@@ -92,7 +93,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="compensationAmount">COMPENSATION AMOUNT</label></strong>
+            <strong className="label"><label htmlFor="compensationAmount">{translate('portals.component.irbAdCreationForm.compensationLabel')}</label></strong>
             <div className="field">
               <Field
                 name="compensationAmount"
@@ -103,7 +104,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="clinicaltrialGovLink">CLINICALTRIALS.GOV LINK</label></strong>
+            <strong className="label"><label htmlFor="clinicaltrialGovLink">{translate('portals.component.irbAdCreationForm.clinicalTrialsLinkLabel')}</label></strong>
             <div className="field">
               <Field
                 name="clinicaltrialGovLink"
@@ -113,9 +114,14 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row">
-            <strong className="label"><label htmlFor="clinicaltrialGovLink">UPLOAD BLINDED PROTOCOL</label></strong>
+            <strong className="label"><label htmlFor="clinicaltrialGovLink">{translate('portals.component.irbAdCreationForm.uploadBlindedProtocolLabel')}</label></strong>
             <div className="field">
-              <label htmlFor="irb_file" data-text="Browse" data-hover-text="Attach File" className="btn btn-gray upload-btn"></label>
+              <label
+                htmlFor="irb_file"
+                data-text={translate('portals.component.irbAdCreationForm.browseBtn')}
+                data-hover-text={translate('portals.component.irbAdCreationForm.browseBtnHoverText')}
+                className="btn btn-gray upload-btn"
+              />
               <Field
                 id="irb_file"
                 name="file"
@@ -128,7 +134,7 @@ class IrbAdCreationForm extends React.Component { // eslint-disable-line react/p
           </div>
 
           <div className="field-row textarea">
-            <strong className="label"><label htmlFor="notes">NOTES</label></strong>
+            <strong className="label"><label htmlFor="notes">{translate('portals.component.irbAdCreationForm.notesLabel')}</label></strong>
             <div className="field">
               <Field
                 name="notes"
