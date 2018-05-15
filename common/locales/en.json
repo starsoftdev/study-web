@@ -640,6 +640,32 @@
     "corporate.page.trials.getProposalModal.toastrError": "All fields required.",
     "corporate.page.trials.getProposalModal.toastrDefaultError": "Something went wrong while submitting your request",
 
+    "sponsor.component.searchProtocolsForm.credits": "add credits",
+    "sponsor.component.searchProtocolsForm.newProtocol": "+ List New Protocol",
+    "sponsor.component.searchProtocolsForm.indicationPlaceholder": "Select Indication",
+    "sponsor.component.searchProtocolsForm.protocolPlaceholder": "Select Protocol",
+    "sponsor.component.searchProtocolsForm.croPlaceholder": "Select CRO",
+    "sponsor.component.searchProtocolsForm.search": "Search",
+
+    "sponsor.component.protocolsList.status": "status",
+    "sponsor.component.protocolsList.tableHeadProtocol": "PROTOCOL",
+    "sponsor.component.protocolsList.tableHeadIndication": "INDICATION",
+    "sponsor.component.protocolsList.tableHeadCro": "CRO",
+    "sponsor.component.protocolsList.tableHeadActive": "ACTIVE",
+    "sponsor.component.protocolsList.tableHeadInactive": "INACTIVE",
+
+    "sponsor.component.protocolItem.viewReport": "View Report",
+    "sponsor.component.protocolItem.renew": "Renew",
+    "sponsor.component.protocolItem.addSite": "Add Site",
+
+    "sponsor.page.sponsorDashboard.signUps": "PATIENT <br />SIGN UPS",
+    "sponsor.page.sponsorDashboard.investigators": "Principal <br /> investigators",
+    "sponsor.page.sponsorDashboard.counterToday": "TODAY",
+    "sponsor.page.sponsorDashboard.counterYesterday": "YESTERDAY",
+    "sponsor.page.sponsorDashboard.counterTotal": "TOTAL",
+    "sponsor.page.sponsorDashboard.counterActive": "ACTIVE",
+    "sponsor.page.sponsorDashboard.counterInactive": "INACTIVE",
+
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
     "portals.component.addCreditsModal.toastrErrorTitle": "Error!",
