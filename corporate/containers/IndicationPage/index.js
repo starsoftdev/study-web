@@ -59,7 +59,7 @@ export class Indication extends Component { // eslint-disable-line react/prefer-
       this.initalFetched = true;
       this.currentIndication = false;
       for (const indication of newProps.indications) {
-        const findIndication = indication.name.toLowerCase().replace(/( - )|( – )/ig, '-').replace(/(\()|(\))/ig, '').replace(/( {2})|( )/ig, '-');
+        const findIndication = indication.name.toLowerCase().replace(/\//ig, '-').replace(/( - )|( – )/ig, '-').replace(/(\()|(\))/ig, '').replace(/( {2})|( )/ig, '-');
         if (findIndication === params.indication) {
           this.currentIndication = indication;
         }
