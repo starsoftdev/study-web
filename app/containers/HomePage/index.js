@@ -61,6 +61,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     this.searchStudies = this.searchStudies.bind(this);
     this.searchProtocols = this.searchProtocols.bind(this);
     this.gotoListNewStudy = this.gotoListNewStudy.bind(this);
+    this.gotoCallCenterHome = this.gotoCallCenterHome.bind(this);
     this.loadProtocols = this.loadProtocols.bind(this);
   }
 
@@ -68,8 +69,9 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
     const { currentUser, currentUserClientId, userRoleType, queryParams } = this.props;
     const params = queryParams;
     params.status = ACTIVE_STATUS_VALUE;
-
-    if (currentUserClientId && userRoleType === 'client') {
+    if (userRoleType === 'callCenter') {
+      this.gotoCallCenterHome();
+    } else if (currentUserClientId && userRoleType === 'client') {
       this.props.fetchClientSites(currentUserClientId, {});
       this.props.fetchLevels();
       this.props.fetchStudies(currentUser, params);
@@ -118,6 +120,10 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
   gotoListNewStudy() {
     browserHistory.push('/app/list-new-study');
+  }
+
+  gotoCallCenterHome() {
+    browserHistory.replace('/app/cc/home');
   }
 
   loadProtocols(isSort, sort, direction) {
