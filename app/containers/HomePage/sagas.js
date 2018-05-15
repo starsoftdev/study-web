@@ -1263,7 +1263,7 @@ export function* editStudyLeadSourcesWorker(action) {
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {
-      yield put(editStudyLeadSourcesSuccess(action.leadSources));
+      yield put(editStudyLeadSourcesSuccess(action.leadSources, action.studyId, action.callTracking));
       toastr.success('', 'The request has been submitted successfully.');
     } else {
       yield put(editStudyLeadSourcesError(response));

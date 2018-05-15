@@ -1145,6 +1145,24 @@
     "portals.component.sideNavBar.siteManager": "StudyKIK Site Manager",
     "portals.component.sideNavBar.customerFeedback": "Customer Feedback",
 
+    "portals.component.sponsorAllEventsModal.modalTitleDateMask": "dddd, MMMM DD, YYYY",
+    "portals.component.sponsorAllEventsModal.piColumn": "Principal Investigator",
+    "portals.component.sponsorAllEventsModal.patientColumn": "Patient",
+    "portals.component.sponsorAllEventsModal.timeColumn": "Time",
+    "portals.component.sponsorAllEventsModal.notApplicable": "N/A",
+    "portals.component.sponsorAllEventsModal.timeMask": "h:mm A (z)",
+
+    "portals.component.sponsorCalendarWidget.patientNo": "Patient #${counter}",
+    "portals.component.sponsorCalendarWidget.patientDateMask": "h:mm A (z)",
+    "portals.component.sponsorCalendarWidget.scheduledPatientsColumn": "SCHEDULED <br /> PATIENTS",
+    "portals.component.sponsorCalendarWidget.totalText": "Total",
+    "portals.component.sponsorCalendarWidget.nMore": "+ ${total} more",
+
+    "portals.component.sponsorFilterBar.allLabel": "All",
+    "portals.component.sponsorFilterBar.notApplicable": "N/A",
+    "portals.component.sponsorFilterBar.protocolPlaceholder": "Select Protocol",
+    "portals.component.sponsorFilterBar.piPlaceholder": "Select Principal Investigator",
+
     "portals.component.studyAdForm.maxSizeExceededToastrError": "Error! The image size is too large. The maximum supported size is 2000x2000 pixels.",
     "portals.component.studyAdForm.updateBtn": "update",
     "portals.component.studyAdForm.zoom": "Zoom:",
@@ -1242,6 +1260,7 @@
     "portals.page.notificationsPage.timeMask": "hh:mm A",
     "portals.page.notificationsPage.fetchNotificationToastrError": "Something went wrong while fetching notifications",
 
+    "portals.page.projectAgreementsPage.helmetTitle": "Receipts & Project Agreements - StudyKIK",
     "portals.page.proposals.pageTitle": "PROPOSALS",
 
     "portals.page.requestProposalPage.helmetTitle": "Request Proposal - StudyKIK",

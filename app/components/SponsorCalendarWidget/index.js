@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import classnames from 'classnames';
 import _ from 'lodash';
 import 'react-big-calendar/lib/less/styles.less';
+import { translate } from '../../../common/utilities/localization';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -94,11 +95,11 @@ class CalendarWidget extends React.Component {
         }
       }
 
-      result.title = `Patient #${counter} ${moment.tz(s.time, timezone).format('h:mm A (z)')}`;
+      result.title = `${translate('portals.component.sponsorCalendarWidget.patientNo', { counter })} ${moment.tz(s.time, timezone).format(translate('portals.component.sponsorCalendarWidget.patientDateMask'))}`;
       result.tooltipTitle = result.title;
-      result.numberName = `Patient #${counter}`;
+      result.numberName = translate('portals.component.sponsorCalendarWidget.patientNo', { counter });
       if (s.principalInvestigator) {
-        result.tooltipTitle = (<div>{s.principalInvestigator}<br /> Patient #{counter} {moment.tz(s.time, timezone).format('h:mm A (z)')}</div>);
+        result.tooltipTitle = (<div>{s.principalInvestigator}<br /> {translate('portals.component.sponsorCalendarWidget.patientNo', { counter })} {moment.tz(s.time, timezone).format(translate('portals.component.sponsorCalendarWidget.patientDateMask'))}</div>);
       }
       currDate = moment(s.time).startOf('date').date();
 
@@ -117,6 +118,11 @@ class CalendarWidget extends React.Component {
         evWrap[i].removeAttribute('title');
       }
     });
+    const calendarMessages = {
+      showMore: function showMore(total) {
+        return translate('portals.component.sponsorCalendarWidget.nMore', { total });
+      },
+    };
 
     return (
       <div className={classnames('calendar-box', 'calendar-slider', { 'five-weeks': this.state.fiveWeeks })}>
@@ -136,6 +142,9 @@ class CalendarWidget extends React.Component {
           onShowMore={(events, date) => {
             this.props.handleShowAll(true, events, date);
           }}
+          additionalColumnMarkup={translate('portals.component.sponsorCalendarWidget.scheduledPatientsColumn')}
+          totalString={translate('portals.component.sponsorCalendarWidget.totalText')}
+          messages={calendarMessages}
           components={{
             event: (ev) => {
               const tooltip = (
