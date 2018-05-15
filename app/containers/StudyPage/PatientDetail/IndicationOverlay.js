@@ -6,6 +6,7 @@ import React from 'react';
 import _ from 'lodash';
 import { Field } from 'redux-form';
 import Input from '../../../components/Input/index';
+import { translate } from '../../../../common/utilities/localization';
 
 class IndicationOverlay extends React.Component {
   static propTypes = {
@@ -68,7 +69,7 @@ class IndicationOverlay extends React.Component {
               id="indication-filter"
               component={Input}
               className="keyword-search"
-              placeholder="Search"
+              placeholder={translate('client.component.indicationOverlay.placeholderSearch')}
               onChange={this.setIndicationFilter}
             />
             <label htmlFor="indication-filter" className="icomoon-icon_search2" />
@@ -82,7 +83,7 @@ class IndicationOverlay extends React.Component {
                     this.onClick(indication);
                   }}
                 >
-                  {indication.name}
+                  {translate(`common.indication.id${indication.id}`)}
                 </li>
               ))}
             </ul>
