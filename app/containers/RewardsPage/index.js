@@ -32,6 +32,7 @@ import { pickReward, setActiveSort } from '../../containers/RewardsPage/actions'
 import RewardModal from '../../components/RewardModal';
 import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
+import { translate } from '../../../common/utilities/localization';
 
 import cardStudykik from '../../assets/images/img6.png';
 import cardAmazon from '../../assets/images/img8.png';
@@ -123,13 +124,15 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
     if (selectedSite && selectedSite !== '0') {
       const siteDetail = find(this.props.sites, { id: selectedSite });
+      const params = { siteName: siteDetail.name, amount: (rewardsBalance[selectedSite] || '0') };
+
       return (
-        <h3 className="pull-left">{siteDetail.name} Has <strong>{rewardsBalance[selectedSite]} KIKs</strong></h3>
+        <h3 className="pull-left" dangerouslySetInnerHTML={{ __html: translate('client.page.rewards.amountKiks', params) }} />
       );
     }
 
     return (
-      <h3 className="pull-left"><strong>{rewardsBalance[0]} Total KIKs</strong></h3>
+      <h3 className="pull-left"><strong>{rewardsBalance[0]} {translate('client.page.rewards.total')}</strong></h3>
     );
   }
 
@@ -147,7 +150,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
       <div className="container-fluid">
         <Helmet title="Rewards - StudyKIK" />
         <section className="rewards">
-          <h2 className="main-heading">REWARDS</h2>
+          <h2 className="main-heading">{translate('client.page.rewards.header')}</h2>
           <div className="form-search clearfix">
             <div className="pull-left custom-select no-left-padding">
               {siteLocations.length > 0 &&
@@ -161,7 +164,12 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
 
           <header className="sub-header clearfix">
             {this.renderHeaderText()}
-            <a className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })} data-text="Redeem" data-hovertext="Redeem Now" onClick={() => (redeemable ? this.openRewardModal() : null)} />
+            <a
+              className={classNames('btn bgn-chat pull-right', { disabled: !redeemable })}
+              data-text={translate('client.page.rewards.redeemBtn')}
+              data-hovertext={translate('client.page.rewards.redeemBtnHover')}
+              onClick={() => (redeemable ? this.openRewardModal() : null)}
+            />
             <RewardModal
               currentUser={currentUser}
               siteLocations={redeemableSiteLocations}
@@ -189,23 +197,23 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
           <div className="earning-info clearfix">
 
             <aside className="aside pull-left">
-              <h3>HOW TO <br /> EARN KIKs </h3>
+              <h3 dangerouslySetInnerHTML={{ __html: translate('client.page.rewards.howTo') }} />
 
               <ol className="list-unstyled list-earning">
                 <li>
                   <span className="number"><span></span></span>
-                  <h4>FILL OUT ENROLLMENT DATA!</h4>
-                  <p>For every study that you update your patient notes and status on weekly, you earn points</p>
+                  <h4>{translate('client.page.rewards.fillOutTitle')}</h4>
+                  <p>{translate('client.page.rewards.fillOutText')}</p>
                 </li>
                 <li>
                   <span className="number"><span></span></span>
-                  <h4>Listing<br /> Studies!</h4>
-                  <p>Every time you list a study, you earn points back</p>
+                  <h4 dangerouslySetInnerHTML={{ __html: translate('client.page.rewards.listingTitle') }} />
+                  <p>{translate('client.page.rewards.listingText')}</p>
                 </li>
                 <li>
                   <span className="number"><span></span></span>
-                  <h4>Referrals!</h4>
-                  <p>We appreciate your referrals! Earn points for every site or sponsor that lists a Platinum Study or higher  with StudyKIK</p>
+                  <h4>{translate('client.page.rewards.referralsTitle')}</h4>
+                  <p>{translate('client.page.rewards.referralsText')}</p>
                 </li>
               </ol>
             </aside>
@@ -216,76 +224,76 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                   <div>
                     <div className="box">
                       <div className="box-holder">
-                        <h3>RUBY LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelRuby')}</h3>
                         <strong className="number">+500 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
 
                     <div className="box">
                       <div className="box-holder">
-                        <h3>RUBY LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelRuby')}</h3>
                         <strong className="number">+50 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
                   </div>
-                  <div className="package-img diamond"><img className="ruby-img" src={ruby} alt="RUBY LISTING" width="135" /></div>
+                  <div className="package-img diamond"><img className="ruby-img" src={ruby} alt={translate('client.page.rewards.levelRuby')} width="135" /></div>
                 </div>
 
                 <div className="col-sm-3 column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
-                        <h3>DIAMOND LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelDiamond')}</h3>
                         <strong className="number">+300 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
 
                     <div className="box">
                       <div className="box-holder">
-                        <h3>DIAMOND LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelDiamond')}</h3>
                         <strong className="number">+30 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
                   </div>
-                  <div className="package-img diamond"><img src={diamond} alt="DIAMOND LISTING" width="115" height="102" /></div>
+                  <div className="package-img diamond"><img src={diamond} alt={translate('client.page.rewards.levelDiamond')} width="115" height="102" /></div>
                 </div>
 
                 <div className="col-sm-3 msg-info column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
-                        <h3>PLATINUM LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelPlatinum')}</h3>
                         <strong className="number">+150 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
 
                     <div className="box">
                       <div className="box-holder">
-                        <h3>PLATINUM LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelPlatinum')}</h3>
                         <strong className="number">+15 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
                   </div>
-                  <div className="package-img platinum"><img src={platinum} alt="PLATINUM LISTING" width="108" height="115" /></div>
+                  <div className="package-img platinum"><img src={platinum} alt={translate('client.page.rewards.levelPlatinum')} width="108" height="115" /></div>
                 </div>
 
                 <div className="col-sm-3 rewards-info column table-child">
                   <div>
                     <div className="box">
                       <div className="box-holder">
-                        <h3>GOLD LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelGold')}</h3>
                         <strong className="number">+50 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
 
                     <div className="box">
                       <div className="box-holder">
-                        <h3>GOLD LISTING</h3>
+                        <h3>{translate('client.page.rewards.levelGold')}</h3>
                         <strong className="number">+5 <span>KIK<span className="text-lowercase">s</span></span></strong>
                       </div>
                     </div>
                   </div>
-                  <div className="package-img gold"><img src={gold} alt="GOLD LISTING" width="98" height="108" /></div>
+                  <div className="package-img gold"><img src={gold} alt={translate('client.page.rewards.levelGold')} width="98" height="108" /></div>
                 </div>
               </div>
 
@@ -293,7 +301,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                 <div className="col-xs-8 sponsor">
                   <div className="box">
                     <div className="box-holder">
-                      <h3>REFER A SPONSOR</h3>
+                      <h3>{translate('client.page.rewards.referSponsor')}</h3>
                       <strong className="number">+300 <span>KIK<span className="text-lowercase">s</span></span></strong>
                     </div>
                   </div>
@@ -302,7 +310,7 @@ export class RewardsPage extends React.Component { // eslint-disable-line react/
                 <div className="col-xs-4 site">
                   <div className="box">
                     <div className="box-holder">
-                      <h3>REFER A SITE</h3>
+                      <h3>{translate('client.page.rewards.referSite')}</h3>
                       <strong className="number">+100 <span>KIK<span className="text-lowercase">s</span></span></strong>
                     </div>
                   </div>

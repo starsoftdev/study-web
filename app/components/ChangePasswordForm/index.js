@@ -34,7 +34,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
 
 
         <div className="field-row">
-          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelOldPassword')}</label></strong>
+          <strong className="label required"><label>{translate('client.component.changePasswordForm.labelOldPassword')}</label></strong>
           <Field
             name="old_password"
             component={Input}
@@ -46,7 +46,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelNewPassword')}</label></strong>
+          <strong className="label required"><label>{translate('client.component.changePasswordForm.labelNewPassword')}</label></strong>
           <Field
             name="new_password"
             component={Input}
@@ -58,7 +58,7 @@ class ChangePasswordForm extends React.Component { // eslint-disable-line react/
         </div>
 
         <div className="field-row">
-          <strong className="label required"><label>{translate('corporate.page.profile.changePasswordForm.labelConfirmPassword')}</label></strong>
+          <strong className="label required"><label>{translate('client.component.changePasswordForm.labelConfirmPassword')}</label></strong>
           <Field
             name="new_password_confirm"
             component={Input}

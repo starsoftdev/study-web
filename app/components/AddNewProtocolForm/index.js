@@ -9,6 +9,7 @@ import { selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { translate } from '../../../common/utilities/localization';
 import {
   selectAddProtocolFormValues,
   selectAddProtocolFormError,
@@ -73,17 +74,17 @@ class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer
       <form className="form-lightbox form-add-protocol" onSubmit={this.onSubmitForm}>
         <div className="add-protocol form-fields">
           <div className="field-row">
-            <strong className="label required"><label>Site Location</label></strong>
+            <strong className="label required"><label>{translate('client.component.addNewProtocolForm.labelSiteLocation')}</label></strong>
             <Field
               name="siteLocation"
               component={ReactSelect}
-              placeholder="Select Site Location"
+              placeholder={translate('client.component.addNewProtocolForm.placeholderSiteLocation')}
               options={siteLocations}
               className="field"
             />
           </div>
           <div className="field-row">
-            <strong className="label required"><label>Recruitment Phone</label></strong>
+            <strong className="label required"><label>{translate('client.component.addNewProtocolForm.labelRecruitmentPhone')}</label></strong>
             <Field
               name="recruitmentPhone"
               component={Input}
@@ -93,17 +94,17 @@ class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer
             />
           </div>
           <div className="field-row">
-            <strong className="label required"><label>Indication</label></strong>
+            <strong className="label required"><label>{translate('client.component.addNewProtocolForm.labelIndication')}</label></strong>
             <Field
               name="indication_id"
               component={ReactSelect}
-              placeholder="Select Indication"
+              placeholder={translate('client.component.addNewProtocolForm.placeholderIndication')}
               options={indications}
               className="field"
             />
           </div>
           <div className="field-row">
-            <strong className="label required"><label>Protocol</label></strong>
+            <strong className="label required"><label>{translate('client.component.addNewProtocolForm.labelProtocol')}</label></strong>
             <Field
               name="protocolNumber"
               component={Input}
@@ -112,7 +113,7 @@ class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer
             />
           </div>
           <div className="field-row">
-            <strong className="label required"><label>Sponsor Name</label></strong>
+            <strong className="label required"><label>{translate('client.component.addNewProtocolForm.labelSponsorName')}</label></strong>
             <Field
               name="sponsorName"
               component={Input}
@@ -121,7 +122,7 @@ class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer
             />
           </div>
           <div className="field-row">
-            <strong className="label"><label>Sponsor Email</label></strong>
+            <strong className="label"><label>{translate('client.component.addNewProtocolForm.labelSponsorEmail')}</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -133,7 +134,7 @@ class AddNewProtocolForm extends Component { // eslint-disable-line react/prefer
             <button type="submit" className="btn btn-default btn-add-row" disabled={savedSite.saving}>
               {savedSite.saving
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>Submit</span>
+                : <span>{translate('client.component.addNewProtocolForm.submit')}</span>
               }
             </button>
           </div>

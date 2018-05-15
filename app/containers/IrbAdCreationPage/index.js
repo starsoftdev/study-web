@@ -22,6 +22,7 @@ import { submitForm, fetchIrbProductList, fetchIrbAdCreation } from '../../conta
 import { selectShoppingCartFormError, selectShoppingCartFormValues } from '../../components/ShoppingCartForm/selectors';
 import { shoppingCartFields } from '../../components/ShoppingCartForm/validator';
 import { ComingSoon } from '../../components/ComingSoon';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   fetchClientSites,
@@ -128,7 +129,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
 
     if ((userRoleType === 'client' && purchasable) && productList[0]) {
       const addOns = [{
-        title: productList[0].name,
+        title: translate(`common.irbAdProductList.id${productList[0].id}`),
         price: productList[0].price * 100,
         quantity: 1,
         total: productList[0].price * 100,
@@ -136,9 +137,9 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
       return (
         <div>
           <StickyContainer className="container-fluid">
-            <Helmet title="Order IRB Ad Creation - StudyKIK" />
+            <Helmet title={translate('portals.page.irbAdCreationPage.helmetTitle')} />
             <section className="study-portal">
-              <h2 className="main-heading">ORDER IRB AD CREATION</h2>
+              <h2 className="main-heading">{translate('portals.page.irbAdCreationPage.pageTitle')}</h2>
               <div className="form-study row">
                 <div className="col-xs-6 form-holder">
                   <IrbAdCreationForm
@@ -177,7 +178,7 @@ export class IrbAdCreationPage extends React.Component { // eslint-disable-line 
     if (userRoleType === 'sponsor') {
       return (
         <div>
-          <Helmet title="Order IRB Ad Creation - StudyKIK" />
+          <Helmet title={translate('portals.page.irbAdCreationPage.helmetTitle')} />
           <ComingSoon />
         </div>
       );

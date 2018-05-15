@@ -13,6 +13,7 @@ import {
   selectSocket,
 } from '../../../containers/GlobalNotifications/selectors';
 import pqsImage from '../../../assets/images/pqs.png';
+import { translate } from '../../../../common/utilities/localization';
 
 class ProtocolsList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -64,12 +65,6 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     }
 
     this.props.setActiveSort(sort, direction);
-
-   /* const dir = ((direction === 'down') ? 'desc' : 'asc');
-    const sorted = _.orderBy(this.props.protocols.details, [function (o) {
-      return o[(sort || defaultSort)];
-    }], [dir]);
-    this.props.sortSuccess(sorted); */
     this.props.loadProtocols(true, sort, direction);
   }
 
@@ -110,22 +105,32 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
     return (
       <section className="table-holder table-area fixed-table">
         <header className="fixed-table-head">
-          <h2>STATUS</h2>
+          <h2>{translate('sponsor.component.protocolsList.status')}</h2>
         </header>
         <div className="fixed-table-thead">
           <table className="table table-messaging-suite">
             <thead>
               <tr>
                 <th className="default-cursor">#<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="protocolNumber" className={(this.props.paginationOptions.activeSort === 'protocolNumber') ? this.props.paginationOptions.activeDirection : ''}>PROTOCOL<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>INDICATION<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="croName" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>CRO<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="protocolNumber" className={(this.props.paginationOptions.activeSort === 'protocolNumber') ? this.props.paginationOptions.activeDirection : ''}>
+                  {translate('sponsor.component.protocolsList.tableHeadProtocol')}<i className="caret-arrow" />
+                </th>
+                <th onClick={this.sortBy} data-sort="indication" className={(this.props.paginationOptions.activeSort === 'indication') ? this.props.paginationOptions.activeDirection : ''}>
+                  {translate('sponsor.component.protocolsList.tableHeadIndication')}<i className="caret-arrow" />
+                </th>
+                <th onClick={this.sortBy} data-sort="croName" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>
+                  {translate('sponsor.component.protocolsList.tableHeadCro')}<i className="caret-arrow" />
+                </th>
                 <th onClick={this.sortBy} data-sort="unreadMessageCount" className={(this.props.paginationOptions.activeSort === 'croName') ? this.props.paginationOptions.activeDirection : ''}>
                   <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip="Patient Qualification Suite" />
                   <ReactTooltip id="pqs-logo" type="info" class="tooltipClass wide" effect="solid" />
                 </th>
-                <th onClick={this.sortBy} data-sort="activeCount" className={(this.props.paginationOptions.activeSort === 'activeCount') ? this.props.paginationOptions.activeDirection : ''}>ACTIVE<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="inactiveCount" className={(this.props.paginationOptions.activeSort === 'inactiveCount') ? this.props.paginationOptions.activeDirection : ''}>INACTIVE<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="activeCount" className={(this.props.paginationOptions.activeSort === 'activeCount') ? this.props.paginationOptions.activeDirection : ''}>
+                  {translate('sponsor.component.protocolsList.tableHeadActive')}<i className="caret-arrow" />
+                </th>
+                <th onClick={this.sortBy} data-sort="inactiveCount" className={(this.props.paginationOptions.activeSort === 'inactiveCount') ? this.props.paginationOptions.activeDirection : ''}>
+                  {translate('sponsor.component.protocolsList.tableHeadInactive')}<i className="caret-arrow" />
+                </th>
                 <th>&nbsp;</th>
               </tr>
             </thead>

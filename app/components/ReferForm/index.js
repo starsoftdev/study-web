@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import referFormValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'refer';
 const mapDispatchToProps = (dispatch) => ({
@@ -75,12 +76,12 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
       <form onSubmit={handleSubmit}>
         <div className="form-fields">
           <div className="field-row">
-            <strong className="label required"><label htmlFor="site-location">SITE LOCATION</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('client.component.referForm.labelSiteLocation')}</label></strong>
             <div className="field">
               <Field
                 name="siteLocation"
                 component={ReactSelect}
-                placeholder="Select Site Location"
+                placeholder={translate('client.component.referForm.placeholderSiteLocation')}
                 options={siteLocations}
                 disabled={bDisabled}
                 selectedValue={defaultValue || undefined}
@@ -88,21 +89,21 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
             </div>
           </div>
           <div className="field-row">
-            <strong className="label required"><label>CONTACT NAME</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('client.component.referForm.labelContactName')}</label></strong>
             <div className="field">
               <div className="row">
                 <Field
                   name="firstName"
                   component={Input}
                   type="text"
-                  placeholder="First Name"
+                  placeholder={translate('client.component.referForm.placeholderFirstName')}
                   className="col pull-left"
                 />
                 <Field
                   name="lastName"
                   component={Input}
                   type="text"
-                  placeholder="Last Name"
+                  placeholder={translate('client.component.referForm.placeholderLastName')}
                   className="col pull-right"
                 />
               </div>
@@ -110,7 +111,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>CONTACT EMAIL</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('client.component.referForm.labelContactEmail')}</label></strong>
             <Field
               name="email"
               component={Input}
@@ -120,7 +121,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>CONTACT COMPANY NAME</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('client.component.referForm.labelContactCompanyName')}</label></strong>
             <Field
               name="companyName"
               component={Input}
@@ -130,18 +131,18 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
           </div>
 
           <div className="field-row">
-            <strong className="label required"><label>CONTACT COMPANY TYPE</label></strong>
+            <strong className="label required"><label htmlFor="site-location">{translate('client.component.referForm.labelContactCompanyType')}</label></strong>
             <Field
               name="companyType"
               component={ReactSelect}
-              placeholder="Select Company Type"
+              placeholder={translate('client.component.referForm.placeholderCompanyType')}
               options={companyTypes}
               className="field"
             />
           </div>
 
           <div className="field-row textarea">
-            <strong className="label"><label>Message</label></strong>
+            <strong className="label"><label>{translate('client.component.referForm.labelMessage')}</label></strong>
             <Field
               name="message"
               component={Input}
@@ -153,7 +154,7 @@ class ReferForm extends React.Component { // eslint-disable-line react/prefer-st
           <div className="btn-block text-right">
             <input
               type="submit"
-              value="SUBMIT"
+              value={translate('client.component.referForm.btnValue')}
               className="btn btn-default"
               disabled={submitting}
             />

@@ -14,6 +14,7 @@ import { selectStudies } from '../selectors';
 import { selectSearchStudiesFormError, selectSearchStudiesFormValues } from './selectors';
 import formValidator from './validator';
 import { ACTIVE_STATUS_VALUE, INACTIVE_STATUS_VALUE } from '../constants';
+import { translate } from '../../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   clientSites: selectClientSites(),
@@ -83,13 +84,13 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
     if (currentUser && currentUser.roleForClient) {
       bDisabled = !(currentUser.roleForClient.canPurchase || currentUser.roleForClient.canRedeemRewards || currentUser.roleForClient.name === 'Super Admin' || currentUser.roleForClient.name === 'Admin');
     }
-    const siteOptions = [{ label: 'All', value: '0' }].concat(map(clientSites.details, siteIterator => ({
+    const siteOptions = [{ label: translate('portals.client.component.homePage.searchStudiesForm.all'), value: '0' }].concat(map(clientSites.details, siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
     })));
-    const statusOptions = [{ label: 'All', value: '0' },
-                           { label: 'Active', value: ACTIVE_STATUS_VALUE },
-                           { label: 'Inactive', value: INACTIVE_STATUS_VALUE }];
+    const statusOptions = [{ label: translate('portals.client.component.homePage.searchStudiesForm.all'), value: '0' },
+                           { label: translate('portals.client.component.homePage.searchStudiesForm.active'), value: ACTIVE_STATUS_VALUE },
+                           { label: translate('portals.client.component.homePage.searchStudiesForm.inactive'), value: INACTIVE_STATUS_VALUE }];
 
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.handleSubmit}>
@@ -107,7 +108,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
                 })}
                 type="text"
                 className="keyword-search"
-                placeholder="Search"
+                placeholder={translate('portals.client.component.homePage.searchStudiesForm.searchPlaceholder')}
                 disabled={clientSites.fetching || studies.fetching}
               />
             </div>
@@ -116,7 +117,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
             <Field
               name="site"
               component={ReactSelect}
-              placeholder="Select Site Location"
+              placeholder={translate('portals.client.component.homePage.searchStudiesForm.sitePlaceholder')}
               options={siteOptions}
               onChange={(e) => this.performSearch(e, 'site')}
               disabled={clientSites.fetching || studies.fetching || bDisabled}
@@ -126,7 +127,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
             <Field
               name="status"
               component={ReactSelect}
-              placeholder="Select Status"
+              placeholder={translate('portals.client.component.homePage.searchStudiesForm.statusPlaceholder')}
               options={statusOptions}
               onChange={(e) => this.performSearch(e, 'status')}
               disabled={clientSites.fetching || studies.fetching}
@@ -136,7 +137,7 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
             <button type="submit" className="btn btn-primary btn-search" disabled={clientSites.fetching || studies.fetching || hasError}>
               {(studies.fetching)
                 ? <LoadingSpinner showOnlyIcon size={20} />
-                : <span>Search</span>
+                : <span>{translate('portals.client.component.homePage.searchStudiesForm.searchBtn')}</span>
               }
             </button>
           </div>
