@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+import { translate } from '../../../../common/utilities/localization';
 
 class ProtocolItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -66,7 +67,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     const { protocolNumber, indication, croName, activeCount, inactiveCount, pqs, unreadMessageCount } = this.props;
     const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
-    let patientMessagingSuiteText = 'Off';
+    let patientMessagingSuiteText = translate('common.constants.off');
     if (unreadMessageCount && unreadMessageCount > 0) {
       messageCountContent = (
         <span className="counter-circle">{unreadMessageCount}</span>
@@ -74,7 +75,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     }
 
     if (pqs) {
-      patientMessagingSuiteText = 'On';
+      patientMessagingSuiteText = translate('common.constants.on');
     }
 
     return (
@@ -108,9 +109,9 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
             <div className="btns">
               <div className="area">
                 <div className="pull-right">
-                  <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Report</Button>
-                  <Button disabled className="btn btn-primary lightbox-opener">Renew</Button>
-                  <Button disabled className="btn btn-danger lightbox-opener">Add Site</Button>
+                  <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>{translate('sponsor.component.protocolItem.viewReport')}</Button>
+                  <Button disabled className="btn btn-primary lightbox-opener">{translate('sponsor.component.protocolItem.renew')}</Button>
+                  <Button disabled className="btn btn-danger lightbox-opener">{translate('sponsor.component.protocolItem.addSite')}</Button>
                 </div>
               </div>
             </div>
