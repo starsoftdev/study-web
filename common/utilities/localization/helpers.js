@@ -59,7 +59,13 @@ function formatString(text, data) {
       newText = getObjProp(data, props);
     }
 
-    return (newText || newText === 0) ? newText : match;
+    // normalize data as string
+    // note: this allows specified falsey values to be returned below and used by presentation layer
+    if (newText === 0 || newText === false) {
+      newText = String(newText);
+    }
+
+    return newText || match;
   });
 };
 
