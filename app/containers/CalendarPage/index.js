@@ -366,7 +366,6 @@ export default class CalendarPage extends React.Component {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
-    const defaultSort = 'orderNumber';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
