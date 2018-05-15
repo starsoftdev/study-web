@@ -740,6 +740,7 @@ export function editStudyLeadSourcesSuccess(leadSources, studyId, callTracking) 
   return {
     type: EDIT_STUDY_LEAD_SOURCES_SUCCESS,
     leadSources,
+    studyId,
     callTracking,
   };
 }
