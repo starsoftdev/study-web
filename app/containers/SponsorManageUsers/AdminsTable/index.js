@@ -65,14 +65,14 @@ export class SponsorManageUsersAdminsTable extends React.Component {
       <div className="table-holder table-responsive">
         {
           <table className="table-manage-user table">
-            <caption>{translate('client.component.sponsorManageUsersAdminsTable.title')}</caption>
+            <caption>{translate('sponsor.component.sponsorManageUsersAdminsTable.title')}</caption>
             <thead>
               <tr>
                 <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersAdminsTable.tableHeadName')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersAdminsTable.tableHeadName')}<i className="caret-arrow" />
                 </th>
                 <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersAdminsTable.tableHeadEmail')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersAdminsTable.tableHeadEmail')}<i className="caret-arrow" />
                 </th>
                 <th />
               </tr>
