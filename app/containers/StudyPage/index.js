@@ -76,6 +76,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.state = {
       socketBinded: false,
       isSubscribedToUpdateStats: false,
+      mountTime: 0
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -86,7 +87,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchStudy(params.id, 1);     // fetch STUDYKIK source by default = 1
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
-
+    this.setState({ mountTime: (new Date()).getTime() });
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
         clientOpenedStudyPage(params.id);
@@ -146,7 +147,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
                 return false;
               }
             });
-            if (needToUpdateMessageStats) {
+            if (needToUpdateMessageStats && socketMessage.invokeTime > this.state.mountTime) {
               if (socketMessage.twilioTextMessage.direction !== 'inbound') {
                 this.props.studyStatsFetched({
                   total: this.props.stats.texts + 1,
