@@ -14,6 +14,7 @@ import TextBlastModal from './TextBlastModal/index';
 import EmailBlastModal from '../../components/EmailBlastModal/index';
 import AddPatientForm from './ImportPatients/AddPatientForm';
 import { selectCurrentUser } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 import { exportPatients } from './actions';
 
@@ -115,13 +116,13 @@ class StudyActionButtons extends Component {
         <div className="col pull-right no-right-padding">
           <button type="button" className="btn btn-primary download pull-right" onClick={this.download}>
             <i className="icomoon-icon_download" />
-            &nbsp;Download
+            &nbsp;{translate('client.component.studyActionButtons.download')}
           </button>
         </div>
         <div className="col pull-right">
           <span className="btn btn-primary import" onClick={this.toggleImportPatientsModal}>
             <i className="icomoon-icon_upload" />
-            &nbsp;Upload Patients
+            &nbsp;{translate('client.component.studyActionButtons.uploadPatients')}
           </span>
           <ImportPatientsModal show={this.state.showImportPatientsModal} onHide={this.toggleImportPatientsModal} toggleAddPatient={this.toggleAddPatientModal} />
           <Modal
@@ -134,7 +135,7 @@ class StudyActionButtons extends Component {
           >
             <Modal.Header>
               <Modal.Title>
-                <strong>Add Patient</strong>
+                <strong>{translate('client.component.studyActionButtons.addPatient')}</strong>
               </Modal.Title>
               <a className="close" onClick={this.toggleAddPatientModal}>
                 <i className="icomoon-icon_close" />
@@ -148,7 +149,7 @@ class StudyActionButtons extends Component {
         <div className="col pull-right">
           <span className="btn btn-primary email" onClick={this.toggleTextEmailBlastModal}>
             <i className="icomoon-icon_chat_alt" />
-            &nbsp;Text / Email Blast
+            &nbsp;{translate('client.component.studyActionButtons.blast')}
             <TextEmailBlastModal
               show={this.state.showTextEmailBlastModal}
               onHide={this.toggleTextEmailBlastModal}
