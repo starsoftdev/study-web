@@ -16,6 +16,7 @@ import Input from '../../../components/Input/index';
 import { submitAddPatient } from '../actions';
 import { selectStudyId, selectAddPatientStatus, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'addPatient';
 
@@ -82,11 +83,11 @@ class AddPatientForm extends React.Component {
       <Form className="form-lightbox" onSubmit={this.addPatient} noValidate="novalidate">
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-first-name">Patient Name</label></strong>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelPatientName')}</label></strong>
           <div className="field">
             <div className="row">
               <Field
-                name="firstName"
+                name={translate('client.component.addPatientForm.placeholderFirstName')}
                 component={Input}
                 type="text"
                 placeholder="First Name"
@@ -98,7 +99,7 @@ class AddPatientForm extends React.Component {
                 name="lastName"
                 component={Input}
                 type="text"
-                placeholder="Last Name"
+                placeholder={translate('client.component.addPatientForm.placeholderLastName')}
                 className="col pull-left"
                 id="import-patient-last-name"
                 required
@@ -108,7 +109,7 @@ class AddPatientForm extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-email"> Patient Email </label>
+            <label htmlFor="import-patient-email">{translate('client.component.addPatientForm.labelPatientEmail')}</label>
           </strong>
           <Field
             name="email"
@@ -121,7 +122,7 @@ class AddPatientForm extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-phone"> Patient Phone </label>
+            <label htmlFor="import-patient-phone">{translate('client.component.addPatientForm.labelPatientPhone')}</label>
           </strong>
           <Field
             name="phone"
@@ -135,18 +136,18 @@ class AddPatientForm extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label>Source</label>
+            <label>{translate('client.component.addPatientForm.labelSource')}</label>
           </strong>
           <Field
             name="source"
             component={ReactSelect}
             className="field required"
-            placeholder="Select Source"
+            placeholder={translate('client.component.addPatientForm.placeholderSource')}
             options={sourceOptions}
           />
         </div>
         <div className="text-right">
-          <Button type="submit" disabled={addPatientStatus.adding}>Submit</Button>
+          <Button type="submit" disabled={addPatientStatus.adding}>{translate('client.component.addPatientForm.submit')}</Button>
         </div>
       </Form>
     );

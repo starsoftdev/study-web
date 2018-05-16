@@ -33,6 +33,7 @@ import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/ac
 import {
   selectSocket,
 } from '../../GlobalNotifications/selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 export class PatientDetailModal extends React.Component {
   static propTypes = {
@@ -165,16 +166,16 @@ export class PatientDetailModal extends React.Component {
         const timezone = site.timezone || currentUser.timezone;
         return (
           <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
-            <span className="date">{moment.tz(currentPatient.appointments[0].time, timezone).format('MM/DD/YY')}</span>
-            <span> at </span>
-            <span className="time">{moment.tz(currentPatient.appointments[0].time, timezone).format('hh:mm A (z)')} </span>
+            <span className="date">{moment.tz(currentPatient.appointments[0].time, timezone).format(translate('client.component.patientDetailModal.dateMask'))}</span>
+            <span> {translate('client.component.patientDetailModal.at')} </span>
+            <span className="time">{moment.tz(currentPatient.appointments[0].time, timezone).format(translate('client.component.patientDetailModal.timeMask'))} </span>
           </a>
         );
       }
 
       return (
         <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.CREATE)}>
-          No Scheduled Appointment
+          {translate('client.component.patientDetailModal.appointment')}
         </a>
       );
     }
@@ -216,18 +217,12 @@ export class PatientDetailModal extends React.Component {
               <div className="column">
                 <div id="carousel-example-generic" className={`carousel slide popup-slider ${carousel.other ? 'full-height' : ''}`}>
                   <ol className="carousel-indicators">
-                    <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>Note</li>
-                    <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>Text</li>
-                    <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>Email</li>
+                    <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>{translate('client.component.patientDetailModal.note')}</li>
+                    <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
+                    <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>{translate('client.component.patientDetailModal.email')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <NotesSection
-                      active={carousel.note}
-                      currentUser={currentUser}
-                      currentPatient={formattedPatient}
-                      notes={currentPatientNotes}
-                      studyId={studyId}
-                    />
+                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
                     <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
                     <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
                   </div>

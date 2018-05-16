@@ -309,7 +309,7 @@ export default function dashboardPageReducer(state = initialState, action) {
 
     case EDIT_STUDY_LEAD_SOURCES_SUCCESS: {
       const studiesCopy = state.studies.details.map(study => {
-        if (study.id === action.studyId) {
+        if (study.study_id === action.studyId) {
           return {
             ...study,
             callTracking: action.callTracking,
