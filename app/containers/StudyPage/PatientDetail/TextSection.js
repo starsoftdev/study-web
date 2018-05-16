@@ -11,6 +11,7 @@ import { toastr } from 'react-redux-toastr';
 import { readStudyPatientMessages, updatePatientSuccess, studyStatsFetched } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
+import { translate } from '../../../../common/utilities/localization';
 import * as Selector from '../selectors';
 
 import {
@@ -68,7 +69,6 @@ class TextSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    // const { currentUser } = newProps;
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
@@ -86,7 +86,6 @@ class TextSection extends React.Component {
             this.initStudyPatientMessagesFetch(this.props);
           });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
-          // this.props.markAsReadPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
           this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
             unreadMessageCount: 0,
@@ -141,7 +140,7 @@ class TextSection extends React.Component {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
     const clientCredits = this.props.clientCredits.details.customerCredits;
     if (clientCredits === 0 || clientCredits === null) {
-      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      toastr.error('', translate('client.component.textSection.toastrCreditsError'));
       return;
     }
     const textarea = this.textarea;
@@ -171,7 +170,7 @@ class TextSection extends React.Component {
 
   checkForValidPhone = (notValidPhone) => {
     if (notValidPhone) {
-      toastr.error('Error!', 'The phone field is empty.');
+      toastr.error(translate('common.constants.error'), translate('client.component.textSection.toastrEmptyPhoneError'));
     }
   }
 
@@ -225,7 +224,7 @@ class TextSection extends React.Component {
       return (
         <textarea
           className="form-control test"
-          placeholder="Type a message..."
+          placeholder={translate('client.component.textSection.placeholderMessage')}
           onChange={this.textAreaChange}
           maxLength={maxCharacters}
           disabled
@@ -238,7 +237,7 @@ class TextSection extends React.Component {
     return (
       <textarea
         className="form-control test"
-        placeholder="Type a message..."
+        placeholder={translate('client.component.textSection.placeholderMessage')}
         onChange={this.textAreaChange}
         maxLength={maxCharacters}
         ref={(textarea) => {
@@ -254,9 +253,9 @@ class TextSection extends React.Component {
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
     const disabled = (clientCredits === 0 || clientCredits === null);
+    const notValidPhone = !currentPatient.phone;
     const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
-    const notValidPhone = !currentPatient.phone;
 
     return (
       <div className={classNames('item text', { active })}>
@@ -274,7 +273,7 @@ class TextSection extends React.Component {
               onClick={(e) => (unsubscribed || !ePMS || notValidPhone || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
               disabled={sendDisabled}
             >
-              Send
+              {translate('client.component.textSection.send')}
             </div>
           </div>
         </div>
