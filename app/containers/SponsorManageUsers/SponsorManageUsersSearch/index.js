@@ -113,7 +113,7 @@ export class SponsorManageUsersSearch extends React.Component {
         <div className="btns-area pull-right">
           <div className="col pull-right">
             <a disabled={!isAllowToEdit} className="btn btn-primary" onClick={() => (!isAllowToEdit ? null : this.openAddUserModal())}>
-              {translate('client.component.sponsorManageUsersSearch.btnAddUser')}
+              {translate('sponsor.component.sponsorManageUsersSearch.btnAddUser')}
             </a>
           </div>
         </div>
@@ -128,7 +128,7 @@ export class SponsorManageUsersSearch extends React.Component {
                 name="name"
                 component={Input}
                 type="text"
-                placeholder={translate('client.component.sponsorManageUsersSearch.placeholderSearch')}
+                placeholder={translate('sponsor.component.sponsorManageUsersSearch.placeholderSearch')}
                 className="keyword-search"
                 onChange={this.handleAdminQueryChange}
               />
@@ -139,7 +139,7 @@ export class SponsorManageUsersSearch extends React.Component {
               <Field
                 name="protocol"
                 component={ReactSelect}
-                placeholder={translate('client.component.sponsorManageUsersSearch.placeholderProtocol')}
+                placeholder={translate('sponsor.component.sponsorManageUsersSearch.placeholderProtocol')}
                 options={[{ label: translate('common.constants.all'), value: 'all' }].concat(options)}
                 onChange={this.handleProtocolQueryChange}
               />
@@ -149,7 +149,7 @@ export class SponsorManageUsersSearch extends React.Component {
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="new-user" show={this.state.addUserModalOpen} onHide={this.closeAddUserModal}>
           <Modal.Header>
-            <Modal.Title>{translate('client.component.sponsorManageUsersSearch.addUserModalTitle')}</Modal.Title>
+            <Modal.Title>{translate('sponsor.component.sponsorManageUsersSearch.addUserModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddUserModal}>
               <i className="icomoon-icon_close" />
             </a>

@@ -26,6 +26,7 @@ import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
 import { getItem } from '../../utils/localStorage';
+import { translate } from '../../../common/utilities/localization';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -243,7 +244,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     } else if (!study || !sources || !campaigns) {
       return (
-        <div>A problem occurred trying to load the page. Please try refreshing the page.</div>
+        <div>{translate('client.page.studyPage.problem')}</div>
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
@@ -255,7 +256,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         value: campaign.id,
       };
     });
-    campaignOptions.unshift({ label: 'All', value: -1 });
+    campaignOptions.unshift({ label: translate('common.constants.all'), value: -1 });
     let defaultSource = '';
     const sourceOptions = this.props.studySources.details.filter(s => !s.isLeadSource).map(studySource => {
       if (studySource.source.type === 'StudyKIK') {
@@ -306,9 +307,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <header className="main-head">
             <h2 className="main-heading">{study.name}</h2>
             <p>
-              <span className="info-cell">Location: {siteLocation}</span>
-              <span className="info-cell">Sponsor: {sponsor}</span>
-              <span className="info-cell">Protocol: {protocol.number || ''}</span>
+              <span className="info-cell">{translate('client.page.studyPage.location')} {siteLocation}</span>
+              <span className="info-cell">{translate('client.page.studyPage.sponsor')} {sponsor}</span>
+              <span className="info-cell">{translate('client.page.studyPage.protocol')} {protocol.number || ''}</span>
             </p>
           </header>
           <FilterStudyPatients

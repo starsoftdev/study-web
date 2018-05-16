@@ -5,6 +5,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
+import { translate } from '../../../../common/utilities/localization';
 
 class PatientText extends React.Component {
   static propTypes = {
@@ -54,7 +55,7 @@ class PatientText extends React.Component {
     const { currentPatient, textMessage, currentUser } = this.props;
     if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
       const user = (textMessage.user || currentUser);
-      const author = (!textMessage.isProxyMessage) ? `${user.firstName} ${user.lastName || ''}` : 'StudyKIK';
+      const author = (!textMessage.isProxyMessage) ? `${user.firstName} ${user.lastName || ''}` : translate('client.component.patientText.studyKIK');
       return (
         <strong className="name">{author}</strong>
       );
@@ -72,9 +73,9 @@ class PatientText extends React.Component {
       let addon = '';
 
       if (textMessage.isStopMessage) {
-        addon = <span className="stop-list-notification">This patient no longer wants to receive text messages. The ability to text him/her through your portal has been removed. You may still call or email to see if he/she qualifies for the study.</span>;
+        addon = <span className="stop-list-notification">{translate('client.component.patientText.stopListNotification')}</span>;
       } else if (textMessage.isStartMessage) {
-        addon = <span className="stop-list-notification">This patient is able to receive text messages.</span>;
+        addon = <span className="stop-list-notification">{translate('client.component.patientText.startListNotification')}</span>;
       }
       return (
         <div className={classNames('post-msg', { reply: textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound' })}>
@@ -87,7 +88,7 @@ class PatientText extends React.Component {
               {addon}
               {(textMessage.isBlastMessage) ?
                 <span className="blast-message-notification"><br />
-                  Text STOP to stop.
+                  {translate('client.component.patientText.blastMessageNotification')}
                 </span> : '' }
             </p>
             <a className="btn-trash">
@@ -96,7 +97,7 @@ class PatientText extends React.Component {
           </div>
           {this.renderTextMessageOriginUser()}
           <time dateTime={textMessage.dateCreated}>
-            {moment.tz(textMessage.dateCreated, timezone).format('MM/DD/YY [at] h:mm A')}
+            {moment.tz(textMessage.dateCreated, timezone).format(translate('client.component.patientText.dateMask'))}
           </time>
         </div>
       );
