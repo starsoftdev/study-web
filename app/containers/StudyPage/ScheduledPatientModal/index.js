@@ -14,6 +14,7 @@ import Checkbox from '../../../components/Input/Checkbox';
 import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
 import { selectCurrentUser, selectSites } from '../../App/selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 const fieldName = 'ScheduledPatientModal';
 
@@ -38,7 +39,7 @@ function getTimeComponents(strTime, timezone) {
   return {
     hour: (((localTime.hour() + 11) % 12) + 1).toString(),
     minute: localTime.minute().toString(),
-    period: localTime.hour() >= 12 ? 'PM' : 'AM',
+    period: localTime.hour() >= 12 ? translate('common.constants.pm') : translate('common.constants.am'),
   };
 }
 
@@ -136,7 +137,7 @@ class ScheduledPatientModal extends React.Component {
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>SCHEDULE PATIENT</Modal.Title>
+            <Modal.Title>{translate('client.component.scheduledPatientModal.title')}</Modal.Title>
             <a className="lightbox-close close" onClick={onHide} disabled={submittingSchedule.submitting}>
               <i className="icomoon-icon_close" />
             </a>
@@ -149,13 +150,13 @@ class ScheduledPatientModal extends React.Component {
               ref={(calendar) => { this.calendar = calendar; }}
             />
             <div className="current-date" onClick={this.navigateToday}>
-              Today: {moment().format('dddd, MMMM DD, YYYY')}
+              {translate('client.component.scheduledPatientModal.today')} {moment().format('dddd, MMMM DD, YYYY')}
             </div>
             <form className="clearfix schedule-form" onSubmit={handleSubmit}>
               <div className="text-center">
                 <div className="field-row patient-name-field-row">
                   <strong className="label required">
-                    <label>PATIENT</label>
+                    <label>{translate('client.component.scheduledPatientModal.labelPatient')}</label>
                   </strong>
                   <div className="field">
                     <div className="row">
@@ -180,14 +181,14 @@ class ScheduledPatientModal extends React.Component {
                 </div>
                 <div className="field-row time-field-row">
                   <strong className="label required">
-                    <label>TIME {`(${moment.tz(timezone).format('z')})`}</label>
+                    <label>{translate('client.component.scheduledPatientModal.time')} {`(${moment.tz(timezone).format('z')})`}</label>
                   </strong>
                   <div className="field time-field">
                     <div className="col-holder row">
                       <div className="col-small pull-left hours">
                         <Field
                           name="hour"
-                          placeholder="Hours"
+                          placeholder={translate('client.component.scheduledPatientModal.placeholderHours')}
                           options={hourOptions}
                           component={ReactSelect}
                         />
@@ -195,7 +196,7 @@ class ScheduledPatientModal extends React.Component {
                       <div className="col-small pull-left minutes">
                         <Field
                           name="minute"
-                          placeholder="Minutes"
+                          placeholder={translate('client.component.scheduledPatientModal.placeholderMinutes')}
                           options={minuteOptions}
                           component={ReactSelect}
                         />
@@ -203,7 +204,7 @@ class ScheduledPatientModal extends React.Component {
                       <div className="col-small pull-left time-mode">
                         <Field
                           name="period"
-                          placeholder="AM/PM"
+                          placeholder={translate('client.component.scheduledPatientModal.placeholderAmPm')}
                           options={periodOptions}
                           component={ReactSelect}
                         />
@@ -220,10 +221,10 @@ class ScheduledPatientModal extends React.Component {
                       component={Checkbox}
                       className="reminder-container"
                     />
-                    <label className="reminder-label"> Text Reminder</label>
+                    <label className="reminder-label">{translate('client.component.scheduledPatientModal.textReminder')}</label>
                   </div>
                 </div>
-                <input type="submit" className="btn btn-default pull-right" value="Submit" disabled={submittingSchedule.submitting} />
+                <input type="submit" className="btn btn-default pull-right" value={translate('client.component.scheduledPatientModal.submit')} disabled={submittingSchedule.submitting} />
               </div>
             </form>
           </Modal.Body>
@@ -237,8 +238,8 @@ class ScheduledPatientModal extends React.Component {
 const hourOptions = numberSequenceCreator(1, 13);
 const minuteOptions = numberSequenceCreator(0, 60);
 const periodOptions = [
-  { label: 'AM', value: 'AM' },
-  { label: 'PM', value: 'PM' },
+  { label: translate('common.constants.am'), value: 'AM' },
+  { label: translate('common.constants.pm'), value: 'PM' },
 ];
 
 const mapStateToProps = createStructuredSelector({
