@@ -26,6 +26,7 @@ import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 import IndicationOverlay from './IndicationOverlay';
 import { selectIndications } from '../../App/selectors';
 import { fetchIndications } from '../../App/actions';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Other';
 
@@ -164,19 +165,19 @@ class OtherSection extends React.Component {
   renderGender() {
     const { loading, submitting } = this.props;
     const genderOptions = [{
-      label: 'N/A',
+      label: translate('common.constants.na'),
       value: 'N/A',
     }, {
-      label: 'Male',
+      label: translate('common.constants.male'),
       value: 'Male',
     }, {
-      label: 'Female',
+      label: translate('common.constants.female'),
       value: 'Female',
     }];
     return (
       <div className="field-row">
         <strong className="label">
-          <label htmlFor="patient-gender">Gender</label>
+          <label htmlFor="patient-gender">{translate('client.component.otherSection.labelGender')}</label>
         </strong>
         <div className="field patient-gender">
           <Field
@@ -184,7 +185,7 @@ class OtherSection extends React.Component {
             component={ReactSelect}
             options={genderOptions}
             disabled={submitting || loading}
-            placeholder="Select Gender"
+            placeholder={translate('client.component.otherSection.placeholderGender')}
           />
         </div>
       </div>
@@ -222,8 +223,8 @@ class OtherSection extends React.Component {
     if (formDidChange) {
       return (
         <div className="pull-right study-page-update-patient-bttns-container">
-          <button className="btn btn-gray-outline" onClick={this.onReset}>Cancel</button>
-          <Button type="submit" disabled={submitting || loading}>Update</Button>
+          <button className="btn btn-gray-outline" onClick={this.onReset}>{translate('client.component.otherSection.cancel')}</button>
+          <Button type="submit" disabled={submitting || loading}>{translate('client.component.otherSection.update')}</Button>
         </div>
       );
     }
@@ -245,7 +246,7 @@ class OtherSection extends React.Component {
           <div className="item-holder">
             <Form className="sub-holder form-lightbox" onSubmit={this.onSubmit}>
               <div className="fields-holder">
-                <strong className="title">OTHER INFORMATION</strong>
+                <strong className="title">{translate('client.component.otherSection.title')}</strong>
                 <DateOfBirthPicker
                   loading={loading}
                   submitting={submitting}
@@ -256,7 +257,7 @@ class OtherSection extends React.Component {
                 {this.renderGender()}
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="patient-bmi">BMI</label>
+                    <label htmlFor="patient-bmi">{translate('client.component.otherSection.labelBmi')}</label>
                   </strong>
                   <div className="field">
                     <Field
@@ -268,7 +269,7 @@ class OtherSection extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="patient-source5">Source</label>
+                    <label htmlFor="patient-source5">{translate('client.component.otherSection.labelSource')}</label>
                   </strong>
                   <div className="field">
                     <FormControl disabled="true" type="text" value={initialValues.source ? initialValues.source.type : ''} />
@@ -276,7 +277,7 @@ class OtherSection extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="patient-source5">PATIENT REFERRAL</label>
+                    <label htmlFor="patient-source5">{translate('client.component.otherSection.labelPatientReferral')}</label>
                   </strong>
                   <button
                     type="button"
@@ -291,7 +292,7 @@ class OtherSection extends React.Component {
                   this.props.currentStudy.canDeletePatient &&
                   <div className="field-row">
                     <strong className="label">
-                      <label htmlFor="patient-source5">DELETE PATIENT</label>
+                      <label htmlFor="patient-source5">{translate('client.component.otherSection.labelDeletePatient')}</label>
                     </strong>
                     <button
                       type="button"
@@ -299,19 +300,19 @@ class OtherSection extends React.Component {
                       onClick={() => { this.props.deletePatient(this.props.initialValues.id); }}
                       disabled={this.props.deletePatientProcess.isDeleting}
                     >
-                      DELETE
+                      {translate('client.component.otherSection.delete')}
                     </button>
                   </div>
                 }
                 <div className="field-row">
-                  <strong className="label">Tag Indications</strong>
+                  <strong className="label">{translate('client.component.otherSection.labelTagIndications')}</strong>
                   <div className="field add-indications" ref={(parent) => (this.parent = parent)}>
                     <Button
                       bsStyle="primary"
                       ref={(target) => (this.target = target)}
                       onClick={this.toggleIndicationPopover}
                     >
-                      + Add Indication
+                      {translate('client.component.otherSection.addIndication')}
                     </Button>
                     <Overlay
                       show={this.state.showIndicationPopover}
