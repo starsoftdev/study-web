@@ -8,6 +8,7 @@ import { get } from 'lodash';
 import { getItem, removeItem } from '../../utils/localStorage';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   GET_REPORTS_LIST,
@@ -80,7 +81,7 @@ export function* fetchReportsWorker(action) {
 
     yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
-    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
+    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
     yield put(getReportsListError(err));
   }
 }
@@ -101,10 +102,10 @@ export function* changeProtocolStatusWorker(action) {
 
     const response = yield call(request, requestURL, options);
     yield put(changeProtocolStatusSuccess(response));
-    toastr.success('Success!', `The study is now ${action.payload.status ? 'active' : 'inactive'}.`);
+    toastr.success(translate('common.constants.success'), translate('sponsor.page.reportViewPage.toastrStatusMessage', { status: (action.payload.status ? 'active' : 'inactive') }));
   } catch (err) {
     yield put(changeProtocolStatusError(err));
-    const errorMessage = get(err, 'message', 'Something went wrong while updating study status');
+    const errorMessage = get(err, 'message', translate('sponsor.page.reportViewPage.toastrUpdatingErrorMessage'));
     toastr.error('', errorMessage);
   }
 }
@@ -139,7 +140,7 @@ export function* exportStudiesWorker(action) {
     if (e.status === 401) {
       removeItem('auth_token');
     }
-    const errorMessage = get(e, 'message', 'Something went wrong while exporting studies. Please try again later.');
+    const errorMessage = get(e, 'message', translate('sponsor.page.reportViewPage.toastrExportingErrorMessage'));
     toastr.error('', errorMessage);
     if (e.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -164,7 +165,7 @@ export function* fetchReportsTotalsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
-    toastr.error('', 'Error! Sorry, we can\'t retrieve the stats right now.');
+    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
     yield put(getReportsTotalsError(err));
   }
 }
