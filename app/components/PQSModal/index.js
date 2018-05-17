@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import PQSStatsForm from '../../components/PQSStatsForm';
 import CenteredModal from '../../components/CenteredModal/index';
+import { translate } from '../../../common/utilities/localization';
 
 class PQSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -68,8 +69,8 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
     ev.preventDefault();
     const range = this.state.predefined;
 
-    const uiStartDate = range.startDate.utc().format('MM/DD/YY');
-    const uiEndDate = range.endDate.utc().format('MM/DD/YY');
+    const uiStartDate = range.startDate.utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
+    const uiEndDate = range.endDate.utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
 
     this.setState({
       selectedTime: {
@@ -85,7 +86,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
-      const format = 'MMM D, YYYY';
+      const format = translate('sponsor.component.PQSModal.specialDateMask');
       if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
         return (
           <span className="time">
@@ -114,7 +115,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
       <div>
         <Modal dialogComponentClass={CenteredModal} dialogClassName={'pqs-stats-modal'} show={this.props.showModal} onHide={this.props.closePQSModal}>
           <Modal.Header>
-            <Modal.Title>Patient Qualification Suite Stats</Modal.Title>
+            <Modal.Title>{translate('sponsor.component.PQSModal.title')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closePQSModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -133,7 +134,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Date Range</Modal.Title>
+            <Modal.Title>{translate('sponsor.component.PQSModal.dateRange')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.hidePopup}>
               <i className="icomoon-icon_close" />
             </a>
@@ -153,7 +154,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
                 <div className="btn-block text-right">
                   {this.renderDateFooter()}
                   <Button onClick={this.changeRange}>
-                    Submit
+                    {translate('sponsor.component.PQSModal.submit')}
                   </Button>
                 </div>
               </div>
