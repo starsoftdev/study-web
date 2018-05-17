@@ -76,7 +76,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.state = {
       socketBinded: false,
       isSubscribedToUpdateStats: false,
-      mountTime: 0
+      mountTime: 0,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
