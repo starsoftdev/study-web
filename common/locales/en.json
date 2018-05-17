@@ -850,8 +850,8 @@
     "sponsor.component.reportViewTotals.headingScreenFailed": "SCREEN<br /> FAILED",
     "sponsor.component.reportViewTotals.headingRandomized": "RANDOMIZED",
     "sponsor.component.reportViewTotals.headingTotal": "TOTAL",
-    "sponsor.component.reportViewTotals.seeLess": "See less",
-    "sponsor.component.reportViewTotals.seeMore": "See more",
+    "sponsor.component.reportViewTotals.seeLess": "see less",
+    "sponsor.component.reportViewTotals.seeMore": "see more",
 
     "sponsor.component.reportViewTable.active": "Active:",
     "sponsor.component.reportViewTable.inactive": "Inactive:",
@@ -880,9 +880,8 @@
     "sponsor.component.reportItem.textReceived": "TEXT RECEIVED",
     "sponsor.component.reportItem.unreadText": "UNREAD TEXT",
     "sponsor.component.reportItem.emailSent": "EMAIL SENT",
-    "sponsor.component.reportItem.lastLoginDateMask": "MM/DD/YY [at] h:mm A",
-    "sponsor.component.reportItem.seeLess": "See less",
-    "sponsor.component.reportItem.seeMore": "See more",
+    "sponsor.component.reportItem.seeLess": "see less",
+    "sponsor.component.reportItem.seeMore": "see more",
 
     "sponsor.component.patientNote.studyKIK": "StudyKIK",
     "sponsor.component.patientNote.defaultDateMask": "MM/DD/YY",
