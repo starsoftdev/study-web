@@ -859,12 +859,14 @@
 
     "sponsor.component.reportItem.na": "N/A",
     "sponsor.component.reportItem.principalInvestigator": "PRINCIPAL INVESTIGATOR",
+    "sponsor.component.reportItem.siteLocation": "SITE LOCATION",
     "sponsor.component.reportItem.listing": "LISTING",
     "sponsor.component.reportItem.status": "STATUS",
-    "sponsor.component.reportItem.pqs": "Patient Qualification Suite",
+    "sponsor.component.reportItem.pqsTooltip": "Patient Qualification Suite",
     "sponsor.component.reportItem.startDate": "START DATE",
     "sponsor.component.reportItem.endDate": "END DATE",
     "sponsor.component.reportItem.lastLogin": "LAST LOGIN",
+    "sponsor.component.reportItem.pqsTitle": "PQS",
     "sponsor.component.reportItem.newPatient": "NEW PATIENT",
     "sponsor.component.reportItem.callTextAttempted": "CALL / TEXT ATTEMPTED",
     "sponsor.component.reportItem.notInterested": "DNQ / NOT INTERESTED",
@@ -878,6 +880,7 @@
     "sponsor.component.reportItem.textReceived": "TEXT RECEIVED",
     "sponsor.component.reportItem.unreadText": "UNREAD TEXT",
     "sponsor.component.reportItem.emailSent": "EMAIL SENT",
+    "sponsor.component.reportItem.lastLoginDateMask": "MM/DD/YY [at] h:mm A",
     "sponsor.component.reportItem.seeLess": "See less",
     "sponsor.component.reportItem.seeMore": "See more",
 
