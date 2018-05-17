@@ -880,6 +880,7 @@
     "sponsor.component.reportItem.textReceived": "TEXT RECEIVED",
     "sponsor.component.reportItem.unreadText": "UNREAD TEXT",
     "sponsor.component.reportItem.emailSent": "EMAIL SENT",
+    "sponsor.component.reportItem.lastLoginDateMask": "MM/DD/YY [at] h:mm A",
     "sponsor.component.reportItem.seeLess": "see less",
     "sponsor.component.reportItem.seeMore": "see more",
 
