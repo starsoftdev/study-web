@@ -5,6 +5,7 @@
 import React from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
+import { translate } from '../../../common/utilities/localization';
 
 class PatientNote extends React.Component {
   static propTypes = {
@@ -48,28 +49,28 @@ class PatientNote extends React.Component {
             </div>
             <div className="info">
               <div className="info-line">
-                <span className="label"> Name: </span>
+                <span className="label"> {translate('sponsor.component.patientNote.name')} </span>
                 <div className="content">
                   <span>
-                    {(!note.is_proxy) ? `${note.firstName} ${note.lastName}` : 'StudyKIK'}
+                    {(!note.is_proxy) ? `${note.firstName} ${note.lastName}` : translate('sponsor.component.patientNote.studyKIK')}
                   </span>
                 </div>
               </div>
 
               <div className="info-line">
-                <span className="label"> Date: </span>
+                <span className="label"> {translate('sponsor.component.patientNote.date')} </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.created_at, currentUser.timezone).format('MM/DD/YY')}
+                    {moment.tz(note.created_at, currentUser.timezone).format(translate('sponsor.component.patientNote.defaultDateMask'))}
                   </span>
                 </div>
               </div>
 
               <div className="info-line">
-                <span className="label"> Time: </span>
+                <span className="label"> {translate('sponsor.component.patientNote.time')} </span>
                 <div className="content">
                   <span>
-                    {moment.tz(note.created_at, currentUser.timezone).format('h:mm A')}
+                    {moment.tz(note.created_at, currentUser.timezone).format(translate('sponsor.component.patientNote.defaultTimeMask'))}
                   </span>
                 </div>
               </div>
