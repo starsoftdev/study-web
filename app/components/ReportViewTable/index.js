@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportItem from '../ReportItem';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({ form: 'reportListForm' })
 
@@ -39,9 +40,9 @@ export class ReportViewTable extends React.Component {
     return (
       <div>
         <p className="report-stats">
-          <span className="stats-span">Active: <span className="number">{active}</span></span>
-          <span className="stats-span">Inactive: <span className="number">{inActive}</span></span>
-          <span className="stats-span">Total: <span className="number">{total}</span></span>
+          <span className="stats-span">{translate('sponsor.component.reportViewTable.active')} <span className="number">{active}</span></span>
+          <span className="stats-span">{translate('sponsor.component.reportViewTable.inactive')} <span className="number">{inActive}</span></span>
+          <span className="stats-span">{translate('sponsor.component.reportViewTable.total')} <span className="number">{total}</span></span>
         </p>
         <InfiniteScroll
           className="reports"

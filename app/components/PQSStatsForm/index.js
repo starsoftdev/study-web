@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { reduxForm } from 'redux-form';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({ form: 'pqsStatsForm', validate: null })
 class PQSStatsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -54,26 +55,26 @@ class PQSStatsForm extends React.Component { // eslint-disable-line react/prefer
     const { selectedTime } = this.props;
     const { testSitesStats } = this.state;
 
-    const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : 'Date Range';
+    const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : translate('sponsor.component.PQSStatsForm.dateRange');
     const sitesStatsListContents = testSitesStats.map((item, index) => (
       <tr key={index}>
         <td className="site">
           {item.name}
         </td>
         <td className="first values">
-          N/A
+          {translate('sponsor.component.PQSStatsForm.na')}
         </td>
         <td className="values">
-          N/A
+          {translate('sponsor.component.PQSStatsForm.na')}
         </td>
         <td className="values">
-          N/A
+          {translate('sponsor.component.PQSStatsForm.na')}
         </td>
         <td className="values">
-          N/A
+          {translate('sponsor.component.PQSStatsForm.na')}
         </td>
         <td className="values">
-          N/A
+          {translate('sponsor.component.PQSStatsForm.na')}
         </td>
       </tr>
     ));
@@ -83,46 +84,38 @@ class PQSStatsForm extends React.Component { // eslint-disable-line react/prefer
         <div className="total-stats">
           <div className="item">
             <span className="counter">
-              N/A
+              {translate('sponsor.component.PQSStatsForm.na')}
             </span>
             <span className="item-label prescreened">
-              Total Prescreened
+              {translate('sponsor.component.PQSStatsForm.totalPrescreened')}
             </span>
           </div>
           <div className="item">
             <span className="counter">
-              N/A
+              {translate('sponsor.component.PQSStatsForm.na')}
             </span>
-            <span className="item-label successful">
-              Successful <br />Transfer
-            </span>
+            <span className="item-label successful" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.PQSStatsForm.successfulTransfer') }} />
           </div>
           <div className="item">
             <span className="counter">
-              N/A
+              {translate('sponsor.component.PQSStatsForm.na')}
             </span>
-            <span className="item-label unsuccessful">
-              Unsuccessful <br />Transfer
-            </span>
+            <span className="item-label unsuccessful" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.PQSStatsForm.unsuccessfulTransfer') }} />
           </div>
           <div className="item">
             <span className="counter">
-              N/A
+              {translate('sponsor.component.PQSStatsForm.na')}
             </span>
-            <span className="item-label duration">
-              Total Call <br />Duration
-            </span>
+            <span className="item-label duration" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.PQSStatsForm.totalDuration') }} />
           </div>
           <div className="item">
             <span className="counter">
-              N/A
+              {translate('sponsor.component.PQSStatsForm.na')}
             </span>
             <span className="item-label mins-special">
-              Mins
+              {translate('sponsor.component.PQSStatsForm.mins')}
             </span>
-            <span className="item-label duration">
-              Total Call <br />Duration
-            </span>
+            <span className="item-label duration" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.PQSStatsForm.totalDuration') }} />
           </div>
         </div>
         <div className="buttons">
@@ -132,7 +125,7 @@ class PQSStatsForm extends React.Component { // eslint-disable-line react/prefer
           </button>
           <button type="button" className="btn btn-primary download pull-left margin-left" onClick={this.download}>
             <i className="icomoon-icon_download" />
-            &nbsp;Download
+            &nbsp;{translate('sponsor.component.PQSStatsForm.download')}
           </button>
         </div>
         <div className="main-stats-table">
@@ -140,22 +133,22 @@ class PQSStatsForm extends React.Component { // eslint-disable-line react/prefer
             <thead>
               <tr>
                 <th className="site">
-                  <span>SITE NAME</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headSiteName')}</span>
                 </th>
                 <th className="values">
-                  <span>Total Prescreened</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headTotalPrescreened')}</span>
                 </th>
                 <th className="values">
-                  <span>Successful Transfer</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headSuccessfulTransfer')}</span>
                 </th>
                 <th className="values">
-                  <span>Unsuccessful Transfer</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headUnsuccessfulTransfer')}</span>
                 </th>
                 <th className="values">
-                  <span>Incoming calls</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headIncomingCalls')}</span>
                 </th>
                 <th className="values">
-                  <span>Total Call Duration</span>
+                  <span>{translate('sponsor.component.PQSStatsForm.headTotalCallDuration')}</span>
                 </th>
               </tr>
             </thead>
