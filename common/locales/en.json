@@ -921,6 +921,10 @@
     "sponsor.page.reportViewPage.cro": "CRO:",
     "sponsor.page.reportViewPage.notes": "NOTES",
     "sponsor.page.reportViewPage.noNotes": "No notes.",
+    "sponsor.page.reportViewPage.toastrFetchStatsErrorMessage": "Error! Sorry, we can't retrieve the stats right now.",
+    "sponsor.page.reportViewPage.toastrExportingErrorMessage": "Something went wrong while exporting studies. Please try again later.",
+    "sponsor.page.reportViewPage.toastrUpdatingErrorMessage": "Something went wrong while updating study status",
+    "sponsor.page.reportViewPage.toastrStatusMessage": "The study is now ${status}.",
 
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
