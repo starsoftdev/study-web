@@ -8,10 +8,9 @@
     }
   }
   .elements-box {
-    border: 3px solid #f78e1e;
     position: relative;
     background: #fff;
-    padding: 0 10px 58px;
+    padding: 0 0 64px;
     margin: 10px auto 30px;
     overflow: hidden;
     min-width: 940px;
@@ -23,7 +22,6 @@
       box-sizing: border-box;
       display: inline-block;
       height: 70px;
-      border-bottom: 1px solid #ddd;
       padding: 10px 9px;
       vertical-align: top;
       font-size: 15px;
@@ -42,9 +40,10 @@
         text-overflow: ellipsis;
         overflow: hidden;
         a {
+          color: #000000;
           white-space: nowrap;
           &:hover, &:active {
-            color: #76daff;
+            text-decoration: underline;
           }
         }
         &.url {
@@ -55,7 +54,10 @@
           }
         }
         .patient-messaging-suite-status {
+          font-weight: bold;
+          text-transform: uppercase;
           color: #a0cf67;
+          text-shadow: 2px 2px 4px #000000;
           &.off {
             color: #f78e1e;
           }
@@ -66,79 +68,139 @@
           top: -1px;
         }
       }
-      &.order {
-        width: 5%;
-      }
-      &.pi {
-        width: 24%;
-      }
-      &.listing {
-        width: 11%;
-      }
-      &.status {
-        width: 11%;
-      }
-      &.pqs {
-        width: 8%;
+    }
+
+    .top-line,
+    .messaging-line,
+    .category-line {
+      padding: 0 10px;
+    }
+
+    .top-line {
+      background: #00afef;
+
+      .box-element {
+
         .name {
-          overflow: visible;
+          color: white;
+        }
+
+        .value {
+          color: #000000;
+        }
+
+        &.order {
+          width: 2%;
+        }
+        &.pi {
+          width: 15%;
+        }
+        &.site-name {
+          width: 15%;
+        }
+        &.listing {
+          width: 13%;
+        }
+        &.status {
+          width: 10%;
+        }
+        &.start-date {
+          width: 9%;
+        }
+        &.end-date {
+          width: 10%;
+        }
+        &.last-login {
+          width: 12%;
+          white-space: nowrap;
+        }
+        &.pqs {
+          width: 5%;
+          position: relative;
+          overflow: hidden;
+
+          .name {
+            float: left;
+          }
+
+          .value {
+            float: left;
+            width: 100%;
+          }
         }
       }
-      &.start-date {
-        width: 12%;
-      }
-      &.end-date {
-        width: 12%;
-      }
-      &.last-login {
-        width: 17%;
-        white-space: nowrap;
-      }
+    }
 
-      &.new-patient {
-        width: 10%;
-      }
-      &.text-attempted {
-        width: 16%;
-      }
-      &.dnq {
-        width: 16%;
-      }
-      &.action-needed {
-        width: 12%;
-      }
-      &.scheduled {
-        width: 9%;
-      }
-      &.consented {
-        width: 9%;
-      }
-      &.screen-failed {
-        width: 11%;
-      }
-      &.randomized {
-        width: 10%;
-      }
-      &.total {
-        width: 7%;
-      }
+    .category-line {
+      border-bottom: 1px solid #ddd;
 
-      &.text-sent {
-        padding: 10px 45px 10px 15px;
+      .box-element {
+
+        &.empty {
+          width: 2%;
+        }
+        &.new-patient {
+          width: 15%;
+        }
+        &.text-attempted {
+          width: 15%;
+        }
+        &.dnq {
+          width: 13%;
+        }
+        &.action-needed {
+          width: 10%;
+        }
+        &.scheduled {
+          width: 9%;
+        }
+        &.consented {
+          width: 10%;
+        }
+        &.screen-failed {
+          width: 12%;
+        }
+        &.randomized {
+          width: 9%;
+        }
+        &.total {
+          width: 5%;
+        }
       }
-      &.text-received, &.unread-text, &.email-sent {
-        padding: 10px 45px;
+    }
+
+    .messaging-line {
+
+      .box-element {
+
+        &.empty {
+          width: 2%;
+        }
+        &.text-sent {
+          width: 15%;
+        }
+        &.text-received {
+          width: 15%;
+        }
+        &.unread-text {
+          width: 13%;
+        }
+        &.email-sent {
+          width: 10%;
+        }
       }
     }
 
     .see-more-btn {
+      line-height: 28px;
+      text-transform: uppercase;
       display: block;
       position: absolute;
       bottom: 0;
       left: 0;
       background: #ddd;
       color: #000;
-      height: 60px;
+      height: 64px;
       text-align: center;
       padding: 17px;
       width: 100%;
@@ -159,6 +221,8 @@
         }
       }
       .see-more-btn {
+        line-height: 28px;
+        text-transform: uppercase;
         font-size: 16px;
         padding-top: 18px;
       }
@@ -175,6 +239,8 @@
         }
       }
       .see-more-btn {
+        line-height: 28px;
+        text-transform: uppercase;
         font-size: 14px;
         padding-top: 20px;
       }
@@ -183,12 +249,14 @@
 
   .report-page-totals-container {
     .see-more-btn {
+      line-height: 28px;
+      text-transform: uppercase;
       display: block;
       bottom: 0;
       left: 0;
       background: #ddd;
       color: #000;
-      height: 60px;
+      height: 64px;
       text-align: center;
       padding: 17px;
       width: 100%;
@@ -203,7 +271,7 @@
         font-size: 16px;
         padding-top: 18px;
       }
-  
+
       @media screen and(max-width: 1300px) {
         font-size: 14px;
         padding-top: 20px;
