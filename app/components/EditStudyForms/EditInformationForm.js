@@ -323,13 +323,13 @@ export default class EditInformationForm extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">SM</label>
+                <label htmlFor="new-patient-phone">Ad Operation</label>
               </strong>
               <div className="field">
                 <Field
                   name="sm_user_id"
                   component={ReactSelect}
-                  placeholder="Select SM"
+                  placeholder="Select Ad Operation"
                   searchPlaceholder="Search"
                   searchable
                   options={smOptions}
@@ -339,13 +339,13 @@ export default class EditInformationForm extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">BD</label>
+                <label htmlFor="new-patient-phone">Business Development</label>
               </strong>
               <div className="field">
                 <Field
                   name="bd_user_id"
                   component={ReactSelect}
-                  placeholder="Select BD"
+                  placeholder="Select Business Development"
                   searchPlaceholder="Search"
                   searchable
                   options={bdOptions}
@@ -355,13 +355,13 @@ export default class EditInformationForm extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">AE</label>
+                <label htmlFor="new-patient-phone">Call Center</label>
               </strong>
               <div className="field">
                 <Field
                   name="ae_user_id"
                   component={ReactSelect}
-                  placeholder="Select AE"
+                  placeholder="Select Call Center"
                   searchPlaceholder="Search"
                   searchable
                   options={aeOptions}

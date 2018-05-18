@@ -47,12 +47,16 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
   render() {
     const options = [];
     _.forEach(this.props.roles.details, (item) => {
-      if (item.name.toUpperCase() !== 'AE') {
-        options.push({
-          label: item.name.toUpperCase(),
-          value: item.id,
-        });
-      }
+      let roleName = item.name.toUpperCase();
+
+      roleName = roleName === 'SM' ? 'AD OPERATION' : roleName;
+      roleName = roleName === 'BD' ? 'BUSINESS DEVELOPMENT' : roleName;
+      roleName = roleName === 'AE' ? 'CALL CENTER' : roleName;
+
+      options.push({
+        label: roleName,
+        value: item.id,
+      });
     });
 
 
