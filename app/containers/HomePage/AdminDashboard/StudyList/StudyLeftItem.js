@@ -66,9 +66,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
       return str;
     };
 
-    const sm = item.sm_user_first_name ? `Ad Operation: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'Ad Operation: N/A';
-    const bd = item.bd_user_first_name ? `Business Development: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'Business Development: N/A';
-    const ae = item.ae_user_first_name ? `Call Center: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'Call Center: N/A';
+    const sm = item.sm_user_first_name ? `AO: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'AO: N/A';
+    const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
+    const ae = item.ae_user_first_name ? `CC: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'CC: N/A';
 
     // campaign_datefrom and campaign_dateto can be null, if it set to TBD
     const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);
@@ -127,9 +127,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
           <ul className="list-unstyled">
             <li><span><a href={landingHref} className="landing-link" target="_blank">{item.study_id}</a></span></li>
             <li><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
-            <li><span>{maxLength(sm, 30)}</span></li>
-            <li><span>{maxLength(bd, 30)}</span></li>
-            <li><span>{maxLength(ae, 30)}</span></li>
+            <li><span>{maxLength(sm, 15)}</span></li>
+            <li><span>{maxLength(bd, 15)}</span></li>
+            <li><span>{maxLength(ae, 15)}</span></li>
             <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
         </td>
