@@ -98,7 +98,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     return (
-      <section className="">
+      <section>
         <InfiniteScroll
           pageStart={0}
           loadMore={this.loadItems}
