@@ -21,6 +21,7 @@ import formValidator from './detailValidator';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
 import ReactSelect from '../../../components/Input/ReactSelect';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Detail';
 
@@ -120,7 +121,7 @@ class PatientDetailSection extends React.Component {
       return (
         <div className="pull-right">
           <Button bsStyle="primary" onClick={this.onReset}>Cancel</Button>
-          <Button type="submit">Update</Button>
+          <Button type="submit">{translate('client.component.patientDetailSection.update')}</Button>
         </div>
       );
     }
@@ -140,7 +141,7 @@ class PatientDetailSection extends React.Component {
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="new-patient-first-name">Name</label>
+            <label htmlFor="new-patient-first-name">{translate('client.component.patientDetailSection.labelName')}</label>
           </strong>
           <div className="field">
             <div className="row">
@@ -149,7 +150,7 @@ class PatientDetailSection extends React.Component {
                   type="text"
                   name="firstName"
                   component={Input}
-                  placeholder="First Name"
+                  placeholder={translate('client.component.patientDetailSection.placeholderFirstName')}
                   isDisabled={submitting}
                   required
                 />
@@ -159,7 +160,7 @@ class PatientDetailSection extends React.Component {
                   type="text"
                   name="lastName"
                   component={Input}
-                  placeholder="Last Name"
+                  placeholder={translate('client.component.patientDetailSection.placeholderLastName')}
                   isDisabled={submitting}
                   required
                 />
@@ -169,7 +170,7 @@ class PatientDetailSection extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label">
-            <label htmlFor="new-patient-email">Email</label>
+            <label htmlFor="new-patient-email">{translate('client.component.patientDetailSection.labelEmail')}</label>
           </strong>
           <div className="field">
             <Field
@@ -181,7 +182,7 @@ class PatientDetailSection extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="new-patient-phone">Phone</label>
+            <label htmlFor="new-patient-phone">{translate('client.component.patientDetailSection.labelPhone')}</label>
           </strong>
           <div className="field">
             <Field
@@ -195,7 +196,7 @@ class PatientDetailSection extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="new-patient-phone">Category</label>
+            <label htmlFor="new-patient-phone">{translate('client.component.patientDetailSection.labelCategory')}</label>
           </strong>
           <div className="field patient-category">
             <Field
@@ -203,7 +204,7 @@ class PatientDetailSection extends React.Component {
               component={ReactSelect}
               options={categories}
               disabled={submitting}
-              placeholder="Select Category"
+              placeholder={translate('client.component.patientDetailSection.placeholderCategory')}
               clearable={false}
             />
           </div>
@@ -211,16 +212,16 @@ class PatientDetailSection extends React.Component {
 
         <div className="field-row">
           <strong className="label">
-            <label htmlFor="new-patient-phone">Signed Up</label>
+            <label>{translate('client.component.patientDetailSection.labelSignedUp')}</label>
           </strong>
           <div className="field">
-            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
+            <time dateTime={initialValues.createdAt}>{moment.tz(initialValues.createdAt, timezone).format(translate('client.component.patientDetailSection.dateMask'))}</time>
           </div>
         </div>
 
         <div className="field-row">
           <strong className="label">
-            <label htmlFor="new-patient-phone">Updated</label>
+            <label>{translate('client.component.patientDetailSection.labelUpdated')}</label>
           </strong>
           <div className="field">
             <time dateTime={initialValues.updatedAt}>{moment.tz(initialValues.updatedAt, timezone).format('MM/DD/YY [at] h:mm A')}</time>
@@ -229,7 +230,7 @@ class PatientDetailSection extends React.Component {
 
         <div className="field-row">
           <strong className="label">
-            <label htmlFor="unsubscribed">Unsubscribe</label>
+            <label htmlFor="unsubscribed">{translate('client.component.patientDetailSection.labelUnsubscribe')}</label>
           </strong>
           <div className="field">
             <Field

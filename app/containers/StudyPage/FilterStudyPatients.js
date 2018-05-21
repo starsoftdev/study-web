@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
+import { translate } from '../../../common/utilities/localization';
 
 import { fetchPatients, fetchPatientCategoriesTotals, setSelectedStudySources } from './actions';
 
@@ -169,7 +170,7 @@ class FilterStudyPatientsForm extends Component {
                   name="search"
                   id="search"
                   className="keyword-search"
-                  placeholder="Search"
+                  placeholder={translate('client.component.filterStudyPatientsForm.searchPlaceholder')}
                 />
               </Debounce>
             </div>
@@ -181,7 +182,7 @@ class FilterStudyPatientsForm extends Component {
               className="field"
               options={campaignOptions}
               disabled={submitting || loading}
-              placeholder="Select Campaign"
+              placeholder={translate('client.component.filterStudyPatientsForm.campaignPlaceholder')}
               onChange={(event) => this.searchPatient(event, 'campaign')}
             />
           </div>
@@ -197,7 +198,7 @@ class FilterStudyPatientsForm extends Component {
               className="field"
               options={sourceOptions}
               disabled={submitting || loading}
-              placeholder="Select Source"
+              placeholder={translate('client.component.filterStudyPatientsForm.sourcePlaceholder')}
               clearable={false}
               onChange={(event) => this.searchPatient(event, 'source')}
             />

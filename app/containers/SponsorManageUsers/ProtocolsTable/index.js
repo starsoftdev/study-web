@@ -69,23 +69,23 @@ export class SponsorManageUsersProtocolsTable extends React.Component {
       <div className="table-holder table-responsive">
         {
           <table className="table-manage-user alt table">
-            <caption>{translate('client.component.sponsorManageUsersProtocolsTable.title')}</caption>
+            <caption>{translate('sponsor.component.sponsorManageUsersProtocolsTable.title')}</caption>
             <thead>
               <tr>
                 <th onClick={this.sortBy} data-sort="protocolNumber" className={`col1 ${(this.props.paginationOptionsProtocols.activeSort === 'protocolNumber') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersProtocolsTable.tableHeadNumber')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersProtocolsTable.tableHeadNumber')}<i className="caret-arrow" />
                 </th>
                 <th onClick={this.sortBy} data-sort="indication" className={`col2 ${(this.props.paginationOptionsProtocols.activeSort === 'indication') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersProtocolsTable.tableHeadIndeication')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersProtocolsTable.tableHeadIndeication')}<i className="caret-arrow" />
                 </th>
                 <th onClick={this.sortBy} data-sort="cros" className={`col3 ${(this.props.paginationOptionsProtocols.activeSort === 'cros') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersProtocolsTable.tableHeadCro')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersProtocolsTable.tableHeadCro')}<i className="caret-arrow" />
                 </th>
                 <th onClick={this.sortBy} data-sort="irbName" className={`col4 ${(this.props.paginationOptionsProtocols.activeSort === 'irb') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersProtocolsTable.tableHeadIrb')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersProtocolsTable.tableHeadIrb')}<i className="caret-arrow" />
                 </th>
                 <th onClick={this.sortBy} data-sort="iwrs" className={`col5 ${(this.props.paginationOptionsProtocols.activeSort === 'iwrs') ? this.props.paginationOptionsProtocols.activeDirection : ''}`}>
-                  {translate('client.component.sponsorManageUsersProtocolsTable.tableHeadIwrs')}<i className="caret-arrow" />
+                  {translate('sponsor.component.sponsorManageUsersProtocolsTable.tableHeadIwrs')}<i className="caret-arrow" />
                 </th>
                 <th className="col6" />
                 <th className="col7" />

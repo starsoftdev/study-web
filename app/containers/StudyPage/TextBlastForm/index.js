@@ -17,6 +17,7 @@ import * as Selector from '../selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitTextBlast } from '../actions';
 import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
 import { selectCurrentUser, selectClientCredits, selectSources } from '../../App/selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -89,7 +90,7 @@ class TextBlastForm extends React.Component {
 
   componentDidMount() {
     const { studyName } = this.props;
-    const message = `<first_name>, please respond yes or no if you are interested in a research study for ${studyName}.`;
+    const message = translate('client.component.textBlastModal.message', { studyName });
     this.props.initialize({
       message,
     });
@@ -246,7 +247,7 @@ class TextBlastForm extends React.Component {
 
   checkForCredits(notEnoughCredits) {
     if (notEnoughCredits) {
-      toastr.error('', 'Error! You do not have enough text credits. Please add more credits.');
+      toastr.error('', translate('client.component.textBlastModal.toastrCreditsError'));
     }
   }
 
@@ -292,7 +293,7 @@ class TextBlastForm extends React.Component {
       return (
         <span className="emails-counter">
           <span className="counter">{newPatientsArr.length}</span>
-          <span className="text"> Patients</span>
+          <span className="text"> {translate('client.component.textBlastModal.patients')}</span>
           <a className="btn-close">
             <i className="icomoon-icon_close" onClick={this.removePatients} />
           </a>
@@ -320,7 +321,7 @@ class TextBlastForm extends React.Component {
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
               <div className="category">
-                <strong className="heading">Category</strong>
+                <strong className="heading">{translate('client.component.textBlastModal.category')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field
@@ -332,7 +333,7 @@ class TextBlastForm extends React.Component {
                         this.selectCategory(checked, 0);
                       }}
                     />
-                    All
+                    {translate('common.constants.all')}
                   </li>
                   {patientCategories.map(patientCategory => (
                     <li key={patientCategory.id}>
@@ -351,7 +352,7 @@ class TextBlastForm extends React.Component {
                 </ul>
               </div>
               <div className="category">
-                <strong className="heading">SOURCE</strong>
+                <strong className="heading">{translate('client.component.textBlastModal.source')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field
@@ -391,7 +392,12 @@ class TextBlastForm extends React.Component {
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
               <div className="subject-field">
-                <FormControl type="text" className="recievers" placeholder="To" disabled />
+                <FormControl
+                  type="text"
+                  className="recievers"
+                  placeholder={translate('client.component.textBlastModal.placeholderTo')}
+                  disabled
+                />
                 {this.renderPatientCount()}
               </div>
               <Field
@@ -399,7 +405,7 @@ class TextBlastForm extends React.Component {
                 component={Input}
                 componentClass="textarea"
                 className="message"
-                placeholder="Type a message..."
+                placeholder={translate('client.component.textBlastModal.placeholderType')}
                 maxLength="160"
                 required
                 onChange={this.textAreaChange}
@@ -417,13 +423,13 @@ class TextBlastForm extends React.Component {
                   onClick={(e) => ((notEnoughCredits || disabled || enteredCharactersLength === 0) ? null : this.submitTextBlast(e))}
                   disabled={disabled || !ePMS}
                 >
-                  Send
+                  {translate('client.component.textBlastModal.send')}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
+        <input type="reset" className="hidden btn btn-gray-outline" value={translate('client.component.textBlastModal.reset')} />
       </Form>
     );
   }

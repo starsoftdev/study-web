@@ -738,7 +738,6 @@
           height: 100%;
           #carousel-example-generic {
             height: calc(~"100% - 60px");
-            border: 2px solid #f78e1e;
             &.full-height {
               height: 100%;
             }
@@ -749,7 +748,7 @@
                 height: 100%;
                 padding: 0;
                 .postarea {
-                  height: 80%;
+                  height: 79%;
                 }
                 .textarea {
                   height: 20%;
@@ -836,7 +835,7 @@
     bottom: auto;
     overflow: hidden;
     position: relative;
-    border-bottom: #f78e1e solid 2px;
+    border: #f78e1e solid 2px;
     li.active, li {
       float: left;
       padding: 7px;
@@ -868,7 +867,7 @@
     bottom: 0;
     z-index: 7;
     position: absolute;
-    border-top: #f78e1e solid 2px;
+    border: #f78e1e solid 2px;
     .form-control {
       resize: none;
       height: 85px;
@@ -896,6 +895,9 @@
   .postarea {
     overflow-y: auto;
     overflow-x: hidden;
+    border-left: #f78e1e solid 2px;
+    border-right: #f78e1e solid 2px;
+    border-bottom: #f78e1e solid 2px;
     height: 342px;
   }
   .notes {
@@ -925,6 +927,9 @@
       width: 100%;
       height: 100%;
       overflow: auto;
+      border-left: #f78e1e solid 2px;
+      border-right: #f78e1e solid 2px;
+      border-bottom: #f78e1e solid 2px;
 
       .sender-field-holder {
         border-color: #ccc;

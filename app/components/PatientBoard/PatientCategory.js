@@ -5,7 +5,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-// import { findDOMNode } from 'react-dom';
 import { DropTarget } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
@@ -22,6 +21,7 @@ import {
   submitMovePatientBetweenCategories,
   showScheduledModal,
 } from '../../containers/StudyPage/actions';
+import { translate } from '../../../common/utilities/localization';
 /**
  * Specifies the drop target contract.
  * All methods are optional.
@@ -244,6 +244,7 @@ class PatientCategory extends React.Component {
 
   render() {
     const { category, connectDropTarget, patientCategoriesTotals } = this.props;
+    const name = translate(`common.patientCategory.id${category.id}`);
     const total = _.find(patientCategoriesTotals, item => (
       item.patientCategoryId === category.id
     ));
@@ -261,7 +262,7 @@ class PatientCategory extends React.Component {
       >
         <span className="opener" style={openerStyle}>
           <strong className="number">{(total) ? total.count : 0}</strong>
-          <span className="text">{category.name}</span>
+          <span className="text">{name}</span>
         </span>
         {this.renderPatients()}
       </li>
