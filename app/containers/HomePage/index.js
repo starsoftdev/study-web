@@ -144,44 +144,44 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
         <Helmet title={translate('portals.page.homePage.helmetTitle')} />
         {userRoleType === 'client' &&
           (
-          <div className="container-fluid">
-            <div className="dashboard form-group">
-              <Dashboard location={this.props.location} />
+            <div className="container-fluid">
+              <div className="dashboard form-group">
+                <Dashboard location={this.props.location} />
+              </div>
+              <div className="search-studies-panel clearfix form-group">
+                <SearchStudiesForm
+                  onSubmit={this.searchStudies}
+                  currentUser={currentUser}
+                  initialValues={{ status: ACTIVE_STATUS_VALUE }}
+                />
+                <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
+                  {translate('portals.page.homePage.listNewStudyBtn')}
+                </button>
+              </div>
+              <div className="table-holder form-group">
+                <StudiesList queryParams={queryParams} />
+              </div>
             </div>
-            <div className="search-studies-panel clearfix form-group">
-              <SearchStudiesForm
-                onSubmit={this.searchStudies}
-                currentUser={currentUser}
-                initialValues={{ status: ACTIVE_STATUS_VALUE }}
-              />
-              <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
-                {translate('portals.page.homePage.listNewStudyBtn')}
-              </button>
-            </div>
-            <div className="table-holder form-group">
-              <StudiesList queryParams={queryParams} />
-            </div>
-          </div>
           )
         }
         {userRoleType === 'sponsor' &&
           (
-          <div className="container-fluid sponsor-portal">
-            <section className="home-section">
-              <SponsorDashboard location={this.props.location} />
-              <div className="search-studies-panel clearfix form-group">
-                <SearchProtocolsForm onSubmit={this.searchProtocols} />
-              </div>
-              <ProtocolsList
-                loadProtocols={this.loadProtocols}
-              />
-            </section>
-          </div>
+            <div className="container-fluid sponsor-portal">
+              <section className="home-section">
+                <SponsorDashboard location={this.props.location} />
+                <div className="search-studies-panel clearfix form-group">
+                  <SearchProtocolsForm onSubmit={this.searchProtocols} />
+                </div>
+                <ProtocolsList
+                  loadProtocols={this.loadProtocols}
+                />
+              </section>
+            </div>
           )
         }
         {userRoleType === 'dashboard' &&
           (
-          <AdminDashboard />
+            <AdminDashboard />
           )
         }
       </div>

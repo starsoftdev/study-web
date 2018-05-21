@@ -258,8 +258,8 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
               {
                 clientAdmins.map((item, index) => (
                   <RowItem key={index} item={item} editAdminClick={this.editAdminClick} editMessagingClick={this.editMessagingClick} clientSites={clientSites} />
-              ))
-            }
+                ))
+              }
             </tbody>
             <tfoot>
               <tr>

@@ -11,8 +11,6 @@ const SentryCliPlugin = require('@sentry/webpack-plugin');
 const plugins = [
   new webpack.HotModuleReplacementPlugin(),
   // enable HMR globally
-  new webpack.NamedModulesPlugin(),
-  // prints more readable module names in the browser console on HMR updates
   new HtmlWebpackPlugin({
     filename: 'app.html',
     chunks: ['app'],
@@ -54,8 +52,15 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].js',
   },
 
+  mode: 'development',
+
   // Add development plugins
   plugins: plugins, // eslint-disable-line no-use-before-define
+
+  optimization: {
+    namedModules: true, // NamedModulesPlugin()
+    minimize: false
+  },
 
   // Load the CSS in a style tag in development
   // We can restore css-loader?sourceMap
