@@ -3,7 +3,8 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
@@ -65,6 +66,12 @@ export class ReportViewSearch extends React.Component {
     this.select = this.select.bind(this);
 
     this.downloadNotes = false;
+
+    this.ranges = {
+      startDate: new Date(),
+      endDate: moment().add(7, 'days').toDate(),
+      key: 'selection',
+    };
   }
 
   componentWillReceiveProps() {
@@ -280,13 +287,15 @@ export class ReportViewSearch extends React.Component {
             </a>
           </Modal.Header>
           <Modal.Body>
-            <DateRange
-              linkedCalendars
-              ranges={defaultRanges}
+            <DateRangePicker
+              onChange={this.handleChange}
+              onInit={this.handleChange}
               startDate={startDate}
               endDate={endDate}
-              onInit={this.handleChange}
-              onChange={this.handleChange}
+              moveRangeOnFirstSelection={false}
+              months={2}
+              direction="horizontal"
+              ranges={[this.ranges]}
             />
             <div className="dateRange-helper">
               <div className="emit-border"><br /></div>
