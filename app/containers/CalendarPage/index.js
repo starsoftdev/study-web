@@ -61,9 +61,9 @@ const getFilteredSchedules = (schedules, filter) =>
   );
 
 const getFilteredSponsorSchedules = (sponsorSchedules, filter) => sponsorSchedules.filter(s =>
-    (!filter.siteLocation || filter.siteLocation === 'all' || s.principalInvestigator === filter.siteLocation || s.siteLocation === filter.siteLocation) &&
+  (!filter.siteLocation || filter.siteLocation === 'all' || s.principalInvestigator === filter.siteLocation || s.siteLocation === filter.siteLocation) &&
     (!filter.protocol || filter.protocol === 'all' || s.protocolNumber === filter.protocol)
-  );
+);
 
 function numberSequenceCreator(start, end) {
   return _.range(start, end).map(n => {
@@ -291,8 +291,8 @@ export default class CalendarPage extends React.Component {
         updatedDate = moment(this.selectedCellInfo.data.time).startOf('day');
       }
       const nn = updatedDate.clone().add(data.period === 'AM' ?
-          data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
+        data.hour % 12 :
+        (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
         time: updatedDate.clone().add(data.period === 'AM' ?

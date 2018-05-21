@@ -34,9 +34,11 @@ class CardItem extends React.Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { brand, name, last4, exp_month, exp_year, isRemoving } = this.props;
-    const expMonthStr = (exp_month < 10)? '0' + exp_month: exp_month.toString(); //eslint-disable-line
-    const expYearStr = exp_year.toString(); //eslint-disable-line
+    const { brand, name, last4, isRemoving } = this.props;
+    const expMonth = this.props.exp_month;
+    const expYear = this.props.exp_year;
+    const expMonthStr = (expMonth < 10)? '0' + expMonth: expMonth.toString(); //eslint-disable-line
+    const expYearStr = expYear.toString(); //eslint-disable-line
     let brandClassName = '';
 
     switch (brand) {
