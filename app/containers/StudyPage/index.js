@@ -76,7 +76,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.state = {
       socketBinded: false,
       isSubscribedToUpdateStats: false,
-      mountTime: 0
+      messageIds: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -87,7 +87,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchStudy(params.id, 1);     // fetch STUDYKIK source by default = 1
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
-    this.setState({ mountTime: (new Date()).getTime() });
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
         clientOpenedStudyPage(params.id);
@@ -133,8 +132,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           // TODO needs to take into account the stats are filtered based on campaign and source selected
           // TODO needs to be able to fetch the redux state without having to resort to hacks
           // TODO right now it cannot access redux state when getting an incoming text or sending an outgoing text
-          if (params && parseInt(params.id) === socketMessage.study.id) {
+          if (params && parseInt(params.id) === socketMessage.study.id && this.state.messageIds.indexOf(socketMessage.text_message_id) === -1) {
             // check is patients is on the board
+            this.state.messageIds.push(socketMessage.text_message_id);
             let needToUpdateMessageStats = false;
             _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
               _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
@@ -147,7 +147,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
                 return false;
               }
             });
-            if (needToUpdateMessageStats && socketMessage.invokeTime > this.state.mountTime) {
+            if (needToUpdateMessageStats) {
               if (socketMessage.twilioTextMessage.direction !== 'inbound') {
                 this.props.studyStatsFetched({
                   total: this.props.stats.texts + 1,
@@ -218,6 +218,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (socket && socket.connected) {
       clientClosedStudyPage(params.id);
     }
+    socket.removeAllListeners('notifyStudyPageMessage');
+    socket.removeAllListeners('notifyLandingPageViewChanged');
   }
 
   handleSubmit(searchFilter, loadMore) {
