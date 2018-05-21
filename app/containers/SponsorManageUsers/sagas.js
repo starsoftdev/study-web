@@ -77,12 +77,12 @@ export function* editSponsorUserWorker(action) {
 
     yield put(editSponsorUserSuccess(response));
     if (action.params.isNew) {
-      toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrAddSuccess'));
+      toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrAddSuccess'));
     } else {
-      toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrUpdateSuccess'));
+      toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrUpdateSuccess'));
     }
   } catch (err) {
-    const errorMessage = get(err, 'message', translate('client.page.sponsorManageUsers.toastrUpdateDefaultError'));
+    const errorMessage = get(err, 'message', translate('sponsor.page.sponsorManageUsers.toastrUpdateDefaultError'));
     toastr.error('', errorMessage);
     yield put(editSponsorUserError(err));
     if (err.status === 401) {
@@ -105,9 +105,9 @@ export function* deleteSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(deleteSponsorUserSuccess(response));
-    toastr.success(translate('common.constants.success'), translate('client.page.sponsorManageUsers.toastrDeleteSuccess'));
+    toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrDeleteSuccess'));
   } catch (err) {
-    const errorMessage = get(err, 'message', translate('client.page.sponsorManageUsers.toastrDeleteDefaultError'));
+    const errorMessage = get(err, 'message', translate('sponsor.page.sponsorManageUsers.toastrDeleteDefaultError'));
     toastr.error('', errorMessage);
     yield put(deleteSponsorUserError(err));
   }
