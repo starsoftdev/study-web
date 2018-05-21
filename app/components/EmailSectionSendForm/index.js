@@ -8,6 +8,7 @@ import { toastr } from 'react-redux-toastr';
 import Input from '../Input/index';
 import formValidator from './validator';
 import { selectClientCredits } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Email';
 
@@ -34,7 +35,7 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
     e.preventDefault();
     const { clientCredits, submitEmailBlast } = this.props;
     if (clientCredits.details.emailCredits === 0 || clientCredits.details.emailCredits === null) {
-      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+      toastr.error('', translate('client.component.emailSectionSendForm.toastrCreditsError'));
     } else {
       submitEmailBlast(e);
     }
@@ -48,7 +49,7 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
         <div className="emails-info-holder">
           <div className="sender-field-holder">
             <div className="sender-field-prev">
-              From
+              {translate('client.component.emailSectionSendForm.from')}
             </div>
             <Field
               name="email"
@@ -56,7 +57,7 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
               bsClass="form-control sender"
               className="sender-field"
               type="text"
-              placeholder="Enter your email address"
+              placeholder={translate('client.component.emailSectionSendForm.placeholderEmail')}
             />
           </div>
           <Field
@@ -64,7 +65,7 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
             component={Input}
             bsClass="form-control subject"
             type="text"
-            placeholder="Subject"
+            placeholder={translate('client.component.emailSectionSendForm.placeholderSubject')}
           />
           <Field
             name="message"
@@ -72,19 +73,19 @@ class EmailSectionSendForm extends React.Component { // eslint-disable-line reac
             componentClass="textarea"
             className="message-box"
             bsClass="form-control"
-            placeholder="Type message..."
+            placeholder={translate('client.component.emailSectionSendForm.placeholderMessage')}
           />
         </div>
         <div className="btns-section">
           {!noBackBtn &&
-            <input type="button" value="back" className="btn btn-gray-outline left" onClick={switchCompose} />
+            <input type="button" value={translate('client.component.emailSectionSendForm.back')} className="btn btn-gray-outline left" onClick={switchCompose} />
           }
           <div
             className="btn btn-default lightbox-opener pull-right"
             onClick={(e) => this.handleSubmitEmailBlast(e)}
             disabled={disabled}
           >
-            Send
+            {translate('client.component.emailSectionSendForm.send')}
           </div>
         </div>
       </Form>

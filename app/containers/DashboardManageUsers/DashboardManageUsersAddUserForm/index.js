@@ -47,8 +47,27 @@ export class AddUserForm extends React.Component { // eslint-disable-line react/
   render() {
     const options = [];
     _.forEach(this.props.roles.details, (item) => {
+      let roleName = item.name.toUpperCase();
+
+      switch (roleName) {
+        case 'SM':
+          roleName = 'AD OPERATION';
+          break;
+        case 'BD':
+          roleName = 'BUSINESS DEVELOPMENT';
+          break;
+        case 'AE':
+          roleName = 'PROJECT MANAGER';
+          break;
+        case 'CC':
+          roleName = 'CALL CENTER';
+          break;
+        default:
+          // return roleName as is (e.g. TEST)
+      }
+
       options.push({
-        label: item.name.toUpperCase(),
+        label: roleName,
         value: item.id,
       });
     });

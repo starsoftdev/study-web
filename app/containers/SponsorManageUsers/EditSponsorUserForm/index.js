@@ -48,7 +48,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
       <form className="form-study form-lightbox" onSubmit={this.props.handleSubmit}>
         <div className="field-row">
           <strong className="required label">
-            <label>{translate('client.component.editSponsorUserForm.labelName')}</label>
+            <label>{translate('sponsor.component.editSponsorUserForm.labelName')}</label>
           </strong>
           <div className="field">
             <div className="row">
@@ -57,7 +57,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
                   name="firstName"
                   component={Input}
                   type="text"
-                  placeholder={translate('client.component.editSponsorUserForm.placeholderFirstName')}
+                  placeholder={translate('sponsor.component.editSponsorUserForm.placeholderFirstName')}
                 />
               </div>
               <div className="col pull-left">
@@ -65,7 +65,7 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
                   name="lastName"
                   component={Input}
                   type="text"
-                  placeholder={translate('client.component.editSponsorUserForm.placeholderLastName')}
+                  placeholder={translate('sponsor.component.editSponsorUserForm.placeholderLastName')}
                 />
               </div>
             </div>
@@ -73,20 +73,20 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
         </div>
         <div className="field-row">
           <strong className="required label">
-            <label>{translate('client.component.editSponsorUserForm.labelEmail')}</label>
+            <label>{translate('sponsor.component.editSponsorUserForm.labelEmail')}</label>
           </strong>
           <div className="field">
             <Field
               name="email"
               component={Input}
               type="text"
-              placeholder={translate('client.component.editSponsorUserForm.placeholderEmail')}
+              placeholder={translate('sponsor.component.editSponsorUserForm.placeholderEmail')}
             />
           </div>
         </div>
         <div className="field-row label-top">
           <strong className="required label">
-            <label>{translate('client.component.editSponsorUserForm.labelProtocol')}</label>
+            <label>{translate('sponsor.component.editSponsorUserForm.labelProtocol')}</label>
           </strong>
           <div className="field">
             <Field
@@ -103,14 +103,14 @@ class EditSponsorUserForm extends Component { // eslint-disable-line react/prefe
             <a className="btn btn-gray-outline lightbox-opener" onClick={this.props.onDelete} disabled={this.props.deleteUserProcess.deleting}>
               {this.props.deleteUserProcess.deleting
                 ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-                : <span>{translate('client.component.editSponsorUserForm.btnDelete')}</span>
+                : <span>{translate('sponsor.component.editSponsorUserForm.btnDelete')}</span>
               }
             </a>
           }
           <button type="submit" className="btn btn-default" disabled={this.props.editUserProcess.saving}>
             {this.props.editUserProcess.saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-              : <span>{isEdit ? translate('client.component.editSponsorUserForm.btnUpdate') : translate('client.component.editSponsorUserForm.btnSubmit')}</span>
+              : <span>{isEdit ? translate('sponsor.component.editSponsorUserForm.btnUpdate') : translate('sponsor.component.editSponsorUserForm.btnSubmit')}</span>
             }
           </button>
         </div>

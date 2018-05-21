@@ -10,6 +10,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import TextBlastForm from '../TextBlastForm/index';
 import CenteredModal from '../../../components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -62,11 +63,11 @@ class TextBlastModal extends React.Component {
         <Modal.Header>
           <div className="sidebar pull-left">
             <Modal.Title>
-              <strong>Select Contacts</strong>
+              <strong>{translate('client.component.textBlastModal.titleLeft')}</strong>
             </Modal.Title>
           </div>
           <Modal.Title>
-            <strong className="title">Text Blast</strong>
+            <strong className="title">{translate('client.component.textBlastModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.closeModal}>
             <i className="icomoon-icon_close" />
