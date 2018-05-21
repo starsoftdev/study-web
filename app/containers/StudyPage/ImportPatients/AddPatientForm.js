@@ -87,10 +87,10 @@ class AddPatientForm extends React.Component {
           <div className="field">
             <div className="row">
               <Field
-                name={translate('client.component.addPatientForm.placeholderFirstName')}
+                name="firstName"
                 component={Input}
                 type="text"
-                placeholder="First Name"
+                placeholder={translate('client.component.addPatientForm.placeholderFirstName')}
                 className="col pull-left"
                 id="import-patient-first-name"
                 required
