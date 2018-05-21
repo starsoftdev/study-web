@@ -5,6 +5,7 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -65,6 +66,7 @@ class ScheduledPatientModal extends React.Component {
   constructor(props) {
     super(props);
     this.navigateToday = this.navigateToday.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this.state = {
       date: moment(),
     };
@@ -100,23 +102,24 @@ class ScheduledPatientModal extends React.Component {
   }
 
   navigateToday() {
-    const today = moment();
-    const todayYear = today.year();
-    const todayMonth = today.month();
-    const calendarYear = this.calendar.getShownDate().year();
-    const calendarMonth = this.calendar.getShownDate().month();
-    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const today = new Date();
 
-    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
-    this.calendar.changeDay(today, { preventDefault: _.noop });
+    this.calendar.focusToDate(today);
     this.setState({
       date: today,
     });
     this.props.handleDateChange(today);
   }
 
+  handleSelect(date) {
+    const chosenDate = moment(date.setHours(11)).startOf('day');
+    this.setState({ date: chosenDate });
+    this.props.handleDateChange(chosenDate);
+  }
+
+
   render() {
-    const { onHide, currentPatient, show, handleSubmit, handleDateChange, submittingSchedule, currentUser, sites } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, submittingSchedule, currentUser, sites } = this.props;
 
     if (currentPatient) {
       const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
@@ -126,6 +129,7 @@ class ScheduledPatientModal extends React.Component {
       } else {
         timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
       }
+      const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
 
       return (
         <Modal
@@ -145,12 +149,12 @@ class ScheduledPatientModal extends React.Component {
           <Modal.Body className="lightbox-card form-lightbox">
             <Calendar
               className="calendar custom-calendar"
-              onChange={handleDateChange}
-              date={this.state.date}
+              onChange={this.handleSelect}
+              date={calendarDate}
               ref={(calendar) => { this.calendar = calendar; }}
             />
             <div className="current-date" onClick={this.navigateToday}>
-              {translate('client.component.scheduledPatientModal.today')} {moment().format('dddd, MMMM DD, YYYY')}
+              {translate('client.component.scheduledPatientModal.today')} {moment().format(translate('client.component.scheduledPatientModal.todayDateMask'))}
             </div>
             <form className="clearfix schedule-form" onSubmit={handleSubmit}>
               <div className="text-center">

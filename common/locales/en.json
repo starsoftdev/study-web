@@ -383,6 +383,7 @@
 
     "client.component.scheduledPatientModal.title": "schedule patient",
     "client.component.scheduledPatientModal.today": "Today:",
+    "client.component.scheduledPatientModal.todayDateMask": "dddd, MMMM DD, YYYY",
     "client.component.scheduledPatientModal.labelPatient": "patient",
     "client.component.scheduledPatientModal.time": "TIME",
     "client.component.scheduledPatientModal.placeholderHours": "Hours",
