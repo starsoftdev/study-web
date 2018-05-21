@@ -65,7 +65,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
 
     this.props.setActiveSort(sort, direction);
 
-   /* const dir = ((direction === 'down') ? 'desc' : 'asc');
+    /* const dir = ((direction === 'down') ? 'desc' : 'asc');
     const sorted = _.orderBy(this.props.protocols.details, [function (o) {
       return o[(sort || defaultSort)];
     }], [dir]);

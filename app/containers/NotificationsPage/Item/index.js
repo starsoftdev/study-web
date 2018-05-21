@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { getAvatarUrl, eventMessage } from '../index';
 
 const NotificationItem = ({ notification, onClick }) => {
-  const { event_log, date, time } = notification;
+  const { event_log, date, time } = notification; //eslint-disable-line
   const url = getAvatarUrl(notification);
 
   return (
