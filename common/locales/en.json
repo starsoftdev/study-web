@@ -123,16 +123,6 @@
     "client.component.editUserForm.toastrMessageAddUser": "User added successfully!",
     "client.component.editUserForm.toastrErrorMessage": "Something went wrong while submitting your request.",
 
-    "client.component.editSponsorUserForm.labelName": "name",
-    "client.component.editSponsorUserForm.labelEmail": "email",
-    "client.component.editSponsorUserForm.labelProtocol": "protocol",
-    "client.component.editSponsorUserForm.placeholderFirstName": "First Name",
-    "client.component.editSponsorUserForm.placeholderLastName": "Last Name",
-    "client.component.editSponsorUserForm.placeholderEmail": "email",
-    "client.component.editSponsorUserForm.btnUpdate": "Update",
-    "client.component.editSponsorUserForm.btnSubmit": "Submit",
-    "client.component.editSponsorUserForm.btnDelete": "Delete",
-
     "client.component.editPatientForm.labelName": "name",
     "client.component.editPatientForm.labelEmail": "email",
     "client.component.editPatientForm.labelPhone": "phone",
@@ -418,13 +408,6 @@
     "client.component.rewardsItem.Kiks": "KIKs",
     "client.component.rewardsItem.nowHas": "now has",
     "client.component.rewardsItem.earned": "earned",
-
-    "client.page.sponsorManageUsers.mainHeading": "manage users",
-    "client.page.sponsorManageUsers.toastrDeleteSuccess": "User has been deleted.",
-    "client.page.sponsorManageUsers.toastrDeleteDefaultError": "Something went wrong while deleting user. Please try again later.",
-    "client.page.sponsorManageUsers.toastrAddSuccess": "User has been added.",
-    "client.page.sponsorManageUsers.toastrUpdateSuccess": "You have updated your information.",
-    "client.page.sponsorManageUsers.toastrUpdateDefaultError": "Something went wrong while editing user. Please try again later.",
 
     "client.page.patientDatabase.mainHeading": "Patient Database",
 
@@ -911,6 +894,23 @@
     "sponsor.component.PQSStatsForm.headUnsuccessfulTransfer": "unsuccessful transfer",
     "sponsor.component.PQSStatsForm.headIncomingCalls": "incoming calls",
     "sponsor.component.PQSStatsForm.headTotalCallDuration": "total call duration",
+
+    "sponsor.component.editSponsorUserForm.labelName": "name",
+    "sponsor.component.editSponsorUserForm.labelEmail": "email",
+    "sponsor.component.editSponsorUserForm.labelProtocol": "protocol",
+    "sponsor.component.editSponsorUserForm.placeholderFirstName": "First Name",
+    "sponsor.component.editSponsorUserForm.placeholderLastName": "Last Name",
+    "sponsor.component.editSponsorUserForm.placeholderEmail": "Email",
+    "sponsor.component.editSponsorUserForm.btnUpdate": "Update",
+    "sponsor.component.editSponsorUserForm.btnSubmit": "Submit",
+    "sponsor.component.editSponsorUserForm.btnDelete": "Delete",
+
+    "sponsor.page.sponsorManageUsers.mainHeading": "manage users",
+    "sponsor.page.sponsorManageUsers.toastrDeleteSuccess": "User has been deleted.",
+    "sponsor.page.sponsorManageUsers.toastrDeleteDefaultError": "Something went wrong while deleting user. Please try again later.",
+    "sponsor.page.sponsorManageUsers.toastrAddSuccess": "User has been added.",
+    "sponsor.page.sponsorManageUsers.toastrUpdateSuccess": "You have updated your information.",
+    "sponsor.page.sponsorManageUsers.toastrUpdateDefaultError": "Something went wrong while editing user. Please try again later.",
 
     "sponsor.page.sponsorDashboard.signUps": "PATIENT <br />SIGN UPS",
     "sponsor.page.sponsorDashboard.investigators": "Principal <br /> investigators",
