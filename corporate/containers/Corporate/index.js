@@ -19,6 +19,7 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
     isLoggedIn: React.PropTypes.bool,
     fetchMeFromToken: React.PropTypes.func,
     userDataFetched: React.PropTypes.object,
+    location: React.PropTypes.object,
     children: React.PropTypes.node,
     logout: React.PropTypes.func,
   };
@@ -28,7 +29,11 @@ export class Corporate extends React.Component { // eslint-disable-line react/pr
     this.props.fetchMeFromToken(false);
   }
 
-  componentWillReceiveProps() {}
+  componentWillReceiveProps(nextProps) {
+    if (this.props.location !== nextProps.location) {
+      window.scrollTo(0, 0);
+    }
+  }
 
   render() {
     return (

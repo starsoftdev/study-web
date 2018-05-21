@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import EmailBlastForm from '../EmailBlastForm/index';
 import CenteredModal from '../CenteredModal/index';
 import sanitizeProps from '../../utils/sanitizeProps';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -57,11 +58,11 @@ class EmailBlastModal extends React.Component {
         <Modal.Header>
           <div className="sidebar pull-left">
             <Modal.Title>
-              <strong>Select Contacts</strong>
+              <strong>{translate('client.component.emailBlastModal.titleLeft')}</strong>
             </Modal.Title>
           </div>
           <Modal.Title>
-            <strong className="title">Email Blast</strong>
+            <strong className="title">{translate('client.component.emailBlastModal.title')}</strong>
           </Modal.Title>
           <a className="close" onClick={this.closeModal}>
             <i className="icomoon-icon_close" />

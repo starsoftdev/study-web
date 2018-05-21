@@ -20,6 +20,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
+import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
@@ -207,7 +208,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           }
         </div>);
     } else if (!this.props.categoryNotes.fetching) {
-      notes = <div className="text-center btn-default-padding">No notes.</div>;
+      notes = <div className="text-center btn-default-padding">{translate('sponsor.page.reportViewPage.noNotes')}</div>;
     }
 
     const searchInitialValues = { source: 1 };
@@ -218,7 +219,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           <div className="individual-study">
             <div className="main-head">
               <h2 className="main-heading">{protocolNumber}</h2>
-              <p><span className="info-cell">Indication: {indication}</span> <span className="info-cell">CRO: {cro}</span></p>
+              <p><span className="info-cell">{translate('sponsor.page.reportViewPage.indication')} {indication}</span> <span className="info-cell">{translate('sponsor.page.reportViewPage.cro')} {cro}</span></p>
             </div>
           </div>
         </section>
@@ -263,7 +264,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         >
           <Modal.Header>
             <Modal.Title>
-              {this.state.modalTitle} NOTES
+              {this.state.modalTitle} {translate('sponsor.page.reportViewPage.notes')}
               <a className="lightbox-close close" onClick={() => { this.closeCategoryModal(); }}>
                 <i className="icomoon-icon_close" />
               </a>

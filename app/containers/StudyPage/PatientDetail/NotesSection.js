@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
 import Input from '../../../components/Input/index';
+import { translate } from '../../../../common/utilities/localization';
 import PatientNote from './PatientNote';
 import formValidator, { fields } from './validator';
 
@@ -73,9 +74,9 @@ class NotesSection extends React.Component {
           {this.renderNotes()}
         </section>
         <div className="textarea">
-          <Field name="note" className="textarea-holder" component={Input} componentClass="textarea" placeholder="Type a note..." />
+          <Field name="note" className="textarea-holder" component={Input} componentClass="textarea" placeholder={translate('client.component.notesSection.placeholderNote')} />
         </div>
-        <Button className="save-btn" onClick={this.onClick} disabled={!note}>Save</Button>
+        <Button className="save-btn" onClick={this.onClick} disabled={!note}>{translate('client.component.notesSection.save')}</Button>
       </div>
     );
   }
