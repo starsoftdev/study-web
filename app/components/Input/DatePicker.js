@@ -4,10 +4,10 @@
 *
 */
 
-import _ from 'lodash';
 import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 import { Calendar } from 'react-date-range';
+import 'react-date-range/dist/styles.css'; // main style file
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
@@ -80,28 +80,26 @@ export default class DatePicker extends Component {
   }
 
   handleSelect(date) {
+    const chosenDate = moment(date.setHours(11));
     this.toggleModal(false);
     this.setState({
-      date,
+      date: chosenDate,
     });
-    this.props.input.onBlur(date);
+    this.props.input.onBlur(chosenDate);
   }
 
   navigateToday() {
-    const today = moment();
-    const todayYear = today.year();
-    const todayMonth = today.month();
-    const calendarYear = this.calendar.getShownDate().year();
-    const calendarMonth = this.calendar.getShownDate().month();
-    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const today = new Date();
 
-    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+    this.calendar.focusToDate(today);
 
-    this.calendar.changeDay(today, { preventDefault: _.noop });
-    this.setState({
-      today,
-    });
-    this.props.input.onBlur(today);
+    if (moment(this.props.minDate).isSameOrBefore(today, 'day')) {
+      this.setState({
+        initDate: today,
+      });
+      this.props.input.onBlur(today);
+      this.toggleModal(false);
+    }
   }
 
   toggleModal(visible) {
@@ -123,6 +121,9 @@ export default class DatePicker extends Component {
       calendarDate = (!date || !date.isValid()) ? moment() : moment(date).utc();
     }
     const inputValue = (!date) ? translate('common.component.input.datePicker.tbd') : calendarDate.format(dateStyle);
+    if (calendarDate) {
+      calendarDate = calendarDate.toDate();
+    }
 
     const inputComponent = (
       <input
@@ -158,8 +159,8 @@ export default class DatePicker extends Component {
             onChange={this.handleSelect}
             className="calendar custom-calendar"
             ref={(calendar) => { this.calendar = calendar; }}
-            minDate={minDate || 'none'}
-            maxDate={maxDate || 'none'}
+            minDate={minDate ? minDate.toDate() : undefined}
+            maxDate={maxDate ? maxDate.toDate() : undefined}
           />
           <div className="current-date" onClick={this.navigateToday}>
             {translate('common.component.input.datePicker.today')} {currentDate.format(translate('common.component.input.datePicker.todayDateMask'))}
