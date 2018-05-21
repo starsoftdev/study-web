@@ -186,11 +186,11 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       notes =
         (<div className="category-notes-container">
           {
-          this.props.categoryNotes.details.map((note, index) => {
-            const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
-            const isNewPatient = isNextPatientDifferent;
-            isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
-            const result =
+            this.props.categoryNotes.details.map((note, index) => {
+              const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
+              const isNewPatient = isNextPatientDifferent;
+              isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
+              const result =
               (<div className="patient-note-container" key={index}>
                 {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
                 { isNewPatient && <div className="img-holder">
@@ -199,12 +199,12 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
                 <PatientNote key={note.id} currentUser={this.props.currentUser} note={note} isNewPatient={isNewPatient} counter={innerCounter} />
                 {isNextPatientDifferent && <hr></hr>}
               </div>);
-            if (isNextPatientDifferent) {
-              innerCounter++;
-            }
-            return result;
-          })
-        }
+              if (isNextPatientDifferent) {
+                innerCounter++;
+              }
+              return result;
+            })
+          }
         </div>);
     } else if (!this.props.categoryNotes.fetching) {
       notes = <div className="text-center btn-default-padding">No notes.</div>;

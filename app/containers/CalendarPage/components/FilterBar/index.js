@@ -252,22 +252,22 @@ class FilterBar extends Component {
           </div>
           <div className="search-area pull-left">
             {(bDisabled)
-            ? <Select
-              className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || bDisabled}
-              options={siteLocationOptions}
-              placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
-              value={defaultValue}
-              onChange={(option) => this.handleFilterChange('siteLocation', option)}
-            />
-            : <Select
-              className="form-control data-search"
-              disabled={fetchingSites || !isAdmin || bDisabled}
-              options={siteLocationOptions}
-              value={filter.siteLocation}
-              placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
-              onChange={(option) => this.handleFilterChange('siteLocation', option)}
-            />
+              ? <Select
+                className="form-control data-search"
+                disabled={fetchingSites || !isAdmin || bDisabled}
+                options={siteLocationOptions}
+                placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
+                value={defaultValue}
+                onChange={(option) => this.handleFilterChange('siteLocation', option)}
+              />
+              : <Select
+                className="form-control data-search"
+                disabled={fetchingSites || !isAdmin || bDisabled}
+                options={siteLocationOptions}
+                value={filter.siteLocation}
+                placeholder={translate('portals.component.calendarPage.filterBar.sitePlaceholder')}
+                onChange={(option) => this.handleFilterChange('siteLocation', option)}
+              />
             }
           </div>
           <div className="search-area pull-left">

@@ -330,17 +330,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           </Modal>
           {(chat)
             ?
-              <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-                <Modal.Header>
-                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-                  <a className="lightbox-close close" onClick={this.closeRenewModal}>
-                    <i className="icomoon-icon_close" />
-                  </a>
-                </Modal.Header>
-                <Modal.Body>
-                  <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
-                </Modal.Body>
-              </Modal>
+            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+              <Modal.Header>
+                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+              </Modal.Body>
+            </Modal>
             : null
           }
         </div>

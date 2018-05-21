@@ -164,9 +164,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               onClick={this.showGlobalPMSModal}
             >
               {patientMessageUnreadCount > 0
-               ? <span className="counter">{patientMessageUnreadCount}</span>
-               : null
-               }
+                ? <span className="counter">{patientMessageUnreadCount}</span>
+                : null
+              }
               <i className="icomoon-credit" />
             </a>
 
