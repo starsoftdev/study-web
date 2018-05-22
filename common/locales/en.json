@@ -1310,7 +1310,6 @@
     "portals.component.topHeaderBar.avatarMenu.paymentInfo": "PAYMENT INFORMATION",
     "portals.component.topHeaderBar.avatarMenu.receipts": "RECEIPTS",
     "portals.component.topHeaderBar.avatarMenu.proposals": "PROPOSALS",
-    "portals.component.topHeaderBar.avatarMenu.receiptsProjectAgreements": "RECEIPTS & PROJECT AGREEMENTS",
     "portals.component.topHeaderBar.avatarMenu.logOut": "LOG OUT",
 
     "portals.component.upgradeStudyForm.pqs": "Patient Qualification Suite",
