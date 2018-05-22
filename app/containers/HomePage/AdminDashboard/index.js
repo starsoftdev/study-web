@@ -3,7 +3,8 @@ import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
 import moment from 'moment-timezone';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import { change, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { StickyContainer } from 'react-sticky';
@@ -11,6 +12,8 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import rd3 from 'react-d3';
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
+import { getMomentFromDate } from '../../../utils/time';
 
 import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
@@ -149,8 +152,9 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       datePicker : null,
       firstDayOfWeek : null,
       dateRange : {
-        startDate: moment().clone().subtract(30, 'days'),
-        endDate: moment(),
+        startDate: moment().clone().subtract(30, 'days').toDate(),
+        endDate: new Date(),
+        key: 'selection',
       },
       prevTotalsFilters: [],
       prevOffset: null,
@@ -165,7 +169,6 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     this.showDateRangeModal = this.showDateRangeModal.bind(this);
     this.hideDateRangeModal = this.hideDateRangeModal.bind(this);
     this.changeRange = this.changeRange.bind(this);
-    this.handleChange = this.handleChange.bind(this);
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.percentageFilterChange = this.percentageFilterChange.bind(this);
     this.percentageFilterSubmit = this.percentageFilterSubmit.bind(this);
@@ -284,13 +287,16 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   handleChange(which, payload) {
-    this.setState({
-      [which] : payload,
-    });
+    if (payload.selection) {
+      this.setState({
+        [which] : payload.selection,
+      });
+    }
   }
 
   parseDateRange() {
-    const { startDate, endDate } = this.state.dateRange;
+    const startDate = getMomentFromDate(this.state.dateRange.startDate);
+    const endDate = getMomentFromDate(this.state.dateRange.endDate);
     const today = moment();
     const fmt = 'MM/DD/YY';
     let prefix = '';
@@ -441,15 +447,15 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
     const { dateRange } = this.state;
     if (dateRange.startDate) {
       const format = 'MMM D, YYYY';
-      if (dateRange.startDate.isSameOrAfter(dateRange.endDate, 'day')) {
+      if (getMomentFromDate(dateRange.startDate).isSameOrAfter(getMomentFromDate(dateRange.endDate), 'day')) {
         return (
           <span className="time">
-            {moment(dateRange.startDate).format(format)}
+            {getMomentFromDate(dateRange.startDate).format(format)}
           </span>
         );
       }
       return (
-        <span className="time">{moment(dateRange.startDate).format(format)} - {moment(dateRange.endDate).format(format)}</span>
+        <span className="time">{getMomentFromDate(dateRange.startDate).format(format)} - {getMomentFromDate(dateRange.endDate).format(format)}</span>
       );
     }
     return null;
@@ -681,13 +687,14 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
                 </a>
               </Modal.Header>
               <Modal.Body>
-                <DateRange
-                  linkedCalendars
-                  ranges={defaultRanges}
-                  startDate={this.state.dateRange.startDate ? this.state.dateRange.startDate : moment()}
-                  endDate={this.state.dateRange.endDate ? this.state.dateRange.endDate : moment().add(1, 'M')}
-                  onInit={this.handleChange}
+                <DateRangePicker
                   onChange={this.handleChange}
+                  moveRangeOnFirstSelection={false}
+                  months={2}
+                  direction="horizontal"
+                  ranges={[this.state.dateRange]}
+                  staticRanges={defaultStaticRanges}
+                  inputRanges={[]}
                 />
                 <div className="dateRange-helper">
                   <div className="emit-border"><br /></div>
