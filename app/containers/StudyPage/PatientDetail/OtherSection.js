@@ -197,7 +197,7 @@ class OtherSection extends React.Component {
     if (initialValues && initialValues.patientIndications) {
       return (
         <div className="category-list">
-          {initialValues.patientIndications.map(pi => (
+          {initialValues.patientIndications.filter(pi => { return pi.indication; }).map(pi => (
             <div key={pi.indication.id} className="category">
               <span className="link">
                 <span className="text">{pi.indication.name}</span>
@@ -235,7 +235,7 @@ class OtherSection extends React.Component {
     const overlayValues = { ...this.state.initialValues };
 
     if (this.state.initialValues && this.state.initialValues.patientIndications) {
-      overlayValues.indications = this.state.initialValues.patientIndications.map(pi => pi.indication);
+      overlayValues.indications = this.state.initialValues.patientIndications.filter(pi => { return pi.indication; }).map(pi => pi.indication);
     }
 
     const { formValues: { dobDay, dobMonth, dobYear }, initialValues, loading, submitting, indications } = this.props;
@@ -269,7 +269,7 @@ class OtherSection extends React.Component {
                 </div>
                 <div className="field-row">
                   <strong className="label">
-                    <label htmlFor="patient-source5">{translate('client.component.otherSection.labelSource')}</label>
+                    <label htmlFor="patient-source5">{translate('client.component.otherSection.labelMedia')}</label>
                   </strong>
                   <div className="field">
                     <FormControl disabled="true" type="text" value={initialValues.source ? initialValues.source.type : ''} />

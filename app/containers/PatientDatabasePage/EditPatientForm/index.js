@@ -455,13 +455,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>{translate('client.component.editPatientForm.labelSource')}</label>
+            <label>{translate('client.component.editPatientForm.labelMedia')}</label>
           </strong>
           <Field
             name="source"
             component={ReactSelect}
             className="field"
-            placeholder={translate('client.component.editPatientForm.placeholderSource')}
+            placeholder={translate('client.component.editPatientForm.placeholderMedia')}
             options={sourceOptions}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
