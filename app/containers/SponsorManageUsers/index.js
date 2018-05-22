@@ -138,7 +138,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
       <div className="container-fluid sponsor-portal">
         <Helmet title="Manage Users - StudyKIK" />
         <section className="manage-sponsor-user">
-          <h2 className="main-heading">{translate('client.page.patientDatabase.mainHeading')}</h2>
+          <h2 className="main-heading">{translate('sponsor.page.sponsorManageUsers.mainHeading')}</h2>
           <SponsorManageUsersSearch
             editUser={this.editUser}
             formValues={this.props.formValues}

@@ -126,7 +126,7 @@ export class LandingPageModal extends React.Component {
       if (!this.state.initialValuesEntered) {
         this.setState({
           initialValuesEntered: true,
-          code: RichTextEditor.createValueFromString(landing.description, 'markdown') || RichTextEditor.createEmptyValue(),
+          code: RichTextEditor.createValueFromString(landing.description || '', 'markdown') || RichTextEditor.createEmptyValue(),
         }, () => {
           change('title', landing.title);
           change('locationMask', landing.locationMask);
