@@ -17,6 +17,7 @@ import * as Selector from '../../containers/StudyPage/selectors';
 import { findPatientsForTextBlast, filterPatientsForTextBlast, removePatientFromTextBlast, removePatientsFromTextBlast, submitEmailBlast } from '../../containers/StudyPage/actions';
 import { selectValues, selectSyncErrors } from '../../common/selectors/form.selector';
 import { selectCurrentUser, selectSources, selectClientCredits } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'StudyPage.TextBlastModal';
 
@@ -187,7 +188,7 @@ class EmailBlastForm extends React.Component {
     }
 
     if (newPatientsArr.length > clientCredits.details.emailCredits) {
-      toastr.error('', 'Error! You do not have enough email credits. Please add more credits.');
+      toastr.error('', translate('client.component.emailBlastForm.toastrCreditsError'));
     } else if (_.isEmpty(formSyncErrors)) {
       submitEmailBlast(formValues.patients, formValues.message, formValues.email, formValues.subject, currentUser.roleForClient.id, (err, data) => {
         onClose(err, data);
@@ -275,7 +276,7 @@ class EmailBlastForm extends React.Component {
       return (
         <span className="emails-counter">
           <span className="counter">{newPatientsArr.length}</span>
-          <span className="text"> Patients</span>
+          <span className="text"> {translate('client.component.emailBlastForm.patients')}</span>
           <a className="btn-close">
             <i className="icomoon-icon_close" onClick={this.removePatients} />
           </a>
@@ -303,7 +304,7 @@ class EmailBlastForm extends React.Component {
           <div className="scroll-holder jcf--scrollable">
             <div className="sub-holder">
               <div className="category">
-                <strong className="heading">Category</strong>
+                <strong className="heading">{translate('client.component.emailBlastForm.category')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field
@@ -334,7 +335,7 @@ class EmailBlastForm extends React.Component {
                 </ul>
               </div>
               <div className="category">
-                <strong className="heading">SOURCE</strong>
+                <strong className="heading">{translate('client.component.emailBlastForm.source')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field
@@ -379,14 +380,14 @@ class EmailBlastForm extends React.Component {
               </div>
               <div className="sender-field-holder">
                 <div className="sender-field-prev">
-                  From
+                  {translate('client.component.emailBlastForm.labelFrom')}
                 </div>
                 <Field
                   name="email"
                   component={Input}
                   className="sender-field"
                   type="text"
-                  placeholder="Enter your email address"
+                  placeholder={translate('client.component.emailBlastForm.placeholderEmailAddress')}
                 />
               </div>
               <Field
@@ -394,14 +395,14 @@ class EmailBlastForm extends React.Component {
                 component={Input}
                 className="subject-field"
                 type="text"
-                placeholder="Subject"
+                placeholder={translate('client.component.emailBlastForm.placeholderSubject')}
               />
               <Field
                 name="message"
                 component={Input}
                 componentClass="textarea"
                 className="email-message"
-                placeholder="Type message..."
+                placeholder={translate('client.component.emailBlastForm.placeholderMessage')}
                 style={{ height: '350px' }}
               />
               <div className="footer">
@@ -410,13 +411,13 @@ class EmailBlastForm extends React.Component {
                   onClick={(e) => this.submitEmailBlast(e)}
                   disabled={disabled}
                 >
-                  Send
+                  {translate('client.component.emailBlastForm.send')}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <input type="reset" className="hidden btn btn-gray-outline" value="reset" />
+        <input type="reset" className="hidden btn btn-gray-outline" value={translate('client.component.emailBlastForm.reset')} />
       </Form>
     );
   }

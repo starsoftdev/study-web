@@ -33,6 +33,7 @@ import {
 import { selectReceiptsList, selectPaginationOptions, selectSearchOptions, selectReceiptsStatus } from './selectors';
 import ReceiptsTable from '../../components/ReceiptsTable';
 import TableSearchForm from '../../components/TableSearchForm';
+import { translate } from '../../../common/utilities/localization';
 
 export class Receipts extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -181,7 +182,7 @@ export class Receipts extends React.Component { // eslint-disable-line react/pre
       <StickyContainer className="container-fluid">
         <Helmet title="Receipts - StudyKIK" />
         <section className="receipts">
-          <h2 className="main-heading">RECEIPTS</h2>
+          <h2 className="main-heading">{translate('client.page.receipts.header')}</h2>
           <TableSearchForm
             changeRange={this.changeRange}
             search={this.search}

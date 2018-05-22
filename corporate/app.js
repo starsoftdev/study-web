@@ -28,6 +28,7 @@ import { default as BillingPage } from './containers/BillingPage';
 import { default as OrderPage } from './containers/OrderPage';
 import { default as AboutPage } from './containers/AboutPage';
 import { default as NotFound } from './containers/NotFoundPage';
+import { default as ServiceUnavailable } from './containers/ServiceUnavailable';
 import { default as ThankYouPage } from './containers/ThankYouPage';
 import { default as ThankYouPage2 } from './containers/ThankYouPage2';
 
@@ -88,6 +89,8 @@ const routes = {
     { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
+    { path: '/at', component: Home },
+    { path: '/au', component: Home },
     { path: '/br', component: Home },
     { path: '/ca', component: Home },
     { path: '/cz', component: Home },
@@ -98,7 +101,11 @@ const routes = {
     { path: '/pl', component: Home },
     { path: '/uk', component: Home },
     { path: '/hu', component: Home },
+    { path: '/pr', component: Home },
+    { path: '/mx', component: Home },
+    { path: '/nz', component: Home },
     { path: '/404', component: NotFound },
+    { path: '/503', component: ServiceUnavailable },
     { path: '*', component: NotFound, onEnter: redirect404 },
   ],
 };

@@ -26,6 +26,7 @@ import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
 import { getItem } from '../../utils/localStorage';
+import { translate } from '../../../common/utilities/localization';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -75,6 +76,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     this.state = {
       socketBinded: false,
       isSubscribedToUpdateStats: false,
+      messageIds: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -85,7 +87,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     fetchStudy(params.id, 1);     // fetch STUDYKIK source by default = 1
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
-
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
         clientOpenedStudyPage(params.id);
@@ -131,8 +132,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           // TODO needs to take into account the stats are filtered based on campaign and source selected
           // TODO needs to be able to fetch the redux state without having to resort to hacks
           // TODO right now it cannot access redux state when getting an incoming text or sending an outgoing text
-          if (params && parseInt(params.id) === socketMessage.study.id) {
+          if (params && parseInt(params.id) === socketMessage.study.id && this.state.messageIds.indexOf(socketMessage.text_message_id) === -1) {
             // check is patients is on the board
+            this.state.messageIds.push(socketMessage.text_message_id);
             let needToUpdateMessageStats = false;
             _.forEach(this.props.patientCategories, (category) => { // eslint-disable-line consistent-return
               _.forEach(category.patients, (patient) => { // eslint-disable-line consistent-return
@@ -216,6 +218,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     if (socket && socket.connected) {
       clientClosedStudyPage(params.id);
     }
+    socket.removeAllListeners('notifyStudyPageMessage');
+    socket.removeAllListeners('notifyLandingPageViewChanged');
   }
 
   handleSubmit(searchFilter, loadMore) {
@@ -243,7 +247,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     } else if (!study || !sources || !campaigns) {
       return (
-        <div>A problem occurred trying to load the page. Please try refreshing the page.</div>
+        <div>{translate('client.page.studyPage.problem')}</div>
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
@@ -255,7 +259,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         value: campaign.id,
       };
     });
-    campaignOptions.unshift({ label: 'All', value: -1 });
+    campaignOptions.unshift({ label: translate('common.constants.all'), value: -1 });
     let defaultSource = '';
     const sourceOptions = this.props.studySources.details.filter(s => !s.isLeadSource).map(studySource => {
       if (studySource.source.type === 'StudyKIK') {
@@ -306,9 +310,9 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           <header className="main-head">
             <h2 className="main-heading">{study.name}</h2>
             <p>
-              <span className="info-cell">Location: {siteLocation}</span>
-              <span className="info-cell">Sponsor: {sponsor}</span>
-              <span className="info-cell">Protocol: {protocol.number || ''}</span>
+              <span className="info-cell">{translate('client.page.studyPage.location')} {siteLocation}</span>
+              <span className="info-cell">{translate('client.page.studyPage.sponsor')} {sponsor}</span>
+              <span className="info-cell">{translate('client.page.studyPage.protocol')} {protocol.number || ''}</span>
             </p>
           </header>
           <FilterStudyPatients

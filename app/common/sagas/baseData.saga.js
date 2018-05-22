@@ -8,11 +8,11 @@ import { reset } from 'redux-form';
 import moment from 'moment-timezone';
 import { push } from 'react-router-redux';
 
+import { removeItem, setItem } from '../../utils/localStorage';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 import { logout } from '../../containers/LoginPage/actions';
 import { fetchPatientMessagesSucceeded } from '../../containers/HomePage/actions';
-import { setItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 
 import {
@@ -225,12 +225,12 @@ export default function* baseDataSaga() {
   yield fork(submitToSponsorPortalWatcher);
   yield fork(getCnsInfoWatcher);
   yield fork(submitCnsWatcher);
-  yield fork(readStudyPatientMessages);
+  yield fork(readStudyPatientMessagesWatcher);
   yield fork(fetchStudySources);
   yield fork(fetchStudyLeadSources);
 }
 
-export function* fetchIndicationsWatcher() {
+function* fetchIndicationsWatcher() {
   while (true) {
     yield take(FETCH_INDICATIONS);
 
@@ -258,7 +258,7 @@ export function* fetchIndicationsWatcher() {
   }
 }
 
-export function* fetchSourcesWatcher() {
+function* fetchSourcesWatcher() {
   while (true) {
     yield take(FETCH_SOURCES);
 
@@ -281,7 +281,7 @@ export function* fetchSourcesWatcher() {
   }
 }
 
-export function* fetchLevelsWatcher() {
+function* fetchLevelsWatcher() {
   while (true) {
     yield take(FETCH_LEVELS);
 
@@ -308,7 +308,7 @@ export function* fetchLevelsWatcher() {
   }
 }
 
-export function* fetchCouponWatcher() { // 1
+function* fetchCouponWatcher() { // 1
   while (true) {
     const { couponId } = yield take(FETCH_COUPON);
     const encodedCouponId = encodeURIComponent(couponId);
@@ -320,12 +320,12 @@ export function* fetchCouponWatcher() { // 1
       yield put(couponFetched(response));
     } catch (err) {
       yield put(couponFetchingError(err));
-      toastr.error('', 'Error! Invalid coupon code.');
+      toastr.error('', translate('portals.component.shoppingCartForm.invalidCouponToastrError'));
     }
   }
 }
 
-export function* fetchRewardsWatcher() {
+function* fetchRewardsWatcher() {
   while (true) {
     try {
       const { siteId, clientId } = yield take(FETCH_REWARDS);
@@ -351,7 +351,7 @@ export function* fetchRewardsWatcher() {
   }
 }
 
-export function* fetchRewardsBalanceWatcher() {
+function* fetchRewardsBalanceWatcher() {
   while (true) {
     try {
       const { siteId, clientId } = yield take(FETCH_REWARDS_BALANCE);
@@ -368,7 +368,7 @@ export function* fetchRewardsBalanceWatcher() {
   }
 }
 
-export function* redeemWatcher() {
+function* redeemWatcher() {
   while (true) {
     // listen for the SUBMIT_FORM action dispatched on form submit
     const { payload } = yield take(REDEEM);
@@ -381,20 +381,20 @@ export function* redeemWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Redeem Reward', 'The request has been submitted successfully');
+      toastr.success(translate('portals.component.rewardModal.redeemToastrSuccessTitle'), translate('portals.component.rewardModal.redeemToastrSuccessMessage'));
       yield put(redeemSuccess(response));
 
       // Clear the form values
       yield put(reset('rewardRedemptions'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.rewardModal.redeemToastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(redeemError(err));
     }
   }
 }
 
-export function* fetchCardsWatcher() {
+function* fetchCardsWatcher() {
   while (true) {
     const { clientId, customerId } = yield take(FETCH_CARDS);
 
@@ -409,13 +409,13 @@ export function* fetchCardsWatcher() {
   }
 }
 
-export function* saveCardWatcher() {
+function* saveCardWatcher() {
   while (true) {
     const { clientId, customerId, cardData } = yield take(SAVE_CARD);
     const cards = yield select(selectCards());
 
     if (cards && cards.details && cards.details.data.length >= 10) {
-      toastr.error('', 'Error! Too many cards on file.');
+      toastr.error('', translate('portals.component.addNewCardForm.saveCardToastrError'));
       yield put(cardSavingError(new Error('Error! Too many cards on file.')));
     } else {
       try {
@@ -425,10 +425,10 @@ export function* saveCardWatcher() {
           body: JSON.stringify(cardData),
         };
         const response = yield call(request, requestURL, options);
-        toastr.success('', 'Success! Your card has been added.');
+        toastr.success('', translate('portals.component.addNewCardForm.saveCardToastrSuccess'));
         yield put(cardSaved(response));
       } catch (err) {
-        const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+        const errorMessage = get(err, 'message', translate('portals.component.addNewCardForm.saveCardToastrOtherError'));
         toastr.error('', errorMessage);
         yield put(cardSavingError(err));
       }
@@ -436,7 +436,7 @@ export function* saveCardWatcher() {
   }
 }
 
-export function* deleteCardWatcher() {
+function* deleteCardWatcher() {
   while (true) {
     const { clientId, customerId, cardId } = yield take(DELETE_CARD);
     const options = {
@@ -451,17 +451,17 @@ export function* deleteCardWatcher() {
       const requestURL = `${API_URL}/clients/${clientId}/payments/deleteCard`;
       const response = yield call(request, requestURL, options);
 
-      toastr.success('', 'Success! You have removed your card.');
+      toastr.success('', translate('client.component.cardItem.toastrSuccess'));
       yield put(cardDeleted(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.cardItem.toastrDefaultError'));
       toastr.error('', errorMessage);
       yield put(cardDeletingError(err));
     }
   }
 }
 
-export function* addCreditsWatcher() {
+function* addCreditsWatcher() {
   while (true) {
     const { clientId, customerId, data } = yield take(ADD_CREDITS);
     const options = {
@@ -483,7 +483,7 @@ export function* addCreditsWatcher() {
   }
 }
 
-export function* fetchClientSitesWatcher() {
+function* fetchClientSitesWatcher() {
   while (true) {
     const { clientId, searchParams } = yield take(FETCH_CLIENT_SITES);
 
@@ -532,7 +532,7 @@ export function* fetchClientSitesWatcher() {
   }
 }
 
-export function* fetchSitePatientsWatcher() {
+function* fetchSitePatientsWatcher() {
   while (true) {
     const { clientRoleId, limit, offset } = yield take(FETCH_SITE_PATIENTS);
     const formValues = yield select(selectGlobalPMSFormValues());
@@ -574,7 +574,7 @@ export function* fetchSitePatientsWatcher() {
   }
 }
 
-export function* fetchClientCreditsWatcher() {
+function* fetchClientCreditsWatcher() {
   while (true) {
     const { userId } = yield take(FETCH_CLIENT_CREDITS);
 
@@ -589,7 +589,7 @@ export function* fetchClientCreditsWatcher() {
   }
 }
 
-export function* searchSitePatientsWatcher() {
+function* searchSitePatientsWatcher() {
   while (true) {
     const { keyword } = yield take(SEARCH_SITE_PATIENTS);
 
@@ -604,7 +604,7 @@ export function* searchSitePatientsWatcher() {
   }
 }
 
-export function* fetchPatientMessagesWatcher() {
+function* fetchPatientMessagesWatcher() {
   while (true) {
     const { patientId } = yield take(FETCH_PATIENT_MESSAGES);
     if (patientId && patientId > 0) {
@@ -625,7 +625,7 @@ export function* fetchPatientMessagesWatcher() {
   }
 }
 
-export function* fetchPatientMessageUnreadCountWatcher() {
+function* fetchPatientMessageUnreadCountWatcher() {
   while (true) {
     const { currentUser } = yield take(FETCH_PATIENT_MESSAGE_UNREAD_COUNT);
     try {
@@ -645,7 +645,7 @@ export function* fetchPatientMessageUnreadCountWatcher() {
   }
 }
 
-export function* fetchPatientCategoriesWatcher() {
+function* fetchPatientCategoriesWatcher() {
   while (true) {
     yield take(FETCH_PATIENT_CATEGORIES);
 
@@ -670,7 +670,7 @@ export function* fetchPatientCategoriesWatcher() {
   }
 }
 
-export function* fetchClientRolesWatcher() {
+function* fetchClientRolesWatcher() {
   while (true) {
     const { clientId, searchParams } = yield take(FETCH_CLIENT_ROLES);
 
@@ -709,7 +709,7 @@ export function* fetchClientRolesWatcher() {
   }
 }
 
-export function* fetchSiteWatcher() {
+function* fetchSiteWatcher() {
   while (true) {
     const { id } = yield take(FETCH_SITE);
 
@@ -724,7 +724,7 @@ export function* fetchSiteWatcher() {
   }
 }
 
-export function* fetchUserWatcher() {
+function* fetchUserWatcher() {
   while (true) {
     const { id } = yield take(FETCH_USER);
 
@@ -741,7 +741,7 @@ export function* fetchUserWatcher() {
   }
 }
 
-export function* deleteUserWatcher() {
+function* deleteUserWatcher() {
   while (true) {
     const { id } = yield take(DELETE_USER);
 
@@ -765,7 +765,7 @@ export function* deleteUserWatcher() {
   }
 }
 
-export function* saveSiteWatcher() {
+function* saveSiteWatcher() {
   while (true) {
     const { clientId, id, data } = yield take(SAVE_SITE);
 
@@ -774,8 +774,8 @@ export function* saveSiteWatcher() {
       let options = null;
       data.client_id = clientId;
 
-      let messageHeader = 'Edit Site Location';
-      let message = 'The site location has been updated successfully!';
+      let messageHeader = translate('portals.component.editSiteForm.editSiteSuccessToastrTitle');
+      let message = translate('portals.component.editSiteForm.editSiteSuccessToastrMessage');
       if (id) {
         requestURL = `${API_URL}/sites/${id}/updateSite`;
         options = {
@@ -783,8 +783,8 @@ export function* saveSiteWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add Site Location';
-        message = 'Site Location added successfully!';
+        messageHeader = translate('portals.component.editSiteForm.addSiteSuccessToastrTitle');
+        message = translate('portals.component.editSiteForm.addSiteSuccessToastrMessage');
         requestURL = `${API_URL}/sites`;
         options = {
           method: 'POST',
@@ -797,14 +797,14 @@ export function* saveSiteWatcher() {
       toastr.success(messageHeader, message);
       yield put(siteSaved(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.editSiteForm.errorToastrMessage'));
       toastr.error('', errorMessage);
       yield put(siteSavingError(err));
     }
   }
 }
 
-export function* saveUserWatcher() {
+function* saveUserWatcher() {
   while (true) {
     const { clientId, id, data } = yield take(SAVE_USER);
 
@@ -812,8 +812,8 @@ export function* saveUserWatcher() {
       let requestURL = null;
       let options = null;
 
-      let messageHeader = 'Edit User';
-      let message = 'The user has been updated successfully!';
+      let messageHeader = translate('client.component.editUserForm.toastrHeaderEditUser');
+      let message = translate('client.component.editUserForm.toastrMessageEditUser');
       if (id) {
         data.userId = id;
         requestURL = `${API_URL}/clients/${clientId}/updateUserWithClientRole`;
@@ -822,8 +822,8 @@ export function* saveUserWatcher() {
           body: JSON.stringify(data),
         };
       } else {
-        messageHeader = 'Add User';
-        message = 'User added successfully!';
+        messageHeader = translate('client.component.editUserForm.toastrHeaderAddUser');
+        message = translate('client.component.editUserForm.toastrMessageAddUser');
         requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
         options = {
           method: 'POST',
@@ -841,14 +841,14 @@ export function* saveUserWatcher() {
         yield put(userSaved(data.clientRole.siteId, response, messageHeader));
       }
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.editUserForm.toastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(userSavingError(err));
     }
   }
 }
 
-export function* updateUserWatcher() {
+function* updateUserWatcher() {
   while (true) {
     const { id, data } = yield take(UPDATE_USER);
     let requestURL = null;
@@ -870,7 +870,7 @@ export function* updateUserWatcher() {
 }
 
 
-export function* fetchCreditsPrice() {
+function* fetchCreditsPrice() {
   while (true) {
     yield take(GET_CREDITS_PRICE);
 
@@ -885,7 +885,7 @@ export function* fetchCreditsPrice() {
   }
 }
 
-export function* fetchIndicationLevelPriceWatcher() {
+function* fetchIndicationLevelPriceWatcher() {
   while (true) {
     const { levelId } = yield take(FETCH_INDICATION_LEVEL_PRICE);
 
@@ -899,14 +899,14 @@ export function* fetchIndicationLevelPriceWatcher() {
       const response = yield call(request, requestURL, params);
       yield put(fetchIndicationLevelPriceSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Can not get price for Exposure Level');
+      const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchLevelPriceErrorToastr'));
       toastr.error('', errorMessage);
       yield put(fetchIndicationLevelPriceError(err));
     }
   }
 }
 
-export function* changeUsersTimezoneWatcher() {
+function* changeUsersTimezoneWatcher() {
   while (true) {
     const { userId, params } = yield take(CHANGE_USERS_TIMEZONE);
     try {
@@ -916,22 +916,22 @@ export function* changeUsersTimezoneWatcher() {
         body: JSON.stringify(params),
       };
       const response = yield call(request, requestURL, reqParams);
-      toastr.success('Time Zone', translate('corporate.page.profile.profileForm.updateProfileToastrSuccess'));
+      toastr.success('Time Zone', translate('client.component.profileForm.updateProfileToastrSuccess'));
       moment.tz.setDefault(response.timezone);
       yield put(changeUsersTimezoneSuccess(response));
     } catch (err) {
-      const errorMessage = get(err, 'message', translate('corporate.page.profile.profileForm.updateProfileToastrError'));
+      const errorMessage = get(err, 'message', translate('client.component.profileForm.updateProfileToastrError'));
       toastr.error('', errorMessage);
       yield put(changeUsersTimezoneError(err));
     }
   }
 }
 
-export function* getTimezoneWatcher() {
+function* getTimezoneWatcher() {
   yield* takeLatest(GET_TIMEZONE, getTimezoneWorker);
 }
 
-export function* getTimezoneWorker(action) {
+function* getTimezoneWorker(action) {
   try {
     const requestURL = `${API_URL}/sites/getTimezone`;
 
@@ -952,11 +952,11 @@ export function* getTimezoneWorker(action) {
   }
 }
 
-export function* fetchClientAdminsWatcher() {
+function* fetchClientAdminsWatcher() {
   yield* takeLatest(FETCH_CLIENT_ADMINS, fetchClientAdminsWorker);
 }
 
-export function* fetchClientAdminsWorker(action) {
+function* fetchClientAdminsWorker(action) {
   try {
     const requestURL = `${API_URL}/clients/${action.id}/admins`;
 
@@ -967,13 +967,13 @@ export function* fetchClientAdminsWorker(action) {
 
     yield put(fetchClientAdminsSuccess(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching clients admins');
+    const errorMessage = get(err, 'message', translate('portals.page.listNewStudyPage.fetchClientAdminsToastrError'));
     toastr.error('', errorMessage);
     yield put(fetchClientAdminsError(err));
   }
 }
 
-export function* changeTemporaryPassword() {
+function* changeTemporaryPassword() {
   while (true) {
     const { payload } = yield take(CHANGE_TEMPORARY_PASSWORD);
 
@@ -993,7 +993,7 @@ export function* changeTemporaryPassword() {
   }
 }
 
-export function* fetchLanding() {
+function* fetchLanding() {
   while (true) {
     const { studyId, utm } = yield take(FETCH_LANDING);
 
@@ -1182,7 +1182,7 @@ function* sendThankYouEmail(action) {
   }
 }
 
-export function* fetchSponsorsWatcher() {
+function* fetchSponsorsWatcher() {
   while (true) {
     yield take(FETCH_SPONSORS);
 
@@ -1203,7 +1203,7 @@ export function* fetchSponsorsWatcher() {
   }
 }
 
-export function* fetchProtocolsWatcher() {
+function* fetchProtocolsWatcher() {
   while (true) {
     const { clientRoleId, sponsorRoleId } = yield take(FETCH_PROTOCOLS);
 
@@ -1228,7 +1228,7 @@ export function* fetchProtocolsWatcher() {
   }
 }
 
-export function* fetchCroWatcher() {
+function* fetchCroWatcher() {
   while (true) {
     yield take(FETCH_CRO);
 
@@ -1249,7 +1249,7 @@ export function* fetchCroWatcher() {
   }
 }
 
-export function* fetchUsersByRoleWatcher() {
+function* fetchUsersByRoleWatcher() {
   while (true) {
     yield take(FETCH_USERS_BY_ROLE);
 
@@ -1270,11 +1270,11 @@ export function* fetchUsersByRoleWatcher() {
   }
 }
 
-export function* submitToClientPortalWatcher() {
+function* submitToClientPortalWatcher() {
   yield* takeLatest(SUBMIT_TO_CLIENT_PORTAL, submitToClientPortalWorker);
 }
 
-export function* submitToClientPortalWorker(action) {
+function* submitToClientPortalWorker(action) {
   try {
     yield call(setItem, 'user_id', action.userId);
     yield put(push('/app'));
@@ -1285,11 +1285,11 @@ export function* submitToClientPortalWorker(action) {
   }
 }
 
-export function* submitToSponsorPortalWatcher() {
+function* submitToSponsorPortalWatcher() {
   yield* takeLatest(SUBMIT_TO_SPONSOR_PORTAL, submitToSponsorPortalWorker);
 }
 
-export function* submitToSponsorPortalWorker(action) {
+function* submitToSponsorPortalWorker(action) {
   try {
     yield call(setItem, 'user_id', action.userId);
     yield put(push('/app'));
@@ -1300,11 +1300,11 @@ export function* submitToSponsorPortalWorker(action) {
   }
 }
 
-export function* getCnsInfoWatcher() {
+function* getCnsInfoWatcher() {
   yield* takeLatest(GET_CNS_INFO, getCnsInfoWorker);
 }
 
-export function* getCnsInfoWorker(action) {
+function* getCnsInfoWorker(action) {
   try {
     const requestURL = `${API_URL}/thankYouPages/getCnsInfo?cns=${action.payload}`;
     const response = yield call(request, requestURL);
@@ -1317,11 +1317,11 @@ export function* getCnsInfoWorker(action) {
   }
 }
 
-export function* submitCnsWatcher() {
+function* submitCnsWatcher() {
   yield* takeLatest(SUBMIT_CNS, submitCnsWorker);
 }
 
-export function* submitCnsWorker(action) {
+function* submitCnsWorker(action) {
   try {
     const requestURL = `${API_URL}/thankYouPages/submitCns`;
     const options = {
@@ -1337,20 +1337,26 @@ export function* submitCnsWorker(action) {
   }
 }
 
-function* readStudyPatientMessages() {
-  while (true) {
-    const { patientId } = yield take(READ_STUDY_PATIENT_MESSAGES);
-    if (patientId && patientId > 0) {
-      try {
-        const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
-        const response = yield call(request, requestURL);
+function* readStudyPatientMessagesWatcher() {
+  yield* takeLatest(READ_STUDY_PATIENT_MESSAGES, readStudyPatientMessagesWorker);
+}
 
-        yield put(readStudyPatientMessagesSuccess(response));
-      } catch (err) {
-        yield put(readStudyPatientMessagesError(err));
-      }
+function* readStudyPatientMessagesWorker(action) {
+  try {
+    const { patientId } = action;
+    if (patientId && patientId > 0) {
+      const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
+      const response = yield call(request, requestURL);
+
+      yield put(readStudyPatientMessagesSuccess(response));
     } else {
       yield put(readStudyPatientMessagesSuccess([]));
+    }
+  } catch (err) {
+    yield put(readStudyPatientMessagesError(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
     }
   }
 }

@@ -15,6 +15,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import PatientActionButtons from '../../containers/PatientDatabasePage/PatientActionButtons';
 
 import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'searchPatients';
 
@@ -185,27 +186,27 @@ export default class SearchPatientsForm extends Component {
     finalIncludeIndication = _.concat(finalIncludeIndication, includeIndicationArr);
     finalExcludeIndication = _.concat(finalExcludeIndication, excludeIndicationArr);
 
-    const siteOptions = [{ label: 'All', value: 'All' }].concat(sites.map(siteIterator => ({
+    const siteOptions = [{ label: translate('common.constants.all'), value: 'All' }].concat(sites.map(siteIterator => ({
       label: siteIterator.name,
       value: siteIterator.id,
     })));
-    const sourceOptions = [{ label: 'All', value: 'All' }].concat(sources.map(sourceIterator => ({
+    const sourceOptions = [{ label: translate('common.constants.all'), value: 'All' }].concat(sources.map(sourceIterator => ({
       label: sourceIterator.type,
       value: sourceIterator.id,
     })));
-    const statusOptions = [{ label: 'All', value: 'All' }].concat(patientCategories.details.map(patientCategoryIterator => ({
+    const statusOptions = [{ label: translate('common.constants.all'), value: 'All' }].concat(patientCategories.details.map(patientCategoryIterator => ({
       label: patientCategoryIterator.name,
       value: patientCategoryIterator.id,
     })));
     const genderOptions = [
       {
-        label: 'All',
+        label: translate('common.constants.all'),
         value: 'All',
       }, {
-        label: 'Male',
+        label: translate('common.constants.male'),
         value: 'Male',
       }, {
-        label: 'Female',
+        label: translate('common.constants.female'),
         value: 'Female',
       },
     ];
@@ -258,7 +259,7 @@ export default class SearchPatientsForm extends Component {
                   name="name"
                   component={Input}
                   type="text"
-                  placeholder="Search"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSearch')}
                   className="keyword-search"
                   disabled={patients.fetching}
                 />
@@ -271,13 +272,13 @@ export default class SearchPatientsForm extends Component {
           <div className="fields-holder clearfix form-search">
             <div className="select-holder pull-left">
               <span className="title">
-                <label>SITE LOCATION</label>
+                <label>{translate('client.component.searchPatientsForm.labelSiteLocation')}</label>
               </span>
               <div className="field">
                 <Field
                   name="site"
                   component={ReactSelect}
-                  placeholder="Select Site Location"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSiteLocation')}
                   options={siteOptions}
                   selectedValue={defaultSiteLocation}
                   disabled={sitesDropdownDisabled}
@@ -287,13 +288,13 @@ export default class SearchPatientsForm extends Component {
             </div>
             <div className="select-holder indication pull-left">
               <span className="title">
-                <label>Include Indication</label>
+                <label>{translate('client.component.searchPatientsForm.labelIncludeIndication')}</label>
               </span>
               <div className="field">
                 <Field
                   name="includeIndication"
                   component={ReactMultiSelect}
-                  placeholder="Select Indication"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectIndication')}
                   searchPlaceholder="Search"
                   searchable
                   optionLabelKey="label"
@@ -310,13 +311,13 @@ export default class SearchPatientsForm extends Component {
 
             <div className="select-holder indication pull-left">
               <span className="title">
-                <label>Exclude Indication</label>
+                <label>{translate('client.component.searchPatientsForm.labelExcludeIndication')}</label>
               </span>
               <div className="field">
                 <Field
                   name="excludeIndication"
                   component={ReactMultiSelect}
-                  placeholder="Select Indication"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectIndication')}
                   searchPlaceholder="Search"
                   searchable
                   optionLabelKey="label"
@@ -333,13 +334,13 @@ export default class SearchPatientsForm extends Component {
 
             <div className="gender gender pull-left">
               <span className="title">
-                <label>Gender</label>
+                <label>{translate('client.component.searchPatientsForm.labelGender')}</label>
               </span>
               <div className="field">
                 <Field
                   name="gender"
                   component={ReactSelect}
-                  placeholder="Select Gender"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectGender')}
                   options={genderOptions}
                   disabled={patients.fetching}
                   onChange={(val) => this.initSearch(val, 'gender')}
@@ -350,13 +351,13 @@ export default class SearchPatientsForm extends Component {
           <div className="fields-holder clearfix">
             <div className="select-holder pull-left clear-left">
               <span className="title">
-                <label>Status</label>
+                <label>{translate('client.component.searchPatientsForm.labelStatus')}</label>
               </span>
               <div className="field">
                 <Field
                   name="status"
                   component={ReactSelect}
-                  placeholder="Select Status"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectStatus')}
                   options={statusOptions}
                   disabled={patients.fetching}
                   onChange={(val) => this.initSearch(val, 'status')}
@@ -366,13 +367,13 @@ export default class SearchPatientsForm extends Component {
 
             <div className="select-holder pull-left">
               <span className="title">
-                <label>Source</label>
+                <label>{translate('client.component.searchPatientsForm.labelSource')}</label>
               </span>
               <div className="field">
                 <Field
                   name="source"
                   component={ReactSelect}
-                  placeholder="Select Source"
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectSource')}
                   options={sourceOptions}
                   disabled={patients.fetching}
                   onChange={(val) => this.initSearch(val, 'source')}
@@ -382,14 +383,14 @@ export default class SearchPatientsForm extends Component {
 
             <div className="age-range pull-left">
               <span className="title">
-                <label>Age Range</label>
+                <label>{translate('client.component.searchPatientsForm.labelAgeRange')}</label>
               </span>
               <div className="col-holder clearfix">
                 <div className="col pull-left">
                   <Field
                     name="ageFrom"
                     className="age-from"
-                    placeholder="From"
+                    placeholder={translate('client.component.searchPatientsForm.placeholderFrom')}
                     component={ReactSelect}
                     options={this.generateNumber('age', 'from')}
                     disabled={patients.fetching}
@@ -402,7 +403,7 @@ export default class SearchPatientsForm extends Component {
                   <Field
                     name="ageTo"
                     className="age-to"
-                    placeholder="To"
+                    placeholder={translate('client.component.searchPatientsForm.placeholderTo')}
                     component={ReactSelect}
                     options={this.generateNumber('age', 'to')}
                     disabled={patients.fetching}
@@ -417,14 +418,14 @@ export default class SearchPatientsForm extends Component {
 
             <div className="bmi pull-left">
               <span className="title">
-                <label>BMI</label>
+                <label>{translate('client.component.searchPatientsForm.labelBMI')}</label>
               </span>
               <div className="col-holder clearfix">
                 <div className="col pull-left">
                   <Field
                     name="bmiFrom"
                     className="bmi-from"
-                    placeholder="From"
+                    placeholder={translate('client.component.searchPatientsForm.placeholderFrom')}
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'from')}
                     disabled={patients.fetching}
@@ -437,7 +438,7 @@ export default class SearchPatientsForm extends Component {
                   <Field
                     name="bmiTo"
                     className="bmi-to"
-                    placeholder="To"
+                    placeholder={translate('client.component.searchPatientsForm.placeholderTo')}
                     component={ReactSelect}
                     options={this.generateNumber('bmi', 'to')}
                     disabled={patients.fetching}
@@ -453,7 +454,7 @@ export default class SearchPatientsForm extends Component {
               <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
                 {(patients.fetching)
                   ? <LoadingSpinner showOnlyIcon size={20} className="fetching-patients" />
-                  : <span>Search</span>
+                  : <span>{translate('client.component.searchPatientsForm.search')}</span>
                 }
               </Button>
             </div>
@@ -462,7 +463,7 @@ export default class SearchPatientsForm extends Component {
             <Button type="submit" bsStyle="primary" className="btn-search" disabled={patients.fetching || hasError}>
               {(patients.fetching)
                 ? <LoadingSpinner showOnlyIcon size={20} />
-                : <span>Search</span>
+                : <span>{translate('client.component.searchPatientsForm.search')}</span>
               }
             </Button>
           </div>

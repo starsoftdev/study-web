@@ -8,6 +8,7 @@ import React, { PropTypes } from 'react';
 import ToggleButton from 'react-toggle-button';
 import classNames from 'classnames';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { translate } from '../../../common/utilities/localization';
 
 const backgroundColors = {
   active: {
@@ -60,6 +61,8 @@ function Toggle({ input, name, initValue, className, onChange, disabled, enableT
     name={name}
     colors={backgroundColors}
     thumbAnimateRange={[0, 80]}
+    inactiveLabel={translate('common.constants.off')}
+    activeLabel={translate('common.constants.on')}
     activeLabelStyle={labelStyle}
     inactiveLabelStyle={labelStyle}
     thumbStyle={{ borderRadius: 0, width: '78px', height: '36px', boxShadow: 'none' }}

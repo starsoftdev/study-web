@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 import ReactTooltip from 'react-tooltip';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+import { translate } from '../../../common/utilities/localization';
 
 class StudyItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -83,9 +84,9 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
       return '';
     }
     if (!timezone) {
-      return moment(date).utc().format('MM/DD/YYYY');
+      return moment(date).utc().format(translate('portals.client.component.studiesList.studyItem.dateMask'));
     }
-    return moment(date).tz(timezone).format('MM/DD/YYYY');
+    return moment(date).tz(timezone).format(translate('portals.client.component.studiesList.studyItem.dateMask'));
   }
 
   render() {
@@ -126,23 +127,31 @@ class StudyItem extends Component { // eslint-disable-line react/prefer-stateles
           <span>{protocol}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientQualificationSuite === 'Off') })}>
-          <span className="patient-messaging-suite-status">{(patientQualificationSuite === 'Off') ? 'Off' : 'On'}</span>
+          <span className="patient-messaging-suite-status">{(patientQualificationSuite === 'Off') ? translate('portals.client.component.studiesList.studyItem.off') : translate('portals.client.component.studiesList.studyItem.on')}</span>
           <span>{messageCountContent}</span>
         </td>
         <td className={classNames('status', { inactive: (status === 'Inactive') })}>
-          <span>{status}</span>
+          <span>{(status === 'Active' || status === 'Inactive') ? translate(`portals.client.component.studiesList.studyItem.study${status}`) : status}</span>
         </td>
         <td className="start-date">
-          <span>{startDate ? this.parseDate(startDate, siteTimezone) : 'TBD'}</span>
+          <span>{startDate ? this.parseDate(startDate, siteTimezone) : translate('portals.client.component.studiesList.studyItem.tbd')}</span>
         </td>
         <td className="end-date">
-          <span>{endDate ? this.parseDate(endDate, siteTimezone) : 'TBD'}</span>
+          <span>{endDate ? this.parseDate(endDate, siteTimezone) : translate('portals.client.component.studiesList.studyItem.tbd')}</span>
           <div className="btns-slide pull-right">
             <div className="btns">
-              <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>View Patients</Button>
-              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable || !this.props.level_id} onClick={this.onRenewClick}>Renew</Button>
-              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable || status === 'Inactive'} onClick={this.onUpgradeClick}>Upgrade</Button>
-              <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>Edit</Button>
+              <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>
+                {translate('portals.client.component.studiesList.studyItem.viewPatientsBtn')}
+              </Button>
+              <Button bsStyle="primary" className="btn-renew" disabled={!purchasable || !this.props.level_id} onClick={this.onRenewClick}>
+                {translate('portals.client.component.studiesList.studyItem.renewBtn')}
+              </Button>
+              <Button bsStyle="danger" className="btn-upgrade" disabled={!purchasable || status === 'Inactive'} onClick={this.onUpgradeClick}>
+                {translate('portals.client.component.studiesList.studyItem.upgradeBtn')}
+              </Button>
+              <Button bsStyle="info" className="btn-edit" onClick={this.onEditClick}>
+                {translate('portals.client.component.studiesList.studyItem.editBtn')}
+              </Button>
             </div>
           </div>
         </td>

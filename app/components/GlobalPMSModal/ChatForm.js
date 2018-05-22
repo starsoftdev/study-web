@@ -23,6 +23,7 @@ import {
 import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'chatPatient';
 
@@ -72,12 +73,12 @@ class ChatForm extends Component { // eslint-disable-line react/prefer-stateless
             name="body"
             component={ChatText}
             className="form-control"
-            placeholder="Type a message..."
+            placeholder={translate('portals.component.globalPMSModal.chatForm.messagePlaceholder')}
             maxLength="160"
             disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}
           />
           <Button type="submit" disabled={disabled || unsubscribed || this.props.selectedPatient.id <= 0}>
-            Send
+            {translate('portals.component.globalPMSModal.chatForm.sendBtn')}
           </Button>
         </fieldset>
       </Form>

@@ -10,6 +10,7 @@ import React, { Component, PropTypes } from 'react';
 import { Calendar } from 'react-date-range';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
+import { translate } from '../../../common/utilities/localization';
 
 export default class DatePicker extends Component {
   static propTypes = {
@@ -27,7 +28,7 @@ export default class DatePicker extends Component {
   }
 
   static defaultProps = {
-    dateStyle: 'MM/DD/YY',
+    dateStyle: translate('common.component.input.datePicker.dateMask'),
   }
 
   constructor(props) {
@@ -121,7 +122,7 @@ export default class DatePicker extends Component {
     if (useUTC) {
       calendarDate = (!date || !date.isValid()) ? moment() : moment(date).utc();
     }
-    const inputValue = (!date) ? 'To Be Determined' : calendarDate.format(dateStyle);
+    const inputValue = (!date) ? translate('common.component.input.datePicker.tbd') : calendarDate.format(dateStyle);
 
     const inputComponent = (
       <input
@@ -145,7 +146,7 @@ export default class DatePicker extends Component {
         keyboard
       >
         <Modal.Header>
-          <Modal.Title>{title || 'Choose Start Date'}</Modal.Title>
+          <Modal.Title>{title || translate('common.component.input.datePicker.defaultModalTitle')}</Modal.Title>
           <a className="lightbox-close close" onClick={() => { this.toggleModal(false); }}>
             <i className="icomoon-icon_close" />
           </a>
@@ -161,13 +162,13 @@ export default class DatePicker extends Component {
             maxDate={maxDate || 'none'}
           />
           <div className="current-date" onClick={this.navigateToday}>
-            Today: {currentDate.format('dddd, MMMM Do, YYYY')}
+            {translate('common.component.input.datePicker.today')} {currentDate.format(translate('common.component.input.datePicker.todayDateMask'))}
           </div>
           <div className="link-holder text-center">
             <a
               className={canNotSetTBD ? 'disabled' : ''}
               onClick={() => { if (!canNotSetTBD) { this.setToBeDetermined(); this.toggleModal(false); } }}
-            >To Be Determined</a>
+            >{translate('common.component.input.datePicker.tbd')}</a>
           </div>
         </Modal.Body>
       </Modal>

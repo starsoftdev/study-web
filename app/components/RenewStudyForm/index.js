@@ -27,6 +27,7 @@ import { selectStudyLevels, selectCurrentUserClientId, selectSavedCard } from '.
 import { saveCard } from '../../containers/App/actions';
 import { selectSelectedIndicationLevelPrice } from '../../containers/HomePage/selectors';
 import formValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'renewStudy';
 @reduxForm({ form: formName, validate: formValidator })
@@ -268,10 +269,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       if (!selectedIndicationLevelPrice.fetching && selectedIndicationLevelPrice.details) {
         const foundExposureLevel = find(studyLevels, { id: exposureLevel });
         const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
-        const durationString = (condenseTwoWeeks) ? '2 Weeks' : monthLength.label;
+        const durationString = (condenseTwoWeeks) ? translate('portals.component.renewStudyForm.2weeks') : monthLength.label;
 
         addOns.push({
-          title: `${durationString} ${foundExposureLevel.type}`,
+          title: `${durationString} ${translate(`common.exposureLevel.id${foundExposureLevel.id}`)}`,
           price: selectedIndicationLevelPrice.details,
           quantity: monthLength.value,
           total: selectedIndicationLevelPrice.details * monthLength.value,
@@ -281,7 +282,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     if (patientQualificationSuite && campaignLength) {
       const monthLength = find(CAMPAIGN_LENGTH_LIST, { value: campaignLength });
       addOns.push({
-        title: 'Patient Qualification Suite',
+        title: translate('portals.component.renewStudyForm.pqs'),
         price: QUALIFICATION_SUITE_PRICE,
         quantity: monthLength.value,
         total: QUALIFICATION_SUITE_PRICE * monthLength.value,
@@ -289,7 +290,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     }
     if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
-        title: 'Media Tracking',
+        title: translate('portals.component.renewStudyForm.mediaTracking'),
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -330,28 +331,28 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     <div className="renew-study form-fields">
                       <div className="field-row">
                         <strong className="label">
-                          <label>Site Location</label>
+                          <label>{translate('portals.component.renewStudyForm.siteLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field
                             name="siteLocation"
                             component={Input}
                             type="text"
-                            placeholder="Site Location"
+                            placeholder={translate('portals.component.renewStudyForm.sitePlaceholder')}
                             isDisabled
                           />
                         </div>
                       </div>
                       <div className="field-row">
                         <strong className="label required">
-                          <label>EXPOSURE LEVEL</label>
+                          <label>{translate('portals.component.renewStudyForm.exposureLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field
                             name="exposureLevel"
                             className="with-loader-disabled-for-now"
                             component={ReactSelect}
-                            placeholder="Select Exposure Level"
+                            placeholder={translate('portals.component.renewStudyForm.exposurePlaceholder')}
                             options={studyLevels}
                             disabled={selectedIndicationLevelPrice.fetching}
                             onChange={this.handleExposureChoose}
@@ -368,13 +369,13 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     </div>
                     <div className="field-row">
                       <strong className="label required">
-                        <label>CAMPAIGN LENGTH</label>
+                        <label>{translate('portals.component.renewStudyForm.campaignLengthLabel')}</label>
                       </strong>
                       <div className="field">
                         <Field
                           name="campaignLength"
                           component={ReactSelect}
-                          placeholder="Select Campaign Length"
+                          placeholder={translate('portals.component.renewStudyForm.campaignLengthPlaceholder')}
                           options={CAMPAIGN_LENGTH_LIST}
                           onChange={this.handleLengthChoose}
                         />
@@ -382,7 +383,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     </div>
                     <div className={classnames('field-row', { hidden: campaignLength !== 1 })}>
                       <strong className="label">
-                        <label>CONDENSE TO 2 WEEKS</label>
+                        <label>{translate('portals.component.renewStudyForm.condenseLabel')}</label>
                       </strong>
                       <div className="field">
                         <Field
@@ -393,9 +394,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                       </div>
                     </div>
                     <div className="field-row">
-                      <strong className="label"><label>Patient qualification <br />
-                        Suite: ${qualificationSuitePrice / 100}
-                      </label></strong>
+                      <strong className="label">
+                        <label dangerouslySetInnerHTML={{ __html: translate('portals.component.renewStudyForm.pqsLabel', { price: qualificationSuitePrice / 100 }) }}></label>
+                      </strong>
                       <div className="field">
                         <Field
                           name="addPatientQualificationSuite"
@@ -407,7 +408,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     {
                       <div className="field-row global-invisible-item">
                         <strong className="label">
-                          <label>MEDIA TRACKING: $247</label>
+                          <label>{translate('portals.component.renewStudyForm.mediaTracking')}: $247</label>
                         </strong>
                         <div className="field">
                           <Field
@@ -423,7 +424,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     }
                     <div className="field-row">
                       <strong className="label required">
-                        <label>START DATE</label>
+                        <label>{translate('portals.component.renewStudyForm.startDateLabel')}</label>
                       </strong>
                       <div className="field" onClick={() => { this.handleDatePickerClose(true); }}>
                         <Field
@@ -435,7 +436,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                     </div>
                     <div className="field-row label-top">
                       <strong className="label">
-                        <label>NOTES</label>
+                        <label>{translate('portals.component.renewStudyForm.notesLabel')}</label>
                       </strong>
                       <div className="field">
                         <Field
@@ -474,7 +475,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Choose Start Date</Modal.Title>
+            <Modal.Title>{translate('portals.component.renewStudyForm.chooseStartDate')}</Modal.Title>
             <a className="lightbox-close close" onClick={() => { this.handleDatePickerClose(false); }}>
               <i className="icomoon-icon_close" />
             </a>
@@ -488,10 +489,10 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               minDate={this.state.minDate || currentDate}
             />
             <div className="current-date" onClick={this.navigateToday}>
-              Today: {currentDate.format('dddd, MMMM Do, YYYY')}
+              {translate('portals.component.renewStudyForm.today')}: {currentDate.format('dddd, MMMM Do, YYYY')}
             </div>
             <div className="link-holder text-center">
-              <a onClick={this.setToBeDetermined}>To Be Determined</a>
+              <a onClick={this.setToBeDetermined}>{translate('portals.component.renewStudyForm.tbd')}</a>
             </div>
           </Modal.Body>
         </Modal>

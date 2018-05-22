@@ -24,6 +24,7 @@ import {
   selectSiteLocations,
   selectCurrentUser,
 } from '../../containers/App/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 import manImage from '../../assets/images/man.svg';
 import shadowImage from '../../assets/images/shadow.png';
@@ -74,26 +75,14 @@ export class ReferPage extends React.Component { // eslint-disable-line react/pr
         <Helmet title="Refer - StudyKIK" />
         <section className="study-portal">
 
-          <h2 className="main-heading">REFER</h2>
+          <h2 className="main-heading">{translate('client.page.refer.header')}</h2>
 
           <div className="row form-study">
             <div className="refer-info pull-right">
               <div className="refer-holder">
                 <div className="textbox text-center pull-left">
-                  <strong className="title">
-                    Refer a new site<br />
-                    or Sponsor/CRO<br />
-                    project manager by <br />
-                    entering their contact!
-                  </strong>
-                  <p>
-                    When they list a Platinum Study or<br />
-                    higher, you will receive 100 reward <br />
-                    KIKs. If they list a multi-site (10+) <br />
-                    central recruitment you will <br />
-                    receive 300 <br />
-                    reward KIKs!
-                  </p>
+                  <strong className="title" dangerouslySetInnerHTML={{ __html: translate('client.page.refer.title') }} />
+                  <p dangerouslySetInnerHTML={{ __html: translate('client.page.refer.text') }} />
                 </div>
                 <div className="img-holder pull-left">
                   <img src={manImage} alt="" width="256" />
