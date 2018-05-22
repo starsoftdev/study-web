@@ -4,10 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, reset, FieldArray } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import classnames from 'classnames';
 import moment from 'moment-timezone';
-import _, { find } from 'lodash';
+import { find } from 'lodash';
 import RenderLeads from '../../components/RenderLeads';
+import { getMomentFromDate } from '../../utils/time';
 
 import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -80,7 +82,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       showDatePicker: false,
       initDate: moment(),
       minDate: moment(),
-      dateStyle: 'MM/DD/YY',
+      dateStyle: translate('common.component.input.datePicker.dateMask'),
       isReset: false,
       isCallTrackingAlreadySet: false,
     };
@@ -158,31 +160,27 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     this.handleDatePickerClose(false);
   }
 
-  handleDateSelect(momentDate) {
+  handleDateSelect(date) {
+    const chosenDate = getMomentFromDate(date);
     this.setState({
-      initDate: momentDate,
+      initDate: chosenDate,
     });
     const { change } = this.props;
-    change('startDate', momentDate);
+    change('startDate', chosenDate);
     this.handleDatePickerClose(false);
   }
 
   navigateToday() {
-    const today = moment();
-    const todayYear = today.year();
-    const todayMonth = today.month();
-    const calendarYear = this.calendar.getShownDate().year();
-    const calendarMonth = this.calendar.getShownDate().month();
-    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const today = new Date();
 
-    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+    this.calendar.focusToDate(today);
 
-    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
+    if (moment(this.state.minDate).isSameOrBefore(getMomentFromDate(today), 'day')) {
       this.setState({
-        initDate: today,
+        initDate: getMomentFromDate(today),
       });
       const { change } = this.props;
-      change('startDate', today);
+      change('startDate', getMomentFromDate(today));
       this.handleDatePickerClose(false);
     }
   }
@@ -304,6 +302,8 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     const { studyLevels, campaignLength, selectedIndicationLevelPrice, formValues, callTracking } = this.props;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
     const currentDate = moment();
+    const calendarDate = this.state.initDate ? this.state.initDate.toDate() : this.state.initDate;
+    const minDate = this.state.minDate || currentDate;
 
     const addOns = this.generateRenewStudyShoppingCartAddOns();
     return (
@@ -482,11 +482,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
           </Modal.Header>
           <Modal.Body>
             <Calendar
-              date={this.state.initDate}
+              date={calendarDate}
+              shownDate={calendarDate}
               onChange={this.handleDateSelect}
               className="calendar custom-calendar"
               ref={(calendar) => { this.calendar = calendar; }}
-              minDate={this.state.minDate || currentDate}
+              minDate={minDate.toDate()}
             />
             <div className="current-date" onClick={this.navigateToday}>
               {translate('portals.component.renewStudyForm.today')}: {currentDate.format('dddd, MMMM Do, YYYY')}
