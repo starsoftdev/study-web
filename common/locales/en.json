@@ -1327,10 +1327,6 @@
     "portals.component.upgradeStudyForm.pqsLabel": "Patient qualification <br />Suite: $${price}",
     "portals.component.upgradeStudyForm.notesLabel": "NOTES",
 
-
-    "portals.page.badgesPage.helmetTitle": "Badges - StudyKIK",
-    "portals.page.badgesPage.comingSoon": "COMING SOON",
-
     "portals.page.calendarPage.helmetTitle": "Calendar - StudyKIK",
     "portals.page.calendarPage.pageTitle": "CALENDAR",
     "portals.page.calendarPage.todayBtn": "Today",
