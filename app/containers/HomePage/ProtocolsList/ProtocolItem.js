@@ -1,6 +1,4 @@
-import classNames from 'classnames';
 import React, { PropTypes, Component } from 'react';
-import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import { translate } from '../../../../common/utilities/localization';
@@ -65,7 +63,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
 
   render() {
     const { protocolNumber, indication, croName, activeCount, inactiveCount, pqs, unreadMessageCount } = this.props;
-    const buttonsShown = this.state.buttonsShown;
     let messageCountContent = null;
     let patientMessagingSuiteText = translate('common.constants.off');
     if (unreadMessageCount && unreadMessageCount > 0) {
@@ -79,45 +76,42 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
     }
 
     return (
-      <tr
-        className={classNames('study-container', { 'tr-active': buttonsShown, 'tr-inactive': !buttonsShown })}
-        onMouseEnter={this.showButtons} onMouseLeave={this.hideButtons}
-      >
-        <td>
-        </td>
-        <td>
-          <span>{protocolNumber}</span>
-        </td>
-        <td>
-          <span>{indication}</span>
-        </td>
-        <td>
-          <span>{croName}</span>
-        </td>
-        <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuiteText === 'Off') })}>
-          <span className="patient-messaging-suite-status">{patientMessagingSuiteText}</span>
-          <span>{messageCountContent}</span>
-        </td>
-        <td>
-          <span>{activeCount}</span>
-        </td>
-        <td className="patient-messaging-suite off">
-          <span>{inactiveCount}</span>
-        </td>
-        <td>
-          <div className="btns-slide">
-            <div className="btns">
-              <div className="area">
-                <div className="pull-right">
-                  <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>{translate('sponsor.component.protocolItem.viewReport')}</Button>
-                  <Button disabled className="btn btn-primary lightbox-opener">{translate('sponsor.component.protocolItem.renew')}</Button>
-                  <Button disabled className="btn btn-danger lightbox-opener">{translate('sponsor.component.protocolItem.addSite')}</Button>
-                </div>
-              </div>
+      <div className="protocol-list-row-item">
+        <div className="protocol-list-row-item-columns-container">
+          <div className="box-element number">
+            <div className="header">#</div>
+            <div className="value">{(this.props.index + 1)}</div>
+          </div>
+          <div className="box-element protocol">
+            <div className="header">{translate('sponsor.component.protocolsList.tableHeadProtocol')}</div>
+            <div className="value">{protocolNumber}</div>
+          </div>
+          <div className="box-element indication">
+            <div className="header">{translate('sponsor.component.protocolsList.tableHeadIndication')}</div>
+            <div className="value">{indication}</div>
+          </div>
+          <div className="box-element cro">
+            <div className="header">{translate('sponsor.component.protocolsList.tableHeadCro')}</div>
+            <div className="value">{croName}</div>
+          </div>
+          <div className="box-element pqs">
+            <div className="header"><div>{translate('sponsor.component.protocolsList.tableHeadPqs')}</div></div>
+            <div className="value">
+              <span className="patient-messaging-suite-status">{patientMessagingSuiteText}</span>
+              <span>{messageCountContent}</span>
             </div>
           </div>
-        </td>
-      </tr>
+          <div className="box-element active">
+            <div className="header">{translate('sponsor.component.protocolsList.tableHeadActive')}</div>
+            <div className="value">{activeCount}</div>
+          </div>
+          <div className="box-element inactive">
+            <div className="header">{translate('sponsor.component.protocolsList.tableHeadInactive')}</div>
+            <div className="value">{inactiveCount}</div>
+          </div>
+        </div>
+        <div className="protocol-list-row-item-view-reports-button" onClick={this.onViewClick}>{translate('sponsor.component.protocolItem.viewReport')}</div>
+      </div>
     );
   }
 }

@@ -72,15 +72,14 @@ class AvatarMenu extends React.Component {
             <ul className="list-unstyled">
               <li><a onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.topHeaderBar.avatarMenu.customerFeedback')}</a></li>
               <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.profile')}</Link></li>
-              <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.paymentInfo')}</Link></li>
+              { userRoleType === 'client' &&
+                <li className={paymentClassName}><Link to="/app/payment-information" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.paymentInfo')}</Link></li>
+              }
               { userRoleType === 'client' &&
                 <li><Link to="/app/receipts" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.receipts')}</Link></li>
               }
               { userRoleType === 'client' &&
                 <li><Link to="/app/proposals" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.proposals')}</Link></li>
-              }
-              { userRoleType !== 'client' &&
-                <li><Link to="/app/receipts-project-agreements" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.receiptsProjectAgreements')}</Link></li>
               }
               <a
                 onClick={() => {
