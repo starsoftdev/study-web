@@ -7,10 +7,11 @@
 import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 import { Calendar } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
+import { getMomentFromDate } from '../../utils/time';
 
 export default class DatePicker extends Component {
   static propTypes = {
@@ -80,7 +81,7 @@ export default class DatePicker extends Component {
   }
 
   handleSelect(date) {
-    const chosenDate = moment(date.setHours(11));
+    const chosenDate = getMomentFromDate(date);
     this.toggleModal(false);
     this.setState({
       date: chosenDate,
