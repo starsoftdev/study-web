@@ -1464,6 +1464,15 @@
     "common.component.input.datePicker.today": "Today:",
     "common.component.input.datePicker.todayDateMask": "dddd, MMMM Do, YYYY",
 
+    "common.constants.dateRanges.lifetime": "Lifetime",
+    "common.constants.dateRanges.today": "Today",
+    "common.constants.dateRanges.yesterday": "Yesterday",
+    "common.constants.dateRanges.last7days": "Last 7 Days",
+    "common.constants.dateRanges.last14days": "Last 14 Days",
+    "common.constants.dateRanges.last30days": "Last 30 Days",
+    "common.constants.dateRanges.thisMonth": "This Month",
+    "common.constants.dateRanges.lastMonth": "Last Month",
+
     "common.constants.on": "On",
     "common.constants.off": "Off",
     "common.constants.tbd": "To Be Determined",

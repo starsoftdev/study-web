@@ -4,11 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, reset, FieldArray } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import { Calendar } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/styles.css';
 import classnames from 'classnames';
 import moment from 'moment-timezone';
 import { find } from 'lodash';
 import RenderLeads from '../../components/RenderLeads';
+import { getMomentFromDate } from '../../utils/time';
 
 import { CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE, CALL_TRACKING_PRICE } from '../../common/constants';
 import CenteredModal from '../../components/CenteredModal/index';
@@ -160,7 +161,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   handleDateSelect(date) {
-    const chosenDate = moment(date.setHours(11));
+    const chosenDate = getMomentFromDate(date);
     this.setState({
       initDate: chosenDate,
     });
@@ -174,12 +175,12 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
 
     this.calendar.focusToDate(today);
 
-    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
+    if (moment(this.state.minDate).isSameOrBefore(getMomentFromDate(today), 'day')) {
       this.setState({
-        initDate: today,
+        initDate: getMomentFromDate(today),
       });
       const { change } = this.props;
-      change('startDate', today);
+      change('startDate', getMomentFromDate(today));
       this.handleDatePickerClose(false);
     }
   }

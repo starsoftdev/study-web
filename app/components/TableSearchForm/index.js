@@ -7,10 +7,13 @@
 import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { getMomentFromDate } from '../../utils/time';
 import CenteredModal from '../CenteredModal/index';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -45,16 +48,19 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
       datePicker : null,
       firstDayOfWeek : null,
       predefined : {
-        startDate: moment().clone().subtract(30, 'days'),
-        endDate: moment(),
+        startDate: moment().clone().subtract(30, 'days').toDate(),
+        endDate: new Date(),
+        key: 'selection',
       },
     };
   }
 
   handleChange(which, payload) {
-    this.setState({
-      [which] : payload,
-    });
+    if (payload.selection) {
+      this.setState({
+        [which] : payload.selection,
+      });
+    }
   }
 
   showPopup(ev) {
@@ -85,16 +91,16 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
     const { predefined } = this.state;
     if (predefined.startDate) {
       const format = translate('portals.component.tableSearchForm.dateMask');
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      if (getMomentFromDate(predefined.startDate).isSameOrAfter(getMomentFromDate(predefined.endDate), 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {getMomentFromDate(predefined.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {getMomentFromDate(predefined.startDate).format(format)} - {getMomentFromDate(predefined.endDate).format(format)}
         </span>
       );
     }
@@ -178,13 +184,14 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
             </a>
           </Modal.Header>
           <Modal.Body>
-            <DateRange
-              linkedCalendars
-              ranges={defaultRanges}
-              startDate={this.state.predefined.startDate ? this.state.predefined.startDate : moment()}
-              endDate={this.state.predefined.endDate ? this.state.predefined.endDate : moment().add(1, 'M')}
-              onInit={this.handleChange}
+            <DateRangePicker
               onChange={this.handleChange}
+              moveRangeOnFirstSelection={false}
+              months={2}
+              direction="horizontal"
+              ranges={[state.predefined]}
+              staticRanges={defaultStaticRanges}
+              inputRanges={[]}
             />
             <div className="dateRange-helper">
               <div className="emit-border"><br /></div>
