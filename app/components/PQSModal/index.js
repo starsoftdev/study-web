@@ -6,12 +6,15 @@
 
 import React from 'react';
 import moment from 'moment';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import PQSStatsForm from '../../components/PQSStatsForm';
 import CenteredModal from '../../components/CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { getMomentFromDate } from '../../utils/time';
 
 class PQSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -27,8 +30,9 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
     this.state = {
       showPopup: false,
       predefined : {
-        startDate: moment().clone().subtract(30, 'days'),
-        endDate: moment(),
+        startDate: moment().clone().subtract(30, 'days').toDate(),
+        endDate: new Date(),
+        key: 'selection',
       },
       selectedTime : {
         startDate: null,
@@ -60,17 +64,19 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
   }
 
   handleChange(which, payload) {
-    this.setState({
-      [which] : payload,
-    });
+    if (payload.selection) {
+      this.setState({
+        [which] : payload.selection,
+      });
+    }
   }
 
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
 
-    const uiStartDate = range.startDate.utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
-    const uiEndDate = range.endDate.utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
+    const uiStartDate = getMomentFromDate(range.startDate).utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
+    const uiEndDate = getMomentFromDate(range.endDate).utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
 
     this.setState({
       selectedTime: {
@@ -87,16 +93,16 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
     const { predefined } = this.state;
     if (predefined.startDate) {
       const format = translate('sponsor.component.PQSModal.specialDateMask');
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      if (getMomentFromDate(predefined.startDate).isSameOrAfter(getMomentFromDate(predefined.endDate), 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {getMomentFromDate(predefined.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {getMomentFromDate(predefined.startDate).format(format)} - {getMomentFromDate(predefined.endDate).format(format)}
         </span>
       );
     }
@@ -105,12 +111,6 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { selectedTime, predefined } = this.state;
-    let startDate = (predefined.startDate) ? predefined.startDate : moment();
-    let endDate = (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
-    if (selectedTime.startDate && selectedTime.endDate) {
-      startDate = moment().clone().subtract(30, 'days');
-      endDate = moment();
-    }
     return (
       <div>
         <Modal dialogComponentClass={CenteredModal} dialogClassName={'pqs-stats-modal'} show={this.props.showModal} onHide={this.props.closePQSModal}>
@@ -140,13 +140,14 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
             </a>
           </Modal.Header>
           <Modal.Body>
-            <DateRange
-              linkedCalendars
-              ranges={defaultRanges}
-              startDate={startDate}
-              endDate={endDate}
-              onInit={this.handleChange}
+            <DateRangePicker
               onChange={this.handleChange}
+              moveRangeOnFirstSelection={false}
+              months={2}
+              direction="horizontal"
+              ranges={[predefined]}
+              staticRanges={defaultStaticRanges}
+              inputRanges={[]}
             />
             <div className="dateRange-helper">
               <div className="emit-border"><br /></div>
