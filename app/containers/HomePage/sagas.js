@@ -9,6 +9,7 @@ import _, { get } from 'lodash';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { translate } from '../../../common/utilities/localization';
 import {
   FETCH_PATIENT_SIGN_UPS,
   FETCH_PRINCIPAL_INVESTIGATOR_TOTALS,
@@ -506,7 +507,7 @@ export function* fetchIndicationLevelPriceWorker(action) {
     const response = yield call(request, requestURL, params);
     yield put(indicationLevelPriceFetched(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Can not get price for Level');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.fetchIndicationLevelPriceToastrError'));
     toastr.error('', errorMessage);
     yield put(indicationLevelPriceFetchingError(err));
     if (err.status === 401) {
@@ -532,7 +533,7 @@ export function* fetchUpgradeStudyPriceWorker(action) {
     const response = yield call(request, requestURL, params);
     yield put(indicationLevelPriceFetched(response));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Can not get price for Indication Level');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.upgradeStudyFetchPriceToastrError'));
     toastr.error('', errorMessage);
     yield put(indicationLevelPriceFetchingError(err));
     if (err.status === 401) {
@@ -563,7 +564,7 @@ export function* renewStudyWorker(action) {
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyRenewed(response));
-    toastr.success('Renew Study', 'The request has been submitted successfully');
+    toastr.success(translate('portals.client.component.studiesList.renewStudyToastrTitle'), translate('portals.client.component.studiesList.renewStudyToastrMessage'));
     yield put(updateStudy({
       studyId,
       condenseTwoWeeks: formValues.condenseTwoWeeks,
@@ -573,9 +574,9 @@ export function* renewStudyWorker(action) {
     }));
     onClose();
   } catch (err) {
-    let errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    let errorMessage = get(err, 'message', translate('portals.client.component.studiesList.renewStudyToastrError'));
     if (errorMessage.toLowerCase().indexOf('no such coupon') !== -1) {
-      errorMessage = 'Error! Invalid coupon code.';
+      errorMessage = translate('portals.client.component.studiesList.renewStudyCouponToastrError');
     }
     toastr.error('', errorMessage);
     yield put(studyRenewingError(err));
@@ -603,7 +604,7 @@ export function* upgradeStudyWorker(action) {
     };
     const response = yield call(request, requestURL, params);
 
-    toastr.success('Upgrade Study', 'The request has been submitted successfully');
+    toastr.success(translate('portals.client.component.studiesList.upgradeStudyToastrTitle'), translate('portals.client.component.studiesList.upgradeStudyToastrMessage'));
     response.newLevelId = formValues.level;
     response.studyId = studyId;
     response.callTracking = formValues.callTracking;
@@ -612,7 +613,7 @@ export function* upgradeStudyWorker(action) {
     yield put(studyUpgraded(response));
     yield put(reset('upgradeStudy'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.upgradeStudyToastrError'));
     toastr.error('', errorMessage);
     yield put(studyUpgradingError(err));
     if (err.status === 401) {
@@ -654,11 +655,11 @@ export function* editStudyWorker(action) {
 
     yield put(fetchClientSites(options.clientId, {}));
 
-    toastr.success('Edit Study', 'The request has been submitted successfully');
+    toastr.success(translate('portals.client.component.studiesList.editStudyToastrTitle'), translate('portals.client.component.studiesList.editStudyToastrMessage'));
     yield put(studyEdited(response));
     yield put(reset('editStudy'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.editStudyToastrError'));
     toastr.error('', errorMessage);
     yield put(studyEditingError(err));
     if (err.status === 401) {
@@ -686,7 +687,7 @@ export function* addEmailNotificationUserWorker(action) {
     const response = yield call(request, requestURL, options);
     yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email, response.user));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Could not add the user.');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addEmailNotifToastrError'));
     toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -710,7 +711,7 @@ export function* addCustomEmailNotificationWorker(action) {
     const response = yield call(request, requestURL, options);
     yield put(addCustomEmailNotificationSuccess(response.id, response.email));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Could not add the custom notification email to the study.');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addCustomEmailNotifToastrError'));
     toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -734,7 +735,7 @@ export function* removeCustomEmailNotificationWorker(action) {
 
     yield put(removeCustomEmailNotificationSuccess(id, email));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Could not remove the custom notification email to the study.');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.removeCustomEmailNotifToastrError'));
     toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -793,7 +794,7 @@ export function* fetchStudiesDashboardWorker(action) {
     }
 
     if (response.studies.length === 0 && offset === 0) {
-      toastr.error('', 'Error! No studies found.');
+      toastr.error('', translate('portals.client.component.studiesList.fetchStudiesToastrError'));
     }
 
     yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
@@ -860,7 +861,7 @@ export function* updateDashboardStudyWorker(action) {
     yield put(updateDashboardStudySuccess(id, params, formValues));
     stopSubmit();
   } catch (err) {
-    const errorMessage = get(err, 'message', 'We were unable to update the study. Please contact support.');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.updateStudyToastrError'));
     toastr.error('', errorMessage);
     console.log(err);
     stopSubmit(err);
@@ -890,7 +891,7 @@ export function* fetchAllClientUsersWorker(action) {
     yield put(fetchAllStudyEmailNotificationsSuccess(response));
   } catch (err) {
     yield put(fetchAllStudyEmailNotificationsError(err));
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching patients for selected study');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.fetchAllStudyEmailNotificationsError'));
     toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -917,7 +918,7 @@ export function* fetchStudyCampaignsWorker(action) {
     yield put(fetchStudyCampaignsDashboardSuccess(response));
   } catch (err) {
     yield put(fetchStudyCampaignsDashboardError(err));
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.fetchStudyCampaignsDashboardError'));
     toastr.error('', errorMessage);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
@@ -1262,7 +1263,7 @@ export function* editStudyLeadSourcesWorker(action) {
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {
-      yield put(editStudyLeadSourcesSuccess(action.leadSources));
+      yield put(editStudyLeadSourcesSuccess(action.leadSources, action.studyId, action.callTracking));
       toastr.success('', 'The request has been submitted successfully.');
     } else {
       yield put(editStudyLeadSourcesError(response));

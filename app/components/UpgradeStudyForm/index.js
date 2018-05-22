@@ -21,6 +21,7 @@ import { selectSelectedIndicationLevelPrice } from '../../containers/HomePage/se
 import { selectUpgradeStudyFormCallTrackingValue, selectUpgradeStudyFormLeadsCount } from './selectors';
 import RenderLeads from '../../components/RenderLeads';
 import formValidator from './validator';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({ form: 'upgradeStudy', validate: formValidator })
 class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -186,7 +187,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     if (patientQualificationSuite && campaignLength) {
       if (selectedStudy && selectedStudy.patientQualificationSuite !== 'On') {
         addOns.push({
-          title: 'Patient Qualification Suite',
+          title: translate('portals.component.upgradeStudyForm.pqs'),
           price: QUALIFICATION_SUITE_PRICE,
           quantity: campaignLength,
           total: QUALIFICATION_SUITE_PRICE * campaignLength,
@@ -195,7 +196,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
     if (callTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
-        title: 'Media Tracking',
+        title: translate('portals.component.upgradeStudyForm.mediaTracking'),
         price: CALL_TRACKING_PRICE,
         quantity: 1,
         total: CALL_TRACKING_PRICE,
@@ -224,14 +225,17 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           .filter(o => o.id > selectedStudy.level_id)
           .map(l => ({
             ...l,
-            label:`${l.name} $${l.price - selectedLevel.price} (+${l.posts - selectedLevel.posts} Posts and +${l.texts - selectedLevel.texts} Text Credits + ${l.emailCredits - selectedLevel.emailCredits} Email Credits)`,
+            label: `${translate(`common.exposureLevel.id${l.id}`)} $${l.price - selectedLevel.price} (${l.posts - selectedLevel.posts}
+              ${translate('portals.component.upgradeStudyForm.posts')} +
+              ${l.texts - selectedLevel.texts} ${translate('portals.component.upgradeStudyForm.textCredits')} +
+              ${l.emailCredits - selectedLevel.emailCredits} ${translate('portals.component.upgradeStudyForm.emailCredits')})`,
           }));
       }
     }
 
     if (filteredLevels.length === 0 && selectedStudy) {
       const topLevel = _.find(studyLevels, o => o.isTop);
-      filteredLevels.push({ ...topLevel, label: 'Ruby' });
+      filteredLevels.push({ ...topLevel, label: translate(`common.exposureLevel.id${topLevel.id}`) });
       value = topLevel.id;
       isDisabled = true;
     }
@@ -249,7 +253,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Upgrade Study</Modal.Title>
+            <Modal.Title>{translate('portals.component.upgradeStudyForm.modalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.handleCloseModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -262,14 +266,14 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                     <div className="upgrade-study form-fields">
                       <div className="field-row">
                         <strong className={`label ${(!selectedStudy || !selectedStudy.level_id) ? 'required' : ''}`}>
-                          <label>UPGRADE LEVEL</label>
+                          <label>{translate('portals.component.upgradeStudyForm.upgradeLevelLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field
                             name="level"
                             className="with-loader-disabled-for-now"
                             component={ReactSelect}
-                            placeholder="Select Upgrade"
+                            placeholder={translate('portals.component.upgradeStudyForm.upgradeLevelPlaceholder')}
                             onChange={this.handleExposureChoose}
                             options={filteredLevels}
                             selectedValue={value || undefined}
@@ -288,20 +292,20 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                       (
                         <div>
                           <div className="field-row">
-                            <strong className="label required"><label>Campaign Length</label></strong>
+                            <strong className="label required"><label>{translate('portals.component.upgradeStudyForm.campaignLengthLabel')}</label></strong>
                             <div className="field">
                               <Field
                                 id="campaign-length"
                                 name="campaignLength"
                                 component={ReactSelect}
-                                placeholder="Select Campaign Length"
+                                placeholder={translate('portals.component.upgradeStudyForm.campaignLengthPlaceholder')}
                                 onChange={this.handleCampaignLengthChoose}
                                 options={CAMPAIGN_LENGTH_LIST}
                               />
                             </div>
                           </div>
                           <div className="field-row">
-                            <strong className="label required"><label>Start Date</label></strong>
+                            <strong className="label required"><label>{translate('portals.component.upgradeStudyForm.startDateLabel')}</label></strong>
                             <div className="field">
                               <Field
                                 id="start-date"
@@ -318,8 +322,9 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                       )
                       }
                       <div className="field-row">
-                        <strong className="label"><label>Patient qualification <br />
-                          Suite: ${qualificationSuitePrice / 100}</label></strong>
+                        <strong className="label">
+                          <label dangerouslySetInnerHTML={{ __html: translate('portals.component.upgradeStudyForm.pqsLabel', { price: qualificationSuitePrice / 100 }) }}></label>
+                        </strong>
                         <div className="field">
                           <Field
                             name="addPatientQualificationSuite"
@@ -332,7 +337,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                       {
                         <div className="field-row global-invisible-item">
                           <strong className="label">
-                            <label>MEDIA TRACKING: $247</label>
+                            <label>{translate('portals.component.upgradeStudyForm.mediaTracking')}: $247</label>
                           </strong>
                           <div className="field">
                             <Field
@@ -348,7 +353,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                       }
                       <div className="field-row label-top">
                         <strong className="label">
-                          <label>NOTES</label>
+                          <label>{translate('portals.component.upgradeStudyForm.notesLabel')}</label>
                         </strong>
                         <div className="field">
                           <Field

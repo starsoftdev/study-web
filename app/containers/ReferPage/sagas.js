@@ -22,6 +22,8 @@ import {
   FETCH_COMPANY_TYPES,
 } from '../../containers/ReferPage/constants';
 
+import { translate } from '../../../common/utilities/localization';
+
 // Bootstrap sagas
 export default [
   referPageSaga,
@@ -56,13 +58,13 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Refer', 'The request has been submitted successfully');
+      toastr.success('Refer', translate('client.component.referForm.referToastrMessage'));
       yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('refer'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('client.component.referForm.referToastrErrorMessage'));
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       if (err.status === 401) {

@@ -3,6 +3,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../components/CenteredModal';
+import { translate } from '../../../common/utilities/localization';
 
 class AlertModal extends React.Component {
   static propTypes = {
@@ -26,10 +27,10 @@ class AlertModal extends React.Component {
         <Modal.Body>
           <div className="text-center">
             <p>
-              Please select {name}(s).
+              {translate('client.component.alertModal.name', { name })}
             </p>
             <div className="btn-block">
-              <a className="btn btn-default lightbox-close" onClick={onHide}>OK</a>
+              <a className="btn btn-default lightbox-close" onClick={onHide}>{translate('client.component.alertModal.ok')}</a>
             </div>
           </div>
         </Modal.Body>

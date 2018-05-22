@@ -15,6 +15,7 @@ import { selectCurrentUser, selectSiteLocations } from '../App/selectors';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 export class PatientDatabasePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -133,7 +134,7 @@ export class PatientDatabasePage extends Component { // eslint-disable-line reac
       <div className="container-fluid">
         <section className="patient-database">
           <Helmet title="Patient Database - StudyKIK" />
-          <h2 className="main-heading">Patient Database</h2>
+          <h2 className="main-heading">{translate('client.page.patientDatabase.mainHeading')}</h2>
           <SearchPatientsForm onSubmit={this.searchPatients} searchPatients={this.searchPatients} paginationOptions={paginationOptions} />
 
           <PatientsList

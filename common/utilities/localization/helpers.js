@@ -8,7 +8,7 @@
  */
 'use strict';
 
-import { locale, dictionaries } from './globals';
+import { locale, dictionaries, qsObj } from './globals';
 
 
 /**
@@ -22,8 +22,13 @@ import { locale, dictionaries } from './globals';
 export function translate(key, data = null) {
   const dictionary = dictionaries[locale] || {};
 
-    // if dictionary key exists, return translated text
-  if (dictionary && dictionary[key]) {
+  // if test locale, return generic text
+  // note: this is useful for testing to see what has been translated
+  if (key && qsObj.locale === 'test') {
+    return 'xxx';
+  }
+  // if dictionary key exists, return translated text
+  else if (dictionary && dictionary[key]) {
     return formatString(dictionary[key], data);
   }
 
@@ -52,6 +57,12 @@ function formatString(text, data) {
     const props = submatch.split('.');
     if (data && props.length) {
       newText = getObjProp(data, props);
+    }
+
+    // normalize data as string
+    // note: this allows specified falsey values to be returned below and used by presentation layer
+    if (newText === 0 || newText === false) {
+      newText = String(newText);
     }
 
     return newText || match;

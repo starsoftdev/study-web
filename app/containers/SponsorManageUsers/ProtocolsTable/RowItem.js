@@ -8,6 +8,7 @@ import CenteredModal from '../../../components/CenteredModal/index';
 import EditProtocolForm from '../EditProtocolForm';
 import ExpandedItem from './ExpandedItem';
 import { selectEditProtocolProcess } from '../selectors';
+import { translate } from '../../../../common/utilities/localization';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -130,10 +131,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td className="col6">
 
-          <span>ASSIGNED USERS ({this.props.item.sponsorUsers.length ? this.props.item.sponsorUsers.length : 0})</span>
+          <span>{translate('client.component.protocolsRowItem.assigned')} ({this.props.item.sponsorUsers.length ? this.props.item.sponsorUsers.length : 0})</span>
           {(this.state.assignedUsersCollapsed && !shouldBeOpened)
             ? <a className="btn add-more-trs" onClick={this.toggleAssignedUsers}></a>
-            : <a className="btn add-more-trs active " onClick={this.toggleAssignedUsers}></a>
+            : <a className="btn add-more-trs active" onClick={this.toggleAssignedUsers}></a>
           }
           {(!this.state.assignedUsersCollapsed || shouldBeOpened) &&
             <div className="assigned-users-list">{assignedUsersContent}</div>
@@ -142,13 +143,13 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td className="col7">
           <a disabled={!isAllowToEdit} className="btn btn-primary btn-edit-site pull-right" onClick={() => (!isAllowToEdit ? null : this.openEditProtocolModal())}>
-            <span>Edit</span>
+            <span>{translate('client.component.protocolsRowItem.edit')}</span>
           </a>
         </td>
 
         <Modal dialogComponentClass={CenteredModal} className="new-user" id="edit-protocol" show={this.state.editProtocolModalOpen} onHide={this.closeEditProtocolModal}>
           <Modal.Header>
-            <Modal.Title>Edit Protocol</Modal.Title>
+            <Modal.Title>{translate('client.component.protocolsRowItem.protocolModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeEditProtocolModal}>
               <i className="icomoon-icon_close" />
             </a>
