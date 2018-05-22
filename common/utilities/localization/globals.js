@@ -17,15 +17,17 @@
 'use strict';
 
 import { createDictionaries } from './dictionaries';
+import { getQueryStringObject } from '../helpers';
 import * as settings from '../../settings/app-settings.json';
 
 
 // globals
 const dictionaries = createDictionaries();
-const userLocale = 'en-us';
+const qsObj = getQueryStringObject();
+const userLocale = (qsObj.locale) ? qsObj.locale : 'en-us';
 
 // check if user locale supported
 const locale = (settings.locales.SUPPORTED.indexOf(userLocale) !== -1) ? userLocale : settings.locales.DEFAULT;
 
 
-export { locale, dictionaries };
+export { locale, dictionaries, qsObj };

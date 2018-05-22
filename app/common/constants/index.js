@@ -1,16 +1,18 @@
+import { translate } from '../../../common/utilities/localization';
+
 export const CAMPAIGN_LENGTH_LIST = [
-  { value: 1, label: '1 Month' },
-  { value: 2, label: '2 Months' },
-  { value: 3, label: '3 Months' },
-  { value: 4, label: '4 Months' },
-  { value: 5, label: '5 Months' },
-  { value: 6, label: '6 Months' },
-  { value: 7, label: '7 Months' },
-  { value: 8, label: '8 Months' },
-  { value: 9, label: '9 Months' },
-  { value: 10, label: '10 Months' },
-  { value: 11, label: '11 Months' },
-  { value: 12, label: '12 Months' },
+  { value: 1, label: `1 ${translate('common.constants.month.one')}` },
+  { value: 2, label: `2 ${translate('common.constants.month.two')}` },
+  { value: 3, label: `3 ${translate('common.constants.month.plural')}` },
+  { value: 4, label: `4 ${translate('common.constants.month.plural')}` },
+  { value: 5, label: `5 ${translate('common.constants.month.plural')}` },
+  { value: 6, label: `6 ${translate('common.constants.month.plural')}` },
+  { value: 7, label: `7 ${translate('common.constants.month.plural')}` },
+  { value: 8, label: `8 ${translate('common.constants.month.plural')}` },
+  { value: 9, label: `9 ${translate('common.constants.month.plural')}` },
+  { value: 10, label: `10 ${translate('common.constants.month.plural')}` },
+  { value: 11, label: `11 ${translate('common.constants.month.plural')}` },
+  { value: 12, label: `12 ${translate('common.constants.month.plural')}` },
 ];
 
 
@@ -23,18 +25,18 @@ export const QUALIFICATION_SUITE_PRICE = 89700;
 export const CALL_TRACKING_PRICE = 24700;
 
 export const MONTH_OPTIONS = [
-  { label: 'Jan', value: 1 },
-  { label: 'Feb', value: 2 },
-  { label: 'Mar', value: 3 },
-  { label: 'Apr', value: 4 },
-  { label: 'May', value: 5 },
-  { label: 'Jun', value: 6 },
-  { label: 'Jul', value: 7 },
-  { label: 'Aug', value: 8 },
-  { label: 'Sep', value: 9 },
-  { label: 'Oct', value: 10 },
-  { label: 'Nov', value: 11 },
-  { label: 'Dec', value: 12 },
+  { label: translate('common.constants.jan'), value: 1 },
+  { label: translate('common.constants.feb'), value: 2 },
+  { label: translate('common.constants.mar'), value: 3 },
+  { label: translate('common.constants.apr'), value: 4 },
+  { label: translate('common.constants.may'), value: 5 },
+  { label: translate('common.constants.jun'), value: 6 },
+  { label: translate('common.constants.jul'), value: 7 },
+  { label: translate('common.constants.aug'), value: 8 },
+  { label: translate('common.constants.sep'), value: 9 },
+  { label: translate('common.constants.oct'), value: 10 },
+  { label: translate('common.constants.nov'), value: 11 },
+  { label: translate('common.constants.dec'), value: 12 },
 ];
 
 const thisYear = new Date().getFullYear();

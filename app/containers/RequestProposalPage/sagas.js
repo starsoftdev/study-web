@@ -23,6 +23,7 @@ import {
   FETCH_COUPON,
   FETCH_PROPOSAL,
 } from '../../containers/RequestProposalPage/constants';
+import { translate } from '../../../common/utilities/localization';
 
 // Bootstrap sagas
 export default [
@@ -42,13 +43,13 @@ export function* submitFormWatcher() {
       };
       const response = yield call(request, requestURL, params);
 
-      toastr.success('Request Proposal', 'The request has been submitted successfully');
+      toastr.success(translate('portals.component.requestProposalCart.submitSuccessToastrTitle'), translate('portals.component.requestProposalCart.submitSuccessToastrMessage'));
       yield put(formSubmitted(response));
 
       // Clear the form values
       yield put(reset('requestProposal'));
     } catch (err) {
-      const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+      const errorMessage = get(err, 'message', translate('portals.component.requestProposalCart.submitErrorToastrMessage'));
       toastr.error('', errorMessage);
       yield put(formSubmissionError(err));
       if (err.status === 401) {

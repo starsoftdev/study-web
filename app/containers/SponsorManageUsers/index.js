@@ -15,6 +15,7 @@ import { fetchProtocols } from '../../containers/App/actions';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { fetchManageSponsorUsersData, editSponsorUser, deleteSponsorUser, editProtocol } from '../../containers/SponsorManageUsers/actions';
 import { selectManageSponsorUsersData, selectEditSponsorUserFormValues, selectEditProtocolFormValues, selectProtocols } from '../../containers/SponsorManageUsers/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 export class SponsorManageUsers extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -137,7 +138,7 @@ export class SponsorManageUsers extends React.Component { // eslint-disable-line
       <div className="container-fluid sponsor-portal">
         <Helmet title="Manage Users - StudyKIK" />
         <section className="manage-sponsor-user">
-          <h2 className="main-heading">MANAGE USERS</h2>
+          <h2 className="main-heading">{translate('sponsor.page.sponsorManageUsers.mainHeading')}</h2>
           <SponsorManageUsersSearch
             editUser={this.editUser}
             formValues={this.props.formValues}

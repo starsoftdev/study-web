@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 import varImage from '../../assets/images/img10.svg';
 import bubbleImage from '../../assets/images/foot.svg';
+import { translate } from '../../../common/utilities/localization';
 
 
 export class ComingSoon extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -24,7 +25,7 @@ export class ComingSoon extends React.Component { // eslint-disable-line react/p
                 <img src={bubbleImage} alt="" className="bottom" />
               </div>
               <div className="msg">
-                <strong className="title">COMING SOON!</strong>
+                <strong className="title">{translate('common.component.comingSoon.text')}</strong>
               </div>
             </div>
           </div>

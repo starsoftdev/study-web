@@ -1,6 +1,6 @@
 {
   "name": "studykik-web",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "StudyKIK Web Client",
   "private": true,
   "repository": {
@@ -163,7 +163,7 @@
     "react-addons-update": "15.3.0",
     "react-async-script": "^0.9.1",
     "react-avatar-editor": "^6.0.0",
-    "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#1384755faf052895f41132869335f7865baea984",
+    "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#55399ca1a86df8e2375f6e592e983382ce0a8143",
     "react-bootstrap": "^0.30.3",
     "react-click-outside": "^2.2.0",
     "react-d3": "^0.4.0",

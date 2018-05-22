@@ -17,6 +17,7 @@ import SponsorFilterBar from '../../components/SponsorFilterBar/index';
 import SponsorCalendarWidget from '../../components/SponsorCalendarWidget/index';
 import SponsorAllEventsModal from '../../components/SponsorAllEventsModal/index';
 import AllEventsModal from './components/AllEventsModal';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   fetchClientSites,
@@ -82,8 +83,8 @@ function numberSequenceCreator(start, end) {
 const hourOptions = numberSequenceCreator(1, 13);
 const minuteOptions = numberSequenceCreator(0, 60);
 const periodOptions = [
-  { label: 'AM', value: 'AM' },
-  { label: 'PM', value: 'PM' },
+  { label: translate('portals.page.calendarPage.amLabel'), value: 'AM' },
+  { label: translate('portals.page.calendarPage.pmLabel'), value: 'PM' },
 ];
 
 
@@ -365,7 +366,6 @@ export default class CalendarPage extends React.Component {
     ev.preventDefault();
     let sort = ev.currentTarget.dataset.sort;
     let direction = 'up';
-    const defaultSort = 'orderNumber';
 
     if (ev.currentTarget.className && ev.currentTarget.className.indexOf('up') !== -1) {
       direction = 'down';
@@ -419,10 +419,10 @@ export default class CalendarPage extends React.Component {
       <div>
         { userRoleType === 'client' &&
           <div className="container-fluid">
-            <Helmet title="Calendar - StudyKIK" />
+            <Helmet title={translate('portals.page.calendarPage.helmetTitle')} />
             <section className="calendar-section">
-              <h2 className="main-heading">CALENDAR</h2>
-              <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+              <h2 className="main-heading">{translate('portals.page.calendarPage.pageTitle')}</h2>
+              <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>{translate('portals.page.calendarPage.todayBtn')}</a></div>
               <FilterBar
                 siteLocationOptions={siteLocationOptions}
                 isAdmin={isAdmin}
@@ -493,10 +493,10 @@ export default class CalendarPage extends React.Component {
         {
           userRoleType === 'sponsor' &&
             <div className="container-fluid">
-              <Helmet title="Calendar - StudyKIK" />
+              <Helmet title={translate('portals.page.calendarPage.helmetTitle')} />
               <section className="sponsor calendar-section">
-                <h2 className="main-heading">CALENDAR</h2>
-                <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>Today</a></div>
+                <h2 className="main-heading">{translate('portals.page.calendarPage.pageTitle')}</h2>
+                <div className="btn-block"><a className="btn btn-primary" onClick={this.navigateToToday}>{translate('portals.page.calendarPage.todayBtn')}</a></div>
                 <SponsorFilterBar
                   sites={sponsorSites}
                   protocols={sponsorProtocols.details}

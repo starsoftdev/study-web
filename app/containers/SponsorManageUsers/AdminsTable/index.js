@@ -6,6 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectPaginationOptionsAdmin, selectSearchSponsorsFormValues } from '../selectors';
 import { setActiveAdminSort } from '../actions';
 import RowItem from './RowItem';
+import { translate } from '../../../../common/utilities/localization';
 
 export class SponsorManageUsersAdminsTable extends React.Component {
   static propTypes = {
@@ -64,11 +65,15 @@ export class SponsorManageUsersAdminsTable extends React.Component {
       <div className="table-holder table-responsive">
         {
           <table className="table-manage-user table">
-            <caption>ADMINS</caption>
+            <caption>{translate('sponsor.component.sponsorManageUsersAdminsTable.title')}</caption>
             <thead>
               <tr>
-                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>NAME<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>EMAIL<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="first_name" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'first_name') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>
+                  {translate('sponsor.component.sponsorManageUsersAdminsTable.tableHeadName')}<i className="caret-arrow" />
+                </th>
+                <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptionsAdmin.activeSort === 'email') ? this.props.paginationOptionsAdmin.activeDirection : ''}`}>
+                  {translate('sponsor.component.sponsorManageUsersAdminsTable.tableHeadEmail')}<i className="caret-arrow" />
+                </th>
                 <th />
               </tr>
             </thead>

@@ -2,6 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
+import { translate } from '../../../common/utilities/localization';
 
 class FilterBar extends Component {
   static propTypes = {
@@ -26,7 +27,7 @@ class FilterBar extends Component {
     const { protocols, sites } = nextProps;
 
     if (protocols.length) {
-      const protocolOptions = [{ label: 'All', value: 'all' }].concat(protocols.map(protocol => ({
+      const protocolOptions = [{ label: translate('portals.component.sponsorFilterBar.allLabel'), value: 'all' }].concat(protocols.map(protocol => ({
         label: protocol.protocolNumber,
         value: protocol.protocolNumber,
       })));
@@ -37,8 +38,8 @@ class FilterBar extends Component {
     }
 
     if (!sites.fetching && sites.details.length) {
-      const siteLocationOptions = [{ label: 'All', value: 'all' }].concat(sites.details.map(site => ({
-        label: (site.principalInvestigator) ? `${site.principalInvestigator} (${site.site_name})` : `N/A (${site.site_name})`,
+      const siteLocationOptions = [{ label: translate('portals.component.sponsorFilterBar.allLabel'), value: 'all' }].concat(sites.details.map(site => ({
+        label: (site.principalInvestigator) ? `${site.principalInvestigator} (${site.site_name})` : `${translate('portals.component.sponsorFilterBar.notApplicable')} (${site.site_name})`,
         value: (site.principalInvestigator) ? site.principalInvestigator : site.site_id,
       })));
 
@@ -104,7 +105,7 @@ class FilterBar extends Component {
               value={filter.protocol}
               options={protocolOptions}
               disabled={false}
-              placeholder={'Select Protocol'}
+              placeholder={translate('portals.component.sponsorFilterBar.protocolPlaceholder')}
               onChange={(option) => this.handleFilterChange('protocol', option)}
             />
           </div>
@@ -114,7 +115,7 @@ class FilterBar extends Component {
               disabled={this.state.protocol === null}
               options={siteLocationOptions}
               value={filter.siteLocation}
-              placeholder="Select Principal Investigator"
+              placeholder={translate('portals.component.sponsorFilterBar.piPlaceholder')}
               onChange={(option) => this.handleFilterChange('siteLocation', option)}
             />
           </div>

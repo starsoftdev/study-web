@@ -20,6 +20,7 @@ import ReactSelect from '../../../components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
 import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.AddPatientModal';
 
@@ -186,7 +187,7 @@ export default class AddPatientForm extends React.Component {
       label: protocolIterator.number,
       value: protocolIterator.studyId,
     }));
-    protocolOptions.unshift({ id: 'add-new-protocol', name: 'Add New Protocol' });
+    protocolOptions.unshift({ id: 'add-new-protocol', name: translate('client.component.addPatientForm.addNewProtocol') });
 
     const sourceOptions = studySources.details.filter(s => !s.isLeadSource).map((studySource) => {
       const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
@@ -200,7 +201,7 @@ export default class AddPatientForm extends React.Component {
       <Form className="form-lightbox" onSubmit={this.addPatient}>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-first-name">Patient Name</label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelPatientName')}</label>
           </strong>
           <div className="field">
             <div className="row">
@@ -208,7 +209,7 @@ export default class AddPatientForm extends React.Component {
                 name="firstName"
                 component={Input}
                 type="text"
-                placeholder="First Name"
+                placeholder={translate('client.component.addPatientForm.placeholderFirstName')}
                 className="col pull-left"
                 id="import-patient-first-name"
               />
@@ -216,7 +217,7 @@ export default class AddPatientForm extends React.Component {
                 name="lastName"
                 component={Input}
                 type="text"
-                placeholder="Last Name"
+                placeholder={translate('client.component.addPatientForm.placeholderLastName')}
                 className="col pull-left"
                 id="import-patient-last-name"
               />
@@ -225,7 +226,7 @@ export default class AddPatientForm extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-email"> Patient Email </label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelPatientEmail')}</label>
           </strong>
           <Field
             name="email"
@@ -237,7 +238,7 @@ export default class AddPatientForm extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="import-patient-phone"> Patient Phone </label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelPatientPhone')}</label>
           </strong>
           <Field
             name="phone"
@@ -250,25 +251,25 @@ export default class AddPatientForm extends React.Component {
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Site Location</label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelSiteLocation')}</label>
           </strong>
           <Field
             name="site"
             component={ReactSelect}
             className="field"
-            placeholder="Select Site Location"
+            placeholder={translate('client.component.addPatientForm.placeholderSiteLocation')}
             options={siteOptions}
             onChange={this.changeSiteLocation}
           />
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Protocol</label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelProtocol')}</label>
           </strong>
           <Field
             name="protocol"
             component={ReactSelect}
-            placeholder="Select Protocol"
+            placeholder={translate('client.component.addPatientForm.placeholderProtocol')}
             className="field"
             options={protocolOptions}
             disabled={isFetchingProtocols || !this.state.siteLocation}
@@ -277,32 +278,32 @@ export default class AddPatientForm extends React.Component {
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>Indication</label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelIndication')}</label>
           </strong>
           <Field
             name="indication"
             component={ReactSelect}
             className="field"
-            placeholder="Select Indication"
+            placeholder={translate('client.component.addPatientForm.placeholderIndication')}
             disabled
             options={indicationOptions}
           />
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Source</label>
+            <label htmlFor="import-patient-first-name">{translate('client.component.addPatientForm.labelSource')}</label>
           </strong>
           <Field
             name="source"
             component={ReactSelect}
             className="field required"
-            placeholder="Select Source"
+            placeholder={translate('client.component.addPatientForm.placeholderSource')}
             options={sourceOptions}
             disabled={studySources.fetching || !this.state.selectedStudyId}
           />
         </div>
         <div className="text-right">
-          <Button type="submit" disabled={submitting}>Submit</Button>
+          <Button type="submit" disabled={submitting}>{translate('client.component.addPatientForm.submit')}</Button>
         </div>
       </Form>
     );
