@@ -5,9 +5,10 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/styles.css';
 import { createStructuredSelector } from 'reselect';
 import * as Selector from '../selectors';
+import { getMomentFromDate } from '../../../utils/time';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
@@ -70,6 +71,7 @@ class ScheduledPatientModal extends React.Component {
     this.state = {
       date: moment(),
     };
+    this.timezone = null;
   }
 
   componentDidMount() {
@@ -83,19 +85,18 @@ class ScheduledPatientModal extends React.Component {
         currentPatient.appointments && currentPatient.appointments.length > 0) {
       const { time, textReminder } = currentPatient.appointments[0];
       const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
-      let timezone;
       if (currentUser.roleForClient.isAdmin) {
-        timezone = patientSite ? patientSite.timezone : currentUser.timezone;
+        this.timezone = patientSite ? patientSite.timezone : currentUser.timezone;
       } else {
-        timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
+        this.timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
       }
       initialValues = {
-        ...getTimeComponents(time, timezone),
+        ...getTimeComponents(time, this.timezone),
         textReminder,
       };
       this.props.setScheduledFormInitialized(true);
       this.setState({
-        date: moment.tz(currentPatient.appointments[0].time, timezone).startOf('date'),
+        date: moment.tz(currentPatient.appointments[0].time, this.timezone).startOf('date'),
       });
       nextProps.initialize(initialValues);
     }
@@ -106,29 +107,22 @@ class ScheduledPatientModal extends React.Component {
 
     this.calendar.focusToDate(today);
     this.setState({
-      date: today,
+      date: getMomentFromDate(today, this.timezone),
     });
-    this.props.handleDateChange(today);
+    this.props.handleDateChange(getMomentFromDate(today, this.timezone));
   }
 
   handleSelect(date) {
-    const chosenDate = moment(date.setHours(11)).startOf('day');
+    const chosenDate = getMomentFromDate(date, this.timezone);
     this.setState({ date: chosenDate });
     this.props.handleDateChange(chosenDate);
   }
 
 
   render() {
-    const { onHide, currentPatient, show, handleSubmit, submittingSchedule, currentUser, sites } = this.props;
+    const { onHide, currentPatient, show, handleSubmit, submittingSchedule } = this.props;
 
     if (currentPatient) {
-      const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
-      let timezone;
-      if (currentUser.roleForClient.isAdmin) {
-        timezone = patientSite ? patientSite.timezone : currentUser.timezone;
-      } else {
-        timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
-      }
       const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
 
       return (
@@ -185,7 +179,7 @@ class ScheduledPatientModal extends React.Component {
                 </div>
                 <div className="field-row time-field-row">
                   <strong className="label required">
-                    <label>{translate('client.component.scheduledPatientModal.time')} {`(${moment.tz(timezone).format('z')})`}</label>
+                    <label>{translate('client.component.scheduledPatientModal.time')} {`(${moment.tz(this.timezone).format('z')})`}</label>
                   </strong>
                   <div className="field time-field">
                     <div className="col-holder row">

@@ -24,3 +24,19 @@ export function parseTimezone(timezone) {
 
   return `${region}/${city}`;
 }
+
+export function getMomentFromDate(date, tz = null) {
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  let day = date.getDate();
+  if (day < 10) {
+    day = `0${day}`;
+  }
+  if (tz) {
+    return moment.tz(`${year}-${month}-${day}`, tz).startOf('date');
+  }
+  return moment(`${year}-${month}-${day}`);
+}
