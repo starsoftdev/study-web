@@ -847,6 +847,7 @@
 
     "sponsor.component.reportItem.na": "N/A",
     "sponsor.component.reportItem.principalInvestigator": "PRINCIPAL INVESTIGATOR",
+    "sponsor.component.reportItem.siteLocation": "SITE LOCATION",
     "sponsor.component.reportItem.listing": "LISTING",
     "sponsor.component.reportItem.status": "STATUS",
     "sponsor.component.reportItem.pqs": "Patient Qualification Suite",
