@@ -294,7 +294,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                       {translate('client.component.patientsList.tableTitleStatus')}<i className="caret-arrow" />
                     </div>
                     <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>
-                      {translate('client.component.patientsList.tableTitleSource')}<i className="caret-arrow" />
+                      {translate('client.component.patientsList.tableTitleMedia')}<i className="caret-arrow" />
                     </div>
                   </div>
                 </div>

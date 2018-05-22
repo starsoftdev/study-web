@@ -55,7 +55,7 @@ export const selectSelectedPatientDetailsForForm = () => createSelector(
     let selectedPatientDetailsForForm = omit(selectedPatientDetails, ['created', 'patientIndications', 'lastAction', 'study_patient_category_id', 'studyPatientCategory']);
     selectedPatientDetailsForForm = {
       ...selectedPatientDetailsForForm,
-      indications: selectedPatientDetails.patientIndications ? selectedPatientDetails.patientIndications.map(piIterator => ({
+      indications: selectedPatientDetails.patientIndications ? selectedPatientDetails.patientIndications.filter(i => { return i.indication; }).map(piIterator => ({
         label: piIterator.indication.name,
         value: piIterator.indication.id,
         id: piIterator.indication.id,
