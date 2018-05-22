@@ -388,7 +388,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         />
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelGender')}</strong>
+            <label>{translate('client.component.editPatientForm.labelGender')}</label>
           </strong>
           <Field
             name="gender"
@@ -401,7 +401,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelBmi')}</strong>
+            <label>{translate('client.component.editPatientForm.labelBmi')}</label>
           </strong>
           <Field
             name="bmi"
@@ -413,7 +413,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelStatus')}</strong>
+            <label>{translate('client.component.editPatientForm.labelStatus')}</label>
           </strong>
           <div className="field">
             <Field
@@ -427,7 +427,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelSiteLocation')}</strong>
+            <label>{translate('client.component.editPatientForm.labelSiteLocation')}</label>
           </strong>
           <Field
             name="site"
@@ -441,7 +441,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelProtocol')}</strong>
+            <label>{translate('client.component.editPatientForm.labelProtocol')}</label>
           </strong>
           <Field
             name="protocol"
@@ -455,13 +455,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <strong>{translate('client.component.editPatientForm.labelSource')}</strong>
+            <label>{translate('client.component.editPatientForm.labelMedia')}</label>
           </strong>
           <Field
             name="source"
             component={ReactSelect}
             className="field"
-            placeholder={translate('client.component.editPatientForm.placeholderSource')}
+            placeholder={translate('client.component.editPatientForm.placeholderMedia')}
             options={sourceOptions}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
