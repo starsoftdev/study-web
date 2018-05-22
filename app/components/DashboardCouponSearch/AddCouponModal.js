@@ -5,8 +5,9 @@ import { Field, reduxForm, change, touch, reset } from 'redux-form';
 import moment from 'moment';
 import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
-import _ from 'lodash';
+import 'react-date-range/dist/styles.css';
 
+import { getMomentFromDate } from '../../utils/time';
 import RadioButton from '../../components/Input/RadioButton';
 import CouponDatePickerDisplay from '../../components/Input/CouponDatePickerDisplay';
 import Input from '../../components/Input';
@@ -119,33 +120,27 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
     }
   }
 
-  handleDateSelect(momentDate) {
-    this.setState({
-      initDate: momentDate,
-    });
+  handleDateSelect(date) {
+    const chosenDate = getMomentFromDate(date);
+    this.setState({ initDate: chosenDate });
     const { change } = this.props;
     const { which } = this.state;
-    change(which, momentDate);
+    change(which, chosenDate);
     this.handleDatePickerClose(false);
   }
 
   navigateToday() {
-    const today = moment();
-    const todayYear = today.year();
-    const todayMonth = today.month();
-    const calendarYear = this.calendar.getShownDate().year();
-    const calendarMonth = this.calendar.getShownDate().month();
-    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const today = new Date();
     const { which } = this.state;
 
-    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+    this.calendar.focusToDate(today);
 
-    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
+    if (moment(this.state.minDate).isSameOrBefore(getMomentFromDate(today), 'day')) {
       this.setState({
-        initDate: today,
+        initDate: getMomentFromDate(today),
       });
       const { change } = this.props;
-      change(which, today);
+      change(which, getMomentFromDate(today));
       this.handleDatePickerClose(false);
     }
   }
@@ -175,6 +170,8 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
       isAmount = null;
       isPercent = true;
     }
+    const calendarDate = this.state.initDate ? this.state.initDate.toDate() : this.state.initDate;
+    const minDate = this.state.minDate || currentDate;
 
     return (
       <div>
@@ -343,11 +340,11 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
           </Modal.Header>
           <Modal.Body>
             <Calendar
-              date={this.state.initDate}
+              date={calendarDate}
               onChange={this.handleDateSelect}
               className="calendar custom-calendar"
               ref={(calendar) => { this.calendar = calendar; }}
-              minDate={this.state.minDate || currentDate}
+              minDate={minDate ? minDate.toDate() : undefined}
             />
             <div className="current-date" onClick={this.navigateToday}>
               Today: {currentDate.format('dddd, MMMM Do, YYYY')}
