@@ -335,7 +335,7 @@ class EmailBlastForm extends React.Component {
                 </ul>
               </div>
               <div className="category">
-                <strong className="heading">{translate('client.component.emailBlastForm.source')}</strong>
+                <strong className="heading">{translate('client.component.emailBlastForm.media')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field
