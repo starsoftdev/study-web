@@ -21,6 +21,7 @@ import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { fetchFilteredProtcols, addPatientIndication, removePatientIndication, updatePatientIndication } from '../actions';
 import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient, selectStudySources } from '../selectors';
 import formValidator from './validator';
+import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.EditPatientModal';
 
@@ -257,10 +258,10 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     }));
     const genderOptions = [
       {
-        label: 'Male',
+        label: translate('common.constants.male'),
         value: 'Male',
       }, {
-        label: 'Female',
+        label: translate('common.constants.female'),
         value: 'Female',
       },
     ];
@@ -272,7 +273,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       <Form className="form-lightbox form-edit-patient-information" onSubmit={this.props.handleSubmit}>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>NAME</label>
+            <label>{translate('client.component.editPatientForm.labelName')}</label>
           </strong>
           <div className="field">
             <div className="row">
@@ -281,7 +282,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                   name="firstName"
                   component={Input}
                   type="text"
-                  placeholder="First Name"
+                  placeholder={translate('client.component.editPatientForm.placeholderFirstName')}
                   disabled={savedPatient.saving}
                 />
               </div>
@@ -290,7 +291,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
                   name="lastName"
                   component={Input}
                   type="text"
-                  placeholder="Last Name"
+                  placeholder={translate('client.component.editPatientForm.placeholderLastName')}
                   disabled={savedPatient.saving}
                 />
               </div>
@@ -299,7 +300,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Email</label>
+            <label>{translate('client.component.editPatientForm.labelEmail')}</label>
           </strong>
           <Field
             name="email"
@@ -311,7 +312,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label required">
-            <label>Phone</label>
+            <label>{translate('client.component.editPatientForm.labelPhone')}</label>
           </strong>
           <Field
             name="phone"
@@ -324,12 +325,12 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group patient-database-indication-hidden">
           <strong className="label">
-            <label>Indications</label>
+            <label>{translate('client.component.editPatientForm.labelIndications')}</label>
           </strong>
           <Field
             name="indications"
             component={ReactSelect}
-            placeholder="Select Indication"
+            placeholder={translate('client.component.editPatientForm.placeholderIndication')}
             options={indicationOptions}
             multi
             joinValues
@@ -340,7 +341,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           />
         </div>
         <div className="field-row">
-          <strong className="label">Indications</strong>
+          <strong className="label">{translate('client.component.editPatientForm.labelIndications')}</strong>
           <div
             className="field add-indications"
             ref={(parent) => (
@@ -354,7 +355,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
               )}
               onClick={this.toggleIndicationPopover}
             >
-              + Add Indication
+              {translate('client.component.editPatientForm.addIndication')}
             </Button>
             <Overlay
               show={this.state.showIndicationPopover}
@@ -387,20 +388,20 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         />
         <div className="field-row form-group">
           <strong className="label">
-            <label>GENDER</label>
+            <strong>{translate('client.component.editPatientForm.labelGender')}</strong>
           </strong>
           <Field
             name="gender"
             component={ReactSelect}
             className="field"
-            placeholder="Select Gender"
+            placeholder={translate('client.component.editPatientForm.placeholderGender')}
             options={genderOptions}
             disabled={savedPatient.saving}
           />
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>BMI</label>
+            <strong>{translate('client.component.editPatientForm.labelBmi')}</strong>
           </strong>
           <Field
             name="bmi"
@@ -412,13 +413,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>STATUS</label>
+            <strong>{translate('client.component.editPatientForm.labelStatus')}</strong>
           </strong>
           <div className="field">
             <Field
               name="status"
               component={ReactSelect}
-              placeholder="Select Status"
+              placeholder={translate('client.component.editPatientForm.placeholderStatus')}
               options={statusOptions}
               disabled
             />
@@ -426,13 +427,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>* Site Location</label>
+            <strong>{translate('client.component.editPatientForm.labelSiteLocation')}</strong>
           </strong>
           <Field
             name="site"
             component={ReactSelect}
             className="field"
-            placeholder="Select Site Location"
+            placeholder={translate('client.component.editPatientForm.placeholderSiteLocation')}
             options={siteOptions}
             onChange={this.changeSiteLocation}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
@@ -440,13 +441,13 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>* Protocol</label>
+            <strong>{translate('client.component.editPatientForm.labelProtocol')}</strong>
           </strong>
           <Field
             name="protocol"
             component={ReactSelect}
             className="field"
-            placeholder="Select Protocol"
+            placeholder={translate('client.component.editPatientForm.placeholderProtocol')}
             options={protocolOptions}
             onChange={this.selectProtocol}
             disabled={isFetchingProtocols || (initialValues && initialValues.source && initialValues.source === 1)}
@@ -454,20 +455,20 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
         </div>
         <div className="field-row form-group">
           <strong className="label">
-            <label>* Source</label>
+            <strong>{translate('client.component.editPatientForm.labelSource')}</strong>
           </strong>
           <Field
             name="source"
             component={ReactSelect}
             className="field"
-            placeholder="Select Source"
+            placeholder={translate('client.component.editPatientForm.placeholderSource')}
             options={sourceOptions}
             disabled={initialValues && initialValues.source && initialValues.source === 1}
           />
         </div>
         <div className="field-row">
           <strong className="label">
-            <label htmlFor="unsubscribed">Unsubscribe</label>
+            <label>{translate('client.component.editPatientForm.labelUnsubscribe')}</label>
           </strong>
           <div className="field">
             <Field
@@ -482,7 +483,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
           <Button type="submit" className="btn-add-row" disabled={savedPatient.saving}>
             {savedPatient.saving
               ? <span><LoadingSpinner showOnlyIcon size={20} /></span>
-              : <span>Update</span>
+              : <span>{translate('client.component.editPatientForm.update')}</span>
             }
           </Button>
         </div>

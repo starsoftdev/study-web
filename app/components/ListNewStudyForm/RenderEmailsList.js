@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import CenteredModal from '../../components/CenteredModal/index';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import Checkbox from '../../components/Input/Checkbox';
+import { translate } from '../../../common/utilities/localization';
 
 class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -100,7 +101,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
             className="field-active"
             onChange={this.selectAll}
           />
-          <strong className="email">RECEIVE EMAIL NOTIFICATION</strong>
+          <strong className="email">{translate('portals.component.listNewStudyForm.renderEmailsList.receiveEmailNotifications')}</strong>
         </div>
 
         <ul className="list-unstyled list-emails">
@@ -121,7 +122,9 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           }
         </ul>
         <div className="btn-holder">
-          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.isAdmin}>Add Email Notification</a>
+          <a className={classNames('add-new-email lightbox-opener')} onClick={this.addEmailNotificationClick} disabled={!currentUser.isAdmin}>
+            {translate('portals.component.listNewStudyForm.renderEmailsList.addEmailNotification')}
+          </a>
         </div>
 
         <Modal
@@ -132,7 +135,7 @@ class RenderEmailsList extends React.Component { // eslint-disable-line react/pr
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
+            <Modal.Title>{translate('portals.component.listNewStudyForm.renderEmailsList.addEmailNotificationModalTitle')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
               <i className="icomoon-icon_close" />
             </a>

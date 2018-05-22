@@ -6,6 +6,7 @@ import { toastr } from 'react-redux-toastr';
 
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
+import { translate } from '../../../common/utilities/localization';
 
 import {
   FETCH_MANAGE_SPONSOR_USERS_DATA,
@@ -76,12 +77,12 @@ export function* editSponsorUserWorker(action) {
 
     yield put(editSponsorUserSuccess(response));
     if (action.params.isNew) {
-      toastr.success('Success!', 'User has been added.');
+      toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrAddSuccess'));
     } else {
-      toastr.success('Success!', 'You have updated your information.');
+      toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrUpdateSuccess'));
     }
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while editing user. Please try again later.');
+    const errorMessage = get(err, 'message', translate('sponsor.page.sponsorManageUsers.toastrUpdateDefaultError'));
     toastr.error('', errorMessage);
     yield put(editSponsorUserError(err));
     if (err.status === 401) {
@@ -104,9 +105,9 @@ export function* deleteSponsorUserWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(deleteSponsorUserSuccess(response));
-    toastr.success('Success!', 'User has been deleted.');
+    toastr.success(translate('common.constants.success'), translate('sponsor.page.sponsorManageUsers.toastrDeleteSuccess'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while deleting user. Please try again later.');
+    const errorMessage = get(err, 'message', translate('sponsor.page.sponsorManageUsers.toastrDeleteDefaultError'));
     toastr.error('', errorMessage);
     yield put(deleteSponsorUserError(err));
   }
@@ -139,9 +140,9 @@ export function* editProtocolWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editProtocolSuccess(response));
-    toastr.success('Success!', 'You have updated your information.');
+    toastr.success(translate('common.constants.success'), translate('client.page.editProtocolForm.toastrSuccess'));
   } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while editing the protocol. Please try again later.');
+    const errorMessage = get(err, 'message', translate('client.page.editProtocolForm.toastrDefaultError'));
     toastr.error('', errorMessage);
     yield put(editProtocolError(err));
     if (err.status === 401) {

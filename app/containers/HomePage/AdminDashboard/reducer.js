@@ -307,7 +307,18 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
 
-    case EDIT_STUDY_LEAD_SOURCES_SUCCESS:
+    case EDIT_STUDY_LEAD_SOURCES_SUCCESS: {
+      const studiesCopy = state.studies.details.map(study => {
+        if (study.study_id === action.studyId) {
+          return {
+            ...study,
+            callTracking: action.callTracking,
+          };
+        } else {
+          return study;
+        }
+      });
+
       return {
         ...state,
         editStudyLeadSourcesProcess: {
@@ -315,7 +326,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           error: false,
         },
         studyLeadSources: {
-          details: action.payload.map((item) => {
+          details: action.leadSources.map((item) => {
             return {
               ...item,
             };
@@ -323,8 +334,13 @@ export default function dashboardPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+        studies: {
+          details: studiesCopy,
+          fetching: false,
+          error: null,
+        },
       };
-
+    }
     case EDIT_STUDY_LEAD_SOURCES_ERROR:
       return {
         ...state,

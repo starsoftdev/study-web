@@ -24,6 +24,7 @@ import TextBlastModal from '../../containers/PatientDatabasePage/TextBlast/index
 import EmailBlastModal from '../../components/PatientDatabaseEmailBlastModal/index';
 import NewProtocolForm from '../../components/AddNewProtocolForm/index';
 import { addProtocolFields } from '../../components/AddNewProtocolForm/validator';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'PatientDatabase.TextBlastModal';
 const mapStateToProps = createStructuredSelector({
@@ -139,7 +140,6 @@ export default class PatientActionButtons extends React.Component {
       params.recruitmentPhone = normalizePhoneForServer(data.recruitmentPhone);
       addProtocol(params);
     } else {
-      console.log('addProtocol', err, data);
       touchAddProtocolFields();
     }
   }
@@ -220,18 +220,18 @@ export default class PatientActionButtons extends React.Component {
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-arrow_up_alt" />
-              <span className="text">Upload Patients</span>
+              <span className="text">{translate('client.component.patientActionButtons.uploadPatients')}</span>
             </div>
           </div>
         </span>
         <span className="or">
-          <span>or</span>
+          <span>{translate('client.component.patientActionButtons.or')}</span>
         </span>
         <span className="modal-opener" onClick={this.toggleAddPatientModal}>
           <div className="table">
             <div className="table-cell">
               <i className="icomoon-icon_plus_alt" />
-              <span className="text">Add Patient</span>
+              <span className="text">{translate('client.component.patientActionButtons.addPatient')}</span>
             </div>
           </div>
         </span>
@@ -246,15 +246,18 @@ export default class PatientActionButtons extends React.Component {
       <div>
         <div className="col pull-right no-right-padding">
           <button type="button" className="btn btn-primary download pull-right" onClick={this.download}>
-            <i className="icomoon-icon_download" />
-            &nbsp;Download
+            <i className="icomoon-icon_download" /> {translate('client.component.patientActionButtons.download')}
           </button>
         </div>
         <div className="col pull-right">
-          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener"><i className="icomoon-icon_upload" /> Upload Patients</label>
+          <label onClick={this.toggleImportPatientsModal} className="btn btn-primary import lightbox-opener">
+            <i className="icomoon-icon_upload" /> {translate('client.component.patientActionButtons.uploadPatients')}
+          </label>
         </div>
         <div className="col pull-right">
-          <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}><i className="icomoon-icon_chat_alt" /> TEXT / EMAIL BLAST</div>
+          <div className={classNames('btn btn-primary email lightbox-opener', { disabled: !isPatientSelected })} onClick={() => (isPatientSelected ? this.toggleTextEmailBlastModal() : null)}>
+            <i className="icomoon-icon_chat_alt" /> {translate('client.component.patientActionButtons.blast')}
+          </div>
         </div>
         <TextEmailBlastModal
           show={this.state.showTextEmailBlastModal}
@@ -283,7 +286,7 @@ export default class PatientActionButtons extends React.Component {
         >
           <Modal.Header>
             <Modal.Title>
-              <strong>Import</strong>
+              <strong>{translate('client.component.patientActionButtons.modalTitleImport')}</strong>
             </Modal.Title>
             <a className="close" onClick={this.toggleImportPatientsModal}>
               <i className="icomoon-icon_close" />
@@ -303,7 +306,7 @@ export default class PatientActionButtons extends React.Component {
         >
           <Modal.Header>
             <Modal.Title>
-              <strong>Add Patient</strong>
+              <strong>{translate('client.component.patientActionButtons.addPatient')}</strong>
             </Modal.Title>
             <a className="close" onClick={this.toggleAddPatientModal}>
               <i className="icomoon-icon_close" />
@@ -315,7 +318,7 @@ export default class PatientActionButtons extends React.Component {
         </Modal>
         <Modal dialogComponentClass={CenteredModal} show={this.state.showAddProtocolModal} onHide={this.toggleAddProtocolModal}>
           <Modal.Header>
-            <Modal.Title>ADD NEW PROTOCOL</Modal.Title>
+            <Modal.Title>{translate('client.component.patientActionButtons.addNewProtocol')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.toggleAddProtocolModal}>
               <i className="icomoon-icon_close" />
             </a>

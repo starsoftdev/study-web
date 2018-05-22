@@ -55,6 +55,7 @@ import {
   sendStudyPatientMessages,
 } from '../../containers/GlobalNotifications/actions';
 import { incrementStudyUnreadMessages, subtractStudyUnreadMessages } from '../../containers/HomePage/actions';
+import { translate } from '../../../common/utilities/localization';
 
 import alertSound from './sounds/message_received.wav';
 
@@ -237,7 +238,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
     }
 
     const siteOptions = map(sites, siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
+    siteOptions.unshift({ label: translate('portals.component.globalPMSModal.allLabel'), value: '0' });
 
     sitePatients.details.forEach((item) => {
       if (item.show === undefined || (item.show && item.show === true)) {
@@ -281,11 +282,12 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
 
     let protocolNumber = '';
     if (this.state.selectedPatient.protocol_number) {
-      protocolNumber = `Protocol: ${this.state.selectedPatient.protocol_number}`;
+      protocolNumber = `${translate('portals.component.globalPMSModal.protocolLabel')}: ${this.state.selectedPatient.protocol_number}`;
     }
     let patientCategory = '';
     if (this.state.selectedPatient.patient_category_id && this.props.patientCategories && this.props.patientCategories.length) {
-      patientCategory = `Status: ${this.props.patientCategories[this.state.selectedPatient.patient_category_id - 1].name}`;
+      const categoryName = translate(`common.patientCategory.id${this.state.selectedPatient.patient_category_id}`);
+      patientCategory = `${translate('portals.component.globalPMSModal.statusLabel')}: ${categoryName}`;
     }
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.props.handleSubmit}>
@@ -305,7 +307,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
             keyboard
           >
             <Modal.Header>
-              <Modal.Title>PATIENT MESSAGING SUITE</Modal.Title>
+              <Modal.Title>{translate('portals.component.globalPMSModal.modalTitle')}</Modal.Title>
               <a className="lightbox-close close" onClick={this.handleClose}>
                 <i className="icomoon-icon_close" />
               </a>
@@ -332,7 +334,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                             onChange={(e) => this.handleKeyPress(e)}
                             type="text"
                             className="keyword-search"
-                            placeholder="Search"
+                            placeholder={translate('portals.component.globalPMSModal.searchPlaceholder')}
                             ref={(searchKey) => {
                               this.searchKey = searchKey;
                             }}
@@ -342,7 +344,7 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
                           <Field
                             name="siteLocation"
                             component={ReactSelect}
-                            placeholder="Select Site Location"
+                            placeholder={translate('portals.component.globalPMSModal.siteLocationPlaceholder')}
                             options={siteOptions}
                             onChange={this.siteLocationChanged}
                             include

@@ -28,6 +28,7 @@ import {
 
 import { submitForm, fetchProposal } from '../../containers/RequestProposalPage/actions';
 import { selectProposalDetail, selectProposalsFormError, selectProposalsFormValues } from './selectors';
+import { translate } from '../../../common/utilities/localization';
 
 export class RequestProposalPage extends Component {
   static propTypes = {
@@ -77,9 +78,9 @@ export class RequestProposalPage extends Component {
       <div>
         { userRoleType === 'client' &&
           <StickyContainer className="container-fluid">
-            <Helmet title="Request Proposal - StudyKIK" />
+            <Helmet title={translate('portals.page.requestProposalPage.helmetTitle')} />
             <section className="study-portal">
-              <h2 className="main-heading">REQUEST PROPOSAL</h2>
+              <h2 className="main-heading">{translate('portals.page.requestProposalPage.pageTitle')}</h2>
 
               <div className="row form-study">
 
@@ -117,7 +118,7 @@ export class RequestProposalPage extends Component {
         {
           userRoleType === 'sponsor' &&
             <div>
-              <Helmet title="Request Proposal - StudyKIK" />
+              <Helmet title={translate('portals.page.requestProposalPage.helmetTitle')} />
               <ComingSoon />
             </div>
         }
