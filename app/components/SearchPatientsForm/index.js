@@ -367,13 +367,13 @@ export default class SearchPatientsForm extends Component {
 
             <div className="select-holder pull-left">
               <span className="title">
-                <label>{translate('client.component.searchPatientsForm.labelSource')}</label>
+                <label>{translate('client.component.searchPatientsForm.labelMedia')}</label>
               </span>
               <div className="field">
                 <Field
                   name="source"
                   component={ReactSelect}
-                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectSource')}
+                  placeholder={translate('client.component.searchPatientsForm.placeholderSelectMedia')}
                   options={sourceOptions}
                   disabled={patients.fetching}
                   onChange={(val) => this.initSearch(val, 'source')}
