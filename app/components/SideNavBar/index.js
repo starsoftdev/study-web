@@ -61,7 +61,6 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
         { upperText: translate('portals.component.sideNavBar.manage'), lowerText: translate('portals.component.sideNavBar.manageLowerText'), link: '/app/sites-users', icon: 'icomoon-icon_group' },
         { upperText: translate('portals.component.sideNavBar.patientDB'), link: '/app/patient-database', icon: 'icomoon-icon_database' },
         { upperText: translate('portals.component.sideNavBar.rewards'), link: '/app/rewards', icon: 'icomoon-gift' },
-        { upperText: translate('portals.component.sideNavBar.badges'), link: '/app/badges', icon: 'icomoon-star' },
       ];
     } else {
       menuItemsGroupA = [

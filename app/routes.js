@@ -276,23 +276,6 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/badges',
-      name: 'badgesPage',
-      getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('./containers/BadgesPage'),
-        ]);
-
-        const renderRoute = loadModule(cb);
-
-        importModules.then(([component]) => {
-          renderRoute(component);
-        });
-
-        importModules.catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToLogin,
       path: '/app/list-new-study',
       name: 'listNewStudyPage',
       getComponent(nextState, cb) {
