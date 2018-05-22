@@ -1,7 +1,6 @@
 /* eslint-disable prefer-template, react/jsx-no-bind */
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
@@ -9,6 +8,7 @@ import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import { Calendar } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 
 import { SchedulePatientModalType } from '../../../../common/constants';
 
@@ -20,6 +20,7 @@ import { selectCurrentUser } from '../../../App/selectors';
 import { translate } from '../../../../../common/utilities/localization';
 
 import validator from './validator';
+import { getMomentFromDate } from '../../../../utils/time';
 
 function getTimeComponents(strTime, timezone) {
   const localTime = moment(strTime).tz(timezone);
@@ -73,20 +74,20 @@ export default class EditScheduleModal extends Component {
       showEditModal: false,
       initDate: moment(),
     };
+    this.timezone = null;
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.UPDATE) {
-      let timezone;
       if (nextProps.currentUser.roleForClient.isAdmin) {
-        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.timezone;
+        this.timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.timezone;
       } else {
-        timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.roleForClient.site.timezone;
+        this.timezone = nextProps.selectedCellInfo.timezone || nextProps.currentUser.roleForClient.site.timezone;
       }
 
       const initialValues = {
-        date: moment(nextProps.selectedCellInfo.data.time).tz(timezone),
-        ...getTimeComponents(nextProps.selectedCellInfo.data.time, timezone),
+        date: moment(nextProps.selectedCellInfo.data.time).tz(this.timezone),
+        ...getTimeComponents(nextProps.selectedCellInfo.data.time, this.timezone),
         textReminder: nextProps.selectedCellInfo.data.textReminder,
         patient: {
           value: nextProps.selectedCellInfo.data.patient_id,
@@ -101,31 +102,27 @@ export default class EditScheduleModal extends Component {
     }
   }
 
-  handleDateSelect(momentDate) {
+  handleDateSelect(date) {
+    const chosenDate = getMomentFromDate(date, this.timezone);
     this.setState({
-      initDate: momentDate,
+      initDate: chosenDate,
     });
     const { change } = this.props;
-    change('date', momentDate);
+    change('date', chosenDate);
     this.handleDatePickerClose(false);
   }
 
   navigateToday() {
-    const today = moment();
-    const todayYear = today.year();
-    const todayMonth = today.month();
-    const calendarYear = this.calendar.getShownDate().year();
-    const calendarMonth = this.calendar.getShownDate().month();
-    const monthDiff = ((todayYear - calendarYear) * 12) + (todayMonth - calendarMonth);
+    const today = new Date();
 
-    this.calendar.changeMonth(monthDiff, { preventDefault: _.noop });
+    this.calendar.focusToDate(today);
 
-    if (moment(this.state.minDate).isSameOrBefore(today, 'day')) {
+    if (moment(this.state.minDate).isSameOrBefore(getMomentFromDate(today), 'day')) {
       this.setState({
-        initDate: today,
+        initDate: getMomentFromDate(today, this.timezone),
       });
       const { change } = this.props;
-      change('date', today);
+      change('date', getMomentFromDate(today, this.timezone));
       this.handleDatePickerClose(false);
     }
   }
@@ -148,16 +145,10 @@ export default class EditScheduleModal extends Component {
       hourOptions,
       minuteOptions,
       periodOptions,
-      currentUser,
     } = this.props;
-    let timezone;
-    if (currentUser.roleForClient.isAdmin) {
-      timezone = selectedCellInfo.timezone || currentUser.timezone;
-    } else {
-      timezone = selectedCellInfo.timezone || currentUser.roleForClient.site.timezone;
-    }
 
     if (modalType === SchedulePatientModalType.UPDATE) {
+      const calendarDate = this.state.initDate ? this.state.initDate.toDate() : this.state.initDate;
       const currentDate = moment();
       return (
         <div>
@@ -193,7 +184,7 @@ export default class EditScheduleModal extends Component {
                 <div className="field-row">
                   <strong className="label required">
                     <label htmlFor="patient-time-edit">
-                      {translate('portals.component.calendarPage.editScheduleModal.timeLabel')} {`(${moment.tz(this.state.initDate, timezone).format(translate('portals.component.calendarPage.editScheduleModal.timezoneMask'))})`}
+                      {translate('portals.component.calendarPage.editScheduleModal.timeLabel')} {`(${moment.tz(this.state.initDate, this.timezone).format(translate('portals.component.calendarPage.editScheduleModal.timezoneMask'))})`}
                     </label>
                   </strong>
                   <div className="field">
@@ -279,7 +270,7 @@ export default class EditScheduleModal extends Component {
             </Modal.Header>
             <Modal.Body>
               <Calendar
-                date={this.state.initDate}
+                date={calendarDate}
                 onChange={this.handleDateSelect}
                 className="calendar custom-calendar"
                 ref={(calendar) => { this.calendar = calendar; }}
