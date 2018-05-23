@@ -1,9 +1,18 @@
 import classNames from 'classnames';
-import React, { Component } from 'react';
+import moment from 'moment';
+import React, { Component, PropTypes } from 'react';
 
 import { translate } from '../../../common/utilities/localization';
 
+function formatDate(date, format = 'MM/DD/YY [at] hh:mm a') {
+  return moment(date).format(format);
+}
+
 class PatientInfo extends Component {
+  static propTypes = {
+    patient: PropTypes.object,
+  };
+
   state = {
     carouselIndex: 0,
   };
@@ -14,6 +23,28 @@ class PatientInfo extends Component {
 
   render() {
     const { carouselIndex } = this.state;
+    const { patient } = this.props;
+
+    let name;
+    let email;
+    let phone;
+    let signUpDate;
+    let updatedDate;
+    let dob;
+    let gender;
+    let bmi;
+
+    if (patient && patient.details) {
+      const patientData = patient.details;
+      name = `${patientData.firstName} ${patientData.lastName}`;
+      email = patientData.email;
+      phone = patientData.phone;
+      signUpDate = formatDate(patientData.createdAt);
+      updatedDate = formatDate(patientData.updatedAt);
+      dob = formatDate(patientData.dob, 'MM/DD/YYYY');
+      gender = patientData.gender;
+      bmi = patientData.bmi;
+    }
 
     return (
       <div className="patient-info">
@@ -29,17 +60,17 @@ class PatientInfo extends Component {
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
               <div className="info-container">
-                <span>Name</span>
-                <span>Email</span>
-                <span>Phone</span>
-                <span>Sign Up</span>
-                <span>Updated</span>
+                <span>{name}</span>
+                <span>{email}</span>
+                <span>{phone}</span>
+                <span>{signUpDate}</span>
+                <span>{updatedDate}</span>
               </div>
             ) : (
               <div className="info-container">
-                <span>Date of Birth</span>
-                <span>Gender</span>
-                <span>BMI</span>
+                <span>{dob}</span>
+                <span>{gender}</span>
+                <span>{bmi}</span>
               </div>
             )}
           </div>

@@ -843,12 +843,24 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
-      path: '/app/cc/patient',
+      path: '/app/cc/patient/:id',
       name: 'callCenterPatientPage',
       getComponent(nextState, cb) {
-        System.import('./containers/CallCenterPatientPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          System.import('./containers/CallCenterPatientPage/reducer'),
+          System.import('./containers/CallCenterPatientPage/sagas'),
+          System.import('./containers/CallCenterPatientPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('callCenterPatientPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
       path: '/app*',
