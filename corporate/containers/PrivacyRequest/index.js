@@ -60,7 +60,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
 
     return (
       <main id="main">
-        <div className="container">
+        <div className="container corporate-site">
           <section className="privacy-request">
             <header className="text-center">
               <h2 className="main-heading">{translate('corporate.page.privacyrequest.header')}</h2>
