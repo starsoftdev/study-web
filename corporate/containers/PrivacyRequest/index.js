@@ -35,6 +35,9 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     this.watcher = null;
     this.setVisible = this.setVisible.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.state = {
+      requestId: 0,
+    };
   }
 
   componentDidMount() {
@@ -49,14 +52,113 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     this.props.change('reCaptcha', value);
   }
 
+  onChangeRequest(value) {
+    if (value) {
+      this.setState({ requestId: value });
+    } else {
+      this.setState({ requestId: 0 });
+    }
+  }
+
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
   }
 
+  renderExtend() {
+    const extendType = [
+      ['drop', 'text'],
+      ['drop', 'text'],
+      ['drop', 'text'],
+      ['text', 'text'],
+      ['text', 'no'],
+      ['drop', 'text'],
+      ['text', 'no'],
+    ];
+    const placeholders = [
+      [translate('corporate.page.privacyrequest.request.opt1placeholder1'), translate('corporate.page.privacyrequest.request.opt1placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt2placeholder1'), translate('corporate.page.privacyrequest.request.opt2placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt3placeholder1'), translate('corporate.page.privacyrequest.request.opt3placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt4placeholder1'), translate('corporate.page.privacyrequest.request.opt4placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt5placeholder1'), ''],
+      [translate('corporate.page.privacyrequest.request.opt6placeholder1'), translate('corporate.page.privacyrequest.request.opt6placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt7placeholder1'), ''],
+    ];
+    const subOptions = [
+      [
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt1info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt1info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt1info3') },
+        { id: 4, name: translate('corporate.page.privacyrequest.request.opt1info4') },
+        { id: 5, name: translate('corporate.page.privacyrequest.request.opt1info5') },
+        { id: 6, name: translate('corporate.page.privacyrequest.request.opt1info6') },
+      ],
+      [
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt2info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt2info2') },
+      ],
+      [
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt3info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt3info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt3info3') },
+        { id: 4, name: translate('corporate.page.privacyrequest.request.opt3info4') },
+        { id: 5, name: translate('corporate.page.privacyrequest.request.opt3info5') },
+        { id: 6, name: translate('corporate.page.privacyrequest.request.opt3info6') },
+        { id: 7, name: translate('corporate.page.privacyrequest.request.opt3info7') },
+        { id: 8, name: translate('corporate.page.privacyrequest.request.opt3info8') },
+      ],
+      [],
+      [],
+      [
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt6info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt6info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt6info3') },
+      ],
+    ];
+    const output = [];
+    for (let i = 0; i < 2; i++) {
+      if (extendType[this.state.requestId - 1][i] === 'drop') {
+        output.push(<div className="field-row" key={`${this.state.requestId}0${i}`}>
+          <Field
+            name="subrequest"
+            component={ReactSelect}
+            placeholder={placeholders[this.state.requestId - 1][i]}
+            options={subOptions[this.state.requestId - 1]}
+            className="field-lg"
+            mobileEnabled
+            required
+          />
+        </div>);
+      }
+
+      if (extendType[this.state.requestId - 1][i] === 'text') {
+        output.push(<div className="field-row" key={`${this.state.requestId}0${i}`}>
+          <Field
+            name="message"
+            placeholder={placeholders[this.state.requestId - 1][i]}
+            component={Input}
+            className="field-lg"
+            bsClass="form-control input-lg"
+            componentClass="textarea"
+          />
+        </div>);
+      }
+    }
+    return output;
+  }
+
   render() {
     const company = { Yourcompany: 'Yourcompany' };
-    const opt = [{ id: 10, name: 'test' }];
+    const opt = [{ id: 1, name: 'I\'m a person' }, { id: 2, name: 'I\'m representing an organization' }];
+    const optdone = [
+      { id: 1, name: translate('corporate.page.privacyrequest.request.opt1') },
+      { id: 2, name: translate('corporate.page.privacyrequest.request.opt2') },
+      { id: 3, name: translate('corporate.page.privacyrequest.request.opt3') },
+      { id: 4, name: translate('corporate.page.privacyrequest.request.opt4') },
+      { id: 5, name: translate('corporate.page.privacyrequest.request.opt5') },
+      { id: 6, name: translate('corporate.page.privacyrequest.request.opt6') },
+      { id: 7, name: translate('corporate.page.privacyrequest.request.opt7') },
+    ];
 
     return (
       <main id="main">
@@ -115,12 +217,14 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
                   name="request"
                   component={ReactSelect}
                   placeholder={translate('corporate.page.privacyrequest.request')}
-                  options={opt}
+                  options={optdone}
                   className="field-lg"
                   mobileEnabled
                   required
+                  onChange={(value) => this.onChangeRequest(value)}
                 />
               </div>
+              { this.state.requestId > 0 && this.renderExtend()}
               <div className="field-row">
                 <ReCAPTCHA
                   ref={(ref) => { this.recaptcha = ref; }}
