@@ -406,6 +406,17 @@ export function* generateReferral() {
 
     try {
       const requestURL = `${API_URL}/patients/generatePatientReferral?patientId=${patientId}&studyId=${studyId}`;
+      const toastrOptions = {
+        id: 'loadingToasterForReferralGenerate',
+        type: 'success',
+        message: 'Loading...',
+        options: {
+          timeOut: 0,
+          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+          showCloseButton: true,
+        },
+      };
+      yield put(toastrActions.add(toastrOptions));
       yield call(request, requestURL, {
         method: 'GET',
       });
@@ -415,6 +426,7 @@ export function* generateReferral() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrGeneratingReferralErrorMessage'));
+      yield put(toastrActions.remove('loadingToasterForReferralGenerate'));
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
@@ -442,6 +454,7 @@ export function* downloadReferral() {
       };
       const requestURL = `${API_URL}/patients/getReferralPDF`;
       const response = yield call(request, requestURL, params);
+      yield put(toastrActions.remove('loadingToasterForReferralGenerate'));
       response.blob().then(blob => {
         FileSaver.saveAs(blob, reportName);
       });
@@ -451,6 +464,7 @@ export function* downloadReferral() {
         removeItem('auth_token');
       }
       const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrDownloadingReferralErrorMessage'));
+      yield put(toastrActions.remove('loadingToasterForReferralGenerate'));
       toastr.error('', errorMessage);
       if (e.status === 401) {
         yield call(() => { location.href = '/login'; });
