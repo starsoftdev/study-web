@@ -21,6 +21,7 @@ import {
 import {
   selectFacebookLandingPageUpdateProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
+import formValidator from './validator';
 
 const formName = 'leadGenForm';
 
@@ -38,6 +39,7 @@ function mapDispatchToProps(dispatch) {
 
 @reduxForm({
   form: formName,
+  validate: formValidator,
 })
 @connect(null, mapDispatchToProps)
 
