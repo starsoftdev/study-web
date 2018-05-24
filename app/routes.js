@@ -408,8 +408,8 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         if (isNaN(nextState.params.id)) {
           System.import('./containers/NotFoundPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+            .then(loadModule(cb))
+            .catch(errorLoading);
         } else {
           const importModules = Promise.all([
             System.import('./containers/StudyPage/reducer'),
