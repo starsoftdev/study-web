@@ -29,7 +29,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   componentWillReceiveProps(newProps) {
     if ((!newProps.editSponsorProcess.saving && this.props.editSponsorProcess.saving) ||
          (!newProps.editSponsorProcess.deleting && this.props.editSponsorProcess.deleting)
-      ) {
+    ) {
       this.closeAddSponsorModal();
     }
   }
