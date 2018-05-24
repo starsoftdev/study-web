@@ -89,8 +89,8 @@ class SearchStudiesForm extends Component { // eslint-disable-line react/prefer-
       value: siteIterator.id,
     })));
     const statusOptions = [{ label: translate('portals.client.component.homePage.searchStudiesForm.all'), value: '0' },
-                           { label: translate('portals.client.component.homePage.searchStudiesForm.active'), value: ACTIVE_STATUS_VALUE },
-                           { label: translate('portals.client.component.homePage.searchStudiesForm.inactive'), value: INACTIVE_STATUS_VALUE }];
+      { label: translate('portals.client.component.homePage.searchStudiesForm.active'), value: ACTIVE_STATUS_VALUE },
+      { label: translate('portals.client.component.homePage.searchStudiesForm.inactive'), value: INACTIVE_STATUS_VALUE }];
 
     return (
       <Form className="form-search form-search-studies pull-left" onSubmit={this.handleSubmit}>

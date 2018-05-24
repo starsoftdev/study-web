@@ -98,8 +98,8 @@ export default class Filter extends React.Component {
         <strong className="title">Address</strong>
         <input
           type="text" name={name} className="form-control" placeholder="Search" ref={(searchVal) => (
-          this.searchVal = searchVal
-        )}
+            this.searchVal = searchVal
+          )}
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
@@ -120,13 +120,13 @@ export default class Filter extends React.Component {
         <strong className="title">Nearby Studies:</strong>
         <input
           type="text" name={`${name}-miles`} className="form-control" placeholder="Miles" ref={(miles) => (
-          this.miles = miles
-        )}
+            this.miles = miles
+          )}
         />
         <input
           type="text" name={`${name}-zipcode`} className="form-control" placeholder="Postal Code" ref={(zip) => (
-          this.zip = zip
-        )}
+            this.zip = zip
+          )}
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit({ miles: this.miles.value, zip: this.zip.value }); }}>Apply</button>
         <a className="btn-close" onClick={() => this.props.onClose()}>
@@ -163,8 +163,8 @@ export default class Filter extends React.Component {
         />
         <input
           type="text" name={name} className="form-control" placeholder="%" ref={(searchVal) => (
-          this.searchVal = searchVal
-        )}
+            this.searchVal = searchVal
+          )}
         />
         <button className="btn btn-default" onClick={() => { this.props.onSubmit(this.searchVal.value); }}>Apply</button>
         <a className="btn-close" data-remove=".filter-search-area" onClick={() => this.props.onClose()}>
