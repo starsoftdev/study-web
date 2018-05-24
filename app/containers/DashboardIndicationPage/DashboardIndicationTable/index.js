@@ -91,8 +91,8 @@ export class DashboardIndicationTable extends React.Component { // eslint-disabl
               {
                 indication.map((item, index) => (
                   <RowItem key={index} item={item} levels={levels} editIndication={this.props.editIndication} deleteIndication={this.props.deleteIndication} addIndicationProcess={this.props.addIndicationProcess} />
-              ))
-            }
+                ))
+              }
             </tbody>
             <tfoot>
               <tr>

@@ -12,7 +12,7 @@ if (process.env.CLOUDFLARE_API_KEY) {
   const assetValues = Object.keys(webpackAssets).map(key => webpackAssets[key]);
 
   const host = 'studykik.com';
-// combine the JS and CSS asset paths to clear
+  // combine the JS and CSS asset paths to clear
   const assets = [];
   for (const asset of assetValues) {
     if (asset.js) {
