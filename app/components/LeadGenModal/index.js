@@ -12,7 +12,7 @@ import Input from '../Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { fetchLanding } from '../../containers/App/actions';
-import { selectLanding } from '../../containers/App/selectors';
+import { selectCurrentUser, selectLanding } from '../../containers/App/selectors';
 import {
   updateFacebookLandingPage,
   resetLandingPageState,
@@ -45,6 +45,7 @@ function mapDispatchToProps(dispatch) {
 
 export class LeadGenModal extends React.Component {
   static propTypes = {
+    currentUser: React.PropTypes.any,
     submitForm: React.PropTypes.func.isRequired,
     fetchLanding:  React.PropTypes.func.isRequired,
     openModal: React.PropTypes.bool.isRequired,
@@ -114,12 +115,13 @@ export class LeadGenModal extends React.Component {
 
   handleSubmit(ev) {
     ev.preventDefault();
-    const { formError, newList, submitForm, studies } = this.props;
+    const { formError, newList, submitForm, studies, currentUser } = this.props;
     const selected = _.find(studies, { selected: true });
     if (formError) {
       return;
     }
-    const list = Object.assign({ studyId: selected.study_id }, newList);
+
+    const list = Object.assign({ studyId: selected.study_id, userId: currentUser.id }, newList);
 
     submitForm(list);
   }
@@ -206,6 +208,7 @@ const mapStateToProps = createStructuredSelector({
   newList: selectValues(formName),
   landing: selectLanding(),
   updateFacebookLandingPageProcess: selectFacebookLandingPageUpdateProcess(),
+  currentUser: selectCurrentUser(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LeadGenModal);
