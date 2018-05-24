@@ -159,6 +159,7 @@ export default class DatePicker extends Component {
             shownDate={calendarDate}
             onChange={this.handleSelect}
             className="calendar custom-calendar"
+            showMonthAndYearPickers={false}
             ref={(calendar) => { this.calendar = calendar; }}
             minDate={minDate ? minDate.toDate() : undefined}
             maxDate={maxDate ? maxDate.toDate() : undefined}
