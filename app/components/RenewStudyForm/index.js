@@ -488,6 +488,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
               className="calendar custom-calendar"
               ref={(calendar) => { this.calendar = calendar; }}
               minDate={minDate.toDate()}
+              showMonthAndYearPickers={false}
             />
             <div className="current-date" onClick={this.navigateToday}>
               {translate('portals.component.renewStudyForm.today')}: {currentDate.format('dddd, MMMM Do, YYYY')}
