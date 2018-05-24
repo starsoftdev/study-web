@@ -14,6 +14,7 @@ import SplitButton from 'react-bootstrap/lib/SplitButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
 import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { STATUS_ALL, STATUS_ACTIVE, STATUS_INACTIVE } from '../../containers/ReportViewPage/constants';
 import { getMomentFromDate } from '../../utils/time';
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
@@ -201,15 +202,15 @@ export class ReportViewSearch extends React.Component {
     const statusOptions = [
       {
         label: translate('common.constants.all'),
-        value: 'All',
+        value: STATUS_ALL,
       },
       {
         label: translate('sponsor.component.reportViewSearch.active'),
-        value: 'active',
+        value: STATUS_ACTIVE,
       },
       {
         label: translate('sponsor.component.reportViewSearch.inactive'),
-        value: 'inactive',
+        value: STATUS_INACTIVE,
       },
     ];
 
@@ -259,6 +260,7 @@ export class ReportViewSearch extends React.Component {
               component={ReactSelect}
               placeholder={translate('sponsor.component.reportViewSearch.placeholderStatus')}
               options={statusOptions}
+              clearable={false}
               onChange={(e) => this.initSearch(e, 'status')}
             />
           </div>
