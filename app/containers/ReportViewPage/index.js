@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import { STATUS_ALL } from './constants';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
@@ -80,7 +81,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    const filters = { source: 1, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    const filters = { source: 1, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
     this.props.getReportsList(filters);
@@ -211,7 +212,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       notes = <div className="text-center btn-default-padding">{translate('sponsor.page.reportViewPage.noNotes')}</div>;
     }
 
-    const searchInitialValues = { source: 1 };
+    const searchInitialValues = { source: 1, status: STATUS_ALL };
 
     return (
       <div className="container-fluid sponsor-portal report-view-page">
