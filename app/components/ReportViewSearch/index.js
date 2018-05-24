@@ -284,6 +284,7 @@ export class ReportViewSearch extends React.Component {
             <DateRangePicker
               onChange={this.handleChange}
               moveRangeOnFirstSelection={false}
+              showMonthAndYearPickers={false}
               months={2}
               direction="horizontal"
               ranges={[this.state.predefined]}

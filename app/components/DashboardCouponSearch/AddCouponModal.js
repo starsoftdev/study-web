@@ -345,6 +345,7 @@ class AddCouponModal extends React.Component { // eslint-disable-line react/pref
               className="calendar custom-calendar"
               ref={(calendar) => { this.calendar = calendar; }}
               minDate={minDate ? minDate.toDate() : undefined}
+              showMonthAndYearPickers={false}
             />
             <div className="current-date" onClick={this.navigateToday}>
               Today: {currentDate.format('dddd, MMMM Do, YYYY')}

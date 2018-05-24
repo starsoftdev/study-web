@@ -144,6 +144,7 @@ class ScheduledPatientModal extends React.Component {
             <Calendar
               className="calendar custom-calendar"
               onChange={this.handleSelect}
+              showMonthAndYearPickers={false}
               date={calendarDate}
               ref={(calendar) => { this.calendar = calendar; }}
             />

@@ -143,6 +143,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
             <DateRangePicker
               onChange={this.handleChange}
               moveRangeOnFirstSelection={false}
+              showMonthAndYearPickers={false}
               months={2}
               direction="horizontal"
               ranges={[predefined]}
