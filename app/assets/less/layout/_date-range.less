@@ -102,6 +102,9 @@
     display: inline-block !important;
     width: calc(~"100% - 207px") !important;
     border-left: 2px solid #f78e1e !important;
+    .rdrMonthAndYearPickers {
+      display: none;
+    }
     .rdrDateDisplayWrapper {
       display: none;
     }
@@ -109,6 +112,8 @@
       border: 2px solid #f78e1e;
       border-top: none;
       .rdrMonth {
+        width: 100%;
+        position: relative;
         &:first-child {
           border-right: 1px solid #f78e1e;
         }
@@ -118,11 +123,14 @@
         .rdrMonthName {
           padding: 2px 0 5px;
           text-align: center;
-          background: #ffc689;
-          font-weight: bold;
+          font-weight: 600;
+          font-size: 20px;
           color: #fff;
           text-transform: uppercase;
-          border-bottom: 2px solid #f78e1e;
+          width: 100%;
+          position: absolute;
+          top: -35px;
+          left: 0;
         }
         .rdrDays .rdrDay {
           .rdrStartEdge, .rdrEndEdge {
@@ -192,6 +200,7 @@
       outline: none;
       border-radius: 50%;
       float: right;
+      z-index: 2;
       i {
         text-align: center;
         width: 29px;
@@ -224,6 +233,12 @@
           background: #fff;
         }
       }
+    }
+    .rdrMonthAndYearPickers {
+      font-size: 20px;
+      line-height: 25px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
   }
   .rdrMonths {

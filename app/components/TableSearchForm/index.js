@@ -187,6 +187,7 @@ export default class TableSearchForm extends Component { // eslint-disable-line 
             <DateRangePicker
               onChange={this.handleChange}
               moveRangeOnFirstSelection={false}
+              showMonthAndYearPickers={false}
               months={2}
               direction="horizontal"
               ranges={[state.predefined]}
