@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 
 function SiteLocationInfo({ indications, site, protocol }) {
-  const formattedIndication = indications.map((item, index) =>
-    (index === 0 ? item.indication.name : `, ${item.indication.name}`)
+  // FIXME: We're choosing the first indication here. It should be handled better
+  const indication = indications.find(item =>
+    item.indication && item.indication.name
   );
 
   return (
@@ -11,7 +12,7 @@ function SiteLocationInfo({ indications, site, protocol }) {
         <span>{site.name}</span>
         <span>{site.address}</span>
         <span>{protocol.number}</span>
-        <span>{formattedIndication}</span>
+        <span>{indication && indication.indication.name}</span>
         <span>{site.phoneNumber}</span>
       </div>
     </div>
