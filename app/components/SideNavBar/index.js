@@ -91,7 +91,7 @@ class SideNavBar extends React.Component { // eslint-disable-line react/prefer-s
                       <div>{item.lowerText}</div>
                     </Link>
                   </li>
-                :
+                  :
                   <li key={index}>
                     <Link to={item.link} activeClassName="active">
                       <i className={item.icon} />
