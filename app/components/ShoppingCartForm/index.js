@@ -283,22 +283,22 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
             <div className="coupon-area">
               {couponSelected
                 ?
-                  <input
-                    className="form-control"
-                    value={couponId}
-                    type="text"
-                    name="couponId"
-                    disabled
-                  />
+                <input
+                  className="form-control"
+                  value={couponId}
+                  type="text"
+                  name="couponId"
+                  disabled
+                />
                 :
-                  <Field
-                    name="couponId"
-                    component={Input}
-                    type="text"
-                    placeholder={translate('portals.component.shoppingCartForm.couponPlaceholder')}
-                    className={classNames({ couponSelected })}
-                    onBlur={this.onFetchCoupon}
-                  />
+                <Field
+                  name="couponId"
+                  component={Input}
+                  type="text"
+                  placeholder={translate('portals.component.shoppingCartForm.couponPlaceholder')}
+                  className={classNames({ couponSelected })}
+                  onBlur={this.onFetchCoupon}
+                />
               }
               <Button
                 bsStyle="primary"
