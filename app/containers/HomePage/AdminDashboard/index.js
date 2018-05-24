@@ -690,6 +690,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
                 <DateRangePicker
                   onChange={this.handleChange}
                   moveRangeOnFirstSelection={false}
+                  showMonthAndYearPickers={false}
                   months={2}
                   direction="horizontal"
                   ranges={[this.state.dateRange]}
