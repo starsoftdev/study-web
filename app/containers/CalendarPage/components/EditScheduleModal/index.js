@@ -274,6 +274,7 @@ export default class EditScheduleModal extends Component {
                 onChange={this.handleDateSelect}
                 className="calendar custom-calendar"
                 ref={(calendar) => { this.calendar = calendar; }}
+                showMonthAndYearPickers={false}
               />
               <div className="current-date" onClick={this.navigateToday}>
                 {translate('portals.component.calendarPage.editScheduleModal.today')} {currentDate.format(translate('portals.component.calendarPage.editScheduleModal.displayMask'))}
