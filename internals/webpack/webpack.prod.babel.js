@@ -117,7 +117,7 @@ module.exports = require('./webpack.base.babel')({
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
-        sourceMap: false,
+        sourceMap: true,
         uglifyOptions: {
           compress: {
             inline: false
