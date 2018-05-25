@@ -112,6 +112,8 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].[chunkhash].js',
   },
 
+  mode: 'production',
+
   optimization: {
     minimizer: [
       new UglifyJsPlugin({
