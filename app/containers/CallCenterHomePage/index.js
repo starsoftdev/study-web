@@ -3,12 +3,20 @@
  *
  */
 
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
 import { map } from 'lodash';
 import { Link } from 'react-router';
 import Modal from 'react-bootstrap/lib/Modal';
+import { createStructuredSelector } from 'reselect';
+
+import { fetchIndications } from '../../containers/App/actions';
+import { selectIndications, selectCurrentUser } from '../App/selectors';
+
+import { fetchPatients } from './actions';
+import { selectFetchedPatients } from './selectors';
 
 import CenteredModal from '../../components/CenteredModal';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -24,13 +32,24 @@ import './style.less';
 const formName = 'callCenterHomePage';
 @reduxForm({ form: formName })
 
-export default class CallCenterHomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
-  constructor(props) {
-    super(props);
+class CallCenterHomePage extends Component {
 
-    this.state = {
-      addUserModalOpen: false,
-    };
+  static propTypes = {
+    currentUser: PropTypes.object.isRequired,
+    fetchIndications: PropTypes.func.isRequired,
+    fetchPatients: PropTypes.func,
+    patients: PropTypes.object,
+    indications: PropTypes.array,
+  };
+
+  state = {
+    addUserModalOpen: false,
+  }
+
+  componentDidMount() {
+    const { currentUser, fetchIndications, fetchPatients } = this.props;
+    fetchIndications();
+    fetchPatients(currentUser.roleForCallCenter.id);
   }
 
   openFiltersModal() {
@@ -42,9 +61,11 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
   }
 
   render() {
-    const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
+    const { patients, indications } = this.props;
 
+    const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
+
+    siteOptions.unshift({ label: 'All', value: '0' });
     return (
       <div id="callcentermain" className="not-found-page">
         <form action="#" className="form-search clearfix">
@@ -110,10 +131,25 @@ export default class CallCenterHomePage extends React.Component { // eslint-disa
         </div>
 
         <div className="content">
-          <CallDiv />
+          <CallDiv patients={patients} indications={indications} />
           <CallCalendar />
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  patients: selectFetchedPatients(),
+  indications: selectIndications(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchIndications: () => dispatch(fetchIndications()),
+    fetchPatients: (clientRoleId) => dispatch(fetchPatients(clientRoleId)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CallCenterHomePage);
