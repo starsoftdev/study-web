@@ -18,7 +18,7 @@ module.exports = (options) => ({
     path: path.resolve(process.cwd(), 'build'),
     publicPath: '/',
   }, options.output), // Merge with env dependent settings
-  //optimization: options.optimization || {},
+  optimization: options.optimization || {},
   module: {
     rules: [
       {
