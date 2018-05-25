@@ -926,7 +926,7 @@
     .emails-info-holder {
       width: 100%;
       height: 100%;
-      overflow: auto;
+      overflow: hidden;
       border-left: #f78e1e solid 2px;
       border-right: #f78e1e solid 2px;
       border-bottom: #f78e1e solid 2px;
@@ -1074,7 +1074,7 @@
       }
 
       .message-box {
-        height: 100%;
+        height: calc(~"100% - 80px");
       }
 
       .subject, .sender {
@@ -1088,7 +1088,7 @@
         resize: none;
         border-width: 0;
         padding: 8px 25px 10px;
-        height: calc(~'100% - 80px');
+        height: 100%;
       }
     }
     .textarea {
