@@ -838,9 +838,21 @@ export default function createRoutes(store) {
       path: '/app/cc/home',
       name: 'callCenterHomePage',
       getComponent(nextState, cb) {
-        System.import('./containers/CallCenterHomePage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          System.import('./containers/CallCenterHomePage/reducer'),
+          System.import('./containers/CallCenterHomePage/sagas'),
+          System.import('./containers/CallCenterHomePage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('callCenterHomePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
       path: '/app/cc/patient/:id',
