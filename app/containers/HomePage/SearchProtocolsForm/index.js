@@ -3,19 +3,19 @@ import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Button from 'react-bootstrap/lib/Button';
-import Input from '../../../components/Input/index';
+import _ from 'lodash';
 
 import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectSearchProtocolsFormError } from './selectors';
-import { selectProtocols, selectProtocolNumbers } from '../selectors';
+import { selectProtocols, selectProtocolNumbers, selectIndications } from '../selectors';
 import formValidator from './validator';
 import { translate } from '../../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
   protocolNumbers: selectProtocolNumbers(),
+  indications: selectIndications(),
   hasError: selectSearchProtocolsFormError(),
 });
 
@@ -26,17 +26,31 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
   static propTypes = {
     protocols: PropTypes.object,
     protocolNumbers: PropTypes.object,
+    indications: PropTypes.object,
     hasError: PropTypes.bool,
     handleSubmit: PropTypes.func,
     onSubmit: PropTypes.func,
   };
 
   render() {
-    const { protocols, hasError, handleSubmit } = this.props;
-    const siteLocationOptions = [{ label: translate('common.constants.all'), value: 'all' }];
+    const { protocols, hasError, handleSubmit, protocolNumbers, indications } = this.props;
+    const protocolNumberOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(protocolNumbers.details.map(row => ({
+      label: row.number,
+      value: row.number,
+    })));
+    const indicationOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(indications.details.map(row => ({
+      label: row.name,
+      value: row.id,
+    })));
 
-    const statusOptions = [{ label: translate('common.constants.all'), value: 'all' }, { label: translate('sponsor.component.searchProtocolsForm.statusActive'), value: 'active' }, { label: translate('sponsor.component.searchProtocolsForm.statusInactive'), value: 'inactive' }];
+    let croOptions = [{ label: translate('common.constants.all'), value: 'all' }].concat(protocols.details.filter(protocol => ((
+      protocol.croName
+    ))).map(row => ({
+      label: row.croName,
+      value: row.croName,
+    })));
 
+    croOptions = _.uniqBy(croOptions, 'value');
 
     return (
 
@@ -46,25 +60,21 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
         </div>
         <div className="fields-holder clearfix">
           <div className="pull-left custom-select">
-            <div className="has-feedback">
-              <Button className="btn-enter">
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <Field
-                name="name"
-                component={Input}
-                type="text"
-                placeholder={translate('sponsor.component.searchProtocolsForm.search')}
-                className="keyword-search"
-              />
-            </div>
+            <Field
+              name="protocol"
+              component={ReactSelect}
+              placeholder={translate('sponsor.component.searchProtocolsForm.protocolPlaceholder')}
+              options={protocolNumberOptions}
+              disabled={protocols.fetching}
+              onChange={(e) => { this.props.onSubmit({ protocol: e }); }}
+            />
           </div>
           <div className="pull-left custom-select">
             <Field
               name="indication"
               component={ReactSelect}
-              placeholder={translate('sponsor.component.searchProtocolsForm.siteLocationPlaceholder')}
-              options={siteLocationOptions}
+              placeholder={translate('sponsor.component.searchProtocolsForm.indicationPlaceholder')}
+              options={indicationOptions}
               disabled={protocols.fetching}
               onChange={(e) => { this.props.onSubmit({ indication: e }); }}
             />
@@ -73,8 +83,8 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
             <Field
               name="cro"
               component={ReactSelect}
-              placeholder={translate('sponsor.component.searchProtocolsForm.statusPlaceholder')}
-              options={statusOptions}
+              placeholder={translate('sponsor.component.searchProtocolsForm.croPlaceholder')}
+              options={croOptions}
               disabled={protocols.fetching}
               onChange={(e) => { this.props.onSubmit({ cro: e }); }}
             />
