@@ -12,9 +12,16 @@ import { selectCurrentUser, selectClientSites, selectProtocols } from '../App/se
 
 import { fetchPatient } from './actions';
 import { selectSelectedPatient } from './selectors';
+import {
+  selectSocket,
+} from '../GlobalNotifications/selectors';
 
 import PatientInfo from './PatientInfo';
 import SiteLocationInfo from './SiteLocationInfo';
+import TextSection from './PatientDetail/TextSection';
+import NotesSection from './PatientDetail/NotesSection';
+import EmailSection from './PatientDetail/EmailSection';
+
 import './styles.less';
 
 const questionnaireUrl = 'https://s3-us-west-2.amazonaws.com/static-assets.studykik.com/Advertising+Scripts+-+Prescreening+Questionnaire+-+StudyKIK+-+Osman.pdf';
@@ -31,10 +38,12 @@ class CallCenterPatientPage extends Component {
     patient: PropTypes.object,
     protocols: PropTypes.object,
     sites: PropTypes.object,
+    socket: React.PropTypes.any,
   };
 
   state = {
     carouselIndex: 0,
+    socketBinded: false,
   };
 
   componentWillMount() {
@@ -51,11 +60,13 @@ class CallCenterPatientPage extends Component {
 
   render() {
     const { carouselIndex } = this.state;
-    const { patient, protocols, sites } = this.props;
-
+    const { patient, protocols, sites, socket, currentUser } = this.props;
+    let formattedPatient;
     let siteForPatient;
     let protocolForPatient;
     let patientIndications;
+    let studyId;
+    let ePMS;
 
     if (patient && patient.details) {
       if (sites && sites.details && sites.details.length > 0) {
@@ -70,6 +81,12 @@ class CallCenterPatientPage extends Component {
       }
 
       patientIndications = patient.details.patientIndications;
+      formattedPatient = Object.assign({}, patient.details, {
+        patientCategoryId: patient.details.studyPatientCategory.patient_category_id,
+      });
+
+      studyId = patient.details.studyPatientCategory.study_id;
+      ePMS = patient.details.studyPatientCategory.study.patientMessagingSuite;
     }
 
     return (
@@ -95,7 +112,7 @@ class CallCenterPatientPage extends Component {
           </form>
         </div>
 
-        <div className="content">
+        <div className="page-content">
           <div className="left-section">
             <div className="wrapper">
               <PatientInfo patient={patient} />
@@ -108,23 +125,33 @@ class CallCenterPatientPage extends Component {
             </object>
           </div>
           <div className="right-section">
-            <div id="carousel-example-generic" className="carousel slide popup-slider">
-              <ol className="carousel-indicators">
-                <li className={classNames({ active: carouselIndex === 0 })} onClick={() => this.handleSelectCarousel(0)}>
-                  {translate('container.page.callCenterPatient.carousel.tab.text')}
-                </li>
-                <li className={classNames({ active: carouselIndex === 1 })} onClick={() => this.handleSelectCarousel(1)}>
-                  {translate('container.page.callCenterPatient.carousel.tab.note')}
-                </li>
-                <li className={classNames({ active: carouselIndex === 2 })} onClick={() => this.handleSelectCarousel(2)}>
-                  {translate('container.page.callCenterPatient.carousel.tab.email')}
-                </li>
-                <li className={classNames({ active: carouselIndex === 3 })} onClick={() => this.handleSelectCarousel(3)}>
-                  {translate('container.page.callCenterPatient.carousel.tab.calendar')}
-                </li>
-              </ol>
-              <div className="carousel-inner" role="listbox">
-                {/* TODO: Content here */}
+            <div className="column">
+              <div id="carousel-example-generic" className="carousel slide popup-slider">
+                <ol className="carousel-indicators">
+                  <li className={classNames({ active: carouselIndex === 0 })} onClick={() => this.handleSelectCarousel(0)}>
+                    {translate('container.page.callCenterPatient.carousel.tab.text')}
+                  </li>
+                  <li className={classNames({ active: carouselIndex === 1 })} onClick={() => this.handleSelectCarousel(1)}>
+                    {translate('container.page.callCenterPatient.carousel.tab.note')}
+                  </li>
+                  <li className={classNames({ active: carouselIndex === 2 })} onClick={() => this.handleSelectCarousel(2)}>
+                    {translate('container.page.callCenterPatient.carousel.tab.email')}
+                  </li>
+                  <li className={classNames({ active: carouselIndex === 3 })} onClick={() => this.handleSelectCarousel(3)}>
+                    {translate('container.page.callCenterPatient.carousel.tab.calendar')}
+                  </li>
+                </ol>
+                {}
+                {
+                  /* TODO: Content here */
+                  patient && patient.details && (
+                  <div className="carousel-inner" role="listbox">
+                    <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                    {<NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />}
+                    {<EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />}
+                  </div>
+                  )
+                }
               </div>
             </div>
           </div>
@@ -139,6 +166,7 @@ const mapStateToProps = createStructuredSelector({
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
   sites: selectClientSites(),
+  socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
