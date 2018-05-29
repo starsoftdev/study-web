@@ -110,8 +110,6 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
               <div className="area">
                 <div className="pull-right">
                   <Button bsStyle="default" className="btn-view-patients" onClick={this.onViewClick}>{translate('sponsor.component.protocolItem.viewReport')}</Button>
-                  <Button disabled className="btn btn-primary lightbox-opener">{translate('sponsor.component.protocolItem.renew')}</Button>
-                  <Button disabled className="btn btn-danger lightbox-opener">{translate('sponsor.component.protocolItem.addSite')}</Button>
                 </div>
               </div>
             </div>

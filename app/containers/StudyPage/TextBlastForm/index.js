@@ -352,7 +352,7 @@ class TextBlastForm extends React.Component {
                 </ul>
               </div>
               <div className="category">
-                <strong className="heading">{translate('client.component.textBlastModal.source')}</strong>
+                <strong className="heading">{translate('client.component.textBlastModal.media')}</strong>
                 <ul className="check-list list-unstyled">
                   <li>
                     <Field

@@ -79,8 +79,8 @@ export class DashboardSponsorTable extends React.Component { // eslint-disable-l
               {
                 sponsors.map((item, index) => (
                   <RowItem key={index} item={item} editSponsor={this.props.editSponsor} deleteSponsor={this.props.deleteSponsor} editSponsorProcess={this.props.editSponsorProcess} />
-              ))
-            }
+                ))
+              }
             </tbody>
             <tfoot>
               <tr>

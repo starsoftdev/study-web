@@ -294,7 +294,7 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
                       {translate('client.component.patientsList.tableTitleStatus')}<i className="caret-arrow" />
                     </div>
                     <div onClick={this.sortBy} data-sort="source" className={`th ${(this.props.paginationOptions.activeSort === 'source') ? this.props.paginationOptions.activeDirection : ''}`}>
-                      {translate('client.component.patientsList.tableTitleSource')}<i className="caret-arrow" />
+                      {translate('client.component.patientsList.tableTitleMedia')}<i className="caret-arrow" />
                     </div>
                   </div>
                 </div>
@@ -330,17 +330,17 @@ class PatientsList extends Component { // eslint-disable-line react/prefer-state
           </Modal>
           {(chat)
             ?
-              <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
-                <Modal.Header>
-                  <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
-                  <a className="lightbox-close close" onClick={this.closeRenewModal}>
-                    <i className="icomoon-icon_close" />
-                  </a>
-                </Modal.Header>
-                <Modal.Body>
-                  <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
-                </Modal.Body>
-              </Modal>
+            <Modal className="chat-patient" dialogComponentClass={CenteredModal} show={chatModalShown} onHide={this.closeChat}>
+              <Modal.Header>
+                <Modal.Title>Chat with {chat.firstName || ''} {chat.lastName || ''}</Modal.Title>
+                <a className="lightbox-close close" onClick={this.closeRenewModal}>
+                  <i className="icomoon-icon_close" />
+                </a>
+              </Modal.Header>
+              <Modal.Body>
+                <ChatForm chat={chat} sendStudyPatientMessages={sendStudyPatientMessages} />
+              </Modal.Body>
+            </Modal>
             : null
           }
         </div>

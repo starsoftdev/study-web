@@ -6,11 +6,15 @@
 
 import React from 'react';
 import moment from 'moment';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import PQSStatsForm from '../../components/PQSStatsForm';
 import CenteredModal from '../../components/CenteredModal/index';
+import { translate } from '../../../common/utilities/localization';
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { getMomentFromDate } from '../../utils/time';
 
 class PQSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -26,8 +30,9 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
     this.state = {
       showPopup: false,
       predefined : {
-        startDate: moment().clone().subtract(30, 'days'),
-        endDate: moment(),
+        startDate: moment().clone().subtract(30, 'days').toDate(),
+        endDate: new Date(),
+        key: 'selection',
       },
       selectedTime : {
         startDate: null,
@@ -59,17 +64,19 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
   }
 
   handleChange(which, payload) {
-    this.setState({
-      [which] : payload,
-    });
+    if (payload.selection) {
+      this.setState({
+        [which] : payload.selection,
+      });
+    }
   }
 
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
 
-    const uiStartDate = range.startDate.utc().format('MM/DD/YY');
-    const uiEndDate = range.endDate.utc().format('MM/DD/YY');
+    const uiStartDate = getMomentFromDate(range.startDate).utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
+    const uiEndDate = getMomentFromDate(range.endDate).utc().format(translate('sponsor.component.PQSModal.defaultDateMask'));
 
     this.setState({
       selectedTime: {
@@ -85,17 +92,17 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
-      const format = 'MMM D, YYYY';
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      const format = translate('sponsor.component.PQSModal.specialDateMask');
+      if (getMomentFromDate(predefined.startDate).isSameOrAfter(getMomentFromDate(predefined.endDate), 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {getMomentFromDate(predefined.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {getMomentFromDate(predefined.startDate).format(format)} - {getMomentFromDate(predefined.endDate).format(format)}
         </span>
       );
     }
@@ -104,17 +111,11 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
 
   render() {
     const { selectedTime, predefined } = this.state;
-    let startDate = (predefined.startDate) ? predefined.startDate : moment();
-    let endDate = (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
-    if (selectedTime.startDate && selectedTime.endDate) {
-      startDate = moment().clone().subtract(30, 'days');
-      endDate = moment();
-    }
     return (
       <div>
         <Modal dialogComponentClass={CenteredModal} dialogClassName={'pqs-stats-modal'} show={this.props.showModal} onHide={this.props.closePQSModal}>
           <Modal.Header>
-            <Modal.Title>Patient Qualification Suite Stats</Modal.Title>
+            <Modal.Title>{translate('sponsor.component.PQSModal.title')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.props.closePQSModal}>
               <i className="icomoon-icon_close" />
             </a>
@@ -133,19 +134,21 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
           keyboard
         >
           <Modal.Header>
-            <Modal.Title>Date Range</Modal.Title>
+            <Modal.Title>{translate('sponsor.component.PQSModal.dateRange')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.hidePopup}>
               <i className="icomoon-icon_close" />
             </a>
           </Modal.Header>
           <Modal.Body>
-            <DateRange
-              linkedCalendars
-              ranges={defaultRanges}
-              startDate={startDate}
-              endDate={endDate}
-              onInit={this.handleChange}
+            <DateRangePicker
               onChange={this.handleChange}
+              moveRangeOnFirstSelection={false}
+              showMonthAndYearPickers={false}
+              months={2}
+              direction="horizontal"
+              ranges={[predefined]}
+              staticRanges={defaultStaticRanges}
+              inputRanges={[]}
             />
             <div className="dateRange-helper">
               <div className="emit-border"><br /></div>
@@ -153,7 +156,7 @@ class PQSModal extends React.Component { // eslint-disable-line react/prefer-sta
                 <div className="btn-block text-right">
                   {this.renderDateFooter()}
                   <Button onClick={this.changeRange}>
-                    Submit
+                    {translate('sponsor.component.PQSModal.submit')}
                   </Button>
                 </div>
               </div>
