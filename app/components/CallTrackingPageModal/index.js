@@ -155,44 +155,47 @@ export class CallTrackingPageModal extends React.Component {
               onSubmit={this.submitCallTrackingForm}
               noValidate="novalidate"
             >
-              <div className="frame">
-                <div className="field-row">
-                  <strong className="label">
-                    <label>MEDIA TRACKING</label>
-                  </strong>
-                  <div className="field">
-                    <Field
-                      name="callTracking"
-                      component={Toggle}
-                    />
+              {
+                this.props.studyLeadSources.fetching ? <div className="frame"><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></div> :
+                  <div className="frame">
+                    <div className="field-row">
+                      <strong className="label">
+                        <label>MEDIA TRACKING</label>
+                      </strong>
+                      <div className="field">
+                        <Field
+                          name="callTracking"
+                          component={Toggle}
+                        />
+                      </div>
+                    </div>
+                    <div className="field-row">
+                      <FieldArray
+                        name="leadSource"
+                        component={RenderLeads}
+                        formValues={this.props.formValues}
+                        isAdmin
+                        messagingNumbers={messagingNumbers}
+                        initialLeadSources={this.props.studyLeadSources.details}
+                        deleteStudyLeadSource={this.props.deleteStudyLeadSource}
+                        fetchStudyLeadSources={this.props.fetchStudyLeadSources}
+                        deleteStudyLeadSourceProcess={this.props.deleteStudyLeadSourceProcess}
+                        deletedLeadSource={this.props.deletedLeadSource}
+                        initForm={this.initForm}
+                        landingPageUrl={landingPageUrl}
+                        studyId={studyId}
+                      />
+                    </div>
+                    <div className="field-row text-right">
+                      <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                        {editStudyLeadSourcesProcess.saving
+                          ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                          : <span>Update</span>
+                        }
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <div className="field-row">
-                  <FieldArray
-                    name="leadSource"
-                    component={RenderLeads}
-                    formValues={this.props.formValues}
-                    isAdmin
-                    messagingNumbers={messagingNumbers}
-                    initialLeadSources={this.props.studyLeadSources.details}
-                    deleteStudyLeadSource={this.props.deleteStudyLeadSource}
-                    fetchStudyLeadSources={this.props.fetchStudyLeadSources}
-                    deleteStudyLeadSourceProcess={this.props.deleteStudyLeadSourceProcess}
-                    deletedLeadSource={this.props.deletedLeadSource}
-                    initForm={this.initForm}
-                    landingPageUrl={landingPageUrl}
-                    studyId={studyId}
-                  />
-                </div>
-                <div className="field-row text-right">
-                  <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                    {editStudyLeadSourcesProcess.saving
-                      ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                      : <span>Update</span>
-                    }
-                  </Button>
-                </div>
-              </div>
+              }
             </Form>
           </div>
         </div>

@@ -196,7 +196,7 @@ class PatientDetailSection extends React.Component {
         </div>
         <div className="field-row">
           <strong className="label required">
-            <label htmlFor="new-patient-phone">{translate('client.component.patientDetailSection.labelCategory')}</label>
+            <label htmlFor="new-patient-phone">{translate('client.component.patientDetailSection.labelStatus')}</label>
           </strong>
           <div className="field patient-category">
             <Field
@@ -204,7 +204,7 @@ class PatientDetailSection extends React.Component {
               component={ReactSelect}
               options={categories}
               disabled={submitting}
-              placeholder={translate('client.component.patientDetailSection.placeholderCategory')}
+              placeholder={translate('client.component.patientDetailSection.placeholderStatus')}
               clearable={false}
             />
           </div>

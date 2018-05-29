@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import _ from 'lodash';
 
 import LoadingSpinner from '../../../components/LoadingSpinner';
+import { translate } from '../../../../common/utilities/localization';
 
 export class ReportViewTotals extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -30,26 +31,26 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   getTotalValues(props) {
     return props.sources.map(sourceObj => {
       let totals = {
-        count_not_contacted: 'N/A',
-        dnq: 'N/A',
-        action_needed: 'N/A',
-        scheduled: 'N/A',
-        consented: 'N/A',
-        screen_failed: 'N/A',
-        randomized: 'N/A',
-        call_attempted: 'N/A',
+        count_not_contacted: translate('sponsor.component.reportViewTotals.na'),
+        dnq: translate('sponsor.component.reportViewTotals.na'),
+        action_needed: translate('sponsor.component.reportViewTotals.na'),
+        scheduled: translate('sponsor.component.reportViewTotals.na'),
+        consented: translate('sponsor.component.reportViewTotals.na'),
+        screen_failed: translate('sponsor.component.reportViewTotals.na'),
+        randomized: translate('sponsor.component.reportViewTotals.na'),
+        call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       const source = sourceObj.id;
       if (props.totals.details[source]) {
         totals = {
-          count_not_contacted: (props.totals.details[source].count_not_contacted || props.totals.details[source].count_not_contacted === 0) ? parseInt(props.totals.details[source].count_not_contacted) : 'N/A',
-          dnq: (props.totals.details[source].dnq || props.totals.details[source].dnq === 0) ? parseInt(props.totals.details[source].dnq) : 'N/A',
-          action_needed: (props.totals.details[source].action_needed || props.totals.details[source].action_needed === 0) ? parseInt(props.totals.details[source].action_needed) : 'N/A',
-          scheduled: (props.totals.details[source].scheduled || props.totals.details[source].scheduled === 0) ? parseInt(props.totals.details[source].scheduled) : 'N/A',
-          consented: (props.totals.details[source].consented || props.totals.details[source].consented === 0) ? parseInt(props.totals.details[source].consented) : 'N/A',
-          screen_failed: (props.totals.details[source].screen_failed || props.totals.details[source].screen_failed === 0) ? parseInt(props.totals.details[source].screen_failed) : 'N/A',
-          randomized: (props.totals.details[source].randomized || props.totals.details[source].randomized === 0) ? parseInt(props.totals.details[source].randomized) : 'N/A',
-          call_attempted: (props.totals.details[source].call_attempted || props.totals.details[source].call_attempted === 0) ? parseInt(props.totals.details[source].call_attempted) : 'N/A',
+          count_not_contacted: (props.totals.details[source].count_not_contacted || props.totals.details[source].count_not_contacted === 0) ? parseInt(props.totals.details[source].count_not_contacted) : translate('sponsor.component.reportViewTotals.na'),
+          dnq: (props.totals.details[source].dnq || props.totals.details[source].dnq === 0) ? parseInt(props.totals.details[source].dnq) : translate('sponsor.component.reportViewTotals.na'),
+          action_needed: (props.totals.details[source].action_needed || props.totals.details[source].action_needed === 0) ? parseInt(props.totals.details[source].action_needed) : translate('sponsor.component.reportViewTotals.na'),
+          scheduled: (props.totals.details[source].scheduled || props.totals.details[source].scheduled === 0) ? parseInt(props.totals.details[source].scheduled) : translate('sponsor.component.reportViewTotals.na'),
+          consented: (props.totals.details[source].consented || props.totals.details[source].consented === 0) ? parseInt(props.totals.details[source].consented) : translate('sponsor.component.reportViewTotals.na'),
+          screen_failed: (props.totals.details[source].screen_failed || props.totals.details[source].screen_failed === 0) ? parseInt(props.totals.details[source].screen_failed) : translate('sponsor.component.reportViewTotals.na'),
+          randomized: (props.totals.details[source].randomized || props.totals.details[source].randomized === 0) ? parseInt(props.totals.details[source].randomized) : translate('sponsor.component.reportViewTotals.na'),
+          call_attempted: (props.totals.details[source].call_attempted || props.totals.details[source].call_attempted === 0) ? parseInt(props.totals.details[source].call_attempted) : translate('sponsor.component.reportViewTotals.na'),
         };
 
         let total = 0;
@@ -138,47 +139,47 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         {this.props.totals.fetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>}
         <ul className="list-inline list-stats">
           <li>
-            <strong className="heading"><span>MEDIA TYPE</span></strong>
+            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingMediaType')}</span></strong>
             { this.renderMediaType() }
           </li>
           <li>
-            <strong className="heading"><span>NEW<br /> PATIENT</span></strong>
+            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNewPatient') }} /></strong>
             { this.renderValues(totalValues, 'count_not_contacted') }
           </li>
           <li>
-            <strong className="heading"><span>CALL / TEXT<br /> ATTEMPTED</span></strong>
+            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
             { this.renderValues(totalValues, 'call_attempted') }
           </li>
           <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
-            <strong className="heading"><span>DNQ / NOT<br /> INTERESTED</span></strong>
+            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
             { this.renderValues(totalValues, 'dnq') }
           </li>
           <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
-            <strong className="heading"><span>ACTION NEEDED</span></strong>
+            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
             { this.renderValues(totalValues, 'action_needed') }
           </li>
           <li>
-            <strong className="heading"><span>SCHEDULED</span></strong>
+            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingScheduled')}</span></strong>
             { this.renderValues(totalValues, 'scheduled') }
           </li>
           <li>
-            <strong className="heading"><span>CONSENTED</span></strong>
+            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
             { this.renderValues(totalValues, 'consented') }
           </li>
           <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
-            <strong className="heading"><span>SCREEN<br /> FAILED</span></strong>
+            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
             { this.renderValues(totalValues, 'screen_failed') }
           </li>
           <li>
-            <strong className="heading"><span>RANDOMIZED</span></strong>
+            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingRandomized')}</span></strong>
             { this.renderValues(totalValues, 'randomized') }
           </li>
           <li>
-            <strong className="heading"><span>TOTAL</span></strong>
+            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingTotal')}</span></strong>
             { this.renderValues(totalValues, 'total') }
           </li>
         </ul>
-        <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? 'See less' : 'See more'}</a>
+        <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
       </div>
     );
   }

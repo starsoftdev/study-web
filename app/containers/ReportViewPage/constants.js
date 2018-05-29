@@ -24,3 +24,7 @@ export const GET_CATEGORY_NOTES_SUCCESS = 'app/ReportViewPage/GET_CATEGORY_NOTES
 export const GET_CATEGORY_NOTES_ERROR = 'app/ReportViewPage/GET_CATEGORY_NOTES_ERROR';
 
 export const CLEAR_REPORT_LIST = 'app/ReportViewPage/CLEAR_REPORT_LIST';
+
+export const STATUS_ALL = 'All';
+export const STATUS_ACTIVE = 'active';
+export const STATUS_INACTIVE = 'inactive';

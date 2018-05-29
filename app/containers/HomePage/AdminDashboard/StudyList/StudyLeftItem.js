@@ -66,9 +66,9 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
       return str;
     };
 
-    const sm = item.sm_user_first_name ? `SM: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'SM: N/A';
+    const sm = item.sm_user_first_name ? `AO: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'AO: N/A';
     const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
-    const ae = item.ae_user_first_name ? `AE: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'AE: N/A';
+    const ae = item.ae_user_first_name ? `CC: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'CC: N/A';
 
     // campaign_datefrom and campaign_dateto can be null, if it set to TBD
     const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);

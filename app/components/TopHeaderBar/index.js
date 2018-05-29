@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
-import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
-import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import studykikLogo from '../../assets/images/logo.svg';
 import AddCreditsModal from '../../components/AddCreditsModal';
@@ -115,15 +113,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
     const { userRoleType, currentUser, patientMessageUnreadCount } = this.props;
     let purchasable = true;
 
-    const tooltip = (
-      <Tooltip
-        id={'ms-tooltip'}
-        className="tooltop-inner"
-      >
-        {translate('portals.component.topHeaderBar.comingSoon')}
-      </Tooltip>
-    );
-
     if (userRoleType === 'client') {
       purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
       const credits = this.props.clientCredits.details.customerCredits || 0;
@@ -141,22 +130,6 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
 
             <NotificationBox currentUser={this.props.currentUser} />
 
-            <OverlayTrigger
-              placement="bottom"
-              overlay={tooltip}
-            >
-              <div className="emails pull-left">
-                <a
-                  className="opener"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                >
-                  <i className="icomoon-envelop" />
-                  <span className="counter">1</span>
-                </a>
-              </div>
-            </OverlayTrigger>
-
             <HelpMenu />
 
             <a
@@ -164,9 +137,9 @@ class TopHeaderBar extends React.Component { // eslint-disable-line react/prefer
               onClick={this.showGlobalPMSModal}
             >
               {patientMessageUnreadCount > 0
-               ? <span className="counter">{patientMessageUnreadCount}</span>
-               : null
-               }
+                ? <span className="counter">{patientMessageUnreadCount}</span>
+                : null
+              }
               <i className="icomoon-credit" />
             </a>
 
