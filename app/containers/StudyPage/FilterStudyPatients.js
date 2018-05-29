@@ -198,7 +198,7 @@ class FilterStudyPatientsForm extends Component {
               className="field"
               options={sourceOptions}
               disabled={submitting || loading}
-              placeholder={translate('client.component.filterStudyPatientsForm.sourcePlaceholder')}
+              placeholder={translate('client.component.filterStudyPatientsForm.mediaPlaceholder')}
               clearable={false}
               onChange={(event) => this.searchPatient(event, 'source')}
             />

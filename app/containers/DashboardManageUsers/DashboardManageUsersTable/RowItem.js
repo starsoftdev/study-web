@@ -8,6 +8,19 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     editUserClick: PropTypes.func,
   };
 
+  getRoleName = (roleName) => {
+    if (roleName === 'sm') {
+      return 'Ad Operation';
+    }
+    if (roleName === 'ae') {
+      return 'Call Center';
+    }
+    if (roleName === 'bd') {
+      return 'Business Development';
+    }
+    return roleName;
+  }
+
   render() {
     return (
       <tr>
@@ -21,7 +34,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {normalizePhoneDisplay(this.props.item.phone)}
         </td>
         <td className="text-uppercase">
-          {this.props.item.role_name}
+          {this.getRoleName(this.props.item.role_name)}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={() => { this.props.editUserClick(this.props.item); }}>

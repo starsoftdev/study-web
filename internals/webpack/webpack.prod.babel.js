@@ -4,29 +4,15 @@ require('dotenv').load();
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OfflinePlugin = require('offline-plugin');
 const AssetsPlugin = require('assets-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const plugins = [
-  new webpack.optimize.CommonsChunkPlugin({
-    name: ['vendor'],
-    children: true,
-    minChunks: 2,
-    async: true,
-  }),
-
   // Minify optimize the JavaScript
   new webpack.LoaderOptionsPlugin({
     minimize: true
-  }),
-
-  // optimize the JavaScript
-  new webpack.optimize.UglifyJsPlugin({
-    warnings: false,
-    drop_console: true,
-    drop_debugger: true,
-    dead_code: true,
   }),
 
   // Minify and optimize the index.html
@@ -68,8 +54,8 @@ const plugins = [
   }),
 
   // Extract the CSS into a seperate file
-  new ExtractTextPlugin({
-    filename: '[name].[contenthash].css',
+  new MiniCssExtractPlugin({
+    filename: "[name].[contenthash].css",
   }),
 
   // Put it in the end to capture all the HtmlWebpackPlugin's
@@ -110,7 +96,7 @@ if (process.env.ENABLE_SENTRY_PLUGIN && process.env.ENABLE_SENTRY_PLUGIN !== 'fa
 
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
- entry: {
+  entry: {
     'app': [
       'babel-polyfill', // Necessary for browser usage
       path.join(process.cwd(), 'app/app.js'),
@@ -118,7 +104,7 @@ module.exports = require('./webpack.base.babel')({
     'corporate': [
       'babel-polyfill', // Necessary for browser usage
       path.join(process.cwd(), 'corporate/app.js'),
-    ],
+    ]
   },
 
   // Utilize long-term caching by adding content hashes (not compilation hashes) to compiled assets
@@ -126,19 +112,32 @@ module.exports = require('./webpack.base.babel')({
     filename: '[name].[chunkhash].js',
   },
 
-  // We use ExtractTextPlugin so we get a seperate CSS file instead
-  // of the CSS being in the JS and injected as a style tag
-  lessLoaders: ExtractTextPlugin.extract({
-    fallback: 'style-loader',
-    use: [
-      {
-        loader: 'css-loader',
-      },
-      {
-        loader: 'less-loader',
-      },
+  mode: 'production',
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          compress: {
+            inline: false
+          }
+        }
+      })
     ]
-  }),
+  },
+
+  // We use MiniCssExtractPlugin so we get a seperate CSS file instead
+  // of the CSS being in the JS and injected as a style tag
+  lessLoaders: [
+  {
+    loader: MiniCssExtractPlugin.loader,
+  }, {
+    loader: 'css-loader',
+  }, {
+    loader: 'less-loader',
+  }
+  ],
 
   plugins: plugins
 });
