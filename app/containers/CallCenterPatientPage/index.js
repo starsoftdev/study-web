@@ -145,11 +145,11 @@ class CallCenterPatientPage extends Component {
                 {
                   /* TODO: Content here */
                   patient && patient.details && (
-                  <div className="carousel-inner" role="listbox">
-                    <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                    {<NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />}
-                    {<EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />}
-                  </div>
+                    <div className="carousel-inner" role="listbox">
+                      <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                      {<NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />}
+                      {<EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />}
+                    </div>
                   )
                 }
               </div>
