@@ -48,6 +48,7 @@ class CallCenterHomePage extends Component {
 
   componentDidMount() {
     const { currentUser, fetchIndications, fetchPatients } = this.props;
+    console.log('cc', currentUser);
     fetchIndications();
     fetchPatients(currentUser.roleForCallCenter.id);
   }
