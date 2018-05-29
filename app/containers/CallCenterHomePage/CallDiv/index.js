@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { translate } from '../../../../common/utilities/localization';
 import _ from 'lodash';
+import { translate } from '../../../../common/utilities/localization';
 
 import './style.less';
 
