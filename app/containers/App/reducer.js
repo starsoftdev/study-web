@@ -124,6 +124,8 @@ import {
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
+  PRIVACY_REQUEST_SUCCESS,
+  RESET_PRIVACY_REQUEST_SUCCESS,
 
   GET_CNS_INFO_SUCCESS,
   SUBMIT_CNS,
@@ -180,6 +182,7 @@ const initialState = {
     getProposalSuccess: null,
     learnAboutFutureTrialsSuccess: null,
     newContactsSuccess: null,
+    privacyRequest: null,
     sources: [],
     levels: [],
     landing: {
@@ -524,6 +527,16 @@ export default function appReducer(state = initialState, action) {
     case RESET_NEW_CONTACT_SUCCESS:
       baseDataInnerState = {
         newContactsSuccess: null,
+      };
+      break;
+    case PRIVACY_REQUEST_SUCCESS:
+      baseDataInnerState = {
+        privacyRequest: true,
+      };
+      break;
+    case RESET_PRIVACY_REQUEST_SUCCESS:
+      baseDataInnerState = {
+        privacyRequestSuccess: null,
       };
       break;
     case PATIENT_SUBSCRIPTION_ERROR:

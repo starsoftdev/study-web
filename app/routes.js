@@ -276,23 +276,6 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/badges',
-      name: 'badgesPage',
-      getComponent(nextState, cb) {
-        const importModules = Promise.all([
-          System.import('./containers/BadgesPage'),
-        ]);
-
-        const renderRoute = loadModule(cb);
-
-        importModules.then(([component]) => {
-          renderRoute(component);
-        });
-
-        importModules.catch(errorLoading);
-      },
-    }, {
-      onEnter: redirectToLogin,
       path: '/app/list-new-study',
       name: 'listNewStudyPage',
       getComponent(nextState, cb) {
@@ -425,8 +408,8 @@ export default function createRoutes(store) {
       getComponent(nextState, cb) {
         if (isNaN(nextState.params.id)) {
           System.import('./containers/NotFoundPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+            .then(loadModule(cb))
+            .catch(errorLoading);
         } else {
           const importModules = Promise.all([
             System.import('./containers/StudyPage/reducer'),
@@ -855,17 +838,41 @@ export default function createRoutes(store) {
       path: '/app/cc/home',
       name: 'callCenterHomePage',
       getComponent(nextState, cb) {
-        System.import('./containers/CallCenterHomePage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          System.import('./containers/CallCenterHomePage/reducer'),
+          System.import('./containers/CallCenterHomePage/sagas'),
+          System.import('./containers/CallCenterHomePage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('callCenterHomePage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
-      path: '/app/cc/patient',
+      path: '/app/cc/patient/:id',
       name: 'callCenterPatientPage',
       getComponent(nextState, cb) {
-        System.import('./containers/CallCenterPatientPage')
-          .then(loadModule(cb))
-          .catch(errorLoading);
+        const importModules = Promise.all([
+          System.import('./containers/CallCenterPatientPage/reducer'),
+          System.import('./containers/CallCenterPatientPage/sagas'),
+          System.import('./containers/CallCenterPatientPage'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('callCenterPatientPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
       },
     }, {
       path: '/app*',

@@ -227,7 +227,7 @@ export default class UploadPatientsForm extends Component {
       fetchFilteredProtcols(currentUser.roleForClient.id, location);
       siteLocation = location;
     } else {
-        // clear the protocol value if there is no site id
+      // clear the protocol value if there is no site id
       change('protocol', null);
       change('indication', null);
       clearStudySources();
@@ -417,10 +417,10 @@ export default class UploadPatientsForm extends Component {
           <div className="field-row status">
             <span className="step-one">
             1. Upload Patients List
-          </span>
+            </span>
             <span className={`step-two ${(this.state.showPreview) ? 'active' : ''}`}>
             2. Preview & Finish
-          </span>
+            </span>
           </div>
           {(!showPreview && !isImporting) &&
             <div className="instructions">
@@ -429,7 +429,7 @@ export default class UploadPatientsForm extends Component {
                 <span className="first-row">Please upload an Excel file up to 5,000 rows and less then 5MB in size.</span>
                   Please format the first row of your colums with the proper column names
                   i.e.: "Full Name", "Email",  "Phone",  "DOB",  "Gender",  and "BMI".
-                  <span className="download-template" onClick={this.downloadExample}>Download Template</span>
+                <span className="download-template" onClick={this.downloadExample}>Download Template</span>
               </span>
               <div className="examples">
                 <span className="title">* Only the Phone field is required; all other fields are optional.</span>
