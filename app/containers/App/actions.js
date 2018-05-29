@@ -162,6 +162,10 @@ import {
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
 
+  PRIVACY_REQUEST,
+  PRIVACY_REQUEST_SUCCESS,
+  RESET_PRIVACY_REQUEST_SUCCESS,
+
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
@@ -1140,6 +1144,27 @@ export function newContactSuccess(payload) {
 export function resetNewContactSuccess(payload) {
   return {
     type: RESET_NEW_CONTACT_SUCCESS,
+    payload,
+  };
+}
+
+export function privacyRequest(params) {
+  return {
+    type: PRIVACY_REQUEST,
+    params,
+  };
+}
+
+export function privacyRequestSuccess(payload) {
+  return {
+    type: PRIVACY_REQUEST_SUCCESS,
+    payload,
+  };
+}
+
+export function resetPrivacyRequestSuccess(payload) {
+  return {
+    type: RESET_PRIVACY_REQUEST_SUCCESS,
     payload,
   };
 }
