@@ -29,6 +29,9 @@ export function* fetchPatientWatcher() {
       const filter = JSON.stringify({
         include: [
           {
+            relation: 'site',
+          },
+          {
             relation: 'patientIndications',
             scope: {
               include: ['indication'],
