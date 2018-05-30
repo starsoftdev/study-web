@@ -21,6 +21,11 @@ const plugins = [
     chunks: ['corporate'],
     templateContent: templateContent('corporate/index.html')
   }),
+  new HtmlWebpackPlugin({
+    filename: 'admin.html',
+    chunks: ['admin'],
+    templateContent: templateContent('admin/index.html')
+  }),
 ];
 
 if (process.env.ENABLE_SENTRY_PLUGIN && process.env.ENABLE_SENTRY_PLUGIN !== 'false'){
@@ -38,6 +43,12 @@ module.exports = require('./webpack.base.babel')({
       'eventsource-polyfill', // Necessary for hot reloading with IE
       'webpack-hot-middleware/client',
       path.join(process.cwd(), 'app/app.js'), // Start with js/app.js
+    ],
+    'admin': [
+      'babel-polyfill', // Necessary for browser usage
+      'eventsource-polyfill', // Necessary for hot reloading with IE
+      'webpack-hot-middleware/client',
+      path.join(process.cwd(), 'admin/app.js'), // Start with js/app.js
     ],
     'corporate': [
       'babel-polyfill', // Necessary for browser usage
