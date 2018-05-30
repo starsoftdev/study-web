@@ -25,9 +25,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
           {this.props.item.bd_user_first_name} {this.props.item.bd_user_last_name}
         </td>
         <td>
-          {this.props.item.ae_user_first_name} {this.props.item.ae_user_last_name}
-        </td>
-        <td>
           <div className="btns-area row pull-right">
             <div className="col pull-left">
               <a className="btn btn-primary btn-edit-site" onClick={() => { this.props.editMessagingClick(this.props.item); }}>
