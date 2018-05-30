@@ -1,6 +1,7 @@
 import React from 'react';
+import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-import { Field, reduxForm, change } from 'redux-form';
+import { Field, reduxForm, change, reset, touch } from 'redux-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 import inViewport from 'in-viewport';
 
@@ -9,24 +10,57 @@ import ReactSelect from '../../../app/components/Input/ReactSelect';
 import BackToTopButton from '../../components/BackTopButton';
 import { translate } from '../../../common/utilities/localization';
 
+import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
+
+import {
+  selectPrivacyRequestSuccess,
+} from '../../../app/containers/App/selectors';
+
+import {
+  privacyRequest,
+  resetPrivacyRequestSuccess,
+} from '../../../app/containers/App/actions';
+
+import formValidator, { fields } from './validator';
+
 import './style.less';
+
+// import formValidator, { fields } from './validator';
 
 const formName = 'privacyForm';
 
+const mapStateToProps = createStructuredSelector({
+  formError: selectSyncErrorBool(formName),
+  privacyRequest: selectValues(formName),
+  newPrivacyRequestSuccess: selectPrivacyRequestSuccess(),
+});
+
 function mapDispatchToProps(dispatch) {
   return {
+    submitForm: (values) => dispatch(privacyRequest(values)),
+    resetPrivacyRequestSuccess: () => dispatch(resetPrivacyRequestSuccess()),
     change: (name, value) => dispatch(change(formName, name, value)),
+    resetForm: () => dispatch(reset(formName)),
+    touchFields: () => dispatch(touch(formName, ...fields)),
   };
 }
 
 @reduxForm({
   form: formName,
+  validate: formValidator,
 })
-@connect(null, mapDispatchToProps)
+@connect(mapStateToProps, mapDispatchToProps)
 export default class PrivacyRequestPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     change: React.PropTypes.func,
+    newPrivacyRequestSuccess: React.PropTypes.any,
+    resetPrivacyRequestSuccess: React.PropTypes.func,
+    submitForm: React.PropTypes.func.isRequired,
+    formError: React.PropTypes.bool.isRequired,
+    resetForm: React.PropTypes.func.isRequired,
+    privacyRequest: React.PropTypes.any,
+    touchFields: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -38,6 +72,25 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     this.state = {
       requestId: 0,
     };
+
+    this.optdone = [
+      { id: 1, name: translate('corporate.page.privacyrequest.request.opt1'), value: translate('corporate.page.privacyrequest.request.opt1') },
+      { id: 2, name: translate('corporate.page.privacyrequest.request.opt2'), value: translate('corporate.page.privacyrequest.request.opt2') },
+      { id: 3, name: translate('corporate.page.privacyrequest.request.opt3'), value: translate('corporate.page.privacyrequest.request.opt3') },
+      { id: 4, name: translate('corporate.page.privacyrequest.request.opt4'), value: translate('corporate.page.privacyrequest.request.opt4') },
+      { id: 5, name: translate('corporate.page.privacyrequest.request.opt5'), value: translate('corporate.page.privacyrequest.request.opt5') },
+      { id: 6, name: translate('corporate.page.privacyrequest.request.opt6'), value: translate('corporate.page.privacyrequest.request.opt6') },
+      { id: 7, name: translate('corporate.page.privacyrequest.request.opt7'), value: translate('corporate.page.privacyrequest.request.opt7') },
+    ];
+    this.placeholders = [
+      [translate('corporate.page.privacyrequest.request.opt1placeholder1'), translate('corporate.page.privacyrequest.request.opt1placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt2placeholder1'), translate('corporate.page.privacyrequest.request.opt2placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt3placeholder1'), translate('corporate.page.privacyrequest.request.opt3placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt4placeholder1'), translate('corporate.page.privacyrequest.request.opt4placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt5placeholder1'), ''],
+      [translate('corporate.page.privacyrequest.request.opt6placeholder1'), translate('corporate.page.privacyrequest.request.opt6placeholder2')],
+      [translate('corporate.page.privacyrequest.request.opt7placeholder1'), ''],
+    ];
   }
 
   componentDidMount() {
@@ -52,17 +105,62 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     this.props.change('reCaptcha', value);
   }
 
-  onChangeRequest(value) {
-    if (value) {
-      this.setState({ requestId: value });
+  onChangeRequest(val) {
+    const selected = this.optdone.find((item) => {
+      return item.value === val;
+    });
+    if (selected) {
+      this.setState({ requestId: selected.id });
     } else {
       this.setState({ requestId: 0 });
+    }
+    const { privacyRequest } = this.props;
+
+    privacyRequest.subrequest = '';
+    privacyRequest.message = '';
+    if (selected && selected.id !== 4) {
+      privacyRequest.subrequest2 = 'ignore';
+    } else {
+      privacyRequest.subrequest2 = '';
     }
   }
 
   setVisible(el) {
     const viewAtr = el.getAttribute('data-view');
     el.classList.add('in-viewport', viewAtr);
+  }
+
+  handleSubmit(ev) {
+    ev.preventDefault();
+
+    const { formError, touchFields } = this.props;
+    const { privacyRequest, submitForm } = this.props;
+
+    if (this.state.requestId === 5) {
+      privacyRequest.subrequest = 'ignore';
+    }
+
+    if (this.state.requestId !== 4) {
+      privacyRequest.subrequest2 = 'ignore';
+    } else {
+      privacyRequest.subrequest2 = '';
+    }
+
+    const request = Object.assign({}, privacyRequest);
+    if (formError) {
+      touchFields();
+      return;
+    }
+
+    for (let i = 0; i < 2; i++) {
+      if (this.placeholders[this.state.requestId - 1][i] !== '') {
+        request[`placeholder${i}`] = this.placeholders[this.state.requestId - 1][i];
+      }
+    }
+    submitForm(request);
+    if (this.recaptcha) {
+      this.recaptcha.reset();
+    }
   }
 
   renderExtend() {
@@ -75,44 +173,35 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
       ['drop', 'text'],
       ['text', 'no'],
     ];
-    const placeholders = [
-      [translate('corporate.page.privacyrequest.request.opt1placeholder1'), translate('corporate.page.privacyrequest.request.opt1placeholder2')],
-      [translate('corporate.page.privacyrequest.request.opt2placeholder1'), translate('corporate.page.privacyrequest.request.opt2placeholder2')],
-      [translate('corporate.page.privacyrequest.request.opt3placeholder1'), translate('corporate.page.privacyrequest.request.opt3placeholder2')],
-      [translate('corporate.page.privacyrequest.request.opt4placeholder1'), translate('corporate.page.privacyrequest.request.opt4placeholder2')],
-      [translate('corporate.page.privacyrequest.request.opt5placeholder1'), ''],
-      [translate('corporate.page.privacyrequest.request.opt6placeholder1'), translate('corporate.page.privacyrequest.request.opt6placeholder2')],
-      [translate('corporate.page.privacyrequest.request.opt7placeholder1'), ''],
-    ];
     const subOptions = [
       [
-        { id: 1, name: translate('corporate.page.privacyrequest.request.opt1info1') },
-        { id: 2, name: translate('corporate.page.privacyrequest.request.opt1info2') },
-        { id: 3, name: translate('corporate.page.privacyrequest.request.opt1info3') },
-        { id: 4, name: translate('corporate.page.privacyrequest.request.opt1info4') },
-        { id: 5, name: translate('corporate.page.privacyrequest.request.opt1info5') },
-        { id: 6, name: translate('corporate.page.privacyrequest.request.opt1info6') },
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt1info1'), value: translate('corporate.page.privacyrequest.request.opt1info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt1info2'), value: translate('corporate.page.privacyrequest.request.opt1info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt1info3'), value: translate('corporate.page.privacyrequest.request.opt1info3') },
+        { id: 4, name: translate('corporate.page.privacyrequest.request.opt1info4'), value: translate('corporate.page.privacyrequest.request.opt1info4') },
+        { id: 5, name: translate('corporate.page.privacyrequest.request.opt1info5'), value: translate('corporate.page.privacyrequest.request.opt1info5') },
+        { id: 6, name: translate('corporate.page.privacyrequest.request.opt1info6'), value: translate('corporate.page.privacyrequest.request.opt1info6') },
       ],
       [
-        { id: 1, name: translate('corporate.page.privacyrequest.request.opt2info1') },
-        { id: 2, name: translate('corporate.page.privacyrequest.request.opt2info2') },
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt2info1'), value: translate('corporate.page.privacyrequest.request.opt2info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt2info2'), value: translate('corporate.page.privacyrequest.request.opt2info2') },
       ],
       [
-        { id: 1, name: translate('corporate.page.privacyrequest.request.opt3info1') },
-        { id: 2, name: translate('corporate.page.privacyrequest.request.opt3info2') },
-        { id: 3, name: translate('corporate.page.privacyrequest.request.opt3info3') },
-        { id: 4, name: translate('corporate.page.privacyrequest.request.opt3info4') },
-        { id: 5, name: translate('corporate.page.privacyrequest.request.opt3info5') },
-        { id: 6, name: translate('corporate.page.privacyrequest.request.opt3info6') },
-        { id: 7, name: translate('corporate.page.privacyrequest.request.opt3info7') },
-        { id: 8, name: translate('corporate.page.privacyrequest.request.opt3info8') },
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt3info1'), value: translate('corporate.page.privacyrequest.request.opt3info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt3info2'), value: translate('corporate.page.privacyrequest.request.opt3info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt3info3'), value: translate('corporate.page.privacyrequest.request.opt3info3') },
+        { id: 4, name: translate('corporate.page.privacyrequest.request.opt3info4'), value: translate('corporate.page.privacyrequest.request.opt3info4') },
+        { id: 5, name: translate('corporate.page.privacyrequest.request.opt3info5'), value: translate('corporate.page.privacyrequest.request.opt3info5') },
+        { id: 6, name: translate('corporate.page.privacyrequest.request.opt3info6'), value: translate('corporate.page.privacyrequest.request.opt3info6') },
+        { id: 7, name: translate('corporate.page.privacyrequest.request.opt3info7'), value: translate('corporate.page.privacyrequest.request.opt3info7') },
+        { id: 8, name: translate('corporate.page.privacyrequest.request.opt3info8'), value: translate('corporate.page.privacyrequest.request.opt3info8') },
       ],
       [],
       [],
       [
-        { id: 1, name: translate('corporate.page.privacyrequest.request.opt6info1') },
-        { id: 2, name: translate('corporate.page.privacyrequest.request.opt6info2') },
-        { id: 3, name: translate('corporate.page.privacyrequest.request.opt6info3') },
+        { id: 1, name: translate('corporate.page.privacyrequest.request.opt6info1'), value: translate('corporate.page.privacyrequest.request.opt6info1') },
+        { id: 2, name: translate('corporate.page.privacyrequest.request.opt6info2'), value: translate('corporate.page.privacyrequest.request.opt6info2') },
+        { id: 3, name: translate('corporate.page.privacyrequest.request.opt6info3'), value: translate('corporate.page.privacyrequest.request.opt6info3') },
       ],
     ];
     const output = [];
@@ -122,7 +211,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
           <Field
             name="subrequest"
             component={ReactSelect}
-            placeholder={placeholders[this.state.requestId - 1][i]}
+            placeholder={this.placeholders[this.state.requestId - 1][i]}
             options={subOptions[this.state.requestId - 1]}
             className="field-lg"
             mobileEnabled
@@ -132,10 +221,17 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
       }
 
       if (extendType[this.state.requestId - 1][i] === 'text') {
+        let fieldName = 'message';
+        if (this.state.requestId !== 5 && i === 0) {
+          fieldName = 'subrequest';
+        }
+        if (this.state.requestId === 4 && i === 1) {
+          fieldName = 'subrequest2';
+        }
         output.push(<div className="field-row" key={`${this.state.requestId}0${i}`}>
           <Field
-            name="message"
-            placeholder={placeholders[this.state.requestId - 1][i]}
+            name={fieldName}
+            placeholder={this.placeholders[this.state.requestId - 1][i]}
             component={Input}
             className="field-lg"
             bsClass="form-control input-lg"
@@ -149,16 +245,11 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
 
   render() {
     const company = { Yourcompany: 'Yourcompany' };
-    const opt = [{ id: 1, name: 'I\'m a person' }, { id: 2, name: 'I\'m representing an organization' }];
-    const optdone = [
-      { id: 1, name: translate('corporate.page.privacyrequest.request.opt1') },
-      { id: 2, name: translate('corporate.page.privacyrequest.request.opt2') },
-      { id: 3, name: translate('corporate.page.privacyrequest.request.opt3') },
-      { id: 4, name: translate('corporate.page.privacyrequest.request.opt4') },
-      { id: 5, name: translate('corporate.page.privacyrequest.request.opt5') },
-      { id: 6, name: translate('corporate.page.privacyrequest.request.opt6') },
-      { id: 7, name: translate('corporate.page.privacyrequest.request.opt7') },
+    const opt = [
+      { id: 1, name: 'I\'m a person', value: 'I\'m a person' },
+      { id: 2, name: 'I\'m representing an organization', value: 'I\'m representing an organization' },
     ];
+
 
     return (
       <main id="main">
@@ -175,7 +266,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
               className="form-privacy"
               noValidate="novalidate"
               data-view="fadeInUp"
-              onSubmit={this.handleSubmit}
+              onSubmit={(ev) => this.handleSubmit(ev)}
             >
               <div className="field-row">
                 <Field
@@ -217,14 +308,14 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
                   name="request"
                   component={ReactSelect}
                   placeholder={translate('corporate.page.privacyrequest.request')}
-                  options={optdone}
+                  options={this.optdone}
                   className="field-lg"
                   mobileEnabled
                   required
                   onChange={(value) => this.onChangeRequest(value)}
                 />
               </div>
-              { this.state.requestId > 0 && this.renderExtend()}
+              { this.state.requestId !== 0 && this.renderExtend()}
               <div className="field-row">
                 <ReCAPTCHA
                   ref={(ref) => { this.recaptcha = ref; }}
