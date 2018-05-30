@@ -66,6 +66,7 @@ import {
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY_SOURCES,
   FETCH_STUDY_LEAD_SOURCES,
+  PRIVACY_REQUEST,
 } from '../../containers/App/constants';
 
 import { READ_STUDY_PATIENT_MESSAGES } from '../../containers/StudyPage/constants';
@@ -173,6 +174,7 @@ import {
   fetchStudySourcesError,
   fetchStudyLeadSourcesSuccess,
   fetchStudyLeadSourcesError,
+  privacyRequestSuccess,
 } from '../../containers/App/actions';
 
 export default function* baseDataSaga() {
@@ -216,6 +218,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
+  yield fork(takeLatest, PRIVACY_REQUEST, privacyRequest);
   yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
   yield fork(fetchSponsorsWatcher);
   yield fork(fetchProtocolsWatcher);
@@ -1160,6 +1163,24 @@ function* newContact(action) {
     const response = yield call(request, requestURL, options);
     toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
     yield put(newContactSuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
+    toastr.error('', errorMessage);
+  }
+}
+
+function* privacyRequest(action) {
+  try {
+    const params = action.params;
+    const requestURL = `${API_URL}/sites/privacyRequest`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
+    yield put(privacyRequestSuccess(response));
   } catch (err) {
     const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);

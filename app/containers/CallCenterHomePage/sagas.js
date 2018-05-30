@@ -29,8 +29,13 @@ export function* fetchPatientsWatcher() {
         query,
       };
       const response = yield call(request, requestURL, params);
+      let hasMore = true;
+      const page = ((offset || 0) / limit) + 1;
+      if (response.length < limit) {
+        hasMore = false;
+      }
 
-      yield put(patientsFetched(response));
+      yield put(patientsFetched(response, page, hasMore));
     } catch (err) {
       yield put(patientsFetchingError(err));
     }

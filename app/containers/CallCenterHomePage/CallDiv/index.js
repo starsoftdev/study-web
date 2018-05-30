@@ -1,8 +1,7 @@
 import React from 'react';
-
 import _ from 'lodash';
-import { translate } from '../../../../common/utilities/localization';
 
+import { translate } from '../../../../common/utilities/localization';
 import './style.less';
 
 export default class CallDiv extends React.Component {
