@@ -59,7 +59,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         firstName: this.props.item.first_name,
         lastName: this.props.item.last_name,
         bd: this.props.item.bd_user_id,
-        ae: this.props.item.ae_user_id,
       },
     };
 
@@ -76,9 +75,6 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
         </td>
         <td>
           {`${this.props.item.bd_user_first_name || ''} ${this.props.item.bd_user_last_name || ''}`}
-        </td>
-        <td>
-          {`${this.props.item.ae_user_first_name || ''} ${this.props.item.ae_user_last_name || ''}`}
         </td>
         <td>
           <a className="btn btn-primary btn-edit-site pull-right" onClick={this.openAddSponsorAdminModal}>
