@@ -7,8 +7,8 @@ import { createStructuredSelector } from 'reselect';
 
 import { translate } from '../../../common/utilities/localization';
 
-import { fetchClientSites, fetchProtocols } from '../App/actions';
-import { selectCurrentUser, selectClientSites, selectProtocols } from '../App/selectors';
+import { fetchProtocols } from '../App/actions';
+import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
 import { fetchPatient } from './actions';
 import { selectSelectedPatient } from './selectors';
@@ -31,13 +31,11 @@ const formName = 'callCenterPatientPage';
 class CallCenterPatientPage extends Component {
   static propTypes = {
     currentUser: PropTypes.object.isRequired,
-    fetchClientSites: PropTypes.func,
     fetchPatient: PropTypes.func,
     fetchProtocols: PropTypes.func,
     params: PropTypes.object,
     patient: PropTypes.object,
     protocols: PropTypes.object,
-    sites: PropTypes.object,
     socket: React.PropTypes.any,
   };
 
@@ -47,9 +45,8 @@ class CallCenterPatientPage extends Component {
   };
 
   componentWillMount() {
-    const { params: { id: patientId }, currentUser, fetchClientSites, fetchPatient, fetchProtocols } = this.props;
-
-    fetchClientSites(currentUser.roleForClient.client_id);
+    const { params: { id: patientId }, currentUser, fetchPatient, fetchProtocols } = this.props;
+    
     fetchPatient(patientId);
     fetchProtocols(currentUser.roleForClient.id);
   }
@@ -60,7 +57,7 @@ class CallCenterPatientPage extends Component {
 
   render() {
     const { carouselIndex } = this.state;
-    const { patient, protocols, sites, socket, currentUser } = this.props;
+    const { patient, protocols, socket, currentUser } = this.props;
     let formattedPatient;
     let siteForPatient;
     let protocolForPatient;
@@ -69,10 +66,7 @@ class CallCenterPatientPage extends Component {
     let ePMS;
 
     if (patient && patient.details) {
-      if (sites && sites.details && sites.details.length > 0) {
-        siteForPatient = sites.details.find(site => site.id === patient.details.site_id);
-      }
-
+      siteForPatient = patient.details.site;
       if (
         protocols && protocols.details && protocols.details.length > 0 &&
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
@@ -165,13 +159,11 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
-  sites: selectClientSites(),
   socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchClientSites: (clientId) => dispatch(fetchClientSites(clientId)),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
   };
