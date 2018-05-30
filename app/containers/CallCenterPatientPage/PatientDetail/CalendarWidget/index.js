@@ -27,6 +27,7 @@ class CalendarWidget extends React.Component {
     schedules: PropTypes.array.isRequired,
     handleOpenModal: PropTypes.func.isRequired,
     handleShowAll: PropTypes.func.isRequired,
+    patient: PropTypes.object,
   };
 
   constructor(props) {
@@ -63,7 +64,7 @@ class CalendarWidget extends React.Component {
   }
 
   render() {
-    const { currentUser, currentSite, schedules, /* sites, */ patient } = this.props;
+    const { currentUser, currentSite, schedules, sites, patient } = this.props;
     const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
     // const eventsList = schedules.map(s => {
     //   const localTime = s.time;
