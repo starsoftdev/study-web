@@ -15,7 +15,7 @@ const initialState = {
 };
 
 export default function addPatientReducer(state = initialState, action) {
-  const protocols = map(state.protocols.details, cloneDeep);
+  const protocols = state.protocols ? map(state.protocols.details, cloneDeep): [];
   switch (action.type) {
     case FETCH_FILTERED_PROTOCOLS:
       return {
