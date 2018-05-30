@@ -6,7 +6,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OfflinePlugin = require('offline-plugin');
-const AssetsPlugin = require('assets-webpack-plugin')
+const AssetsPlugin = require('assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const plugins = [
@@ -20,6 +20,25 @@ const plugins = [
     filename: 'app.html',
     chunks: ['app'],
     template: 'app/index.html',
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true,
+    },
+  }),
+
+  // Minify and optimize the index.html
+  new HtmlWebpackPlugin({
+    filename: 'admin.html',
+    chunks: ['admin'],
+    template: 'admin/index.html',
     minify: {
       removeComments: true,
       collapseWhitespace: true,
@@ -100,6 +119,10 @@ module.exports = require('./webpack.base.babel')({
     'app': [
       'babel-polyfill', // Necessary for browser usage
       path.join(process.cwd(), 'app/app.js'),
+    ],
+    'admin': [
+      'babel-polyfill', // Necessary for browser usage
+      path.join(process.cwd(), 'admin/app.js'),
     ],
     'corporate': [
       'babel-polyfill', // Necessary for browser usage
