@@ -35,7 +35,7 @@ export function* fetchPatientsWatcher() {
         hasMore = false;
       }
 
-      yield put(patientsFetched(response));
+      yield put(patientsFetched(response, page, hasMore));
     } catch (err) {
       yield put(patientsFetchingError(err));
     }
