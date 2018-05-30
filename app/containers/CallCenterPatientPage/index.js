@@ -46,7 +46,7 @@ class CallCenterPatientPage extends Component {
 
   componentWillMount() {
     const { params: { id: patientId }, currentUser, fetchPatient, fetchProtocols } = this.props;
-    
+
     fetchPatient(patientId);
     fetchProtocols(currentUser.roleForClient.id);
   }
