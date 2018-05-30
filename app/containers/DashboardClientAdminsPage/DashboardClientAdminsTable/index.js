@@ -96,7 +96,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
       initialValues: {
         ...item,
         bd: item.bd_user_id,
-        ae: item.ae_user_id,
       },
     } });
 
@@ -224,8 +223,6 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
         clientAdmins = orderBy(clientAdmins, [(o) => (`${o.first_name} ${o.last_name}`)], [dir]);
       } else if (this.props.paginationOptions.activeSort === 'bd_name') {
         clientAdmins = orderBy(clientAdmins, [(o) => (`${o.bd_user_first_name} ${o.bd_user_last_name}`)], [dir]);
-      } else if (this.props.paginationOptions.activeSort === 'ae_name') {
-        clientAdmins = orderBy(clientAdmins, [(o) => (`${o.ae_user_first_name} ${o.ae_user_last_name}`)], [dir]);
       } else {
         clientAdmins = orderBy(clientAdmins, [(o) => (o[this.props.paginationOptions.activeSort])], [dir]);
       }
@@ -249,8 +246,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
                 <th onClick={this.sortBy} data-sort="client_name" className={`th ${(this.props.paginationOptions.activeSort === 'client_name') ? this.props.paginationOptions.activeDirection : ''}`}>Company<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="name" className={`th ${(this.props.paginationOptions.activeSort === 'name') ? this.props.paginationOptions.activeDirection : ''}`}>Name<i className="caret-arrow" /></th>
                 <th onClick={this.sortBy} data-sort="email" className={`th ${(this.props.paginationOptions.activeSort === 'email') ? this.props.paginationOptions.activeDirection : ''}`}>Email<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="bd_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_name') ? this.props.paginationOptions.activeDirection : ''}`}>BD<i className="caret-arrow" /></th>
-                <th onClick={this.sortBy} data-sort="ae_name" className={`th ${(this.props.paginationOptions.activeSort === 'ae_name') ? this.props.paginationOptions.activeDirection : ''}`}>AE<i className="caret-arrow" /></th>
+                <th onClick={this.sortBy} data-sort="bd_name" className={`th ${(this.props.paginationOptions.activeSort === 'bd_name') ? this.props.paginationOptions.activeDirection : ''}`}>BUSINESS DEVELOPMENT<i className="caret-arrow" /></th>
                 <th>&nbsp;</th>
               </tr>
             </thead>
@@ -263,7 +259,7 @@ export class DashboardClientAdminsTable extends React.Component { // eslint-disa
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan="6">
+                <td colSpan="5">
                   {this.props.clientAdmins.fetching && <div className="text-center"><LoadingSpinner showOnlyIcon /></div>}
                 </td>
               </tr>
