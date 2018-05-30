@@ -426,6 +426,11 @@ const selectNewContactSuccess = () => createSelector(
   (substate) => get(substate, 'baseData.newContactsSuccess', {})
 );
 
+const selectPrivacyRequestSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.privacyRequestSuccess', {})
+);
+
 const selectTrials = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials', {})
@@ -521,6 +526,7 @@ export {
   selectGetProposalSuccess,
   selectLearnAboutFutureTrialsSuccess,
   selectNewContactSuccess,
+  selectPrivacyRequestSuccess,
 
   selectTrials,
   selectTrialsTotal,
