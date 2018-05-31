@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import { createStructuredSelector } from 'reselect';
+import libPhoneNumber from 'google-libphonenumber';
 import * as Selector from '../selectors';
 import { getMomentFromDate } from '../../../utils/time';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -17,6 +18,8 @@ import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
 import { selectCurrentUser, selectSites } from '../../App/selectors';
 import { translate } from '../../../../common/utilities/localization';
+const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
+const PNT = libPhoneNumber.PhoneNumberType;
 
 const fieldName = 'ScheduledPatientModal';
 
@@ -124,7 +127,15 @@ class ScheduledPatientModal extends React.Component {
 
     if (currentPatient) {
       const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
+      let reminderDisabled = false;
+      if (currentPatient.phone) {
+        const number = phoneUtil.parseAndKeepRawInput(currentPatient.phone, '');
+        const numberType = phoneUtil.getNumberType(number);
 
+        if (numberType === PNT.FIXED_LINE || numberType === PNT.UNKNOWN) {
+          reminderDisabled = true;
+        }
+      }
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
@@ -218,6 +229,7 @@ class ScheduledPatientModal extends React.Component {
                       name="textReminder"
                       type="checkbox"
                       component={Checkbox}
+                      disabled={reminderDisabled}
                       className="reminder-container"
                     />
                     <label className="reminder-label">{translate('client.component.scheduledPatientModal.textReminder')}</label>
