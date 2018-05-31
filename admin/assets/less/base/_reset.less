@@ -184,15 +184,7 @@ input[type=number] {
 
 #wrapper {
 	position: relative;
-	padding: 102px 0 0 261px;
-
-	.home-page & {
-		padding-top: 101px;
-	}
-
-	&.dashboard {
-		padding-left: 0;
-	}
+	padding: 80px 0 0 0;
 }
 
 .field-row.label-top {
@@ -206,7 +198,7 @@ input[type=number] {
 	.font(0,0);
 	margin: 0 0 0 2px;
 	.align(@align: middle);
-	
+
 	&:before {
 		.arrow(0 4px);
 		margin: -3px 0 0;
@@ -217,25 +209,25 @@ input[type=number] {
 
 .table th {
 	cursor: pointer;
-	
+
 	&:empty { cursor: default; }
-	
+
 	&:hover {
 		color: #999;
 	}
-	
+
 	&.up {
 		.caret-arrow:before { border-width: 0 4px 4px; }
-		
+
 	}
-	
+
 	&.down {
 		.caret-arrow:before {
 			border-width: 4px 4px 0;
 			border-color: #354052 transparent transparent;
 		}
 	}
-	
+
 	&.none {
 		.caret-arrow:before {
 			border-width: 0 4px;
@@ -254,82 +246,64 @@ input[type=number] {
 
 .field-row {
 	.font(0,0);
-	
+
 	+ .field-row {
 		margin: 30px 0 0;
 	}
-	
+
 	.lightbox & {
 		+ .field-row {
 			margin: 15px 0 0;
 		}
-		
+
 		+ .add-messaging-number-row {
 			margin: 8px 0 -5px;
 		}
 	}
-	
+
 	> * {
 		.font(@font-size-base);
 	}
-	
+
 	.field-row {
 		.font(0,0);
-		
+
 		> * {
 			.font(@font-size-base);
 		}
 	}
-	
+
 	.field,
 	.label {
 		.align(@align: middle);
 	}
-	
+
 	.label {
 		width: 37%;
 		padding: 0 10px 0 0;
 	}
-	
+
 	.field {
 		width: 63%;
 		position: relative;
 	}
-	
+
 	.row {
 		margin: 0 -6px;
 	}
-	
+
 	[class^="col-"], [class*=" col-"] {
 		padding: 0 6px;
 	}
-	
-	
+
+
 }
 
 .required {
-	
+
 	> label {
 		&:before {
 			content: '* ';
 		}
 	}
-}
-
-@media screen and (max-width: @psd) {
-
-	#wrapper {
-		padding-left: 220px;
-
-		&.dashboard {
-			padding-left: 0;
-		}
-	}
-}
-
-.main-heading {
-	color: #99cc66;
-    font-weight: 700;
-    margin: 0 0 34px;
-    text-transform: uppercase;
 }
