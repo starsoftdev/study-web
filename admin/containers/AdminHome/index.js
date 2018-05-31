@@ -9,8 +9,8 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     return (
-      <div>
-        <h1>New Admin portal</h1>
+      <div id="adminHomePage">
+        <h1>Admin portal</h1>
       </div>
     );
   }
