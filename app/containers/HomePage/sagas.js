@@ -1341,7 +1341,7 @@ export function* homePageSaga() {
   const watcherN = yield fork(fetchTaggedIndicationsForStudyWatcher);
   const watcherO = yield fork(addTaggedIndicationForStudyWatcher);
   const watcherP = yield fork(removeTaggedIndicationForStudyWatcher);
-  const watcherR = yield fork(fetchFive9ListWatcher);
+  /* const watcherR = yield fork(fetchFive9ListWatcher); */
   const watcherS = yield fork(removeStudyAdWatcher);
 
   // Suspend execution until location changes
@@ -1395,7 +1395,7 @@ export function* homePageSaga() {
     yield cancel(watcherN);
     yield cancel(watcherO);
     yield cancel(watcherP);
-    yield cancel(watcherR);
+    /* yield cancel(watcherR); */
     yield cancel(watcherS);
     if (options.payload.pathname !== '/app') {
       yield put(clearFilters());
