@@ -11,6 +11,7 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import { STATUS_ALL } from './constants';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
@@ -20,6 +21,7 @@ import CenteredModal from '../../components/CenteredModal/index';
 import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
+import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
 import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
@@ -79,7 +81,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const cro = this.props.location.query.cro || null;
     const messaging = this.props.location.query.messaging || null;
 
-    const filters = { source: 1, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+    const filters = { source: 1, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
     this.props.getReportsList(filters);
@@ -186,11 +188,11 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       notes =
         (<div className="category-notes-container">
           {
-          this.props.categoryNotes.details.map((note, index) => {
-            const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
-            const isNewPatient = isNextPatientDifferent;
-            isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
-            const result =
+            this.props.categoryNotes.details.map((note, index) => {
+              const nextPatient = this.props.categoryNotes.details[index + 1] ? this.props.categoryNotes.details[index + 1].patient_id : null;
+              const isNewPatient = isNextPatientDifferent;
+              isNextPatientDifferent = (nextPatient && note.patient_id !== nextPatient);
+              const result =
               (<div className="patient-note-container" key={index}>
                 {(isNewPatient) && <div className="name font-bold">{`Patient #${innerCounter} (${note.siteName})`}</div>}
                 { isNewPatient && <div className="img-holder">
@@ -199,18 +201,18 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
                 <PatientNote key={note.id} currentUser={this.props.currentUser} note={note} isNewPatient={isNewPatient} counter={innerCounter} />
                 {isNextPatientDifferent && <hr></hr>}
               </div>);
-            if (isNextPatientDifferent) {
-              innerCounter++;
-            }
-            return result;
-          })
-        }
+              if (isNextPatientDifferent) {
+                innerCounter++;
+              }
+              return result;
+            })
+          }
         </div>);
     } else if (!this.props.categoryNotes.fetching) {
-      notes = <div className="text-center btn-default-padding">No notes.</div>;
+      notes = <div className="text-center btn-default-padding">{translate('sponsor.page.reportViewPage.noNotes')}</div>;
     }
 
-    const searchInitialValues = { source: 1 };
+    const searchInitialValues = { source: 1, status: STATUS_ALL };
 
     return (
       <div className="container-fluid sponsor-portal report-view-page">
@@ -218,7 +220,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           <div className="individual-study">
             <div className="main-head">
               <h2 className="main-heading">{protocolNumber}</h2>
-              <p><span className="info-cell">Indication: {indication}</span> <span className="info-cell">CRO: {cro}</span></p>
+              <p><span className="info-cell">{translate('sponsor.page.reportViewPage.indication')} {indication}</span> <span className="info-cell">{translate('sponsor.page.reportViewPage.cro')} {cro}</span></p>
             </div>
           </div>
         </section>
@@ -263,7 +265,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
         >
           <Modal.Header>
             <Modal.Title>
-              {this.state.modalTitle} NOTES
+              {this.state.modalTitle} {translate('sponsor.page.reportViewPage.notes')}
               <a className="lightbox-close close" onClick={() => { this.closeCategoryModal(); }}>
                 <i className="icomoon-icon_close" />
               </a>

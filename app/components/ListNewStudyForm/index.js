@@ -397,7 +397,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
           <div className="field-row">
             <strong className="label">
-              <labe dangerouslySetInnerHTML={{ __html: `${translate('portals.component.listNewStudyForm.pqsLabel')} $897` }}l />
+              <label dangerouslySetInnerHTML={{ __html: `${translate('portals.component.listNewStudyForm.pqsLabel')} $897` }} />
             </strong>
             <Field
               name="patientQualificationSuite"
