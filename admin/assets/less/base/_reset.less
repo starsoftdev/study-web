@@ -1,0 +1,309 @@
+@import "_custom-icons";
+
+* {
+	max-height: 1000000px;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-width: 1200px;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	&.page-lightbox-active,
+	&.body-datepicker-active {
+		height: 100%;
+		overflow-y: hidden;
+	}
+}
+
+@-webkit-viewport   { width: device-width; }
+@-moz-viewport      { width: device-width; }
+@-ms-viewport       { width: device-width; }
+@-o-viewport        { width: device-width; }
+@viewport           { width: device-width; }
+
+::-webkit-input-placeholder {
+  color: #636363;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+  color: #636363;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+  color: #636363;
+}
+
+:-ms-input-placeholder {
+  color: #636363;
+}
+
+a,
+button,
+[type] {
+	white-space: normal;
+	transition: all 0.25s;
+}
+
+a.hover-underline {
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.btn {
+	border-radius: 2px;
+	border-width: 2px;
+  padding: 5px 12px;
+	font-weight: 600;
+	white-space: normal;
+	transition: all 0.25s;
+	text-transform: uppercase;
+
+
+	&:focus,
+	&:active:focus,
+	&:hover {
+		outline: none;
+		box-shadow: none;
+	}
+
+	&.btn-default {
+		&:focus,
+		&:active:focus,
+		&:hover {
+			background: #76daff;
+			border-color: #76daff;
+		}
+	}
+
+	&.btn-primary {
+		&:focus,
+		&:active:focus,
+		&:hover {
+			color: @btn-primary-bg;
+			background: @btn-primary-color;
+			border-color: @btn-primary-color;
+		}
+	}
+
+	&.btn-gray {
+		color: #fff !important;
+		background: darken(#999, 10%);
+
+		&:hover {
+			background: #999;
+		}
+	}
+
+	&.btn-gray-outline {
+		background: #fff;
+		color: darken(#999, 10%);
+		border: darken(#999, 10%) solid 2px;
+
+		&:hover,
+		&:focus,
+		&:active:focus {
+			color: #fff;
+			background: darken(#999, 10%);
+		}
+	}
+}
+
+.table-responsive {
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  .table {
+    thead {
+      tr {
+        th {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.label,
+label {
+	margin: 0;
+	padding: 0;
+	color: inherit;
+	display: inline;
+	white-space: normal;
+	font-weight: inherit;
+	.font(inherit, inherit);
+  overflow-wrap: break-word;
+}
+
+.form-control {
+	border-width: 2px;
+	padding: 5px 15px;
+
+	&:focus {
+		color: #949ca1;
+		outline: none;
+		box-shadow: none;
+		border-color: #00afef;
+		.placeholder(#949ca1);
+	}
+
+	&[readonly] {
+		background: #fff;
+	}
+
+	&:hover {
+		border-color: #00afef;
+	}
+}
+
+.has-error {
+	.form-control,
+	.jcf-select {
+		border-color: #f00;
+	}
+}
+
+
+input[type=number] {
+	-moz-appearance: textfield;
+
+	&::-webkit-inner-spin-button,
+	&::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+	}
+}
+
+.datepicker-input {
+	cursor: pointer;
+}
+
+#wrapper {
+	position: relative;
+	padding: 80px 0 0 0;
+}
+
+.field-row.label-top {
+	.field,
+	.label {
+		vertical-align: top;
+	}
+}
+
+.caret-arrow {
+	.font(0,0);
+	margin: 0 0 0 2px;
+	.align(@align: middle);
+
+	&:before {
+		.arrow(0 4px);
+		margin: -3px 0 0;
+		border-bottom-color: #354052;
+		transition: border 0.25s ease;
+	}
+}
+
+.table th {
+	cursor: pointer;
+
+	&:empty { cursor: default; }
+
+	&:hover {
+		color: #999;
+	}
+
+	&.up {
+		.caret-arrow:before { border-width: 0 4px 4px; }
+
+	}
+
+	&.down {
+		.caret-arrow:before {
+			border-width: 4px 4px 0;
+			border-color: #354052 transparent transparent;
+		}
+	}
+
+	&.none {
+		.caret-arrow:before {
+			border-width: 0 4px;
+		}
+	}
+}
+
+.table tbody > tr {
+	&.tr-active,
+	&:hover {
+		> td {
+			background: #f1f1f1;
+		}
+	}
+}
+
+.field-row {
+	.font(0,0);
+
+	+ .field-row {
+		margin: 30px 0 0;
+	}
+
+	.lightbox & {
+		+ .field-row {
+			margin: 15px 0 0;
+		}
+
+		+ .add-messaging-number-row {
+			margin: 8px 0 -5px;
+		}
+	}
+
+	> * {
+		.font(@font-size-base);
+	}
+
+	.field-row {
+		.font(0,0);
+
+		> * {
+			.font(@font-size-base);
+		}
+	}
+
+	.field,
+	.label {
+		.align(@align: middle);
+	}
+
+	.label {
+		width: 37%;
+		padding: 0 10px 0 0;
+	}
+
+	.field {
+		width: 63%;
+		position: relative;
+	}
+
+	.row {
+		margin: 0 -6px;
+	}
+
+	[class^="col-"], [class*=" col-"] {
+		padding: 0 6px;
+	}
+
+
+}
+
+.required {
+
+	> label {
+		&:before {
+			content: '* ';
+		}
+	}
+}

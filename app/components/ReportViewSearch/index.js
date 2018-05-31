@@ -3,7 +3,8 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import { defaultRanges, DateRange } from 'react-date-range';
+import { DateRangePicker } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import _ from 'lodash';
@@ -12,6 +13,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import SplitButton from 'react-bootstrap/lib/SplitButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { STATUS_ALL, STATUS_ACTIVE, STATUS_INACTIVE } from '../../containers/ReportViewPage/constants';
+import { getMomentFromDate } from '../../utils/time';
 import CenteredModal from '../CenteredModal/index';
 import ReactSelect from '../Input/ReactSelect';
 import Input from '../Input/index';
@@ -20,6 +24,7 @@ import { getItem } from '../../utils/localStorage';
 import {
   selectSocket,
 } from '../../containers/GlobalNotifications/selectors';
+import { translate } from '../../../common/utilities/localization';
 
 @reduxForm({ form: 'searchReports' })
 
@@ -44,8 +49,9 @@ export class ReportViewSearch extends React.Component {
       searchTimer: null,
       showPopup: false,
       predefined : {
-        startDate: moment().clone().subtract(30, 'days'),
-        endDate: moment(),
+        startDate: moment().clone().subtract(30, 'days').toDate(),
+        endDate: new Date(),
+        key: 'selection',
       },
       selectedTime : {
         startDate: null,
@@ -83,9 +89,11 @@ export class ReportViewSearch extends React.Component {
   }
 
   handleChange(which, payload) {
-    this.setState({
-      [which] : payload,
-    });
+    if (payload.selection) {
+      this.setState({
+        [which] : payload.selection,
+      });
+    }
   }
 
   showPopup(ev) {
@@ -119,17 +127,17 @@ export class ReportViewSearch extends React.Component {
   changeRange(ev) {
     ev.preventDefault();
     const range = this.state.predefined;
-    const startDate = moment(range.startDate).utc();
-    let endDate = moment(range.endDate).utc();
+    const startDate = getMomentFromDate(range.startDate).utc();
+    let endDate = getMomentFromDate(range.endDate).utc();
 
     if (!endDate.isAfter(startDate)) {
       endDate = endDate.add(1, 'days');
     }
-    const uiStartDate = startDate.format('MM/DD/YY');
-    const uiEndDate = endDate.format('MM/DD/YY');
+    const uiStartDate = startDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
+    const uiEndDate = endDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
 
-    this.props.dispatch(change('searchReports', 'startDate', startDate.format('YYYY-MM-DD HH:mm:ss')));
-    this.props.dispatch(change('searchReports', 'endDate', endDate.format('YYYY-MM-DD HH:mm:ss')));
+    this.props.dispatch(change('searchReports', 'startDate', startDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
+    this.props.dispatch(change('searchReports', 'endDate', endDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
 
     this.setState({
       selectedTime: {
@@ -173,16 +181,16 @@ export class ReportViewSearch extends React.Component {
     const { predefined } = this.state;
     if (predefined.startDate) {
       const format = 'MMM D, YYYY';
-      if (predefined.startDate.isSameOrAfter(predefined.endDate, 'day')) {
+      if (getMomentFromDate(predefined.startDate).isSameOrAfter(getMomentFromDate(predefined.endDate), 'day')) {
         return (
           <span className="time">
-            {moment(predefined.startDate).format(format)}
+            {getMomentFromDate(predefined.startDate).format(format)}
           </span>
         );
       }
       return (
         <span className="time">
-          {moment(predefined.startDate).format(format)} - {moment(predefined.endDate).format(format)}
+          {getMomentFromDate(predefined.startDate).format(format)} - {getMomentFromDate(predefined.endDate).format(format)}
         </span>
       );
     }
@@ -190,46 +198,39 @@ export class ReportViewSearch extends React.Component {
   }
 
   render() {
-    const { selectedTime, predefined } = this.state;
+    const { selectedTime } = this.state;
     const statusOptions = [
       {
-        label: 'All',
-        value: 'All',
+        label: translate('common.constants.all'),
+        value: STATUS_ALL,
       },
       {
-        label: 'Active',
-        value: 'active',
+        label: translate('sponsor.component.reportViewSearch.active'),
+        value: STATUS_ACTIVE,
       },
       {
-        label: 'Inactive',
-        value: 'inactive',
+        label: translate('sponsor.component.reportViewSearch.inactive'),
+        value: STATUS_INACTIVE,
       },
     ];
 
-    const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : 'Date Range';
-    let startDate = (predefined.startDate) ? predefined.startDate : moment();
-    let endDate = (predefined.endDate) ? predefined.endDate : moment().add(1, 'M');
-    if (selectedTime.startDate && selectedTime.endDate) {
-      startDate = moment().clone().subtract(30, 'days');
-      endDate = moment();
-    }
+    const timeButtonText = (selectedTime.startDate && selectedTime.endDate) ? `${selectedTime.startDate} - ${selectedTime.endDate}` : translate('sponsor.component.reportViewSearch.dateRange');
 
     return (
       <div className="search-controls form-search clearfix">
         <div className="btns-area pull-right full-width">
-          {/* TODO: remove tmp styles */}
           <div className="col pull-right">
             <SplitButton
               bsStyle="primary"
-              title="download"
+              title={translate('sponsor.component.reportViewSearch.download')}
               id="split-button-basic"
               onClick={this.download}
             >
               <MenuItem eventKey={false} onSelect={this.select}>
-                Without Notes
+                {translate('sponsor.component.reportViewSearch.withoutNotes')}
               </MenuItem>
               <MenuItem eventKey onSelect={this.select}>
-                With Notes
+                {translate('sponsor.component.reportViewSearch.withNotes')}
               </MenuItem>
             </SplitButton>
           </div>
@@ -247,7 +248,7 @@ export class ReportViewSearch extends React.Component {
                 name="name"
                 component={Input}
                 type="text"
-                placeholder="Search"
+                placeholder={translate('sponsor.component.reportViewSearch.placeholderSearch')}
                 className="keyword-search"
                 onChange={(e) => this.initSearch(e, 'name')}
               />
@@ -257,8 +258,9 @@ export class ReportViewSearch extends React.Component {
             <Field
               name="status"
               component={ReactSelect}
-              placeholder="Select Study Status"
+              placeholder={translate('sponsor.component.reportViewSearch.placeholderStatus')}
               options={statusOptions}
+              clearable={false}
               onChange={(e) => this.initSearch(e, 'status')}
             />
           </div>
@@ -279,13 +281,15 @@ export class ReportViewSearch extends React.Component {
             </a>
           </Modal.Header>
           <Modal.Body>
-            <DateRange
-              linkedCalendars
-              ranges={defaultRanges}
-              startDate={startDate}
-              endDate={endDate}
-              onInit={this.handleChange}
+            <DateRangePicker
               onChange={this.handleChange}
+              moveRangeOnFirstSelection={false}
+              showMonthAndYearPickers={false}
+              months={2}
+              direction="horizontal"
+              ranges={[this.state.predefined]}
+              staticRanges={defaultStaticRanges}
+              inputRanges={[]}
             />
             <div className="dateRange-helper">
               <div className="emit-border"><br /></div>
@@ -293,7 +297,7 @@ export class ReportViewSearch extends React.Component {
                 <div className="btn-block text-right">
                   {this.renderDateFooter()}
                   <Button onClick={this.changeRange}>
-                    Submit
+                    {translate('sponsor.component.reportViewSearch.submit')}
                   </Button>
                 </div>
               </div>
