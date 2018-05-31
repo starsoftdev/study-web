@@ -140,29 +140,25 @@ export default class EditInformationModal extends React.Component {
   }
 
   renderModalContent() {
-    const { addEmailNotificationClick, openModal, onClose, study } = this.props;
-    if (openModal) {
-      const initialValues = this.getEditStudyInitialValues(study);
-      return (
-        <div>
-          <div className="form-area">
-            <div className="head">
-              <div className="inner-head">
-                <strong className="title">INFO</strong>
-                <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
-              </div>
-            </div>
-            <EditInformationForm
-              addEmailNotificationClick={addEmailNotificationClick}
-              initialValues={initialValues}
-              onClose={onClose}
-            />
-          </div>
-        </div>
-      );
-    }
+    const { addEmailNotificationClick, onClose, study } = this.props;
+    const initialValues = this.getEditStudyInitialValues(study);
+
     return (
-      <div />
+      <div>
+        <div className="form-area">
+          <div className="head">
+            <div className="inner-head">
+              <strong className="title">INFO</strong>
+              <a className="btn-right-arrow" onClick={onClose}><i className="glyphicon glyphicon-menu-right" /></a>
+            </div>
+          </div>
+          <EditInformationForm
+            addEmailNotificationClick={addEmailNotificationClick}
+            initialValues={initialValues}
+            onClose={onClose}
+          />
+        </div>
+      </div>
     );
   }
 
