@@ -129,7 +129,8 @@ module.exports = (options) => ({
   resolve: {
     alias: {
       corporate: path.resolve(process.cwd(), 'corporate'),
-      app: path.resolve(process.cwd(), 'app')
+      app: path.resolve(process.cwd(), 'app'),
+      admin: path.resolve(process.cwd(), 'admin')
     },
     modules: [
       'app',
