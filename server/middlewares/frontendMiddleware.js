@@ -175,6 +175,16 @@ const addDevMiddlewares = (app, webpackConfig) => {
     });
   });
 
+  app.get('/admin*', (req, res) => {
+    fs.readFile(path.join(compiler.outputPath, 'admin.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(file.toString());
+      }
+    });
+  });
+
   // for loader.io verification
   app.get('/loaderio-9719d1a0d138bda492e5d8e90a243c6e', (req, res) => {
     res.send('loaderio-9719d1a0d138bda492e5d8e90a243c6e');
@@ -231,6 +241,8 @@ const addProdMiddlewares = (app, options) => {
   app.use('/images', express.static(serverPublicPath));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
+
+  app.get('/admin*', (req, res) => res.sendFile(path.resolve(outputPath, 'admin.html')));
 
   app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
 
