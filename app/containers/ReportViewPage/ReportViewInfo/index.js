@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import graphImage from '../../../assets/images/graph.svg';
+import { translate } from '../../../../common/utilities/localization';
 
 
 export class ReportViewInfo extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -16,21 +17,21 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
 
   render() {
     let totals = {
-      textSent: 'N/A',
-      unreadText: 'N/A',
-      emailSent: 'N/A',
-      count_today: 'N/A',
-      count_yesterday: 'N/A',
+      textSent: translate('sponsor.component.reportViewInfo.na'),
+      unreadText: translate('sponsor.component.reportViewInfo.na'),
+      emailSent: translate('sponsor.component.reportViewInfo.na'),
+      count_today: translate('sponsor.component.reportViewInfo.na'),
+      count_yesterday: translate('sponsor.component.reportViewInfo.na'),
     };
     let totalSignUps = 0;
     if (this.props.totals.details[this.props.totals.source]) {
       totals = {
-        textSent: (this.props.totals.details[this.props.totals.source].outbound_text || this.props.totals.details[this.props.totals.source].outbound_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_text) : 'N/A',
-        unreadText: (this.props.totals.details[this.props.totals.source].unread_text || this.props.totals.details[this.props.totals.source].unread_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].unread_text) : 'N/A',
-        emailSent: (this.props.totals.details[this.props.totals.source].outbound_emails || this.props.totals.details[this.props.totals.source].outbound_emails === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_emails) : 'N/A',
+        textSent: (this.props.totals.details[this.props.totals.source].outbound_text || this.props.totals.details[this.props.totals.source].outbound_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_text) : translate('sponsor.component.reportViewInfo.na'),
+        unreadText: (this.props.totals.details[this.props.totals.source].unread_text || this.props.totals.details[this.props.totals.source].unread_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].unread_text) : translate('sponsor.component.reportViewInfo.na'),
+        emailSent: (this.props.totals.details[this.props.totals.source].outbound_emails || this.props.totals.details[this.props.totals.source].outbound_emails === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_emails) : translate('sponsor.component.reportViewInfo.na'),
 
-        count_today: (this.props.totals.details[this.props.totals.source].count_today || this.props.totals.details[this.props.totals.source].count_today === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_today) : 'N/A',
-        count_yesterday: (this.props.totals.details[this.props.totals.source].count_yesterday || this.props.totals.details[this.props.totals.source].count_yesterday === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_yesterday) : 'N/A',
+        count_today: (this.props.totals.details[this.props.totals.source].count_today || this.props.totals.details[this.props.totals.source].count_today === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_today) : translate('sponsor.component.reportViewInfo.na'),
+        count_yesterday: (this.props.totals.details[this.props.totals.source].count_yesterday || this.props.totals.details[this.props.totals.source].count_yesterday === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_yesterday) : translate('sponsor.component.reportViewInfo.na'),
       };
 
       totalSignUps = parseInt(this.props.totals.details[this.props.totals.source].count_not_contacted) + parseInt(this.props.totals.details[this.props.totals.source].dnq) + parseInt(this.props.totals.details[this.props.totals.source].action_needed) + parseInt(this.props.totals.details[this.props.totals.source].scheduled)
@@ -46,7 +47,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 <img width="141" height="119" alt=" " src={graphImage} />
               </div>
               <div className="textbox">
-                <h2 className="view-header">PATIENT <br />SIGN UPS</h2>
+                <h2 className="view-header" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.signUps') }} />
               </div>
             </div>
           </div>
@@ -54,16 +55,16 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title report-font-fix">YESTERDAY</span>
+                  <span className="sub-title report-font-fix">{translate('sponsor.component.reportViewInfo.yesterday')}</span>
                   <strong className="number">{totals.count_yesterday}</strong>
                 </li>
                 <li>
-                  <span className="sub-title report-font-fix">TODAY</span>
+                  <span className="sub-title report-font-fix">{translate('sponsor.component.reportViewInfo.today')}</span>
                   <strong className="number">{totals.count_today}</strong>
                 </li>
                 <li>
-                  <span className="sub-title report-font-fix">TOTAL</span>
-                  <strong className="number">{totalSignUps || 'N/A'}</strong>
+                  <span className="sub-title report-font-fix">{translate('sponsor.component.reportViewInfo.total')}</span>
+                  <strong className="number">{totalSignUps || translate('sponsor.component.reportViewInfo.na')}</strong>
                 </li>
               </ul>
             </div>
@@ -74,7 +75,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="reprot-view-box-holder">
               <i className="icomoon-icon_comment_alt pull-left i-view" />
               <div className="textbox">
-                <h2 className="view-header">PATIENT <br />MESSAGES</h2>
+                <h2 className="view-header" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.messages') }} />
               </div>
             </div>
           </div>
@@ -82,15 +83,15 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="reprot-view-box-holder">
               <ul className="list-inline text-center list-activities alt">
                 <li>
-                  <span className="sub-title report-font-fix">TEXT<br />SENT</span>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.textSent') }} />
                   <strong className="number">{totals.textSent}</strong>
                 </li>
                 <li>
-                  <span className="sub-title report-font-fix">UNREAD<br />TEXT</span>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.textUnread') }} />
                   <strong className="number">{totals.unreadText}</strong>
                 </li>
                 <li>
-                  <span className="sub-title report-font-fix">EMAIL <br />SENT</span>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.emailSent') }} />
                   <strong className="number">{totals.emailSent}</strong>
                 </li>
               </ul>
@@ -102,7 +103,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="reprot-view-box-holder">
               <i className="icomoon-phone pull-left i-view" />
               <div className="textbox">
-                <h2 className="view-header">PATIENT <br />QUALIFICATION SUITE</h2>
+                <h2 className="view-header" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.pqs') }} />
               </div>
             </div>
           </div>
@@ -110,16 +111,16 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
             <div className="reprot-view-box-holder" onClick={this.props.openPQSModal}>
               <ul className="list-inline text-center list-activities alt">
                 <li className="font-fix">
-                  <span className="sub-title report-font-fix">INCOMING<br />CALL</span>
-                  <strong className="number">N/A</strong>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.incomingCall') }} />
+                  <strong className="number">{translate('sponsor.component.reportViewInfo.na')}</strong>
                 </li>
                 <li className="font-fix">
-                  <span className="sub-title report-font-fix">SUCCESSFUL<br />TRANSFER</span>
-                  <strong className="number">N/A</strong>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.successfulTransfer') }} />
+                  <strong className="number">{translate('sponsor.component.reportViewInfo.na')}</strong>
                 </li>
                 <li className="font-fix">
-                  <span className="sub-title report-font-fix">UNSUCCESSFUL<br />TRANSFER</span>
-                  <strong className="number">N/A</strong>
+                  <span className="sub-title report-font-fix" dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewInfo.unsuccessfulTransfer') }} />
+                  <strong className="number">{translate('sponsor.component.reportViewInfo.na')}</strong>
                 </li>
               </ul>
             </div>

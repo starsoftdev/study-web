@@ -107,11 +107,11 @@ export class TrialsArticle extends Component {
           <div className="desc">
             {landingDescription ? (
               <div className="custom-description" dangerouslySetInnerHTML={{ __html: markdown }} />
-              ) : (
-                <p>
-                  {trial.name}
-                </p>
-              )
+            ) : (
+              <p>
+                {trial.name}
+              </p>
+            )
             }
           </div>
           <div className="btn-holder">
