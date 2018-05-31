@@ -57,12 +57,6 @@ class SearchProtocolsForm extends Component { // eslint-disable-line react/prefe
       <Form className="form-search form-search-protocols pull-left" onSubmit={handleSubmit}>
 
         <div className="btns-popups pull-right disabled-buttons-container">
-          <div className="col pull-right">
-            <button disabled className="btn btn-primary download"><i className="icomoon-icon_creditcard" /> {translate('sponsor.component.searchProtocolsForm.credits')}</button>
-          </div>
-          <div className="col pull-right">
-            <button disabled className="btn btn-primary download">{translate('sponsor.component.searchProtocolsForm.newProtocol')}</button>
-          </div>
         </div>
         <div className="fields-holder clearfix">
           <div className="pull-left custom-select">

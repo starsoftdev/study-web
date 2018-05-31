@@ -78,26 +78,26 @@ const selectValidSiteLocations = () => createSelector(
             moment(campaign.dateFrom) < moment() && moment() < moment(campaign.dateTo)
           )).length > 0
       )).map(site => {
-        const recentCampaign = site.campaigns.filter(campaign =>
-          (
-            moment(campaign.dateFrom) < moment() && moment() < moment(campaign.dateTo)
-          )).sort((a, b) => {
-            if (moment(a.dateFrom) > moment(b.dateFrom)) {
-              return 1;
-            } else if (moment(a.dateFrom) === moment(b.dateFrom)) {
-              return 0;
-            }
-            return -1;
-          })[0];
-        return {
-          site: {
-            value: site.id,
-            label: site.name,
-          },
-          study_id: recentCampaign.study_id,
-          campaign_id: recentCampaign.id,
-        };
-      });
+      const recentCampaign = site.campaigns.filter(campaign =>
+        (
+          moment(campaign.dateFrom) < moment() && moment() < moment(campaign.dateTo)
+        )).sort((a, b) => {
+        if (moment(a.dateFrom) > moment(b.dateFrom)) {
+          return 1;
+        } else if (moment(a.dateFrom) === moment(b.dateFrom)) {
+          return 0;
+        }
+        return -1;
+      })[0];
+      return {
+        site: {
+          value: site.id,
+          label: site.name,
+        },
+        study_id: recentCampaign.study_id,
+        campaign_id: recentCampaign.id,
+      };
+    });
   }
 );
 
@@ -426,6 +426,11 @@ const selectNewContactSuccess = () => createSelector(
   (substate) => get(substate, 'baseData.newContactsSuccess', {})
 );
 
+const selectPrivacyRequestSuccess = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.privacyRequestSuccess', {})
+);
+
 const selectTrials = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.trials', {})
@@ -521,6 +526,7 @@ export {
   selectGetProposalSuccess,
   selectLearnAboutFutureTrialsSuccess,
   selectNewContactSuccess,
+  selectPrivacyRequestSuccess,
 
   selectTrials,
   selectTrialsTotal,

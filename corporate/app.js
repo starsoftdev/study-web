@@ -31,6 +31,7 @@ import { default as NotFound } from './containers/NotFoundPage';
 import { default as ServiceUnavailable } from './containers/ServiceUnavailable';
 import { default as ThankYouPage } from './containers/ThankYouPage';
 import { default as ThankYouPage2 } from './containers/ThankYouPage2';
+import { default as PrivacyRequestPage } from './containers/PrivacyRequest';
 
 import './assets/less/main.less';
 
@@ -72,6 +73,7 @@ const routes = {
     { path: '/billing', component: BillingPage },
     { path: '/order', component: OrderPage },
     { path: '/privacy-policy', component: PrivacyPolicyPage },
+    { path: '/privacy-request', component: PrivacyRequestPage },
     { path: '/pqs', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },

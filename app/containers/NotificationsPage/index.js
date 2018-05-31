@@ -40,7 +40,7 @@ export const getRedirectionUrl = (notification) => {
 };
 
 export const getAvatarUrl = (notification) => {
-  const { event_log } = notification;
+  const { event_log } = notification;  //eslint-disable-line
   const data = JSON.parse(event_log.eventData);
   let url = require('../../assets/images/Default-User-Img-Dr.png');
   if (event_log.eventType === 'twilio-message' || event_log.eventType === 'new-patient' || event_log.eventType === 'twilio-call') {
@@ -70,7 +70,7 @@ export const eventMessage = (eventLog) => {
 };
 
 const sanitize = (notifications) => notifications.map(n => {
-  const { event_log } = n;
+  const { event_log } = n; //eslint-disable-line
   const description = event_log.eventMessage.replace(/<strong>/g, '').replace(/<\/strong>/g, '');
 
   const date = moment(event_log.created).format(translate('portals.page.notificationsPage.dateMask'));
