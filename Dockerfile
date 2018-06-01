@@ -11,6 +11,7 @@ RUN apk add --no-cache --virtual .build-deps \
   nasm \
   libpng-dev \
   lcms2-dev \
+  libtool \
   bash
 #  python && \
 #  apk add vips-dev fftw-dev --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
