@@ -23,6 +23,7 @@ import moment from 'moment-timezone';
 import SideNavBar from '../../components/SideNavBar';
 import TopHeaderBar from '../../components/TopHeaderBar';
 import TopHeaderBar2 from '../../components/TopHeaderBar2';
+import TopHeaderBar3 from '../../components/TopHeaderBar3';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import GlobalNotifications from '../../containers/GlobalNotifications';
 import { logout } from '../../containers/LoginPage/actions';
@@ -253,6 +254,31 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       );
     }
 
+    if (currentUserRoleType === 'dashboard') {
+      return (
+        <IdleTimer
+          element={document}
+          events={['mousemove', 'keydown', 'mousedown', 'touchstart']}
+          activeAction={this.activeHandler}
+          idleAction={this.idleHandler}
+          timeout={this.state.timeout}
+          startOnLoad
+          format="MM-DD-YYYY HH:MM:ss.SSS"
+        >
+          <div id="wrapper" className="dashboard">
+            <TopHeaderBar2 />
+            <main id="main">
+              {React.Children.toArray(this.props.children)}
+            </main>
+            <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
+            <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
+            {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
+          </div>
+        </IdleTimer>
+      );
+    }
+
+    // callcenter role
     return (
       <IdleTimer
         element={document}
@@ -264,12 +290,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         format="MM-DD-YYYY HH:MM:ss.SSS"
       >
         <div id="wrapper" className="dashboard">
-          <TopHeaderBar2 />
+          <TopHeaderBar3 />
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
-          <ChangeTemporaryPasswordModal show={this.state.showChangePwdModal} onSubmit={this.handleChangePassword} />
-          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType={currentUserRoleType} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
