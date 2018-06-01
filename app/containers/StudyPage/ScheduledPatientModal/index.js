@@ -121,7 +121,6 @@ class ScheduledPatientModal extends React.Component {
     this.props.handleDateChange(chosenDate);
   }
 
-
   render() {
     const { onHide, currentPatient, show, handleSubmit, submittingSchedule } = this.props;
 
