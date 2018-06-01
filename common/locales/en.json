@@ -879,7 +879,7 @@
     "sponsor.component.patientNote.defaultTimeMask": "h:mm A",
     "sponsor.component.patientNote.name": "Name:",
     "sponsor.component.patientNote.date": "Date:",
-    "sponsor.component.patientNote.time": "Name:",
+    "sponsor.component.patientNote.time": "Time:",
 
     "sponsor.component.PQSModal.title": "Patient Qualification Suite Stats",
     "sponsor.component.PQSModal.dateRange": "Date Range",
