@@ -3,7 +3,7 @@
 ****************************************************************************************/
 
 #adminHomePage h1 { font-size: 40px; text-transform: uppercase; }
-#statsBox { background: #fff; border: 2px solid #00afef; margin: 15px 0 0; padding: 20px; }
+#statsBox { background: #fff; border: 2px solid #00afef; margin: 15px 0 30px; padding: 20px; }
 #statsBox ul { list-style: none; padding: 0; }
 #statsBox li { margin-bottom: 15px; margin-top: 10px; text-transform: uppercase; }
 #statsBox .section { display: inline-block; vertical-align: top; }
@@ -12,3 +12,13 @@
 #statsBox .section3 { width: 35%; }
 #statsBox .section .chart { display: inline-block; vertical-align: top; width: 50%; }
 #statsBox .section ul.half { display: inline-block; vertical-align: top; width: 50%; }
+
+#mediaStatsBox { background: #fff; border: 2px solid #00afef; margin-bottom: 30px;}
+#mediaStatsTable { padding: 10px 20px; }
+#mediaStatsTable table { width: 100%; }
+#mediaStatsTable tr { height: 35px; display: none; }
+#mediaStatsTable tr.header { display: table-row; }
+#mediaStatsTable tr.alwaysVisible { display: table-row; }
+.expanded #mediaStatsTable tr { height: 35px; display: table-row; }
+.expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
+.expendableSection .showMoreBtn:hover { background: #ccc; }
