@@ -14,39 +14,49 @@ const mapStateToProps = createStructuredSelector({
 const filterOptions = {
   statusOptions : [
     {
+      id: 1,
       label: 'Active',
       value: 'active',
     }, {
+      id: 2,
       label: 'Inactive',
       value: 'inactive',
     },
   ],
   colorOptions : [
     {
+      id: 1,
       label: 'Red',
       value: 'red',
     }, {
+      id: 2,
       label: 'Yellow',
       value: 'yellow',
     }, {
+      id: 3,
       label: 'Green',
       value: 'green',
     }, {
+      id: 4,
       label: 'Purple',
       value: 'purple',
     },
   ],
   tierOptions : [
     {
+      id: 1,
       label: 'Tier 1',
       value: '1',
     }, {
+      id: 2,
       label: 'Tier 2',
       value: '2',
     }, {
+      id: 3,
       label: 'Tier 3',
       value: '3',
     }, {
+      id: 4,
       label: 'Tier 4',
       value: '4',
     },
