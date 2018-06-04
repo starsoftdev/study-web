@@ -37,7 +37,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
           </ul>
           <div className="chart">
             <PieChart
-              data={pieData1}
+              data={pieData1} b
               width={180}
               height={180}
               radius={90}
