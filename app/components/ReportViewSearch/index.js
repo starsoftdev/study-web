@@ -133,11 +133,11 @@ export class ReportViewSearch extends React.Component {
     if (!endDate.isAfter(startDate)) {
       endDate = endDate.add(1, 'days');
     }
-    const uiStartDate = startDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
-    const uiEndDate = endDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
+    const uiStartDate = startDate.clone().format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
+    const uiEndDate = endDate.clone().format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
 
-    this.props.dispatch(change('searchReports', 'startDate', startDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
-    this.props.dispatch(change('searchReports', 'endDate', endDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
+    this.props.dispatch(change('searchReports', 'startDate', startDate));
+    this.props.dispatch(change('searchReports', 'endDate', endDate));
 
     this.setState({
       selectedTime: {

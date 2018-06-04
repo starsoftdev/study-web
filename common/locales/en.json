@@ -803,7 +803,6 @@
     "sponsor.component.sponsorManageUsersProtocolsTable.tableHeadIwrs": "IWRS",
 
     "sponsor.component.reportViewSearch.defaultDateMask": "MM/DD/YY",
-    "sponsor.component.reportViewSearch.dateAndTimeMask": "'YYYY-MM-DD HH:mm:ss'",
     "sponsor.component.reportViewSearch.active": "Active",
     "sponsor.component.reportViewSearch.inactive": "Inactive",
     "sponsor.component.reportViewSearch.dateRange": "Date Range",
