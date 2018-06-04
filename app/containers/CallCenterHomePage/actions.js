@@ -4,10 +4,10 @@ import {
   FETCH_PATIENTS_ERROR,
 } from './constants';
 
-export function fetchPatients(clientRoleId) {
+export function fetchPatients(userId) {
   return {
     type: FETCH_PATIENTS,
-    clientRoleId,
+    userId,
   };
 }
 
