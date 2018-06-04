@@ -3083,7 +3083,7 @@ th, .th {
 /* main part styling */
 
 .admin-dashboard {
-  padding: 82px 10px 0;
+  padding: 102px 10px 0;
 
   .active-table-row {
     background: #f1f1f1 !important;
@@ -3367,7 +3367,7 @@ th, .th {
   position: relative;
 
   &.bar-active {
-    padding-top: 118px;
+    padding-top: 156px;
 
     .filters-bar {
       left: 20px;
@@ -3386,7 +3386,7 @@ th, .th {
     border: solid 2px #f78e1e;
 
     .filters-holder {
-      max-height: 83px;
+      max-height: 86px;
       overflow-y: auto;
       padding: 15px 18px;
       overflow-x: hidden;
@@ -3430,18 +3430,12 @@ th, .th {
       margin: 0 0 -12px;
     }
 
-    .add-new-filters {
-      margin: 8px 12px 0 0;
-      line-height: 26px;
-    }
-
     .top-head.fixed-position {
       margin: 14px 0 0;
     }
   }
 
   .holder {
-    /*overflow: hidden;*/
 
     .font(0, 0);
     > * {
@@ -3453,14 +3447,6 @@ th, .th {
       * {
         font-size: 14px;
       }
-    }
-  }
-
-  .add-new-filters {
-    padding: 5px 12px;
-    text-indent: 1px;
-    @media screen and (max-width: @psd) {
-      padding: 5px 13px 5px 12px;
     }
   }
 
@@ -5712,8 +5698,22 @@ div[data-percentage],
 @import '../layout/_multi-select-checkbox';
 @import '../layout/dashboard-custom';
 
-
 /*****************/
 /* admin portal headerBar Component  */
 /*****************/
 @import "../../../components/AdminHeaderBar/AvatarMenu/styles";
+
+/*****************/
+/* admin portal CenteredModal Component  */
+/*****************/
+@import "../../../components/CenteredModal/styles";
+
+/*****************/
+/* admin portal FiltersForm Component  */
+/*****************/
+@import "../../../components/FiltersForm/styles";
+
+/*****************/
+/* admin portal Filter Component  */
+/*****************/
+@import "../../../components/Filter/styles";
