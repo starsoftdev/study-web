@@ -66,7 +66,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       customFilters: [],
       prevTotalsFilters: [],
       prevOffset: null,
-      searchType: null,
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -83,6 +82,8 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.mapFilterValues = this.mapFilterValues.bind(this);
 
     this.filtersFormValues = {};
+    this.searchType = null;
+    this.searchValue = null;
   }
 
   addFilter(options) {
@@ -177,40 +178,15 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
       if (key !== 'campaign' && key !== 'search') {
-        if (key === 'percentage') {
-          newFilters.push({
-            name: key,
-            type: 'compare',
-            value: filterValues.value,
-            onChange: this.percentageFilterChange,
-            onSubmit: this.percentageFilterSubmit,
-          });
-        } else if (key === 'nearbyStudies') {
-          newFilters.push({
-            name: key,
-            type: 'nearby',
-            value: filterValues.value,
-            onChange: this.nearbyFilterChange,
-            onSubmit: this.nearbyFilterSubmit,
-          });
-        } else if (key === 'address') {
-          newFilters.push({
-            name: key,
-            type: 'address',
-            value: filterValues.value,
-            onSubmit: this.addressFilterSubmit,
-          });
-        } else {
-          _.forEach(filterValues, (v) => {
-            if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
-              newFilters.push({
-                name: key,
-                type: 'value',
-                value: v.label,
-              });
-            }
-          });
-        }
+        _.forEach(filterValues, (v) => {
+          if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
+            newFilters.push({
+              name: key,
+              type: 'value',
+              value: v.label,
+            });
+          }
+        });
       }
     });
     return newFilters;
@@ -237,7 +213,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
                 onClick={() => this.addFilter({
                   name: 'search',
                   type: 'search',
-                  value: '',
+                  value: this.searchValue,
                 })}
               >
                 <i className="icomoon-icon_search2" />
@@ -247,6 +223,9 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
                 component={Input}
                 type="text"
                 placeholder="Search"
+                onChange={(e) => {
+                  this.searchValue = e.target.value;
+                }}
               />
             </div>
             <Field
@@ -256,9 +235,9 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
               placeholder="Select Type"
               searchable
               options={filterOptions.searchOptions}
-              onChange={(e) => this.setState({
-                searchType: e,
-              })}
+              onChange={(e) => {
+                this.searchType = e;
+              }}
             />
             {this.state.modalOpen &&
               <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.modalOpen} onHide={this.closeFiltersModal}>
@@ -290,7 +269,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
               filters={filters}
               removeFilter={this.removeFilter}
               resetForm={resetForm}
-              searchType={this.state.searchType}
+              searchType={this.searchType}
             />
           </StickyContainer>
         }
