@@ -11,6 +11,7 @@ export default class FilterQueryForm extends React.Component {
     filters: React.PropTypes.array.isRequired,
     removeFilter: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
+    searchType: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -19,21 +20,12 @@ export default class FilterQueryForm extends React.Component {
   }
 
   formatFilterName(filter) {
-    let name = filter.name;
-    if (name === 'siteLocation') {
-      name = 'Site Location';
-    }
-    if (name === 'exposureLevel') {
-      name = 'Exposure Level';
-    }
-    if (name === 'siteNumber') {
-      name = 'Site Number';
-    }
+    const name = filter.name;
     return { ...filter, name };
   }
 
   render() {
-    const { filters, clearFilters, removeFilter } = this.props;
+    const { filters, clearFilters, removeFilter, searchType } = this.props;
     if (filters.length > 0) {
       return (
         <div className="filters-bar">
@@ -46,23 +38,14 @@ export default class FilterQueryForm extends React.Component {
                   key={index}
                   options={this.formatFilterName(filter)}
                   component={Filter}
+                  searchType={searchType}
                   onClose={() => removeFilter(filter)}
-                  onChange={(e) => {
-                    if (filter.onChange) {
-                      filter.onChange(e);
-                    }
-                  }}
-                  onSubmit={(e) => {
-                    if (filter.onSubmit) {
-                      filter.onSubmit(e);
-                    }
-                  }}
                 />
               )}
             </div>
           </div>
           <div className="gray-outline">
-            <Button className="pull-right" onClick={() => clearFilters()}>
+            <Button bsStyle="clear" className="pull-right" onClick={() => clearFilters()}>
               Clear
             </Button>
             <Button className="pull-right" onClick={() => {}}>
