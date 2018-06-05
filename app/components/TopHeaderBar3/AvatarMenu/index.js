@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
 
 

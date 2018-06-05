@@ -5,11 +5,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import Helmet from 'react-helmet';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
-import { Link } from 'react-router';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
@@ -22,7 +20,6 @@ import { selectFetchedPatients } from './selectors';
 import CenteredModal from '../../components/CenteredModal';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
-import studykikLogo from '../../assets/images/logo.svg';
 import FiltersForm from './FiltersForm/';
 
 import CallDiv from './CallDiv/';
