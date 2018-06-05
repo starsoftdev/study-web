@@ -90,7 +90,7 @@ export default class Filter extends React.Component {
       case 'address':
         return this.createAddressBox(searchType, options.value);
       default:
-        return null;
+        return this.createStudyNumberBox(options.type, options.value);
     }
   }
 }
