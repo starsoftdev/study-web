@@ -73,7 +73,7 @@ const filterOptions = {
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
 @connect(mapStateToProps)
 
-class FiltersForm extends Component { // eslint-disable-line react/prefer-stateless-function
+class FiltersModalForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     initialValues: PropTypes.object || PropTypes.arrayOf(PropTypes.object),
     updateFilters: PropTypes.func,
@@ -269,4 +269,4 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
   }
 }
 
-export default FiltersForm;
+export default FiltersModalForm;
