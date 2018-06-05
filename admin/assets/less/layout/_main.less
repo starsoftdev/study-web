@@ -3188,14 +3188,11 @@ th, .th {
     margin: 0 0 0 12px;
 
     &:focus,
-    &:active {
-      background: #fff;
-      color: #00afef;
-    }
-
+    &:active,
     &:hover {
+      background: #76daff;
+      border-color: #76daff;
       color: #fff;
-      background: #00afef;
     }
   }
 }
@@ -3367,7 +3364,8 @@ th, .th {
   position: relative;
 
   &.bar-active {
-    padding-top: 156px;
+    height: 160px;
+    margin: 0 0 30px;
 
     .filters-bar {
       left: 20px;
@@ -3383,7 +3381,7 @@ th, .th {
     // left: -99999px;
     position: fixed;
     background: #fff;
-    border: solid 2px #f78e1e;
+    border: solid 2px #00afef;
 
     .filters-holder {
       max-height: 86px;
@@ -3579,43 +3577,6 @@ div[data-percentage],
     }
 
   }
-
-  .color {
-    /*font-weight: 700;*/
-  }
-  .red {
-    color: #dd0000;
-
-  }
-
-  .yellow {
-    color: #f9ce15;
-  }
-
-  .green {
-    color: #7dbc00;
-  }
-
-  .purple {
-    color: #873fbd;
-  }
-
-  .tier1 {
-    color: #00afef;
-  }
-
-  .tier2 {
-    color: #f78e1e;
-  }
-
-  .tier3 {
-    color: #a0cf67;
-  }
-
-  .tier4 {
-    color: #949ca1;
-  }
-
 }
 
 .graph-area {
