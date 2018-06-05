@@ -2,7 +2,6 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { StickyContainer } from 'react-sticky';
 import classNames from 'classnames';
-import Button from 'react-bootstrap/lib/Button';
 
 import Filter from './index';
 
@@ -45,12 +44,12 @@ export default class FilterQueryForm extends React.Component {
             </div>
           </div>
           <div className="gray-outline">
-            <Button bsStyle="clear" className="pull-right" onClick={() => clearFilters()}>
+            <button className="pull-right btn btn-clear clear" onClick={() => clearFilters()}>
               Clear
-            </Button>
-            <Button className="pull-right" onClick={() => {}}>
+            </button>
+            <button className="pull-right btn btn-default" onClick={() => {}}>
               Apply
-            </Button>
+            </button>
           </div>
         </div>
       </StickyContainer>
