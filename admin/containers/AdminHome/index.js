@@ -14,6 +14,8 @@ import Modal from 'react-bootstrap/lib/Modal';
 import _, { concat, mapKeys, cloneDeep, pullAt, findIndex } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
+import ExpandableSection from '../../components/ExpandableSection';
+import MediaStatsTable from '../../components/MediaStatsTable';
 import CenteredModal from '../../components/CenteredModal';
 import FiltersForm from '../../components/FiltersForm';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
@@ -274,6 +276,9 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
           </StickyContainer>
         }
         <StatsBox />
+        <div id="mediaStatsBox">
+          <ExpandableSection content={<MediaStatsTable />} />
+        </div>
       </div>
     );
   }
