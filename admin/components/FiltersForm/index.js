@@ -65,9 +65,9 @@ const filterOptions = {
   sponsorsOptions : [],
   protocolsOptions : [],
   croOptions : [],
+  adOptions : [],
   smOptions : [],
   bdOptions : [],
-  aeOptions : [],
 };
 
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
@@ -214,17 +214,17 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
 
           <div className="field-row">
             <Field
-              name="ao"
+              name="ad"
               className="filter-field"
               component={ReactMultiCheckBox}
-              placeholder="AO"
+              placeholder="AD OPERATION"
               optionLabelKey="label"
               multiple
               searchable
               includeAllOption
               onChange={(e) => this.initSearch(e, 'ao')}
-              dataSource={filterOptions.aeOptions}
-              initialValue={initialValues.ao}
+              dataSource={filterOptions.adOptions}
+              initialValue={initialValues.ad}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -234,7 +234,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               name="bd"
               className="filter-field"
               component={ReactMultiCheckBox}
-              placeholder="BD"
+              placeholder="BUSINESS DEVELOPMENT"
               optionLabelKey="label"
               multiple
               searchable
@@ -251,7 +251,7 @@ class FiltersForm extends Component { // eslint-disable-line react/prefer-statel
               name="cc"
               className="filter-field"
               component={ReactMultiCheckBox}
-              placeholder="CC"
+              placeholder="CALL CENTER"
               searchPlaceholder="Search"
               searchable
               optionLabelKey="label"
