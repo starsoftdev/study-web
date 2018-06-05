@@ -23,17 +23,17 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       <div id="statsBox">
         <div className="section section1">
           <ul>
-            <li>Last 24 hours: 100</li>
-            <li>Campaign Total: 200</li>
-            <li>Grand Total: 700</li>
+            <li><strong>Last 24 hours:</strong> 100</li>
+            <li><strong>Campaign Total:</strong> 200</li>
+            <li><strong>Grand Total:</strong> 700</li>
           </ul>
         </div>
         <div className="section section2">
           <ul className="half">
-            <li>RED: 40 (40%)</li>
-            <li>Yellow: 30 (30%)</li>
-            <li>Green: 20 (20%)</li>
-            <li>Purple: 10 (10%)</li>
+            <li><strong className="color red">RED:</strong> 40 (40%)</li>
+            <li><strong className="color yellow">Yellow:</strong> 30 (30%)</li>
+            <li><strong className="color green">Green:</strong> 20 (20%)</li>
+            <li><strong className="color purple">Purple:</strong> 10 (10%)</li>
           </ul>
           <div className="chart">
             <PieChart
@@ -52,10 +52,10 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         </div>
         <div className="section section2">
           <ul className="half">
-            <li>Tier 1: 40 (40%)</li>
-            <li>Tier 2: 30 (30%)</li>
-            <li>Tier 3: 20 (20%)</li>
-            <li>Tier 4: 10 (10%)</li>
+            <li><strong className="tier1">Tier 1:</strong> 40 (40%)</li>
+            <li><strong className="tier2">Tier 2:</strong> 30 (30%)</li>
+            <li><strong className="tier3">Tier 3:</strong> 20 (20%)</li>
+            <li><strong className="tier4">Tier 4:</strong> 10 (10%)</li>
           </ul>
           <div className="chart">
             <PieChart
