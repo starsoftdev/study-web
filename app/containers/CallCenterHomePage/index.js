@@ -5,6 +5,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
+import Helmet from 'react-helmet';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
@@ -67,13 +68,8 @@ class CallCenterHomePage extends Component {
 
     siteOptions.unshift({ label: 'All', value: '0' });
     return (
-      <div id="callcentermain" className="not-found-page">
+      <div className="container-fluid" id="callcentermain">
         <form action="#" className="form-search clearfix">
-          <h1 className="logo pull-left">
-            <Link to="/app">
-              <img src={studykikLogo} width="350" height="51" alt="logo" />
-            </Link>
-          </h1>
           <div className="search-area">
             <div className="field">
               <Button bsStyle="primary" onClick={(e) => this.openFiltersModal(e)}>
