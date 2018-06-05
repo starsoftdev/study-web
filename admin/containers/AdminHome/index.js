@@ -68,6 +68,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       prevOffset: null,
     };
 
+    this.mapSearchLabels = this.mapSearchLabels.bind(this);
     this.addFilter = this.addFilter.bind(this);
     this.updateFilters = this.updateFilters.bind(this);
     this.clearFilters = this.clearFilters.bind(this);
@@ -87,7 +88,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     if (customFilters.length === 0) {
       const newOptions = {
         ...options,
-        name: options.name + customFilters.length,
         onClose: () => this.removeFilter({ name: 'search' }),
         onSubmit: this.searchFilterSubmit,
       };
@@ -120,12 +120,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       this.setState({ customFilters });
 
       change('adminDashboardFilters', 'search', []);
-    } else if (filter.name === 'percentage') {
-      change('adminDashboardFilters', 'percentage', []);
-    } else if (filter.name === 'nearbyStudies') {
-      change('adminDashboardFilters', 'nearbyStudies', []);
-    } else if (filter.name === 'address') {
-      change('adminDashboardFilters', 'address', []);
     } else if (filters[filter.name]) {
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
@@ -165,6 +159,19 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     return newFilters;
   }
 
+  mapSearchLabels(type) {
+    switch (type) {
+      case 'studyNumber':
+        return 'Study Number';
+      case 'postalCode':
+        return 'Postal Code';
+      case 'address':
+        return 'Address';
+      default:
+        return 'Search';
+    }
+  }
+
   render() {
     const { customFilters } = this.state;
     const { resetForm, filtersFormValues } = this.props;
@@ -184,7 +191,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
                 className="btn-enter"
                 type="submit"
                 onClick={() => this.addFilter({
-                  name: 'search',
+                  name: this.mapSearchLabels(this.searchType),
                   type: 'search',
                   value: this.searchValue,
                 })}
@@ -241,7 +248,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
             filters={filters}
             removeFilter={this.removeFilter}
             resetForm={resetForm}
-            searchType={this.searchType}
           />
         }
         <StatsBox />
