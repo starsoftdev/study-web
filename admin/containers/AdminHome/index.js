@@ -74,11 +74,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
-    this.handleChange = this.handleChange.bind(this, 'dateRange');
-    this.percentageFilterChange = this.percentageFilterChange.bind(this);
-    this.nearbyFilterChange = this.nearbyFilterChange.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
-    this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
 
     this.filtersFormValues = {};
@@ -146,32 +142,9 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.setState({ modalOpen: false });
   }
 
-  handleChange(which, payload) {
-    if (payload.selection) {
-      this.setState({
-        [which] : payload.selection,
-      });
-    }
-  }
-
-  percentageFilterChange(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'percentage', e);
-  }
-
-  nearbyFilterChange(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'nearbyStudies', e);
-  }
-
   searchFilterSubmit(e) {
     const { change } = this.props;
     change('adminDashboardFilters', 'search', { value: e });
-  }
-
-  addressFilterSubmit(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'address', { value: e });
   }
 
   mapFilterValues(filters) {

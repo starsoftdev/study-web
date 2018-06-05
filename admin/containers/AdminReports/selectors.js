@@ -11,7 +11,7 @@ const selectAdminHomePage = () => createSelector(
 
 const selectFilterFormValues = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'adminDashboardFilters.values', {})
+  substate => get(substate, 'adminReportsFilters.values', {})
 );
 
 export default selectAdminHomePage;
