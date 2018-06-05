@@ -21,8 +21,19 @@
 
   button {
 
+    &:first-child {
+      color: #999;
+      border-color: #999;
+      background-color: #fff;
+
+      &:hover {
+        color: #fff;
+        background: #999;
+      }
+    }
+
     &:last-child {
-      margin: 0 10px 0 0;
+      margin: 0 12px 0 0;
     }
   }
 }
@@ -32,6 +43,7 @@
   .admin-search-type {
 
     .form-control {
+      width: 210px;
       border-radius: 3px 0 0 3px;
       border-right-width: 1px;
     }
@@ -41,6 +53,7 @@
     position: relative;
 
     .form-control {
+      padding: 5px 50px 5px 15px;
       border-radius: 0 3px 3px 0;
       border-left-width: 1px;
     }
