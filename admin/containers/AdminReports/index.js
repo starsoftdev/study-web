@@ -82,11 +82,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
 
   addFilter(options) {
     const { customFilters } = this.state;
-
-    if (options.value === null) {
-      console.log('options', options);
-      this.removeFilter({ type: 'search' });
-    } else if (customFilters.length === 0) {
+    if (customFilters.length === 0 && options.value !== null) {
       const newOptions = {
         ...options,
         onClose: () => this.removeFilter({ name: 'search' }),
@@ -116,15 +112,11 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     const { change, filtersFormValues } = this.props;
     const filters = cloneDeep(filtersFormValues);
 
-    console.log('removeFilter', filter, customFilters);
-
     if (filter.type === 'search') {
-      console.log(findIndex(customFilters, filter));
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
 
       change('adminReportsFilters', 'search', []);
-      change('adminReportsFilters', 'study-search', '');
     } else if (filters[filter.name]) {
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
@@ -187,7 +179,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
                 searchable
                 options={filterOptions.searchOptions}
                 onChange={(e) => this.addFilter({
-                  name: 'search',
+                  name: 'Study Number',
                   type: 'search',
                   value: e,
                 })}
