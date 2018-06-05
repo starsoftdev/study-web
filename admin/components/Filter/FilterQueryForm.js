@@ -1,5 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { StickyContainer } from 'react-sticky';
+import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 
 import Filter from './index';
@@ -26,8 +28,8 @@ export default class FilterQueryForm extends React.Component {
 
   render() {
     const { filters, clearFilters, removeFilter, searchType } = this.props;
-    if (filters.length > 0) {
-      return (
+    return (
+      <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
         <div className="filters-bar">
           <div className="filters-holder search-filters">
             <strong className="title">FILTERS</strong>
@@ -53,8 +55,7 @@ export default class FilterQueryForm extends React.Component {
             </Button>
           </div>
         </div>
-      );
-    }
-    return null;
+      </StickyContainer>
+    );
   }
 }
