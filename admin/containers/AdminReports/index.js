@@ -18,7 +18,7 @@ import FiltersModalForm from '../../components/FiltersModalForm';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectFilterFormValues } from './selectors';
-const formName = 'adminDashboardFilters';
+const formName = 'adminReportsFilters';
 
 const filterOptions = {
   searchOptions : [
@@ -72,9 +72,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     this.removeFilter = this.removeFilter.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
-    this.handleChange = this.handleChange.bind(this, 'dateRange');
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
-    this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
 
     this.filtersFormValues = {};
@@ -85,7 +83,10 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
   addFilter(options) {
     const { customFilters } = this.state;
 
-    if (customFilters.length === 0) {
+    if (options.value === null) {
+      console.log('options', options);
+      this.removeFilter({ type: 'search' });
+    } else if (customFilters.length === 0) {
       const newOptions = {
         ...options,
         onClose: () => this.removeFilter({ name: 'search' }),
@@ -97,7 +98,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
   }
 
   updateFilters(key, value) {
-    this.props.change('adminDashboardFilters', key, value);
+    this.props.change('adminReportsFilters', key, value);
   }
 
   clearFilters() {
@@ -118,21 +119,17 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     console.log('removeFilter', filter, customFilters);
 
     if (filter.type === 'search') {
+      console.log(findIndex(customFilters, filter));
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
 
-      change('adminDashboardFilters', 'search', []);
-    } else if (filter.name === 'percentage') {
-      change('adminDashboardFilters', 'percentage', []);
-    } else if (filter.name === 'nearbyStudies') {
-      change('adminDashboardFilters', 'nearbyStudies', []);
-    } else if (filter.name === 'address') {
-      change('adminDashboardFilters', 'address', []);
+      change('adminReportsFilters', 'search', []);
+      change('adminReportsFilters', 'study-search', '');
     } else if (filters[filter.name]) {
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
 
-      change('adminDashboardFilters', filter.name, filters[filter.name]);
+      change('adminReportsFilters', filter.name, filters[filter.name]);
     }
   }
 
@@ -144,22 +141,9 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     this.setState({ modalOpen: false });
   }
 
-  handleChange(which, payload) {
-    if (payload.selection) {
-      this.setState({
-        [which] : payload.selection,
-      });
-    }
-  }
-
   searchFilterSubmit(e) {
     const { change } = this.props;
-    change('adminDashboardFilters', 'search', { value: e });
-  }
-
-  addressFilterSubmit(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'address', { value: e });
+    change('adminReportsFilters', 'search', { value: e });
   }
 
   mapFilterValues(filters) {
@@ -196,7 +180,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
             </Button>
             <div className="field pull-right">
               <Field
-                name="studyId"
+                name="study-search"
                 className="pull-right"
                 component={ReactSelect}
                 placeholder="Study Number"
