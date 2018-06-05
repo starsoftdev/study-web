@@ -6,6 +6,7 @@ const compression = require('compression');
 const pug = require('pug');
 const Promise = require('bluebird');
 const lookup = require('country-code-lookup');
+const packageJson = require('../../package.json');
 const PagesService = require('../services/pages.service');
 const getLandingPageLocals = require('../views/landing-page.locals');
 
@@ -136,6 +137,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
 
+  // ecv health check
+  app.get('/ecv', (req, res) => res.status(200).json({ name:packageJson.name, version:packageJson.version }));
+
   const serverPublicPath = webpackConfig.output.serverPublicPath || path.resolve(process.cwd(), 'public');
   app.use('/images', express.static(serverPublicPath));
 
@@ -232,6 +236,9 @@ const addDevMiddlewares = (app, webpackConfig) => {
 const addProdMiddlewares = (app, options) => {
   const publicPath = options.publicPath || '/';
   const outputPath = options.outputPath || path.resolve(process.cwd(), 'build');
+
+  // ecv health check
+  app.get('/ecv', (req, res) => res.status(200).json({ name:packageJson.name, version:packageJson.version }));
 
   // compression middleware compresses your server responses which makes them
   // smaller (applies also to assets). You can read more about that technique
