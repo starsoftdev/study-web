@@ -1,5 +1,5 @@
 /*
- * AdminHome
+ * AdminReports
  *
  */
 
@@ -12,27 +12,25 @@ import Modal from 'react-bootstrap/lib/Modal';
 import _, { concat, mapKeys, cloneDeep, pullAt, findIndex } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
-import ExpandableSection from '../../components/ExpandableSection';
-import MediaStatsTable from '../../components/MediaStatsTable';
 import CenteredModal from '../../components/CenteredModal';
+import RangePopups from '../../components/RangePopups';
 import FiltersModalForm from '../../components/FiltersModalForm';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectFilterFormValues } from './selectors';
-import Input from '../../../app/components/Input';
 const formName = 'adminDashboardFilters';
 
 const filterOptions = {
   searchOptions : [
     {
-      label: 'Study Number',
-      value: 'studyNumber',
+      label: '1',
+      value: '1',
     }, {
-      label: 'Postal Code',
-      value: 'postalCode',
+      label: '2',
+      value: '2',
     }, {
-      label: 'Address',
-      value: 'address',
+      label: '3',
+      value: '3',
     },
   ],
 };
@@ -51,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
   enableReinitialize: true,
 })
 @connect(mapStateToProps, mapDispatchToProps)
-export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
+export class AdminReports extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
@@ -75,8 +73,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
     this.handleChange = this.handleChange.bind(this, 'dateRange');
-    this.percentageFilterChange = this.percentageFilterChange.bind(this);
-    this.nearbyFilterChange = this.nearbyFilterChange.bind(this);
     this.searchFilterSubmit = this.searchFilterSubmit.bind(this);
     this.addressFilterSubmit = this.addressFilterSubmit.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
@@ -88,10 +84,10 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
   addFilter(options) {
     const { customFilters } = this.state;
+
     if (customFilters.length === 0) {
       const newOptions = {
         ...options,
-        name: options.name + customFilters.length,
         onClose: () => this.removeFilter({ name: 'search' }),
         onSubmit: this.searchFilterSubmit,
       };
@@ -118,6 +114,8 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     const { customFilters } = this.state;
     const { change, filtersFormValues } = this.props;
     const filters = cloneDeep(filtersFormValues);
+
+    console.log('removeFilter', filter, customFilters);
 
     if (filter.type === 'search') {
       pullAt(customFilters, findIndex(customFilters, filter));
@@ -152,16 +150,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         [which] : payload.selection,
       });
     }
-  }
-
-  percentageFilterChange(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'percentage', e);
-  }
-
-  nearbyFilterChange(e) {
-    const { change } = this.props;
-    change('adminDashboardFilters', 'nearbyStudies', e);
   }
 
   searchFilterSubmit(e) {
@@ -199,46 +187,28 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
 
     return (
-      <div id="adminHomePage" className="admin-dashboard">
+      <div id="adminReportsPage" className="admin-reports">
         <div className="fixed-header clearfix">
           <h1 className="main-heading pull-left">Admin portal</h1>
           <div className="filters-btns pull-right">
             <Button className="pull-right" onClick={this.openFiltersModal}>
               Filters
             </Button>
-            <div className="field admin-search-value pull-right">
-              <Button
-                className="btn-enter"
-                type="submit"
-                onClick={() => this.addFilter({
+            <div className="field pull-right">
+              <Field
+                name="studyId"
+                className="pull-right"
+                component={ReactSelect}
+                placeholder="Study Number"
+                searchable
+                options={filterOptions.searchOptions}
+                onChange={(e) => this.addFilter({
                   name: 'search',
                   type: 'search',
-                  value: this.searchValue,
+                  value: e,
                 })}
-              >
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <Field
-                name="admin-search-value"
-                component={Input}
-                type="text"
-                placeholder="Search"
-                onChange={(e) => {
-                  this.searchValue = e.target.value;
-                }}
               />
             </div>
-            <Field
-              name="admin-search-type"
-              className="admin-search-type pull-right"
-              component={ReactSelect}
-              placeholder="Select Type"
-              searchable
-              options={filterOptions.searchOptions}
-              onChange={(e) => {
-                this.searchType = e;
-              }}
-            />
             {this.state.modalOpen &&
               <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.modalOpen} onHide={this.closeFiltersModal}>
                 <Modal.Header>
@@ -271,13 +241,11 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
             searchType={this.searchType}
           />
         }
+        <RangePopups />
         <StatsBox />
-        <div id="mediaStatsBox">
-          <ExpandableSection content={<MediaStatsTable />} />
-        </div>
       </div>
     );
   }
 }
 
-export default AdminHome;
+export default AdminReports;
