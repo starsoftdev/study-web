@@ -6,20 +6,17 @@ export default class RangePopups extends React.Component {
       <div id="btnsPopupsHolder">
         <div className="col pull-right no-right-padding">
           <button type="button" className="btn btn-primary pull-right" onClick={() => {}}>
-            <i className="icomoon-icon_download" />
-            &nbsp;Download
+            Download
           </button>
         </div>
         <div className="col pull-right">
           <button type="button" className="btn btn-primary pull-right" onClick={() => {}}>
-            <i className="icomoon-icon_download" />
-            &nbsp;Study End Date Range
+            Study End Date Range
           </button>
         </div>
         <div className="col pull-right">
           <button type="button" className="btn btn-primary pull-right" onClick={() => {}}>
-            <i className="icomoon-icon_download" />
-            &nbsp;Stats Date Range
+            Stats Date Range
           </button>
         </div>
       </div>
