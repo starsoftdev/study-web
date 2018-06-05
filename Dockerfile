@@ -11,6 +11,7 @@ RUN apk add --no-cache --virtual .build-deps \
   nasm \
   libpng-dev \
   lcms2-dev \
+  libtool \
   bash
 #  python && \
 #  apk add vips-dev fftw-dev --update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
@@ -51,7 +52,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
 
 WORKDIR /usr/src/app
 COPY package.json ./
-RUN npm install --only=production \
+RUN npm install \
   && apk del .build-deps
 
 ## Runtime container
