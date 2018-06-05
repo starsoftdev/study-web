@@ -13,14 +13,14 @@ import {
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { clientRoleId } = yield take(FETCH_PATIENTS);
+    const { userId } = yield take(FETCH_PATIENTS);
     try {
-      const requestURL = `${API_URL}/patients/patientsForUser`;
+      const requestURL = `${API_URL}/patients/patientsForCallCenterUser`;
       let query = {};
       const limit = 50;
       const offset = 0;
       query = {
-        clientRoleId,
+        userId,
         limit: limit || 50,
         offset: offset || 0,
       };
