@@ -13,7 +13,6 @@ export default class FilterQueryForm extends React.Component {
     filters: React.PropTypes.array.isRequired,
     removeFilter: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
-    searchType: React.PropTypes.any,
   };
 
   constructor(props) {
@@ -27,7 +26,7 @@ export default class FilterQueryForm extends React.Component {
   }
 
   render() {
-    const { filters, clearFilters, removeFilter, searchType } = this.props;
+    const { filters, clearFilters, removeFilter } = this.props;
     return (
       <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
         <div className="filters-bar">
@@ -40,7 +39,6 @@ export default class FilterQueryForm extends React.Component {
                   key={index}
                   options={this.formatFilterName(filter)}
                   component={Filter}
-                  searchType={searchType}
                   onClose={() => removeFilter(filter)}
                 />
               )}
