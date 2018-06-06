@@ -1147,7 +1147,7 @@
     "portals.component.renderLeads.utm": "UTM #",
     "portals.component.renderLeads.mediaUrl": "Media Url #",
     "portals.component.renderLeads.mediaTypeLabel": "Media Type #",
-    "portals.component.renderLeads.mediaTypePlaceholder": "Select Source Type",
+    "portals.component.renderLeads.mediaTypePlaceholder": "Select Media Type",
     "portals.component.renderLeads.mediaNameLabel": "Media Name #",
     "portals.component.renderLeads.messagingNumberLabel": "Messaging Number #",
     "portals.component.renderLeads.messagingNumberPlaceholder": "Select Messaging Number",
