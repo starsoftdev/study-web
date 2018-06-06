@@ -86,7 +86,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
     if (sources && sources.length > 0) {
       if (!expanded) {
-        return (<strong className="number"><span>{sources[0].type}</span></strong>);
+        return (<strong className="number media-type"><span>{sources[0].type}</span></strong>);
       } else {
         return (
           <div>
