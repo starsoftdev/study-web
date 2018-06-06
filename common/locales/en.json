@@ -1150,7 +1150,7 @@
     "portals.component.renderLeads.mediaTypePlaceholder": "Select Source Type",
     "portals.component.renderLeads.mediaNameLabel": "Media Name #",
     "portals.component.renderLeads.messagingNumberLabel": "Messaging Number #",
-    "portals.component.renderLeads.messagingNumberPlaceholder": "Select Source Type",
+    "portals.component.renderLeads.messagingNumberPlaceholder": "Select Messaging Number",
     "portals.component.renderLeads.searchPlaceholder": "Select Source Type",
     "portals.component.renderLeads.redirectNumberLabel": "Redirect Number #",
     "portals.component.renderLeads.addMedia": "Add Media",
