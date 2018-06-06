@@ -11,6 +11,7 @@ import _, { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
 import FiltersPageForm from '../../components/FiltersPageForm';
+import ReportTabs from '../../components/ReportTabs';
 import RangePopups from '../../components/RangePopups';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import { selectFilterFormValues } from './selectors';
@@ -139,6 +140,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
         }
         <RangePopups />
         <StatsBox />
+        <ReportTabs />
       </div>
     );
   }

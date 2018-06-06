@@ -14,6 +14,15 @@
 #infoSection .part { border: 2px solid; float: left; height: 350px; margin: 10px; width: calc(~'25% - 20px'); }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
+#reportTabs { width: 100%; margin: 0 0 30px; }
+#reportTabs .tab { display: inline-block; padding: 10px; background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; }
+#reportTabs .tab:last-child { border-right: 2px solid #00afef; }
+#reportTabs .tab:hover, #reportTabs .tab.active { color: #fff; background: #00afef; cursor: pointer; }
+#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 20px; }
+#reportTabs section { min-height: 100px; margin: 0; display: none; visibility: hidden; font-size: 16px; }
+#reportTabs section.active { display: block; visibility: visible; }
+#reportTabs section table { width: 100%; }
+#reportTabs section .header{ text-transform: uppercase; }
 #statsBox { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
 #statsBox ul { list-style: none; padding: 0; }
 #statsBox li { margin-bottom: 15px; margin-top: 10px; text-transform: uppercase; }
@@ -31,7 +40,6 @@
 #statsBox .tier2 { color: #f78e1e; }
 #statsBox .tier3 { color: #a0cf67; }
 #statsBox .tier4 { color: #949ca1; }
-
 #mediaStatsBox { background: #fff; border: 2px solid #00afef; margin-bottom: 30px;}
 #mediaStatsTable { padding: 10px 20px; }
 #mediaStatsTable table { width: 100%; }
