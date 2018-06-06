@@ -1,26 +1,15 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
-export class MediaStatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
-  constructor() {
-    super();
-
-    this.goToReportsPage = this.goToReportsPage.bind(this);
-  }
-
-  goToReportsPage() {
-    browserHistory.push('/admin/reports');
-  }
-
+export class TotalTabContent extends Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <div id="mediaStatsTable">
-        <table onClick={this.goToReportsPage}>
-          <tr className="header">
-            <td></td>
+      <div id="totalTabContent">
+        <table>
+          <tr>
+            <th>Media Type</th>
             <th>New Patient</th>
             <th>Call Attempted</th>
-            <th>DNQ / Not Interested</th>
+            <th>Not Interested</th>
             <th>Action Needed</th>
             <th>Scheduled</th>
             <th>Consented</th>
@@ -112,8 +101,8 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
             <td></td>
             <td></td>
           </tr>
-          <tr className="alwaysVisible">
-            <th>Campaign Total</th>
+          <tr>
+            <th>Total</th>
             <td></td>
             <td></td>
             <td></td>
@@ -124,8 +113,8 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
             <td></td>
             <td></td>
           </tr>
-          <tr className="alwaysVisible">
-            <th>Grand Total</th>
+          <tr>
+            <th>Disposition</th>
             <td></td>
             <td></td>
             <td></td>
@@ -142,4 +131,4 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
   }
 }
 
-export default MediaStatsBox;
+export default TotalTabContent;
