@@ -36,7 +36,11 @@ export default class StudyInfo extends React.Component {
     return (
       <div id="infoSection">
         <div className="head">
-          <h2 className="pull-left">Active: 2 Inactive: 0 Total: 2</h2>
+          <h2 className="pull-left">
+            <span>Active: 2</span>
+            <span>Inactive: 0</span>
+            <span>Total: 2</span>
+          </h2>
           <div className="btns pull-right">
             <form className="admin-info-filter">
               <div className="select pull-left">
