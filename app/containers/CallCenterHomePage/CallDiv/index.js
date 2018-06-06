@@ -63,7 +63,6 @@ export default class CallDiv extends React.Component {
         patientPhone = patient.phone;
       }
     }
-    console.log('patient', patient);
     return (<div className="cc-box" key={key}>
       <strong className="name">
         <span className="first-name">{patient.first_name}</span>
@@ -92,15 +91,6 @@ export default class CallDiv extends React.Component {
     const { patients, indications } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      let patientPhone;
-      if (patient.phone) {
-        // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
-        try {
-          patientPhone = formatPhone(patient.phone);
-        } catch (err) {
-          patientPhone = patient.phone;
-        }
-      }
       if (patient && patient.patient_category_id === 2) {
         output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
       }
