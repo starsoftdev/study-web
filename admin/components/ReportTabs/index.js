@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import ReportTabTable from '../../components/ReportTabTable';
+import ReportTabTable from '../ReportTabTable';
+import TotalTabContent from '../TotalTabContent';
 
 const tabs = [
   { type: 'total' },
@@ -21,7 +22,7 @@ export default class ReportTabs extends React.Component {
     super(props);
 
     this.state = {
-      activeTab: 'studykik',
+      activeTab: 'total',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -56,7 +57,9 @@ export default class ReportTabs extends React.Component {
           }
         </div>
         <div className="content-holder">
-          <section className={classNames('total', { active: (activeTab === 'total') })} />
+          <section className={classNames('total', { active: (activeTab === 'total') })}>
+            <TotalTabContent />
+          </section>
           <section className={classNames('studykik', { active: (activeTab === 'studykik') })}>
             <ReportTabTable />
           </section>

@@ -4,25 +4,32 @@
 
 #adminHomePage h1 { font-size: 40px; text-transform: uppercase; }
 #adminReportsPage h1 { font-size: 40px; text-transform: uppercase; }
+
 #btnsPopupsHolder { height: 40px; margin: 0 0 30px; width: 100%; }
 #btnsPopupsHolder .col { padding: 0 6px }
-#infoSection { margin-bottom: 30px; position: relative; overflow: hidden; }
-#infoSection .head { width: 100%; height: 40px; }
-#infoSection h2 { font-size: 21px; line-height: 40px; font-weight: 700; margin: 0 10px 0 0; }
-#infoSection .tiles section { border: 2px solid #00afef; margin: 10px 0 0; overflow: hidden; background: #fff; }
-#infoSection .title { width: 100%; text-align: center; font-weight: 600; text-transform: uppercase; margin: 10px 0; }
+
+#infoSection { margin-bottom: 30px; overflow: hidden; position: relative; }
+#infoSection .head { height: 40px; width: 100%; }
+#infoSection h2 { font-size: 21px; font-weight: 700; line-height: 40px; margin: 0 10px 0 0; }
+#infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 10px 0 0; overflow: hidden; }
+#infoSection .title { font-weight: 600; margin: 10px 0; text-align: center; text-transform: uppercase; width: 100%; }
 #infoSection .part { border: 2px solid; float: left; height: 350px; margin: 10px; width: calc(~'25% - 20px'); }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
-#reportTabs { width: 100%; margin: 0 0 30px; }
-#reportTabs .tab { display: inline-block; padding: 10px; background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; }
+
+#reportTabs { margin: 0 0 30px; width: 100%; }
+#reportTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; display: inline-block; padding: 10px; }
 #reportTabs .tab:last-child { border-right: 2px solid #00afef; }
-#reportTabs .tab:hover, #reportTabs .tab.active { color: #fff; background: #00afef; cursor: pointer; }
+#reportTabs .tab:hover, #reportTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
 #reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 20px; }
-#reportTabs section { min-height: 100px; margin: 0; display: none; visibility: hidden; font-size: 16px; }
+#reportTabs section { display: none; font-size: 16px; margin: 0; min-height: 100px; visibility: hidden; }
 #reportTabs section.active { display: block; visibility: visible; }
+#reportTabs section.total { margin-top: -10px; }
 #reportTabs section table { width: 100%; }
-#reportTabs section .header{ text-transform: uppercase; }
+#reportTabs section .header { text-transform: uppercase; }
+
+#totalTabContent tr { height: 35px; }
+
 #statsBox { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
 #statsBox ul { list-style: none; padding: 0; }
 #statsBox li { margin-bottom: 15px; margin-top: 10px; text-transform: uppercase; }
@@ -40,13 +47,15 @@
 #statsBox .tier2 { color: #f78e1e; }
 #statsBox .tier3 { color: #a0cf67; }
 #statsBox .tier4 { color: #949ca1; }
+
 #mediaStatsBox { background: #fff; border: 2px solid #00afef; margin-bottom: 30px;}
 #mediaStatsTable { padding: 10px 20px; }
-#mediaStatsTable table { width: 100%; }
-#mediaStatsTable tr { height: 35px; display: none; }
+#mediaStatsTable table { cursor: pointer; width: 100%; }
+#mediaStatsTable tr { display: none; height: 35px; }
 #mediaStatsTable th { text-transform: uppercase; }
 #mediaStatsTable tr.header { display: table-row; }
 #mediaStatsTable tr.alwaysVisible { display: table-row; }
-.expanded #mediaStatsTable tr { height: 35px; display: table-row; }
+
+.expanded #mediaStatsTable tr { display: table-row; height: 35px; }
 .expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
 .expendableSection .showMoreBtn:hover { background: #ccc; }
