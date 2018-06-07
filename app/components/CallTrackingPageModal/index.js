@@ -135,6 +135,7 @@ export class CallTrackingPageModal extends React.Component {
     const { openModal, messagingNumbers, study, editStudyLeadSourcesProcess } = this.props;
     const landingPageUrl = study ? study.landingPageUrl : '';
     const studyId = study ? study.study_id : null;
+    const recruitmentPhone = study ? study.recruitment_phone : '';
 
     return (
       <Collapse
@@ -185,6 +186,7 @@ export class CallTrackingPageModal extends React.Component {
                         initForm={this.initForm}
                         landingPageUrl={landingPageUrl}
                         studyId={studyId}
+                        recruitmentPhone={recruitmentPhone}
                       />
                     </div>
                     <div className="field-row text-right">
