@@ -34,10 +34,11 @@ export default class ReportTabs extends React.Component {
     this.setState({ activeTab: type });
   }
 
-  renderTab(type) {
+  renderTab(type, key) {
     const { activeTab } = this.state;
     return (
       <div
+        key={key}
         className={classNames('tab', { active: (activeTab === type) })}
         onClick={() => this.handleClick(type)}
       >
@@ -52,8 +53,8 @@ export default class ReportTabs extends React.Component {
       <div id="reportTabs">
         <div className="tabs-holder">
           {
-            tabs.map(tab => {
-              return this.renderTab(tab.type);
+            tabs.map((tab, i) => {
+              return this.renderTab(tab.type, i);
             })
           }
         </div>
