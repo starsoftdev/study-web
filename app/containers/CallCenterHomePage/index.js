@@ -124,7 +124,7 @@ class CallCenterHomePage extends Component {
         </div>
 
         <div className="content">
-          <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone}/>
+          <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone} />
           <CallCalendar />
         </div>
       </div>

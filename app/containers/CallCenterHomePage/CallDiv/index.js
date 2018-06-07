@@ -11,7 +11,7 @@ export default class CallDiv extends React.Component {
   static propTypes = {
     patients: React.PropTypes.object,
     indications: React.PropTypes.array,
-    timezone: React.PropTypes.object
+    timezone: React.PropTypes.object,
   };
 
   renderUnreadMessageCount(patient) {
@@ -25,7 +25,7 @@ export default class CallDiv extends React.Component {
 
   renderTextCreatedDate(patient) {
 
-    const {timezone} = this.props;
+    const { timezone } = this.props;
 
     if (patient.last_message_body && patient.last_message_date) {
       return (
@@ -36,7 +36,7 @@ export default class CallDiv extends React.Component {
   }
 
   renderPatientTextMessageSummary(patient) {
-    
+
     if ((patient.last_message_body && patient.last_message_date) && patient.count_unread > 0) {
       return (
         <div className="msg-alert">
@@ -72,14 +72,14 @@ export default class CallDiv extends React.Component {
       <span className="email">{patient.email}</span>
       <span className="phone">{patientPhone}</span>
       {this.renderPatientTextMessageSummary(patient)}
-      </div>)
+    </div>);
   }
 
   renderNewPatients = () => {
-    const { patients, indications } = this.props;
+    const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      
+
       if (patient && patient.patient_category_id === 1) {
         output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
       }
@@ -88,7 +88,7 @@ export default class CallDiv extends React.Component {
   }
 
   renderCall1 = () => {
-    const { patients, indications } = this.props;
+    const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
       if (patient && patient.patient_category_id === 2) {
@@ -107,12 +107,12 @@ export default class CallDiv extends React.Component {
   }
 
   renderMeetings = () => {
-    const { patients, indications } = this.props;
+    const { patients } = this.props;
 
     const output = [];
     _.forEach(patients.details, (patient) => {
       if (patient && patient.patient_category_id === 5) {
-        output.push(getPatientView(patient, `callDiv_meeting_${patient.id}`));
+        output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
       }
     });
     return output;
