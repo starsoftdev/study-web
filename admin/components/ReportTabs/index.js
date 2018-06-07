@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import ReportTabTable from '../ReportTabTable';
 import TotalTabContent from '../TotalTabContent';
+import MediaSourceTabContent from '../MediaSourceTabContent';
+import DispositionTabContent from '../DispositionTabContent';
 
 const tabs = [
   { type: 'total' },
@@ -61,27 +62,29 @@ export default class ReportTabs extends React.Component {
             <TotalTabContent />
           </section>
           <section className={classNames('studykik', { active: (activeTab === 'studykik') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('database', { active: (activeTab === 'database') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('tv', { active: (activeTab === 'tv') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('radio', { active: (activeTab === 'radio') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('digital', { active: (activeTab === 'digital') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('print', { active: (activeTab === 'print') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('other', { active: (activeTab === 'other') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
-          <section className={classNames('disposition', { active: (activeTab === 'disposition') })} />
+          <section className={classNames('disposition', { active: (activeTab === 'disposition') })}>
+            <DispositionTabContent />
+          </section>
         </div>
       </div>
     );
