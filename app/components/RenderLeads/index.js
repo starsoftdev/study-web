@@ -16,6 +16,7 @@ import { selectSources } from '../../containers/App/selectors';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
+import { formatPhone } from '../../common/helper/functions';
 
 const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
@@ -45,6 +46,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     sources: PropTypes.array,
     landingPageUrl: PropTypes.string,
     studyId: PropTypes.number,
+    recruitmentPhone: PropTypes.string,
   };
 
   constructor(props) {
@@ -97,7 +99,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
   }
 
   render() {
-    const { fields, formValues, messagingNumbers, initialLeadSources, sources } = this.props;
+    const { fields, formValues, messagingNumbers, initialLeadSources, sources, recruitmentPhone } = this.props;
     const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source);
 
     let sourceOptions = [];
@@ -157,7 +159,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
-
+          if (!formValues.leadSource[index].recruitmentPhone) {
+            formValues.leadSource[index].recruitmentPhone = recruitmentPhone != '' ? formatPhone(recruitmentPhone) : '';
+          }
+          
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
@@ -226,6 +231,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                       type="text"
                       className="field"
                       isDisabled
+                      label={recruitmentPhone}
                     />
                   </div>
                 )
