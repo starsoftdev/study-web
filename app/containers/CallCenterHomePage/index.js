@@ -59,7 +59,7 @@ class CallCenterHomePage extends Component {
   }
 
   render() {
-    const { patients, indications } = this.props;
+    const { patients, indications, currentUser } = this.props;
 
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
 
@@ -124,7 +124,7 @@ class CallCenterHomePage extends Component {
         </div>
 
         <div className="content">
-          <CallDiv patients={patients} indications={indications} />
+          <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone}/>
           <CallCalendar />
         </div>
       </div>
