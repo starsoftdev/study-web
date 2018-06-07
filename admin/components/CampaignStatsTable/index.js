@@ -1,27 +1,16 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
-export class MediaStatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
-  constructor() {
-    super();
-
-    this.goToReportsPage = this.goToReportsPage.bind(this);
-  }
-
-  goToReportsPage() {
-    browserHistory.push('/admin/reports');
-  }
-
+export class CampaignStatsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <div id="mediaStatsTable">
-        <table onClick={this.goToReportsPage}>
+      <div className="campaignStatsTable">
+        <table>
           <thead>
             <tr>
-              <td></td>
+              <th>Media Type</th>
               <th>New Patient</th>
               <th>Call Attempted</th>
-              <th>DNQ / Not Interested</th>
+              <th>Not Qualified</th>
               <th>Action Needed</th>
               <th>Scheduled</th>
               <th>Consented</th>
@@ -31,7 +20,7 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr className="alwaysVisible">
               <th>StudyKIK</th>
               <td></td>
               <td></td>
@@ -115,20 +104,8 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
               <td></td>
               <td></td>
             </tr>
-            <tr className="alwaysVisible">
-              <th>Campaign Total</th>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr className="alwaysVisible">
-              <th>Grand Total</th>
+            <tr>
+              <th>Total</th>
               <td></td>
               <td></td>
               <td></td>
@@ -146,4 +123,4 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
   }
 }
 
-export default MediaStatsBox;
+export default CampaignStatsTable;
