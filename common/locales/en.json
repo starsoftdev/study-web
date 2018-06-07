@@ -717,6 +717,7 @@
     "corporate.page.trials.listingLightGreenTitle": "Patient Media Tracking",
     "corporate.page.trials.listingLightGreenInnerTitle": "Patient Media Tracking",
     "corporate.page.trials.listingLightGreenInnerText": "Your site will never miss a patient who is calling about your trial on the weekends or after hours because StudyKIK tracks all phone calls and notifies your site about the missed call. This allows sites to call patients back & answer questions that may have prior to screening.",
+    "corporate.page.trials.postCount": "${count} Post",
     "corporate.page.trials.postsCount": "${count} Posts",
     "corporate.page.trials.levelRuby": "ruby",
     "corporate.page.trials.levelDiamond": "diamond",
