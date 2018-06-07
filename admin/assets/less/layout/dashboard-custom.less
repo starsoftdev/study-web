@@ -12,9 +12,10 @@
 #infoSection .head { height: 40px; margin: 0 0 10px 0; width: 100%; }
 #infoSection h2 { font-size: 21px; font-weight: 700; line-height: 40px; margin: 0 10px 0 0; text-transform: uppercase; }
 #infoSection h2 span { margin: 0 10px 0 0; }
-#infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 0 0 30px 0; overflow: hidden; padding: 10px; }
+#infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; overflow: hidden; padding: 10px; }
 #infoSection .title { font-weight: 600; margin: 10px 0; text-align: center; text-transform: uppercase; width: 100%; }
 #infoSection .part { border: 2px solid; float: left; height: 350px; margin: 10px; width: calc(~'25% - 20px'); }
+#infoSection .part.stat { cursor: pointer; }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
 
@@ -55,9 +56,30 @@
 #mediaStatsTable table { cursor: pointer; width: 100%; }
 #mediaStatsTable tr { display: none; height: 35px; }
 #mediaStatsTable th { text-transform: uppercase; }
-#mediaStatsTable tr.header { display: table-row; }
+#mediaStatsTable thead tr { display: table-row; }
 #mediaStatsTable tr.alwaysVisible { display: table-row; }
 
 .expanded #mediaStatsTable tr { display: table-row; height: 35px; }
 .expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
 .expendableSection .showMoreBtn:hover { background: #ccc; }
+
+/***************************************************************************************
+*************************** Admin Study Stats Page *************************************
+****************************************************************************************/
+
+#adminStudyStatsPage { padding: 20px; }
+#adminStudyStatsPage .campaignStats { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; }
+#adminStudyStatsPage .campaignInfo { border-bottom: 2px solid #00afef; padding: 5px 20px; }
+#adminStudyStatsPage .campaignInfo span { margin-right: 30px; }
+#adminStudyStatsPage .campaignInfo strong { text-transform: uppercase; }
+.campaignStatsTable { padding: 10px 20px; }
+.campaignStatsTable table { width: 100%; }
+.campaignStatsTable tr { display: none; height: 35px; }
+.campaignStatsTable th { text-transform: uppercase; }
+.campaignStatsTable thead tr { display: table-row; }
+.campaignStatsTable tr.alwaysVisible { display: table-row; }
+.expanded .campaignStatsTable tr { display: table-row; }
+#studyGeneralInfo { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
+#studyGeneralInfo ul { display: inline-block; list-style: none; margin: 0; padding: 0; vertical-align: top; width: 30%; }
+#studyGeneralInfo li { line-height: 30px; }
+#studyGeneralInfo strong { text-transform: uppercase; }

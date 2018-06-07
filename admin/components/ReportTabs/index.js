@@ -49,9 +49,9 @@ export default class ReportTabs extends Component {
     const { activeTab } = this.state;
     return (
       <div
+        key={key}
         className={classNames('tab', { active: (activeTab === type) })}
         onClick={() => this.handleClick(type)}
-        key={key}
       >
         {title}
       </div>

@@ -64,7 +64,30 @@ export default function createRoutes(store) {
 
         importModules.catch(errorLoading);
       },
-    }, {
+    },
+    {
+      onEnter: redirectToLogin,
+      path: '/admin/studyStats/:studyId',
+      name: 'AdminStudyStatsPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/AdminStudyStats/reducer'),
+          System.import('./containers/AdminStudyStats/sagas'),
+          System.import('./containers/AdminStudyStats'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('AdminStudyStatsPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    },
+    {
       path: '/admin*',
       name: 'notfound',
       getComponent(nextState, cb) {
