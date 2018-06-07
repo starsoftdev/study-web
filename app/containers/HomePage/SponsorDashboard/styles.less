@@ -21,7 +21,9 @@
       box-sizing: border-box;
       display: inline-block;
       height: 70px;
+      overflow: hidden;
       padding: 10px 9px;
+      position: relative;
       vertical-align: top;
       font-size: 15px;
       .name {
@@ -38,9 +40,14 @@
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
         a {
           color: #000000;
           white-space: nowrap;
+          width: 100%;
+          &.na {
+            width: auto;
+          }
           &:hover, &:active {
             text-decoration: underline;
           }
