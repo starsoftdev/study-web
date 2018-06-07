@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-export default class RangePopups extends React.Component {
+export default class RangePopups extends Component {
+  static propTypes = {
+    manuallySetActiveTab: PropTypes.func.isRequired,
+  };
+
   render() {
     return (
       <div id="btnsPopupsHolder">
@@ -10,7 +14,7 @@ export default class RangePopups extends React.Component {
           </button>
         </div>
         <div className="col pull-right">
-          <button type="button" className="btn btn-primary pull-right" onClick={() => {}}>
+          <button type="button" className="btn btn-primary pull-right" onClick={() => this.props.manuallySetActiveTab('studyEndDateRange')}>
             Study End Date Range
           </button>
         </div>
