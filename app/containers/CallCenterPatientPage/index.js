@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
 import { translate } from '../../../common/utilities/localization';
@@ -10,12 +11,13 @@ import { translate } from '../../../common/utilities/localization';
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
-import { fetchPatient } from './actions';
-import { selectSelectedPatient } from './selectors';
+import { fetchPatient, fetchCallCenterPatientCategories, submitPatientUpdate } from './actions';
+import { selectSelectedPatient, selectCallCenterPatientCategories } from './selectors';
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
 
+import Tabs from './Tabs';
 import PatientInfo from './PatientInfo';
 import SiteLocationInfo from './SiteLocationInfo';
 import TextSection from './PatientDetail/TextSection';
@@ -30,34 +32,130 @@ const formName = 'callCenterPatientPage';
 @reduxForm({ form: formName })
 class CallCenterPatientPage extends Component {
   static propTypes = {
+    callCenterPatientCategories: PropTypes.array,
     currentUser: PropTypes.object.isRequired,
+    fetchCallCenterPatientCategories: PropTypes.func,
     fetchPatient: PropTypes.func,
     fetchProtocols: PropTypes.func,
     params: PropTypes.object,
     patient: PropTypes.object,
     protocols: PropTypes.object,
     socket: React.PropTypes.any,
+    submitPatientUpdate: React.PropTypes.func,
+  };
+
+  static defaultProps = {
+    callCenterPatientCategories: [],
   };
 
   state = {
     carouselIndex: 0,
     socketBinded: false,
+    selectedTab: '',
   };
 
   componentWillMount() {
-    const { params: { id: patientId }, currentUser, fetchPatient, fetchProtocols } = this.props;
+    const {
+      params: { id: patientId },
+      fetchCallCenterPatientCategories,
+      fetchPatient,
+      fetchProtocols,
+    } = this.props;
 
+    fetchCallCenterPatientCategories();
     fetchPatient(patientId);
-    fetchProtocols(currentUser.roleForClient.id);
+    fetchProtocols();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { patient } = nextProps;
+    if (this.props.patient !== patient && patient.details) {
+      const ccPatientCategoryId = patient.details.call_center_patient_category_id;
+      let selectedTab = '';
+      switch (ccPatientCategoryId) {
+        case 2:
+          selectedTab = 'call1';
+          break;
+        case 3:
+          selectedTab = 'call2';
+          break;
+        case 4:
+          selectedTab = 'call3';
+          break;
+        case 5:
+          selectedTab = 'scheduled';
+          break;
+        case 6:
+          // TODO: Decide between 4 tabs
+          break;
+        default:
+      }
+      this.setState({ selectedTab });
+    }
+  }
+
+  handleExit = () => {
+    browserHistory.push('/app/cc/home');
   }
 
   handleSelectCarousel = (index) => {
     this.setState({ carouselIndex: index });
   }
 
+  handleSelectTab = (selectedTab) => {
+    const { patient, submitPatientUpdate } = this.props;
+    this.setState({ selectedTab });
+
+    let callCenterPatientCategoryId = '';
+    let patientCategoryId = '';
+    switch (selectedTab) {
+      case 'call1':
+        callCenterPatientCategoryId = 2;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'call2':
+        callCenterPatientCategoryId = 3;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'call3':
+        callCenterPatientCategoryId = 4;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'scheduled':
+        callCenterPatientCategoryId = 5;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'prescreened':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 4; // Action Needed
+        break;
+      case 'dnq':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        break;
+      case 'ni':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        break;
+      case 'cnc':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        break;
+      default:
+    }
+    if (!callCenterPatientCategoryId) return;
+
+    submitPatientUpdate({
+      patientId: patient.details.id,
+      callCenterPatientCategoryId,
+      patientCategoryId,
+    });
+  }
+
   render() {
-    const { carouselIndex } = this.state;
+    const { carouselIndex, selectedTab } = this.state;
     const { patient, protocols, socket, currentUser } = this.props;
+
     let formattedPatient;
     let siteForPatient;
     let protocolForPatient;
@@ -86,14 +184,11 @@ class CallCenterPatientPage extends Component {
     return (
       <div id="cc-patient-page">
         <div className="header">
-          <div className="tabs">
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.followUp')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.schedule')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.prescn')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.dnq')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.cnc')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.exit')}</Button>
-          </div>
+          <Tabs
+            onExit={this.handleExit}
+            onSelectTab={this.handleSelectTab}
+            selectedTab={selectedTab}
+          />
           <form action="#" className="form-search clearfix">
             <div className="search-area">
               <div className="field">
@@ -156,6 +251,7 @@ class CallCenterPatientPage extends Component {
 }
 
 const mapStateToProps = createStructuredSelector({
+  callCenterPatientCategories: selectCallCenterPatientCategories(),
   currentUser: selectCurrentUser(),
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
@@ -164,8 +260,10 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
   };
 }
 

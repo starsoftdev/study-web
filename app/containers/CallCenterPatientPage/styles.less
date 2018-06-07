@@ -13,8 +13,10 @@
     position: relative;
 
     .tab {
-      margin: 0 5px;
-      text-transform: none;
+      background-color: white; color: #00afef; margin: 0; outline: 0;
+
+      &.active { background-color: #00afef; border-color: #00afef; color: white; }
+      &.exit { background-color: #f78e1e; border-color: #f78e1e; color: white; margin-left: 30px; }
     }
 
     .form-search {
