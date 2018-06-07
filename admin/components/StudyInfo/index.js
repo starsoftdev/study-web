@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
+import { browserHistory } from 'react-router';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 
@@ -30,6 +31,12 @@ export default class StudyInfo extends React.Component {
     super(props);
 
     this.state = {};
+
+    this.goToStudyStatsPage = this.goToStudyStatsPage.bind(this);
+  }
+
+  goToStudyStatsPage(studyId) {
+    browserHistory.push(`/admin/studyStats/${studyId}`);
   }
 
   render() {
@@ -107,7 +114,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat">
+            <div className="part stat" onClick={() => this.goToStudyStatsPage(10001)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
@@ -167,7 +174,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat">
+            <div className="part stat" onClick={() => this.goToStudyStatsPage(10002)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
