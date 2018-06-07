@@ -10,6 +10,11 @@ export const selectSelectedPatient = () => createSelector(
   (substate) => substate.selectedPatient
 );
 
+export const selectCallCenterPatientCategories = () => createSelector(
+  selectCallCenterPatientPageDomain(),
+  (substate) => substate.callCenterPatientCategories
+);
+
 export const selectCurrentPatientCategory = () => createSelector(
   selectCallCenterPatientPageDomain(),
   (substate) => {

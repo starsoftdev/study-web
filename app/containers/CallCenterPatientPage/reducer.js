@@ -2,14 +2,18 @@ import {
   FETCH_PATIENT,
   FETCH_PATIENT_SUCCESS,
   FETCH_PATIENT_ERROR,
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES_SUCCESS,
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES_ERROR,
   ADD_PATIENT_NOTE_SUCCESS,
   SUBMIT_DELETE_NOTE_SUCCESS,
   SUBMIT_EMAIL,
   SUBMIT_EMAIL_SUCCESS,
   SUBMIT_EMAIL_ERROR,
+  UPDATE_PATIENT_SUCCESS,
 } from './constants';
 
 const initialState = {
+  callCenterPatientCategories: [],
   selectedPatient: {
     details: null,
     fetching: false,
@@ -56,6 +60,18 @@ export default function callCenterPatientPageReducer(state = initialState, actio
           error: payload,
         },
       };
+    case FETCH_CALL_CENTER_PATIENT_CATEGORIES_SUCCESS:
+      return {
+        ...state,
+        callCenterPatientCategories: action.payload,
+      };
+      break;
+    case FETCH_CALL_CENTER_PATIENT_CATEGORIES_ERROR:
+      return {
+        ...state,
+        callCenterPatientCategories: [],
+      };
+      break;
     case ADD_PATIENT_NOTE_SUCCESS:
       notes = state.selectedPatient.details.notes;
       return {
@@ -102,6 +118,9 @@ export default function callCenterPatientPageReducer(state = initialState, actio
         ...state,
         submittingEmail: false,
       };
+    case UPDATE_PATIENT_SUCCESS:
+      // TODO: Implement this
+      return state;
     default:
       return state;
   }
