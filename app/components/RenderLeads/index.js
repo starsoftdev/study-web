@@ -160,7 +160,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
           if (!formValues.leadSource[index].recruitmentPhone) {
-            formValues.leadSource[index].recruitmentPhone = (recruitmentPhone !== '') ? formatPhone(recruitmentPhone) : '';
+            formValues.leadSource[index].recruitmentPhone = recruitmentPhone !== '' ? formatPhone(recruitmentPhone) : '';
           }
 
           return (
