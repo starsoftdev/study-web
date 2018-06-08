@@ -26,6 +26,10 @@ import {
 
   UPDATE_PATIENT_SUCCESS,
 
+  SUBMIT_PATIENT_DISPOSITION,
+  SUBMIT_PATIENT_DISPOSITION_SUCCESS,
+  SUBMIT_PATIENT_DISPOSITION_ERROR,
+
 } from './constants';
 
 export function fetchPatient(id) {
@@ -172,6 +176,27 @@ export function emailsFetchError(payload) {
 export function updatePatientSuccess(payload) {
   return {
     type: UPDATE_PATIENT_SUCCESS,
+    payload,
+  };
+}
+
+export function submitPatientDisposition(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION,
+    payload,
+  };
+}
+
+export function patientDispositionSubmitted(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION_SUCCESS,
+    payload,
+  };
+}
+
+export function patientDispositionSubmissionError(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION_ERROR,
     payload,
   };
 }
