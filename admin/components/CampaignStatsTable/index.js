@@ -10,7 +10,7 @@ export class CampaignStatsTable extends Component { // eslint-disable-line react
               <th>Media Type</th>
               <th>New Patient</th>
               <th>Call Attempted</th>
-              <th>Not Qualified</th>
+              <th>DNQ / Not interested</th>
               <th>Action Needed</th>
               <th>Scheduled</th>
               <th>Consented</th>
