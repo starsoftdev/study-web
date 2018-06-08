@@ -162,7 +162,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           if (!formValues.leadSource[index].recruitmentPhone) {
             formValues.leadSource[index].recruitmentPhone = recruitmentPhone != '' ? formatPhone(recruitmentPhone) : '';
           }
-          
+
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
