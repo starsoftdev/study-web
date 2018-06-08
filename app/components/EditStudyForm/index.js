@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetChangeAdState: () => dispatch(resetChangeStudyAdState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
-  fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
+  fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
 });
 
 const mapStateToProps = createStructuredSelector({
