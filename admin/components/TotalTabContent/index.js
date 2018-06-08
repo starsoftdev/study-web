@@ -10,7 +10,7 @@ export class TotalTabContent extends Component { // eslint-disable-line react/pr
               <th>Media Type</th>
               <th>New Patient</th>
               <th>Call Attempted</th>
-              <th>Not Interested</th>
+              <th>DNQ / NOT INTERESTED</th>
               <th>Action Needed</th>
               <th>Scheduled</th>
               <th>Consented</th>
