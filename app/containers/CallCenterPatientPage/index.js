@@ -11,13 +11,23 @@ import { translate } from '../../../common/utilities/localization';
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
-import { fetchPatient, fetchCallCenterPatientCategories, submitPatientUpdate } from './actions';
-import { selectSelectedPatient, selectCallCenterPatientCategories } from './selectors';
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
 
+import {
+  fetchPatient,
+  fetchCallCenterPatientCategories,
+  submitPatientUpdate,
+} from './actions';
+import {
+  selectSelectedPatient,
+  selectCallCenterPatientCategories,
+  selectCallCenterScheduledModalFormValues,
+} from './selectors';
+
 import Tabs from './Tabs';
+import ScheduledPatientModal from './ScheduledPatientModal';
 import PatientInfo from './PatientInfo';
 import SiteLocationInfo from './SiteLocationInfo';
 import TextSection from './PatientDetail/TextSection';
@@ -40,7 +50,8 @@ class CallCenterPatientPage extends Component {
     params: PropTypes.object,
     patient: PropTypes.object,
     protocols: PropTypes.object,
-    socket: React.PropTypes.any,
+    scheduledModalFormValues: PropTypes.object,
+    socket: PropTypes.any,
     submitPatientUpdate: React.PropTypes.func,
   };
 
@@ -50,6 +61,7 @@ class CallCenterPatientPage extends Component {
 
   state = {
     carouselIndex: 0,
+    isScheduleModalVisible: false,
     socketBinded: false,
     selectedTab: '',
   };
@@ -122,8 +134,7 @@ class CallCenterPatientPage extends Component {
         patientCategoryId = 2; // Call / Text Attempted
         break;
       case 'scheduled':
-        callCenterPatientCategoryId = 5;
-        patientCategoryId = 2; // Call / Text Attempted
+        this.setState({ isScheduleModalVisible: true });
         break;
       case 'prescreened':
         callCenterPatientCategoryId = 6;
@@ -152,9 +163,31 @@ class CallCenterPatientPage extends Component {
     });
   }
 
+  /* Schedule Patient Modal */
+  closePatientScheduleModal = () => {
+    this.setState({ isScheduleModalVisible: false });
+  }
+
+  handleDateChange= (date) => {
+    this.scheduleDate = date;
+  }
+
+  onPatientScheduleSubmit = (e) => {
+    e.preventDefault();
+
+    const { patient, submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      patientId: patient.details.id,
+      callCenterPatientCategoryId: 5,
+      patientCategoryId: 2, // Call / Text Attempted
+    });
+
+    this.setState({ isScheduleModalVisible: false });
+  }
+
   render() {
-    const { carouselIndex, selectedTab } = this.state;
-    const { patient, protocols, socket, currentUser } = this.props;
+    const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
+    const { patient, protocols, socket, currentUser, scheduledModalFormValues } = this.props;
 
     let formattedPatient;
     let siteForPatient;
@@ -245,6 +278,14 @@ class CallCenterPatientPage extends Component {
             </div>
           </div>
         </div>
+        <ScheduledPatientModal
+          show={isScheduleModalVisible}
+          onHide={this.closePatientScheduleModal}
+          handleSubmit={this.onPatientScheduleSubmit}
+          handleDateChange={this.handleDateChange}
+          currentPatient={patient.details}
+          currentUser={currentUser}
+        />
       </div>
     );
   }
@@ -255,6 +296,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
+  scheduledModalFormValues: selectCallCenterScheduledModalFormValues(),
   socket: selectSocket(),
 });
 
