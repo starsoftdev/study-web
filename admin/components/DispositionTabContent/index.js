@@ -15,7 +15,7 @@ export default class DispositionTabContent extends React.Component { // eslint-d
             <th>END DATE</th>
             <th>PASSED PRESCREENER</th>
             <th>DID NOT PASS PRESCREENER</th>
-            <th>NOT INTERESTED</th>
+            <th>DNQ / NOT INTERESTED</th>
             <th>ALL ATTEMPTS MADE</th>
             <th>TOTAL</th>
           </tr>
