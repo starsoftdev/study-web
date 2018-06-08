@@ -589,6 +589,8 @@
     "container.page.callCenterPatient.carousel.tab.email": "Email",
     "container.page.callCenterPatient.carousel.tab.calendar": "Calendar",
     "container.page.callCenterPatient.toastr.success.updatePatient": "Patient updated successfully!",
+    "container.page.callCenterPatient.modal.scheduledPatientModal.title": "schedule patient",
+    "container.page.callCenterPatient.modal.scheduledPatientModal.todayDateMask": "dddd, MMMM DD, YYYY",
 
     "corporate.page.privacyPolicy.header": "privacy policy",
     "corporate.page.privacyPolicy.headerText": "StudyKIK respects your privacy and will never sell or trade personal information provided on this Website. Maintaining trust is paramount to us.",

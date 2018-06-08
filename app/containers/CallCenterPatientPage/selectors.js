@@ -5,6 +5,11 @@ import { createSelector } from 'reselect';
  */
 const selectCallCenterPatientPageDomain = () => state => state.callCenterPatientPage;
 
+/**
+ * Form selector
+ */
+export const selectFormDomain = () => state => state.form;
+
 export const selectSelectedPatient = () => createSelector(
   selectCallCenterPatientPageDomain(),
   (substate) => substate.selectedPatient
@@ -28,4 +33,9 @@ export const selectCurrentPatientCategory = () => createSelector(
 export const selectSubmittingEmail = () => createSelector(
   selectCallCenterPatientPageDomain(),
   (subState) => subState.submittingEmail
+);
+
+export const selectCallCenterScheduledModalFormValues = () => createSelector(
+  selectCallCenterPatientPageDomain(),
+  (subState) => (subState.CallCenterScheduledPatientModal ? subState.CallCenterScheduledPatientModal.values : null)
 );
