@@ -9,7 +9,6 @@ import {
   SUBMIT_EMAIL,
   SUBMIT_EMAIL_SUCCESS,
   SUBMIT_EMAIL_ERROR,
-  UPDATE_PATIENT_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -65,13 +64,11 @@ export default function callCenterPatientPageReducer(state = initialState, actio
         ...state,
         callCenterPatientCategories: action.payload,
       };
-      break;
     case FETCH_CALL_CENTER_PATIENT_CATEGORIES_ERROR:
       return {
         ...state,
         callCenterPatientCategories: [],
       };
-      break;
     case ADD_PATIENT_NOTE_SUCCESS:
       notes = state.selectedPatient.details.notes;
       return {
@@ -118,9 +115,6 @@ export default function callCenterPatientPageReducer(state = initialState, actio
         ...state,
         submittingEmail: false,
       };
-    case UPDATE_PATIENT_SUCCESS:
-      // TODO: Implement this
-      return state;
     default:
       return state;
   }
