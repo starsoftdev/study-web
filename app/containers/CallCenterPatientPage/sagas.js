@@ -15,6 +15,7 @@ import {
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_EMAIL,
+  SUBMIT_PATIENT_DISPOSITION,
 } from './constants';
 
 import {
@@ -26,6 +27,8 @@ import {
   addPatientNoteSuccess,
   submitEmailSuccess,
   updatePatientSuccess,
+  patientDispositionSubmitted,
+  patientDispositionSubmissionError,
 } from './actions';
 
 export function* fetchPatientWatcher() {
@@ -37,6 +40,9 @@ export function* fetchPatientWatcher() {
         include: [
           {
             relation: 'site',
+          },
+          {
+            relation: 'dispositions',
           },
           {
             relation: 'patientIndications',
@@ -272,6 +278,31 @@ function* submitPatientUpdate() {
   }
 }
 
+function* submitPatientDisposition() {
+  while (true) {
+    const { payload: { patientId, dispositionKey } } = yield take(SUBMIT_PATIENT_DISPOSITION);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patientDispositions/updatePatientDisposition`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          dispositionKey,
+        }),
+      });
+      yield put(patientDispositionSubmitted());
+    } catch (e) {
+      yield put(patientDispositionSubmissionError());
+      toastr.error('', e.message);
+    }
+  }
+}
+
 export function* callCenterPatientPageSaga() {
   try {
     const watcherA = yield fork(fetchPatientWatcher);
@@ -280,6 +311,7 @@ export function* callCenterPatientPageSaga() {
     const watcherD = yield fork(submitEmail);
     const watcherE = yield fork(fetchCallCenterPatientCategoriesWatcher);
     const watcherF = yield fork(submitPatientUpdate);
+    const watcherG = yield fork(submitPatientDisposition);
 
     yield take(LOCATION_CHANGE);
 
@@ -289,6 +321,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherD);
     yield cancel(watcherE);
     yield cancel(watcherF);
+    yield cancel(watcherG);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
