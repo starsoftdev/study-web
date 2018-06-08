@@ -7,6 +7,7 @@ import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
 import { translate } from '../../../common/utilities/localization';
+import settings from '../../../common/settings/app-settings.json';
 
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
@@ -19,6 +20,7 @@ import {
   fetchPatient,
   fetchCallCenterPatientCategories,
   submitPatientUpdate,
+  submitPatientDisposition,
 } from './actions';
 import {
   selectSelectedPatient,
@@ -53,6 +55,7 @@ class CallCenterPatientPage extends Component {
     scheduledModalFormValues: PropTypes.object,
     socket: PropTypes.any,
     submitPatientUpdate: React.PropTypes.func,
+    submitPatientDisposition: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -80,7 +83,8 @@ class CallCenterPatientPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { patient } = nextProps;
+    const { patient, currentUser } = nextProps;
+
     if (this.props.patient !== patient && patient.details) {
       const ccPatientCategoryId = patient.details.call_center_patient_category_id;
       let selectedTab = '';
@@ -97,9 +101,14 @@ class CallCenterPatientPage extends Component {
         case 5:
           selectedTab = 'scheduled';
           break;
-        case 6:
-          // TODO: Decide between 4 tabs
+        case 6: {
+          const { dispositions } = patient.details;
+          if (dispositions) {
+            const disposition = dispositions.find(item => item.userId === currentUser.id);
+            return this.updateTabFromDisposition(disposition.dispositionKey);
+          }
           break;
+        }
         default:
       }
       this.setState({ selectedTab });
@@ -115,11 +124,13 @@ class CallCenterPatientPage extends Component {
   }
 
   handleSelectTab = (selectedTab) => {
-    const { patient, submitPatientUpdate } = this.props;
+    const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
     this.setState({ selectedTab });
 
     let callCenterPatientCategoryId = '';
     let patientCategoryId = '';
+    let dispositionKey;
+
     switch (selectedTab) {
       case 'call1':
         callCenterPatientCategoryId = 2;
@@ -139,18 +150,22 @@ class CallCenterPatientPage extends Component {
       case 'prescreened':
         callCenterPatientCategoryId = 6;
         patientCategoryId = 4; // Action Needed
+        dispositionKey = settings.disposition.PRESCREENED;
         break;
       case 'dnq':
         callCenterPatientCategoryId = 6;
         patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.DNQ;
         break;
       case 'ni':
         callCenterPatientCategoryId = 6;
         patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.NI;
         break;
       case 'cnc':
         callCenterPatientCategoryId = 6;
         patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.CNC;
         break;
       default:
     }
@@ -161,6 +176,31 @@ class CallCenterPatientPage extends Component {
       callCenterPatientCategoryId,
       patientCategoryId,
     });
+
+    if (dispositionKey !== undefined) {
+      submitPatientDisposition({
+        patientId: patient.details.id,
+        dispositionKey,
+      });
+    }
+  }
+
+  updateTabFromDisposition = (dispositionKey) => {
+    switch (dispositionKey) {
+      case settings.disposition.PRESCREENED:
+        this.setState({ selectedTab: 'prescreened' });
+        break;
+      case settings.disposition.DNQ:
+        this.setState({ selectedTab: 'dnq' });
+        break;
+      case settings.disposition.NI:
+        this.setState({ selectedTab: 'ni' });
+        break;
+      case settings.disposition.CNC:
+        this.setState({ selectedTab: 'cnc' });
+        break;
+      default:
+    }
   }
 
   /* Schedule Patient Modal */
@@ -306,6 +346,7 @@ function mapDispatchToProps(dispatch) {
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
+    submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
   };
 }
 
