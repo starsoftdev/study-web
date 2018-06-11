@@ -74,7 +74,7 @@ export class CallTrackingPageModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchMessagingNumbersDashboard();
-      this.props.fetchStudyLeadSources(this.props.study.study_id, [1]);
+      this.props.fetchStudyLeadSources(this.props.study.study_id);
       this.props.change('callTracking', this.props.study.callTracking);
     }
 
@@ -92,10 +92,6 @@ export class CallTrackingPageModal extends React.Component {
 
     if (this.props.messagingNumbers.fetching && !newProps.messagingNumbers.fetching) {
       this.setState({ isNumbersFetched: true });
-    }
-
-    if (!newProps.editStudyLeadSourcesProcess.saving && this.props.editStudyLeadSourcesProcess.saving) {
-      this.props.onClose();
     }
   }
 
@@ -135,6 +131,7 @@ export class CallTrackingPageModal extends React.Component {
     const { openModal, messagingNumbers, study, editStudyLeadSourcesProcess } = this.props;
     const landingPageUrl = study ? study.landingPageUrl : '';
     const studyId = study ? study.study_id : null;
+    const recruitmentPhone = study ? study.recruitment_phone : '';
 
     return (
       <Collapse
@@ -185,6 +182,7 @@ export class CallTrackingPageModal extends React.Component {
                         initForm={this.initForm}
                         landingPageUrl={landingPageUrl}
                         studyId={studyId}
+                        recruitmentPhone={recruitmentPhone}
                       />
                     </div>
                     <div className="field-row text-right">
@@ -218,7 +216,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
-    fetchStudyLeadSources: (studyId, excludeSourceIds) => dispatch(fetchStudyLeadSources(studyId, excludeSourceIds)),
+    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
     deleteStudyLeadSource: (studyId, studySourceId, leadSource) => dispatch(deleteStudyLeadSource(studyId, studySourceId, leadSource)),
     resetForm: () => dispatch(reset(formName)),
     touchCallTracking: (fields) => dispatch(touch(formName, ...fields)),

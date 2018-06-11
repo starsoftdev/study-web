@@ -1,22 +1,27 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import ReportTabTable from '../ReportTabTable';
 import TotalTabContent from '../TotalTabContent';
+import StudyEndDateRangeTab from '../StudyEndDateRangeTab';
+import MediaSourceTabContent from '../MediaSourceTabContent';
+import DispositionTabContent from '../DispositionTabContent';
 
 const tabs = [
-  { type: 'total' },
-  { type: 'studykik' },
-  { type: 'database' },
-  { type: 'tv' },
-  { type: 'radio' },
-  { type: 'digital' },
-  { type: 'print' },
-  { type: 'other' },
-  { type: 'disposition' },
+  { type: 'total', title: 'total' },
+  { type: 'studykik', title: 'studykik' },
+  { type: 'database', title: 'database' },
+  { type: 'tv', title: 'tv' },
+  { type: 'radio', title: 'radio' },
+  { type: 'digital', title: 'digital' },
+  { type: 'print', title: 'print' },
+  { type: 'other', title: 'other' },
+  { type: 'disposition', title: 'disposition' },
+  { type: 'studyEndDateRange', title: 'study end date range' },
 ];
 
-export default class ReportTabs extends React.Component {
-  static propTypes = {};
+export default class ReportTabs extends Component {
+  static propTypes = {
+    activateManually: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -29,18 +34,26 @@ export default class ReportTabs extends React.Component {
     this.renderTab = this.renderTab.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    const { activateManually } = newProps;
+    if (activateManually) {
+      this.setState({ activeTab: activateManually });
+    }
+  }
+
   handleClick(type) {
     this.setState({ activeTab: type });
   }
 
-  renderTab(type) {
+  renderTab(type, title, key) {
     const { activeTab } = this.state;
     return (
       <div
+        key={key}
         className={classNames('tab', { active: (activeTab === type) })}
         onClick={() => this.handleClick(type)}
       >
-        {type}
+        {title}
       </div>
     );
   }
@@ -51,8 +64,8 @@ export default class ReportTabs extends React.Component {
       <div id="reportTabs">
         <div className="tabs-holder">
           {
-            tabs.map(tab => {
-              return this.renderTab(tab.type);
+            tabs.map((tab, key) => {
+              return this.renderTab(tab.type, tab.title, key);
             })
           }
         </div>
@@ -61,27 +74,32 @@ export default class ReportTabs extends React.Component {
             <TotalTabContent />
           </section>
           <section className={classNames('studykik', { active: (activeTab === 'studykik') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('database', { active: (activeTab === 'database') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('tv', { active: (activeTab === 'tv') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('radio', { active: (activeTab === 'radio') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('digital', { active: (activeTab === 'digital') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('print', { active: (activeTab === 'print') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
           <section className={classNames('other', { active: (activeTab === 'other') })}>
-            <ReportTabTable />
+            <MediaSourceTabContent />
           </section>
-          <section className={classNames('disposition', { active: (activeTab === 'disposition') })} />
+          <section className={classNames('disposition', { active: (activeTab === 'disposition') })}>
+            <DispositionTabContent />
+          </section>
+          <section className={classNames('disposition', { active: (activeTab === 'studyEndDateRange') })}>
+            <StudyEndDateRangeTab />
+          </section>
         </div>
       </div>
     );

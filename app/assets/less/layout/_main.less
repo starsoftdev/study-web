@@ -872,7 +872,13 @@ input[type=search]:-ms-input-placeholder {
 img.pqs-logo {
   width: 22px;
   position: relative;
-  top: -2px;
+  top: -4px;
+
+  @media screen and(min-width: 1530px) {
+    & {
+      margin-bottom: 4px;
+    }
+  }
 }
 
 .table {

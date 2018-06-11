@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
+import { browserHistory } from 'react-router';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 
@@ -21,22 +22,33 @@ const campaignOptions = [
   form: 'adminInfoFilter',
   enableReinitialize: true,
 })
-export default class StudyInfo extends React.Component {
-  static propTypes = {
-
-  };
-
+export default class StudyInfo extends Component {
   constructor(props) {
     super(props);
 
     this.state = {};
+
+    this.goToStudyStatsPage = this.goToStudyStatsPage.bind(this);
+    this.goToStudyEditPage = this.goToStudyEditPage.bind(this);
+  }
+
+  goToStudyStatsPage(studyId) {
+    browserHistory.push(`/admin/studyStats/${studyId}`);
+  }
+
+  goToStudyEditPage(studyId) {
+    browserHistory.push(`/admin/studies/${studyId}/edit`);
   }
 
   render() {
     return (
       <div id="infoSection">
         <div className="head">
-          <h2 className="pull-left">Active: 2 Inactive: 0 Total: 2</h2>
+          <h2 className="pull-left">
+            <span>Active: 2</span>
+            <span>Inactive: 0</span>
+            <span>Total: 2</span>
+          </h2>
           <div className="btns pull-right">
             <form className="admin-info-filter">
               <div className="select pull-left">
@@ -61,7 +73,7 @@ export default class StudyInfo extends React.Component {
         </div>
         <div className="tiles">
           <section>
-            <div className="part study">
+            <div className="part study clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">study</div>
               <ul>
                 <li>#</li>
@@ -75,7 +87,7 @@ export default class StudyInfo extends React.Component {
                 <li>COLOR:</li>
               </ul>
             </div>
-            <div className="part info">
+            <div className="part info clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">info</div>
               <ul>
                 <li>SITE LOCATION:</li>
@@ -88,7 +100,7 @@ export default class StudyInfo extends React.Component {
                 <li>CC:</li>
               </ul>
             </div>
-            <div className="part campaign">
+            <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">campaign</div>
               <ul>
                 <li>EXPOSURE LEVEL:</li>
@@ -103,7 +115,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat">
+            <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(10001)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
@@ -121,7 +133,7 @@ export default class StudyInfo extends React.Component {
             </div>
           </section>
           <section>
-            <div className="part study">
+            <div className="part study clickable" onClick={() => this.goToStudyEditPage(10002)}>
               <div className="title">study</div>
               <ul>
                 <li>#</li>
@@ -135,7 +147,7 @@ export default class StudyInfo extends React.Component {
                 <li>COLOR:</li>
               </ul>
             </div>
-            <div className="part info">
+            <div className="part info clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">info</div>
               <ul>
                 <li>SITE LOCATION:</li>
@@ -148,7 +160,7 @@ export default class StudyInfo extends React.Component {
                 <li>CC:</li>
               </ul>
             </div>
-            <div className="part campaign">
+            <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">campaign</div>
               <ul>
                 <li>EXPOSURE LEVEL:</li>
@@ -163,7 +175,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat">
+            <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(10002)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
