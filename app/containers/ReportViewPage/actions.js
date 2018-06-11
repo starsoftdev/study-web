@@ -23,7 +23,7 @@ import {
   CLEAR_REPORT_LIST,
   FETCH_DISPOSITIONS,
   FETCH_DISPOSITIONS_SUCCESS,
-  FETCH_DISPOSITIONS_ERROR
+  FETCH_DISPOSITIONS_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
