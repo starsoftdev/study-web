@@ -1,3 +1,6 @@
 export const FETCH_PATIENTS = 'CallCenterHomePage/FETCH_PATIENTS';
 export const FETCH_PATIENTS_SUCCESS = 'CallCenterHomePage/FETCH_PATIENTS_SUCCESS';
 export const FETCH_PATIENTS_ERROR = 'CallCenterHomePage/FETCH_PATIENTS_ERROR';
+export const FETCH_SCHEDULES = 'CallCenterHomePage/FETCH_SCHEDULES';
+export const FETCH_SCHEDULES_SUCCESS = 'CallCenterHomePage/FETCH_SCHEDULES_SUCCESS';
+export const FETCH_SCHEDULES_ERROR = 'CallCenterHomePage/FETCH_SCHEDULES_ERROR';
