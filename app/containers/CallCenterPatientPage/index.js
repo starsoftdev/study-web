@@ -3,19 +3,33 @@ import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
 import { translate } from '../../../common/utilities/localization';
+import settings from '../../../common/settings/app-settings.json';
 
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
-import { fetchPatient } from './actions';
-import { selectSelectedPatient } from './selectors';
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
 
+import {
+  fetchPatient,
+  fetchCallCenterPatientCategories,
+  submitPatientUpdate,
+  submitPatientDisposition,
+} from './actions';
+import {
+  selectSelectedPatient,
+  selectCallCenterPatientCategories,
+  selectCallCenterScheduledModalFormValues,
+} from './selectors';
+
+import Tabs from './Tabs';
+import ScheduledPatientModal from './ScheduledPatientModal';
 import PatientInfo from './PatientInfo';
 import SiteLocationInfo from './SiteLocationInfo';
 import TextSection from './PatientDetail/TextSection';
@@ -30,34 +44,191 @@ const formName = 'callCenterPatientPage';
 @reduxForm({ form: formName })
 class CallCenterPatientPage extends Component {
   static propTypes = {
+    callCenterPatientCategories: PropTypes.array,
     currentUser: PropTypes.object.isRequired,
+    fetchCallCenterPatientCategories: PropTypes.func,
     fetchPatient: PropTypes.func,
     fetchProtocols: PropTypes.func,
     params: PropTypes.object,
     patient: PropTypes.object,
     protocols: PropTypes.object,
-    socket: React.PropTypes.any,
+    scheduledModalFormValues: PropTypes.object,
+    socket: PropTypes.any,
+    submitPatientUpdate: React.PropTypes.func,
+    submitPatientDisposition: React.PropTypes.func,
+  };
+
+  static defaultProps = {
+    callCenterPatientCategories: [],
   };
 
   state = {
     carouselIndex: 0,
+    isScheduleModalVisible: false,
     socketBinded: false,
+    selectedTab: '',
   };
 
   componentWillMount() {
-    const { params: { id: patientId }, currentUser, fetchPatient, fetchProtocols } = this.props;
+    const {
+      params: { id: patientId },
+      fetchCallCenterPatientCategories,
+      fetchPatient,
+      fetchProtocols,
+    } = this.props;
 
+    fetchCallCenterPatientCategories();
     fetchPatient(patientId);
-    fetchProtocols(currentUser.roleForClient.id);
+    fetchProtocols();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { patient, currentUser } = nextProps;
+
+    if (this.props.patient !== patient && patient.details) {
+      const ccPatientCategoryId = patient.details.call_center_patient_category_id;
+      let selectedTab = '';
+      switch (ccPatientCategoryId) {
+        case 2:
+          selectedTab = 'call1';
+          break;
+        case 3:
+          selectedTab = 'call2';
+          break;
+        case 4:
+          selectedTab = 'call3';
+          break;
+        case 5:
+          selectedTab = 'scheduled';
+          break;
+        case 6: {
+          const { dispositions } = patient.details;
+          if (dispositions) {
+            const disposition = dispositions.find(item => item.userId === currentUser.id);
+            return this.updateTabFromDisposition(disposition.dispositionKey);
+          }
+          break;
+        }
+        default:
+      }
+      this.setState({ selectedTab });
+    }
+  }
+
+  handleExit = () => {
+    browserHistory.push('/app/cc/home');
   }
 
   handleSelectCarousel = (index) => {
     this.setState({ carouselIndex: index });
   }
 
+  handleSelectTab = (selectedTab) => {
+    const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
+    this.setState({ selectedTab });
+
+    let callCenterPatientCategoryId = '';
+    let patientCategoryId = '';
+    let dispositionKey;
+
+    switch (selectedTab) {
+      case 'call1':
+        callCenterPatientCategoryId = 2;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'call2':
+        callCenterPatientCategoryId = 3;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'call3':
+        callCenterPatientCategoryId = 4;
+        patientCategoryId = 2; // Call / Text Attempted
+        break;
+      case 'scheduled':
+        this.setState({ isScheduleModalVisible: true });
+        break;
+      case 'prescreened':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 4; // Action Needed
+        dispositionKey = settings.disposition.PRESCREENED;
+        break;
+      case 'dnq':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.DNQ;
+        break;
+      case 'ni':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.NI;
+        break;
+      case 'cnc':
+        callCenterPatientCategoryId = 6;
+        patientCategoryId = 3; // Not Qualified / Not Interested
+        dispositionKey = settings.disposition.CNC;
+        break;
+      default:
+    }
+    if (!callCenterPatientCategoryId) return;
+
+    submitPatientUpdate({
+      patientId: patient.details.id,
+      callCenterPatientCategoryId,
+      patientCategoryId,
+    });
+
+    if (dispositionKey !== undefined) {
+      submitPatientDisposition({
+        patientId: patient.details.id,
+        dispositionKey,
+      });
+    }
+  }
+
+  updateTabFromDisposition = (dispositionKey) => {
+    switch (dispositionKey) {
+      case settings.disposition.PRESCREENED:
+        this.setState({ selectedTab: 'prescreened' });
+        break;
+      case settings.disposition.DNQ:
+        this.setState({ selectedTab: 'dnq' });
+        break;
+      case settings.disposition.NI:
+        this.setState({ selectedTab: 'ni' });
+        break;
+      case settings.disposition.CNC:
+        this.setState({ selectedTab: 'cnc' });
+        break;
+      default:
+    }
+  }
+
+  /* Schedule Patient Modal */
+  closePatientScheduleModal = () => {
+    this.setState({ isScheduleModalVisible: false });
+  }
+
+  handleDateChange= (date) => {
+    this.scheduleDate = date;
+  }
+
+  onPatientScheduleSubmit = (e) => {
+    e.preventDefault();
+
+    const { patient, submitPatientUpdate } = this.props;
+    submitPatientUpdate({
+      patientId: patient.details.id,
+      callCenterPatientCategoryId: 5,
+      patientCategoryId: 2, // Call / Text Attempted
+    });
+
+    this.setState({ isScheduleModalVisible: false });
+  }
+
   render() {
-    const { carouselIndex } = this.state;
-    const { patient, protocols, socket, currentUser } = this.props;
+    const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
+    const { patient, protocols, socket, currentUser, scheduledModalFormValues } = this.props;
+
     let formattedPatient;
     let siteForPatient;
     let protocolForPatient;
@@ -86,14 +257,11 @@ class CallCenterPatientPage extends Component {
     return (
       <div id="cc-patient-page">
         <div className="header">
-          <div className="tabs">
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.followUp')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.schedule')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.prescn')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.dnq')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.cnc')}</Button>
-            <Button className="tab">{translate('container.page.callCenterPatient.tab.exit')}</Button>
-          </div>
+          <Tabs
+            onExit={this.handleExit}
+            onSelectTab={this.handleSelectTab}
+            selectedTab={selectedTab}
+          />
           <form action="#" className="form-search clearfix">
             <div className="search-area">
               <div className="field">
@@ -150,22 +318,35 @@ class CallCenterPatientPage extends Component {
             </div>
           </div>
         </div>
+        <ScheduledPatientModal
+          show={isScheduleModalVisible}
+          onHide={this.closePatientScheduleModal}
+          handleSubmit={this.onPatientScheduleSubmit}
+          handleDateChange={this.handleDateChange}
+          currentPatient={patient.details}
+          currentUser={currentUser}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = createStructuredSelector({
+  callCenterPatientCategories: selectCallCenterPatientCategories(),
   currentUser: selectCurrentUser(),
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
+  scheduledModalFormValues: selectCallCenterScheduledModalFormValues(),
   socket: selectSocket(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
+    fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
+    submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
   };
 }
 
