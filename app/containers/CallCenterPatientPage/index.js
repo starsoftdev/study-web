@@ -113,6 +113,7 @@ class CallCenterPatientPage extends Component {
       }
       this.setState({ selectedTab });
     }
+    return null;
   }
 
   handleExit = () => {
@@ -227,7 +228,7 @@ class CallCenterPatientPage extends Component {
 
   render() {
     const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
-    const { patient, protocols, socket, currentUser, scheduledModalFormValues } = this.props;
+    const { patient, protocols, socket, currentUser } = this.props;
 
     let formattedPatient;
     let siteForPatient;

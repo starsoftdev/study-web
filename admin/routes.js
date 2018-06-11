@@ -88,6 +88,28 @@ export default function createRoutes(store) {
       },
     },
     {
+      onEnter: redirectToLogin,
+      path: '/admin/studies/:studyId/edit',
+      name: 'AdminStudyEditPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/AdminStudyEdit/reducer'),
+          System.import('./containers/AdminStudyEdit/sagas'),
+          System.import('./containers/AdminStudyEdit'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('AdminStudyEditPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    },
+    {
       path: '/admin*',
       name: 'notfound',
       getComponent(nextState, cb) {
