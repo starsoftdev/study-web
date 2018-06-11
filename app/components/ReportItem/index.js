@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import classNames from 'classnames';
+import pqsImage from '../../assets/images/pqs2.png';
 import { translate } from '../../../common/utilities/localization';
 
 class ReportItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -18,17 +20,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
     this.state = {
       expanded: false,
     };
-
-    this.toggleExpand = this.toggleExpand.bind(this);
   }
-
-  toggleExpand(e) {
-    e.preventDefault();
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  }
-
 
   render() {
     const { item, order, percentage, openNotesModal } = this.props;
@@ -49,7 +41,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
     );
 
     return (
-      <div className={`elements-box ${this.state.expanded ? '' : 'collapsed'}`}>
+      <div className="elements-box">
         <div className="top-line">
           <div className="box-element order">
             <span className="name">#</span>
@@ -59,7 +51,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
             <span className="name">{translate('sponsor.component.reportItem.principalInvestigator')}</span>
             <span className="value">
               <OverlayTrigger placement="top" overlay={tooltip}>
-                <a target="_blank" href={landingHref} className="tooltip-element">{piName}</a>
+                <a target="_blank" href={landingHref} className={classNames('tooltip-element', { na: (item.principalinvestigatorname === null) })}>{piName}</a>
               </OverlayTrigger>
             </span>
           </div>
@@ -89,7 +81,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
           </div>
           <div className="box-element pqs">
             <OverlayTrigger placement="top" overlay={pqsTooltip}>
-              <span className="name">{translate('sponsor.component.reportItem.pqsTitle')}</span>
+              <img className="pqs-logo" src={pqsImage} alt="" data-for="pqs-logo" data-tip={translate('sponsor.component.reportItem.pqsTitle')} />
             </OverlayTrigger>
             <span className="value"><span className={`patient-messaging-suite-status ${(item.pqs_cur || item.pqs_last) ? '' : 'off'}`}>{(item.pqs_cur || item.pqs_last) ? translate('common.constants.on') : translate('common.constants.off')}</span></span>
           </div>
@@ -154,7 +146,6 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
             <span className="value">{item.outbound_emails || 0}</span>
           </div>
         </div>
-        <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportItem.seeLess') : translate('sponsor.component.reportItem.seeMore')}</a>
       </div>
     );
   }
