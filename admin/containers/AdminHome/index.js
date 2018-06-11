@@ -14,7 +14,6 @@ import ExpandableSection from '../../components/ExpandableSection';
 import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
-import LandngPageEdit from '../../components/LandingPageEdit';
 import StudyInfo from '../../components/StudyInfo';
 import { selectFilterFormValues } from './selectors';
 const formName = 'adminDashboardFilters';
@@ -145,7 +144,6 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
           <ExpandableSection content={<MediaStatsTable />} />
         </div>
         <StudyInfo />
-        <LandngPageEdit />
       </div>
     );
   }
