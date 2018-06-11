@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
-import LandingPageEdit from '../../components/LandingPageEdit'
+import LandingPageEdit from '../../components/LandingPageEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
