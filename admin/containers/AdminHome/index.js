@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { change, reset, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _, { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
+import { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
 import ExpandableSection from '../../components/ExpandableSection';
@@ -100,7 +100,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
       if (key !== 'campaign' && key !== 'search') {
-        _.forEach(filterValues, (v) => {
+        filterValues.forEach(v => {
           if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
             newFilters.push({
               name: key,

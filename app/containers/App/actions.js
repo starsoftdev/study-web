@@ -1411,11 +1411,10 @@ export function fetchStudySourcesError(payload) {
 }
 
 
-export function fetchStudyLeadSources(studyId, excludeSourceIds) {
+export function fetchStudyLeadSources(studyId) {
   return {
     type: FETCH_STUDY_LEAD_SOURCES,
     studyId,
-    excludeSourceIds,
   };
 }
 
