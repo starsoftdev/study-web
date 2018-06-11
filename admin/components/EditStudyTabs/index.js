@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../../components/LandingPageEdit';
 
 const tabs = [
@@ -64,7 +65,9 @@ export default class EditStudyTabs extends Component {
           }
         </div>
         <div className="content-holder">
-          <section className={classNames('notes', { active: (activeTab === 'notes') })} />
+          <section className={classNames('notes', { active: (activeTab === 'notes') })}>
+            <NotesTabContent />
+          </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
             <LandingPageEdit />
           </section>
