@@ -136,8 +136,9 @@ export class ReportViewSearch extends React.Component {
     const uiStartDate = startDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
     const uiEndDate = endDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
 
-    this.props.dispatch(change('searchReports', 'startDate', startDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
-    this.props.dispatch(change('searchReports', 'endDate', endDate.format(translate('sponsor.component.reportViewSearch.dateAndTimeMask'))));
+    // TODO make this aspect more robust, since this is going to get passed to the API without any transformations
+    this.props.dispatch(change('searchReports', 'startDate', startDate.toISOString()));
+    this.props.dispatch(change('searchReports', 'endDate', endDate.toISOString()));
 
     this.setState({
       selectedTime: {
