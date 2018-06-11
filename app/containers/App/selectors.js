@@ -105,7 +105,7 @@ const selectIndications = () => createSelector(
   selectGlobal(),
   (substate) => {
     const indications = get(substate, 'baseData.indications', []);
-    
+
     return indications.map(e => {
       let translatedName = translate(`common.indication.id${e.id}`);
       if (translatedName.startsWith('[TRANSLATE ERR]')) {
