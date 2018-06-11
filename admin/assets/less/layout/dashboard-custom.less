@@ -15,7 +15,7 @@
 #infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; overflow: hidden; padding: 10px; }
 #infoSection .title { font-weight: 600; margin: 10px 0; text-align: center; text-transform: uppercase; width: 100%; }
 #infoSection .part { border: 2px solid; float: left; height: 350px; margin: 10px; width: calc(~'25% - 20px'); }
-#infoSection .part.stat { cursor: pointer; }
+#infoSection .clickable { cursor: pointer; }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
 
@@ -83,3 +83,35 @@
 #studyGeneralInfo ul { display: inline-block; list-style: none; margin: 0; padding: 0; vertical-align: top; width: 30%; }
 #studyGeneralInfo li { line-height: 30px; }
 #studyGeneralInfo strong { text-transform: uppercase; }
+
+/***************************************************************************************
+*************************** Admin Study Edit Page **************************************
+****************************************************************************************/
+
+#adminStudyEditPage { height: calc(~"100vh - 80px"); padding: 10px; }
+#studyInfoSection { display: inline-block; height: 100%; overflow: auto; padding-right: 20px; vertical-align: top; width: 30%; }
+#studyInfoSection h2 { margin-top: 0; }
+#studyInfoSection .section { background: #fff; margin-bottom: 20px; padding: 10px; }
+#studyInfoSection .smallSection { margin-bottom: 20px; }
+#studyInfoSection .smallSection ul { margin-bottom: 20px; }
+#studyInfoSection .updateBtnSection { background: #ddd; margin: -20px 0 20px; padding: 10px; text-align: right; }
+#studyInfoSection ul { list-style: none; margin: 0; padding: 0; }
+#studyInfoSection li { line-height: 30px; }
+#studyInfoSection li.hasCheckbox div { display: inline-block; margin: 5px 10px 0 0; vertical-align: middle; }
+#studyInfoSection h3 { margin-top: 0; }
+
+#studyEditSection { display: inline-block; height: 100%; padding: 60px 0 20px; vertical-align: top; width: 70%; }
+#editStudyTabs { height: 100%; width: 100%; }
+#editStudyTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-size: 17px; font-weight: 600; display: inline-block; margin-right: 8px; padding: 5px 4px 5px 8px; position: relative; text-transform: uppercase; }
+#editStudyTabs .tab:after { background-color: inherit; border: 2px solid #00afef; content:" "; display: block; height: 38px; position: absolute; right: -10px; top: -2px; transform:skewX(25deg); width: 40px; z-index: -1; }
+#editStudyTabs .tab:hover, #editStudyTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
+#editStudyTabs .content-holder { background: #fff; border: 2px solid #00afef; height: calc(~"100% - 36px"); padding: 20px; }
+#editStudyTabs section { display: none; font-size: 16px; margin: 0; visibility: hidden; }
+#editStudyTabs section.active { display: block; visibility: visible; }
+
+@media screen and (max-width: 1520px) {
+  #editStudyTabs .tab { font-size: 14px; }
+}
+@media screen and (max-width: 1300px) {
+  #editStudyTabs .tab { font-size: 13px; padding: 5px 2px 5px 4px; }
+}
