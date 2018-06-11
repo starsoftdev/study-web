@@ -105,7 +105,7 @@ class CallCenterPatientPage extends Component {
           const { dispositions } = patient.details;
           if (dispositions) {
             const disposition = dispositions.find(item => item.userId === currentUser.id);
-            return this.updateTabFromDisposition(disposition.dispositionKey);
+            this.updateTabFromDisposition(disposition.dispositionKey);
           }
           break;
         }
@@ -227,7 +227,7 @@ class CallCenterPatientPage extends Component {
 
   render() {
     const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
-    const { patient, protocols, socket, currentUser, scheduledModalFormValues } = this.props;
+    const { patient, protocols, socket, currentUser } = this.props;
 
     let formattedPatient;
     let siteForPatient;
