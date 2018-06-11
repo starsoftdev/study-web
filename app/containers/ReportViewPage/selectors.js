@@ -62,6 +62,11 @@ const selectNotesPaginationOptions = () => createSelector(
   substate => substate.notesPaginationOptions
 );
 
+const selectDispositionTotals = () => createSelector(
+  selectReportViewPageDomain(),
+  (substate) => substate.dispositionTotals
+);
+
 export default selectReportViewPage;
 export {
   selectReportViewPageDomain,
@@ -73,4 +78,5 @@ export {
   selectReportsTotals,
   selectCategoryNotes,
   selectNotesPaginationOptions,
+  selectDispositionTotals,
 };
