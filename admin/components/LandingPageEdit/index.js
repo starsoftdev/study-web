@@ -1,10 +1,17 @@
 import React from 'react';
 import RichTextEditor from 'react-rte';
-import { Field } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
 import Toggle from '../../components/Input/Toggle';
 import Checkbox from '../../components/Input/Checkbox';
 import defaultImage from '../../assets/images/picin.jpg';
+
+const formName = 'landingPageForm';
+
+@reduxForm({
+  form: formName,
+  validate: null,
+})
 
 export default class LandingPageEdit extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -70,9 +77,11 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
 
     return (
       <div id="landingPageEdit">
-        <section className="text">
+        <div className="text">
           <div>
-            <label htmlFor="new-patient-phone">Text:</label>
+            <strong className="label">
+              <label>Text:</label>
+            </strong>
             <div className="field rich-text-editor-container">
               <RichTextEditor
                 value={this.state.code}
@@ -81,10 +90,12 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
               />
             </div>
           </div>
-        </section>
-        <section className="initial-text-message">
+        </div>
+        <div className="initial-text-message">
           <div>
-            <label htmlFor="new-patient-phone">Initial text message:</label>
+            <strong className="label">
+              <label>Initial text message:</label>
+            </strong>
             <div className="field">
               <Field
                 name="initialMessageText"
@@ -93,10 +104,12 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
               />
             </div>
           </div>
-        </section>
-        <section className="study-ad">
+        </div>
+        <div className="study-ad">
           <div>
-            <label htmlFor="new-patient-phone">Study Ad:</label>
+            <strong className="label">
+              <label>Study Ad:</label>
+            </strong>
             <div className="field">
               { fileSrc &&
                 <div className="img-preview">
@@ -116,11 +129,11 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
               </a>
             </div>
           </div>
-        </section>
-        <section className="custom-info-fields">
+        </div>
+        <div className="custom-info-fields">
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Title:</label>
+              <label>Title:</label>
             </strong>
             <div className="field">
               <Field
@@ -133,7 +146,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Location:</label>
+              <label>Location:</label>
             </strong>
             <div className="field">
               <Field
@@ -146,7 +159,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Enter Your information To Join!:</label>
+              <label>Enter Your information To Join!:</label>
             </strong>
             <div className="field">
               <Field
@@ -159,7 +172,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Full Name:</label>
+              <label>Full Name:</label>
             </strong>
             <div className="field">
               <Field
@@ -173,7 +186,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-email">Email:</label>
+              <label>Email:</label>
             </strong>
             <div className="field">
               <Field
@@ -186,7 +199,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Mobile Phone:</label>
+              <label>Mobile Phone:</label>
             </strong>
             <div className="field">
               <Field
@@ -199,7 +212,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Sign up Now!:</label>
+              <label>Sign up Now!:</label>
             </strong>
             <div className="field">
               <Field
@@ -211,7 +224,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Click To Call!:</label>
+              <label>Click To Call!:</label>
             </strong>
             <div className="field">
               <Field
@@ -223,7 +236,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Click To Call number:</label>
+              <label>Click To Call number:</label>
             </strong>
             <div className="field">
               <Field
@@ -235,7 +248,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">If interested, enter information above to sign up!:</label>
+              <label>If interested, enter information above to sign up!:</label>
             </strong>
             <div className="field">
               <Field
@@ -247,7 +260,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">By Signing up...:</label>
+              <label>By Signing up...:</label>
             </strong>
             <div className="field">
               <Field
@@ -259,7 +272,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Share this study:</label>
+              <label>Share this study:</label>
             </strong>
             <div className="field">
               <Field
@@ -271,7 +284,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Initial text:</label>
+              <label>Initial text:</label>
             </strong>
             <div className="field">
               <Field
@@ -283,7 +296,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-first-name">Upcoming Study:</label>
+              <label>Upcoming Study:</label>
             </strong>
             <div className="field">
               <Field
@@ -295,7 +308,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Hide click to call button:</label>
+              <label>Hide click to call button:</label>
             </strong>
             <div className="field">
               <Field
@@ -307,7 +320,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">Hide share this study Icons and text:</label>
+              <label>Hide share this study Icons and text:</label>
             </strong>
             <div className="field">
               <Field
@@ -319,7 +332,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">MLP Distance:</label>
+              <label>MLP Distance:</label>
             </strong>
             <div className="field">
               <Field
@@ -331,7 +344,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label htmlFor="new-patient-phone">MLP Phone:</label>
+              <label>MLP Phone:</label>
             </strong>
             <div className="field">
               <Field
@@ -341,7 +354,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
               />
             </div>
           </div>
-        </section>
+        </div>
       </div>
     );
   }
