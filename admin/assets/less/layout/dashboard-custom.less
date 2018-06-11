@@ -1,4 +1,124 @@
 /***************************************************************************************
 *************************** Admin Home Page ********************************************
 ****************************************************************************************/
+
 #adminHomePage h1 { font-size: 40px; text-transform: uppercase; }
+#adminReportsPage h1 { font-size: 40px; text-transform: uppercase; }
+
+#btnsPopupsHolder { height: 40px; margin: 0 0 30px; width: 100%; }
+#btnsPopupsHolder .col { padding: 0 6px }
+
+#infoSection { margin-bottom: 30px; overflow: hidden; position: relative; }
+#infoSection .head { height: 40px; margin: 0 0 10px 0; width: 100%; }
+#infoSection h2 { font-size: 21px; font-weight: 700; line-height: 40px; margin: 0 10px 0 0; text-transform: uppercase; }
+#infoSection h2 span { margin: 0 10px 0 0; }
+#infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; overflow: hidden; padding: 10px; }
+#infoSection .title { font-weight: 600; margin: 10px 0; text-align: center; text-transform: uppercase; width: 100%; }
+#infoSection .part { border: 2px solid; float: left; height: 350px; margin: 10px; width: calc(~'25% - 20px'); }
+#infoSection .clickable { cursor: pointer; }
+#infoSection .part ul { margin: 10px; padding: 0; }
+#infoSection .part li { list-style: none; }
+
+#reportTabs { margin: 0 0 30px; width: 100%; }
+#reportTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; display: inline-block; padding: 10px; text-transform: uppercase; }
+#reportTabs .tab:last-child { border-right: 2px solid #00afef; }
+#reportTabs .tab:hover, #reportTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
+#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 20px; }
+#reportTabs section { display: none; font-size: 16px; margin: 0; min-height: 100px; visibility: hidden; }
+#reportTabs section.active { display: block; visibility: visible; }
+#reportTabs section.total { margin-top: -10px; }
+#reportTabs section table { width: 100%; }
+#reportTabs section .header { text-transform: uppercase; }
+
+#totalTabContent tr { height: 35px; }
+#totalTabContent th { text-transform: uppercase; }
+
+#statsBox { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
+#statsBox ul { list-style: none; padding: 0; }
+#statsBox li { margin-bottom: 15px; margin-top: 10px; text-transform: uppercase; }
+#statsBox .section { display: inline-block; vertical-align: top; }
+#statsBox .section1 { width: 30%; }
+#statsBox .section2 { width: 35%; }
+#statsBox .section3 { width: 35%; }
+#statsBox .section .chart { display: inline-block; vertical-align: top; width: 50%; }
+#statsBox .section ul.half { display: inline-block; vertical-align: top; width: 50%; }
+#statsBox .red { color: #dd0000; }
+#statsBox .yellow { color: #f9ce15; }
+#statsBox .green { color: #7dbc00; }
+#statsBox .purple { color: #873fbd; }
+#statsBox .tier1 { color: #00afef; }
+#statsBox .tier2 { color: #f78e1e; }
+#statsBox .tier3 { color: #a0cf67; }
+#statsBox .tier4 { color: #949ca1; }
+
+#mediaStatsBox { background: #fff; border: 2px solid #00afef; margin-bottom: 30px;}
+#mediaStatsTable { padding: 10px 20px; }
+#mediaStatsTable table { cursor: pointer; width: 100%; }
+#mediaStatsTable tr { display: none; height: 35px; }
+#mediaStatsTable th { text-transform: uppercase; }
+#mediaStatsTable thead tr { display: table-row; }
+#mediaStatsTable tr.alwaysVisible { display: table-row; }
+
+.expanded #mediaStatsTable tr { display: table-row; height: 35px; }
+.expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
+.expendableSection .showMoreBtn:hover { background: #ccc; }
+
+/***************************************************************************************
+*************************** Admin Study Stats Page *************************************
+****************************************************************************************/
+
+#adminStudyStatsPage { padding: 20px; }
+#adminStudyStatsPage .campaignStats { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; }
+#adminStudyStatsPage .campaignInfo { border-bottom: 2px solid #00afef; padding: 5px 20px; }
+#adminStudyStatsPage .campaignInfo span { margin-right: 30px; }
+#adminStudyStatsPage .campaignInfo strong { text-transform: uppercase; }
+.campaignStatsTable { padding: 10px 20px; }
+.campaignStatsTable table { width: 100%; }
+.campaignStatsTable tr { display: none; height: 35px; }
+.campaignStatsTable th { text-transform: uppercase; }
+.campaignStatsTable thead tr { display: table-row; }
+.campaignStatsTable tr.alwaysVisible { display: table-row; }
+.expanded .campaignStatsTable tr { display: table-row; }
+#studyGeneralInfo { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
+#studyGeneralInfo ul { display: inline-block; list-style: none; margin: 0; padding: 0; vertical-align: top; width: 30%; }
+#studyGeneralInfo li { line-height: 30px; }
+#studyGeneralInfo strong { text-transform: uppercase; }
+
+/***************************************************************************************
+*************************** Admin Reports Page *****************************************
+****************************************************************************************/
+
+#mediaSourceTabContent th { text-transform: uppercase; }
+
+/***************************************************************************************
+*************************** Admin Study Edit Page **************************************
+****************************************************************************************/
+
+#adminStudyEditPage { height: calc(~"100vh - 80px"); padding: 10px; }
+#studyInfoSection { display: inline-block; height: 100%; overflow: auto; padding-right: 20px; vertical-align: top; width: 30%; }
+#studyInfoSection h2 { margin-top: 0; }
+#studyInfoSection .section { background: #fff; margin-bottom: 20px; padding: 10px; }
+#studyInfoSection .smallSection { margin-bottom: 20px; }
+#studyInfoSection .smallSection ul { margin-bottom: 20px; }
+#studyInfoSection .updateBtnSection { background: #ddd; margin: -20px 0 20px; padding: 10px; text-align: right; }
+#studyInfoSection ul { list-style: none; margin: 0; padding: 0; }
+#studyInfoSection li { line-height: 30px; }
+#studyInfoSection li.hasCheckbox div { display: inline-block; margin: 5px 10px 0 0; vertical-align: middle; }
+#studyInfoSection h3 { margin-top: 0; }
+
+#studyEditSection { display: inline-block; height: 100%; padding: 60px 0 20px; vertical-align: top; width: 70%; }
+#editStudyTabs { height: 100%; width: 100%; }
+#editStudyTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-size: 17px; font-weight: 600; display: inline-block; margin-right: 8px; padding: 5px 4px 5px 8px; position: relative; text-transform: uppercase; }
+#editStudyTabs .tab:after { background-color: inherit; border: 2px solid #00afef; content: " "; display: block; height: 38px; position: absolute; right: -10px; top: -2px; transform: skewX(25deg); width: 40px; z-index: -1; }
+#editStudyTabs .tab:hover, #editStudyTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
+#editStudyTabs .content-holder { background: #fff; border: 2px solid #00afef; height: calc(~"100% - 36px"); padding: 20px; }
+#editStudyTabs section { display: none; font-size: 16px; margin: 0; visibility: hidden; }
+#editStudyTabs section.active { display: block; visibility: visible; }
+
+@media screen and (max-width: 1520px) {
+  #editStudyTabs .tab { font-size: 14px; }
+}
+@media screen and (max-width: 1300px) {
+  #editStudyTabs .tab { font-size: 13px; padding: 5px 2px 5px 4px; }
+}
+

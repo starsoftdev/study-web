@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import classNames from 'classnames';
 import pqsImage from '../../assets/images/pqs2.png';
 import { translate } from '../../../common/utilities/localization';
 
@@ -50,7 +51,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
             <span className="name">{translate('sponsor.component.reportItem.principalInvestigator')}</span>
             <span className="value">
               <OverlayTrigger placement="top" overlay={tooltip}>
-                <a target="_blank" href={landingHref} className="tooltip-element">{piName}</a>
+                <a target="_blank" href={landingHref} className={classNames('tooltip-element', { na: (item.principalinvestigatorname === null) })}>{piName}</a>
               </OverlayTrigger>
             </span>
           </div>
