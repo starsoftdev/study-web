@@ -32,7 +32,17 @@ function ReactSelect({
   const hasError = touched && error && !active;
   const optionsToRender = options.map(o => (
     { ...o, value: (o.value || o.id), label: (o.label || o.name) }
-  ));
+  )).sort((a, b) => {
+    const textA = a.label.toUpperCase();
+    const textB = b.label.toUpperCase();
+    let returnValue = 0;
+    if (textA < textB) {
+      returnValue = -1;
+    } else if (textA > textB) {
+      returnValue = 1;
+    }
+    return  returnValue;
+  });
 
   const tooltip = (
     <Tooltip
