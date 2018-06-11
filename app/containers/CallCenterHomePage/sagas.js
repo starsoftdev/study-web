@@ -1,4 +1,4 @@
-import { take, takeLatest, call, put, fork, cancel } from 'redux-saga/effects';
+import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
