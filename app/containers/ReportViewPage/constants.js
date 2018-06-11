@@ -28,3 +28,7 @@ export const CLEAR_REPORT_LIST = 'app/ReportViewPage/CLEAR_REPORT_LIST';
 export const STATUS_ALL = 'All';
 export const STATUS_ACTIVE = 'active';
 export const STATUS_INACTIVE = 'inactive';
+
+export const FETCH_DISPOSITIONS = 'app/ReportViewPage/FETCH_DISPOSITIONS';
+export const FETCH_DISPOSITIONS_SUCCESS = 'app/ReportViewPage/FETCH_DISPOSITIONS_SUCCESS';
+export const FETCH_DISPOSITIONS_ERROR = 'app/ReportViewPage/FETCH_DISPOSITIONS_ERROR';

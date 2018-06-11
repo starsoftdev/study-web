@@ -22,7 +22,7 @@ import UpgradeStudyForm from '../../components/UpgradeStudyForm/index';
 import EditStudyForm from '../../components/EditStudyForm';
 import StudyItem from './StudyItem';
 import { translate } from '../../../common/utilities/localization';
-import pqsImage from '../../assets/images/pqs.png';
+import pqsImage from '../../assets/images/pqs2.png';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

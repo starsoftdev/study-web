@@ -8,20 +8,18 @@ import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
-import { Link } from 'react-router';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
 
-import { fetchPatients } from './actions';
-import { selectFetchedPatients } from './selectors';
+import { fetchPatients, fetchSchedules } from './actions';
+import { selectFetchedPatients, selectSchedules } from './selectors';
 
 import CenteredModal from '../../components/CenteredModal';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
-import studykikLogo from '../../assets/images/logo.svg';
 import FiltersForm from './FiltersForm/';
 
 import CallDiv from './CallDiv/';
@@ -38,19 +36,21 @@ class CallCenterHomePage extends Component {
     currentUser: PropTypes.object.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func,
+    fetchSchedules: PropTypes.func,
     patients: PropTypes.object,
     indications: PropTypes.array,
+    schedules: PropTypes.object,
   };
 
   state = {
     addUserModalOpen: false,
-  }
+  };
 
   componentDidMount() {
-    const { currentUser, fetchIndications, fetchPatients } = this.props;
-    console.log('cc', currentUser);
+    const { currentUser, fetchIndications, fetchPatients, fetchSchedules } = this.props;
     fetchIndications();
-    fetchPatients(currentUser.roleForCallCenter.id);
+    fetchPatients(currentUser.id);
+    fetchSchedules();
   }
 
   openFiltersModal() {
@@ -62,19 +62,14 @@ class CallCenterHomePage extends Component {
   }
 
   render() {
-    const { patients, indications } = this.props;
+    const { patients, indications, currentUser, schedules } = this.props;
 
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-
     siteOptions.unshift({ label: 'All', value: '0' });
+
     return (
-      <div id="callcentermain" className="not-found-page">
+      <div className="container-fluid" id="callcentermain">
         <form action="#" className="form-search clearfix">
-          <h1 className="logo pull-left">
-            <Link to="/app">
-              <img src={studykikLogo} width="350" height="51" alt="logo" />
-            </Link>
-          </h1>
           <div className="search-area">
             <div className="field">
               <Button bsStyle="primary" onClick={(e) => this.openFiltersModal(e)}>
@@ -132,8 +127,8 @@ class CallCenterHomePage extends Component {
         </div>
 
         <div className="content">
-          <CallDiv patients={patients} indications={indications} />
-          <CallCalendar />
+          <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone} />
+          <CallCalendar currentUser={currentUser} schedules={schedules && schedules.data} />
         </div>
       </div>
     );
@@ -144,12 +139,14 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patients: selectFetchedPatients(),
   indications: selectIndications(),
+  schedules: selectSchedules(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
-    fetchPatients: (clientRoleId) => dispatch(fetchPatients(clientRoleId)),
+    fetchPatients: (userId) => dispatch(fetchPatients(userId)),
+    fetchSchedules: () => dispatch(fetchSchedules()),
   };
 }
 

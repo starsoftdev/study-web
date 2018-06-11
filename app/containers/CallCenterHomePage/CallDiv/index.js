@@ -1,7 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 
 import { translate } from '../../../../common/utilities/localization';
+import { formatPhone } from '../../../common/helper/functions';
 import './style.less';
 
 export default class CallDiv extends React.Component {
@@ -9,33 +11,108 @@ export default class CallDiv extends React.Component {
   static propTypes = {
     patients: React.PropTypes.object,
     indications: React.PropTypes.array,
+    timezone: React.PropTypes.string,
   };
 
+  renderUnreadMessageCount(patient) {
+    if (patient.count_unread > 0) {
+      return (
+        <span className="counter-circle">{patient.count_unread}</span>
+      );
+    }
+    return null;
+  }
+
+  renderTextCreatedDate(patient) {
+
+    const { timezone } = this.props;
+
+    if (patient.last_message_body && patient.last_message_date) {
+      return (
+        <time dateTime={patient.last_message_date}>{moment.tz(patient.last_message_date, timezone).format(translate('client.component.patient.dateMask'))}</time>
+      );
+    }
+    return null;
+  }
+
+  renderPatientTextMessageSummary(patient) {
+
+    if ((patient.last_message_body && patient.last_message_date) && patient.count_unread > 0) {
+      return (
+        <div className="msg-alert">
+          <div className="msg">
+            <p>{patient.last_message_body ? patient.last_message_body : ''}</p>
+          </div>
+          <div className="time">
+            {this.renderUnreadMessageCount(patient)}
+            {this.renderTextCreatedDate(patient)}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
+
+  getPatientView = (patient, key) => {
+    let patientPhone;
+    if (patient.phone) {
+      // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
+      try {
+        patientPhone = formatPhone(patient.phone);
+      } catch (err) {
+        patientPhone = patient.phone;
+      }
+    }
+    return (<div className="cc-box" key={key}>
+      <strong className="name">
+        <span className="first-name">{patient.first_name}</span>
+        <span> </span>
+        <span className="last-name">{patient.last_name}</span>
+      </strong>
+      <span className="email">{patient.email}</span>
+      <span className="phone">{patientPhone}</span>
+      {this.renderPatientTextMessageSummary(patient)}
+    </div>);
+  }
+
   renderNewPatients = () => {
-    const { patients, indications } = this.props;
-    console.log(patients);
+    const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
+
       if (patient && patient.patient_category_id === 1) {
-        output.push(<div className="cc-box" key={`callDiv_newPatient_${patient.id}`}>
-          <span>{patient.first_name} {patient.last_name}</span>
-          <span>{indications[patient.study_id].name}</span>
-        </div>);
+        output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
       }
     });
     return output;
   }
 
   renderCall1 = () => {
-    const { patients, indications } = this.props;
-
+    const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
       if (patient && patient.patient_category_id === 2) {
-        output.push(<div className="cc-box" key={`callDiv_call1_${patient.id}`}>
-          <span>{patient.first_name} {patient.last_name}</span>
-          <span>{indications[patient.study_id].name}</span>
-        </div>);
+        output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
+      }
+    });
+    return output;
+  }
+
+  renderCall2 = () => {
+    return null;
+  }
+
+  renderCall3 = () => {
+    return null;
+  }
+
+  renderMeetings = () => {
+    const { patients } = this.props;
+
+    const output = [];
+    _.forEach(patients.details, (patient) => {
+      if (patient && patient.patient_category_id === 5) {
+        output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
       }
     });
     return output;
@@ -96,6 +173,29 @@ export default class CallDiv extends React.Component {
             {translate('container.page.callcenter.heading.meetings')}
           </div>
           { this.renderMeetings() }
+        </div>
+        <div className="cc-row">
+          <div className="cc-box cc-box-heading">
+            {translate('container.page.callcenter.heading.archivepatient')}
+          </div>
+          <div className="cc-box">
+            <span>Patient Name</span>
+            <span>Patient Email</span>
+            <span>Patient Phone</span>
+            <span>Prescn</span>
+          </div>
+          <div className="cc-box">
+            <span>Patient Name</span>
+            <span>Patient Email</span>
+            <span>Patient Phone</span>
+            <span>DNQ</span>
+          </div>
+          <div className="cc-box">
+            <span>Patient Name</span>
+            <span>Patient Email</span>
+            <span>Patient Phone</span>
+            <span>CNC</span>
+          </div>
         </div>
       </div>
     );
