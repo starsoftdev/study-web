@@ -87,7 +87,7 @@ export default class StudyInfo extends Component {
                 <li>COLOR:</li>
               </ul>
             </div>
-            <div className="part info">
+            <div className="part info clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">info</div>
               <ul>
                 <li>SITE LOCATION:</li>
@@ -100,7 +100,7 @@ export default class StudyInfo extends Component {
                 <li>CC:</li>
               </ul>
             </div>
-            <div className="part campaign">
+            <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">campaign</div>
               <ul>
                 <li>EXPOSURE LEVEL:</li>
@@ -147,7 +147,7 @@ export default class StudyInfo extends Component {
                 <li>COLOR:</li>
               </ul>
             </div>
-            <div className="part info">
+            <div className="part info clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">info</div>
               <ul>
                 <li>SITE LOCATION:</li>
@@ -160,7 +160,7 @@ export default class StudyInfo extends Component {
                 <li>CC:</li>
               </ul>
             </div>
-            <div className="part campaign">
+            <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">campaign</div>
               <ul>
                 <li>EXPOSURE LEVEL:</li>
