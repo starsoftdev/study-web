@@ -105,7 +105,7 @@ class CallCenterPatientPage extends Component {
           const { dispositions } = patient.details;
           if (dispositions) {
             const disposition = dispositions.find(item => item.userId === currentUser.id);
-            return this.updateTabFromDisposition(disposition.dispositionKey);
+            this.updateTabFromDisposition(disposition.dispositionKey);
           }
           break;
         }
@@ -113,7 +113,6 @@ class CallCenterPatientPage extends Component {
       }
       this.setState({ selectedTab });
     }
-    return null;
   }
 
   handleExit = () => {
