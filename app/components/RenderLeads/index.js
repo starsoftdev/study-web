@@ -231,7 +231,6 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                       type="text"
                       className="field"
                       isDisabled
-                      label={recruitmentPhone}
                     />
                   </div>
                 )
