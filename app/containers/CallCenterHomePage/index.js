@@ -14,8 +14,8 @@ import { createStructuredSelector } from 'reselect';
 import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
 
-import { fetchPatients } from './actions';
-import { selectFetchedPatients } from './selectors';
+import { fetchPatients, fetchSchedules } from './actions';
+import { selectFetchedPatients, selectSchedules } from './selectors';
 
 import CenteredModal from '../../components/CenteredModal';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -36,18 +36,21 @@ class CallCenterHomePage extends Component {
     currentUser: PropTypes.object.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func,
+    fetchSchedules: PropTypes.func,
     patients: PropTypes.object,
     indications: PropTypes.array,
+    schedules: PropTypes.object,
   };
 
   state = {
     addUserModalOpen: false,
-  }
+  };
 
   componentDidMount() {
-    const { currentUser, fetchIndications, fetchPatients } = this.props;
+    const { currentUser, fetchIndications, fetchPatients, fetchSchedules } = this.props;
     fetchIndications();
     fetchPatients(currentUser.id);
+    fetchSchedules();
   }
 
   openFiltersModal() {
@@ -59,11 +62,11 @@ class CallCenterHomePage extends Component {
   }
 
   render() {
-    const { patients, indications, currentUser } = this.props;
+    const { patients, indications, currentUser, schedules } = this.props;
 
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-
     siteOptions.unshift({ label: 'All', value: '0' });
+
     return (
       <div className="container-fluid" id="callcentermain">
         <form action="#" className="form-search clearfix">
@@ -125,7 +128,7 @@ class CallCenterHomePage extends Component {
 
         <div className="content">
           <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone} />
-          <CallCalendar />
+          <CallCalendar currentUser={currentUser} schedules={schedules && schedules.data} />
         </div>
       </div>
     );
@@ -136,12 +139,14 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patients: selectFetchedPatients(),
   indications: selectIndications(),
+  schedules: selectSchedules(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
-    fetchPatients: (clientRoleId) => dispatch(fetchPatients(clientRoleId)),
+    fetchPatients: (userId) => dispatch(fetchPatients(userId)),
+    fetchSchedules: () => dispatch(fetchSchedules()),
   };
 }
 

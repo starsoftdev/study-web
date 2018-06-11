@@ -11,7 +11,7 @@ export default class CallDiv extends React.Component {
   static propTypes = {
     patients: React.PropTypes.object,
     indications: React.PropTypes.array,
-    timezone: React.PropTypes.object,
+    timezone: React.PropTypes.string,
   };
 
   renderUnreadMessageCount(patient) {
