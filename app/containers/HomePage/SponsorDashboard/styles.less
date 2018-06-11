@@ -21,7 +21,9 @@
       box-sizing: border-box;
       display: inline-block;
       height: 70px;
+      overflow: hidden;
       padding: 10px 9px;
+      position: relative;
       vertical-align: top;
       font-size: 15px;
       .name {
@@ -38,9 +40,14 @@
         text-align: left;
         text-overflow: ellipsis;
         overflow: hidden;
+        white-space: nowrap;
         a {
           color: #000000;
           white-space: nowrap;
+          width: 100%;
+          &.na {
+            width: auto;
+          }
           &:hover, &:active {
             text-decoration: underline;
           }
@@ -243,6 +250,43 @@
         font-size: 14px;
         padding-top: 20px;
       }
+    }
+  }
+
+  .popup-slider {
+    .carousel-indicators {
+      margin: 0;
+      top: auto;
+      left: auto;
+      width: auto;
+      bottom: auto;
+      overflow: hidden;
+      position: relative;
+      border: #f78e1e solid 2px;
+      li.active, li {
+        float: left;
+        padding: 7px;
+        color: #101010;
+        border-width: 0;
+        font-weight: 700;
+        .size(50%, auto);
+        border-radius: 0;
+        margin: 0 0 -2px;
+        .font(21px, 26px);
+        text-indent: inherit;
+        text-transform: uppercase;
+      }
+      li:hover,
+      li.active {
+        color: #fff;
+        background: #f78e1e;
+      }
+    }
+    .carousel-inner {
+      height: 100%;
+    }
+    .item {
+      padding: 0 0 85px;
     }
   }
 

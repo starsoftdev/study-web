@@ -3,12 +3,17 @@ import {
   FETCH_PATIENT_SUCCESS,
   FETCH_PATIENT_ERROR,
 
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES,
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES_SUCCESS,
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES_ERROR,
+
   ADD_PATIENT_NOTE_SUCCESS,
 
   READ_STUDY_PATIENT_MESSAGES,
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
 
+  SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_DELETE_NOTE_SUCCESS,
@@ -20,6 +25,10 @@ import {
   FETCH_EMAILS_ERROR,
 
   UPDATE_PATIENT_SUCCESS,
+
+  SUBMIT_PATIENT_DISPOSITION,
+  SUBMIT_PATIENT_DISPOSITION_SUCCESS,
+  SUBMIT_PATIENT_DISPOSITION_ERROR,
 
 } from './constants';
 
@@ -44,9 +53,21 @@ export function patientFetchingError(payload) {
   };
 }
 
-export function updatePatientSuccess(payload) {
+export function fetchCallCenterPatientCategories(payload) {
   return {
-    type: UPDATE_PATIENT_SUCCESS,
+    type: FETCH_CALL_CENTER_PATIENT_CATEGORIES,
+    payload,
+  };
+}
+export function callCenterPatientCategoriesFetched(payload) {
+  return {
+    type: FETCH_CALL_CENTER_PATIENT_CATEGORIES_SUCCESS,
+    payload,
+  };
+}
+export function callCenterPatientCategoriesFetchingError(payload) {
+  return {
+    type: FETCH_CALL_CENTER_PATIENT_CATEGORIES_ERROR,
     payload,
   };
 }
@@ -68,6 +89,13 @@ export function readStudyPatientMessagesSuccess(payload) {
 export function readStudyPatientMessagesError(payload) {
   return {
     type: READ_STUDY_PATIENT_MESSAGES_ERROR,
+    payload,
+  };
+}
+
+export function submitPatientUpdate(payload) {
+  return {
+    type: SUBMIT_PATIENT_UPDATE,
     payload,
   };
 }
@@ -141,6 +169,34 @@ export function emailsFetched(payload) {
 export function emailsFetchError(payload) {
   return {
     type: FETCH_EMAILS_ERROR,
+    payload,
+  };
+}
+
+export function updatePatientSuccess(payload) {
+  return {
+    type: UPDATE_PATIENT_SUCCESS,
+    payload,
+  };
+}
+
+export function submitPatientDisposition(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION,
+    payload,
+  };
+}
+
+export function patientDispositionSubmitted(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION_SUCCESS,
+    payload,
+  };
+}
+
+export function patientDispositionSubmissionError(payload) {
+  return {
+    type: SUBMIT_PATIENT_DISPOSITION_ERROR,
     payload,
   };
 }
