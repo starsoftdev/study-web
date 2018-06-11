@@ -44,6 +44,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     this.state = {
       modalOpen: false,
       customFilters: [],
+      activateManually: null,
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -51,6 +52,7 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
+    this.manuallySetActiveTab = this.manuallySetActiveTab.bind(this);
   }
 
   addFilter(options) {
@@ -113,11 +115,15 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
     return newFilters;
   }
 
-  render() {
-    const { customFilters } = this.state;
-    const { resetForm, change, filtersFormValues } = this.props;
+  manuallySetActiveTab(activeTab) {
+    this.setState({ activateManually: activeTab });
+  }
 
+  render() {
+    const { customFilters, activateManually } = this.state;
+    const { resetForm, change, filtersFormValues } = this.props;
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
+
     return (
       <div id="adminHomePage" className="admin-dashboard">
         <div className="fixed-header clearfix">
@@ -138,9 +144,13 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
           resetForm={resetForm}
         />
         }
-        <RangePopups />
+        <RangePopups
+          manuallySetActiveTab={this.manuallySetActiveTab}
+        />
         <StatsBox />
-        <ReportTabs />
+        <ReportTabs
+          activateManually={activateManually}
+        />
       </div>
     );
   }

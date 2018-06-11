@@ -242,13 +242,12 @@ export default class EditInformationForm extends React.Component {
   render() {
     const { addEmailNotificationClick, addTaggedIndicationForStudy, change, cro, formValues, indications, initialFormValues, messagingNumbers, protocols,
       removeCustomEmailNotification, siteLocations, sponsors, submitting, usersByRoles } = this.props;
-
     if (formValues) {
       const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
       const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
-      const aeOptions = usersByRoles.ae.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
+      const ccOptions = usersByRoles.cc.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
 
       const siteLocationsOptions = siteLocations.map(item => ({ value: item.id, label: item.location }));
 
@@ -359,12 +358,12 @@ export default class EditInformationForm extends React.Component {
               </strong>
               <div className="field">
                 <Field
-                  name="ae_user_id"
+                  name="cc_user_id"
                   component={ReactSelect}
                   placeholder="Select Call Center"
                   searchPlaceholder="Search"
                   searchable
-                  options={aeOptions}
+                  options={ccOptions}
                   customSearchIconClass="icomoon-icon_search2"
                 />
               </div>
