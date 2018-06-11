@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -22,21 +22,22 @@ const campaignOptions = [
   form: 'adminInfoFilter',
   enableReinitialize: true,
 })
-export default class StudyInfo extends React.Component {
-  static propTypes = {
-
-  };
-
+export default class StudyInfo extends Component {
   constructor(props) {
     super(props);
 
     this.state = {};
 
     this.goToStudyStatsPage = this.goToStudyStatsPage.bind(this);
+    this.goToStudyEditPage = this.goToStudyEditPage.bind(this);
   }
 
   goToStudyStatsPage(studyId) {
     browserHistory.push(`/admin/studyStats/${studyId}`);
+  }
+
+  goToStudyEditPage(studyId) {
+    browserHistory.push(`/admin/studies/${studyId}/edit`);
   }
 
   render() {
@@ -72,7 +73,7 @@ export default class StudyInfo extends React.Component {
         </div>
         <div className="tiles">
           <section>
-            <div className="part study">
+            <div className="part study clickable" onClick={() => this.goToStudyEditPage(10001)}>
               <div className="title">study</div>
               <ul>
                 <li>#</li>
@@ -114,7 +115,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat" onClick={() => this.goToStudyStatsPage(10001)}>
+            <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(10001)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
@@ -132,7 +133,7 @@ export default class StudyInfo extends React.Component {
             </div>
           </section>
           <section>
-            <div className="part study">
+            <div className="part study clickable" onClick={() => this.goToStudyEditPage(10002)}>
               <div className="title">study</div>
               <ul>
                 <li>#</li>
@@ -174,7 +175,7 @@ export default class StudyInfo extends React.Component {
                 <li>PQS:</li>
               </ul>
             </div>
-            <div className="part stat" onClick={() => this.goToStudyStatsPage(10002)}>
+            <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(10002)}>
               <div className="title">stats</div>
               <ul>
                 <li>LAST 24 HOURS:</li>
