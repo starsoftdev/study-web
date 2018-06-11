@@ -541,7 +541,7 @@
     "corporate.page.login.loginForm.reCaptchaError": "Validate recaptcha!",
     "corporate.page.login.loginForm.rememberLink": "Remember Me",
     "corporate.page.login.loginForm.forgotPassword": "Forgot Password?",
-    "corporate.page.login.loginForm.newOrRestoredPasswordMessage": "Your ${newUser} password is:",
+    "corporate.page.login.loginForm.newOrRestoredPasswordMessage": "Your password is:",
     "corporate.page.login.loginForm.newOrRestoredPasswordWarning": "Make sure to save this in a safe place. If you'd like to create a new custom password, please visit the Profile page.",
     "corporate.page.login.loginForm.toastMessageSuccessful": "Login successful!",
     "corporate.page.login.loginForm.toastMessageFailed": "Login Failed!",
