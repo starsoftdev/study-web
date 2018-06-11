@@ -118,6 +118,29 @@ export default class CallDiv extends React.Component {
     return output;
   }
 
+  renderCall2 = () => {
+    return null;
+  }
+
+  renderCall3 = () => {
+    return null;
+  }
+
+  renderMeetings = () => {
+    const { patients, indications } = this.props;
+
+    const output = [];
+    _.forEach(patients.details, (patient) => {
+      if (patient && patient.patient_category_id === 5) {
+        output.push(<div className="cc-box" key={`callDiv_call1_${patient.id}`}>
+          <span>{patient.first_name} {patient.last_name}</span>
+          <span>{indications[patient.study_id].name}</span>
+        </div>);
+      }
+    });
+    return output;
+  }
+
   render() {
     return (
       <div className="cc-container">
