@@ -291,7 +291,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
         title: `100 ${translate('portals.component.addCreditsModal.textCredits')}`,
         quantity: this.state.quantity,
         price: this.state.price,
-        total: this.state.quantity * this.props.creditsPrice.price,
+        total: this.state.quantity * (this.props.creditsPrice.price || 0),
       });
     }
 
@@ -300,9 +300,13 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
         title: `500 ${translate('portals.component.addCreditsModal.emailCredits')}`,
         quantity: this.state.emailQuantity,
         price: this.state.price,
-        total: this.state.emailQuantity * this.props.creditsPrice.price,
+        total: this.state.emailQuantity * (this.props.creditsPrice.price || 0),
       });
     }
+
+    const textCreditsPrice = this.props.creditsPrice.price ? ((this.state.quantity * (this.props.creditsPrice.price || 0)) / 100) : null;
+
+    const emailCreditsPrice = this.props.creditsPrice.price ? ((this.state.emailQuantity * (this.props.creditsPrice.price || 0)) / 100) : null;
 
     return (
       <div>
@@ -353,7 +357,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                             <span className="jcf-number parent-active">
                               <input
                                 type="text"
-                                value={`${this.state.quantity * 100} ${translate('portals.component.addCreditsModal.textCreditsValue')} ($${(this.state.quantity * this.props.creditsPrice.price) / 100})`}
+                                value={`${this.state.quantity * 100} ${translate('portals.component.addCreditsModal.textCreditsValue')} ${textCreditsPrice ? `$(${textCreditsPrice})` : ''}`}
                                 id="quantity"
                                 className="form-control jcf-real-element field-active"
                                 name="quantity"
@@ -372,7 +376,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                             <span className="jcf-number parent-active">
                               <input
                                 type="text"
-                                value={`${this.state.emailQuantity * 500} ${translate('portals.component.addCreditsModal.emailCreditsValue')} ($${(this.state.emailQuantity * this.props.creditsPrice.price) / 100})`}
+                                value={`${this.state.emailQuantity * 500} ${translate('portals.component.addCreditsModal.emailCreditsValue')} ${emailCreditsPrice ? `$(${emailCreditsPrice})` : ''}`}
                                 id="emailQuantity"
                                 className="form-control jcf-real-element field-active"
                                 name="emailQuantity"
@@ -397,7 +401,7 @@ class AddCreditsModal extends Component { // eslint-disable-line react/prefer-st
                     validateAndSubmit={this.addCreditsSubmit}
                     addOns={products}
                     showAddNewCard={this.handleNewModalOpen}
-                    manualDisableSubmit={this.props.addCreditsOperation.adding}
+                    manualDisableSubmit={this.props.addCreditsOperation.adding || !this.props.creditsPrice.price}
                   />
                 </div>
               </div>
