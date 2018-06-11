@@ -830,6 +830,7 @@
 
     "sponsor.component.reportViewTotals.na": "N/A",
     "sponsor.component.reportViewTotals.headingMediaType": "MEDIA TYPE",
+    "sponsor.component.reportViewTotals.headingDisposition": "DISPOSITION",
     "sponsor.component.reportViewTotals.headingNewPatient": "NEW<br /> PATIENT",
     "sponsor.component.reportViewTotals.headingCallTextAttempted": "CALL / TEXT<br /> ATTEMPTED",
     "sponsor.component.reportViewTotals.headingNotInterested": "DNQ / NOT<br /> INTERESTED",
@@ -873,6 +874,8 @@
     "sponsor.component.reportItem.lastLoginDateMask": "MM/DD/YY [at] h:mm A",
     "sponsor.component.reportItem.seeLess": "see less",
     "sponsor.component.reportItem.seeMore": "see more",
+    "sponsor.component.reportItem.media": "Media",
+    "sponsor.component.reportItem.disposition": "Disposition",
 
     "sponsor.component.patientNote.studyKIK": "StudyKIK",
     "sponsor.component.patientNote.defaultDateMask": "MM/DD/YY",
@@ -935,6 +938,10 @@
     "sponsor.page.reportViewPage.toastrExportingErrorMessage": "Something went wrong while exporting studies. Please try again later.",
     "sponsor.page.reportViewPage.toastrUpdatingErrorMessage": "Something went wrong while updating study status",
     "sponsor.page.reportViewPage.toastrStatusMessage": "The study is now ${status}.",
+    "sponsor.page.reportViewPage.dispositions.key1": "Passed Prescreener",
+    "sponsor.page.reportViewPage.dispositions.key2": "Did Not Pass",
+    "sponsor.page.reportViewPage.dispositions.key3": "Not Interested",
+    "sponsor.page.reportViewPage.dispositions.key4": "All Atempts Made",    
 
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
