@@ -53,7 +53,6 @@ import {
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
   EDIT_MEDIA_TYPES,
-  DELETE_MEDIA_TYPE,
 } from './AdminDashboard/constants';
 
 import {

@@ -4,14 +4,14 @@ export default values => {
   const isGUrlValid = (str) => { return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(str); };
 
   if (values.mediaType) {
-    values.mediaType.forEach((lead, index) => {
-      const leadError = {};
+    values.mediaType.forEach((mediaType, index) => {
+      const mediaTypeError = {};
 
       if (!mediaType.source) {
-        leadError.source = 'Lead source can\'t be blank';
+        mediaTypeError.source = 'Media Type can\'t be blank';
       }
       if (!mediaType.sourceName) {
-        leadError.sourceName = 'Lead source name can\'t be blank';
+        mediaTypeError.sourceName = 'Media Type can\'t be blank';
       }
 
       // check for unique messagingNumber
@@ -19,17 +19,17 @@ export default values => {
       let isGoogleUrlUnique = true;
       let isGoogleUrlValid = true;
       let isNameUnique = true;
-      values.mediaType.forEach((leadInner, indexInner) => {
-        if (indexInner !== index && leadInner.messagingNumber && mediaType.messagingNumber && leadInner.messagingNumber.value && mediaType.messagingNumber.value && leadInner.messagingNumber.value === mediaType.messagingNumber.value) {
+      values.mediaType.forEach((mediaTypeInner, indexInner) => {
+        if (indexInner !== index && mediaTypeInner.messagingNumber && mediaType.messagingNumber && mediaTypeInner.messagingNumber.value && mediaType.messagingNumber.value && mediaTypeInner.messagingNumber.value === mediaType.messagingNumber.value) {
           isUnique = false;
         }
-        if (indexInner !== index && leadInner.url && mediaType.url && leadInner.url.toLowerCase() === mediaType.url.toLowerCase()) {
+        if (indexInner !== index && mediaTypeInner.url && mediaType.url && mediaTypeInner.url.toLowerCase() === mediaType.url.toLowerCase()) {
           isGoogleUrlUnique = false;
         }
-        if (leadInner.googleUrl && !isGUrlValid(leadInner.googleUrl)) {
+        if (mediaTypeInner.googleUrl && !isGUrlValid(mediaTypeInner.googleUrl)) {
           isGoogleUrlValid = false;
         }
-        if (indexInner !== index && leadInner.sourceName && mediaType.sourceName && leadInner.sourceName.toLowerCase() === mediaType.sourceName.toLowerCase()) {
+        if (indexInner !== index && mediaTypeInner.sourceName && mediaType.sourceName && mediaTypeInner.sourceName.toLowerCase() === mediaType.sourceName.toLowerCase()) {
           isNameUnique = false;
         }
       });
@@ -54,7 +54,7 @@ export default values => {
       }
 
       if (!mediaType.source || !mediaType.sourceName || messagingNumberErrors || googleUrlErrors || urlErrors || sourceNameErrors) {
-        mediaTypeErrors[index] = { ...leadError, ...messagingNumberErrors, ...googleUrlErrors, ...urlErrors, ...sourceNameErrors };
+        mediaTypeErrors[index] = { ...mediaTypeError, ...messagingNumberErrors, ...googleUrlErrors, ...urlErrors, ...sourceNameErrors };
       }
     });
   }
