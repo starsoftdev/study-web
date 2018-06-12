@@ -34,13 +34,13 @@ const selectCallTracking = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> count of `leads`
+ * RequestProposalForm -> count of `mediaTypes`
  */
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'requestProposal.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'requestProposal.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 

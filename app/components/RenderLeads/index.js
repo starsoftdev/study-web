@@ -1,6 +1,6 @@
 /**
 *
-* Array of lead sources
+* Array of media types
 *
 */
 
@@ -29,18 +29,15 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(mapStateToProps, mapDispatchToProps)
 class RenderLeads extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    disableDelete: PropTypes.bool,
     fields: PropTypes.object,
     formValues: PropTypes.object,
     fetchSources: PropTypes.func,
     initForm: PropTypes.func,
-    deleteStudyLeadSource: PropTypes.func,
-    fetchStudyLeadSources: PropTypes.func,
-    deleteStudyLeadSourceProcess: PropTypes.object,
-    deletedLeadSource: PropTypes.object,
+    fetchMediaTypes: PropTypes.func,
+    deleteMediaType: PropTypes.func.isRequired,
     isAdmin: PropTypes.bool,
     isClientEditForm: PropTypes.bool,
-    initialLeadSources: PropTypes.array,
+    initialMediaTypes: PropTypes.array,
     messagingNumbers: PropTypes.object,
     meta: PropTypes.object,
     sources: PropTypes.array,
@@ -54,39 +51,25 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
     this.state = {};
 
-    this.addSourceType = this.addSourceType.bind(this);
-    this.deleteSourceType = this.deleteSourceType.bind(this);
+    this.addMediaType = this.addMediaType.bind(this);
+    this.deleteMediaType = this.deleteMediaType.bind(this);
   }
 
-  addSourceType() {
+  addMediaType() {
     const { fields } = this.props;
     // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
-    fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId });
+    fields.push({ landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId });
   }
 
-  deleteSourceType(index) {
-    const { fields, initialLeadSources, formValues, deleteStudyLeadSource } = this.props;
-    let initObject = null;
-
-    if (initialLeadSources && initialLeadSources.length > 0) {
-      initObject = _.findIndex(initialLeadSources, (o) => {
-        if (formValues.leadSource && formValues.leadSource[index]) {
-          return (o.studySourceId === formValues.leadSource[index].studySourceId);
-        } else {
-          return false;
-        }
-      });
-    }
-
-    if (initObject) {
-      deleteStudyLeadSource(initObject, index);
-    } else {
-      fields.remove(index);
-    }
+  deleteMediaType(studySource, index) {
+    const { deleteMediaType } = this.props;
+    deleteMediaType(studySource.studyId, studySource.id, index);
+    // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
+    // fields.remove(index);
   }
 
   render() {
-    const { fields, formValues, messagingNumbers, initialLeadSources, sources, recruitmentPhone } = this.props;
+    const { fields, formValues, messagingNumbers, initialMediaTypes, sources, recruitmentPhone } = this.props;
 
     let sourceOptions = [];
     if (sources.length > 0) {
@@ -101,18 +84,18 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     }
 
     return (
-      <div className="leads-list">
-        {fields.map((lead, index) => {
-          const showName = formValues.leadSource && formValues.leadSource.length > index && typeof formValues.leadSource[index].source !== 'undefined' && formValues.leadSource[index].source;
+      <div className="media-type-list">
+        {fields.map((fieldName, index) => {
+          const showName = formValues.mediaType && formValues.mediaType.length > index && typeof formValues.mediaType[index].source !== 'undefined' && formValues.mediaType[index].source;
           let landingHref = null;
           let googleHref = null;
           let initObject = null;
           let patientsExists = false;
 
-          if (initialLeadSources && initialLeadSources.length > 0) {
-            initObject = _.find(initialLeadSources, (o) => {
-              if (formValues.leadSource && formValues.leadSource[index]) {
-                return (o.studySourceId === formValues.leadSource[index].studySourceId);
+          if (initialMediaTypes && initialMediaTypes.length > 0) {
+            initObject = _.find(initialMediaTypes, (o) => {
+              if (formValues.mediaType && formValues.mediaType[index]) {
+                return (o.studySourceId === formValues.mediaType[index].studySourceId);
               } else {
                 return false;
               }
@@ -134,8 +117,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               messagingNumbersOptions.unshift(initObject.messagingNumber);
             }
 
-            if (initObject && initObject.url && formValues.leadSource && formValues.leadSource[index]) {
-              landingHref = initObject.url ? `/${formValues.leadSource[index].studyId}-${formValues.leadSource[index].landingPageUrl}?utm=${formValues.leadSource[index].url}` : '';
+            if (initObject && initObject.url && formValues.mediaType && formValues.mediaType[index]) {
+              landingHref = initObject.url ? `/${formValues.mediaType[index].studyId}-${formValues.mediaType[index].landingPageUrl}?utm=${formValues.mediaType[index].url}` : '';
               googleHref = initObject.googleUrl ? initObject.googleUrl : '';
             }
           }
@@ -143,34 +126,33 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           const urlLink = landingHref ? <a href={landingHref} className="landing-link study-source-link" target="_blank">{translate('portals.component.renderLeads.utm')}{(index + 1)}</a> : `${translate('portals.component.renderLeads.utm')}${(index + 1)}`;
           const googleUrlLink = googleHref ? <a href={googleHref} className="landing-link study-source-link" target="_blank">{translate('portals.component.renderLeads.mediaUrl')}{(index + 1)}</a> : `${translate('portals.component.renderLeads.mediaUrl')}${(index + 1)}`;
 
-          const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
-          const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
-          if (formValues.leadSource && formValues.leadSource[index] && !formValues.leadSource[index].recruitmentPhone) {
+          const needToShowMessagingNumber = this.props.isClientEditForm && formValues.mediaType && formValues.mediaType[index] && formValues.mediaType[index].messagingNumber;
+          const needToShowGoogleUrl = this.props.isClientEditForm && formValues.mediaType && formValues.mediaType[index] && formValues.mediaType[index].googleUrl;
+          if (formValues.mediaType && formValues.mediaType[index] && !formValues.mediaType[index].recruitmentPhone) {
             // TODO this is unsafe behavior, because we're modifying a prop inside the render
-            formValues.leadSource[index].recruitmentPhone = recruitmentPhone !== '' ? formatPhone(recruitmentPhone) : '';
+            formValues.mediaType[index].recruitmentPhone = recruitmentPhone !== '' ? formatPhone(recruitmentPhone) : '';
           }
 
           return (
             <div className="lead-item" key={index}>
               <div className="field-row dropdown">
-                <strong className={classnames('label', (!this.props.disableDelete || (formValues.leadSource[index] && formValues.leadSource[index].isNew)) ? 'required' : '')}>
+                <strong className={classnames('label', 'required')}>
                   <label>{translate('portals.component.renderLeads.mediaTypeLabel')}{(index + 1)}</label>
                 </strong>
                 <Field
-                  name={`${lead}.source`}
+                  name={`${fieldName}.source`}
                   component={ReactSelect}
                   objectValue
                   placeholder={translate('portals.component.renderLeads.mediaTypePlaceholder')}
                   options={sourceOptions}
                   className="field"
-                  disabled={this.props.disableDelete && (formValues.leadSource[index] && !formValues.leadSource[index].isNew)}
                 />
                 {
                   !patientsExists && (
                     <span
                       className="delete-source-type icomoon-icon_trash"
                       onClick={() => {
-                        this.deleteSourceType(index);
+                        this.deleteMediaType(initObject, index);
                       }}
                     />
                   )
@@ -181,7 +163,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <div className={classnames('field-row')}>
                     <strong className="label required"><label>{translate('portals.component.renderLeads.mediaNameLabel')}{(index + 1)}</label></strong>
                     <Field
-                      name={`${lead}.source_name`}
+                      name={`${fieldName}.sourceName`}
                       component={Input}
                       type="text"
                       className="field"
@@ -196,7 +178,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                     <strong className="label"><label>{translate('portals.component.renderLeads.messagingNumberLabel')}{(index + 1)}</label></strong>
                     <Field
                       className="field"
-                      name={`${lead}.messagingNumber`}
+                      name={`${fieldName}.messagingNumber`}
                       component={ReactSelect}
                       placeholder={translate('portals.component.renderLeads.messagingNumberPlaceholder')}
                       searchPlaceholder={translate('portals.component.renderLeads.searchPlaceholder')}
@@ -213,7 +195,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <div className={classnames('field-row')}>
                     <strong className="label"><label>{translate('portals.component.renderLeads.redirectNumberLabel')}{(index + 1)}</label></strong>
                     <Field
-                      name={`${lead}.recruitmentPhone`}
+                      name={`${fieldName}.recruitmentPhone`}
                       component={Input}
                       type="text"
                       className="field"
@@ -227,7 +209,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <div className={classnames('field-row')}>
                     <strong className="label"><label>{urlLink}</label></strong>
                     <Field
-                      name={`${lead}.url`}
+                      name={`${fieldName}.url`}
                       component={Input}
                       type="text"
                       className="field"
@@ -241,7 +223,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <div className={classnames('field-row')}>
                     <strong className="label"><label>{translate('portals.component.renderLeads.messagingNumberLabel')}{(index + 1)}</label></strong>
                     <Field
-                      name={`${lead}.messagingNumber`}
+                      name={`${fieldName}.messagingNumber`}
                       component={Input}
                       type="text"
                       className="field special-cursor-text"
@@ -255,7 +237,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                   <div className={classnames('field-row')}>
                     <strong className="label"><label>{googleUrlLink}</label></strong>
                     <Field
-                      name={`${lead}.googleUrl`}
+                      name={`${fieldName}.googleUrl`}
                       component={Input}
                       type="text"
                       className="field special-cursor-text"
@@ -272,7 +254,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           <div className="field">
             <div
               className="add-new-source"
-              onClick={this.addSourceType}
+              onClick={this.addMediaType}
             >
               <i className="icomoon-icon_close" />
               <span> {translate('portals.component.renderLeads.addMedia')}</span>

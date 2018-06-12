@@ -65,7 +65,7 @@ import {
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_MEDIA_TYPES,
   PRIVACY_REQUEST,
 } from '../../containers/App/constants';
 
@@ -172,8 +172,8 @@ import {
   patientCategoriesFetchingError,
   fetchStudySourcesSuccess,
   fetchStudySourcesError,
-  fetchStudyLeadSourcesSuccess,
-  fetchStudyLeadSourcesError,
+  fetchMediaTypesSuccess,
+  fetchMediaTypesError,
   privacyRequestSuccess,
 } from '../../containers/App/actions';
 
@@ -230,7 +230,7 @@ export default function* baseDataSaga() {
   yield fork(submitCnsWatcher);
   yield fork(readStudyPatientMessagesWatcher);
   yield fork(fetchStudySources);
-  yield fork(fetchStudyLeadSources);
+  yield fork(fetchMediaTypes);
 }
 
 function* fetchIndicationsWatcher() {
@@ -1400,20 +1400,20 @@ function* fetchStudySources() {
   }
 }
 
-function* fetchStudyLeadSources() {
+function* fetchMediaTypes() {
   while (true) {
-    const { studyId } = yield take(FETCH_STUDY_LEAD_SOURCES);
+    const { studyId } = yield take(FETCH_MEDIA_TYPES);
     try {
       const options = {
         method: 'GET',
       };
 
-      const requestURL = `${API_URL}/studies/${studyId}/studyLeadSources`;
+      const requestURL = `${API_URL}/studies/${studyId}/studyMediaTypes`;
       const response = yield call(request, requestURL, options);
 
-      yield put(fetchStudyLeadSourcesSuccess(response));
+      yield put(fetchMediaTypesSuccess(response));
     } catch (err) {
-      yield put(fetchStudyLeadSourcesError(err));
+      yield put(fetchMediaTypesError(err));
     }
   }
 }

@@ -25,7 +25,7 @@ import { translate } from '../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
-  leadsCount: selectLeadsCount(),
+  mediaTypesCount: selectLeadsCount(),
 });
 
 @reduxForm({ form: 'requestProposal', validate: formValidator })
@@ -37,7 +37,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     callTracking: PropTypes.bool,
-    leadsCount: PropTypes.number,
+    mediaTypesCount: PropTypes.number,
     formValues: PropTypes.object,
     currentUser: PropTypes.object,
   };
@@ -48,8 +48,8 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
   }
 
   componentWillReceiveProps(newProps) {
-    // If leads are all removed, set `callTracking` value to false
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
+    // If media types are all removed, set `callTracking` value to false
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
       this.props.dispatch(change('requestProposal', 'callTracking', false));
     }
 

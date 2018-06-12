@@ -15,16 +15,15 @@ import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues, selectSyncErrorBool, selectFormFieldNames } from '../../common/selectors/form.selector';
 import {
-  selectStudyLeadSources,
+  selectMediaTypes,
   selectMessagingNumbers,
-  selectEditStudyLeadSourcesProcess,
-  selectDashboardDeleteStudyLeadSourceProcess,
-  selectDeletedLeadSource,
+  selectEditMediaTypesProcess,
 } from '../../containers/HomePage/AdminDashboard/selectors';
-import { fetchStudyLeadSources } from '../../containers/App/actions';
+import { fetchMediaTypes } from '../../containers/App/actions';
 import RenderLeads from '../../components/RenderLeads';
 import formValidator from './validator';
-import { fetchMessagingNumbersDashboard, editStudyLeadSources, deleteStudyLeadSource } from '../../containers/HomePage/AdminDashboard/actions';
+import { fetchMessagingNumbersDashboard, editMediaTypes } from '../../containers/HomePage/AdminDashboard/actions';
+import { deleteMediaType } from '../../components/CallTrackingPageModal/actions';
 
 const formName = 'callTrackingPageForm';
 
@@ -36,13 +35,11 @@ const formName = 'callTrackingPageForm';
 
 export class CallTrackingPageModal extends React.Component {
   static propTypes = {
+    deleteMediaType: PropTypes.func.isRequired,
     study: PropTypes.object,
-    studyLeadSources: PropTypes.object,
-    fetchStudyLeadSources: PropTypes.func,
-    editStudyLeadSourcesProcess: PropTypes.object,
-    deletedLeadSource: PropTypes.object,
-    deleteStudyLeadSource: PropTypes.func,
-    deleteStudyLeadSourceProcess: PropTypes.object,
+    studyMediaTypes: PropTypes.object,
+    fetchMediaTypes: PropTypes.func,
+    editMediaTypesProcess: PropTypes.object,
     resetForm: PropTypes.func,
     formValues: PropTypes.object,
     onClose: PropTypes.func.isRequired,
@@ -53,7 +50,7 @@ export class CallTrackingPageModal extends React.Component {
     fetchMessagingNumbersDashboard: PropTypes.func.isRequired,
     callTrackingFields: PropTypes.array,
     messagingNumbers: PropTypes.object,
-    editStudyLeadSources: PropTypes.func,
+    editMediaTypes: PropTypes.func,
     isOnTop: PropTypes.bool,
     array: PropTypes.object,
   };
@@ -62,7 +59,7 @@ export class CallTrackingPageModal extends React.Component {
     super(props);
 
     this.state = {
-      isLeadSourcesFetched: false,
+      isMediaTypesFetched: false,
       isNumbersFetched: false,
     };
 
@@ -74,19 +71,19 @@ export class CallTrackingPageModal extends React.Component {
   componentWillReceiveProps(newProps) {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchMessagingNumbersDashboard();
-      this.props.fetchStudyLeadSources(this.props.study.study_id);
+      this.props.fetchMediaTypes(this.props.study.study_id);
       this.props.change('callTracking', this.props.study.callTracking);
     }
 
-    if (this.props.studyLeadSources.fetching && !newProps.studyLeadSources.fetching) {
-      this.setState({ isLeadSourcesFetched: true });
+    if (this.props.studyMediaTypes.fetching && !newProps.studyMediaTypes.fetching) {
+      this.setState({ isMediaTypesFetched: true });
 
-      if (newProps.studyLeadSources.details.length > 0) {
-        this.props.array.removeAll('leadSource');
-        newProps.studyLeadSources.details.map((newItem) => this.props.array.push('leadSource', newItem));
+      if (newProps.studyMediaTypes.details.length > 0) {
+        this.props.array.removeAll('mediaType');
+        newProps.studyMediaTypes.details.map((newItem) => this.props.array.push('mediaType', newItem));
       } else {
-        this.props.array.removeAll('leadSource');
-        this.props.array.push('leadSource', { source: null });
+        this.props.array.removeAll('mediaType');
+        this.props.array.push('mediaType', { source: null });
       }
     }
 
@@ -103,7 +100,7 @@ export class CallTrackingPageModal extends React.Component {
 
   initForm() {
     this.props.resetForm();
-    this.props.change('leadSource', [{ source: null }]);
+    this.props.change('mediaType', [{ source: null }]);
   }
 
   submitCallTrackingForm(e) {
@@ -116,19 +113,19 @@ export class CallTrackingPageModal extends React.Component {
     }
 
     // transform the Google URL submission to append http:// in front of it in case it isn't specified
-    if (formValues.leadSource && formValues.leadSource.length > 0) {
-      for (const leadSource of formValues.leadSource) {
-        if (leadSource.googleUrl && !/http(s)?:\/\//g.test(leadSource.googleUrl)) {
-          leadSource.googleUrl = `http://${leadSource.googleUrl}`;
+    if (formValues.mediaType && formValues.mediaType.length > 0) {
+      for (const mediaType of formValues.mediaType) {
+        if (mediaType.googleUrl && !/http(s)?:\/\//g.test(mediaType.googleUrl)) {
+          mediaType.googleUrl = `http://${mediaType.googleUrl}`;
         }
       }
     }
 
-    this.props.editStudyLeadSources(study.study_id, formValues.leadSource, formValues.callTracking);
+    this.props.editMediaTypes(study.study_id, formValues.mediaType, formValues.callTracking);
   }
 
   render() {
-    const { openModal, messagingNumbers, study, editStudyLeadSourcesProcess } = this.props;
+    const { editMediaTypesProcess, deleteMediaType, fetchMediaTypes, openModal, messagingNumbers, study } = this.props;
     const landingPageUrl = study ? study.landingPageUrl : '';
     const studyId = study ? study.study_id : null;
     const recruitmentPhone = study ? study.recruitment_phone : '';
@@ -154,7 +151,7 @@ export class CallTrackingPageModal extends React.Component {
               noValidate="novalidate"
             >
               {
-                this.props.studyLeadSources.fetching ? <div className="frame"><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></div> :
+                this.props.studyMediaTypes.fetching ? <div className="frame"><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></div> :
                   <div className="frame">
                     <div className="field-row">
                       <strong className="label">
@@ -169,16 +166,14 @@ export class CallTrackingPageModal extends React.Component {
                     </div>
                     <div className="field-row">
                       <FieldArray
-                        name="leadSource"
+                        name="mediaType"
                         component={RenderLeads}
                         formValues={this.props.formValues}
                         isAdmin
                         messagingNumbers={messagingNumbers}
-                        initialLeadSources={this.props.studyLeadSources.details}
-                        deleteStudyLeadSource={this.props.deleteStudyLeadSource}
-                        fetchStudyLeadSources={this.props.fetchStudyLeadSources}
-                        deleteStudyLeadSourceProcess={this.props.deleteStudyLeadSourceProcess}
-                        deletedLeadSource={this.props.deletedLeadSource}
+                        initialMediaTypes={this.props.studyMediaTypes.details}
+                        fetchMediaTypes={fetchMediaTypes}
+                        deleteMediaType={deleteMediaType}
                         initForm={this.initForm}
                         landingPageUrl={landingPageUrl}
                         studyId={studyId}
@@ -187,7 +182,7 @@ export class CallTrackingPageModal extends React.Component {
                     </div>
                     <div className="field-row text-right">
                       <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                        {editStudyLeadSourcesProcess.saving
+                        {editMediaTypesProcess.saving
                           ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                           : <span>Update</span>
                         }
@@ -204,10 +199,8 @@ export class CallTrackingPageModal extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  studyLeadSources: selectStudyLeadSources(),
-  editStudyLeadSourcesProcess: selectEditStudyLeadSourcesProcess(),
-  deleteStudyLeadSourceProcess: selectDashboardDeleteStudyLeadSourceProcess(),
-  deletedLeadSource: selectDeletedLeadSource(),
+  studyMediaTypes: selectMediaTypes(),
+  editMediaTypesProcess: selectEditMediaTypesProcess(),
   formValues: selectValues(formName),
   callTrackingFormError: selectSyncErrorBool(formName),
   callTrackingFields: selectFormFieldNames(formName),
@@ -216,12 +209,12 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
-    fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
-    deleteStudyLeadSource: (studyId, studySourceId, leadSource) => dispatch(deleteStudyLeadSource(studyId, studySourceId, leadSource)),
+    deleteMediaType: (studyId, studySourceId, index) => dispatch(deleteMediaType(studyId, studySourceId, index)),
+    fetchMediaTypes: (studyId) => dispatch(fetchMediaTypes(studyId)),
     resetForm: () => dispatch(reset(formName)),
     touchCallTracking: (fields) => dispatch(touch(formName, ...fields)),
     fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
-    editStudyLeadSources: (studyId, leadSources, callTracking) => dispatch(editStudyLeadSources(studyId, leadSources, callTracking)),
+    editMediaTypes: (studyId, mediaTypes, callTracking) => dispatch(editMediaTypes(studyId, mediaTypes, callTracking)),
   };
 }
 
