@@ -4,7 +4,7 @@ export default class MediaSourceTabContent extends React.Component { // eslint-d
 
   render() {
     return (
-      <table>
+      <table id="mediaSourceTabContent">
         <thead>
           <tr>
             <th>Study #</th>
