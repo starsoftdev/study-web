@@ -11,7 +11,7 @@ export default class CallDiv extends React.Component {
   static propTypes = {
     patients: React.PropTypes.object,
     indications: React.PropTypes.array,
-    timezone: React.PropTypes.object,
+    timezone: React.PropTypes.string,
   };
 
   renderUnreadMessageCount(patient) {
@@ -113,6 +113,29 @@ export default class CallDiv extends React.Component {
     _.forEach(patients.details, (patient) => {
       if (patient && patient.patient_category_id === 5) {
         output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
+      }
+    });
+    return output;
+  }
+
+  renderCall2 = () => {
+    return null;
+  }
+
+  renderCall3 = () => {
+    return null;
+  }
+
+  renderMeetings = () => {
+    const { patients, indications } = this.props;
+
+    const output = [];
+    _.forEach(patients.details, (patient) => {
+      if (patient && patient.patient_category_id === 5) {
+        output.push(<div className="cc-box" key={`callDiv_call1_${patient.id}`}>
+          <span>{patient.first_name} {patient.last_name}</span>
+          <span>{indications[patient.study_id].name}</span>
+        </div>);
       }
     });
     return output;

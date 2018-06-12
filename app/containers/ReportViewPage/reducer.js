@@ -23,6 +23,7 @@ import {
   GET_CATEGORY_NOTES_ERROR,
   GET_CATEGORY_NOTES_SUCCESS,
   CLEAR_REPORT_LIST,
+  FETCH_DISPOSITIONS_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -58,6 +59,12 @@ const initialState = {
   },
   categoryNotes: {
     details: [],
+    fetching: false,
+    error: null,
+  },
+  dispositionTotals: {
+    details: {},
+    disposition: 1,
     fetching: false,
     error: null,
   },
@@ -277,6 +284,11 @@ function reportViewPageReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+      };
+    case FETCH_DISPOSITIONS_SUCCESS:
+      return {
+        ...state,
+        dispositions: action.payload,
       };
     default:
       return state;

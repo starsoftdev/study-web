@@ -15,6 +15,8 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     totals: PropTypes.object,
     openNotesModal: PropTypes.func,
     sources: PropTypes.array,
+    dispositions: PropTypes.array,
+    dispositionTotals: PropTypes.object,
   }
 
   constructor(props) {
@@ -22,15 +24,21 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
     this.state = {
       expanded: false,
+      currentTab: 'media',
     };
 
     this.toggleExpand = this.toggleExpand.bind(this);
-    this.renderMediaType = this.renderMediaType.bind(this);
+    this.renderCategory = this.renderCategory.bind(this);
+    this.handleSelectTab = this.handleSelectTab.bind(this);
+    this.getTotalValues = this.getTotalValues.bind(this);
   }
 
-  getTotalValues(props) {
-    return props.sources.map(sourceObj => {
-      let totals = {
+  getTotalValues(currentTab) {
+    const categories = currentTab === 'media' ? this.props.sources : this.props.dispositions;
+    const totals = currentTab === 'media' ? this.props.totals : this.props.dispositionTotals;
+
+    return categories.map(cat => {
+      let totalValues = {
         count_not_contacted: translate('sponsor.component.reportViewTotals.na'),
         dnq: translate('sponsor.component.reportViewTotals.na'),
         action_needed: translate('sponsor.component.reportViewTotals.na'),
@@ -40,31 +48,31 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         randomized: translate('sponsor.component.reportViewTotals.na'),
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
-      const source = sourceObj.id;
-      if (props.totals.details[source]) {
-        totals = {
-          count_not_contacted: (props.totals.details[source].count_not_contacted || props.totals.details[source].count_not_contacted === 0) ? parseInt(props.totals.details[source].count_not_contacted) : translate('sponsor.component.reportViewTotals.na'),
-          dnq: (props.totals.details[source].dnq || props.totals.details[source].dnq === 0) ? parseInt(props.totals.details[source].dnq) : translate('sponsor.component.reportViewTotals.na'),
-          action_needed: (props.totals.details[source].action_needed || props.totals.details[source].action_needed === 0) ? parseInt(props.totals.details[source].action_needed) : translate('sponsor.component.reportViewTotals.na'),
-          scheduled: (props.totals.details[source].scheduled || props.totals.details[source].scheduled === 0) ? parseInt(props.totals.details[source].scheduled) : translate('sponsor.component.reportViewTotals.na'),
-          consented: (props.totals.details[source].consented || props.totals.details[source].consented === 0) ? parseInt(props.totals.details[source].consented) : translate('sponsor.component.reportViewTotals.na'),
-          screen_failed: (props.totals.details[source].screen_failed || props.totals.details[source].screen_failed === 0) ? parseInt(props.totals.details[source].screen_failed) : translate('sponsor.component.reportViewTotals.na'),
-          randomized: (props.totals.details[source].randomized || props.totals.details[source].randomized === 0) ? parseInt(props.totals.details[source].randomized) : translate('sponsor.component.reportViewTotals.na'),
-          call_attempted: (props.totals.details[source].call_attempted || props.totals.details[source].call_attempted === 0) ? parseInt(props.totals.details[source].call_attempted) : translate('sponsor.component.reportViewTotals.na'),
+      const source = cat.id;
+      if (totals.details[source]) {
+        totalValues = {
+          count_not_contacted: (totals.details[source].count_not_contacted || totals.details[source].count_not_contacted === 0) ? parseInt(totals.details[source].count_not_contacted) : translate('sponsor.component.reportViewTotals.na'),
+          dnq: (totals.details[source].dnq || totals.details[source].dnq === 0) ? parseInt(totals.details[source].dnq) : translate('sponsor.component.reportViewTotals.na'),
+          action_needed: (totals.details[source].action_needed || totals.details[source].action_needed === 0) ? parseInt(totals.details[source].action_needed) : translate('sponsor.component.reportViewTotals.na'),
+          scheduled: (totals.details[source].scheduled || totals.details[source].scheduled === 0) ? parseInt(totals.details[source].scheduled) : translate('sponsor.component.reportViewTotals.na'),
+          consented: (totals.details[source].consented || totals.details[source].consented === 0) ? parseInt(totals.details[source].consented) : translate('sponsor.component.reportViewTotals.na'),
+          screen_failed: (totals.details[source].screen_failed || totals.details[source].screen_failed === 0) ? parseInt(totals.details[source].screen_failed) : translate('sponsor.component.reportViewTotals.na'),
+          randomized: (totals.details[source].randomized || totals.details[source].randomized === 0) ? parseInt(totals.details[source].randomized) : translate('sponsor.component.reportViewTotals.na'),
+          call_attempted: (totals.details[source].call_attempted || totals.details[source].call_attempted === 0) ? parseInt(totals.details[source].call_attempted) : translate('sponsor.component.reportViewTotals.na'),
         };
 
         let total = 0;
-        _.forEach(totals, val => {
+        _.forEach(totalValues, val => {
           if (val !== 'N/A') {
             total += parseInt(val);
           }
         });
-        totals.total = total;
+        totalValues.total = total;
       }
-      const percentage = props.getPercentageObject(totals);
+      const percentage = this.props.getPercentageObject(totalValues);
 
       return {
-        totals,
+        totals: totalValues,
         percentage,
       };
     });
@@ -80,18 +88,22 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     });
   }
 
-  renderMediaType() {
-    const { expanded } = this.state;
-    const { sources } = this.props;
+  handleSelectTab = (tab) => {
+    this.setState({ currentTab: tab });
+  }
 
-    if (sources && sources.length > 0) {
+  renderCategory() {
+    const { expanded, currentTab } = this.state;
+    const cats = currentTab === 'media' ? this.props.sources : this.props.dispositions;
+
+    if (cats && cats.length > 0) {
       if (!expanded) {
-        return (<strong className="number"><span>{sources[0].type}</span></strong>);
+        return (<strong className="number media-type"><span>{cats[0].type}</span></strong>);
       } else {
         return (
           <div>
             {
-              sources.map(item => (<strong key={item.id} className="number"><span>{item.type}</span></strong>))
+              cats.map(item => (<strong key={item.id} className="number"><span>{item.type}</span></strong>))
             }
           </div>
         );
@@ -133,53 +145,66 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   render() {
-    const totalValues = this.getTotalValues(this.props);
+    const { currentTab } = this.state;
+    const totalValues = this.getTotalValues(currentTab);
+    const headingTitle = currentTab === 'media' ? 'headingMediaType' : 'headingDisposition';
+
     return (
-      <div className="report-page-totals-container">
-        {this.props.totals.fetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>}
-        <ul className="list-inline list-stats">
-          <li>
-            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingMediaType')}</span></strong>
-            { this.renderMediaType() }
+      <div id="carousel-example-generic" className="carousel slide popup-slider">
+        <ol className="carousel-indicators">
+          <li className={classNames({ active: currentTab === 'media' })} onClick={() => this.handleSelectTab('media')}>
+            {translate('sponsor.component.reportItem.media')}
           </li>
-          <li>
-            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNewPatient') }} /></strong>
-            { this.renderValues(totalValues, 'count_not_contacted') }
+          <li className={classNames({ active: currentTab === 'disposition' })} onClick={() => this.handleSelectTab('disposition')}>
+            {translate('sponsor.component.reportItem.disposition')}
           </li>
-          <li>
-            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
-            { this.renderValues(totalValues, 'call_attempted') }
-          </li>
-          <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
-            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
-            { this.renderValues(totalValues, 'dnq') }
-          </li>
-          <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
-            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
-            { this.renderValues(totalValues, 'action_needed') }
-          </li>
-          <li>
-            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingScheduled')}</span></strong>
-            { this.renderValues(totalValues, 'scheduled') }
-          </li>
-          <li>
-            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
-            { this.renderValues(totalValues, 'consented') }
-          </li>
-          <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
-            <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
-            { this.renderValues(totalValues, 'screen_failed') }
-          </li>
-          <li>
-            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingRandomized')}</span></strong>
-            { this.renderValues(totalValues, 'randomized') }
-          </li>
-          <li>
-            <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingTotal')}</span></strong>
-            { this.renderValues(totalValues, 'total') }
-          </li>
-        </ul>
-        <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
+        </ol>
+        <div className="report-page-totals-container">
+          {this.props.totals.fetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>}
+          <ul className="list-inline list-stats">
+            <li>
+              <strong className="heading"><span>{translate(`sponsor.component.reportViewTotals.${headingTitle}`)}</span></strong>
+              { this.renderCategory() }
+            </li>
+            <li>
+              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNewPatient') }} /></strong>
+              { this.renderValues(totalValues, 'count_not_contacted') }
+            </li>
+            <li>
+              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
+              { this.renderValues(totalValues, 'call_attempted') }
+            </li>
+            <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
+              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
+              { this.renderValues(totalValues, 'dnq') }
+            </li>
+            <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
+              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
+              { this.renderValues(totalValues, 'action_needed') }
+            </li>
+            <li>
+              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingScheduled')}</span></strong>
+              { this.renderValues(totalValues, 'scheduled') }
+            </li>
+            <li>
+              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
+              { this.renderValues(totalValues, 'consented') }
+            </li>
+            <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
+              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
+              { this.renderValues(totalValues, 'screen_failed') }
+            </li>
+            <li>
+              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingRandomized')}</span></strong>
+              { this.renderValues(totalValues, 'randomized') }
+            </li>
+            <li>
+              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingTotal')}</span></strong>
+              { this.renderValues(totalValues, 'total') }
+            </li>
+          </ul>
+          <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
+        </div>
       </div>
     );
   }
