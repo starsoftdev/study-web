@@ -164,11 +164,12 @@ export class PatientDetailModal extends React.Component {
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0 && currentPatient.appointments[0]) {
         const timezone = site.timezone || currentUser.timezone;
+        const scheduleDate =  moment(currentPatient.appointments[0].utcTime).utc();
         return (
           <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
-            <span className="date">{moment.tz(currentPatient.appointments[0].time, timezone).format(translate('client.component.patientDetailModal.dateMask'))}</span>
+            <span className="date">{scheduleDate.format(translate('client.component.patientDetailModal.dateMask'))}</span>
             <span> {translate('client.component.patientDetailModal.at')} </span>
-            <span className="time">{moment.tz(currentPatient.appointments[0].time, timezone).format(translate('client.component.patientDetailModal.timeMask'))} </span>
+            <span className="time">{scheduleDate.format(translate('client.component.patientDetailModal.timeMask'))} ({moment.tz(timezone).format('z')})</span>
           </a>
         );
       }

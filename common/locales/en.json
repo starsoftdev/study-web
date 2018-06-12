@@ -259,7 +259,7 @@
     "client.component.patientItem.edit": "Edit",
 
     "client.component.patientDetailModal.dateMask": "MM/DD/YY",
-    "client.component.patientDetailModal.timeMask": "hh:mm A (z)",
+    "client.component.patientDetailModal.timeMask": "h:mm A",
     "client.component.patientDetailModal.at": "at",
     "client.component.patientDetailModal.appointment": "No Scheduled Appointment",
     "client.component.patientDetailModal.note": "Note",
