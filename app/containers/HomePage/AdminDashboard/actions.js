@@ -93,12 +93,12 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
-  EDIT_STUDY_LEAD_SOURCES,
-  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
-  EDIT_STUDY_LEAD_SOURCES_ERROR,
-  DELETE_STUDY_LEAD_SOURCE,
-  DELETE_STUDY_LEAD_SOURCE_SUCCESS,
-  DELETE_STUDY_LEAD_SOURCE_ERROR,
+  EDIT_MEDIA_TYPES,
+  EDIT_MEDIA_TYPES_SUCCESS,
+  EDIT_MEDIA_TYPES_ERROR,
+  DELETE_MEDIA_TYPE,
+  DELETE_MEDIA_TYPE_SUCCESS,
+  DELETE_MEDIA_TYPE_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {
@@ -727,50 +727,27 @@ export function deleteCampaignError(payload) {
   };
 }
 
-export function editStudyLeadSources(studyId, leadSources, callTracking) {
+export function editMediaTypes(studyId, mediaTypes, callTracking) {
   return {
-    type: EDIT_STUDY_LEAD_SOURCES,
+    type: EDIT_MEDIA_TYPES,
     studyId,
-    leadSources,
+    mediaTypes,
     callTracking,
   };
 }
 
-export function editStudyLeadSourcesSuccess(leadSources, studyId, callTracking) {
+export function editMediaTypesSuccess(mediaTypes, studyId, callTracking) {
   return {
-    type: EDIT_STUDY_LEAD_SOURCES_SUCCESS,
-    leadSources,
+    type: EDIT_MEDIA_TYPES_SUCCESS,
+    mediaTypes,
     studyId,
     callTracking,
   };
 }
 
-export function editStudyLeadSourcesError(payload) {
+export function editMediaTypesError(payload) {
   return {
-    type: EDIT_STUDY_LEAD_SOURCES_ERROR,
-    payload,
-  };
-}
-
-export function deleteStudyLeadSource(leadSource, index) {
-  return {
-    type: DELETE_STUDY_LEAD_SOURCE,
-    leadSource,
-    index,
-  };
-}
-
-export function deleteStudyLeadSourceSuccess(leadSource, index) {
-  return {
-    type: DELETE_STUDY_LEAD_SOURCE_SUCCESS,
-    leadSource,
-    index,
-  };
-}
-
-export function deleteStudyLeadSourceError(payload) {
-  return {
-    type: DELETE_STUDY_LEAD_SOURCE_ERROR,
+    type: EDIT_MEDIA_TYPES_ERROR,
     payload,
   };
 }

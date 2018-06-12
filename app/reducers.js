@@ -16,6 +16,7 @@ import { default as uploadPatientsReducer } from './components/UploadPatientsFor
 import { default as rewardForm } from './containers/RewardsPage/RewardModal/reducer';
 import { default as resetPasswordPageReducer } from './containers/ResetPasswordPage/reducer';
 import { default as editDashboardStudyReducer } from './components/EditStudyForms/reducer';
+import { default as mediaTrackingReducer } from './components/CallTrackingPageModal/reducer';
 import appReducer from './containers/App/reducer';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
@@ -35,6 +36,7 @@ export default function createReducer(asyncReducers) {
       'StudyPage.TextBlastModal': textBlastModalReducer,
       rewardForm,
       'UploadPatients.UploadPatientsForm': uploadPatientsReducer,
+      'Dashboard.MediaTrackingForm': mediaTrackingReducer,
     }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
