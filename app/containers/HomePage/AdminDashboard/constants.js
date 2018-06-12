@@ -125,10 +125,6 @@ export const FETCH_FIVE_9_LIST                           = 'DashboardPage/FETCH_
 export const FETCH_FIVE_9_LIST_SUCCESS                   = 'DashboardPage/FETCH_FIVE_9_LIST_SUCCESS';
 export const FETCH_FIVE_9_LIST_ERROR                     = 'DashboardPage/FETCH_FIVE_9_LIST_ERROR';
 
-export const EDIT_STUDY_LEAD_SOURCES                     = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES';
-export const EDIT_STUDY_LEAD_SOURCES_SUCCESS             = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_SUCCESS';
-export const EDIT_STUDY_LEAD_SOURCES_ERROR               = 'DashboardPage/EDIT_STUDY_LEAD_SOURCES_ERROR';
-
-export const DELETE_STUDY_LEAD_SOURCE                     = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES';
-export const DELETE_STUDY_LEAD_SOURCE_SUCCESS             = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES_SUCCESS';
-export const DELETE_STUDY_LEAD_SOURCE_ERROR               = 'DashboardPage/DELETE_STUDY_LEAD_SOURCES_ERROR';
+export const EDIT_MEDIA_TYPES                     = 'DashboardPage/EDIT_MEDIA_TYPES';
+export const EDIT_MEDIA_TYPES_SUCCESS             = 'DashboardPage/EDIT_MEDIA_TYPES_SUCCESS';
+export const EDIT_MEDIA_TYPES_ERROR               = 'DashboardPage/EDIT_MEDIA_TYPES_ERROR';

@@ -10,11 +10,11 @@ import Input from '../../components/Input';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 import CenteredModal from '../../components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { addEmailNotificationUser, fetchClientAdmins, fetchStudyLeadSources } from '../../containers/App/actions';
+import { addEmailNotificationUser, fetchClientAdmins, fetchMediaTypes } from '../../containers/App/actions';
 import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../containers/App/selectors';
 import { selectSyncErrorBool, selectSyncErrors, selectValues } from '../../common/selectors/form.selector';
 import { setEmailNotifications } from '../../containers/HomePage/actions';
-import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectStudyLeadSources } from '../../containers/HomePage/selectors';
+import { selectEditedStudy, selectHomePageClientAdmins, selectStudies, selectEditStudyEmailNotifications, selectMediaTypes } from '../../containers/HomePage/selectors';
 import StudyAdForm from '../../components/StudyAdForm';
 import { translate } from '../../../common/utilities/localization';
 
@@ -43,7 +43,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetChangeAdState: () => dispatch(resetChangeStudyAdState()),
   setEmailNotifications: (fields) => dispatch(setEmailNotifications(fields)),
   resetForm: () => dispatch(reset(formName)),
-  fetchStudyLeadSources: (studyId) => dispatch(fetchStudyLeadSources(studyId)),
+  fetchMediaTypes: (studyId) => dispatch(fetchMediaTypes(studyId)),
 });
 
 const mapStateToProps = createStructuredSelector({
@@ -60,7 +60,7 @@ const mapStateToProps = createStructuredSelector({
   changeStudyAdProcess: selectChangeStudyAdProcess(),
   studyLevels: selectStudyLevels(),
   studies: selectStudies(),
-  studyLeadSources: selectStudyLeadSources(),
+  studyMediaTypes: selectMediaTypes(),
 });
 @reduxForm({
   form: formName,
@@ -102,8 +102,8 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
     resetChangeAdState: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     studies: PropTypes.object,
-    fetchStudyLeadSources: PropTypes.func.isRequired,
-    studyLeadSources: PropTypes.object,
+    fetchMediaTypes: PropTypes.func.isRequired,
+    studyMediaTypes: PropTypes.object,
   };
   constructor(props) {
     super(props);
@@ -220,8 +220,8 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       });
     }
 
-    if (this.props.studyLeadSources.fetching && !newProps.studyLeadSources.fetching) {
-      change('leadSource', newProps.studyLeadSources.details);
+    if (this.props.studyMediaTypes.fetching && !newProps.studyMediaTypes.fetching) {
+      change('mediaType', newProps.studyMediaTypes.details);
     }
 
     if (newProps.emailNotifications.length > 0 && newProps.emailNotifications !== emailNotifications) {

@@ -214,9 +214,9 @@ import {
   FETCH_STUDY_SOURCES_SUCCESS,
   FETCH_STUDY_SOURCES_ERROR,
 
-  FETCH_STUDY_LEAD_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR,
+  FETCH_MEDIA_TYPES,
+  FETCH_MEDIA_TYPES_SUCCESS,
+  FETCH_MEDIA_TYPES_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -1411,23 +1411,23 @@ export function fetchStudySourcesError(payload) {
 }
 
 
-export function fetchStudyLeadSources(studyId) {
+export function fetchMediaTypes(studyId) {
   return {
-    type: FETCH_STUDY_LEAD_SOURCES,
+    type: FETCH_MEDIA_TYPES,
     studyId,
   };
 }
 
-export function fetchStudyLeadSourcesSuccess(payload) {
+export function fetchMediaTypesSuccess(payload) {
   return {
-    type: FETCH_STUDY_LEAD_SOURCES_SUCCESS,
+    type: FETCH_MEDIA_TYPES_SUCCESS,
     payload,
   };
 }
 
-export function fetchStudyLeadSourcesError(payload) {
+export function fetchMediaTypesError(payload) {
   return {
-    type: FETCH_STUDY_LEAD_SOURCES_ERROR,
+    type: FETCH_MEDIA_TYPES_ERROR,
     payload,
   };
 }

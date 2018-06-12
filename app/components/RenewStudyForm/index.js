@@ -50,7 +50,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     resetForm: PropTypes.func,
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
-    leadsCount: PropTypes.number,
+    mediaTypesCount: PropTypes.number,
     formValues: PropTypes.object,
     callTracking: PropTypes.bool,
   };
@@ -103,7 +103,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       change('siteLocation', newProps.selectedStudy.siteName);
     }
 
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
       const { change } = this.props;
       change('callTracking', false);
     }
@@ -420,7 +420,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                       </div>
                     }
                     {(callTracking && !this.state.isCallTrackingAlreadySet) &&
-                      <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                      <FieldArray name="mediaType" component={RenderLeads} formValues={formValues} />
                     }
                     <div className="field-row">
                       <strong className="label required">
@@ -509,7 +509,7 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
   savedCard: selectSavedCard(),
-  leadsCount: selectLeadsCount(),
+  mediaTypesCount: selectLeadsCount(),
   callTracking: selectCallTracking(),
 });
 
