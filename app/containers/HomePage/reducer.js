@@ -46,9 +46,9 @@ import {
   FETCH_CLIENT_ADMINS_SUCCESS,
   FETCH_CLIENT_ADMINS_ERROR,
   ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR
+  FETCH_MEDIA_TYPES,
+  FETCH_MEDIA_TYPES_SUCCESS,
+  FETCH_MEDIA_TYPES_ERROR
 } from '../../containers/App/constants';
 
 import {
@@ -146,7 +146,7 @@ const initialState = {
     error: null,
   },
   emailNotifications: [],
-  studyLeadSources: {
+  studyMediaTypes: {
     details: [],
     fetching: false,
     error: null,
@@ -700,24 +700,24 @@ export default function homePageReducer(state = initialState, action) {
       };
     }
 
-    case FETCH_STUDY_LEAD_SOURCES:
+    case FETCH_MEDIA_TYPES:
       return {
         ...state,
-        studyLeadSources: {
-          details: state.studyLeadSources.details,
+        studyMediaTypes: {
+          details: state.studyMediaTypes.details,
           fetching: true,
           error: null,
         }
       };
 
-    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
+    case FETCH_MEDIA_TYPES_SUCCESS:
       return {
         ...state,
-        studyLeadSources: {
+        studyMediaTypes: {
           details: action.payload.map((item) => {
             return {
-              source: { value: item.source_id, label: item.type },
-              source_name: item.source_name,
+              source: { value: item.sourceId, label: item.type },
+              sourceName: item.sourceName,
               studySourceId: item.studySourceId,
               messagingNumber: item.phoneNumber,
               googleUrl: item.googleUrl,
@@ -730,10 +730,10 @@ export default function homePageReducer(state = initialState, action) {
         }
       };
 
-    case FETCH_STUDY_LEAD_SOURCES_ERROR:
+    case FETCH_MEDIA_TYPES_ERROR:
       return {
         ...state,
-        studyLeadSources: {
+        studyMediaTypes: {
           details: [],
           fetching: false,
           error: action.payload,

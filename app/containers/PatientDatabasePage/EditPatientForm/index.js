@@ -245,8 +245,8 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       value: protocolIterator.studyId,
     }));
 
-    const sourceOptions = studySources.details.filter(s => !s.isLeadSource).map((studySource) => {
-      const sourceName = studySource.source_name ? studySource.source_name : studySource.source.label;
+    const sourceOptions = studySources.details.filter(s => !s.isMediaType).map((studySource) => {
+      const sourceName = studySource.sourceName ? studySource.sourceName : studySource.source.label;
       return {
         label: sourceName,
         value: studySource.studySourceId,

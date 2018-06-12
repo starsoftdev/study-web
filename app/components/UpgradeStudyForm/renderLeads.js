@@ -12,11 +12,11 @@ import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 
 import {
-  LEAD_SOURCE_LIST,
+  MEDIA_TYPE_LIST,
 } from '../../common/constants';
 
 const RenderLeads = ({ fields, availPhoneNumbers }) => (
-  <div className="leads-list row form-group">
+  <div className="media-type-list row form-group">
     {fields.map((lead, index) =>
       <div className="lead-item" key={index}>
         <button
@@ -38,7 +38,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
             name={`${lead}.source`}
             component={ReactSelect}
             placeholder="Select Lead Source"
-            options={LEAD_SOURCE_LIST}
+            options={MEDIA_TYPE_LIST}
             className="field col-sm-7"
           />
         </div>
@@ -64,7 +64,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
         <div className="field-row">
           <span className="label required col-sm-5"><label>Source Name</label></span>
           <Field
-            name={`${lead}.source_name`}
+            name={`${lead}.sourceName`}
             component={Input}
             type="text"
             className="field col-sm-7"

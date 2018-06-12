@@ -33,28 +33,28 @@ export { fields };
 export default values => {
   const fieldValidator = validatorFactory(schema);
   const fieldErrors = fieldValidator(values);
-  const leadSourceErrors = [];
+  const mediaTypeErrors = [];
 
-  if (values.callTracking && values.leadSource) {
-    values.leadSource.forEach((lead, index) => {
+  if (values.callTracking && values.mediaType) {
+    values.mediaType.forEach((lead, index) => {
       const leadError = {};
 
-      if (!lead.source) {
+      if (!mediaType.source) {
         leadError.source = 'Lead source can\'t be blank';
       }
-      if (!lead.source_name) {
-        leadError.source_name = 'Lead source name can\'t be blank';
+      if (!mediaType.sourceName) {
+        leadError.sourceName = 'Lead source name can\'t be blank';
       }
-      if (!lead.source || !lead.source_name) {
-        leadSourceErrors[index] = leadError;
+      if (!mediaType.source || !mediaType.sourceName) {
+        mediaTypeErrors[index] = leadError;
       }
     });
   }
 
-  if (leadSourceErrors && leadSourceErrors.length > 0) {
+  if (mediaTypeErrors && mediaTypeErrors.length > 0) {
     return {
       ...fieldErrors,
-      leadSource: leadSourceErrors,
+      mediaType: mediaTypeErrors,
     };
   } else {
     return fieldErrors;

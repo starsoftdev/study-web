@@ -41,7 +41,7 @@ import {
 
 const mapStateToProps = createStructuredSelector({
   callTracking: selectCallTracking(),
-  leadsCount: selectLeadsCount(),
+  mediaTypesCount: selectLeadsCount(),
   currentUserClientId: selectCurrentUserClientId(),
   addNotificationProcess: selectAddNotificationProcess(),
   savedSite: selectSavedSite(),
@@ -78,7 +78,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     studyLevels: PropTypes.array,
     listNewStudyState: PropTypes.object,
     callTracking: PropTypes.bool,
-    leadsCount: PropTypes.number,
+    mediaTypesCount: PropTypes.number,
     fullSiteLocations: PropTypes.object,
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
@@ -100,8 +100,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
   componentWillReceiveProps(newProps) {
     const { change } = this.props;
-    // If leads are all removed, set `callTracking` value to false
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
+    // If media types are all removed, set `callTracking` value to false
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
       change('callTracking', false);
     }
 
@@ -421,7 +421,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
           {callTracking &&
             <FieldArray
-              name="leadSource"
+              name="mediaType"
               component={RenderLeads}
               formValues={formValues}
             />

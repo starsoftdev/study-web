@@ -42,13 +42,13 @@ const selectCallTracking = () => createSelector(
 );
 
 /**
- * ListNewStudyForm -> count of `leads`
+ * ListNewStudyForm -> count of `mediaTypes`
  */
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'listNewStudy.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'listNewStudy.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 

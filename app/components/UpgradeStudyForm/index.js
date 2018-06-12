@@ -31,7 +31,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
     callTracking: PropTypes.bool,
-    leadsCount: PropTypes.number,
+    mediaTypesCount: PropTypes.number,
     selectedStudy: PropTypes.object,
     savedCard: PropTypes.object,
     show: PropTypes.bool,
@@ -68,7 +68,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
       this.props.dispatch(change('upgradeStudy', 'callTracking', false));
     }
 
@@ -349,7 +349,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                         </div>
                       }
                       {(callTracking && !this.state.isCallTrackingAlreadySet) &&
-                        <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                        <FieldArray name="mediaType" component={RenderLeads} formValues={formValues} />
                       }
                       <div className="field-row label-top">
                         <strong className="label">
@@ -392,7 +392,7 @@ const mapStateToProps = createStructuredSelector({
   studyLevels: selectStudyLevels(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   callTracking: selectUpgradeStudyFormCallTrackingValue(),
-  leadsCount: selectUpgradeStudyFormLeadsCount(),
+  mediaTypesCount: selectUpgradeStudyFormLeadsCount(),
   savedCard: selectSavedCard(),
 });
 

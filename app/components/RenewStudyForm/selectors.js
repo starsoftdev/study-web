@@ -56,8 +56,8 @@ const selectCallTracking = () => createSelector(
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'renewStudy.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'renewStudy.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 
