@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class DispositionTabContent extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class DispositionTabContent extends Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (
-      <table>
+      <table id="dispositionTable">
         <thead>
           <tr>
             <th>STUDY #</th>
@@ -15,7 +15,7 @@ export default class DispositionTabContent extends React.Component { // eslint-d
             <th>END DATE</th>
             <th>PASSED PRESCREENER</th>
             <th>DID NOT PASS PRESCREENER</th>
-            <th>NOT INTERESTED</th>
+            <th>DNQ / NOT INTERESTED</th>
             <th>ALL ATTEMPTS MADE</th>
             <th>TOTAL</th>
           </tr>

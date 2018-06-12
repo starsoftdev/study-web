@@ -16,6 +16,7 @@ import {
   EXPORT_STUDIES,
   GET_REPORTS_TOTALS,
   GET_CATEGORY_NOTES,
+  FETCH_DISPOSITIONS,
 } from './constants';
 
 import {
@@ -27,6 +28,8 @@ import {
   getReportsTotalsError,
   getCategoryNotesSuccess,
   getCategoryNotesError,
+  dispositionsFetched,
+  dispositionsFetchingError,
 } from './actions';
 
 
@@ -36,6 +39,7 @@ export function* reportViewPageSaga() {
   const watcherC = yield fork(exportStudiesWatcher);
   const watcherD = yield fork(fetchReportsTotalsWatcher);
   const watcherE = yield fork(getCategoryNotesWatcher);
+  const watcherF = yield fork(fetchDispositionsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -44,6 +48,7 @@ export function* reportViewPageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
 
 export function* fetchReportsWatcher() {
@@ -201,6 +206,28 @@ export function* getCategoryNotesWorker(action) {
     yield put(getCategoryNotesSuccess(response, hasMore, page));
   } catch (err) {
     yield put(getCategoryNotesError(err));
+  }
+}
+
+export function* fetchDispositionsWatcher() {
+  yield* takeLatest(FETCH_DISPOSITIONS, fetchDispositionsWorker);
+}
+export function* fetchDispositionsWorker() {
+  try {
+    const options = {
+      method: 'GET',
+      query: {
+        filter: JSON.stringify({
+          order: 'dispositionKey ASC',
+        }),
+      },
+    };
+    const requestURL = `${API_URL}/patientDispositions`;
+    const response = yield call(request, requestURL, options);
+
+    yield put(dispositionsFetched(response));
+  } catch (e) {
+    yield put(dispositionsFetchingError(e));
   }
 }
 
