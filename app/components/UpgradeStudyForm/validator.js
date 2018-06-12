@@ -16,17 +16,17 @@ export default values => {
   }
 
   if (values.callTracking && values.mediaType) {
-    values.mediaType.forEach((lead, index) => {
-      const leadError = {};
+    values.mediaType.forEach((mediaType, index) => {
+      const mediaTypeError = {};
 
       if (!mediaType.source) {
-        leadError.source = 'Lead source can\'t be blank';
+        mediaTypeError.source = 'Media Type can\'t be blank';
       }
       if (!mediaType.sourceName) {
-        leadError.sourceName = 'Lead source name can\'t be blank';
+        mediaTypeError.sourceName = 'Media Type can\'t be blank';
       }
       if (!mediaType.source || !mediaType.sourceName) {
-        mediaTypeErrors[index] = leadError;
+        mediaTypeErrors[index] = mediaTypeError;
       }
     });
   }

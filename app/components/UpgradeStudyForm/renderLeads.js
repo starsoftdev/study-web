@@ -17,8 +17,8 @@ import {
 
 const RenderLeads = ({ fields, availPhoneNumbers }) => (
   <div className="media-type-list row form-group">
-    {fields.map((lead, index) =>
-      <div className="lead-item" key={index}>
+    {fields.map((mediaType, index) =>
+      <div className="media-type-item" key={index}>
         <button
           className="link-delete"
           onClick={
@@ -32,12 +32,12 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
         </button>
         <div className="field-row">
           <span className="label required col-sm-5">
-            <label>Lead Source</label>
+            <label>Media Type</label>
           </span>
           <Field
-            name={`${lead}.source`}
+            name={`${mediaType}.source`}
             component={ReactSelect}
-            placeholder="Select Lead Source"
+            placeholder="Select Media Type"
             options={MEDIA_TYPE_LIST}
             className="field col-sm-7"
           />
@@ -49,9 +49,9 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
               <div className="field-row">
                 <span className="label required col-sm-5"><label>Phone number</label></span>
                 <Field
-                  name={`${lead}.source_phone`}
+                  name={`${mediaType}.source_phone`}
                   component={ReactSelect}
-                  placeholder="Select Lead Source"
+                  placeholder="Select Media Type"
                   options={availPhoneNumbers}
                   className="field col-sm-7"
                 />
@@ -64,7 +64,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
         <div className="field-row">
           <span className="label required col-sm-5"><label>Source Name</label></span>
           <Field
-            name={`${lead}.sourceName`}
+            name={`${mediaType}.sourceName`}
             component={Input}
             type="text"
             className="field col-sm-7"
@@ -82,7 +82,7 @@ const RenderLeads = ({ fields, availPhoneNumbers }) => (
             fields.push({});
           }}
         >
-          <i className="icomoon-icon_close" /> Add Lead Source
+          <i className="icomoon-icon_close" /> Add Media Type
         </button>
       </div>
     </div>
