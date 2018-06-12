@@ -18,7 +18,7 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
         <table onClick={this.goToReportsPage}>
           <thead>
             <tr>
-              <td></td>
+              <th></th>
               <th>New Patient</th>
               <th>Call Attempted</th>
               <th>DNQ / Not Interested</th>
