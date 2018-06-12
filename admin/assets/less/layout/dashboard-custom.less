@@ -42,6 +42,7 @@
 #mediaStatsTable table { cursor: pointer; width: 100%; }
 #mediaStatsTable tr { display: none; line-height: 35px; }
 #mediaStatsTable thead th { padding: 0 5px; }
+#mediaStatsTable thead th:first-child { padding: 0; }
 #mediaStatsTable th { text-transform: uppercase; }
 #mediaStatsTable thead tr { display: table-row; }
 #mediaStatsTable tr.alwaysVisible { display: table-row; }
@@ -74,6 +75,8 @@
 .campaignStatsTable { padding: 10px 20px; }
 .campaignStatsTable table { width: 100%; }
 .campaignStatsTable tr { display: none; height: 35px; }
+.campaignStatsTable thead th { padding: 0 5px; }
+.campaignStatsTable thead th:first-child { padding: 0; }
 .campaignStatsTable th { text-transform: uppercase; }
 .campaignStatsTable thead tr { display: table-row; }
 .campaignStatsTable tr.alwaysVisible { display: table-row; }
@@ -82,6 +85,18 @@
 #studyGeneralInfo ul { display: inline-block; list-style: none; margin: 0; padding: 0; vertical-align: top; width: 30%; }
 #studyGeneralInfo li { line-height: 30px; }
 #studyGeneralInfo strong { text-transform: uppercase; }
+@media screen and (max-width: 1520px) {
+  .campaignStatsTable th { font-size: 16px; }
+  .campaignStatsTable tr { line-height: 32px; }
+}
+@media screen and (max-width: 1360px) {
+  .campaignStatsTable th { font-size: 14px; }
+  .campaignStatsTable tr { line-height: 28px; }
+}
+@media screen and (max-width: 1210px) {
+  .campaignStatsTable th { font-size: 13px; }
+  .campaignStatsTable tr { line-height: 26px; }
+}
 
 /***************************************************************************************
 *************************** Admin Reports Page *****************************************
@@ -98,8 +113,14 @@
 #reportTabs section table { width: 100%; }
 #reportTabs section .header { text-transform: uppercase; }
 
-#totalTabContent tr { height: 35px; }
+#totalTabContent tr { line-height: 35px; }
 #totalTabContent th { text-transform: uppercase; }
+#totalTabContent thead th { padding: 0 5px; }
+#totalTabContent thead th:first-child { padding: 0; }
+@media screen and (max-width: 1330px) {
+  #totalTabContent th { font-size: 14px; }
+  #totalTabContent tr { line-height: 32px; }
+}
 
 #mediaSourceTabContent th { text-transform: uppercase; }
 
@@ -121,7 +142,7 @@
 
 #studyEditSection { display: inline-block; height: 100%; padding: 60px 0 20px; vertical-align: top; width: 70%; }
 #editStudyTabs { height: 100%; width: 100%; }
-#editStudyTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-size: 17px; font-weight: 600; display: inline-block; margin-right: 8px; padding: 5px 4px 5px 8px; position: relative; text-transform: uppercase; }
+#editStudyTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-size: 17px; font-weight: 600; display: inline-block;margin-right: 8px; padding: 5px 4px 5px 8px; position: relative; text-transform: uppercase; }
 #editStudyTabs .tab:after { background-color: inherit; border: 2px solid #00afef; content: " "; display: block; height: 38px; position: absolute; right: -10px; top: -2px; transform: skewX(25deg); width: 40px; z-index: -1; }
 #editStudyTabs .tab:hover, #editStudyTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
 #editStudyTabs .content-holder { background: #fff; border: 2px solid #00afef; height: calc(~"100% - 36px"); overflow-y: auto; padding: 20px; }
