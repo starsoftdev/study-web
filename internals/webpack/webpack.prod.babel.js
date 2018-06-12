@@ -105,14 +105,6 @@ const plugins = [
   new AssetsPlugin(),
 ];
 
-if (process.env.ENABLE_SENTRY_PLUGIN && process.env.ENABLE_SENTRY_PLUGIN !== 'false'){
-  plugins.push(new SentryCliPlugin({
-    include: '.',
-    ignoreFile: '.sentrycliignore',
-    ignore: ['node_modules', 'webpack.config.js'],
-  }))
-}
-
 module.exports = require('./webpack.base.babel')({
   // In production, we skip all hot-reloading stuff
   entry: {
