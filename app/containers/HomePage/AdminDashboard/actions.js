@@ -96,9 +96,6 @@ import {
   EDIT_MEDIA_TYPES,
   EDIT_MEDIA_TYPES_SUCCESS,
   EDIT_MEDIA_TYPES_ERROR,
-  DELETE_MEDIA_TYPE,
-  DELETE_MEDIA_TYPE_SUCCESS,
-  DELETE_MEDIA_TYPE_ERROR,
 } from './constants';
 
 export function updateFilters(filters = []) {

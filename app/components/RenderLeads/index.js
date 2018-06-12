@@ -63,6 +63,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
   deleteMediaType(studySource, index) {
     const { deleteMediaType } = this.props;
+    console.log(studySource);
+    console.log(index);
     deleteMediaType(studySource.studyId, studySource.id, index);
     // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
     // fields.remove(index);
@@ -134,7 +136,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           }
 
           return (
-            <div className="lead-item" key={index}>
+            <div className="media-type-item" key={index}>
               <div className="field-row dropdown">
                 <strong className={classnames('label', 'required')}>
                   <label>{translate('portals.component.renderLeads.mediaTypeLabel')}{(index + 1)}</label>
