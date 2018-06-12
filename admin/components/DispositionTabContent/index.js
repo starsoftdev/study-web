@@ -4,7 +4,7 @@ export default class DispositionTabContent extends Component { // eslint-disable
 
   render() {
     return (
-      <table>
+      <table id="dispositionTable">
         <thead>
           <tr>
             <th>STUDY #</th>
