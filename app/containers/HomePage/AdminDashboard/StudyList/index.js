@@ -602,6 +602,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
             </Sticky>
             }
             <div className="study-tables fixed-top">
+              {totals &&
               <div className="head">
                 <h2 className="pull-left">{totals.details.total_studies || 0} STUDIES</h2>
                 <div className="btns pull-right">
@@ -703,6 +704,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
                   </Modal.Body>
                 </Modal>
               </div>
+              }
               <InfiniteScroll
                 pageStart={0}
                 loadMore={this.loadItems}
