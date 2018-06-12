@@ -84,15 +84,18 @@ class ScheduledPatientModal extends React.Component {
     const { currentPatient, currentUser, sites } = nextProps;
     let initialValues = {};
 
-    if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
-        currentPatient.appointments && currentPatient.appointments.length > 0) {
-      const { time, textReminder } = currentPatient.appointments[0];
+    if (currentPatient && currentUser) {
       const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
       if (currentUser.roleForClient.isAdmin) {
         this.timezone = patientSite ? patientSite.timezone : currentUser.timezone;
       } else {
         this.timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
       }
+    }
+
+    if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
+        currentPatient.appointments && currentPatient.appointments.length > 0) {
+      const { time, textReminder } = currentPatient.appointments[0];
       initialValues = {
         ...getTimeComponents(time, this.timezone),
         textReminder,
