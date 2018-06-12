@@ -551,13 +551,13 @@ export default class StudyList extends React.Component { // eslint-disable-line 
     );
 
 
-    const maxCampaignCount = totals.details ? parseInt(totals.details.max_campaign_count) : 0;
+    const maxCampaignCount = totals && totals.details ? parseInt(totals.details.max_campaign_count) : 0;
 
     let campaignOptions = [];
     for (let i = 1; i <= maxCampaignCount; i++) {
-      campaignOptions.push({ label: i, value: i });
+      campaignOptions.push({ label: i.toString(), value: i.toString() });
     }
-    if (totals.details && totals.details.current_campaign_count && totals.details.current_campaign_count > 0) {
+    if (totals && totals.details && totals.details.current_campaign_count > 0) {
       campaignOptions.push({ label: 'Current', value: 'current' });
     }
 
