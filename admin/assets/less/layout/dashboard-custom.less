@@ -9,7 +9,7 @@
 #btnsPopupsHolder .col { padding: 0 6px }
 
 #infoSection { margin-bottom: 30px; overflow: hidden; position: relative; }
-#infoSection .head { height: 40px; margin: 0 0 10px 0; width: 100%; }
+#infoSection .head { height: 40px; margin: 0 0 10px; width: 100%; }
 #infoSection h2 { font-size: 21px; font-weight: 700; line-height: 40px; margin: 0 10px 0 0; text-transform: uppercase; }
 #infoSection h2 span { margin: 0 10px 0 0; }
 #infoSection .tiles section { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; overflow: hidden; padding: 10px; }
@@ -40,12 +40,25 @@
 #mediaStatsBox { background: #fff; border: 2px solid #00afef; margin-bottom: 30px;}
 #mediaStatsTable { padding: 10px 20px; }
 #mediaStatsTable table { cursor: pointer; width: 100%; }
-#mediaStatsTable tr { display: none; height: 35px; }
+#mediaStatsTable tr { display: none; line-height: 35px; }
+#mediaStatsTable thead th { padding: 0 5px; }
 #mediaStatsTable th { text-transform: uppercase; }
 #mediaStatsTable thead tr { display: table-row; }
 #mediaStatsTable tr.alwaysVisible { display: table-row; }
+@media screen and (max-width: 1520px) {
+  #mediaStatsTable th { font-size: 16px; }
+  #mediaStatsTable tr { line-height: 32px; }
+}
+@media screen and (max-width: 1360px) {
+  #mediaStatsTable th { font-size: 14px; }
+  #mediaStatsTable tr { line-height: 28px; }
+}
+@media screen and (max-width: 1210px) {
+  #mediaStatsTable th { font-size: 13px; }
+  #mediaStatsTable tr { line-height: 26px; }
+}
 
-.expanded #mediaStatsTable tr { display: table-row; height: 35px; }
+.expanded #mediaStatsTable tr { display: table-row; }
 .expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
 .expendableSection .showMoreBtn:hover { background: #ccc; }
 
