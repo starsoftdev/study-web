@@ -128,10 +128,6 @@ const render = () => {
   );
 };
 
-if (SENTRY_DSN) {
-  Raven.config(SENTRY_DSN).install();
-}
-
 if (MIXPANEL_TOKEN) {
   mixpanel.init(MIXPANEL_TOKEN);
 }
@@ -142,14 +138,6 @@ if (LOG_ROCKET) {
   if (MIXPANEL_TOKEN) {
     LogRocket.getSessionURL((sessionURL) => {
       mixpanel.track('LogRocket', { sessionURL });
-    });
-  }
-
-  if (SENTRY_DSN) {
-    Raven.setDataCallback((data) => {
-      // eslint-disable-next-line no-param-reassign
-      data.extra.sessionURL = LogRocket.sessionURL;
-      return data;
     });
   }
 }
