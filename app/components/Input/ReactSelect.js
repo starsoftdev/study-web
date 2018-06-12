@@ -33,9 +33,13 @@ function ReactSelect({
   const optionsToRender = options.map(o => (
     { ...o, value: (o.value || o.id), label: (o.label || o.name) }
   )).sort((a, b) => {
-    const textA = a.label.toUpperCase();
-    const textB = b.label.toUpperCase();
+    let textA = a.label;
+    let textB = b.label;
     let returnValue = 0;
+    if (typeof a.label === 'string' && typeof b.label === 'string') {
+      textA = a.label.toUpperCase();
+      textB = b.label.toUpperCase();
+    }
     if (textA < textB) {
       returnValue = -1;
     } else if (textA > textB) {
