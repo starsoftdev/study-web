@@ -140,7 +140,6 @@ function dashboardProtocolPageReducer(state = initialState, action) {
     case EDIT_PROTOCOL_SUCCESS:
       foundUserIndex = _.findIndex(newProtocols, item => (item.id === action.payload.id));
       if (foundUserIndex !== -1) {
-        // newProtocols.splice(foundUserIndex, 1, action.payload);
         newProtocols[foundUserIndex].number = action.payload.number;
       }
 
@@ -182,7 +181,6 @@ function dashboardProtocolPageReducer(state = initialState, action) {
     case UPLOAD_FILE_SUCCESS:
       foundUserIndex = _.findIndex(newProtocols, item => (item.id === action.payload.id));
       if (foundUserIndex !== -1) {
-        // newProtocols.splice(foundUserIndex, 1, action.payload);
         newProtocols[foundUserIndex].orgfilename = action.payload.orgFilename;
         newProtocols[foundUserIndex].filename = action.payload.filename;
       }
