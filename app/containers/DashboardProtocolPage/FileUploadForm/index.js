@@ -2,8 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
-import { Field, reduxForm } from 'redux-form';
-import Input from '../../../components/Input';
+import { reduxForm } from 'redux-form';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
@@ -35,7 +34,6 @@ export class FileUploadForm extends React.Component { // eslint-disable-line rea
   }
 
   render() {
-    const { initialValues } = this.props;
     return (
       <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
 
@@ -57,7 +55,7 @@ export class FileUploadForm extends React.Component { // eslint-disable-line rea
           <button type="submit" className="btn btn-primary">
             {this.props.uploading
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-              : <span>{this.props.isEdit ? 'Update' : 'Submit'}</span>
+              : <span>Submit</span>
             }
           </button>
         </div>
