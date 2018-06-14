@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import NotesTabContent from '../NotesTabContent';
+import LandingPageEdit from '../LandingPageEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -63,8 +65,12 @@ export default class EditStudyTabs extends Component {
           }
         </div>
         <div className="content-holder">
-          <section className={classNames('notes', { active: (activeTab === 'notes') })} />
-          <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })} />
+          <section className={classNames('notes', { active: (activeTab === 'notes') })}>
+            <NotesTabContent />
+          </section>
+          <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
+            <LandingPageEdit />
+          </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
