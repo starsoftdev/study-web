@@ -264,7 +264,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               placeholder={translate('portals.component.listNewStudyForm.indicationPlaceholder')}
               options={indications}
               className="field"
-              sortAsc
+              sort="alphabetically"
             />
           </div>
 
