@@ -1,6 +1,7 @@
 export default values => {
   const leadSourceErrors = [];
   const isUrlValid = (str) => { return /^\w+$/.test(str); };
+  const isGUrlValid = (str) => { return /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(str); };
 
   if (values.leadSource) {
     values.leadSource.forEach((lead, index) => {
@@ -16,6 +17,7 @@ export default values => {
       // check for unique messagingNumber
       let isUnique = true;
       let isGoogleUrlUnique = true;
+      let isGoogleUrlValid = true;
       let isNameUnique = true;
       values.leadSource.forEach((leadInner, indexInner) => {
         if (indexInner !== index && leadInner.messagingNumber && lead.messagingNumber && leadInner.messagingNumber.value && lead.messagingNumber.value && leadInner.messagingNumber.value === lead.messagingNumber.value) {
@@ -23,6 +25,9 @@ export default values => {
         }
         if (indexInner !== index && leadInner.url && lead.url && leadInner.url.toLowerCase() === lead.url.toLowerCase()) {
           isGoogleUrlUnique = false;
+        }
+        if (leadInner.googleUrl && !isGUrlValid(leadInner.googleUrl)) {
+          isGoogleUrlValid = false;
         }
         if (indexInner !== index && leadInner.source_name && lead.source_name && leadInner.source_name.toLowerCase() === lead.source_name.toLowerCase()) {
           isNameUnique = false;
@@ -37,6 +42,9 @@ export default values => {
       }
       if (!isGoogleUrlUnique) {
         googleUrlErrors = { url : ['Url should be unique'] };
+      }
+      if (!isGoogleUrlValid) {
+        googleUrlErrors = { googleUrl : ['Url should be correct format'] };
       }
       if (!isNameUnique) {
         sourceNameErrors = { source_name : ['Source name should be unique'] };

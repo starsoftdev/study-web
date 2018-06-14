@@ -200,7 +200,7 @@ class PatientBoard extends React.Component {
       id: currentAppointmentId,
       patientId: currentPatient.id,
       clientRoleId: currentUser.roleForClient.id,
-      time: time.format(),
+      time,
       textReminder: formValues.textReminder || false,
     };
 

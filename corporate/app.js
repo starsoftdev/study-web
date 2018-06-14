@@ -77,17 +77,17 @@ const routes = {
     { path: '/pqs', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
-    { path: '/indication/:indication', component: Indication },
-    { path: '/br/indication/:indication', component: Indication },
-    { path: '/ca/indication/:indication', component: Indication },
-    { path: '/cz/indication/:indication', component: Indication },
-    { path: '/de/indication/:indication', component: Indication },
-    { path: '/fr/indication/:indication', component: Indication },
-    { path: '/jp/indication/:indication', component: Indication },
-    { path: '/it/indication/:indication', component: Indication },
-    { path: '/pl/indication/:indication', component: Indication },
-    { path: '/uk/indication/:indication', component: Indication },
-    { path: '/hu/indication/:indication', component: Indication },
+    { path: '/indication/:indication*', component: Indication },
+    { path: '/br/indication/:indication*', component: Indication },
+    { path: '/ca/indication/:indication*', component: Indication },
+    { path: '/cz/indication/:indication*', component: Indication },
+    { path: '/de/indication/:indication*', component: Indication },
+    { path: '/fr/indication/:indication*', component: Indication },
+    { path: '/jp/indication/:indication*', component: Indication },
+    { path: '/it/indication/:indication*', component: Indication },
+    { path: '/pl/indication/:indication*', component: Indication },
+    { path: '/uk/indication/:indication*', component: Indication },
+    { path: '/hu/indication/:indication*', component: Indication },
     { path: '/thankyou', component: ThankYouPage },
     { path: '/thankyou2', component: ThankYouPage2 },
     { path: '/*-:siteLocation', component: LandingPage },
@@ -128,10 +128,6 @@ const render = () => {
   );
 };
 
-if (SENTRY_DSN) {
-  Raven.config(SENTRY_DSN).install();
-}
-
 if (MIXPANEL_TOKEN) {
   mixpanel.init(MIXPANEL_TOKEN);
 }
@@ -142,14 +138,6 @@ if (LOG_ROCKET) {
   if (MIXPANEL_TOKEN) {
     LogRocket.getSessionURL((sessionURL) => {
       mixpanel.track('LogRocket', { sessionURL });
-    });
-  }
-
-  if (SENTRY_DSN) {
-    Raven.setDataCallback((data) => {
-      // eslint-disable-next-line no-param-reassign
-      data.extra.sessionURL = LogRocket.sessionURL;
-      return data;
     });
   }
 }
