@@ -27,14 +27,14 @@ function ReactSelect({
   clearValueText,
   clearable,
   mobileEnabled,
-  sortAsc,
+  sort,
   ...rest
 }) {
   const hasError = touched && error && !active;
   const optionsToRender = options.map(o => (
     { ...o, value: (o.value || o.id), label: (o.label || o.name) }
   ));
-  if (sortAsc) {
+  if (sort && sort === 'alphabetically') {
     optionsToRender.sort((a, b) => {
       let textA = a.label;
       let textB = b.label;
@@ -159,7 +159,7 @@ ReactSelect.propTypes = {
   clearValueText: PropTypes.string,
   clearable: PropTypes.bool,
   mobileEnabled: PropTypes.bool,
-  sortAsc: PropTypes.bool,
+  sort: PropTypes.string,
 };
 
 export default ReactSelect;
