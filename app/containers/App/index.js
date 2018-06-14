@@ -106,13 +106,6 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           mixpanel.track('LogRocket', { sessionURL });
         });
       }
-      if (SENTRY_DSN) {
-        Raven.setDataCallback((data) => {
-          // eslint-disable-next-line no-param-reassign
-          data.extra.sessionURL = LogRocket.sessionURL;
-          return data;
-        });
-      }
     }
   }
 
