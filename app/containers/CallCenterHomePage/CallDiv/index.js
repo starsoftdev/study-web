@@ -53,31 +53,6 @@ export default class CallDiv extends React.Component {
     return null;
   }
 
-  dispositionKeyToText = (key) => {
-    let dispositionText = '';
-    switch (key) {
-      case 0:
-        dispositionText = 'NONE';
-        break;
-      case 1:
-        dispositionText = 'PRESCN';
-        break;
-      case 2:
-        dispositionText = 'DNQ';
-        break;
-      case 3:
-        dispositionText = 'NI';
-        break;
-      case 4:
-        dispositionText = 'CNC';
-        break;
-      default:
-        dispositionText = '';
-        break;
-    }
-    return (<span className="disposition">{dispositionText}</span>);
-  }
-
   getPatientView = (patient, key) => {
     let patientPhone;
     if (patient.phone) {
@@ -97,7 +72,7 @@ export default class CallDiv extends React.Component {
       <span className="email">{patient.email}</span>
       <span className="phone">{patientPhone}</span>
       {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
-      {patient.disposition_key > 0 && this.dispositionKeyToText(patient.disposition_key)}
+      {patient.disposition_key > 0 ? translate(`common.disposition.id${patient.disposition_key}`) : ''}
     </div>);
   }
 
