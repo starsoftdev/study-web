@@ -16,7 +16,7 @@ import {
   EXPORT_STUDIES,
   GET_REPORTS_TOTALS,
   GET_CATEGORY_NOTES,
-  FETCH_DISPOSITIONS,
+  FETCH_DISPOSITION_TOTALS,
 } from './constants';
 
 import {
@@ -28,8 +28,8 @@ import {
   getReportsTotalsError,
   getCategoryNotesSuccess,
   getCategoryNotesError,
-  dispositionsFetched,
-  dispositionsFetchingError,
+  getDispositionTotalsSuccess,
+  getDispositionTotalsError,
 } from './actions';
 
 
@@ -210,24 +210,23 @@ export function* getCategoryNotesWorker(action) {
 }
 
 export function* fetchDispositionsWatcher() {
-  yield* takeLatest(FETCH_DISPOSITIONS, fetchDispositionsWorker);
+  yield* takeLatest(FETCH_DISPOSITION_TOTALS, fetchDispositionsWorker);
 }
-export function* fetchDispositionsWorker() {
+export function* fetchDispositionsWorker(action) {
   try {
-    const options = {
-      method: 'GET',
-      query: {
-        filter: JSON.stringify({
-          order: 'dispositionKey ASC',
-        }),
-      },
-    };
-    const requestURL = `${API_URL}/patientDispositions`;
-    const response = yield call(request, requestURL, options);
-
-    yield put(dispositionsFetched(response));
-  } catch (e) {
-    yield put(dispositionsFetchingError(e));
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(getDispositionTotalsSuccess(response));
+  } catch (err) {
+    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    yield put(getDispositionTotalsError(err));
   }
 }
 
