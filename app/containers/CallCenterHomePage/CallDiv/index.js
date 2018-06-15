@@ -71,7 +71,8 @@ export default class CallDiv extends React.Component {
       </strong>
       <span className="email">{patient.email}</span>
       <span className="phone">{patientPhone}</span>
-      {this.renderPatientTextMessageSummary(patient)}
+      {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
+      {patient.disposition_key > 0 ? translate(`common.disposition.id${patient.disposition_key}`) : ''}
     </div>);
   }
 
@@ -80,7 +81,7 @@ export default class CallDiv extends React.Component {
     const output = [];
     _.forEach(patients.details, (patient) => {
 
-      if (patient && patient.patient_category_id === 1) {
+      if (patient && (patient.call_center_patient_category_id === 1 || !patient.call_center_patient_category_id)) {
         output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
       }
     });
@@ -91,7 +92,7 @@ export default class CallDiv extends React.Component {
     const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.patient_category_id === 2) {
+      if (patient && patient.call_center_patient_category_id === 2) {
         output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
       }
     });
@@ -99,11 +100,25 @@ export default class CallDiv extends React.Component {
   }
 
   renderCall2 = () => {
-    return null;
+    const { patients } = this.props;
+    const output = [];
+    _.forEach(patients.details, (patient) => {
+      if (patient && patient.call_center_patient_category_id === 3) {
+        output.push(this.getPatientView(patient, `callDiv_call2_${patient.id}`));
+      }
+    });
+    return output;
   }
 
   renderCall3 = () => {
-    return null;
+    const { patients } = this.props;
+    const output = [];
+    _.forEach(patients.details, (patient) => {
+      if (patient && patient.call_center_patient_category_id === 4) {
+        output.push(this.getPatientView(patient, `callDiv_call3_${patient.id}`));
+      }
+    });
+    return output;
   }
 
   renderMeetings = () => {
@@ -111,31 +126,20 @@ export default class CallDiv extends React.Component {
 
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.patient_category_id === 5) {
+      if (patient && patient.call_center_patient_category_id === 5) {
         output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
       }
     });
     return output;
   }
 
-  renderCall2 = () => {
-    return null;
-  }
-
-  renderCall3 = () => {
-    return null;
-  }
-
-  renderMeetings = () => {
-    const { patients, indications } = this.props;
+  renderArchive = () => {
+    const { patients } = this.props;
 
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.patient_category_id === 5) {
-        output.push(<div className="cc-box" key={`callDiv_call1_${patient.id}`}>
-          <span>{patient.first_name} {patient.last_name}</span>
-          <span>{indications[patient.study_id].name}</span>
-        </div>);
+      if (patient && patient.call_center_patient_category_id === 6) {
+        output.push(this.getPatientView(patient, `callDiv_archive_${patient.id}`));
       }
     });
     return output;
@@ -178,24 +182,7 @@ export default class CallDiv extends React.Component {
           <div className="cc-box cc-box-heading">
             {translate('container.page.callcenter.heading.archivepatient')}
           </div>
-          <div className="cc-box">
-            <span>Patient Name</span>
-            <span>Patient Email</span>
-            <span>Patient Phone</span>
-            <span>Prescn</span>
-          </div>
-          <div className="cc-box">
-            <span>Patient Name</span>
-            <span>Patient Email</span>
-            <span>Patient Phone</span>
-            <span>DNQ</span>
-          </div>
-          <div className="cc-box">
-            <span>Patient Name</span>
-            <span>Patient Email</span>
-            <span>Patient Phone</span>
-            <span>CNC</span>
-          </div>
+          { this.renderArchive() }
         </div>
       </div>
     );

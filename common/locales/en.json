@@ -1536,6 +1536,12 @@
     "common.countryName.uk": "United Kingdom",
     "common.countryName.us": "United States",
 
+    "common.disposition.id0": "NONE",
+    "common.disposition.id1": "PRESCN",
+    "common.disposition.id2": "DNQ",
+    "common.disposition.id3": "NI'",
+    "common.disposition.id4": "CNC",
+
     "common.patientCategory.id1": "New Patient",
     "common.patientCategory.id2": "Call / Text Attempted",
     "common.patientCategory.id3": "Not Qualified / Not Interested",
