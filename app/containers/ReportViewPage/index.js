@@ -70,6 +70,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     clearReportList: PropTypes.func,
     sources: PropTypes.array,
     dispositionTotals: PropTypes.object,
+    getDispositionTotals: PropTypes.func,
   };
 
   constructor(props) {
