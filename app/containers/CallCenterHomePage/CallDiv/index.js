@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 
 import { translate } from '../../../../common/utilities/localization';
 import { formatPhone } from '../../../common/helper/functions';
-import settings from '../../../../common/settings/app-settings.json';
 import './style.less';
 
 export default class CallDiv extends React.Component {
