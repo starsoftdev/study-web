@@ -48,7 +48,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         randomized: translate('sponsor.component.reportViewTotals.na'),
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
-      const source = cat.id;
+      const source = currentTab === 'media' ? cat.id : cat.id - 1;
       if (totals.details[source]) {
         totalValues = {
           count_not_contacted: (totals.details[source].count_not_contacted || totals.details[source].count_not_contacted === 0) ? parseInt(totals.details[source].count_not_contacted) : translate('sponsor.component.reportViewTotals.na'),
@@ -98,12 +98,12 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
     if (cats && cats.length > 0) {
       if (!expanded) {
-        return (<strong className="number media-type"><span>{cats[0].type}</span></strong>);
+        return (<strong className="number media-type no-animation"><span>{cats[0].type}</span></strong>);
       } else {
         return (
           <div>
             {
-              cats.map(item => (<strong key={item.id} className="number media-type"><span>{item.type}</span></strong>))
+              cats.map(item => (<strong key={item.id} className="number media-type no-animation"><span>{item.type}</span></strong>))
             }
           </div>
         );
@@ -164,7 +164,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
             ((currentTab === 'media' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
           <ul className="list-inline list-stats">
-            <li>
+            <li className="allcaps">
               <strong className="heading"><span>{translate(`sponsor.component.reportViewTotals.${headingTitle}`)}</span></strong>
               { this.renderCategory() }
             </li>
