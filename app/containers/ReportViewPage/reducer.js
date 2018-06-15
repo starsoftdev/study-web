@@ -23,7 +23,9 @@ import {
   GET_CATEGORY_NOTES_ERROR,
   GET_CATEGORY_NOTES_SUCCESS,
   CLEAR_REPORT_LIST,
-  FETCH_DISPOSITIONS_SUCCESS,
+  FETCH_DISPOSITION_TOTALS_SUCCESS,
+  FETCH_DISPOSITION_TOTALS,
+  FETCH_DISPOSITION_TOTALS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -285,10 +287,32 @@ function reportViewPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_DISPOSITIONS_SUCCESS:
+    case FETCH_DISPOSITION_TOTALS:
       return {
         ...state,
-        dispositions: action.payload,
+        dispositionTotals: {
+          details: state.dispositionTotals.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_DISPOSITION_TOTALS_SUCCESS:
+      return {
+        ...state,
+        dispositionTotals: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_DISPOSITION_TOTALS_ERROR:
+      return {
+        ...state,
+        dispositionTotals: {
+          details: {},
+          fetching: false,
+          error: action.payload,
+        },
       };
     default:
       return state;
