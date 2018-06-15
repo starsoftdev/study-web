@@ -6,9 +6,6 @@ import { translate } from '../../../../common/utilities/localization';
 import { formatPhone } from '../../../common/helper/functions';
 import settings from '../../../../common/settings/app-settings.json';
 import './style.less';
-// if (somePatientData.disposition === settings.disposition.DNQ) {
-// // DNQ stuff here
-// }
 
 export default class CallDiv extends React.Component {
 
@@ -58,13 +55,27 @@ export default class CallDiv extends React.Component {
   }
 
   dispositionKeyToText = (key) => {
-    // console.log('settings', settings);
     let dispositionText = '';
-    _.forEach(settings.disposition, (item, disText) => {
-      if (item === key) {
-        dispositionText = disText === 'PRESCREENED' ? 'PRESCN' : disText;
-      }
-    });
+    switch (key) {
+      case 0:
+        dispositionText = 'NONE';
+        break;
+      case 1:
+        dispositionText = 'PRESCN';
+        break;
+      case 2:
+        dispositionText = 'DNQ';
+        break;
+      case 3:
+        dispositionText = 'NI';
+        break;
+      case 4:
+        dispositionText = 'CNC';
+        break;
+      default:
+        dispositionText = '';
+        break;
+    }
     return (<span className="disposition">{dispositionText}</span>);
   }
 
