@@ -2037,5 +2037,11 @@
     "corporate.page.privacyrequest.request.opt6placeholder2": "Optionally, explain your question in more detail",
     "corporate.page.privacyrequest.request.opt7placeholder1": "* Please describe the behaviour of test you are objecting to, related to the usage of your personal information.",
     "corporate.page.privacyrequest.info": "What information about you would you like to access?",
-    "corporate.page.privacyrequest.messagePlaceholder": "Optionally, explain your question in more detail"
+    "corporate.page.privacyrequest.messagePlaceholder": "Optionally, explain your question in more detail",
+
+    "common.disposition.id0": "NONE",
+    "common.disposition.id1": "PRESCN",
+    "common.disposition.id2": "DNQ",
+    "common.disposition.id3": "NI'",
+    "common.disposition.id4": "CNC"
 }
