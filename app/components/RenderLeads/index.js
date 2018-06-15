@@ -64,22 +64,12 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId });
   }
 
-  deleteSourceType(index) {
-    const { fields, initialLeadSources, formValues, deleteStudyLeadSource } = this.props;
-    let initObject = null;
-
-    if (initialLeadSources && initialLeadSources.length > 0) {
-      initObject = _.findIndex(initialLeadSources, (o) => {
-        if (formValues.leadSource && formValues.leadSource[index]) {
-          return (o.studySourceId === formValues.leadSource[index].studySourceId);
-        } else {
-          return false;
-        }
-      });
-    }
+  deleteSourceType(initObject, index) {
+    const { fields, deleteStudyLeadSource } = this.props;
 
     if (initObject) {
       deleteStudyLeadSource(initObject, index);
+      fields.remove(index);
     } else {
       fields.remove(index);
     }
@@ -170,7 +160,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                     <span
                       className="delete-source-type icomoon-icon_trash"
                       onClick={() => {
-                        this.deleteSourceType(index);
+                        this.deleteSourceType(formValues.leadSource[index], index);
                       }}
                     />
                   )

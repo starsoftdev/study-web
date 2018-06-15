@@ -89,7 +89,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   handleSelectTab = (tab) => {
-    this.setState({ currentTab: tab });
+    this.setState({ currentTab: tab, expanded: tab === 'disposition' ? true : this.state.expanded  });
   }
 
   renderCategory() {
@@ -103,7 +103,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         return (
           <div>
             {
-              cats.map(item => (<strong key={item.id} className="number"><span>{item.type}</span></strong>))
+              cats.map(item => (<strong key={item.id} className="number media-type"><span>{item.type}</span></strong>))
             }
           </div>
         );
@@ -160,7 +160,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           </li>
         </ol>
         <div className="report-page-totals-container">
-          {this.props.totals.fetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>}
+          {
+            ((currentTab === 'media' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
+          }
           <ul className="list-inline list-stats">
             <li>
               <strong className="heading"><span>{translate(`sponsor.component.reportViewTotals.${headingTitle}`)}</span></strong>
@@ -203,7 +205,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
               { this.renderValues(totalValues, 'total') }
             </li>
           </ul>
-          <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
+          {
+            currentTab === 'media' && <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
+          }
         </div>
       </div>
     );
