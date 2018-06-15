@@ -72,7 +72,7 @@ export default class CallDiv extends React.Component {
       <span className="email">{patient.email}</span>
       <span className="phone">{patientPhone}</span>
       {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
-      {patient.disposition_key > 0 ? translate(`common.disposition.id${patient.disposition_key}`) : ''}
+      {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
     </div>);
   }
 
