@@ -103,7 +103,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         return (
           <div>
             {
-              cats.map(item => (<strong key={item.id} className="number"><span>{item.type}</span></strong>))
+              cats.map(item => (<strong key={item.id} className="number media-type"><span>{item.type}</span></strong>))
             }
           </div>
         );
