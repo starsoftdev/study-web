@@ -87,57 +87,57 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     }
   }
 ç
-  mapFilterValues(filters) {
-    const newFilters = [];
-    mapKeys(filters, (filterValues, key) => {
-      if (key !== 'campaign' && key !== 'search') {
-        filterValues.forEach(v => {
-          if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
-            newFilters.push({
-              name: key,
-              type: 'value',
-              value: v.label,
-            });
-          }
-        });
-      }
-    });
-    return newFilters;
-  }
+mapFilterValues(filters) {
+  const newFilters = [];
+  mapKeys(filters, (filterValues, key) => {
+    if (key !== 'campaign' && key !== 'search') {
+      filterValues.forEach(v => {
+        if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
+          newFilters.push({
+            name: key,
+            type: 'value',
+            value: v.label,
+          });
+        }
+      });
+    }
+  });
+  return newFilters;
+}
 
-  render() {
-    const { customFilters } = this.state;
-    const { resetForm, change, filtersFormValues, studies } = this.props;
+render() {
+  const { customFilters } = this.state;
+  const { resetForm, change, filtersFormValues, studies } = this.props;
 
-    const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
-    return (
-      <div id="adminHomePage" className="admin-dashboard">
-        <div className="fixed-header clearfix">
-          <h1 className="main-heading pull-left">Admin portal</h1>
-          <FiltersPageForm
-            change={change}
-            resetForm={resetForm}
-            updateFilters={this.updateFilters}
-            addFilter={this.addFilter}
-            filtersFormValues={filtersFormValues}
-          />
-        </div>
-        {(filters.length > 0) &&
+  const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
+  return (
+    <div id="adminHomePage" className="admin-dashboard">
+      <div className="fixed-header clearfix">
+        <h1 className="main-heading pull-left">Admin portal</h1>
+        <FiltersPageForm
+          change={change}
+          resetForm={resetForm}
+          updateFilters={this.updateFilters}
+          addFilter={this.addFilter}
+          filtersFormValues={filtersFormValues}
+        />
+      </div>
+      {(filters.length > 0) &&
           <FilterQueryForm
             clearFilters={this.clearFilters}
             filters={filters}
             removeFilter={this.removeFilter}
             resetForm={resetForm}
           />
-        }
-        <StatsBox />
-        <div id="mediaStatsBox">
-          <ExpandableSection content={<MediaStatsTable />} />
-        </div>
-        <StudyInfo studies={studies} />
+      }
+      <StatsBox />
+      <div id="mediaStatsBox">
+        <ExpandableSection content={<MediaStatsTable />} />
       </div>
-    );
-  }
+      <StudyInfo studies={studies} />
+    </div>
+  );
+}
 }
 
 
