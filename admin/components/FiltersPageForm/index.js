@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Field } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -22,7 +22,7 @@ const filterOptions = {
   ],
 };
 
-export default class FiltersPageForm extends React.Component {
+export default class FiltersPageForm extends Component {
   static propTypes = {
     change: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
