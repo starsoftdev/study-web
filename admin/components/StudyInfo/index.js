@@ -24,7 +24,7 @@ const campaignOptions = [
 })
 export class StudyInfo extends Component {
   constructor(props) {
-    super(props) ;
+    super(props);
 
     this.state = {};
 
