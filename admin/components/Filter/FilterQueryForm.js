@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { StickyContainer } from 'react-sticky';
 import classNames from 'classnames';
@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import Filter from './index';
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
-export default class FilterQueryForm extends React.Component {
+export default class FilterQueryForm extends Component {
   static propTypes = {
     clearFilters: React.PropTypes.func.isRequired,
     filters: React.PropTypes.array.isRequired,
