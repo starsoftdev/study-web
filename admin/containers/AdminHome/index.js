@@ -15,28 +15,19 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues } from './selectors';
+import { selectFilterFormValues, selectStudies } from './selectors';
 const formName = 'adminDashboardFilters';
-
-const mapStateToProps = createStructuredSelector({
-  filtersFormValues: selectFilterFormValues(),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
-  resetForm: () => dispatch(reset(formName)),
-});
 
 @reduxForm({
   form: 'adminFilter',
   enableReinitialize: true,
 })
-@connect(mapStateToProps, mapDispatchToProps)
 export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
+    studies: PropTypes.object,
   };
 
   constructor(props) {
@@ -95,7 +86,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       change('adminDashboardFilters', filter.name, filters[filter.name]);
     }
   }
-
+ç
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
@@ -116,7 +107,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
   render() {
     const { customFilters } = this.state;
-    const { resetForm, change, filtersFormValues } = this.props;
+    const { resetForm, change, filtersFormValues, studies } = this.props;
 
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     return (
@@ -143,10 +134,21 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         <div id="mediaStatsBox">
           <ExpandableSection content={<MediaStatsTable />} />
         </div>
-        <StudyInfo />
+        <StudyInfo studies={studies} />
       </div>
     );
   }
 }
 
-export default AdminHome;
+
+const mapStateToProps = createStructuredSelector({
+  filtersFormValues: selectFilterFormValues(),
+  studies: selectStudies(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  change: (formName, name, value) => dispatch(change(formName, name, value)),
+  resetForm: () => dispatch(reset(formName)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);

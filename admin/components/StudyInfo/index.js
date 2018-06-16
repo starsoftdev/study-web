@@ -22,9 +22,9 @@ const campaignOptions = [
   form: 'adminInfoFilter',
   enableReinitialize: true,
 })
-export default class StudyInfo extends Component {
+export class StudyInfo extends Component {
   constructor(props) {
-    super(props);
+    super(props) ;
 
     this.state = {};
 
@@ -197,3 +197,5 @@ export default class StudyInfo extends Component {
     );
   }
 }
+
+export default StudyInfo;
