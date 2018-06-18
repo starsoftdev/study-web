@@ -174,7 +174,7 @@ class TextSection extends React.Component {
   renderText() {
     const { currentUser, currentPatient, site } = this.props;
     const { twilioMessages } = this.state;
-    const timezone = currentUser.roleForClient.isAdmin ? currentUser.timezone : site.timezone;
+    const timezone = (currentUser.roleForClient && currentUser.roleForClient.isAdmin) ? currentUser.timezone : site.timezone;
 
     if (currentPatient && twilioMessages.length) {
       return (
