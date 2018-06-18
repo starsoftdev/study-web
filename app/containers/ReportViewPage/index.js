@@ -24,9 +24,29 @@ import PatientNote from './PatientNote';
 import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, getDispositionTotals } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectDispositionTotals } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
+
+const dispositions = [
+  {
+    id: '1',
+    type: translate('sponsor.page.reportViewPage.dispositions.key1'),
+  },
+  {
+    id: '2',
+    type: translate('sponsor.page.reportViewPage.dispositions.key2'),
+  },
+  {
+    id: '3',
+    type: translate('sponsor.page.reportViewPage.dispositions.key3'),
+  },
+  {
+    id: '4',
+    type: translate('sponsor.page.reportViewPage.dispositions.key4'),
+  },
+];
+
 export class ReportViewPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -49,6 +69,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     fetchSources: PropTypes.func,
     clearReportList: PropTypes.func,
     sources: PropTypes.array,
+    dispositionTotals: PropTypes.object,
+    getDispositionTotals: PropTypes.func,
   };
 
   constructor(props) {
@@ -86,6 +108,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
+    delete filters.source;
+    this.props.getDispositionTotals(filters);
     this.props.fetchSources();
   }
 
@@ -245,6 +269,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           totals={this.props.totals}
           openNotesModal={this.openNotesModal}
           sources={this.props.sources}
+          dispositions={dispositions}
+          dispositionTotals={this.props.dispositionTotals}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
@@ -306,6 +332,7 @@ const mapStateToProps = createStructuredSelector({
   categoryNotes: selectCategoryNotes(),
   notesPaginationOptions: selectNotesPaginationOptions(),
   sources: selectSources(),
+  dispositionTotals: selectDispositionTotals(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -317,6 +344,7 @@ function mapDispatchToProps(dispatch) {
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
     fetchSources: () => dispatch(fetchSources()),
+    getDispositionTotals: searchParams => dispatch(getDispositionTotals(searchParams)),
     clearReportList: () => dispatch(clearReportList()),
   };
 }

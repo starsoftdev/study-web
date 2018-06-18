@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import { createStructuredSelector } from 'reselect';
+import libPhoneNumber from 'google-libphonenumber';
 import * as Selector from '../selectors';
 import { getMomentFromDate } from '../../../utils/time';
 import ReactSelect from '../../../components/Input/ReactSelect';
@@ -17,6 +18,8 @@ import validator from './validator';
 import { setScheduledFormInitialized } from '../actions';
 import { selectCurrentUser, selectSites } from '../../App/selectors';
 import { translate } from '../../../../common/utilities/localization';
+const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
+const PNT = libPhoneNumber.PhoneNumberType;
 
 const fieldName = 'ScheduledPatientModal';
 
@@ -81,15 +84,18 @@ class ScheduledPatientModal extends React.Component {
     const { currentPatient, currentUser, sites } = nextProps;
     let initialValues = {};
 
-    if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
-        currentPatient.appointments && currentPatient.appointments.length > 0) {
-      const { time, textReminder } = currentPatient.appointments[0];
+    if (currentPatient && currentUser) {
       const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
       if (currentUser.roleForClient.isAdmin) {
         this.timezone = patientSite ? patientSite.timezone : currentUser.timezone;
       } else {
         this.timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
       }
+    }
+
+    if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
+        currentPatient.appointments && currentPatient.appointments.length > 0) {
+      const { time, textReminder } = currentPatient.appointments[0];
       initialValues = {
         ...getTimeComponents(time, this.timezone),
         textReminder,
@@ -118,13 +124,20 @@ class ScheduledPatientModal extends React.Component {
     this.props.handleDateChange(chosenDate);
   }
 
-
   render() {
     const { onHide, currentPatient, show, handleSubmit, submittingSchedule } = this.props;
 
     if (currentPatient) {
-      const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
+      const calendarDate = this.state.date ? new Date(this.state.date.toDate().setHours(0, 0, 0)) : this.state.date;
+      let reminderDisabled = false;
+      if (currentPatient.phone) {
+        const number = phoneUtil.parseAndKeepRawInput(currentPatient.phone, '');
+        const numberType = phoneUtil.getNumberType(number);
 
+        if (numberType === PNT.FIXED_LINE || numberType === PNT.UNKNOWN) {
+          reminderDisabled = true;
+        }
+      }
       return (
         <Modal
           className="datepicker-modal scheduled-patient-modal"
@@ -218,6 +231,7 @@ class ScheduledPatientModal extends React.Component {
                       name="textReminder"
                       type="checkbox"
                       component={Checkbox}
+                      disabled={reminderDisabled}
                       className="reminder-container"
                     />
                     <label className="reminder-label">{translate('client.component.scheduledPatientModal.textReminder')}</label>
