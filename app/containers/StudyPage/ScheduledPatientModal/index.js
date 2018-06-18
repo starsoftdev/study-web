@@ -128,7 +128,7 @@ class ScheduledPatientModal extends React.Component {
     const { onHide, currentPatient, show, handleSubmit, submittingSchedule } = this.props;
 
     if (currentPatient) {
-      const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
+      const calendarDate = this.state.date ? new Date(this.state.date.toDate().setHours(0, 0, 0)) : this.state.date;
       let reminderDisabled = false;
       if (currentPatient.phone) {
         const number = phoneUtil.parseAndKeepRawInput(currentPatient.phone, '');
