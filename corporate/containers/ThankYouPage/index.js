@@ -72,6 +72,9 @@ export class ThankYouPage extends React.Component {
   }
 
   componentWillReceiveProps(newProp) {
+    if (newProp.cnsSubmitProcess.submitting) {
+      this.setState({ isCnsSubmitted : false });
+    }
     if (this.props.cnsSubmitProcess.submitting && !newProp.cnsSubmitProcess.submitting) {
       this.setState({ isCnsSubmitted : true });
     }
@@ -154,7 +157,7 @@ export class ThankYouPage extends React.Component {
             },
           ]}
         />
-        {!this.state.isCnsSubmitted &&
+        {(!this.state.isCnsSubmitted || this.props.cnsSubmitProcess.error) &&
           <AppointmentForm
             onSubmit={this.submitAppointment}
             dates={dates}
@@ -166,7 +169,7 @@ export class ThankYouPage extends React.Component {
                   <br />
                   {(this.props.cnsInfo.details.city || '') + ' ' + (this.props.cnsInfo.details.state || '') + ' ' + (this.props.cnsInfo.details.zip || '')}
                 </address>
-                { (!this.props.cnsInfo.details.site_address && !this.props.cnsInfo.details.site_address2) && <div><LoadingSpinner showOnlyIcon /></div>}
+                { (this.props.cnsInfo.fetching) && <div><LoadingSpinner showOnlyIcon /></div>}
               </div>
             }
             header={<div className="text-center"><div className="appointment-header-first">Just one more step, {this.state.subscribedFromLanding.firstName}!</div><div className="appointment-header-second">Pick a date and time for your free consultation at CNS Healthcare:</div></div>}
@@ -174,7 +177,7 @@ export class ThankYouPage extends React.Component {
           />
         }
 
-        {this.state.isCnsSubmitted &&
+        {this.state.isCnsSubmitted && !this.props.cnsSubmitProcess.error &&
           <div className="container">
             <section className="thanks-section text-center">
               <h1 className="main-heading small-font">

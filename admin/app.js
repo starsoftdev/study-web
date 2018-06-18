@@ -72,11 +72,6 @@ const render = () => {
   );
 };
 
-
-if (SENTRY_DSN) {
-  Raven.config(SENTRY_DSN).install();
-}
-
 render();
 
 // Install ServiceWorker and AppCache in the end since

@@ -27,12 +27,30 @@ function ReactSelect({
   clearValueText,
   clearable,
   mobileEnabled,
+  sort,
   ...rest
 }) {
   const hasError = touched && error && !active;
   const optionsToRender = options.map(o => (
     { ...o, value: (o.value || o.id), label: (o.label || o.name) }
   ));
+  if (sort && sort === 'alphabetically') {
+    optionsToRender.sort((a, b) => {
+      let textA = a.label;
+      let textB = b.label;
+      let returnValue = 0;
+      if (typeof a.label === 'string' && typeof b.label === 'string') {
+        textA = a.label.toUpperCase();
+        textB = b.label.toUpperCase();
+      }
+      if (textA < textB) {
+        returnValue = -1;
+      } else if (textA > textB) {
+        returnValue = 1;
+      }
+      return  returnValue;
+    });
+  }
 
   const tooltip = (
     <Tooltip
@@ -141,6 +159,7 @@ ReactSelect.propTypes = {
   clearValueText: PropTypes.string,
   clearable: PropTypes.bool,
   mobileEnabled: PropTypes.bool,
+  sort: PropTypes.string,
 };
 
 export default ReactSelect;
