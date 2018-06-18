@@ -1367,9 +1367,7 @@ export function* homePageSaga() {
     yield cancel(watcherP);
     /* yield cancel(watcherR); */
     yield cancel(watcherS);
-    if (options.payload.pathname !== '/app') {
-      yield put(clearFilters());
-      yield put(reset('dashboardFilters'));
-    }
+    yield put(clearFilters());
+    yield put(reset('dashboardFilters'));
   }
 }
