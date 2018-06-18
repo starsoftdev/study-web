@@ -22,13 +22,13 @@ import { translate } from '../../../../../common/utilities/localization';
 import validator from './validator';
 import { getMomentFromDate } from '../../../../utils/time';
 
-function getTimeComponents(strTime, timezone) {
-  const localTime = moment(strTime).tz(timezone);
+function getTimeComponents(strTime) {
+  const time = moment(strTime).utc();
 
   return {
-    hour: (((localTime.hour() + 11) % 12) + 1).toString(),
-    minute: localTime.minute().toString(),
-    period: localTime.hour() >= 12 ? 'PM' : 'AM',
+    hour: (((time.hour() + 11) % 12) + 1).toString(),
+    minute: time.minute().toString(),
+    period: time.hour() >= 12 ? 'PM' : 'AM',
   };
 }
 
