@@ -1,13 +1,12 @@
 /*
  * AdminHome
- *
  */
 
 import React, { Component, PropTypes } from 'react';
 import { change, reset, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
+import _ from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
 import ExpandableSection from '../../components/ExpandableSection';
@@ -15,7 +14,9 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies } from './selectors';
+import { selectFilterFormValues, selectStudies, selectPaginationOptions } from './selectors';
+import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters } from './actions';
+
 const formName = 'adminDashboardFilters';
 
 @reduxForm({
@@ -28,6 +29,11 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     resetForm: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
     studies: PropTypes.object,
+    totals: PropTypes.object,
+    fetchStudiesForAdmin: PropTypes.func,
+    fetchTotalsForAdmin: PropTypes.func,
+    clearFilters: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -35,120 +41,104 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
     this.state = {
       modalOpen: false,
-      customFilters: [],
+      prevOffset: null,
+      prevTotalsFilters: null,
     };
 
-    this.addFilter = this.addFilter.bind(this);
-    this.updateFilters = this.updateFilters.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
-    this.removeFilter = this.removeFilter.bind(this);
-    this.mapFilterValues = this.mapFilterValues.bind(this);
+    this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
   }
 
-  addFilter(options) {
-    const { customFilters } = this.state;
-    if (customFilters.length === 0) {
-      const newOptions = {
-        ...options,
-        onClose: () => this.removeFilter({ name: 'search' }),
-      };
-      customFilters.push(newOptions);
-      this.setState({ customFilters });
+  componentDidMount() {
+    this.fetchStudiesAccordingToFilters(null, null, true, null);
+  }
+
+  fetchStudiesAccordingToFilters(value, key, fetchByScroll, otherFiltersFormValues) {
+    const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, filtersFormValues } = this.props;
+    const { prevTotalsFilters, prevOffset } = this.state;
+    let filters = otherFiltersFormValues || _.cloneDeep(filtersFormValues);
+
+    if ((value && key) || (key === 'campaign') || (key === 'source')) {
+      const newFilterValues = _.cloneDeep(value);
+      filters = { ...filters, [key]:newFilterValues };
     }
-  }
 
-  updateFilters(key, value) {
-    this.props.change('adminDashboardFilters', key, value);
-  }
+    let isEmpty = true;
 
-  clearFilters() {
-    const { resetForm } = this.props;
-    this.setState({
-      customFilters: [],
-    });
-    resetForm();
-  }
-
-  removeFilter(filter) {
-    const { customFilters } = this.state;
-    const { change, filtersFormValues } = this.props;
-    const filters = cloneDeep(filtersFormValues);
-
-    if (filter.type === 'search') {
-      pullAt(customFilters, findIndex(customFilters, filter));
-      this.setState({ customFilters });
-
-      change('adminDashboardFilters', 'search', []);
-    } else if (filters[filter.name]) {
-      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
-      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
-
-      change('adminDashboardFilters', filter.name, filters[filter.name]);
-    }
-  }
-ç
-mapFilterValues(filters) {
-  const newFilters = [];
-  mapKeys(filters, (filterValues, key) => {
-    if (key !== 'campaign' && key !== 'search') {
-      filterValues.forEach(v => {
-        if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
-          newFilters.push({
-            name: key,
-            type: 'value',
-            value: v.label,
-          });
-        }
-      });
-    }
-  });
-  return newFilters;
-}
-
-render() {
-  const { customFilters } = this.state;
-  const { resetForm, change, filtersFormValues, studies } = this.props;
-
-  const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
-  return (
-    <div id="adminHomePage" className="admin-dashboard">
-      <div className="fixed-header clearfix">
-        <h1 className="main-heading pull-left">Admin portal</h1>
-        <FiltersPageForm
-          change={change}
-          resetForm={resetForm}
-          updateFilters={this.updateFilters}
-          addFilter={this.addFilter}
-          filtersFormValues={filtersFormValues}
-        />
-      </div>
-      {(filters.length > 0) &&
-          <FilterQueryForm
-            clearFilters={this.clearFilters}
-            filters={filters}
-            removeFilter={this.removeFilter}
-            resetForm={resetForm}
-          />
+    _.forEach(filters, (filter, k) => {
+      const initFilter = _.cloneDeep(filter);
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'nearbyStudies' && k !== 'address') {
+        const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
+        filters[k] = withoutAll;
       }
-      <StatsBox />
-      <div id="mediaStatsBox">
-        <ExpandableSection content={<MediaStatsTable />} />
+
+      if (!_.isEmpty(initFilter)) {
+        isEmpty = false;
+      }
+    });
+
+    let offset = 0;
+    const limit = 50;
+
+    if (fetchByScroll) {
+      offset = paginationOptions.page * limit;
+    }
+
+    if (filters.source === -1) {
+      change('dashboardFilters', 'source', null);
+      delete filters.source;
+    }
+
+    if (isEmpty) {
+      clearFilters();
+    } else if (_.isEqual(prevTotalsFilters, filters)) {
+      if (prevOffset !== offset || _.isEmpty(totals.details)) {
+        fetchStudiesForAdmin(filters, limit, offset);
+        fetchTotalsForAdmin(filters, limit, offset);
+        this.setState({ prevOffset: offset });
+      }
+    } else {
+      this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
+      fetchStudiesForAdmin(filters, limit, offset);
+      fetchTotalsForAdmin(filters, limit, offset);
+      this.setState({ prevOffset: offset });
+    }
+  }
+
+  render() {
+    const { resetForm, studies } = this.props;
+
+    return (
+      <div id="adminHomePage" className="admin-dashboard">
+        <div className="fixed-header clearfix">
+          <h1 className="main-heading pull-left">Admin portal</h1>
+          <FiltersPageForm />
+        </div>
+        <FilterQueryForm
+          resetForm={resetForm}
+        />
+        <StatsBox />
+        <div id="mediaStatsBox">
+          <ExpandableSection content={<MediaStatsTable />} />
+        </div>
+        <StudyInfo studies={studies} />
       </div>
-      <StudyInfo studies={studies} />
-    </div>
-  );
-}
+    );
+  }
 }
 
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
+  paginationOptions: selectPaginationOptions(),
   studies: selectStudies(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   resetForm: () => dispatch(reset(formName)),
+  fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
+  fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
+  clearFilters: () => dispatch(clearFilters()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);

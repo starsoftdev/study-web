@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
 
-const selectAdminHomeDomain = () => state => state;
+const selectAdminHomeDomain = () => state => state.adminHomePage;
 const selectFormDomain = () => state => state.form;
 
 const selectAdminHomePage = () => createSelector(
@@ -19,8 +19,20 @@ const selectStudies = () => createSelector(
   substate => substate.studies
 );
 
+const selectCustomFilters = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.customFilters
+);
+
+const selectPaginationOptions = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.paginationOptions
+);
+
 export default selectAdminHomePage;
 export {
   selectFilterFormValues,
   selectStudies,
+  selectCustomFilters,
+  selectPaginationOptions,
 };
