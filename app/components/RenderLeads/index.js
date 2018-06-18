@@ -62,10 +62,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
   }
 
   deleteMediaType(studySource, index) {
-    const { deleteMediaType } = this.props;
-    console.log(studySource);
-    console.log(index);
-    deleteMediaType(studySource.studyId, studySource.id, index);
+    const { deleteMediaType, formValues } = this.props;
+    const mediaType = formValues.mediaType[index];
+    // delete the media type from the form reducer and check whether it's valid to remove it
+    deleteMediaType(mediaType.studyId, mediaType.studySourceId, index);
     // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
     // fields.remove(index);
   }
