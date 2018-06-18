@@ -25,7 +25,7 @@ import formValidator from './validator';
 import { fetchMessagingNumbersDashboard, editMediaTypes } from '../../containers/HomePage/AdminDashboard/actions';
 import { deleteMediaType } from '../../components/CallTrackingPageModal/actions';
 
-const formName = 'callTrackingPageForm';
+const formName = 'MediaTrackingForm';
 
 @reduxForm({
   form: formName,
