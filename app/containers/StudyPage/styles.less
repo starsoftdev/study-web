@@ -835,6 +835,7 @@
     bottom: auto;
     overflow: hidden;
     position: relative;
+    background: #fff;
     border: #f78e1e solid 2px;
     li.active, li {
       float: left;
@@ -1393,6 +1394,20 @@
   }
   .reminder-container {
     display: inline-block;
+
+    .jcf-checkbox[disabled] {
+      cursor: not-allowed;
+      background: lightgray;
+
+      span[disabled] {
+        cursor: not-allowed;
+        border: 2px solid #838383;
+
+        &:before {
+          cursor: not-allowed;
+        }
+      }
+    }
   }
   .reminder-label {
     vertical-align: middle;
