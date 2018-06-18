@@ -2,5 +2,12 @@
     "locales": {
         "DEFAULT": "en-us",
         "SUPPORTED": ["en-us"]
+    },
+    "disposition": {
+        "NONE": 0,
+        "PRESCREENED": 1,
+        "DNQ": 2,
+        "NI": 3,
+        "CNC": 4
     }
 }

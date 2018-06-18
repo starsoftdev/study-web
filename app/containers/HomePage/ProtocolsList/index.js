@@ -12,7 +12,7 @@ import ProtocolItem from './ProtocolItem';
 import {
   selectSocket,
 } from '../../../containers/GlobalNotifications/selectors';
-import pqsImage from '../../../assets/images/pqs.png';
+import pqsImage from '../../../assets/images/pqs2.png';
 import { translate } from '../../../../common/utilities/localization';
 
 class ProtocolsList extends Component { // eslint-disable-line react/prefer-stateless-function

@@ -104,14 +104,12 @@ export default class AddPatientForm extends React.Component {
   }
 
   changeSiteLocation(siteId) {
+    const { change, currentUser, fetchFilteredProtcols } = this.props;
+    change('protocol', null);
+    change('source', null);
     this.setState({ siteLocation: siteId });
     if (siteId) {
-      const { currentUser, fetchFilteredProtcols } = this.props;
       fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
-    } else {
-      const { change } = this.props;
-      // clear the protocol value if there is no site id
-      change('protocol', null);
     }
   }
 
@@ -147,7 +145,7 @@ export default class AddPatientForm extends React.Component {
   selectProtocol(studyId) {
     this.setState({ selectedStudyId: studyId });
     const { protocols, change, switchShowAddProtocolModal, fetchStudySources } = this.props;
-
+    change('source', null);
     if (studyId === 'add-new-protocol') {
       change('protocol', null);
       change('indication', null);
