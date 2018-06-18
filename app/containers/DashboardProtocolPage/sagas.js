@@ -8,6 +8,7 @@ import {
   FETCH_PROTOCOL,
   ADD_PROTOCOL,
   EDIT_PROTOCOL,
+  UPLOAD_FILE,
   DELETE_PROTOCOL,
 } from './constants';
 
@@ -18,6 +19,8 @@ import {
   addProtocolError,
   editProtocolSuccess,
   editProtocolError,
+  uploadFileSuccess,
+  uploadFileError,
   deleteProtocolSuccess,
   deleteProtocolError,
 } from './actions';
@@ -27,6 +30,7 @@ export function* dashboardProtocolSaga() {
   const watcherB = yield fork(addProtocolWatcher);
   const watcherC = yield fork(editProtocolWatcher);
   const watcherD = yield fork(deleteProtocolWatcher);
+  const watcherE = yield fork(uploadFileWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -34,6 +38,7 @@ export function* dashboardProtocolSaga() {
   yield cancel(watcherB);
   yield cancel(watcherC);
   yield cancel(watcherD);
+  yield cancel(watcherE);
 }
 
 export function* fetchProtocolWatcher() {
@@ -112,6 +117,33 @@ export function* editProtocolWorker(action) {
     const errorMessage = get(err, 'message', 'Something went wrong while saving protocols');
     toastr.error('', errorMessage);
     yield put(editProtocolError(err));
+  }
+}
+
+export function* uploadFileWatcher() {
+  yield* takeLatest(UPLOAD_FILE, uploadFileWorker);
+}
+
+export function* uploadFileWorker(action) {
+  const { payload } = action;
+
+  try {
+    const requestURL = `${API_URL}/protocols/${action.payload.id}`;
+    const data = new FormData();
+    data.append('file', payload.file);
+
+    const options = {
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
+    };
+
+    const response = yield call(request, requestURL, options);
+    toastr.success('', 'Success! File uploaded Successfully.');
+    yield put(uploadFileSuccess(response));
+  } catch (err) {
+    toastr.error('', 'Error! Unable to upload File.');
+    yield put(uploadFileError(err));
   }
 }
 
