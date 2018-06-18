@@ -68,7 +68,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
 
     const sm = item.sm_user_first_name ? `AO: ${item.sm_user_first_name} ${item.sm_user_last_name}` : 'AO: N/A';
     const bd = item.bd_user_first_name ? `BD: ${item.bd_user_first_name} ${item.bd_user_last_name}` : 'BD: N/A';
-    const ae = item.ae_user_first_name ? `CC: ${item.ae_user_first_name} ${item.ae_user_last_name}` : 'CC: N/A';
+    const cc = item.cc_user_first_name ? `CC: ${item.cc_user_first_name} ${item.cc_user_last_name}` : 'CC: N/A';
 
     // campaign_datefrom and campaign_dateto can be null, if it set to TBD
     const campaignDateFrom = moment(item.campaign_datefrom).tz(item.timezone);
@@ -129,7 +129,7 @@ class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stat
             <li><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
             <li><span>{maxLength(sm, 15)}</span></li>
             <li><span>{maxLength(bd, 15)}</span></li>
-            <li><span>{maxLength(ae, 15)}</span></li>
+            <li><span>{maxLength(cc, 15)}</span></li>
             <li><span className={`color ${item.color || ''}`}>{`${item.color ? item.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
         </td>

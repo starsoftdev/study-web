@@ -127,6 +127,8 @@ import {
   PRIVACY_REQUEST_SUCCESS,
   RESET_PRIVACY_REQUEST_SUCCESS,
 
+  GET_CNS_INFO,
+  GET_CNS_INFO_ERROR,
   GET_CNS_INFO_SUCCESS,
   SUBMIT_CNS,
   SUBMIT_CNS_SUCCESS,
@@ -928,6 +930,24 @@ export default function appReducer(state = initialState, action) {
             emailsSent: state.baseData.patientMessages.stats.emailsSent || 0,
             unreadTexts: (state.baseData.patientMessages.stats.unreadTexts - unreadCount) || 0,
           },
+        },
+      };
+      break;
+    case GET_CNS_INFO:
+      baseDataInnerState = {
+        cnsInfo: {
+          details: state.baseData.cnsInfo.details,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case GET_CNS_INFO_ERROR:
+      baseDataInnerState = {
+        cnsInfo: {
+          details: {},
+          fetching: false,
+          error: action.payload,
         },
       };
       break;
