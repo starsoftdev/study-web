@@ -15,6 +15,9 @@ import {
   EDIT_PROTOCOL,
   EDIT_PROTOCOL_SUCCESS,
   EDIT_PROTOCOL_ERROR,
+  UPLOAD_FILE,
+  UPLOAD_FILE_SUCCESS,
+  UPLOAD_FILE_ERROR,
   DELETE_PROTOCOL,
   DELETE_PROTOCOL_SUCCESS,
   DELETE_PROTOCOL_ERROR,
@@ -31,6 +34,7 @@ const initialState = {
   editProtocolProcess: {
     saving: false,
     deleting: false,
+    uploading: false,
     error: null,
   },
   paginationOptions: {
@@ -93,6 +97,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: true,
           deleting: false,
+          uploading: false,
           error: null,
         },
       };
@@ -108,6 +113,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
           error: null,
         },
       };
@@ -117,6 +123,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
           error: action.payload,
         },
       };
@@ -126,13 +133,14 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: true,
           deleting: false,
+          uploading: false,
           error: null,
         },
       };
     case EDIT_PROTOCOL_SUCCESS:
       foundUserIndex = _.findIndex(newProtocols, item => (item.id === action.payload.id));
       if (foundUserIndex !== -1) {
-        newProtocols.splice(foundUserIndex, 1, action.payload);
+        newProtocols[foundUserIndex].number = action.payload.number;
       }
 
       console.log('edit', action.payload, foundUserIndex);
@@ -146,6 +154,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
           error: null,
         },
       };
@@ -155,6 +164,48 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
+          error: action.payload,
+        },
+      };
+    case UPLOAD_FILE:
+      return {
+        ...state,
+        editProtocolProcess: {
+          saving: false,
+          uploading: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case UPLOAD_FILE_SUCCESS:
+      foundUserIndex = _.findIndex(newProtocols, item => (item.id === action.payload.id));
+      if (foundUserIndex !== -1) {
+        newProtocols[foundUserIndex].orgfilename = action.payload.orgFilename;
+        newProtocols[foundUserIndex].filename = action.payload.filename;
+      }
+
+      return {
+        ...state,
+        protocol: {
+          details: newProtocols,
+          fetching: false,
+          error: action.payload,
+        },
+        editProtocolProcess: {
+          saving: false,
+          deleting: false,
+          uploading: false,
+          error: null,
+        },
+      };
+    case UPLOAD_FILE_ERROR:
+      return {
+        ...state,
+        editProtocolProcess: {
+          saving: false,
+          deleting: false,
+          uploading: false,
           error: action.payload,
         },
       };
@@ -164,6 +215,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: true,
+          uploading: false,
           error: null,
         },
       };
@@ -182,6 +234,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
           error: null,
         },
       };
@@ -191,6 +244,7 @@ function dashboardProtocolPageReducer(state = initialState, action) {
         editProtocolProcess: {
           saving: false,
           deleting: false,
+          uploading: false,
           error: action.payload,
         },
       };

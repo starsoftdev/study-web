@@ -66,19 +66,19 @@ class CalendarWidget extends React.Component {
     const { currentUser, currentSite, schedules, sites } = this.props;
     const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
     const eventsList = schedules.map(s => {
-      const localTime = s.time;
+      const time = moment(s.utcTime).utc();
       const browserTime = moment()
-        .year(localTime.year())
-        .month(localTime.month())
-        .date(localTime.date())
-        .hour(localTime.hour())
-        .minute(localTime.minute())
+        .year(time.year())
+        .month(time.month())
+        .date(time.date())
+        .hour(time.hour())
+        .minute(time.minute())
         .seconds(0);
       const site = _.find(sites, item => item.id === s.site_id);
       const timezone = site ? site.timezone : calendarTimezone;
       return {
         data: s,
-        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${moment.tz(localTime, timezone).format(translate('portals.component.calendarPage.calendarWidget.patientDateMask'))}`,
+        title: `${s.patient.firstName} ${s.patient.lastName || ''} ${time.format(translate('portals.component.calendarPage.calendarWidget.patientDateMask'))} (${moment.tz(timezone).format('z')})`,
         start: browserTime,
         end: browserTime,
       };
