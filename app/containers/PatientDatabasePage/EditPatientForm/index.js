@@ -156,13 +156,11 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
   }
 
   changeSiteLocation(siteId) {
+    const { currentUser, fetchFilteredProtcols, change } = this.props;
+    change('protocol', null);
+    change('source', null);
     if (siteId) {
-      const { currentUser, fetchFilteredProtcols } = this.props;
       fetchFilteredProtcols(currentUser.roleForClient.id, siteId);
-    } else {
-      const { change } = this.props;
-      // clear the protocol value if there is no site id
-      change('protocol', null);
     }
   }
 
@@ -170,6 +168,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
     if (studyId) {
       const { change, fetchStudySources, formValues, indications, protocols, addPatientIndication, updatePatientIndication } = this.props;
       // fetch the study sources for the sources dropdown
+      change('source', null);
       fetchStudySources(studyId);
       const protocol = _.find(protocols, { studyId });
       const indicationInList = _.find(formValues.indications, { id: protocol.indicationId });
@@ -199,6 +198,7 @@ class EditPatientForm extends Component { // eslint-disable-line react/prefer-st
       }
     } else {
       const { clearStudySources } = this.props;
+      change('source', null);
       clearStudySources();
     }
   }
