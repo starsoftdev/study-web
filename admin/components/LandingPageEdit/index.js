@@ -172,7 +172,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>Full Name:</label>
+              <label>* Full Name:</label>
             </strong>
             <div className="field">
               <Field
@@ -186,7 +186,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>Email:</label>
+              <label>* Email:</label>
             </strong>
             <div className="field">
               <Field
@@ -199,7 +199,7 @@ export default class LandingPageEdit extends React.Component { // eslint-disable
           </div>
           <div className="field-row">
             <strong className="label">
-              <label>Mobile Phone:</label>
+              <label>* Mobile Phone:</label>
             </strong>
             <div className="field">
               <Field
