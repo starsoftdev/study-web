@@ -107,7 +107,7 @@ export class FilterQueryForm extends Component {
             </div>
           </div>
         </StickyContainer>
-      )
+      );
     } else {
       return null;
     }
