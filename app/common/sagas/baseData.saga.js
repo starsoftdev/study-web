@@ -1,12 +1,12 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import {take, call, put, fork, select, cancel} from 'redux-saga/effects';
+import { take, call, put, fork, select, cancel } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
 import moment from 'moment-timezone';
-import {LOCATION_CHANGE, push} from 'react-router-redux';
+import { LOCATION_CHANGE, push } from 'react-router-redux';
 
 import { removeItem, setItem } from '../../utils/localStorage';
 import request from '../../utils/request';
@@ -240,7 +240,7 @@ export default function* baseDataSaga() {
   }
 
   // Suspend execution until location changes
-  const options = yield take(LOCATION_CHANGE)
+  const options = yield take(LOCATION_CHANGE);
   if (options.payload.pathname !== '/app') {
     if (deleteMediaTypesWatcher) {
       yield cancel(deleteMediaTypesWatcher);
