@@ -21,6 +21,9 @@ import {
   GET_CATEGORY_NOTES_SUCCESS,
   GET_CATEGORY_NOTES_ERROR,
   CLEAR_REPORT_LIST,
+  FETCH_DISPOSITION_TOTALS,
+  FETCH_DISPOSITION_TOTALS_SUCCESS,
+  FETCH_DISPOSITION_TOTALS_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
@@ -145,5 +148,29 @@ export function getCategoryNotesError(payload) {
 export function clearReportList() {
   return {
     type: CLEAR_REPORT_LIST,
+  };
+}
+
+// ///////////////////////////////////////////
+// disposition
+// ///////////////////////////////////////////
+export function getDispositionTotals(searchParams) {
+  return {
+    type: FETCH_DISPOSITION_TOTALS,
+    searchParams,
+  };
+}
+
+export function getDispositionTotalsSuccess(payload) {
+  return {
+    type: FETCH_DISPOSITION_TOTALS_SUCCESS,
+    payload,
+  };
+}
+
+export function getDispositionTotalsError(payload) {
+  return {
+    type: FETCH_DISPOSITION_TOTALS_ERROR,
+    payload,
   };
 }

@@ -133,8 +133,8 @@ export class ReportViewSearch extends React.Component {
     if (!endDate.isAfter(startDate)) {
       endDate = endDate.add(1, 'days');
     }
-    const uiStartDate = startDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
-    const uiEndDate = endDate.format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
+    const uiStartDate = startDate.clone().format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
+    const uiEndDate = endDate.clone().format(translate('sponsor.component.reportViewSearch.defaultDateMask'));
 
     // TODO make this aspect more robust, since this is going to get passed to the API without any transformations
     this.props.dispatch(change('searchReports', 'startDate', startDate.toISOString()));
