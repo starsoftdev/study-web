@@ -485,7 +485,7 @@ export class ListYourTrialsPage extends React.Component { // eslint-disable-line
                       <img src={diamond6} width="70" alt="package description" className="img6" />
                     </div>
                     <h2>{translate('corporate.page.trials.levelBronze')}</h2>
-                    <p>{translate('corporate.page.trials.postsCount', { count: 1 })}</p>
+                    <p>{translate('corporate.page.trials.postCount', { count: 1 })}</p>
                     <strong className="price" dangerouslySetInnerHTML={{ __html: translate('corporate.page.trials.price', { price: 97 }) }} />
                     <div className="btn-block text-center">
                       <span className="btn-default btn" onClick={this.toggleListNow}>{translate('corporate.page.trials.listNowButton')}</span>

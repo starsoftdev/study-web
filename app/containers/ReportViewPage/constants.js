@@ -28,3 +28,7 @@ export const CLEAR_REPORT_LIST = 'app/ReportViewPage/CLEAR_REPORT_LIST';
 export const STATUS_ALL = 'All';
 export const STATUS_ACTIVE = 'active';
 export const STATUS_INACTIVE = 'inactive';
+
+export const FETCH_DISPOSITION_TOTALS = 'app/ReportViewPage/FETCH_DISPOSITION_TOTALS';
+export const FETCH_DISPOSITION_TOTALS_SUCCESS = 'app/ReportViewPage/FETCH_DISPOSITION_TOTALS_SUCCESS';
+export const FETCH_DISPOSITION_TOTALS_ERROR = 'app/ReportViewPage/FETCH_DISPOSITION_TOTALS_ERROR';
