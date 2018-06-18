@@ -992,7 +992,7 @@
     "portals.component.calendarPage.filterBar.protocolPlaceholder": "Select Protocol",
     "portals.component.calendarPage.filterBar.all": "All",
 
-    "portals.component.calendarPage.calendarWidget.patientDateMask": "h:mm A (z)",
+    "portals.component.calendarPage.calendarWidget.patientDateMask": "h:mm A",
     "portals.component.calendarPage.calendarWidget.scheduledPatientsColumn": "SCHEDULED <br /> PATIENTS",
     "portals.component.calendarPage.calendarWidget.totalText": "Total",
     "portals.component.calendarPage.calendarWidget.nMore": "+ ${total} more",
