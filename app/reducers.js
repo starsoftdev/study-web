@@ -36,7 +36,7 @@ export default function createReducer(asyncReducers) {
       'StudyPage.TextBlastModal': textBlastModalReducer,
       rewardForm,
       'UploadPatients.UploadPatientsForm': uploadPatientsReducer,
-      'Dashboard.MediaTrackingForm': mediaTrackingReducer,
+      MediaTrackingForm: mediaTrackingReducer,
     }),
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
