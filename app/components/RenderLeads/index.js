@@ -91,11 +91,11 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           const showName = formValues.mediaType && formValues.mediaType.length > index && typeof formValues.mediaType[index].source !== 'undefined' && formValues.mediaType[index].source;
           let landingHref = null;
           let googleHref = null;
-          let initObject = null;
+          let mediaTypeObject = null;
           let patientsExists = false;
 
           if (initialMediaTypes && initialMediaTypes.length > 0) {
-            initObject = _.find(initialMediaTypes, (o) => {
+            mediaTypeObject = _.find(initialMediaTypes, (o) => {
               if (formValues.mediaType && formValues.mediaType[index]) {
                 return (o.studySourceId === formValues.mediaType[index].studySourceId);
               } else {
@@ -104,7 +104,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
             });
           }
 
-          if (initObject && initObject.patientsCount > 0) {
+          if (mediaTypeObject && mediaTypeObject.patientsCount > 0) {
             patientsExists = true;
           }
 
@@ -115,13 +115,13 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               label: item.phone_number,
             }));
 
-            if (initObject && initObject.messagingNumber) {
-              messagingNumbersOptions.unshift(initObject.messagingNumber);
+            if (mediaTypeObject && mediaTypeObject.messagingNumber) {
+              messagingNumbersOptions.unshift(mediaTypeObject.messagingNumber);
             }
 
-            if (initObject && initObject.url && formValues.mediaType && formValues.mediaType[index]) {
-              landingHref = initObject.url ? `/${formValues.mediaType[index].studyId}-${formValues.mediaType[index].landingPageUrl}?utm=${formValues.mediaType[index].url}` : '';
-              googleHref = initObject.googleUrl ? initObject.googleUrl : '';
+            if (mediaTypeObject && mediaTypeObject.url && formValues.mediaType && formValues.mediaType[index]) {
+              landingHref = mediaTypeObject.url ? `/${formValues.mediaType[index].studyId}-${formValues.mediaType[index].landingPageUrl}?utm=${formValues.mediaType[index].url}` : '';
+              googleHref = mediaTypeObject.googleUrl ? mediaTypeObject.googleUrl : '';
             }
           }
 
@@ -154,7 +154,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                     <span
                       className="delete-source-type icomoon-icon_trash"
                       onClick={() => {
-                        this.deleteMediaType(initObject, index);
+                        this.deleteMediaType(mediaTypeObject, index);
                       }}
                     />
                   )
