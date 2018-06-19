@@ -24,7 +24,7 @@ import formValidator from './validator';
 import { translate } from '../../../common/utilities/localization';
 
 const mapStateToProps = createStructuredSelector({
-  callTracking: selectCallTracking(),
+  mediaTracking: selectCallTracking(),
   mediaTypesCount: selectLeadsCount(),
 });
 
@@ -36,7 +36,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
     siteLocations: PropTypes.array,
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
-    callTracking: PropTypes.bool,
+    mediaTracking: PropTypes.bool,
     mediaTypesCount: PropTypes.number,
     formValues: PropTypes.object,
     currentUser: PropTypes.object,
@@ -48,9 +48,9 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
   }
 
   componentWillReceiveProps(newProps) {
-    // If media types are all removed, set `callTracking` value to false
+    // If media types are all removed, set `mediaTracking` value to false
     if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
-      this.props.dispatch(change('requestProposal', 'callTracking', false));
+      this.props.dispatch(change('requestProposal', 'mediaTracking', false));
     }
 
     let messagingSuiteToggled = false;
@@ -256,7 +256,7 @@ class RequestProposalForm extends Component { // eslint-disable-line react/prefe
               <div className="field-row">
                 <strong className="label"><label>{translate('portals.component.requestProposalForm.mediaTrackingLabel')} $247</label></strong>
                 <Field
-                  name="callTracking"
+                  name="mediaTracking"
                   component={Toggle}
                   className="field"
                 />

@@ -37,7 +37,7 @@ const selectUpgradeStudyFormPatientMessagingSuiteValue = () => createSelector(
 
 const selectUpgradeStudyFormCallTrackingValue = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'upgradeStudy.values.callTracking', null)
+  substate => get(substate, 'upgradeStudy.values.mediaTracking', null)
 );
 
 const selectUpgradeStudyFormNotesValue = () => createSelector(

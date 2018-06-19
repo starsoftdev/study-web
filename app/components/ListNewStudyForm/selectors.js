@@ -34,11 +34,11 @@ const selectGetListNewStudyFormErrors = () => createSelector(
 );
 
 /**
- * ListNewStudyForm -> `callTracking`
+ * ListNewStudyForm -> `mediaTracking`
  */
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'listNewStudy.values.callTracking')
+  (substate) => get(substate, 'listNewStudy.values.mediaTracking')
 );
 
 /**

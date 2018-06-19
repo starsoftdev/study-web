@@ -1,10 +1,10 @@
 export default values => {
   const errors = {};
   const mediaTypeErrors = [];
-  if (!values.level && !values.addPatientQualificationSuite && !values.callTracking) {
+  if (!values.level && !values.addPatientQualificationSuite && !values.mediaTracking) {
     errors.level = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
     errors.addPatientQualificationSuite = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
-    errors.callTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
+    errors.mediaTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
   }
   if (values.startDate) {
     if (!values.level) {
@@ -15,7 +15,7 @@ export default values => {
     }
   }
 
-  if (values.callTracking && values.mediaType) {
+  if (values.mediaTracking && values.mediaType) {
     values.mediaType.forEach((mediaType, index) => {
       const mediaTypeError = {};
 
