@@ -119,6 +119,7 @@ import {
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
 } from '../../containers/App/constants';
 import {
+  fetchMediaTypes,
   fetchClientSites,
   fetchClientCredits,
   fetchRewardsBalance,
@@ -1251,6 +1252,20 @@ export function* editMediaTypesWorker(action) {
     if (response.success) {
       yield put(editMediaTypesSuccess(action.mediaTypes, action.studyId, action.mediaTracking));
       toastr.success('', 'The request has been submitted successfully.');
+      // fetch the media types to get the new study source ids (if any were created)
+      if (action.mediaTypes.length > 0) {
+        let created = false;
+        for (const mediaType of action.mediaTypes) {
+          if (!mediaType.studySourceId) {
+            // this media type doesn't have a studySourceId, so it is brand new, and needs an API call to get the study source id
+            created = true;
+            break;
+          }
+        }
+        if (created) {
+          yield put(fetchMediaTypes(action.studyId));
+        }
+      }
     } else {
       yield put(editMediaTypesError(response));
     }
