@@ -567,7 +567,7 @@ export function* renewStudyWorker(action) {
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
-      callTracking: formValues.callTracking,
+      mediaTracking: formValues.mediaTracking,
     }));
     onClose();
   } catch (err) {
@@ -604,7 +604,7 @@ export function* upgradeStudyWorker(action) {
     toastr.success(translate('portals.client.component.studiesList.upgradeStudyToastrTitle'), translate('portals.client.component.studiesList.upgradeStudyToastrMessage'));
     response.newLevelId = formValues.level;
     response.studyId = studyId;
-    response.callTracking = formValues.callTracking;
+    response.mediaTracking = formValues.mediaTracking;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
@@ -1244,12 +1244,12 @@ export function* editMediaTypesWorker(action) {
       method: 'POST',
       body: JSON.stringify({
         mediaTypes: action.mediaTypes,
-        callTracking: action.callTracking,
+        mediaTracking: action.mediaTracking,
       }),
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {
-      yield put(editMediaTypesSuccess(action.mediaTypes, action.studyId, action.callTracking));
+      yield put(editMediaTypesSuccess(action.mediaTypes, action.studyId, action.mediaTracking));
       toastr.success('', 'The request has been submitted successfully.');
     } else {
       yield put(editMediaTypesError(response));

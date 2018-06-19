@@ -220,10 +220,6 @@ export default class EditStudyForm extends Component { // eslint-disable-line re
       });
     }
 
-    if (this.props.studyMediaTypes.fetching && !newProps.studyMediaTypes.fetching) {
-      change('mediaType', newProps.studyMediaTypes.details);
-    }
-
     if (newProps.emailNotifications.length > 0 && newProps.emailNotifications !== emailNotifications) {
       change('emailNotifications', newProps.emailNotifications);
     }

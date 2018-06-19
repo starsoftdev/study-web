@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 
 import {
   FETCH_NOTE,
@@ -101,9 +100,6 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
-  FETCH_MEDIA_TYPES,
-  FETCH_MEDIA_TYPES_SUCCESS,
-  FETCH_MEDIA_TYPES_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -216,11 +212,6 @@ const initialState = {
     saving: false,
     error: false,
   },
-  studyMediaTypes: {
-    details: [],
-    fetching: false,
-    error: null,
-  },
   updatedStudyAd: null,
   removedStudyAd: null,
   levels: [],
@@ -241,51 +232,6 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
-
-    case FETCH_MEDIA_TYPES:
-      return {
-        ...state,
-        studyMediaTypes: {
-          details: state.studyMediaTypes.details,
-          fetching: true,
-          error: null,
-        },
-      };
-
-    case FETCH_MEDIA_TYPES_SUCCESS:
-      return {
-        ...state,
-        studyMediaTypes: {
-          details: action.payload.map((item) => {
-            return {
-              source: { value: item.sourceId, label: item.type },
-              sourceName: item.sourceName,
-              studySourceId: item.studySourceId,
-              landingPageId: item.landingPageId,
-              recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
-              messagingNumber: item.phoneNumberId ? { value: item.phoneNumberId, label:item.phoneNumber } : null,
-              googleUrl: item.googleUrl,
-              url: item.url,
-              studyId: item.studyId,
-              landingPageUrl: item.landingPageUrl,
-              patientsCount: parseInt(item.patientsCount),
-            };
-          }),
-          fetching: false,
-          error: null,
-        },
-      };
-
-    case FETCH_MEDIA_TYPES_ERROR:
-      return {
-        ...state,
-        studyMediaTypes: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
-      };
-
     case EDIT_MEDIA_TYPES:
       return {
         ...state,
@@ -300,7 +246,7 @@ export default function dashboardPageReducer(state = initialState, action) {
         if (study.study_id === action.studyId) {
           return {
             ...study,
-            callTracking: action.callTracking,
+            mediaTracking: action.mediaTracking,
           };
         } else {
           return study;
@@ -313,7 +259,7 @@ export default function dashboardPageReducer(state = initialState, action) {
           saving: false,
           error: false,
         },
-        studyMediaTypes: {
+        mediaTypes: {
           details: action.mediaTypes.map((item) => {
             return {
               ...item,

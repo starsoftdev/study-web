@@ -30,7 +30,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     dispatch: PropTypes.func.isRequired,
     studyLevels: PropTypes.array,
     selectedIndicationLevelPrice: PropTypes.object,
-    callTracking: PropTypes.bool,
+    mediaTracking: PropTypes.bool,
     mediaTypesCount: PropTypes.number,
     selectedStudy: PropTypes.object,
     savedCard: PropTypes.object,
@@ -69,7 +69,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
 
   componentWillReceiveProps(newProps) {
     if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
-      this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+      this.props.dispatch(change('upgradeStudy', 'mediaTracking', false));
     }
 
     if (newProps.selectedStudy) {
@@ -91,13 +91,13 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
-      if (newProps.selectedStudy.callTracking) {
-        this.props.dispatch(change('upgradeStudy', 'callTracking', true));
+      if (newProps.selectedStudy.mediaTracking) {
+        this.props.dispatch(change('upgradeStudy', 'mediaTracking', true));
         this.setState({
           isCallTrackingAlreadySet: true,
         });
       } else {
-        this.props.dispatch(change('upgradeStudy', 'callTracking', false));
+        this.props.dispatch(change('upgradeStudy', 'mediaTracking', false));
         this.setState({
           isCallTrackingAlreadySet: false,
         });
@@ -163,7 +163,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   generateUpgradeStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice, selectedStudy, callTracking } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, selectedStudy, mediaTracking } = this.props;
     const { level, patientQualificationSuite } = this.state;
     const addOns = [];
 
@@ -194,7 +194,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
         });
       }
     }
-    if (callTracking && !this.state.isCallTrackingAlreadySet) {
+    if (mediaTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
         title: translate('portals.component.upgradeStudyForm.mediaTracking'),
         price: CALL_TRACKING_PRICE,
@@ -207,7 +207,7 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { studyLevels, selectedIndicationLevelPrice, callTracking, selectedStudy, formValues } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, mediaTracking, selectedStudy, formValues } = this.props;
     let patientQualificationSuite = false;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
 
@@ -341,14 +341,14 @@ class UpgradeStudyForm extends Component { // eslint-disable-line react/prefer-s
                           </strong>
                           <div className="field">
                             <Field
-                              name="callTracking"
+                              name="mediaTracking"
                               component={Toggle}
                               disabled={this.state.isCallTrackingAlreadySet}
                             />
                           </div>
                         </div>
                       }
-                      {(callTracking && !this.state.isCallTrackingAlreadySet) &&
+                      {(mediaTracking && !this.state.isCallTrackingAlreadySet) &&
                         <FieldArray name="mediaType" component={RenderLeads} formValues={formValues} />
                       }
                       <div className="field-row label-top">
@@ -391,7 +391,7 @@ const mapStateToProps = createStructuredSelector({
   clientId: selectCurrentUserClientId(),
   studyLevels: selectStudyLevels(),
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
-  callTracking: selectUpgradeStudyFormCallTrackingValue(),
+  mediaTracking: selectUpgradeStudyFormCallTrackingValue(),
   mediaTypesCount: selectUpgradeStudyFormLeadsCount(),
   savedCard: selectSavedCard(),
 });

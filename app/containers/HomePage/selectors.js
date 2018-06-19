@@ -92,7 +92,7 @@ const selectSearchProtocolsFormValues = () => createSelector(
 
 const selectMediaTypes = () => createSelector(
   selectHomePageDomain(),
-  (substate) => substate.studyMediaTypes
+  (substate) => substate.mediaTypes
 );
 
 
