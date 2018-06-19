@@ -304,7 +304,7 @@ export default function homePageReducer(state = initialState, action) {
         );
 
         studiesCollection[index].latestDateTo = latestDateTo.format();
-        studiesCollection[index].callTracking = payload.callTracking;
+        studiesCollection[index].mediaTracking = payload.mediaTracking;
       }
 
       return {
@@ -514,7 +514,7 @@ export default function homePageReducer(state = initialState, action) {
       const study = _.find(studies, (o) => (o.studyId === payload.studyId));
       study.level_id = payload.newLevelId;
       study.patientQualificationSuite = payload.patientQualificationSuite;
-      study.callTracking = payload.callTracking;
+      study.mediaTracking = payload.mediaTracking;
       return {
         ...state,
         studies: {
@@ -703,7 +703,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_MEDIA_TYPES:
       return {
         ...state,
-        studyMediaTypes: {
+        mediaTypes: {
           details: state.studyMediaTypes.details,
           fetching: true,
           error: null,
@@ -713,7 +713,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_MEDIA_TYPES_SUCCESS:
       return {
         ...state,
-        studyMediaTypes: {
+        mediaTypes: {
           details: action.payload.map((item) => {
             return {
               source: { value: item.sourceId, label: item.type },
@@ -733,7 +733,7 @@ export default function homePageReducer(state = initialState, action) {
     case FETCH_MEDIA_TYPES_ERROR:
       return {
         ...state,
-        studyMediaTypes: {
+        mediaTypes: {
           details: [],
           fetching: false,
           error: action.payload,

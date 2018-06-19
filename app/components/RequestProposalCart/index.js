@@ -125,7 +125,7 @@ export class RequestProposalCart extends Component {
       total += QUALIFICATION_SUITE_PRICE * months.value;
     }
 
-    if (formValues.callTracking) {
+    if (formValues.mediaTracking) {
       total += CALL_TRACKING_PRICE;
     }
 
@@ -206,7 +206,7 @@ export class RequestProposalCart extends Component {
       });
     }
 
-    if (formValues.callTracking) {
+    if (formValues.mediaTracking) {
       products.push({
         title: translate('portals.component.requestProposalCart.mediaTracking'),
         price: CALL_TRACKING_PRICE,

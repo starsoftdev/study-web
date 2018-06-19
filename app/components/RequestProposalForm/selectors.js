@@ -26,11 +26,11 @@ const selectProposalFormError = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> `callTracking`
+ * RequestProposalForm -> `mediaTracking`
  */
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'requestProposal.values.callTracking')
+  (substate) => get(substate, 'requestProposal.values.mediaTracking')
 );
 
 /**

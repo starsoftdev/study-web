@@ -50,7 +50,7 @@ const selectRenewStudyFormPatientMessagingSuiteValue = () => createSelector(
 
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'renewStudy.values.callTracking', null)
+  substate => get(substate, 'renewStudy.values.mediaTracking', null)
 );
 
 const selectLeadsCount = () => createSelector(

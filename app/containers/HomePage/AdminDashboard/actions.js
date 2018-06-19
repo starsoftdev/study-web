@@ -724,21 +724,21 @@ export function deleteCampaignError(payload) {
   };
 }
 
-export function editMediaTypes(studyId, mediaTypes, callTracking) {
+export function editMediaTypes(studyId, mediaTypes, mediaTracking) {
   return {
     type: EDIT_MEDIA_TYPES,
     studyId,
     mediaTypes,
-    callTracking,
+    mediaTracking,
   };
 }
 
-export function editMediaTypesSuccess(mediaTypes, studyId, callTracking) {
+export function editMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
   return {
     type: EDIT_MEDIA_TYPES_SUCCESS,
     mediaTypes,
     studyId,
-    callTracking,
+    mediaTracking,
   };
 }
 

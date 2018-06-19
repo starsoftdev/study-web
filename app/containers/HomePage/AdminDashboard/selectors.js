@@ -169,11 +169,6 @@ const selectDashboardfive9List = () => createSelector(
   (substate) => substate.five9List
 );
 
-const selectMediaTypes = () => createSelector(
-  selectDashboardPageDomain(),
-  (substate) => substate.studyMediaTypes
-);
-
 export default selectDashboardPage;
 export {
   selectDashboardPageDomain,
@@ -207,6 +202,5 @@ export {
   selectDashboardDeleteCampaignProcess,
   selectDashboardfive9List,
   selectFacebookLandingPageUpdateProcess,
-  selectMediaTypes,
   selectEditMediaTypesProcess,
 };

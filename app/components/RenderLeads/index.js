@@ -10,20 +10,17 @@ import { createStructuredSelector } from 'reselect';
 import classnames from 'classnames';
 import { Field } from 'redux-form';
 import _ from 'lodash';
-import { fetchSources } from '../../containers/App/actions';
 import { selectSources } from '../../containers/App/selectors';
 
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
-import { formatPhone } from '../../common/helper/functions';
 
 const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  fetchSources: () => dispatch(fetchSources()),
+const mapDispatchToProps = () => ({
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -31,25 +28,18 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
   static propTypes = {
     fields: PropTypes.object,
     formValues: PropTypes.object,
-    fetchSources: PropTypes.func,
-    initForm: PropTypes.func,
-    fetchMediaTypes: PropTypes.func,
     deleteMediaType: PropTypes.func.isRequired,
     isAdmin: PropTypes.bool,
     isClientEditForm: PropTypes.bool,
-    initialMediaTypes: PropTypes.array,
     messagingNumbers: PropTypes.object,
     meta: PropTypes.object,
     sources: PropTypes.array,
     landingPageUrl: PropTypes.string,
     studyId: PropTypes.number,
-    recruitmentPhone: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
-
-    this.state = {};
 
     this.addMediaType = this.addMediaType.bind(this);
     this.deleteMediaType = this.deleteMediaType.bind(this);
@@ -66,12 +56,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     const mediaType = formValues.mediaType[index];
     // delete the media type from the form reducer and check whether it's valid to remove it
     deleteMediaType(mediaType.studyId, mediaType.studySourceId, index);
-    // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
-    // fields.remove(index);
   }
 
   render() {
-    const { fields, formValues, messagingNumbers, initialMediaTypes, sources, recruitmentPhone } = this.props;
+    const { fields, formValues, messagingNumbers, sources } = this.props;
 
     let sourceOptions = [];
     if (sources.length > 0) {
@@ -94,14 +82,8 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
           let mediaTypeObject = null;
           let patientsExists = false;
 
-          if (initialMediaTypes && initialMediaTypes.length > 0) {
-            mediaTypeObject = _.find(initialMediaTypes, (o) => {
-              if (formValues.mediaType && formValues.mediaType[index]) {
-                return (o.studySourceId === formValues.mediaType[index].studySourceId);
-              } else {
-                return false;
-              }
-            });
+          if (formValues.mediaType && formValues.mediaType.length > 0) {
+            mediaTypeObject = formValues.mediaType[index];
           }
 
           if (mediaTypeObject && mediaTypeObject.patientsCount > 0) {
@@ -130,10 +112,6 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.mediaType && formValues.mediaType[index] && formValues.mediaType[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.mediaType && formValues.mediaType[index] && formValues.mediaType[index].googleUrl;
-          if (formValues.mediaType && formValues.mediaType[index] && !formValues.mediaType[index].recruitmentPhone) {
-            // TODO this is unsafe behavior, because we're modifying a prop inside the render
-            formValues.mediaType[index].recruitmentPhone = recruitmentPhone !== '' ? formatPhone(recruitmentPhone) : '';
-          }
 
           return (
             <div className="media-type-item" key={index}>

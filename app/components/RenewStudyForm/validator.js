@@ -17,7 +17,7 @@ export default values => {
   const fieldErrors = fieldValidator(values);
   const mediaTypeErrors = [];
 
-  if (values.callTracking && values.mediaType) {
+  if (values.mediaTracking && values.mediaType) {
     values.mediaType.forEach((mediaType, index) => {
       const mediaTypeError = {};
 
