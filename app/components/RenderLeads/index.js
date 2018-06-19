@@ -67,7 +67,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
   deleteSourceType(initObject, index) {
     const { fields, deleteStudyLeadSource } = this.props;
 
-    if (initObject) {
+    if (initObject && initObject.studySourceId && initObject.source) {
       deleteStudyLeadSource(initObject, index);
       fields.remove(index);
     } else {
