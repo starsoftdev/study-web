@@ -86,7 +86,9 @@ export function* fetchReportsWorker(action) {
 
     yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
-    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
     yield put(getReportsListError(err));
   }
 }
@@ -170,7 +172,9 @@ export function* fetchReportsTotalsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
-    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
     yield put(getReportsTotalsError(err));
   }
 }
@@ -225,7 +229,9 @@ export function* fetchDispositionsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getDispositionTotalsSuccess(response));
   } catch (err) {
-    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
     yield put(getDispositionTotalsError(err));
   }
 }
