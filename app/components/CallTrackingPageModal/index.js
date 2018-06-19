@@ -52,11 +52,10 @@ const mapDispatchToProps = (dispatch) => {
   validate: formValidator,
 })
 @connect(mapStateToProps, mapDispatchToProps)
-export class MediaTrackingModal extends React.Component {
+export default class MediaTrackingModal extends React.Component {
   static propTypes = {
     deleteMediaType: PropTypes.func.isRequired,
     study: PropTypes.object,
-    mediaTypes: PropTypes.object,
     fetchMediaTypes: PropTypes.func,
     editMediaTypesProcess: PropTypes.object,
     resetForm: PropTypes.func,
@@ -90,7 +89,7 @@ export class MediaTrackingModal extends React.Component {
     if (newProps.openModal && !this.props.openModal && this.props.study.study_id) {
       this.props.fetchMessagingNumbersDashboard();
       this.props.fetchMediaTypes(this.props.study.study_id);
-      // this.props.change('mediaTracking', this.props.study.mediaTracking);
+      this.props.change('mediaTracking', this.props.study.mediaTracking);
     }
 
     if (this.props.messagingNumbers.fetching && !newProps.messagingNumbers.fetching) {
