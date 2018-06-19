@@ -91,14 +91,6 @@ class CallCenterHomePage extends Component {
                 </div>
               </Modal.Body>
             </Modal>
-            <Field
-              name="ccUser"
-              component={ReactSelect}
-              placeholder={translate('common.layout.placeholder.selectuser')}
-              options={siteOptions}
-              disabled={false}
-              className="field"
-            />
             <div className="field">
               <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />
