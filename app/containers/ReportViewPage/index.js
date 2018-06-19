@@ -108,8 +108,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
-    delete filters.source;
-    this.props.getDispositionTotals(filters);
+    this.props.getDispositionTotals({ ...filters, source: null });
     this.props.fetchSources();
   }
 
