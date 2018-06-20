@@ -66,7 +66,7 @@ class CalendarWidget extends React.Component {
     const { currentUser, currentSite, schedules, sites } = this.props;
     const calendarTimezone = currentUser ? currentUser.timezone : 'UTC';
     const eventsList = schedules.map(s => {
-      const time = moment(s.utcTime).utc();
+      const time = moment(s.utcTime);
       const browserTime = moment()
         .year(time.year())
         .month(time.month())
