@@ -17,6 +17,9 @@ import {
   DELETE_PROTOCOL,
   DELETE_PROTOCOL_SUCCESS,
   DELETE_PROTOCOL_ERROR,
+  UPLOAD_FILE,
+  UPLOAD_FILE_SUCCESS,
+  UPLOAD_FILE_ERROR,
   SET_ACTIVE_SORT,
   SET_SEARCH_QUERY,
 } from './constants';
@@ -84,6 +87,27 @@ export function editProtocolSuccess(payload) {
 export function editProtocolError(payload) {
   return {
     type: EDIT_PROTOCOL_ERROR,
+    payload,
+  };
+}
+
+export function uploadFile(payload) {
+  return {
+    type: UPLOAD_FILE,
+    payload,
+  };
+}
+
+export function uploadFileSuccess(payload) {
+  return {
+    type: UPLOAD_FILE_SUCCESS,
+    payload,
+  };
+}
+
+export function uploadFileError(payload) {
+  return {
+    type: UPLOAD_FILE_ERROR,
     payload,
   };
 }

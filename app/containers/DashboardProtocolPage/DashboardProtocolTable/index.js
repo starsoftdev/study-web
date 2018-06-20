@@ -13,6 +13,7 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
     protocol: PropTypes.object,
     editProtocol: PropTypes.func,
     deleteProtocol: PropTypes.func,
+    uploadFile: PropTypes.func,
     setActiveSort: PropTypes.func,
     editProtocolProcess: PropTypes.object,
     protocolSearchFormValues: PropTypes.object,
@@ -82,7 +83,7 @@ export class DashboardProtocolTable extends React.Component { // eslint-disable-
             <tbody>
               {
                 protocol.map((item, index) => (
-                  <RowItem key={index} item={item} editProtocol={this.props.editProtocol} deleteProtocol={this.props.deleteProtocol} editProtocolProcess={this.props.editProtocolProcess} />
+                  <RowItem key={index} item={item} editProtocol={this.props.editProtocol} uploadFile={this.props.uploadFile} deleteProtocol={this.props.deleteProtocol} editProtocolProcess={this.props.editProtocolProcess} />
                 ))
               }
             </tbody>

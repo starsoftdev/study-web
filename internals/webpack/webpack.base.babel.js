@@ -5,11 +5,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const URL = require('url').URL;
-let SENTRY_DSN = null
-if (process.env.SENTRY_DSN) {
-  const sentryUrl = new URL(process.env.SENTRY_DSN);
-  SENTRY_DSN = `${sentryUrl.protocol}//${sentryUrl.username}@${sentryUrl.hostname}${sentryUrl.pathname}`;
-}
 
 module.exports = (options) => ({
   mode: options.mode,
@@ -117,7 +112,6 @@ module.exports = (options) => ({
       IDLE_TIMEOUT: process.env.IDLE_TIMEOUT ? JSON.stringify(process.env.IDLE_TIMEOUT) : 7200000,
       DASHBOARD_TIMEZONE: JSON.stringify(process.env.DASHBOARD_TIMEZONE),
       MIXPANEL_TOKEN: process.env.MIXPANEL_TOKEN ? JSON.stringify(process.env.MIXPANEL_TOKEN): null,
-      SENTRY_DSN: SENTRY_DSN ? JSON.stringify(SENTRY_DSN): null,
       SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY ? JSON.stringify(process.env.GOOGLE_RECAPTCHA_SITE_KEY): null,
       SOCKET_URL: JSON.stringify(process.env.SOCKET_URL),
       OPTIMIZELY_PROJECT_ID: process.env.OPTIMIZELY_PROJECT_ID ? JSON.stringify(process.env.OPTIMIZELY_PROJECT_ID) : null,
