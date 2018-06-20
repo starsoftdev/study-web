@@ -50,9 +50,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
     resetForm: PropTypes.func,
     manualDisableSubmit: PropTypes.bool,
     validateAndSubmit: PropTypes.func,
-    leadsCount: PropTypes.number,
+    mediaTypesCount: PropTypes.number,
     formValues: PropTypes.object,
-    callTracking: PropTypes.bool,
+    mediaTracking: PropTypes.bool,
   };
 
   constructor(props) {
@@ -103,9 +103,9 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
       change('siteLocation', newProps.selectedStudy.siteName);
     }
 
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
       const { change } = this.props;
-      change('callTracking', false);
+      change('mediaTracking', false);
     }
 
     if (!this.props.selectedStudy && newProps.selectedStudy) {
@@ -125,13 +125,13 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         change('startDate', moment());
       }
 
-      if (newProps.selectedStudy.callTracking) {
-        change('callTracking', true);
+      if (newProps.selectedStudy.mediaTracking) {
+        change('mediaTracking', true);
         this.setState({
           isCallTrackingAlreadySet: true,
         });
       } else {
-        change('callTracking', false);
+        change('mediaTracking', false);
         this.setState({
           isCallTrackingAlreadySet: false,
         });
@@ -259,7 +259,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   generateRenewStudyShoppingCartAddOns() {
-    const { studyLevels, selectedIndicationLevelPrice, callTracking } = this.props;
+    const { studyLevels, selectedIndicationLevelPrice, mediaTracking } = this.props;
     const { exposureLevel, campaignLength, condenseTwoWeeks, patientQualificationSuite } = this.state;
     const addOns = [];
 
@@ -286,7 +286,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
         total: QUALIFICATION_SUITE_PRICE * monthLength.value,
       });
     }
-    if (callTracking && !this.state.isCallTrackingAlreadySet) {
+    if (mediaTracking && !this.state.isCallTrackingAlreadySet) {
       addOns.push({
         title: translate('portals.component.renewStudyForm.mediaTracking'),
         price: CALL_TRACKING_PRICE,
@@ -299,7 +299,7 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    const { studyLevels, campaignLength, selectedIndicationLevelPrice, formValues, callTracking } = this.props;
+    const { studyLevels, campaignLength, selectedIndicationLevelPrice, formValues, mediaTracking } = this.props;
     const qualificationSuitePrice = QUALIFICATION_SUITE_PRICE;
     const currentDate = moment();
     const calendarDate = this.state.initDate ? this.state.initDate.toDate() : this.state.initDate;
@@ -412,15 +412,15 @@ class RenewStudyForm extends Component { // eslint-disable-line react/prefer-sta
                         </strong>
                         <div className="field">
                           <Field
-                            name="callTracking"
+                            name="mediaTracking"
                             component={Toggle}
                             disabled={this.state.isCallTrackingAlreadySet}
                           />
                         </div>
                       </div>
                     }
-                    {(callTracking && !this.state.isCallTrackingAlreadySet) &&
-                      <FieldArray name="leadSource" component={RenderLeads} formValues={formValues} />
+                    {(mediaTracking && !this.state.isCallTrackingAlreadySet) &&
+                      <FieldArray name="mediaType" component={RenderLeads} formValues={formValues} />
                     }
                     <div className="field-row">
                       <strong className="label required">
@@ -509,8 +509,8 @@ const mapStateToProps = createStructuredSelector({
   selectedIndicationLevelPrice: selectSelectedIndicationLevelPrice(),
   campaignLength: selectRenewStudyFormCampaignLengthValue(),
   savedCard: selectSavedCard(),
-  leadsCount: selectLeadsCount(),
-  callTracking: selectCallTracking(),
+  mediaTypesCount: selectLeadsCount(),
+  mediaTracking: selectCallTracking(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
