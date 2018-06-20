@@ -24,11 +24,10 @@ import { getMomentFromDate } from '../../../../utils/time';
 
 function getTimeComponents(strTime, timezone) {
   const localTime = moment(strTime).tz(timezone);
-
   return {
     hour: (((localTime.hour() + 11) % 12) + 1).toString(),
     minute: localTime.minute().toString(),
-    period: localTime.hour() >= 12 ? 'PM' : 'AM',
+    period: localTime.hour() >= 12 ? translate('common.constants.pm') : translate('common.constants.am'),
   };
 }
 
@@ -87,7 +86,7 @@ export default class EditScheduleModal extends Component {
 
       const initialValues = {
         date: moment(nextProps.selectedCellInfo.data.time).tz(this.timezone),
-        ...getTimeComponents(nextProps.selectedCellInfo.data.time, this.timezone),
+        ...getTimeComponents(nextProps.selectedCellInfo.data.utcTime, this.timezone),
         textReminder: nextProps.selectedCellInfo.data.textReminder,
         patient: {
           value: nextProps.selectedCellInfo.data.patient_id,

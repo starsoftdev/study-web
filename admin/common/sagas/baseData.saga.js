@@ -1381,16 +1381,11 @@ function* fetchStudySources() {
 
 function* fetchStudyLeadSources() {
   while (true) {
-    const { studyId, excludeSourceIds } = yield take(FETCH_STUDY_LEAD_SOURCES);
+    const { studyId } = yield take(FETCH_STUDY_LEAD_SOURCES);
     try {
       const options = {
         method: 'GET',
       };
-
-      if (excludeSourceIds) {
-        options.query = {};
-        options.query.excludeSourceIds = JSON.stringify(excludeSourceIds);
-      }
 
       const requestURL = `${API_URL}/studies/${studyId}/studyLeadSources`;
       const response = yield call(request, requestURL, options);

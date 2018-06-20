@@ -6,19 +6,28 @@ import { toastr } from 'react-redux-toastr';
 import request from '../../utils/request';
 import { getItem, removeItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
+
 import {
+  FETCH_CALL_CENTER_PATIENT_CATEGORIES,
   FETCH_PATIENT,
+  SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
   SUBMIT_EMAIL,
+  SUBMIT_PATIENT_DISPOSITION,
 } from './constants';
 
 import {
   patientFetched,
   patientFetchingError,
+  callCenterPatientCategoriesFetched,
+  callCenterPatientCategoriesFetchingError,
   deletePatientNoteSuccess,
   addPatientNoteSuccess,
   submitEmailSuccess,
+  updatePatientSuccess,
+  patientDispositionSubmitted,
+  patientDispositionSubmissionError,
 } from './actions';
 
 export function* fetchPatientWatcher() {
@@ -30,6 +39,9 @@ export function* fetchPatientWatcher() {
         include: [
           {
             relation: 'site',
+          },
+          {
+            relation: 'dispositions',
           },
           {
             relation: 'patientIndications',
@@ -120,12 +132,33 @@ export function* fetchPatientWatcher() {
   }
 }
 
+function* fetchCallCenterPatientCategoriesWatcher() {
+  while (true) {
+    yield take(FETCH_CALL_CENTER_PATIENT_CATEGORIES);
+
+    try {
+      const options = {
+        method: 'GET',
+        query: {
+          filter: JSON.stringify({
+            fields: ['name', 'id'],
+            order: 'id ASC',
+          }),
+        },
+      };
+      const requestURL = `${API_URL}/callCenterPatientCategories`;
+      const response = yield call(request, requestURL, options);
+      yield put(callCenterPatientCategoriesFetched(response));
+    } catch (err) {
+      yield put(callCenterPatientCategoriesFetchingError(err));
+    }
+  }
+}
+
 function* submitPatientNote() {
   while (true) {
     // listen for the SUBMIT_PATIENT_NOTE action
     const { patientId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
-
-    console.log('currentUser', currentUser);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -211,12 +244,85 @@ function* submitDeleteNote() {
   }
 }
 
+function* submitPatientUpdate() {
+  while (true) {
+    // listen for the SUBMIT_PATIENT_UPDATE action
+    const { payload: { patientId, callCenterPatientCategoryId, patientCategoryId } } = yield take(SUBMIT_PATIENT_UPDATE);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      // Update call center patient category
+      let requestURL = `${API_URL}/patients/updateCallCenterCategory`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          callCenterPatientCategoryId,
+        }),
+      });
+
+      // Update patient category
+      requestURL = `${API_URL}/patients/updateCategory`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          studyId: null,
+          patientId,
+          patientCategoryId,
+          afterPatientId: null,
+        }),
+      });
+      toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
+      yield put(updatePatientSuccess());
+    } catch (e) {
+      let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
+      if (errorMessage.includes('email')) {
+        errorMessage = translate('client.page.studyPage.toastrEmailOnFileErrorMessage');
+      } else if (errorMessage.includes('phone')) {
+        errorMessage = translate('client.page.studyPage.toastrPhoneOnFileErrorMessage');
+      }
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+function* submitPatientDisposition() {
+  while (true) {
+    const { payload: { patientId, dispositionKey } } = yield take(SUBMIT_PATIENT_DISPOSITION);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patientDispositions/updatePatientDisposition`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          patientId,
+          dispositionKey,
+        }),
+      });
+      yield put(patientDispositionSubmitted());
+    } catch (e) {
+      yield put(patientDispositionSubmissionError());
+      toastr.error('', e.message);
+    }
+  }
+}
+
 export function* callCenterPatientPageSaga() {
   try {
     const watcherA = yield fork(fetchPatientWatcher);
     const watcherB = yield fork(submitPatientNote);
     const watcherC = yield fork(submitDeleteNote);
     const watcherD = yield fork(submitEmail);
+    const watcherE = yield fork(fetchCallCenterPatientCategoriesWatcher);
+    const watcherF = yield fork(submitPatientUpdate);
+    const watcherG = yield fork(submitPatientDisposition);
 
     yield take(LOCATION_CHANGE);
 
@@ -224,6 +330,9 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherB);
     yield cancel(watcherC);
     yield cancel(watcherD);
+    yield cancel(watcherE);
+    yield cancel(watcherF);
+    yield cancel(watcherG);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

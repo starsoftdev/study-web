@@ -3078,12 +3078,13 @@ th, .th {
 }
 
 /************************/
-/*	dashboard-portal	*/
+/*	admin-portal	*/
 /************************/
 /* main part styling */
 
-.admin-dashboard {
-  padding: 82px 10px 0;
+.admin-dashboard,
+.admin-reports {
+  padding: 102px 10px 0;
 
   .active-table-row {
     background: #f1f1f1 !important;
@@ -3188,14 +3189,11 @@ th, .th {
     margin: 0 0 0 12px;
 
     &:focus,
-    &:active {
-      background: #fff;
-      color: #00afef;
-    }
-
+    &:active,
     &:hover {
+      background: #76daff;
+      border-color: #76daff;
       color: #fff;
-      background: #00afef;
     }
   }
 }
@@ -3367,7 +3365,8 @@ th, .th {
   position: relative;
 
   &.bar-active {
-    padding-top: 118px;
+    height: 160px;
+    margin: 0 0 30px;
 
     .filters-bar {
       left: 20px;
@@ -3383,10 +3382,10 @@ th, .th {
     // left: -99999px;
     position: fixed;
     background: #fff;
-    border: solid 2px #f78e1e;
+    border: solid 2px #00afef;
 
     .filters-holder {
-      max-height: 83px;
+      max-height: 86px;
       overflow-y: auto;
       padding: 15px 18px;
       overflow-x: hidden;
@@ -3430,18 +3429,12 @@ th, .th {
       margin: 0 0 -12px;
     }
 
-    .add-new-filters {
-      margin: 8px 12px 0 0;
-      line-height: 26px;
-    }
-
     .top-head.fixed-position {
       margin: 14px 0 0;
     }
   }
 
   .holder {
-    /*overflow: hidden;*/
 
     .font(0, 0);
     > * {
@@ -3453,14 +3446,6 @@ th, .th {
       * {
         font-size: 14px;
       }
-    }
-  }
-
-  .add-new-filters {
-    padding: 5px 12px;
-    text-indent: 1px;
-    @media screen and (max-width: @psd) {
-      padding: 5px 13px 5px 12px;
     }
   }
 
@@ -3593,43 +3578,6 @@ div[data-percentage],
     }
 
   }
-
-  .color {
-    /*font-weight: 700;*/
-  }
-  .red {
-    color: #dd0000;
-
-  }
-
-  .yellow {
-    color: #f9ce15;
-  }
-
-  .green {
-    color: #7dbc00;
-  }
-
-  .purple {
-    color: #873fbd;
-  }
-
-  .tier1 {
-    color: #00afef;
-  }
-
-  .tier2 {
-    color: #f78e1e;
-  }
-
-  .tier3 {
-    color: #a0cf67;
-  }
-
-  .tier4 {
-    color: #949ca1;
-  }
-
 }
 
 .graph-area {
@@ -5712,8 +5660,22 @@ div[data-percentage],
 @import '../layout/_multi-select-checkbox';
 @import '../layout/dashboard-custom';
 
-
 /*****************/
 /* admin portal headerBar Component  */
 /*****************/
 @import "../../../components/AdminHeaderBar/AvatarMenu/styles";
+
+/*****************/
+/* admin portal CenteredModal Component  */
+/*****************/
+@import "../../../components/CenteredModal/styles";
+
+/*****************/
+/* admin portal FiltersForm Component  */
+/*****************/
+@import "../../../components/FiltersModalForm/styles";
+
+/*****************/
+/* admin portal Filter Component  */
+/*****************/
+@import "../../../components/Filter/styles";

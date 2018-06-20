@@ -16,6 +16,7 @@ import {
   EXPORT_STUDIES,
   GET_REPORTS_TOTALS,
   GET_CATEGORY_NOTES,
+  FETCH_DISPOSITION_TOTALS,
 } from './constants';
 
 import {
@@ -27,6 +28,8 @@ import {
   getReportsTotalsError,
   getCategoryNotesSuccess,
   getCategoryNotesError,
+  getDispositionTotalsSuccess,
+  getDispositionTotalsError,
 } from './actions';
 
 
@@ -36,6 +39,7 @@ export function* reportViewPageSaga() {
   const watcherC = yield fork(exportStudiesWatcher);
   const watcherD = yield fork(fetchReportsTotalsWatcher);
   const watcherE = yield fork(getCategoryNotesWatcher);
+  const watcherF = yield fork(fetchDispositionsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -44,6 +48,7 @@ export function* reportViewPageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
 
 export function* fetchReportsWatcher() {
@@ -81,7 +86,9 @@ export function* fetchReportsWorker(action) {
 
     yield put(getReportsListSuccess(response, hasMore, page));
   } catch (err) {
-    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
     yield put(getReportsListError(err));
   }
 }
@@ -165,7 +172,9 @@ export function* fetchReportsTotalsWorker(action) {
     const response = yield call(request, requestURL);
     yield put(getReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
-    toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
     yield put(getReportsTotalsError(err));
   }
 }
@@ -201,6 +210,29 @@ export function* getCategoryNotesWorker(action) {
     yield put(getCategoryNotesSuccess(response, hasMore, page));
   } catch (err) {
     yield put(getCategoryNotesError(err));
+  }
+}
+
+export function* fetchDispositionsWatcher() {
+  yield* takeLatest(FETCH_DISPOSITION_TOTALS, fetchDispositionsWorker);
+}
+export function* fetchDispositionsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(getDispositionTotalsSuccess(response));
+  } catch (err) {
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
+    yield put(getDispositionTotalsError(err));
   }
 }
 

@@ -16,6 +16,7 @@ import { selectSources } from '../../containers/App/selectors';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
+import { formatPhone } from '../../common/helper/functions';
 
 const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
@@ -45,6 +46,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     sources: PropTypes.array,
     landingPageUrl: PropTypes.string,
     studyId: PropTypes.number,
+    recruitmentPhone: PropTypes.string,
   };
 
   constructor(props) {
@@ -52,53 +54,29 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
     this.state = {};
 
+    this.addSourceType = this.addSourceType.bind(this);
     this.deleteSourceType = this.deleteSourceType.bind(this);
   }
 
-  componentWillMount() {
-    const { fields, sources, fetchSources } = this.props;
-    if (fields.length === 0) {
-      fields.push({ source: null });
-    }
-    if (sources.length === 0) {
-      fetchSources();
-    }
+  addSourceType() {
+    const { fields } = this.props;
+    // TODO this is unsafe behavior, because we're modifying a prop outside of the reducer
+    fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId });
   }
 
-  componentWillReceiveProps(newProps) {
-    if (!newProps.deleteStudyLeadSourceProcess.deleting && this.props.deleteStudyLeadSourceProcess.deleting && newProps.deletedLeadSource.details) {
-      newProps.fields.remove(newProps.deletedLeadSource.index);
-    }
+  deleteSourceType(initObject, index) {
+    const { fields, deleteStudyLeadSource } = this.props;
 
-    if (newProps.fields.length === 0) {
-      newProps.initForm();
-    }
-  }
-
-  deleteSourceType(index) {
-    const { fields, initialLeadSources, formValues, deleteStudyLeadSource } = this.props;
-    let initObject = null;
-
-    if (initialLeadSources && initialLeadSources.length > 0) {
-      initObject = _.find(initialLeadSources, (o) => {
-        if (formValues.leadSource && formValues.leadSource[index]) {
-          return (o.studySourceId === formValues.leadSource[index].studySourceId);
-        } else {
-          return false;
-        }
-      });
-    }
-
-    if (initObject) {
+    if (initObject && initObject.studySourceId && initObject.source) {
       deleteStudyLeadSource(initObject, index);
+      fields.remove(index);
     } else {
       fields.remove(index);
     }
   }
 
   render() {
-    const { fields, formValues, messagingNumbers, initialLeadSources, sources } = this.props;
-    const showAdd = (formValues.leadSource && formValues.leadSource.length >= 1 && formValues.leadSource[0].source);
+    const { fields, formValues, messagingNumbers, initialLeadSources, sources, recruitmentPhone } = this.props;
 
     let sourceOptions = [];
     if (sources.length > 0) {
@@ -157,6 +135,10 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
 
           const needToShowMessagingNumber = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].messagingNumber;
           const needToShowGoogleUrl = this.props.isClientEditForm && formValues.leadSource && formValues.leadSource[index] && formValues.leadSource[index].googleUrl;
+          if (formValues.leadSource && formValues.leadSource[index] && !formValues.leadSource[index].recruitmentPhone) {
+            // TODO this is unsafe behavior, because we're modifying a prop inside the render
+            formValues.leadSource[index].recruitmentPhone = recruitmentPhone !== '' ? formatPhone(recruitmentPhone) : '';
+          }
 
           return (
             <div className="lead-item" key={index}>
@@ -178,7 +160,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
                     <span
                       className="delete-source-type icomoon-icon_trash"
                       onClick={() => {
-                        this.deleteSourceType(index);
+                        this.deleteSourceType(formValues.leadSource[index], index);
                       }}
                     />
                   )
@@ -274,22 +256,19 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
               }
             </div>
           );
-        }
-        )}
-        {
-          showAdd &&
-          <div className="field-row">
-            <strong className="label"></strong>
-            <div className="field">
-              <div
-                className="add-new-source"
-                onClick={() => fields.push({ isNew: true, landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId })}
-              >
-                <i className="icomoon-icon_close" /> {translate('portals.component.renderLeads.addMedia')}
-              </div>
+        })}
+        <div className="field-row">
+          <strong className="label"></strong>
+          <div className="field">
+            <div
+              className="add-new-source"
+              onClick={this.addSourceType}
+            >
+              <i className="icomoon-icon_close" />
+              <span> {translate('portals.component.renderLeads.addMedia')}</span>
             </div>
           </div>
-        }
+        </div>
       </div>
     );
   }

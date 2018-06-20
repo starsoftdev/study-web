@@ -13,7 +13,7 @@ export default function ScheduledPatientModal(state, action) {
   switch (action.type) {
     case SHOW_SCHEDULED_MODAL:
       if (action.modalType === SchedulePatientModalType.CREATE) {
-        const initialValues = { textReminder: true };
+        const initialValues = { textReminder: false };
         return {
           ...state,
           modalType: action.modalType,
