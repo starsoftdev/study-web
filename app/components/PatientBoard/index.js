@@ -190,7 +190,7 @@ class PatientBoard extends React.Component {
     const formValues = schedulePatientFormValues;
     let currentAppointmentId;
 
-    const time = scheduledDate.utc().hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute);
+    const time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute);
 
     if (currentPatient.appointments && currentPatient.appointments[0]) {
       currentAppointmentId = currentPatient.appointments[0].id;
@@ -200,7 +200,7 @@ class PatientBoard extends React.Component {
       id: currentAppointmentId,
       patientId: currentPatient.id,
       clientRoleId: currentUser.roleForClient.id,
-      time,
+      time: time.utc(),
       textReminder: formValues.textReminder || false,
     };
 
