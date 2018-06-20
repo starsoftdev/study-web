@@ -272,15 +272,18 @@ export default class CalendarPage extends React.Component {
 
   handleSubmit(data) {
     let submitData;
-    const { currentUser } = this.props;
+    const { currentUser, sites } = this.props;
 
     if (data.siteLocation && data.protocol) { // CREATE
+      const patientSite = _.find(sites, site => site.id === data.siteLocation.siteId);
+      const timezone = patientSite ? patientSite.timezone : currentUser.timezone;
+      const scheduledDate = this.selectedCellInfo.selectedDate ? this.selectedCellInfo.selectedDate.tz(timezone).startOf('day') : moment().tz(timezone).startOf('day');
+      const time = scheduledDate.hour(data.period === 'AM' ? data.hour % 12 : (data.hour % 12) + 12).minute(data.minute);
+
       submitData = {
         patientId: data.patient.value,
         clientRoleId: currentUser.roleForClient.id,
-        time: moment(this.selectedCellInfo.selectedDate).add(data.period === 'AM' ?
-          data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
+        time: time.utc(),
         textReminder: data.textReminder,
       };
     } else { // UPDATE

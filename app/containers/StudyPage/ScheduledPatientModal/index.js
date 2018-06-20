@@ -95,9 +95,9 @@ class ScheduledPatientModal extends React.Component {
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&
         currentPatient.appointments && currentPatient.appointments.length > 0) {
-      const { time, textReminder } = currentPatient.appointments[0];
+      const { utcTime, textReminder } = currentPatient.appointments[0];
       initialValues = {
-        ...getTimeComponents(time, this.timezone),
+        ...getTimeComponents(utcTime, this.timezone),
         textReminder,
       };
       this.props.setScheduledFormInitialized(true);
