@@ -1,18 +1,23 @@
 import React from 'react';
 import _ from 'lodash';
 import moment from 'moment-timezone';
+import { browserHistory } from 'react-router';
 
 import { translate } from '../../../../common/utilities/localization';
 import { formatPhone } from '../../../common/helper/functions';
 import './style.less';
 
-export default class CallDiv extends React.Component {
+class CallDiv extends React.Component {
 
   static propTypes = {
     patients: React.PropTypes.object,
     indications: React.PropTypes.array,
     timezone: React.PropTypes.string,
   };
+
+  gotoPatientPage = (id) => {
+    browserHistory.push(`/app/cc/patient/${id}`);
+  }
 
   renderUnreadMessageCount(patient) {
     if (patient.count_unread > 0) {
@@ -63,7 +68,7 @@ export default class CallDiv extends React.Component {
         patientPhone = patient.phone;
       }
     }
-    return (<div className="cc-box" key={key}>
+    return (<div className="cc-box" key={key} onClick={() => { this.gotoPatientPage(patient.id); }}>
       <strong className="name">
         <span className="first-name">{patient.first_name}</span>
         <span> </span>
@@ -188,3 +193,5 @@ export default class CallDiv extends React.Component {
     );
   }
 }
+
+export default CallDiv;
