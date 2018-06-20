@@ -52,8 +52,7 @@ import {
   FETCH_CAMPAIGNS_BY_STUDY,
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
-  EDIT_STUDY_LEAD_SOURCES,
-  DELETE_STUDY_LEAD_SOURCE,
+  EDIT_MEDIA_TYPES,
 } from './AdminDashboard/constants';
 
 import {
@@ -110,10 +109,8 @@ import {
   fetchFive9ListError,
   removeStudyAdSuccess,
   removeStudyAdError,
-  editStudyLeadSourcesSuccess,
-  editStudyLeadSourcesError,
-  deleteStudyLeadSourceSuccess,
-  deleteStudyLeadSourceError,
+  editMediaTypesSuccess,
+  editMediaTypesError,
 } from './AdminDashboard/actions';
 
 import {
@@ -122,6 +119,7 @@ import {
   REMOVE_CUSTOM_EMAIL_NOTIFICATION,
 } from '../../containers/App/constants';
 import {
+  fetchMediaTypes,
   fetchClientSites,
   fetchClientCredits,
   fetchRewardsBalance,
@@ -570,7 +568,7 @@ export function* renewStudyWorker(action) {
       condenseTwoWeeks: formValues.condenseTwoWeeks,
       campaignLength: formValues.campaignLength,
       startDate: (formValues.startDate ? formValues.startDate.format('YYYY-MM-DD') : null),
-      callTracking: formValues.callTracking,
+      mediaTracking: formValues.mediaTracking,
     }));
     onClose();
   } catch (err) {
@@ -607,7 +605,7 @@ export function* upgradeStudyWorker(action) {
     toastr.success(translate('portals.client.component.studiesList.upgradeStudyToastrTitle'), translate('portals.client.component.studiesList.upgradeStudyToastrMessage'));
     response.newLevelId = formValues.level;
     response.studyId = studyId;
-    response.callTracking = formValues.callTracking;
+    response.mediaTracking = formValues.mediaTracking;
     yield put(fetchRewardsBalance(formValues.currentUser.roleForClient.client_id, formValues.currentUser.roleForClient.site_id));
     yield put(fetchClientCredits(formValues.user_id));
     yield put(studyUpgraded(response));
@@ -633,7 +631,7 @@ export function* editStudyWorker(action) {
 
     const data = new FormData();
     _.forEach(options, (value, index) => {
-      if (index !== 'emailNotifications' && index !== 'leadSource') {
+      if (index !== 'emailNotifications' && index !== 'mediaType') {
         data.append(index, value);
       }
     });
@@ -642,8 +640,8 @@ export function* editStudyWorker(action) {
       data.append('emailNotifications', JSON.stringify(options.emailNotifications));
     }
 
-    if (options.leadSource) {
-      data.append('leadSource', JSON.stringify(options.leadSource));
+    if (options.mediaType) {
+      data.append('mediaType', JSON.stringify(options.mediaType));
     }
 
     const params = {
@@ -1236,56 +1234,45 @@ export function* deleteCampaignWorker(action) {
   }
 }
 
-export function* editStudyLeadSourcesWatcher() {
-  yield* takeLatest(EDIT_STUDY_LEAD_SOURCES, editStudyLeadSourcesWorker);
+export function* editMediaTypesWatcher() {
+  yield* takeLatest(EDIT_MEDIA_TYPES, editMediaTypesWorker);
 }
 
-export function* editStudyLeadSourcesWorker(action) {
+export function* editMediaTypesWorker(action) {
   try {
-    const requestURL = `${API_URL}/studies/${action.studyId}/editStudyLeadSources`;
+    const requestURL = `${API_URL}/studies/${action.studyId}/editMediaTypes`;
     const params = {
       method: 'POST',
       body: JSON.stringify({
-        leadSources: action.leadSources,
-        callTracking: action.callTracking,
+        mediaTypes: action.mediaTypes,
+        mediaTracking: action.mediaTracking,
       }),
     };
     const response = yield call(request, requestURL, params);
     if (response.success) {
-      yield put(editStudyLeadSourcesSuccess(action.leadSources, action.studyId, action.callTracking));
+      yield put(editMediaTypesSuccess(action.mediaTypes, action.studyId, action.mediaTracking));
       toastr.success('', 'The request has been submitted successfully.');
+      // fetch the media types to get the new study source ids (if any were created)
+      if (action.mediaTypes.length > 0) {
+        let created = false;
+        for (const mediaType of action.mediaTypes) {
+          if (!mediaType.studySourceId) {
+            // this media type doesn't have a studySourceId, so it is brand new, and needs an API call to get the study source id
+            created = true;
+            break;
+          }
+        }
+        if (created) {
+          yield put(fetchMediaTypes(action.studyId));
+        }
+      }
     } else {
-      yield put(editStudyLeadSourcesError(response));
+      yield put(editMediaTypesError(response));
     }
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
     toastr.error('', errorMessage);
-    yield put(editStudyLeadSourcesError(err));
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-export function* deleteStudyLeadSourceWatcher() {
-  yield* takeLatest(DELETE_STUDY_LEAD_SOURCE, deleteStudyLeadSourceWorker);
-}
-
-export function* deleteStudyLeadSourceWorker(action) {
-  try {
-    const requestURL = `${API_URL}/studies/${action.leadSource.studyId}/deleteStudyLeadSource`;
-    const params = {
-      method: 'POST',
-      body: JSON.stringify({
-        studySourceId: action.leadSource.studySourceId,
-      }),
-    };
-    yield call(request, requestURL, params);
-    yield put(deleteStudyLeadSourceSuccess(action.leadSource, action.index));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    toastr.error('', errorMessage);
-    yield put(deleteStudyLeadSourceError(err));
+    yield put(editMediaTypesError(err));
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
@@ -1332,8 +1319,7 @@ export function* homePageSaga() {
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
-  const editStudyLeadSourcesWatcher1 = yield fork(editStudyLeadSourcesWatcher);
-  const deleteStudyLeadSourceWatcher1 = yield fork(deleteStudyLeadSourceWatcher);
+  const editMediaTypesWatcher1 = yield fork(editMediaTypesWatcher);
   const watcherJ = yield fork(fetchNoteWatcher);
   const watcherK = yield fork(addNoteWatcher);
   const watcherL = yield fork(editNoteWatcher);
@@ -1386,8 +1372,7 @@ export function* homePageSaga() {
     yield cancel(fetchCampaignsByStudyWatcher1);
     yield cancel(editCampaignWatcher1);
     yield cancel(deleteCampaignWatcher1);
-    yield cancel(editStudyLeadSourcesWatcher1);
-    yield cancel(deleteStudyLeadSourceWatcher1);
+    yield cancel(editMediaTypesWatcher1);
     yield cancel(watcherJ);
     yield cancel(watcherK);
     yield cancel(watcherL);
@@ -1397,9 +1382,7 @@ export function* homePageSaga() {
     yield cancel(watcherP);
     /* yield cancel(watcherR); */
     yield cancel(watcherS);
-    if (options.payload.pathname !== '/app') {
-      yield put(clearFilters());
-      yield put(reset('dashboardFilters'));
-    }
+    yield put(clearFilters());
+    yield put(reset('dashboardFilters'));
   }
 }
