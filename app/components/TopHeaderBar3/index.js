@@ -40,7 +40,7 @@ class TopHeaderBar2 extends React.Component { // eslint-disable-line react/prefe
     return (
       <header id="d-header">
         <div className="container-fluid">
-          <h1 className="logo pull-left"><Link to="/app"><img src={studykikLogo} width="214" height="31" alt="logo" /></Link></h1>
+          <h1 className="logo pull-left"><Link to="/app/cc/home"><img src={studykikLogo} width="214" height="31" alt="logo" /></Link></h1>
           <AvatarMenu handleLogoutClick={this.handleLogoutClick} currentUser={this.props.currentUser} />
         </div>
       </header>
