@@ -40,8 +40,8 @@ import {
 } from '../../containers/ListNewStudyPage/actions';
 
 const mapStateToProps = createStructuredSelector({
-  callTracking: selectCallTracking(),
-  leadsCount: selectLeadsCount(),
+  mediaTracking: selectCallTracking(),
+  mediaTypesCount: selectLeadsCount(),
   currentUserClientId: selectCurrentUserClientId(),
   addNotificationProcess: selectAddNotificationProcess(),
   savedSite: selectSavedSite(),
@@ -77,8 +77,8 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
     indications: PropTypes.array,
     studyLevels: PropTypes.array,
     listNewStudyState: PropTypes.object,
-    callTracking: PropTypes.bool,
-    leadsCount: PropTypes.number,
+    mediaTracking: PropTypes.bool,
+    mediaTypesCount: PropTypes.number,
     fullSiteLocations: PropTypes.object,
     formValues: PropTypes.object,
     saveSite: PropTypes.func,
@@ -100,9 +100,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
 
   componentWillReceiveProps(newProps) {
     const { change } = this.props;
-    // If leads are all removed, set `callTracking` value to false
-    if (newProps.leadsCount === 0 && this.props.leadsCount === 1) {
-      change('callTracking', false);
+    // If media types are all removed, set `mediaTracking` value to false
+    if (newProps.mediaTypesCount === 0 && this.props.mediaTypesCount === 1) {
+      change('mediaTracking', false);
     }
 
     if (this.props.addNotificationProcess.saving && !newProps.addNotificationProcess.saving && newProps.addNotificationProcess.savedUser) {
@@ -194,7 +194,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
   }
 
   render() {
-    const { addEmailNotificationUser, callTracking, change, currentUserClientId, fileInputRef, formValues,
+    const { addEmailNotificationUser, mediaTracking, change, currentUserClientId, fileInputRef, formValues,
       hideAddEmailModal, listNewStudyState, indications, showAddEmailModal, studyLevels, currentUser } = this.props;
 
     const siteLocations = _.map(this.props.fullSiteLocations.details, row => ({
@@ -412,7 +412,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
               <div className="field-row">
                 <strong className="label"><label>{translate('portals.component.listNewStudyForm.mediaTrackingLabel')} $247</label></strong>
                 <Field
-                  name="callTracking"
+                  name="mediaTracking"
                   component={Toggle}
                   className="field"
                 />
@@ -420,9 +420,9 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
             </div>
           }
 
-          {callTracking &&
+          {mediaTracking &&
             <FieldArray
-              name="leadSource"
+              name="mediaType"
               component={RenderLeads}
               formValues={formValues}
             />
