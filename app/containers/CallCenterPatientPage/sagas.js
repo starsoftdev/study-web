@@ -6,7 +6,6 @@ import { toastr } from 'react-redux-toastr';
 import request from '../../utils/request';
 import { getItem, removeItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
-import { submitMovePatientBetweenCategories } from '../StudyPage/actions';
 
 import {
   FETCH_CALL_CENTER_PATIENT_CATEGORIES,
@@ -255,7 +254,8 @@ function* submitPatientUpdate() {
     }
 
     try {
-      const requestURL = `${API_URL}/patients/updateCallCenterCategory`;
+      // Update call center patient category
+      let requestURL = `${API_URL}/patients/updateCallCenterCategory`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -263,7 +263,18 @@ function* submitPatientUpdate() {
           callCenterPatientCategoryId,
         }),
       });
-      yield put(submitMovePatientBetweenCategories(undefined, undefined, patientCategoryId, patientId));
+
+      // Update patient category
+      requestURL = `${API_URL}/patients/updateCategory`;
+      yield call(request, requestURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          studyId: null,
+          patientId,
+          patientCategoryId,
+          afterPatientId: null,
+        }),
+      });
       toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
       yield put(updatePatientSuccess());
     } catch (e) {
