@@ -250,14 +250,25 @@
       display: table-cell;
       vertical-align: top;
       cursor: default;
+
+      &.allcaps span{
+        text-transform: uppercase;
+      }
+    }
+
+    .media-type > span {
+      text-transform: uppercase;
     }
 
     .number.hover,
     .number:hover {
-      color: #fff;
-      &:before {
-        height: 100%;
-        transition-duration: 0.25s;
+      
+      &:not(.no-animation) {
+        color: #fff;  
+        &:before {
+          height: 100%;
+          transition-duration: 0.25s;
+        }
       }
       &.pointer {
         cursor: pointer;
@@ -285,9 +296,9 @@
     }
 
     .heading {
-      color: #fff;
+      color: #000;
       .font(18px);
-      background: #f78e1e;
+      background: #fff;
       word-wrap: break-word;
       -webkit-hyphens: auto;
       -moz-hyphens: auto;

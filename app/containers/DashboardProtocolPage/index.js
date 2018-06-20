@@ -11,7 +11,7 @@ import Helmet from 'react-helmet';
 import DashboardProtocolSearch from './DashboardProtocolSearch/index';
 import DashboardProtocolTable from './DashboardProtocolTable';
 
-import { fetchProtocol, addProtocol, editProtocol, deleteProtocol, setActiveSort, setSearchQuery } from './actions';
+import { fetchProtocol, addProtocol, editProtocol, uploadFile, deleteProtocol, setActiveSort, setSearchQuery } from './actions';
 import { selectDashboardProtocol, selectDashboardEditProtocolProcess, selectDashboardProtocolSearchFormValues, selectPaginationOptions } from './selectors';
 
 export class DashboardProtocolPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -21,6 +21,7 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
     protocol: PropTypes.object,
     addProtocol: PropTypes.func,
     editProtocol: PropTypes.func,
+    uploadFile: PropTypes.func,
     deleteProtocol: PropTypes.func,
     editProtocolProcess: PropTypes.object,
     protocolSearchFormValues: PropTypes.object,
@@ -74,6 +75,7 @@ export class DashboardProtocolPage extends React.Component { // eslint-disable-l
           editProtocolProcess={this.props.editProtocolProcess}
           editProtocol={this.props.editProtocol}
           deleteProtocol={this.props.deleteProtocol}
+          uploadFile={this.props.uploadFile}
           protocolSearchFormValues={this.props.protocolSearchFormValues}
           loadMore={this.loadMore}
           setActiveSort={this.props.setActiveSort}
@@ -95,6 +97,7 @@ function mapDispatchToProps(dispatch) {
     fetchProtocols: (query, limit, offset) => dispatch(fetchProtocol(query, limit, offset)),
     addProtocol: (payload) => dispatch(addProtocol(payload)),
     editProtocol: (payload) => dispatch(editProtocol(payload)),
+    uploadFile: (payload) => dispatch(uploadFile(payload)),
     deleteProtocol: (payload) => dispatch(deleteProtocol(payload)),
     setActiveSort: (sort, direction) => dispatch(setActiveSort(sort, direction)),
     setSearchQuery: (query) => dispatch(setSearchQuery(query)),
