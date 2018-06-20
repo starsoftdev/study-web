@@ -1,10 +1,10 @@
 export default values => {
   const errors = {};
-  const leadSourceErrors = [];
-  if (!values.level && !values.addPatientQualificationSuite && !values.callTracking) {
+  const mediaTypeErrors = [];
+  if (!values.level && !values.addPatientQualificationSuite && !values.mediaTracking) {
     errors.level = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
     errors.addPatientQualificationSuite = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
-    errors.callTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
+    errors.mediaTracking = 'You need to select either Upgrade Level, Patient Messaging Suite, or Patient Qualification Suite';
   }
   if (values.startDate) {
     if (!values.level) {
@@ -15,26 +15,26 @@ export default values => {
     }
   }
 
-  if (values.callTracking && values.leadSource) {
-    values.leadSource.forEach((lead, index) => {
-      const leadError = {};
+  if (values.mediaTracking && values.mediaType) {
+    values.mediaType.forEach((mediaType, index) => {
+      const mediaTypeError = {};
 
-      if (!lead.source) {
-        leadError.source = 'Lead source can\'t be blank';
+      if (!mediaType.source) {
+        mediaTypeError.source = 'Media Type can\'t be blank';
       }
-      if (!lead.source_name) {
-        leadError.source_name = 'Lead source name can\'t be blank';
+      if (!mediaType.sourceName) {
+        mediaTypeError.sourceName = 'Media Type can\'t be blank';
       }
-      if (!lead.source || !lead.source_name) {
-        leadSourceErrors[index] = leadError;
+      if (!mediaType.source || !mediaType.sourceName) {
+        mediaTypeErrors[index] = mediaTypeError;
       }
     });
   }
 
-  if (leadSourceErrors && leadSourceErrors.length > 0) {
+  if (mediaTypeErrors && mediaTypeErrors.length > 0) {
     return {
       ...errors,
-      leadSource: leadSourceErrors,
+      mediaType: mediaTypeErrors,
     };
   } else {
     return errors;
