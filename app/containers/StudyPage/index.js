@@ -261,7 +261,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     });
     campaignOptions.unshift({ label: translate('common.constants.all'), value: -1 });
     let defaultSource = '';
-    const sourceOptions = this.props.studySources.details.filter(s => !s.isLeadSource).map(studySource => {
+    const sourceOptions = this.props.studySources.details.filter(s => !s.isMediaType).map(studySource => {
       if (studySource.source.type === 'StudyKIK') {
         defaultSource = studySource.source.value;
       }
@@ -285,8 +285,8 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
     const totalCountByGroups = {};
     const sourceMapped = this.props.studySources.details.map((studySource) => {
-      const isStudySourceNameSet = !!studySource.source_name;
-      const sourceName = studySource.source_name ? `- ${studySource.source_name}` : studySource.source.label;
+      const isStudySourceNameSet = !!studySource.sourceName;
+      const sourceName = studySource.sourceName ? `- ${studySource.sourceName}` : studySource.source.label;
       const group = studySource.source.label;
       if (totalCountByGroups[group]) {
         totalCountByGroups[group]++;
