@@ -19,7 +19,7 @@ import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 import { selectValues } from '../../../../common/selectors/form.selector';
 import ReactSelect from '../../../../components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
-import CallTrackingPageModal from '../../../../components/CallTrackingPageModal';
+import MediaTrackingModal from '../../../../components/CallTrackingPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
@@ -985,7 +985,7 @@ export default class StudyList extends React.Component { // eslint-disable-line 
               openModal={this.state.showCampaignPageModal}
               study={selectedStudies[0]}
             />
-            <CallTrackingPageModal
+            <MediaTrackingModal
               onClose={() => {
                 this.showCallTrackingModal(false);
               }}

@@ -207,7 +207,7 @@ export class ListNewStudyPage extends React.Component { // eslint-disable-line r
       });
     }
 
-    if (formValues.callTracking) {
+    if (formValues.mediaTracking) {
       addOns.push({
         title: translate('portals.page.listNewStudyPage.mediaTracking'),
         price: CALL_TRACKING_PRICE,
