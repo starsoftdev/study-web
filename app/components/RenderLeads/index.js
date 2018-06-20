@@ -51,11 +51,15 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     fields.push({ landingPageUrl: this.props.landingPageUrl, studyId: this.props.studyId });
   }
 
-  deleteMediaType(studySource, index) {
-    const { deleteMediaType, formValues } = this.props;
-    const mediaType = formValues.mediaType[index];
-    // delete the media type from the form reducer and check whether it's valid to remove it
-    deleteMediaType(mediaType.studyId, mediaType.studySourceId, index);
+  deleteSourceType(initObject, index) {
+    const { fields, deleteStudyLeadSource } = this.props;
+
+    if (initObject && initObject.studySourceId && initObject.source) {
+      deleteStudyLeadSource(initObject, index);
+      fields.remove(index);
+    } else {
+      fields.remove(index);
+    }
   }
 
   render() {
