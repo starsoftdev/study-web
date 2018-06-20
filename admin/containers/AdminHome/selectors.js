@@ -19,6 +19,11 @@ const selectStudies = () => createSelector(
   substate => substate.studies
 );
 
+const selectTotals = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.totals
+);
+
 const selectCustomFilters = () => createSelector(
   selectAdminHomeDomain(),
   substate => substate.customFilters
@@ -33,6 +38,7 @@ export default selectAdminHomePage;
 export {
   selectFilterFormValues,
   selectStudies,
+  selectTotals,
   selectCustomFilters,
   selectPaginationOptions,
 };

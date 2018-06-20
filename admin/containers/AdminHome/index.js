@@ -14,8 +14,10 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies, selectPaginationOptions } from './selectors';
+import { selectFilterFormValues, selectStudies, selectTotals, selectPaginationOptions } from './selectors';
 import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters } from './actions';
+import { selectSources } from '../App/selectors';
+import { fetchSources } from '../App/actions';
 
 const formName = 'adminDashboardFilters';
 
@@ -32,8 +34,10 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     totals: PropTypes.object,
     fetchStudiesForAdmin: PropTypes.func,
     fetchTotalsForAdmin: PropTypes.func,
+    fetchSources: PropTypes.func,
     clearFilters: PropTypes.func,
     paginationOptions: PropTypes.object,
+    sources: PropTypes.array,
   };
 
   constructor(props) {
@@ -48,13 +52,15 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchStudiesAccordingToFilters(null, null, true, null);
+  componentWillMount() {
+    this.props.fetchSources();
   }
 
   fetchStudiesAccordingToFilters(value, key, fetchByScroll, otherFiltersFormValues) {
     const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, filtersFormValues } = this.props;
     const { prevTotalsFilters, prevOffset } = this.state;
+    const sources = _.cloneDeep(this.props.sources);
+    const defaultSource = sources.find(s => { return s.type === 'StudyKIK'; });
     let filters = otherFiltersFormValues || _.cloneDeep(filtersFormValues);
 
     if ((value && key) || (key === 'campaign') || (key === 'source')) {
@@ -83,6 +89,11 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
       offset = paginationOptions.page * limit;
     }
 
+    if (!filters.source && defaultSource) {
+      filters.source = defaultSource.id;
+      change('dashboardFilters', 'source', defaultSource.id);
+    }
+
     if (filters.source === -1) {
       change('dashboardFilters', 'source', null);
       delete filters.source;
@@ -105,7 +116,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { resetForm, studies } = this.props;
+    const { resetForm, studies, totals, filtersFormValues } = this.props;
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -115,12 +126,13 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         </div>
         <FilterQueryForm
           resetForm={resetForm}
+          fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
         />
         <StatsBox />
         <div id="mediaStatsBox">
           <ExpandableSection content={<MediaStatsTable />} />
         </div>
-        <StudyInfo studies={studies} />
+        <StudyInfo studies={studies} totals={totals} filtersFormValues={filtersFormValues} />
       </div>
     );
   }
@@ -131,6 +143,8 @@ const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
   paginationOptions: selectPaginationOptions(),
   studies: selectStudies(),
+  totals: selectTotals(),
+  sources: selectSources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -139,6 +153,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
   fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
   clearFilters: () => dispatch(clearFilters()),
+  fetchSources: () => dispatch(fetchSources()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);
