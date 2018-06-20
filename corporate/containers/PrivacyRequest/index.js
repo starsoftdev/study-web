@@ -244,7 +244,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
   }
 
   render() {
-    
+
     const opt = [
       { id: 1, name: 'I\'m a person', value: 'I\'m a person' },
       { id: 2, name: 'I\'m representing an organization', value: 'I\'m representing an organization' },

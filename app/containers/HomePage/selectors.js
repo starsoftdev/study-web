@@ -90,9 +90,9 @@ const selectSearchProtocolsFormValues = () => createSelector(
   (substate) => get(substate, 'searchProtocols.values', {})
 );
 
-const selectStudyLeadSources = () => createSelector(
+const selectMediaTypes = () => createSelector(
   selectHomePageDomain(),
-  (substate) => substate.studyLeadSources
+  (substate) => substate.mediaTypes
 );
 
 
@@ -115,5 +115,5 @@ export {
   selectHomePageClientAdmins,
   selectQueryParams,
   selectEditStudyEmailNotifications,
-  selectStudyLeadSources,
+  selectMediaTypes,
 };
