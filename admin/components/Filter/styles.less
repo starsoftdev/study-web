@@ -1,0 +1,80 @@
+.filters-bar {
+  .select {
+    min-width: 90px !important;
+
+    .form-control {
+      width: 90px;
+    }
+  }
+
+  .form-control.percent-select {
+    width: 86px;
+  }
+}
+
+.gray-outline {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 15px 25px;
+  background: #ddd;
+
+  button {
+
+    &:first-child {
+      color: #999;
+      border-color: #999;
+      background-color: #fff;
+
+      &:hover {
+        color: #fff;
+        background: #999;
+      }
+    }
+
+    &:last-child {
+      margin: 0 12px 0 0;
+    }
+  }
+}
+
+.filters-btns {
+
+  .admin-search-type {
+
+    .form-control {
+      width: 210px;
+      border-radius: 3px 0 0 3px;
+      border-right-width: 1px;
+    }
+  }
+
+  .admin-search-value {
+    position: relative;
+
+    .form-control {
+      padding: 5px 50px 5px 15px;
+      border-radius: 0 3px 3px 0;
+      border-left-width: 1px;
+    }
+  }
+}
+  
+.btn-close {
+  top: 50%;
+  right: 15px;
+  .size(20px);
+  color: #00afef;
+  margin: -10px 0 0;
+  background: #fff;
+  .font(11px, 16px);
+  position: absolute;
+  text-align: center;
+  border: solid 2px #00afef;
+
+  &:hover {
+    color: #76daff;
+    border-color: #76daff;
+    cursor: pointer;
+  }
+}
