@@ -89,7 +89,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   handleSelectTab = (tab) => {
-    this.setState({ currentTab: tab, expanded: tab === 'disposition' ? true : this.state.expanded  });
+    this.setState({ currentTab: tab });
   }
 
   renderCategory() {
@@ -97,7 +97,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     const cats = currentTab === 'media' ? this.props.sources : this.props.dispositions;
 
     if (cats && cats.length > 0) {
-      if (!expanded) {
+      if (currentTab === 'media' && !expanded) {
         return (<strong className="number media-type no-animation"><span>{cats[0].type}</span></strong>);
       } else {
         return (
@@ -113,9 +113,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   renderValues(values, field) {
-    const { expanded } = this.state;
+    const { expanded, currentTab } = this.state;
     if (values.length > 0) {
-      if (!expanded) {
+      if (currentTab === 'media' && !expanded) {
         return (
           <strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
             <span>
