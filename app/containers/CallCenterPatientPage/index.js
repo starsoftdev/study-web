@@ -305,7 +305,6 @@ class CallCenterPatientPage extends Component {
                 </ol>
                 {}
                 {
-                  /* TODO: Content here */
                   patient && patient.details && (
                     <div className="carousel-inner" role="listbox">
                       <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
