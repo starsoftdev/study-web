@@ -6,6 +6,10 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change, blur } from 'redux-form';
 
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+import 'react-phone-number-input/rrui.css';
+
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectFormsTempTimezone, selectSavedSite } from '../../containers/App/selectors';
 import Input from '../../components/Input/index';
@@ -94,6 +98,10 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
 
       this.setState({ fetchingTimezone: false });
     }
+  }
+
+  onPhoneNumberChange = (value) => {
+    this.props.change('phoneNumber', value);
   }
 
   onPhoneBlur(event) {
@@ -213,14 +221,8 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             <strong className="label required">
               <label>{translate('portals.component.editSiteForm.phoneLabel')}</label>
             </strong>
-            <div className="field">
-              <Field
-                name="phoneNumber"
-                component={Input}
-                type="text"
-                disabled={savedSite.saving}
-                onBlur={this.onPhoneBlur}
-              />
+            <div className="field phone">
+              <PhoneInput onChange={this.onPhoneNumberChange} />
             </div>
           </div>
           <div className="field-row">
