@@ -17,6 +17,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     sources: PropTypes.array,
     dispositions: PropTypes.array,
     dispositionTotals: PropTypes.object,
+    mediaSources: PropTypes.object,
   }
 
   constructor(props) {
@@ -24,7 +25,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
     this.state = {
       expanded: false,
-      currentTab: 'media',
+      currentTab: 'mediaType',
     };
 
     this.toggleExpand = this.toggleExpand.bind(this);
@@ -34,10 +35,16 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   getTotalValues(currentTab) {
-    const categories = currentTab === 'media' ? this.props.sources : this.props.dispositions;
-    const totals = currentTab === 'media' ? this.props.totals : this.props.dispositionTotals;
+    let categories = currentTab === 'mediaType' ? this.props.sources : this.props.dispositions;
+    let totals = currentTab === 'mediaType' ? this.props.totals : this.props.dispositionTotals;
+
+    if (currentTab ===  'mediaName') {
+      categories = this.props.mediaSources.details;
+      totals = this.props.mediaSources;
+    }
 
     return categories.map(cat => {
+      let source = currentTab === 'mediaType' ? cat.id : cat.id - 1;
       let totalValues = {
         count_not_contacted: translate('sponsor.component.reportViewTotals.na'),
         dnq: translate('sponsor.component.reportViewTotals.na'),
@@ -48,7 +55,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         randomized: translate('sponsor.component.reportViewTotals.na'),
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
-      const source = currentTab === 'media' ? cat.id : cat.id - 1;
+      if (currentTab ===  'mediaName') {
+        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
+      }
       if (totals.details[source]) {
         totalValues = {
           count_not_contacted: (totals.details[source].count_not_contacted || totals.details[source].count_not_contacted === 0) ? parseInt(totals.details[source].count_not_contacted) : translate('sponsor.component.reportViewTotals.na'),
@@ -94,16 +103,20 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
 
   renderCategory() {
     const { expanded, currentTab } = this.state;
-    const cats = currentTab === 'media' ? this.props.sources : this.props.dispositions;
+    let cats = currentTab === 'mediaType' ? this.props.sources : this.props.dispositions;
+
+    if (currentTab ===  'mediaName') {
+      cats = this.props.mediaSources.details;
+    }
 
     if (cats && cats.length > 0) {
-      if (currentTab === 'media' && !expanded) {
-        return (<strong className="number media-type no-animation"><span>{cats[0].type}</span></strong>);
+      if (currentTab === 'mediaType' && !expanded) {
+        return (<strong className="number media-type no-animation"><span>{(cats[0].name ? cats[0].name : cats[0].type)}</span></strong>);
       } else {
         return (
           <div>
             {
-              cats.map(item => (<strong key={item.id} className="number media-type no-animation"><span>{item.type}</span></strong>))
+              cats.map(item => (<strong key={item.id} className="number media-type no-animation"><span>{(item.name ? item.name : item.type)}</span></strong>))
             }
           </div>
         );
@@ -115,7 +128,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   renderValues(values, field) {
     const { expanded, currentTab } = this.state;
     if (values.length > 0) {
-      if (currentTab === 'media' && !expanded) {
+      if (currentTab === 'mediaType' && !expanded) {
         return (
           <strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
             <span>
@@ -147,13 +160,24 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   render() {
     const { currentTab } = this.state;
     const totalValues = this.getTotalValues(currentTab);
-    const headingTitle = currentTab === 'media' ? 'headingMediaType' : 'headingDisposition';
+    let headingTitle;
+
+    if (currentTab === 'mediaType') {
+      headingTitle = 'headingMediaType';
+    } else if (currentTab ===  'mediaName') {
+      headingTitle = 'headingMediaName';
+    } else {
+      headingTitle = 'headingDisposition';
+    }
 
     return (
       <div id="carousel-example-generic" className="carousel slide popup-slider">
         <ol className="carousel-indicators">
-          <li className={classNames({ active: currentTab === 'media' })} onClick={() => this.handleSelectTab('media')}>
-            {translate('sponsor.component.reportItem.media')}
+          <li className={classNames({ active: currentTab === 'mediaType' })} onClick={() => this.handleSelectTab('mediaType')}>
+            {translate('sponsor.component.reportItem.mediaType')}
+          </li>
+          <li className={classNames({ active: currentTab === 'mediaName' })} onClick={() => this.handleSelectTab('mediaName')}>
+            {translate('sponsor.component.reportItem.mediaName')}
           </li>
           <li className={classNames({ active: currentTab === 'disposition' })} onClick={() => this.handleSelectTab('disposition')}>
             {translate('sponsor.component.reportItem.disposition')}
@@ -161,7 +185,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         </ol>
         <div className="report-page-totals-container">
           {
-            ((currentTab === 'media' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
+            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
           <ul className="list-inline list-stats">
             <li className="allcaps">
@@ -206,7 +230,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
             </li>
           </ul>
           {
-            currentTab === 'media' && <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
+            currentTab === 'mediaType' && <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
           }
         </div>
       </div>
