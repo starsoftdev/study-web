@@ -176,7 +176,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           <li className={classNames({ active: currentTab === 'mediaType' })} onClick={() => this.handleSelectTab('mediaType')}>
             {translate('sponsor.component.reportItem.mediaType')}
           </li>
-          <li className={classNames({ active: currentTab === 'mediaName' })} onClick={() => this.handleSelectTab('mediaName')}>
+          <li className={classNames('center-tab', { active: currentTab === 'mediaName' })} onClick={() => this.handleSelectTab('mediaName')}>
             {translate('sponsor.component.reportItem.mediaName')}
           </li>
           <li className={classNames({ active: currentTab === 'disposition' })} onClick={() => this.handleSelectTab('disposition')}>
