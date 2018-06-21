@@ -42,7 +42,7 @@ function mapDispatchToProps(dispatch) {
     change: (name, value) => dispatch(change(formName, name, value)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
-    resetField: (name) => dispatch(change(formName, name, null))
+    resetField: (name) => dispatch(change(formName, name, null)),
   };
 }
 
