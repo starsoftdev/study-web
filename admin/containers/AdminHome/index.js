@@ -15,16 +15,23 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues } from './selectors';
+import { fetchTotalsAdmin, fetchStudiesAdmin, fetchSources } from './actions';
+import { selectFilterFormValues, selectStudiesTotals, selectStudies, selectSources } from './selectors';
 const formName = 'adminDashboardFilters';
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
+  totals: selectStudiesTotals(),
+  studies: selectStudies(),
+  sources: selectSources(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   change: (formName, name, value) => dispatch(change(formName, name, value)),
   resetForm: () => dispatch(reset(formName)),
+  fetchTotalsAdmin: (filters, limit, offset) => dispatch(fetchTotalsAdmin(filters, limit, offset)),
+  fetchStudiesAdmin: (params, limit, offset) => dispatch(fetchStudiesAdmin(params, limit, offset)),
+  fetchSources: () => dispatch(fetchSources()),
 });
 
 @reduxForm({
@@ -32,10 +39,16 @@ const mapDispatchToProps = (dispatch) => ({
   enableReinitialize: true,
 })
 @connect(mapStateToProps, mapDispatchToProps)
-export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
+export class AdminHomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    fetchTotalsAdmin: PropTypes.func.isRequired,
+    fetchStudiesAdmin: PropTypes.func,
+    fetchSources: PropTypes.func,
+    totals: PropTypes.object,
+    studies: PropTypes.object,
+    sources: PropTypes.array,
     filtersFormValues: PropTypes.object.isRequired,
   };
 
@@ -45,6 +58,7 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.state = {
       modalOpen: false,
       customFilters: [],
+      prevOffset: null,
     };
 
     this.addFilter = this.addFilter.bind(this);
@@ -52,6 +66,32 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.setDates = this.setDates.bind(this);
+  }
+
+  componentDidMount() {
+    const filters = this.props.filtersFormValues;
+    const defaultSource = { id: 1 };
+    const offset = 0;
+    const limit = 1000000; // temp value before API didn't change
+
+    filters.source = defaultSource.id;
+
+    // TODO: need to fetch data from another custom API endpoints instead of existed ones
+    this.props.fetchSources();
+    this.props.fetchTotalsAdmin(filters, limit, offset);
+    this.props.fetchStudiesAdmin(filters, limit, offset);
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('componentWillReceiveProps', newProps.filtersFormValues);
+
+    if (newProps.filtersFormValues.campaign !== this.props.filtersFormValues.campaign) {
+      const offset = 0;
+      const limit = 1000000; // temp value before API didn't change
+      this.props.fetchTotalsAdmin({ ...newProps.filtersFormValues, source: 1 }, limit, offset);
+    }
   }
 
   addFilter(options) {
@@ -114,9 +154,27 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     return newFilters;
   }
 
+  setDates(startDate, endDate)  {
+    console.log('setDates', startDate, endDate);
+  }
+
+  handleSubmit()  {
+    const filters = cloneDeep(this.props.filtersFormValues);
+    const defaultSource = { id: 1 };
+    const offset = 0;
+    const limit = 50;
+
+    filters.source = defaultSource.id;
+
+    this.props.fetchTotalsAdmin(filters, limit, offset);
+    this.setState({ prevOffset: offset });
+  }
+
   render() {
+    const { resetForm, change, filtersFormValues, totals, studies, sources } = this.props;
     const { customFilters } = this.state;
-    const { resetForm, change, filtersFormValues } = this.props;
+
+    const campaingSelected = (typeof filtersFormValues.campaign === 'string');
 
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     return (
@@ -136,17 +194,33 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
             clearFilters={this.clearFilters}
             filters={filters}
             removeFilter={this.removeFilter}
+            handleSubmit={this.handleSubmit}
             resetForm={resetForm}
           />
         }
-        <StatsBox />
+        <StatsBox
+          totals={totals}
+          campaingSelected={campaingSelected}
+        />
         <div id="mediaStatsBox">
-          <ExpandableSection content={<MediaStatsTable />} />
+          <ExpandableSection
+            content={
+              <MediaStatsTable
+                campaingSelected={campaingSelected}
+                studies={studies}
+                sources={sources}
+              />
+            }
+          />
         </div>
-        <StudyInfo />
+        <StudyInfo
+          totals={totals}
+          setDates={this.setDates}
+          updateFilters={this.updateFilters}
+        />
       </div>
     );
   }
 }
 
-export default AdminHome;
+export default AdminHomePage;
