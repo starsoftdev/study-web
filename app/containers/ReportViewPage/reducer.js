@@ -26,6 +26,9 @@ import {
   FETCH_DISPOSITION_TOTALS_SUCCESS,
   FETCH_DISPOSITION_TOTALS,
   FETCH_DISPOSITION_TOTALS_ERROR,
+  FETCH_MEDIA_SOURCES,
+  FETCH_MEDIA_SOURCES_SUCCESS,
+  FETCH_MEDIA_SOURCES_ERROR,
 } from './constants';
 
 const initialState = {
@@ -35,6 +38,11 @@ const initialState = {
     total: 'N/A',
   },
   reportsList: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  mediaSources: {
     details: [],
     fetching: false,
     error: null,
@@ -178,6 +186,33 @@ function reportViewPageReducer(state = initialState, action) {
         totals: {
           details: {},
           source: state.totals.source,
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_MEDIA_SOURCES:
+      return {
+        ...state,
+        mediaSources: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_MEDIA_SOURCES_SUCCESS:
+      return {
+        ...state,
+        mediaSources: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_MEDIA_SOURCES_ERROR:
+      return {
+        ...state,
+        mediaSources: {
+          details: [],
           fetching: false,
           error: action.payload,
         },
