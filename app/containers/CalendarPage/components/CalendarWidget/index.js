@@ -120,12 +120,13 @@ class CalendarWidget extends React.Component {
           eventOffset={300}
           onSelectSlot={({ start, end, slots }) => {
             if (slots.length === 1) {
-              const selectedDate = this.getTimezoneDate(start);
+              const selectedDate = moment(start).tz(currentSite ? currentSite.timezone : calendarTimezone);
               this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate });
             }
           }}
           onSelectDate={(label, date) => {
-            this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: date });
+            const selectedDate = moment(date).tz(currentSite ? currentSite.timezone : calendarTimezone);
+            this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate });
           }}
           onSelectEvent={(event) => {
             const site = _.find(sites, item => item.id === event.data.site_id);
