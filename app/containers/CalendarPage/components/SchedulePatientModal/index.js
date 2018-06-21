@@ -52,7 +52,7 @@ export default class SchedulePatientModal extends Component {
     const { siteLocationOptions, isAdmin } = this.props;
 
     if (this.props.modalType === SchedulePatientModalType.HIDDEN && nextProps.modalType === SchedulePatientModalType.CREATE) {
-      let initialValues = { textReminder: true };
+      let initialValues = { textReminder: false };
 
       if (!isAdmin) {
         const site = siteLocationOptions[0];
