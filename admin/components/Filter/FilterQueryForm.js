@@ -12,6 +12,7 @@ export default class FilterQueryForm extends React.Component {
     filters: React.PropTypes.array.isRequired,
     removeFilter: React.PropTypes.func.isRequired,
     resetForm: React.PropTypes.func.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -47,7 +48,7 @@ export default class FilterQueryForm extends React.Component {
             <button className="pull-right btn btn-clear clear" onClick={() => clearFilters()}>
               Clear
             </button>
-            <button className="pull-right btn btn-default" onClick={() => {}}>
+            <button className="pull-right btn btn-default" onClick={this.props.handleSubmit}>
               Apply
             </button>
           </div>
