@@ -80,19 +80,18 @@ class CallDiv extends React.Component {
           {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
         </div>
       );
-    } else {
-      return (
-        <div className="cc-box disabled" key={key}>
-          <strong className="name">
-            <span className="first-name">{patient.first_name}</span>
-            <span> </span>
-            <span className="last-name">{patient.last_name}</span>
-          </strong>
-          <span className="email">{patient.email}</span>
-          {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
-        </div>
-      );
     }
+    return (
+      <div className="cc-box disabled" key={key}>
+        <strong className="name">
+          <span className="first-name">{patient.first_name}</span>
+          <span> </span>
+          <span className="last-name">{patient.last_name}</span>
+        </strong>
+        <span className="email">{patient.email}</span>
+        {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
+      </div>
+    );
   }
 
   renderNewPatients = () => {
