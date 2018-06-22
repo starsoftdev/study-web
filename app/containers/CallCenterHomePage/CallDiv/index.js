@@ -59,26 +59,40 @@ class CallDiv extends React.Component {
   }
 
   getPatientView = (patient, key) => {
-    let patientPhone;
     if (patient.phone) {
+      let patientPhone;
       // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
       try {
         patientPhone = formatPhone(patient.phone);
       } catch (err) {
         patientPhone = patient.phone;
       }
+      return (
+        <div className="cc-box" key={key} onClick={() => { this.gotoPatientPage(patient.id); }}>
+          <strong className="name">
+            <span className="first-name">{patient.first_name}</span>
+            <span> </span>
+            <span className="last-name">{patient.last_name}</span>
+          </strong>
+          <span className="email">{patient.email}</span>
+          <span className="phone">{patientPhone}</span>
+          {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
+          {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
+        </div>
+      );
+    } else {
+      return (
+        <div className="cc-box disabled" key={key}>
+          <strong className="name">
+            <span className="first-name">{patient.first_name}</span>
+            <span> </span>
+            <span className="last-name">{patient.last_name}</span>
+          </strong>
+          <span className="email">{patient.email}</span>
+          {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
+        </div>
+      );
     }
-    return (<div className="cc-box" key={key} onClick={() => { this.gotoPatientPage(patient.id); }}>
-      <strong className="name">
-        <span className="first-name">{patient.first_name}</span>
-        <span> </span>
-        <span className="last-name">{patient.last_name}</span>
-      </strong>
-      <span className="email">{patient.email}</span>
-      <span className="phone">{patientPhone}</span>
-      {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
-      {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
-    </div>);
   }
 
   renderNewPatients = () => {
