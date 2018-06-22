@@ -49,11 +49,11 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
           </div>
           <div className="box-element pi">
             <span className="name">{translate('sponsor.component.reportItem.principalInvestigator')}</span>
-            <span className="value">
-              <OverlayTrigger placement="top" overlay={tooltip}>
+            <OverlayTrigger placement="top" overlay={tooltip}>
+              <span className="value">
                 <a target="_blank" href={landingHref} className={classNames('tooltip-element', { na: (item.principalinvestigatorname === null) })}>{piName}</a>
-              </OverlayTrigger>
-            </span>
+              </span>
+            </OverlayTrigger>
           </div>
           <div className="box-element site-name">
             <span className="name">{translate('sponsor.component.reportItem.siteLocation')}</span>
