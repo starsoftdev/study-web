@@ -72,6 +72,25 @@ const plugins = [
     },
   }),
 
+  // Minify and optimize the index.html
+  new HtmlWebpackPlugin({
+    filename: 'vendor.html',
+    chunks: ['vendor'],
+    template: 'vendor/index.html',
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true,
+    },
+  }),
+
   // Extract the CSS into a seperate file
   new MiniCssExtractPlugin({
     filename: "[name].[contenthash].css",
@@ -119,6 +138,10 @@ module.exports = require('./webpack.base.babel')({
     'corporate': [
       'babel-polyfill', // Necessary for browser usage
       path.join(process.cwd(), 'corporate/app.js'),
+    ],
+    'vendor': [
+      'babel-polyfill', // Necessary for browser usage
+      path.join(process.cwd(), 'vendor/app.js'),
     ]
   },
 
