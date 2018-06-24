@@ -1,10 +1,10 @@
 /* eslint-disable comma-dangle, no-case-declarations */
 
-import { findIndex, pullAt } from 'lodash';
+import { pullAt } from 'lodash';
 import {
   FETCH_STUDIES_FOR_ADMIN, FETCH_STUDIES_FOR_ADMIN_ERROR, FETCH_STUDIES_FOR_ADMIN_SUCCESS,
   FETCH_TOTALS_FOR_ADMIN, FETCH_TOTALS_FOR_ADMIN_ERROR, FETCH_TOTALS_FOR_ADMIN_SUCCESS,
-  CLEAR_FILTERS, ADD_CUSTOM_FILTER, REMOVE_CUSTOM_FILTER, CLEAR_CUSTOM_FILTERS,
+  CLEAR_FILTERS, ADD_CUSTOM_FILTER, REMOVE_CUSTOM_FILTER, CLEAR_CUSTOM_FILTERS, CLEAR_STUDIES,
 } from './constants';
 
 const initialState = {
@@ -15,7 +15,7 @@ const initialState = {
   },
   paginationOptions: {
     hasMoreItems: true,
-    page: 1,
+    page: 0,
   },
   totals: {
     details: {},
@@ -100,6 +100,20 @@ export default function adminHomeReducer(state = initialState, action) {
           error: null,
         },
       };
+    case CLEAR_STUDIES:
+      return {
+        ...state,
+        totals: {
+          details: [],
+          fetching: false,
+          error: null,
+        },
+        studies: {
+          details: [],
+          fetching: false,
+          error: null,
+        },
+      };
     case CLEAR_FILTERS:
       return {
         ...state,
@@ -121,7 +135,9 @@ export default function adminHomeReducer(state = initialState, action) {
       };
     case REMOVE_CUSTOM_FILTER:
       const newCustomFilters = [...state.customFilters];
-      pullAt(newCustomFilters, findIndex(newCustomFilters, action.payload));
+      if (action.payload && action.payload.key) {
+        pullAt(newCustomFilters, newCustomFilters.findIndex((e) => e.key === action.payload.key));
+      }
       return {
         ...state,
         customFilters: newCustomFilters,
