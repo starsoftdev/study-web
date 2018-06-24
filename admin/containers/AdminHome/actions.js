@@ -5,7 +5,7 @@
 import {
   FETCH_STUDIES_FOR_ADMIN, FETCH_STUDIES_FOR_ADMIN_SUCCESS, FETCH_STUDIES_FOR_ADMIN_ERROR,
   FETCH_TOTALS_FOR_ADMIN, FETCH_TOTALS_FOR_ADMIN_SUCCESS, FETCH_TOTALS_FOR_ADMIN_ERROR,
-  CLEAR_FILTERS, ADD_CUSTOM_FILTER, REMOVE_CUSTOM_FILTER, CLEAR_CUSTOM_FILTERS,
+  CLEAR_FILTERS, ADD_CUSTOM_FILTER, REMOVE_CUSTOM_FILTER, CLEAR_CUSTOM_FILTERS, CLEAR_STUDIES,
 } from './constants';
 
 
@@ -81,5 +81,11 @@ export function removeCustomFilter(payload) {
 export function clearCustomFilters() {
   return {
     type: CLEAR_CUSTOM_FILTERS,
+  };
+}
+
+export function clearStudies() {
+  return {
+    type: CLEAR_STUDIES,
   };
 }

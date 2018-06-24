@@ -1,25 +1,26 @@
 import React, { Component, PropTypes } from 'react';
-import { change, Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { StickyContainer } from 'react-sticky';
 import classNames from 'classnames';
 
 import Filter from './index';
-import { clearCustomFilters, removeCustomFilter } from '../../containers/AdminHome/actions';
+import { clearCustomFilters, removeCustomFilter, clearStudies } from '../../containers/AdminHome/actions';
 import { selectCustomFilters, selectFilterFormValues } from '../../containers/AdminHome/selectors';
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class FilterQueryForm extends Component {
   static propTypes = {
     resetForm: React.PropTypes.func.isRequired,
-    change: React.PropTypes.func.isRequired,
+    changeAdminFilters: React.PropTypes.func.isRequired,
     clearCustomFilters: React.PropTypes.func.isRequired,
+    clearStudies: React.PropTypes.func.isRequired,
     removeCustomFilter: React.PropTypes.func.isRequired,
     fetchStudiesAccordingToFilters: React.PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
+    filterUnchanged: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -37,31 +38,32 @@ export class FilterQueryForm extends Component {
   }
 
   clearFilters() {
-    const { resetForm, clearCustomFilters } = this.props;
+    const { resetForm, clearCustomFilters, clearStudies } = this.props;
     clearCustomFilters();
     resetForm();
+    clearStudies();
   }
 
   removeFilter(filter) {
-    const { removeCustomFilter, change, filtersFormValues } = this.props;
+    const { removeCustomFilter, changeAdminFilters, filtersFormValues, clearStudies } = this.props;
     const filters = cloneDeep(filtersFormValues);
 
     if (filter.type === 'search') {
       removeCustomFilter(filter);
-
-      change('adminDashboardFilters', 'search', []);
+      clearStudies();
     } else if (filters[filter.name]) {
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
 
-      change('adminDashboardFilters', filter.name, filters[filter.name]);
+      changeAdminFilters(filter.name, filters[filter.name]);
+      clearStudies();
     }
   }
 
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      if (key !== 'campaign' && key !== 'search') {
+      if (key !== 'campaign' && key !== 'search' && key !== 'admin-search-type' && key !== 'admin-search-value') {
         filterValues.forEach(v => {
           if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
             newFilters.push({
@@ -77,12 +79,12 @@ export class FilterQueryForm extends Component {
   }
 
   render() {
-    const { filtersFormValues, customFilters, fetchStudiesAccordingToFilters } = this.props;
+    const { filtersFormValues, customFilters, fetchStudiesAccordingToFilters, filterUnchanged } = this.props;
 
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     if (filters.length > 0) {
       return (
-        <StickyContainer className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
+        <div className={classNames('filters-section', { 'bar-active': (filters.length > 0) }, { 'filters-added': (filters.length > 0) })}>
           <div className="filters-bar">
             <div className="filters-holder search-filters">
               <strong className="title">FILTERS</strong>
@@ -102,12 +104,12 @@ export class FilterQueryForm extends Component {
               <button className="pull-right btn btn-clear clear" onClick={() => this.clearFilters()}>
                 Clear
               </button>
-              <button className="pull-right btn btn-default" onClick={() => fetchStudiesAccordingToFilters(null, null, false, null)}>
+              <button className="pull-right btn btn-default" disabled={filterUnchanged} onClick={() => fetchStudiesAccordingToFilters(null, null, false, null)}>
                 Apply
               </button>
             </div>
           </div>
-        </StickyContainer>
+        </div>
       );
     } else {
       return null;
@@ -122,8 +124,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
   clearCustomFilters: () => dispatch(clearCustomFilters()),
+  clearStudies: () => dispatch(clearStudies()),
   removeCustomFilter: (filter) => dispatch(removeCustomFilter(filter)),
 });
 
