@@ -3,7 +3,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import { change, reset, reduxForm } from 'redux-form';
+import { change, reset } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
@@ -14,28 +14,32 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies, selectTotals, selectPaginationOptions } from './selectors';
-import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters } from './actions';
+import { selectFilterFormValues, selectStudies, selectTotals, selectPaginationOptions, selectCustomFilters } from './selectors';
+import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies } from './actions';
 import { selectSources } from '../App/selectors';
-import { fetchSources } from '../App/actions';
+import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole } from '../App/actions';
 
 const formName = 'adminDashboardFilters';
 
-@reduxForm({
-  form: 'adminFilter',
-  enableReinitialize: true,
-})
 export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
+    changeAdminFilters: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
+    customFilters: PropTypes.array.isRequired,
     studies: PropTypes.object,
     totals: PropTypes.object,
     fetchStudiesForAdmin: PropTypes.func,
     fetchTotalsForAdmin: PropTypes.func,
+    fetchIndications: PropTypes.func,
+    fetchProtocols: PropTypes.func,
+    fetchSponsors: PropTypes.func,
     fetchSources: PropTypes.func,
+    fetchCro: PropTypes.func,
+    fetchUsersByRole: PropTypes.func,
     clearFilters: PropTypes.func,
+    clearStudies: PropTypes.func,
     paginationOptions: PropTypes.object,
     sources: PropTypes.array,
   };
@@ -50,18 +54,27 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     };
 
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
+    this.getCurrentFilters = this.getCurrentFilters.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchSources();
+    this.props.fetchIndications();
+    this.props.fetchProtocols();
+    this.props.fetchSponsors();
+    this.props.fetchCro();
+    this.props.fetchUsersByRole();
   }
 
-  fetchStudiesAccordingToFilters(value, key, fetchByScroll, otherFiltersFormValues) {
-    const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, filtersFormValues } = this.props;
+  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
+    const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, sources, clearStudies } = this.props;
     const { prevTotalsFilters, prevOffset } = this.state;
-    const sources = _.cloneDeep(this.props.sources);
-    const defaultSource = sources.find(s => { return s.type === 'StudyKIK'; });
-    let filters = otherFiltersFormValues || _.cloneDeep(filtersFormValues);
+
+    const allSources = _.cloneDeep(sources);
+    const defaultSource = allSources.find(s => {
+      return s.type === 'StudyKIK';
+    });
+    let filters = this.getCurrentFilters();
 
     if ((value && key) || (key === 'campaign') || (key === 'source')) {
       const newFilterValues = _.cloneDeep(value);
@@ -70,37 +83,30 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
     let isEmpty = true;
 
-    _.forEach(filters, (filter, k) => {
-      const initFilter = _.cloneDeep(filter);
-      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'nearbyStudies' && k !== 'address') {
-        const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
-        filters[k] = withoutAll;
-      }
-
-      if (!_.isEmpty(initFilter)) {
+    _.forEach(filters, (filter) => {
+      if (!_.isEmpty(filter)) {
         isEmpty = false;
       }
     });
+
+    if (defaultSource && filters.source === defaultSource.id) {
+      change('dashboardFilters', 'source', defaultSource.id);
+    } else if (!filters.source) {
+      change('dashboardFilters', 'source', null);
+    }
 
     let offset = 0;
     const limit = 50;
 
     if (fetchByScroll) {
       offset = paginationOptions.page * limit;
-    }
-
-    if (!filters.source && defaultSource) {
-      filters.source = defaultSource.id;
-      change('dashboardFilters', 'source', defaultSource.id);
-    }
-
-    if (filters.source === -1) {
-      change('dashboardFilters', 'source', null);
-      delete filters.source;
+    } else {
+      clearStudies();
     }
 
     if (isEmpty) {
       clearFilters();
+      this.setState({ prevTotalsFilters: null });
     } else if (_.isEqual(prevTotalsFilters, filters)) {
       if (prevOffset !== offset || _.isEmpty(totals.details)) {
         fetchStudiesForAdmin(filters, limit, offset);
@@ -115,8 +121,54 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     }
   }
 
+  getCurrentFilters() {
+    const { filtersFormValues, customFilters, sources } = this.props;
+    const allSources = _.cloneDeep(sources);
+    const defaultSource = allSources.find(s => {
+      return s.type === 'StudyKIK';
+    });
+    let filters = _.cloneDeep(filtersFormValues);
+
+    // adding custom filters and remove unneeded attributes
+    if (filters['admin-search-type']) {
+      delete filters['admin-search-type'];
+    }
+    if (filters['admin-search-value']) {
+      delete filters['admin-search-value'];
+    }
+    customFilters.forEach(cf => {
+      if (cf.key === 'studyNumber' && cf.value) {
+        filters = { ...filters, search: { value: cf.value.trim() } };
+      } else if (cf.key === 'address' && cf.value) {
+        filters = { ...filters, address: { value: cf.value.trim() } };
+      } else if (cf.key === 'postalCode' && cf.value) {
+        filters = { ...filters, postalCode: { value: cf.value.trim() } };
+      }
+    });
+
+    _.forEach(filters, (filter, k) => {
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address') {
+        const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
+        filters[k] = withoutAll;
+      }
+    });
+
+    if (!filters.source && defaultSource) {
+      change('dashboardFilters', 'source', defaultSource.id);
+      filters.source = defaultSource.id;
+    }
+
+    if (filters.source === -1) {
+      change('dashboardFilters', 'source', null);
+      delete filters.source;
+    }
+
+    return filters;
+  }
+
   render() {
-    const { resetForm, studies, totals, filtersFormValues } = this.props;
+    const { resetForm, studies, totals, filtersFormValues, changeAdminFilters, paginationOptions } = this.props;
+    const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -126,13 +178,21 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         </div>
         <FilterQueryForm
           resetForm={resetForm}
+          changeAdminFilters={changeAdminFilters}
           fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+          filterUnchanged={filterUnchanged}
         />
         <StatsBox />
         <div id="mediaStatsBox">
           <ExpandableSection content={<MediaStatsTable />} />
         </div>
-        <StudyInfo studies={studies} totals={totals} filtersFormValues={filtersFormValues} />
+        <StudyInfo
+          studies={studies}
+          totals={totals}
+          filtersFormValues={filtersFormValues}
+          paginationOptions={paginationOptions}
+          fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+        />
       </div>
     );
   }
@@ -145,15 +205,23 @@ const mapStateToProps = createStructuredSelector({
   studies: selectStudies(),
   totals: selectTotals(),
   sources: selectSources(),
+  customFilters: selectCustomFilters(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
+  change: (fName, name, value) => dispatch(change(fName, name, value)),
+  changeAdminFilters: (name, value) => dispatch(change(formName, name, value)),
   resetForm: () => dispatch(reset(formName)),
   fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
   fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
-  clearFilters: () => dispatch(clearFilters()),
+  fetchIndications: () => dispatch(fetchIndications()),
+  fetchProtocols: () => dispatch(fetchProtocols()),
+  fetchSponsors: () => dispatch(fetchSponsors()),
   fetchSources: () => dispatch(fetchSources()),
+  fetchUsersByRole: () => dispatch(fetchUsersByRole()),
+  fetchCro: () => dispatch(fetchCro()),
+  clearFilters: () => dispatch(clearFilters()),
+  clearStudies: () => dispatch(clearStudies()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);

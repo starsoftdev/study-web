@@ -3,8 +3,10 @@ import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import { browserHistory } from 'react-router';
 import moment from 'moment-timezone';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import ReactSelect from '../../components/Input/ReactSelect';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const campaignOptions = [
   {
@@ -28,6 +30,8 @@ export class StudyInfo extends Component {
     studies: PropTypes.object,
     totals: PropTypes.object,
     filtersFormValues: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    fetchStudiesAccordingToFilters: PropTypes.func,
   }
 
   constructor(props) {
@@ -37,6 +41,7 @@ export class StudyInfo extends Component {
 
     this.goToStudyStatsPage = this.goToStudyStatsPage.bind(this);
     this.goToStudyEditPage = this.goToStudyEditPage.bind(this);
+    this.loadItems = this.loadItems.bind(this);
   }
 
   goToStudyStatsPage(studyId) {
@@ -45,6 +50,12 @@ export class StudyInfo extends Component {
 
   goToStudyEditPage(studyId) {
     browserHistory.push(`/admin/studies/${studyId}/edit`);
+  }
+
+  loadItems() {
+    if (this.props.studies.details.length > 0) {
+      this.props.fetchStudiesAccordingToFilters(null, null, true);
+    }
   }
 
   renderStudyTiles(study, key) {
@@ -149,10 +160,10 @@ export class StudyInfo extends Component {
   }
 
   render() {
-    const { studies, totals } = this.props;
+    const { studies, totals, paginationOptions } = this.props;
     return (
       <div id="infoSection">
-        {totals.details.total_studies && (
+        {(totals.details && totals.details.total_studies) && (
           <div className="head">
             <h2 className="pull-left">
               <span>Active: {totals.details.total_active || 0}</span>
@@ -182,11 +193,22 @@ export class StudyInfo extends Component {
             </div>
           </div>
         )}
-        <div className="tiles">
-          {
-            studies.details.map((study, key) => this.renderStudyTiles(study, key))
-          }
-        </div>
+
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadItems}
+          initialLoad={false}
+          hasMore={paginationOptions.hasMoreItems}
+        >
+          <div className="tiles">
+            {
+              studies.details.map((study, key) => this.renderStudyTiles(study, key))
+            }
+          </div>
+          {studies.fetching &&
+          <div className="loading"><LoadingSpinner showOnlyIcon /></div>}
+        </InfiniteScroll>
+
       </div>
     );
   }

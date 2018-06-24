@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Field, change } from 'redux-form';
+import { Field, change, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
@@ -10,7 +10,7 @@ import FiltersModalForm from '../../components/FiltersModalForm';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { selectCustomFilters, selectFilterFormValues } from '../../containers/AdminHome/selectors';
-import { addCustomFilter } from '../../containers/AdminHome/actions';
+import { addCustomFilter, removeCustomFilter } from '../../containers/AdminHome/actions';
 
 const filterOptions = {
   searchOptions : [
@@ -27,12 +27,15 @@ const filterOptions = {
   ],
 };
 
+const formName = 'adminDashboardFilters';
+@reduxForm({ form: formName, destroyOnUnmount: false })
 export class FiltersPageForm extends Component {
   static propTypes = {
     change: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
     addCustomFilter: PropTypes.func.isRequired,
+    removeCustomFilter: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -48,7 +51,7 @@ export class FiltersPageForm extends Component {
     this.updateFilters = this.updateFilters.bind(this);
     this.addFilter = this.addFilter.bind(this);
 
-    this.searchType = null;
+    this.searchType = 'studyNumber';
     this.searchValue = null;
   }
 
@@ -74,18 +77,18 @@ export class FiltersPageForm extends Component {
   }
 
   updateFilters(key, value) {
-    this.props.change('adminDashboardFilters', key, value);
+    this.props.change(key, value);
   }
 
   addFilter(options) {
-    const { customFilters, addCustomFilter } = this.props;
-    if (customFilters.length === 0) {
-      const newOptions = {
-        ...options,
-        onClose: () => this.removeFilter({ name: 'search' }),
-      };
-      addCustomFilter(newOptions);
+    if (!options.value) {
+      return;
     }
+    const { customFilters, addCustomFilter, removeCustomFilter } = this.props;
+    if (customFilters.length !== 0) {
+      removeCustomFilter(options);
+    }
+    addCustomFilter(options);
   }
 
   render() {
@@ -102,6 +105,7 @@ export class FiltersPageForm extends Component {
             type="submit"
             onClick={() => this.addFilter({
               name: this.mapSearchLabels(this.searchType),
+              key: this.searchType,
               type: 'search',
               value: this.searchValue,
             })}
@@ -122,8 +126,9 @@ export class FiltersPageForm extends Component {
           name="admin-search-type"
           className="admin-search-type pull-right"
           component={ReactSelect}
-          placeholder="Select Type"
+          clearable={false}
           searchable
+          selectedValue={this.searchType}
           options={filterOptions.searchOptions}
           onChange={(e) => {
             this.searchType = e;
@@ -162,7 +167,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   addCustomFilter: (filter) => dispatch(addCustomFilter(filter)),
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
+  removeCustomFilter: (filter) => dispatch(removeCustomFilter(filter)),
+  change: (name, value) => dispatch(change(name, value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FiltersPageForm);
