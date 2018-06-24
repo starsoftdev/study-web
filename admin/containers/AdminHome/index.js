@@ -20,28 +20,27 @@ import { selectSources } from '../App/selectors';
 import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole } from '../App/actions';
 
 const formName = 'adminDashboardFilters';
-
-export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
+export class AdminHomePage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     changeAdminFilters: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
+    fetchSources: PropTypes.func,
+    totals: PropTypes.object,
+    studies: PropTypes.object,
+    sources: PropTypes.array,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
-    studies: PropTypes.object,
-    totals: PropTypes.object,
     fetchStudiesForAdmin: PropTypes.func,
     fetchTotalsForAdmin: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchProtocols: PropTypes.func,
     fetchSponsors: PropTypes.func,
-    fetchSources: PropTypes.func,
     fetchCro: PropTypes.func,
     fetchUsersByRole: PropTypes.func,
     clearFilters: PropTypes.func,
     clearStudies: PropTypes.func,
     paginationOptions: PropTypes.object,
-    sources: PropTypes.array,
   };
 
   constructor(props) {
@@ -55,6 +54,14 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
 
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.getCurrentFilters = this.getCurrentFilters.bind(this);
+    this.setDates = this.setDates.bind(this);
+  }
+
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.filtersFormValues.campaign !== this.props.filtersFormValues.campaign) {
+      this.fetchStudiesAccordingToFilters(null, null, false);
+    }
   }
 
   componentWillMount() {
@@ -166,9 +173,15 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
     return filters;
   }
 
+  setDates(startDate, endDate)  {
+    console.log('setDates', startDate, endDate);
+  }
+
   render() {
     const { resetForm, studies, totals, filtersFormValues, changeAdminFilters, paginationOptions } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
+
+    const campaingSelected = (typeof filtersFormValues.campaign === 'string');
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -182,7 +195,10 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
           fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
           filterUnchanged={filterUnchanged}
         />
-        <StatsBox />
+        <StatsBox
+          totals={totals}
+          campaingSelected={campaingSelected}
+        />
         <div id="mediaStatsBox">
           <ExpandableSection content={<MediaStatsTable />} />
         </div>
@@ -191,13 +207,14 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
           totals={totals}
           filtersFormValues={filtersFormValues}
           paginationOptions={paginationOptions}
+          changeAdminFilters={changeAdminFilters}
           fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+          setDates={this.setDates}
         />
       </div>
     );
   }
 }
-
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
@@ -224,4 +241,4 @@ const mapDispatchToProps = (dispatch) => ({
   clearStudies: () => dispatch(clearStudies()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHomePage);
