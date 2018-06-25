@@ -1,9 +1,10 @@
 /**
- * Call Center Homepage
+ * Vendor Amdin Page
  *
  */
 
 import React, { Component } from 'react';
+import Helmet from 'react-helmet';
 import Button from 'react-bootstrap/lib/Button';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
@@ -83,8 +84,11 @@ class VendorAdminPage extends Component {
       email: 'bruce@we.com',
     }];
 
+    const pageTitle = `Vendor Admins - StudyKIK`;
+
     return (
       <div className="container-fluid" id="vendorAdminPage">
+        <Helmet title={pageTitle} />
         <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmin')}</h2>
         <div className="clearfix container-fluid">
           <form action="#" className="form-search pull-left" onSubmit={this.onSubmit}>
