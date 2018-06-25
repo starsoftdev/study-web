@@ -18,6 +18,13 @@
 #infoSection .clickable { cursor: pointer; }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
+#infoSection .part li label { display: inline-block; vertical-align: top; width: 55%; }
+#infoSection .part li span { display: inline-block; vertical-align: top; width: 45%; }
+#infoSection .part.campaign li label { width: 70%; }
+#infoSection .part.campaign li span { width: 30%; }
+#infoSection .part.stat li label { width: 80%; }
+#infoSection .part.stat li span { text-align: right; width: 20%; }
+#infoSection .loading { text-align: center; }
 
 #statsBox { background: #fff; border: 2px solid #00afef; margin: 0 0 30px; padding: 20px; }
 #statsBox ul { list-style: none; padding: 0; }
@@ -44,7 +51,9 @@
 #mediaStatsTable thead th { padding: 0 5px; }
 #mediaStatsTable thead th:first-child { padding: 0; }
 #mediaStatsTable th { text-transform: uppercase; }
+#mediaStatsTable td { text-align: center; }
 #mediaStatsTable thead tr { display: table-row; }
+#mediaStatsTable thead th { text-align: center; }
 #mediaStatsTable tr.alwaysVisible { display: table-row; }
 @media screen and (max-width: 1520px) {
   #mediaStatsTable th { font-size: 16px; }
@@ -62,6 +71,13 @@
 .expanded #mediaStatsTable tr { display: table-row; }
 .expendableSection .showMoreBtn { background: #ddd; display: block; font-weight: bold; outline: none; padding: 17px; text-align: center; width: 100%; }
 .expendableSection .showMoreBtn:hover { background: #ccc; }
+
+.color {
+  &.red { color: #f33; }
+  &.yellow { color: #ffe11a; }
+  &.green { color: #a0cf67; }
+  &.purple { color: #873fbd; }
+}
 
 /***************************************************************************************
 *************************** Admin Study Stats Page *************************************
