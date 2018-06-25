@@ -84,7 +84,7 @@ class VendorAdminPage extends Component {
       email: 'bruce@we.com',
     }];
 
-    const pageTitle = `Vendor Admins - StudyKIK`;
+    const pageTitle = 'Vendor Admins - StudyKIK';
 
     return (
       <div className="container-fluid" id="vendorAdminPage">
