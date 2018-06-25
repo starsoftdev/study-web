@@ -105,7 +105,10 @@ class CallCenterPatientPage extends Component {
           const { dispositions } = patient.details;
           if (dispositions) {
             const disposition = dispositions.find(item => item.userId === currentUser.id);
-            this.updateTabFromDisposition(disposition.dispositionKey);
+            if (disposition) {
+              this.updateTabFromDisposition(disposition.dispositionKey);
+              return;
+            }
           }
           break;
         }
@@ -177,12 +180,10 @@ class CallCenterPatientPage extends Component {
       patientCategoryId,
     });
 
-    if (dispositionKey !== undefined) {
-      submitPatientDisposition({
-        patientId: patient.details.id,
-        dispositionKey,
-      });
-    }
+    submitPatientDisposition({
+      patientId: patient.details.id,
+      dispositionKey,
+    });
   }
 
   updateTabFromDisposition = (dispositionKey) => {
