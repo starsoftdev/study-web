@@ -14,10 +14,10 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies, selectTotals, selectPaginationOptions, selectCustomFilters } from './selectors';
-import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies } from './actions';
-import { selectSources } from '../App/selectors';
-import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole } from '../App/actions';
+import { selectPaginationOptions } from './selectors';
+import { selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters } from '../App/selectors';
+import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
+  fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies } from '../App/actions';
 
 const formName = 'adminDashboardFilters';
 export class AdminHomePage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -181,7 +181,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     const { resetForm, studies, totals, filtersFormValues, changeAdminFilters, paginationOptions } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
-    const campaingSelected = (typeof filtersFormValues.campaign === 'string');
+    const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -197,7 +197,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
         />
         <StatsBox
           totals={totals}
-          campaingSelected={campaingSelected}
+          campainSelected={campaignSelected}
         />
         <div id="mediaStatsBox">
           <ExpandableSection content={<MediaStatsTable />} />
