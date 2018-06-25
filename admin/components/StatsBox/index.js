@@ -8,7 +8,7 @@ import { isEqual } from 'lodash';
 export class StatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     totals: PropTypes.object,
-    campaingSelected: PropTypes.bool,
+    campaignSelected: PropTypes.bool,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -17,7 +17,7 @@ export class StatsBox extends Component { // eslint-disable-line react/prefer-st
   }
 
   render() {
-    const { totals, campaingSelected } = this.props;
+    const { totals, campaignSelected } = this.props;
     const details = totals.details || {};
 
     const redCount = parseInt(details.total_red) || 0;
@@ -63,7 +63,7 @@ export class StatsBox extends Component { // eslint-disable-line react/prefer-st
         <div className="section section1">
           <ul>
             <li><strong>Last 24 hours:</strong> {details.total_today || 0}</li>
-            <li><strong>Campaign Total:</strong> {campaingSelected ? (details.total_campaign || 0) : 'N/A'}</li>
+            <li><strong>Campaign Total:</strong> {campaignSelected ? (details.total_campaign || 0) : 'N/A'}</li>
             <li><strong>Grand Total:</strong> {details.total_grand || 0}</li>
           </ul>
         </div>
