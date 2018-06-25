@@ -32,6 +32,7 @@ import { default as ServiceUnavailable } from './containers/ServiceUnavailable';
 import { default as ThankYouPage } from './containers/ThankYouPage';
 import { default as ThankYouPage2 } from './containers/ThankYouPage2';
 import { default as PrivacyRequestPage } from './containers/PrivacyRequest';
+import { default as CookiesAndOtherTechnologiesPage } from './containers/CookiesAndOtherTechnologiesPage';
 
 import './assets/less/main.less';
 
@@ -76,6 +77,7 @@ const routes = {
     { path: '/privacy-request', component: PrivacyRequestPage },
     { path: '/pqs', component: PQS },
     { path: '/terms-and-conditions', component: TermsAndConditionsPage },
+    { path: '/cookies', component: CookiesAndOtherTechnologiesPage },
     { path: '/app', component: LoginPage, onEnter: redirectApp },
     { path: '/indication/:indication*', component: Indication },
     { path: '/br/indication/:indication*', component: Indication },
