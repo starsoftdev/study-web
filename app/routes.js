@@ -875,6 +875,26 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      path: '/app/vendor/admins',
+      name: 'vendorAdminPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('./containers/Vendor/Admin/reducer'),
+          System.import('./containers/Vendor/Admin/sagas'),
+          System.import('./containers/Vendor/Admin'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('callCenterPatientPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {
