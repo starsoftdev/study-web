@@ -140,9 +140,9 @@ export function* editProtocolWorker(action) {
     const response = yield call(request, requestURL, params);
 
     yield put(editProtocolSuccess(response));
-    toastr.success(translate('common.constants.success'), translate('client.page.editProtocolForm.toastrSuccess'));
+    toastr.success(translate('common.constants.success'), translate('client.component.editProtocolForm.toastrSuccess'));
   } catch (err) {
-    const errorMessage = get(err, 'message', translate('client.page.editProtocolForm.toastrDefaultError'));
+    const errorMessage = get(err, 'message', translate('client.component.editProtocolForm.toastrDefaultError'));
     toastr.error('', errorMessage);
     yield put(editProtocolError(err));
     if (err.status === 401) {
