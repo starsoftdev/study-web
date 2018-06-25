@@ -487,6 +487,18 @@
     "client.page.helpSupport.header": "Help and Support",
     "client.page.helpSupport.friendlyStaff": "To speak with one of our friendly staff members, please contact us.",
 
+    "client.page.vendor.admin.addVendorAdmin": "ADD VENDOR ADMIN",
+    "client.page.vendor.admin.company": "Company",
+    "client.page.vendor.admin.email": "Email",
+    "client.page.vendor.admin.firstName": "First Name",
+    "client.page.vendor.admin.lastName": "Last Name",
+    "client.page.vendor.admin.name": "Name",
+    "client.page.vendor.admin.study": "STUDY",
+    "client.page.vendor.admin.studyNumber": "STUDY",
+    "client.page.vendor.admin.submit": "Submit",
+    "client.page.vendor.admin.vendorAdmin": "VENDOR ADMIN",
+    "client.page.vendor.admin.vendorAdmins": "VENDOR ADMINS",
+
     "corporate.component.footer.copyright": "© StudyKIK ${year}. All rights reserved.",
     "corporate.component.footer.privacy": "Privacy Policy",
     "corporate.component.footer.terms": "Terms & Conditions",
