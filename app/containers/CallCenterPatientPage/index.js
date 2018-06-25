@@ -127,8 +127,8 @@ class CallCenterPatientPage extends Component {
     const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
     this.setState({ selectedTab });
 
-    let callCenterPatientCategoryId = '';
-    let patientCategoryId = '';
+    let callCenterPatientCategoryId;
+    let patientCategoryId;
     let dispositionKey;
 
     switch (selectedTab) {
@@ -219,7 +219,7 @@ class CallCenterPatientPage extends Component {
     submitPatientUpdate({
       patientId: patient.details.id,
       callCenterPatientCategoryId: 5,
-      patientCategoryId: 2, // Call / Text Attempted
+      patientCategoryId: 5, // scheduled
     });
 
     this.setState({ isScheduleModalVisible: false });
