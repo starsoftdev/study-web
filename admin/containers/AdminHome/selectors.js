@@ -14,25 +14,31 @@ const selectFilterFormValues = () => createSelector(
   substate => get(substate, 'adminDashboardFilters.values', {})
 );
 
-const selectStudiesTotals = () => createSelector(
-  selectAdminHomeDomain(),
-  substate => substate.totals
-);
-
 const selectStudies = () => createSelector(
   selectAdminHomeDomain(),
   substate => substate.studies
 );
 
-const selectSources = () => createSelector(
+const selectTotals = () => createSelector(
   selectAdminHomeDomain(),
-  substate => substate.sources
+  substate => substate.totals
+);
+
+const selectCustomFilters = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.customFilters
+);
+
+const selectPaginationOptions = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.paginationOptions
 );
 
 export default selectAdminHomePage;
 export {
-  selectStudiesTotals,
   selectFilterFormValues,
   selectStudies,
-  selectSources,
+  selectTotals,
+  selectCustomFilters,
+  selectPaginationOptions,
 };

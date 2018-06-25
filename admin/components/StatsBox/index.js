@@ -58,8 +58,6 @@ export class StatsBox extends Component { // eslint-disable-line react/prefer-st
       { label: 'TIER 4', value: tier4Count, percent: tier4Percent, color: '#949ca1' },
     ];
 
-    console.log('details', details);
-
     return (
       <div id="statsBox">
         <div className="section section1">
