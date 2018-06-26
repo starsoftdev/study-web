@@ -875,6 +875,7 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
       path: '/app/vendor/admins',
       name: 'vendorAdminPage',
       getComponent(nextState, cb) {
@@ -887,7 +888,7 @@ export default function createRoutes(store) {
         const renderRoute = loadModule(cb);
 
         importModules.then(([reducer, sagas, component]) => {
-          injectReducer('callCenterPatientPage', reducer.default);
+          injectReducer('vendorAdminPage', reducer.default);
           injectSagas(sagas.default);
           renderRoute(component);
         });
