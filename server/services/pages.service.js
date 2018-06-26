@@ -5,6 +5,7 @@ const fetchLanding = (landingId) => {
   return rp({
     uri: `${API_URL}/landingPages/${landingId}/fetchLanding`,
     json: true,
+    rejectUnauthorized: process.env.NODE_ENV !== 'development',
   });
 };
 
