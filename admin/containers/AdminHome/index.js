@@ -14,8 +14,7 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectPaginationOptions } from './selectors';
-import { selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters } from '../App/selectors';
+import { selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters, selectStudiesPaginationOptions } from '../App/selectors';
 import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
   fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies } from '../App/actions';
 
@@ -218,7 +217,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
-  paginationOptions: selectPaginationOptions(),
+  paginationOptions: selectStudiesPaginationOptions(),
   studies: selectStudies(),
   totals: selectTotals(),
   sources: selectSources(),
