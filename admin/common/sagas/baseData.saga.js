@@ -1,6 +1,7 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
 import { take, call, put, fork } from 'redux-saga/effects';
+import { takeLatest } from 'redux-saga';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import request from '../../utils/request';
@@ -14,6 +15,8 @@ import {
   FETCH_PROTOCOLS,
   FETCH_CRO,
   FETCH_USERS_BY_ROLE,
+  FETCH_STUDIES_FOR_ADMIN,
+  FETCH_TOTALS_FOR_ADMIN,
 } from '../../containers/App/constants';
 
 import {
@@ -31,7 +34,12 @@ import {
   fetchCroError,
   fetchUsersByRoleSuccess,
   fetchUsersByRoleError,
+  fetchStudiesForAdminError,
+  fetchStudiesForAdminSuccess,
+  fetchTotalsForAdminError,
+  fetchTotalsForAdminSuccess,
 } from '../../containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
 
 export default function* baseDataSaga() {
   yield fork(fetchIndicationsWatcher);
@@ -41,6 +49,8 @@ export default function* baseDataSaga() {
   yield fork(fetchProtocolsWatcher);
   yield fork(fetchCroWatcher);
   yield fork(fetchUsersByRoleWatcher);
+  yield fork(fetchStudiesForAdminWatcher);
+  yield fork(fetchTotalsForAdminWatcher);
 }
 
 function* fetchIndicationsWatcher() {
@@ -206,5 +216,65 @@ function* fetchUsersByRoleWatcher() {
       toastr.error('', errorMessage);
       yield put(fetchUsersByRoleError(err));
     }
+  }
+}
+
+export function* fetchStudiesForAdminWatcher() {
+  yield* takeLatest(FETCH_STUDIES_FOR_ADMIN, fetchStudiesForAdminWorker);
+}
+
+export function* fetchStudiesForAdminWorker(action) {
+  const { params, limit, offset } = action;
+  try {
+    const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    let hasMore = true;
+    const page = (offset / 50) + 1;
+    if (response.studies.length < 50) {
+      hasMore = false;
+    }
+
+    if (response.studies.length === 0 && offset === 0) {
+      toastr.error('', translate('portals.client.component.studiesList.fetchStudiesToastrError'));
+    }
+
+    yield put(fetchStudiesForAdminSuccess(response, hasMore, page));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchStudiesForAdminError(err));
+  }
+}
+
+export function* fetchTotalsForAdminWatcher() {
+  yield* takeLatest(FETCH_TOTALS_FOR_ADMIN, fetchTotalsForAdminWorker);
+}
+
+export function* fetchTotalsForAdminWorker(action) {
+  const { params, limit, offset } = action;
+  try {
+    const requestURL = `${API_URL}/studies/getTotalsForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchTotalsForAdminSuccess(response));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchTotalsForAdminError(err));
   }
 }

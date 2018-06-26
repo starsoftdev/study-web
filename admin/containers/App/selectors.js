@@ -108,17 +108,22 @@ const selectFilterFormValues = () => createSelector(
 
 const selectStudies = () => createSelector(
   selectGlobal(),
-  substate => substate.studies
+  (substate) => get(substate, 'baseData.studies', {})
 );
 
 const selectTotals = () => createSelector(
   selectGlobal(),
-  substate => substate.totals
+  (substate) => get(substate, 'baseData.totals', {})
 );
 
 const selectCustomFilters = () => createSelector(
   selectGlobal(),
-  substate => substate.customFilters
+  (substate) => get(substate, 'baseData.customFilters', {})
+);
+
+const selectStudiesPaginationOptions = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.studiesPaginationOptions', {})
 );
 
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
@@ -150,4 +155,5 @@ export {
   selectStudies,
   selectTotals,
   selectCustomFilters,
+  selectStudiesPaginationOptions,
 };

@@ -7,12 +7,4 @@ const selectAdminHomePage = () => createSelector(
   substate => substate
 );
 
-const selectPaginationOptions = () => createSelector(
-  selectAdminHomeDomain(),
-  substate => substate.paginationOptions
-);
-
 export default selectAdminHomePage;
-export {
-  selectPaginationOptions,
-};
