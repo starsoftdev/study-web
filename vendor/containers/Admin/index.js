@@ -23,7 +23,7 @@ import SearchStudyForm from './SearchStudyForm';
 
 import './style.less';
 
-
+const pageTitle = 'Vendor Admins - StudyKIK';
 const formName = 'vendorAdminSearch';
 @reduxForm({ form: formName })
 
@@ -83,8 +83,6 @@ class VendorAdminPage extends Component {
       last_name: 'Wanye',
       email: 'bruce@we.com',
     }];
-
-    const pageTitle = 'Vendor Admins - StudyKIK';
 
     return (
       <div className="container-fluid" id="vendorAdminPage">
