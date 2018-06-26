@@ -4,6 +4,7 @@ import { pullAt } from 'lodash';
 import {
   FETCH_STUDIES_FOR_ADMIN, FETCH_STUDIES_FOR_ADMIN_ERROR, FETCH_STUDIES_FOR_ADMIN_SUCCESS,
   FETCH_TOTALS_FOR_ADMIN, FETCH_TOTALS_FOR_ADMIN_ERROR, FETCH_TOTALS_FOR_ADMIN_SUCCESS,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN, FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS, FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR,
   CLEAR_FILTERS, ADD_CUSTOM_FILTER, REMOVE_CUSTOM_FILTER, CLEAR_CUSTOM_FILTERS, CLEAR_STUDIES,
 } from './constants';
 
@@ -18,6 +19,11 @@ const initialState = {
     page: 0,
   },
   totals: {
+    details: {},
+    fetching: false,
+    error: null,
+  },
+  mediaTotals: {
     details: {},
     fetching: false,
     error: null,
@@ -100,6 +106,33 @@ export default function adminHomeReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN:
+      return {
+        ...state,
+        mediaTotals: {
+          details: state.mediaTotals.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS:
+      return {
+        ...state,
+        mediaTotals: {
+          details: action.payload,
+          fetching: false,
+          error: true,
+        },
+      };
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR:
+      return {
+        ...state,
+        mediaTotals: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
     case CLEAR_STUDIES:
       return {
         ...state,
@@ -110,6 +143,11 @@ export default function adminHomeReducer(state = initialState, action) {
         },
         studies: {
           details: [],
+          fetching: false,
+          error: null,
+        },
+        mediaTotals: {
+          details: {},
           fetching: false,
           error: null,
         },

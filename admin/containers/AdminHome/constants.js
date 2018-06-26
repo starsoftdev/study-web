@@ -14,3 +14,7 @@ export const FETCH_STUDIES_FOR_ADMIN_ERROR              = 'AdminHomePage/FETCH_S
 export const FETCH_TOTALS_FOR_ADMIN                     = 'AdminHomePage/FETCH_TOTALS_FOR_ADMIN';
 export const FETCH_TOTALS_FOR_ADMIN_SUCCESS             = 'AdminHomePage/FETCH_TOTALS_FOR_ADMIN_SUCCESS';
 export const FETCH_TOTALS_FOR_ADMIN_ERROR               = 'AdminHomePage/FETCH_TOTALS_FOR_ADMIN_ERROR';
+
+export const FETCH_MEDIA_TOTALS_FOR_ADMIN               = 'AdminHomePage/FETCH_MEDIA_TOTALS_FOR_ADMIN';
+export const FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS       = 'AdminHomePage/FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS';
+export const FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR         = 'AdminHomePage/FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR';
