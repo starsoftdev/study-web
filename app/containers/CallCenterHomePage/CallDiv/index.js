@@ -42,7 +42,7 @@ class CallDiv extends React.Component {
 
   renderPatientTextMessageSummary(patient) {
 
-    if ((patient.last_message_body && patient.last_message_date) && patient.count_unread > 0) {
+    if (patient.last_message_body && patient.last_message_date) {
       return (
         <div className="msg-alert">
           <div className="msg">
