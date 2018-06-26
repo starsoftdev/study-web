@@ -17,6 +17,7 @@ import {
   GET_REPORTS_TOTALS,
   GET_CATEGORY_NOTES,
   FETCH_DISPOSITION_TOTALS,
+  FETCH_MEDIA_SOURCES,
 } from './constants';
 
 import {
@@ -30,6 +31,8 @@ import {
   getCategoryNotesError,
   getDispositionTotalsSuccess,
   getDispositionTotalsError,
+  mediaSourcesFetched,
+  mediaSourcesFetchingError,
 } from './actions';
 
 
@@ -40,6 +43,7 @@ export function* reportViewPageSaga() {
   const watcherD = yield fork(fetchReportsTotalsWatcher);
   const watcherE = yield fork(getCategoryNotesWatcher);
   const watcherF = yield fork(fetchDispositionsWatcher);
+  const watcherG = yield fork(fetchMediaSourcesWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -49,6 +53,7 @@ export function* reportViewPageSaga() {
   yield cancel(watcherD);
   yield cancel(watcherE);
   yield cancel(watcherF);
+  yield cancel(watcherG);
 }
 
 export function* fetchReportsWatcher() {
@@ -176,6 +181,26 @@ export function* fetchReportsTotalsWorker(action) {
       toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
     }
     yield put(getReportsTotalsError(err));
+  }
+}
+
+export function* fetchMediaSourcesWatcher() {
+  yield* takeLatest(FETCH_MEDIA_SOURCES, fetchMediaSourcesWorker);
+}
+
+function* fetchMediaSourcesWorker(action) {
+  try {
+    const queryString = composeQueryString(action.searchParams);
+    const options = {
+      method: 'GET',
+    };
+
+    const requestURL = `${API_URL}/studies/getLeadSourcesByProtocol?${queryString}`;
+    const response = yield call(request, requestURL, options);
+
+    yield put(mediaSourcesFetched(response));
+  } catch (err) {
+    yield put(mediaSourcesFetchingError(err));
   }
 }
 

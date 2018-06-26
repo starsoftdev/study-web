@@ -67,6 +67,11 @@ const selectDispositionTotals = () => createSelector(
   (substate) => substate.dispositionTotals
 );
 
+const selectMediaSources = () => createSelector(
+  selectReportViewPageDomain(),
+  (substate) => substate.mediaSources
+);
+
 export default selectReportViewPage;
 export {
   selectReportViewPageDomain,
@@ -79,4 +84,5 @@ export {
   selectCategoryNotes,
   selectNotesPaginationOptions,
   selectDispositionTotals,
+  selectMediaSources,
 };
