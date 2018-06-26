@@ -165,7 +165,9 @@ export default class UploadPatientsForm extends Component {
         const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
         change('protocol', newSelectedProtocol.studyId);
         change('indication', newSelectedProtocol.indicationId);
-        this.setState({ needToUpdateProtocol : false });
+        this.setState({ needToUpdateProtocol : false }, () => {
+          this.protocolField.props.onChange(newSelectedProtocol.studyId);
+        });
       }
     }
 
@@ -534,6 +536,7 @@ export default class UploadPatientsForm extends Component {
                 options={protocolOptions}
                 disabled={isFetchingProtocols || !this.state.siteLocation}
                 onChange={this.selectProtocol}
+                ref={(node) => this.protocolField = node}
               />
             </div>
           }
