@@ -26,21 +26,21 @@ const selectProposalFormError = () => createSelector(
 );
 
 /**
- * RequestProposalForm -> `callTracking`
+ * RequestProposalForm -> `mediaTracking`
  */
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'requestProposal.values.callTracking')
+  (substate) => get(substate, 'requestProposal.values.mediaTracking')
 );
 
 /**
- * RequestProposalForm -> count of `leads`
+ * RequestProposalForm -> count of `mediaTypes`
  */
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'requestProposal.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'requestProposal.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 
