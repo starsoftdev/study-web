@@ -4,12 +4,12 @@
  *
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactSuperSelect from 'react-super-select';
 import classNames from 'classnames';
 import _ from 'lodash';
 
-class ReactMultiCheckBox extends React.Component {
+class ReactMultiCheckBox extends Component {
   componentDidMount() {
   }
 
