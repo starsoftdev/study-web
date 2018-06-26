@@ -1551,7 +1551,7 @@
     "common.disposition.id0": "NONE",
     "common.disposition.id1": "PRESCN",
     "common.disposition.id2": "DNQ",
-    "common.disposition.id3": "NI'",
+    "common.disposition.id3": "NI",
     "common.disposition.id4": "CNC",
 
     "common.patientCategory.id1": "New Patient",
