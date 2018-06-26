@@ -879,9 +879,9 @@ export default function createRoutes(store) {
       name: 'vendorAdminPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
-          System.import('./containers/Vendor/Admin/reducer'),
-          System.import('./containers/Vendor/Admin/sagas'),
-          System.import('./containers/Vendor/Admin'),
+          System.import('../vendor/containers/Admin/reducer'),
+          System.import('../vendor/containers/Admin/sagas'),
+          System.import('../vendor/containers/Admin'),
         ]);
 
         const renderRoute = loadModule(cb);

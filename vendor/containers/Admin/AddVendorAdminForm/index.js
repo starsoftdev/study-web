@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../../../components/Input';
-import LoadingSpinner from '../../../../components/LoadingSpinner';
-import { translate } from '../../../../../common/utilities/localization';
+import Input from '../../../../app/components/Input';
+import LoadingSpinner from '../../../../app/components/LoadingSpinner';
+import { translate } from '../../../../common/utilities/localization';
 
 @reduxForm({ form: 'addVendorAdminForm' })
 
