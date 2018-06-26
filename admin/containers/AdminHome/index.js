@@ -200,19 +200,19 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
         {(totals.details && totals.details.total_studies) && (
           <div id="mediaStatsBox">
             <ExpandableSection
-            content={
-              <MediaStatsTable
-                campaingSelected={campaingSelected}
-                campaign={filtersFormValues.campaign}
-                startDate={filtersFormValues.startDate}
-                endDate={filtersFormValues.endDate}
-                studies={studies}
-                sources={sources}
-                mediaTotals={mediaTotals}
-                fetchMediaTotalsForAdmin={fetchMediaTotalsForAdmin}
-              />
-            }
-          />
+              content={
+                <MediaStatsTable
+                  campaingSelected={campaingSelected}
+                  campaign={filtersFormValues.campaign}
+                  startDate={filtersFormValues.startDate}
+                  endDate={filtersFormValues.endDate}
+                  studies={studies}
+                  sources={sources}
+                  mediaTotals={mediaTotals}
+                  fetchMediaTotalsForAdmin={fetchMediaTotalsForAdmin}
+                />
+              }
+            />
           </div>)
         }
         <StudyInfo
