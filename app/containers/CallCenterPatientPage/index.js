@@ -244,7 +244,6 @@ class CallCenterPatientPage extends Component {
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
         pdfURL = `https://s3.amazonaws.com/${bucket}/${protocolForPatient.filename}`;
-        console.log('protocolForPatient', pdfURL);
       }
 
       patientIndications = patient.details.patientIndications;
