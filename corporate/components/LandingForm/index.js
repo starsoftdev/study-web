@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
 import Input from '../../../app/components/Input';
-import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
+import MixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
@@ -112,15 +112,13 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
     const ipcountryValue = document.head.querySelector('[property=ipcountry]').content;
-    const inputWrap = (ipcountryValue !== 'US') ? mixIntlTelInput : Input;
     const bsClass = `form-control input-lg ${(this.state.codeLength) ? `length-${this.state.codeLength}` : ''}`;
     let errorMessage = '';
-    const phoneInput =
-      (<Field
+    const phoneInput = (
+      <Field
         name="phone"
-        ccName="code"
         type="tel"
-        component={inputWrap}
+        component={MixIntlTelInput}
         placeholder={phonePlaceholder}
         className="field-row fixed-height"
         bsClass={bsClass}
