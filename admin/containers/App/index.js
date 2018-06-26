@@ -11,7 +11,7 @@
  * the linting exception.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import ReactGA from 'react-ga';
@@ -29,7 +29,7 @@ import IdleModal from '../../components/IdleModal';
 
 import { selectAuthState, selectCurrentUser } from './selectors';
 
-class App extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class App extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     children: React.PropTypes.node,

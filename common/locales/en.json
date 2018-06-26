@@ -848,6 +848,7 @@
 
     "sponsor.component.reportViewTotals.na": "N/A",
     "sponsor.component.reportViewTotals.headingMediaType": "MEDIA TYPE",
+    "sponsor.component.reportViewTotals.headingMediaName": "MEDIA NAME",
     "sponsor.component.reportViewTotals.headingDisposition": "DISPOSITION",
     "sponsor.component.reportViewTotals.headingNewPatient": "NEW<br /> PATIENT",
     "sponsor.component.reportViewTotals.headingCallTextAttempted": "CALL / TEXT<br /> ATTEMPTED",
@@ -892,7 +893,8 @@
     "sponsor.component.reportItem.lastLoginDateMask": "MM/DD/YY [at] h:mm A",
     "sponsor.component.reportItem.seeLess": "see less",
     "sponsor.component.reportItem.seeMore": "see more",
-    "sponsor.component.reportItem.media": "Media",
+    "sponsor.component.reportItem.mediaType": "Media Type",
+    "sponsor.component.reportItem.mediaName": "Media Name",
     "sponsor.component.reportItem.disposition": "Disposition",
 
     "sponsor.component.patientNote.studyKIK": "StudyKIK",

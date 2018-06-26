@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 import enhanceWithClickOutside from 'react-click-outside';
@@ -6,7 +6,7 @@ import enhanceWithClickOutside from 'react-click-outside';
 
 import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 
-class AvatarMenu extends React.Component {
+class AvatarMenu extends Component {
   static propTypes = {
     handleLogoutClick: PropTypes.func.isRequired,
     currentUser: PropTypes.any,
