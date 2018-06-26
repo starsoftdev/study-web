@@ -24,6 +24,11 @@ const selectTotals = () => createSelector(
   substate => substate.totals
 );
 
+const selectMediaTotals = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.mediaTotals
+);
+
 const selectCustomFilters = () => createSelector(
   selectAdminHomeDomain(),
   substate => substate.customFilters
@@ -41,4 +46,5 @@ export {
   selectTotals,
   selectCustomFilters,
   selectPaginationOptions,
+  selectMediaTotals,
 };

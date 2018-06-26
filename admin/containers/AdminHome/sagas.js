@@ -9,6 +9,7 @@ import { translate } from '../../../common/utilities/localization';
 import {
   FETCH_STUDIES_FOR_ADMIN,
   FETCH_TOTALS_FOR_ADMIN,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN,
 } from './constants';
 
 import {
@@ -16,6 +17,8 @@ import {
   fetchStudiesForAdminError,
   fetchTotalsForAdminSuccess,
   fetchTotalsForAdminError,
+  fetchMediaTotalsForAdminSuccess,
+  fetchMediaTotalsForAdminError,
 } from './actions';
 
 // Bootstrap sagas
@@ -83,9 +86,32 @@ export function* fetchTotalsForAdminWorker(action) {
   }
 }
 
+export function* fetchMediaTotalsForAdminWatcher() {
+  yield* takeLatest(FETCH_MEDIA_TOTALS_FOR_ADMIN, fetchMediaTotalsForAdminWorker);
+}
+
+export function* fetchMediaTotalsForAdminWorker(action) {
+  const { params } = action;
+  try {
+    const requestURL = `${API_URL}/studies/getMediaTotalsForDashboard`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchMediaTotalsForAdminSuccess(response));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchMediaTotalsForAdminError(err));
+  }
+}
+
 export function* adminHomePageSaga() {
   const fetchStudiesForAdminWatcher1 = yield fork(fetchStudiesForAdminWatcher);
   const fetchTotalsForAdminWatcher1 = yield fork(fetchTotalsForAdminWatcher);
+  const fetchMediaTotalsForAdminWatcher1 = yield fork(fetchMediaTotalsForAdminWatcher);
 
 
   const options = yield take(LOCATION_CHANGE);
@@ -93,5 +119,6 @@ export function* adminHomePageSaga() {
   if (options.payload.pathname !== '/admin/home') {
     yield cancel(fetchStudiesForAdminWatcher1);
     yield cancel(fetchTotalsForAdminWatcher1);
+    yield cancel(fetchMediaTotalsForAdminWatcher1);
   }
 }
