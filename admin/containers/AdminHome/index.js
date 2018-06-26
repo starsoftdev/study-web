@@ -14,9 +14,14 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters, selectStudiesPaginationOptions } from '../App/selectors';
-import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
+import {
+  selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters,
+  selectStudiesPaginationOptions } from '../App/selectors';
+import {
+  fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
   fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies } from '../App/actions';
+import { selectMediaTotals } from './selectors';
+import { fetchMediaTotalsForAdmin } from './actions';
 
 const formName = 'adminDashboardFilters';
 export class AdminHomePage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -26,6 +31,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     resetForm: PropTypes.func.isRequired,
     fetchSources: PropTypes.func,
     totals: PropTypes.object,
+    mediaTotals: PropTypes.object,
     studies: PropTypes.object,
     sources: PropTypes.array,
     filtersFormValues: PropTypes.object.isRequired,
@@ -37,6 +43,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     fetchSponsors: PropTypes.func,
     fetchCro: PropTypes.func,
     fetchUsersByRole: PropTypes.func,
+    fetchMediaTotalsForAdmin: PropTypes.func,
     clearFilters: PropTypes.func,
     clearStudies: PropTypes.func,
     paginationOptions: PropTypes.object,
@@ -53,7 +60,6 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
 
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.getCurrentFilters = this.getCurrentFilters.bind(this);
-    this.setDates = this.setDates.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -165,12 +171,9 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     return filters;
   }
 
-  setDates(startDate, endDate)  {
-    console.log('setDates', startDate, endDate);
-  }
-
   render() {
-    const { resetForm, studies, totals, filtersFormValues, changeAdminFilters, paginationOptions } = this.props;
+    const { resetForm, studies, mediaTotals, sources, totals, filtersFormValues, changeAdminFilters, paginationOptions,
+      fetchMediaTotalsForAdmin } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
@@ -193,7 +196,20 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
         />
         {(totals.details && totals.details.total_studies) && (
           <div id="mediaStatsBox">
-            <ExpandableSection content={<MediaStatsTable />} />
+            <ExpandableSection
+              content={
+                <MediaStatsTable
+                  campaignSelected={campaignSelected}
+                  campaign={filtersFormValues.campaign}
+                  startDate={filtersFormValues.startDate}
+                  endDate={filtersFormValues.endDate}
+                  studies={studies}
+                  sources={sources}
+                  mediaTotals={mediaTotals}
+                  fetchMediaTotalsForAdmin={fetchMediaTotalsForAdmin}
+                />
+              }
+            />
           </div>)
         }
         <StudyInfo
@@ -203,7 +219,6 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
           paginationOptions={paginationOptions}
           changeAdminFilters={changeAdminFilters}
           fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
-          setDates={this.setDates}
         />
       </div>
     );
@@ -215,6 +230,7 @@ const mapStateToProps = createStructuredSelector({
   paginationOptions: selectStudiesPaginationOptions(),
   studies: selectStudies(),
   totals: selectTotals(),
+  mediaTotals: selectMediaTotals(),
   sources: selectSources(),
   customFilters: selectCustomFilters(),
 });
@@ -225,6 +241,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(reset(formName)),
   fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
   fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
+  fetchMediaTotalsForAdmin: (params) => dispatch(fetchMediaTotalsForAdmin(params)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),
   fetchSponsors: () => dispatch(fetchSponsors()),

@@ -26,7 +26,6 @@ export class StudyInfo extends Component {
     paginationOptions: PropTypes.object,
     fetchStudiesAccordingToFilters: PropTypes.func,
     changeAdminFilters: PropTypes.func.isRequired,
-    setDates: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -92,7 +91,7 @@ export class StudyInfo extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { setDates } = this.props;
+    const { changeAdminFilters, fetchStudiesAccordingToFilters } = this.props;
     const range = this.state.predefined;
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
@@ -110,7 +109,11 @@ export class StudyInfo extends Component {
       },
     }, () => {
       this.hidePopup();
-      setDates(startDate.toISOString(), endDate.toISOString());
+      changeAdminFilters('startDate', startDate);
+      changeAdminFilters('endDate', endDate);
+      setTimeout(() => {
+        fetchStudiesAccordingToFilters(null, null, false);
+      }, 200);
     });
   }
 

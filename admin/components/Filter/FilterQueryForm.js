@@ -63,7 +63,7 @@ export class FilterQueryForm extends Component {
   mapFilterValues(filters) {
     const newFilters = [];
     mapKeys(filters, (filterValues, key) => {
-      if (key !== 'campaign' && key !== 'search' && key !== 'admin-search-type' && key !== 'admin-search-value') {
+      if (key !== 'campaign' && key !== 'search' && key !== 'startDate' && key !== 'endDate' && key !== 'admin-search-type' && key !== 'admin-search-value') {
         filterValues.forEach(v => {
           if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
             newFilters.push({

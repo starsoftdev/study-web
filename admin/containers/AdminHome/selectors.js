@@ -7,4 +7,12 @@ const selectAdminHomePage = () => createSelector(
   substate => substate
 );
 
+const selectMediaTotals = () => createSelector(
+  selectAdminHomeDomain(),
+  substate => substate.mediaTotals
+);
+
 export default selectAdminHomePage;
+export {
+  selectMediaTotals,
+};
