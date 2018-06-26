@@ -20,7 +20,7 @@ import {
   setProcessingStatus,
 } from '../../GlobalNotifications/actions';
 
-import { selectClientCredits, selectClientSites } from '../../App/selectors';
+import { selectClientSites } from '../../App/selectors';
 import PatientText from './PatientText';
 
 const formName = 'CallCenterPatientPage.Text';
@@ -33,7 +33,6 @@ class TextSection extends React.Component {
     active: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    clientCredits: React.PropTypes.object,
     fetchStudyPatientMessages: React.PropTypes.func.isRequired,
     sendStudyPatientMessages: React.PropTypes.func.isRequired,
     setProcessingStatus: React.PropTypes.func,
@@ -135,15 +134,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
-    if (clientCredits === 0 || clientCredits === null) {
-      toastr.error('', translate('client.component.textSection.toastrCreditsError'));
-      return;
-    }
     const textarea = this.textarea;
     const options = {
       studyId,
       currentUserId: currentUser.id,
+      isCallCenter: true,
       isProxy: currentUser.isProxy,
       patientId: currentPatient.id,
       body: textarea.value,
@@ -246,19 +241,17 @@ class TextSection extends React.Component {
 
   render() {
     const { currentPatient, active, ePMS } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null);
     const notValidPhone = !currentPatient.phone;
-    const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
+    const sendDisabled = !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
 
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          {this.renderTextArea(disabled || unsubscribed || !ePMS)}
+          {this.renderTextArea(unsubscribed || !ePMS)}
         </div>
         <div className="btns-section">
           <span className="remaining-counter">
@@ -280,7 +273,6 @@ class TextSection extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  clientCredits: selectClientCredits(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   site: selectClientSites(),
 });

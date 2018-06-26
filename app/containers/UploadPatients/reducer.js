@@ -156,7 +156,7 @@ export default function uploadPatientsPageReducer(state = initialState, action) 
           details: action.payload.map((item) => {
             return {
               source: { value: item.source_id, label: item.type },
-              source_name: item.source_name,
+              sourceName: item.sourceName,
               studySourceId: item.studySourceId,
             };
           }),

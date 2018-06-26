@@ -136,9 +136,9 @@ export default function patientDatabasePageReducer(state = initialState, action)
           details: action.payload.map((item) => {
             return {
               source: { value: item.source_id, label: item.type },
-              source_name: item.source_name,
+              sourceName: item.sourceName,
               studySourceId: item.studySourceId,
-              isLeadSource: item.isLeadSource,
+              isMediaType: item.isMediaType,
             };
           }),
           fetching: false,
