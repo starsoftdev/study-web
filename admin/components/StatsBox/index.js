@@ -1,39 +1,85 @@
-import React, { Component } from 'react';
+/* eslint-disable no-multi-spaces */
+
+import React, { Component, PropTypes } from 'react';
 import { PieChart } from 'react-d3';
+import { isEqual } from 'lodash';
 
 
-export class AdminHome extends Component { // eslint-disable-line react/prefer-stateless-function
+export class StatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    totals: PropTypes.object,
+    campaingSelected: PropTypes.bool,
+  };
+
+  shouldComponentUpdate(nextProps) {
+    const equal = isEqual(nextProps.totals.details, this.props.totals.details);
+    return !equal;
+  }
 
   render() {
+    const { totals, campaingSelected } = this.props;
+    const details = totals.details || {};
+
+    const redCount = parseInt(details.total_red) || 0;
+    const yellowCount = parseInt(details.total_yellow) || 0;
+    const greenCount = parseInt(details.total_green) || 0;
+    const purpleCount = parseInt(details.total_purple) || 0;
+
+    const colorsTotal = redCount + yellowCount + greenCount + purpleCount;
+
+    const redPercent = redCount ? ((redCount / colorsTotal) * 100).toFixed(2) : 0;
+    const yellowPercent = yellowCount ? ((yellowCount / colorsTotal) * 100).toFixed(2) : 0;
+    const greenPercent = greenCount ? ((greenCount / colorsTotal) * 100).toFixed(2) : 0;
+    const purplePercent = purpleCount ? ((purpleCount / colorsTotal) * 100).toFixed(2) : 0;
+
+    const tier1Count = parseInt(details.total_tier_one) || 0;
+    const tier2Count = parseInt(details.total_tier_two) || 0;
+    const tier3Count = parseInt(details.total_tier_three) || 0;
+    const tier4Count = parseInt(details.total_tier_four) || 0;
+
+    const tiersTotal = tier1Count + tier2Count + tier3Count + tier4Count;
+
+    const tier1Percent = tier1Count ? ((tier1Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier2Percent = tier2Count ? ((tier2Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier3Percent = tier3Count ? ((tier3Count / tiersTotal) * 100).toFixed(2) : 0;
+    const tier4Percent = tier4Count ? ((tier4Count / tiersTotal) * 100).toFixed(2) : 0;
+
     const pieData1 = [
-      { label: 'RED', value: 40, percent: 40, color: '#dd0000' },
-      { label: 'YELLOW', value: 30, percent: 30, color: '#f9ce15' },
-      { label: 'GREEN', value: 20, percent: 20, color: '#7dbc00' },
-      { label: 'PURPLE', value: 10, percent: 10, color: '#873fbd' },
+      { label: 'RED',    value: redCount,    percent: redPercent, color: '#dd0000' },
+      { label: 'YELLOW', value: yellowCount, percent: yellowPercent, color: '#f9ce15' },
+      { label: 'GREEN',  value: greenCount,  percent: greenPercent, color: '#7dbc00' },
+      { label: 'PURPLE', value: purpleCount, percent: purplePercent, color: '#873fbd' },
     ];
 
     const pieData2 = [
-      { label: 'TIER 1', value: 40, percent: 40, color: '#00afef' },
-      { label: 'TIER 2', value: 30, percent: 30, color: '#f78e1e' },
-      { label: 'TIER 3', value: 20, percent: 20, color: '#a0cf67' },
-      { label: 'TIER 4', value: 10, percent: 10, color: '#949ca1' },
+      { label: 'TIER 1', value: tier1Count, percent: tier1Percent, color: '#00afef' },
+      { label: 'TIER 2', value: tier2Count, percent: tier2Percent, color: '#f78e1e' },
+      { label: 'TIER 3', value: tier3Count, percent: tier3Percent, color: '#a0cf67' },
+      { label: 'TIER 4', value: tier4Count, percent: tier4Percent, color: '#949ca1' },
     ];
 
     return (
       <div id="statsBox">
         <div className="section section1">
           <ul>
-            <li><strong>Last 24 hours:</strong> 100</li>
-            <li><strong>Campaign Total:</strong> 200</li>
-            <li><strong>Grand Total:</strong> 700</li>
+            <li><strong>Last 24 hours:</strong> {details.total_today || 0}</li>
+            <li><strong>Campaign Total:</strong> {campaingSelected ? (details.total_campaign || 0) : 'N/A'}</li>
+            <li><strong>Grand Total:</strong> {details.total_grand || 0}</li>
           </ul>
         </div>
         <div className="section section2">
           <ul className="half">
-            <li><strong className="color red">RED:</strong> 40 (40%)</li>
-            <li><strong className="color yellow">Yellow:</strong> 30 (30%)</li>
-            <li><strong className="color green">Green:</strong> 20 (20%)</li>
-            <li><strong className="color purple">Purple:</strong> 10 (10%)</li>
+            {
+              pieData1.map((data, index) => {
+                const colorClass = data.label.toLowerCase();
+                return (
+                  <li key={index}>
+                    <strong className={`color ${colorClass}`}>{data.label}: </strong>
+                    <span className="number">{data.value} <span>({`${data.percent}%`})</span></span>
+                  </li>
+                );
+              })
+            }
           </ul>
           <div className="chart">
             <PieChart
@@ -52,10 +98,16 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
         </div>
         <div className="section section2">
           <ul className="half">
-            <li><strong className="tier1">Tier 1:</strong> 40 (40%)</li>
-            <li><strong className="tier2">Tier 2:</strong> 30 (30%)</li>
-            <li><strong className="tier3">Tier 3:</strong> 20 (20%)</li>
-            <li><strong className="tier4">Tier 4:</strong> 10 (10%)</li>
+            {
+              pieData2.map((data, index) => {
+                return (
+                  <li key={index}>
+                    <strong className={`tier${(index + 1)}`}>{data.label}: </strong>
+                    <span className="number">{data.value} <span>({`${data.percent}%`})</span></span>
+                  </li>
+                );
+              })
+            }
           </ul>
           <div className="chart">
             <PieChart
@@ -77,4 +129,4 @@ export class AdminHome extends Component { // eslint-disable-line react/prefer-s
   }
 }
 
-export default AdminHome;
+export default StatsBox;
