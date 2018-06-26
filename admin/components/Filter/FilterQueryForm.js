@@ -17,7 +17,7 @@ export class FilterQueryForm extends Component {
     clearCustomFilters: React.PropTypes.func.isRequired,
     clearStudies: React.PropTypes.func.isRequired,
     removeCustomFilter: React.PropTypes.func.isRequired,
-    fetchStudiesAccordingToFilters: React.PropTypes.func.isRequired,
+    applyFilters: React.PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
     filterUnchanged: PropTypes.bool.isRequired,
@@ -79,7 +79,7 @@ export class FilterQueryForm extends Component {
   }
 
   render() {
-    const { filtersFormValues, customFilters, fetchStudiesAccordingToFilters, filterUnchanged } = this.props;
+    const { filtersFormValues, customFilters, applyFilters, filterUnchanged } = this.props;
 
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     if (filters.length > 0) {
@@ -104,7 +104,7 @@ export class FilterQueryForm extends Component {
               <button className="pull-right btn btn-clear clear" onClick={() => this.clearFilters()}>
                 Clear
               </button>
-              <button className="pull-right btn btn-default" disabled={filterUnchanged} onClick={() => fetchStudiesAccordingToFilters(null, null, false, null)}>
+              <button className="pull-right btn btn-default" disabled={filterUnchanged} onClick={() => applyFilters()}>
                 Apply
               </button>
             </div>

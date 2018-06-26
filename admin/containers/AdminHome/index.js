@@ -56,10 +56,9 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     this.setDates = this.setDates.bind(this);
   }
 
-
   componentWillReceiveProps(newProps) {
     if (newProps.filtersFormValues.campaign !== this.props.filtersFormValues.campaign) {
-      this.fetchStudiesAccordingToFilters(null, null, false);
+      this.fetchStudiesAccordingToFilters();
     }
   }
 
@@ -72,7 +71,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     this.props.fetchUsersByRole();
   }
 
-  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
+  fetchStudiesAccordingToFilters(fetchByScroll = false) {
     const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, sources, clearStudies } = this.props;
     const { prevTotalsFilters, prevOffset } = this.state;
 
@@ -80,13 +79,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     const defaultSource = allSources.find(s => {
       return s.type === 'StudyKIK';
     });
-    let filters = this.getCurrentFilters();
-
-    if ((value && key) || (key === 'campaign') || (key === 'source')) {
-      const newFilterValues = _.cloneDeep(value);
-      filters = { ...filters, [key]:newFilterValues };
-    }
-
+    const filters = this.getCurrentFilters();
     let isEmpty = true;
 
     _.forEach(filters, (filter) => {
@@ -191,7 +184,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
         <FilterQueryForm
           resetForm={resetForm}
           changeAdminFilters={changeAdminFilters}
-          fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+          applyFilters={this.fetchStudiesAccordingToFilters}
           filterUnchanged={filterUnchanged}
         />
         <StatsBox
