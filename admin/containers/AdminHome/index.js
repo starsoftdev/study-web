@@ -197,8 +197,9 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
           totals={totals}
           campaingSelected={campaingSelected}
         />
-        <div id="mediaStatsBox">
-          <ExpandableSection
+        {(totals.details && totals.details.total_studies) && (
+          <div id="mediaStatsBox">
+            <ExpandableSection
             content={
               <MediaStatsTable
                 campaingSelected={campaingSelected}
@@ -212,7 +213,8 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
               />
             }
           />
-        </div>
+          </div>)
+        }
         <StudyInfo
           studies={studies}
           totals={totals}
