@@ -5,6 +5,7 @@ import { getItem } from '../../utils/localStorage';
 
 import {
   SET_AUTH_STATE,
+  SET_USER_DATA,
 
   FETCH_INDICATIONS_SUCCESS,
   FETCH_SOURCES_SUCCESS,
@@ -53,6 +54,10 @@ const initialState = {
       fetching: false,
       error: null,
     },
+    studiesPaginationOptions: {
+      hasMoreItems: true,
+      page: 0,
+    },
     totals: {
       details: {},
       fetching: false,
@@ -90,12 +95,33 @@ export default function appReducer(state = initialState, action) {
   let baseDataInnerState = null;
   let resultState = null;
   let newStudiesList = [];
+  let userRoleType = '';
 
   switch (action.type) {
     case SET_AUTH_STATE:
       resultState = {
         ...state,
         loggedIn: action.payload.newAuthState,
+      };
+      break;
+    case SET_USER_DATA:
+      if (action.payload.userData) {
+        if (action.payload.userData.roleForSponsor) {
+          userRoleType = 'sponsor';
+        } else if (action.payload.userData.roleForClient) {
+          userRoleType = 'client';
+        } else if (action.payload.userData.roleForCallCenter) {
+          userRoleType = 'callCenter';
+        } else if (action.payload.userData.roles && action.payload.userData.roles.length > 0) {
+          userRoleType = 'dashboard';
+        } else {
+          userRoleType = '';
+        }
+      }
+      resultState = {
+        ...state,
+        userData: action.payload.userData,
+        userRoleType,
       };
       break;
     case FETCH_STUDIES_FOR_ADMIN:
@@ -105,9 +131,9 @@ export default function appReducer(state = initialState, action) {
           fetching: true,
           error: null,
         },
-        paginationOptions: {
+        studiesPaginationOptions: {
           hasMoreItems: false,
-          page: state.paginationOptions.page,
+          page: state.studiesPaginationOptions.page,
         },
       };
       break;
@@ -126,7 +152,7 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        paginationOptions: {
+        studiesPaginationOptions: {
           hasMoreItems: action.hasMoreItems,
           page: action.page,
         },

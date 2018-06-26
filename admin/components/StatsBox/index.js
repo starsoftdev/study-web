@@ -4,7 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import { PieChart } from 'react-d3';
 import { isEqual } from 'lodash';
 
-
 export class StatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     totals: PropTypes.object,

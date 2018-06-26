@@ -6,8 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 
 import Filter from './index';
-import { clearCustomFilters, removeCustomFilter, clearStudies } from '../../containers/AdminHome/actions';
-import { selectCustomFilters, selectFilterFormValues } from '../../containers/AdminHome/selectors';
+import { clearCustomFilters, removeCustomFilter, clearStudies } from '../../containers/App/actions';
+import { selectCustomFilters, selectFilterFormValues } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class FilterQueryForm extends Component {
