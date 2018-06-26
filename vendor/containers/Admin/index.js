@@ -13,10 +13,10 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import RowItem from './RowItem';
-import Input from '../../../components/Input';
-import { translate } from '../../../../common/utilities/localization';
+import Input from '../../../app/components/Input';
+import { translate } from '../../../common/utilities/localization';
 
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../app/components/CenteredModal/index';
 
 import AddVendorAdminForm from './AddVendorAdminForm';
 import SearchStudyForm from './SearchStudyForm';
