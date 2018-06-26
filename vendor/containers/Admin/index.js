@@ -1,9 +1,10 @@
 /**
- * Call Center Homepage
+ * Vendor Amdin Page
  *
  */
 
 import React, { Component } from 'react';
+import Helmet from 'react-helmet';
 import Button from 'react-bootstrap/lib/Button';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
@@ -12,17 +13,17 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import RowItem from './RowItem';
-import Input from '../../../components/Input';
-import { translate } from '../../../../common/utilities/localization';
+import Input from '../../../app/components/Input';
+import { translate } from '../../../common/utilities/localization';
 
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../app/components/CenteredModal/index';
 
 import AddVendorAdminForm from './AddVendorAdminForm';
 import SearchStudyForm from './SearchStudyForm';
 
 import './style.less';
 
-
+const pageTitle = 'Vendor Admins - StudyKIK';
 const formName = 'vendorAdminSearch';
 @reduxForm({ form: formName })
 
@@ -85,6 +86,7 @@ class VendorAdminPage extends Component {
 
     return (
       <div className="container-fluid" id="vendorAdminPage">
+        <Helmet title={pageTitle} />
         <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmin')}</h2>
         <div className="clearfix container-fluid">
           <form action="#" className="form-search pull-left" onSubmit={this.onSubmit}>
