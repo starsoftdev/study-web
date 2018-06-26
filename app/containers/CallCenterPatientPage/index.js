@@ -38,8 +38,6 @@ import EmailSection from './PatientDetail/EmailSection';
 
 import './styles.less';
 
-const questionnaireUrl = 'https://s3-us-west-2.amazonaws.com/static-assets.studykik.com/Advertising+Scripts+-+Prescreening+Questionnaire+-+StudyKIK+-+Osman.pdf';
-
 const formName = 'callCenterPatientPage';
 @reduxForm({ form: formName })
 class CallCenterPatientPage extends Component {
@@ -229,6 +227,7 @@ class CallCenterPatientPage extends Component {
   render() {
     const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
     const { patient, protocols, socket, currentUser } = this.props;
+    const bucket = process.env.AWS_BUCKET || 'studykik-dev';
 
     let formattedPatient;
     let siteForPatient;
@@ -236,6 +235,7 @@ class CallCenterPatientPage extends Component {
     let patientIndications;
     let studyId;
     let ePMS;
+    let pdfURL = '';
 
     if (patient && patient.details) {
       siteForPatient = patient.details.site;
@@ -244,6 +244,7 @@ class CallCenterPatientPage extends Component {
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
+        pdfURL = `https://s3.amazonaws.com/${bucket}/${protocolForPatient.filename}`;
       }
 
       patientIndications = patient.details.patientIndications;
@@ -283,8 +284,8 @@ class CallCenterPatientPage extends Component {
             </div>
           </div>
           <div className="middle-section">
-            <object data={questionnaireUrl} width="100%" height="100%" type="application/pdf">
-              <embed src={questionnaireUrl} width="100%" height="100%" type="application/pdf" />
+            <object data={pdfURL} width="100%" height="100%" type="application/pdf">
+              <embed src={pdfURL} width="100%" height="100%" type="application/pdf" />
             </object>
           </div>
           <div className="right-section">
