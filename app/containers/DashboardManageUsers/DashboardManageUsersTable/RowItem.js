@@ -9,16 +9,21 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   };
 
   getRoleName = (roleName) => {
-    if (roleName === 'sm') {
-      return 'Ad Operation';
+    switch (roleName) {
+      case 'sm':
+        return 'AD OPERATION';
+      case 'bd':
+        return 'BUSINESS DEVELOPMENT';
+      case 'ae':
+        return 'PROJECT MANAGER';
+      case 'cc':
+        return 'CALL CENTER';
+      case 'callCenterManager':
+        return 'CALL CENTER MANAGER';
+      default:
+        // return roleName as is (e.g. TEST)
+        return roleName;
     }
-    if (roleName === 'ae') {
-      return 'Call Center';
-    }
-    if (roleName === 'bd') {
-      return 'Business Development';
-    }
-    return roleName;
   }
 
   render() {
