@@ -205,6 +205,7 @@ function* submitEmail() {
           userId: currentUser.id,
           message,
           subject,
+          isCallCenter: true,
         }),
       });
       yield put(submitEmailSuccess(response));
