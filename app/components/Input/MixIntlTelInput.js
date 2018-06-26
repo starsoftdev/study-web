@@ -1,10 +1,4 @@
 /**
-*
-* Input
-*
-*/
-
-/**
  * Input element for redux-form
  *
  * Not only supports <input> (text, email, password)
@@ -12,149 +6,117 @@
  */
 import React, { PropTypes } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
-import { FormControl, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { InputSmart } from 'react-phone-number-input';
+
 import classNames from 'classnames';
+import { formatNumber } from 'libphonenumber-js';
+import metadata from 'libphonenumber-js/metadata.min.json';
 
-function mixIntlTelInput({
-  input,
-  name,
-  ccName,
-  type,
-  id,
-  inputRef,
-  placeholder,
-  componentClass,
-  bsClass,
-  className,
-  tooltipEnabled,
-  onBlur,
-  onFocus,
-  onChange,
-  onCodeChange,
-  required,
-  meta: { touched, error, active },
-  maxLength,
-  children,
-  isDisabled,
-  min,
-  max,
-  step,
-  defaultValue,
-  onSelectFlag,
-  preferredCountries,
-}) {
-  const hasError = touched && error && !active;
-  const tooltip = (
-    <Tooltip
-      id={`${name}-tooltip`}
-      className="tooltip-error"
-    >
-      {error}
-    </Tooltip>
-  );
-  let inputComponent = (
-    <FormControl
-      {...input}
-      type={type}
-      disabled={isDisabled}
-      id={id}
-      inputRef={inputRef}
-      placeholder={placeholder}
-      required={required}
-      maxLength={maxLength}
-      min={min}
-      max={max}
-      step={step}
-      defaultValue={defaultValue}
-      componentClass={componentClass} // Default value is `input`
-      bsClass={bsClass || 'form-control'}
-      onChange={(event) => {
-        input.onChange(event);
-        if (onChange) {
-          onChange(event);
-        }
-      }}
-      onBlur={(event) => {
-        input.onBlur(event);
-        if (onBlur) {
-          onBlur(event);
-        }
-      }}
-      onFocus={(event) => {
-        input.onFocus(event);
-        if (onFocus) {
-          onFocus(event);
-        }
-      }}
-    >
-      {children}
-    </FormControl>
-  );
-  const ccInputComponent = (
-    <IntlTelInput
-      css={['intl-tel-input', 'form-control', 'input-lg']}
-      fieldName={ccName}
-      separateDialCode
-      preferredCountries={preferredCountries}
-      onSelectFlag={(code, selectedCountryData) => {
-        if (onSelectFlag) {
-          onSelectFlag(code, selectedCountryData);
-        }
-      }}
-      onPhoneNumberChange={(status, value, countryData, number) => {
-        if (onCodeChange) {
-          onCodeChange(status, value, countryData, number);
-        }
-      }}
-    />
-  );
+export default class MixIntlTelInput extends React.PureComponent {
+  static propTypes = {
+    className: PropTypes.string,
+    preferredCountries: PropTypes.array,
+    meta: PropTypes.object.isRequired,
+    input: PropTypes.object.isRequired,
+    tooltipEnabled: PropTypes.bool,
+  };
 
-  if (hasError && tooltipEnabled) {
-    inputComponent = (
-      <OverlayTrigger
-        placement="right"
-        overlay={tooltip}
-      >
-        {inputComponent}
-      </OverlayTrigger>
+  constructor(props, context) {
+    super(props, context);
+
+    // We have to detach the visual display (UX) from the actual (correctly-formatted for data use).
+    let country = 'US';  // automatic default
+    let value = null;
+    try {
+      country = props.preferredCountries && props.preferredCountries.length && props.preferredCountries[0].toUpperCase();
+      value =  props.input.value;
+    } catch (e) {
+      // no-op
+    }
+    this.state = {
+      country,
+      value,
+    };
+  }
+
+  render() {
+    const { touched, error, active } = this.props.meta;
+    const hasError = touched && error && !active;
+
+    return (
+      <div className={classNames(this.props.className, 'intl-phone-input', { 'has-error': hasError, focus: active })}>
+        {this.renderCountrySelect()}
+        {this.renderPhoneInput()}
+      </div>
     );
   }
 
-  return (
-    <div className={classNames(className, { 'has-error': hasError, focus: active })}>
-      {ccInputComponent}
-      {inputComponent}
-    </div>
-  );
+  renderCountrySelect() {
+    return (
+      <IntlTelInput
+        css={['intl-tel-input', 'form-control', 'input-lg']}
+        separateDialCode
+        preferredCountries={this.props.preferredCountries}
+        onSelectFlag={this.onSelectFlag}
+      />
+    );
+  }
+
+  renderPhoneInput() {
+    const { touched, error, active } = this.props.meta;
+    const hasError = touched && error && !active;
+
+    const props = Object.assign({}, this.props.input);
+    delete props.onChange;
+    delete props.value;
+
+    const inputComponent = (
+      <InputSmart
+        onChange={this.onPhoneNumberChange}
+        value={this.state.value}
+        country={this.state.country}
+        metadata={metadata}
+        className="intl-tel-input form-control input-lg phone-input"
+        {...props}
+      />
+    );
+
+    if (hasError && this.props.tooltipEnabled) {
+      const tooltip = (
+        <Tooltip
+          id={`${name}-tooltip`}
+          className="tooltip-error"
+        >
+          {error}
+        </Tooltip>
+      );
+      return (
+        <OverlayTrigger
+          placement="right"
+          overlay={tooltip}
+        >
+          {inputComponent}
+        </OverlayTrigger>
+      );
+    } else {
+      return inputComponent;
+    }
+  }
+
+  onSelectFlag = (code, selectedCountryData) => {
+    this.setState({
+      country: selectedCountryData.iso2.toUpperCase(),
+    });
+  }
+
+  /**
+   * We're bypassing the loop where redux-form attempts to set the value.
+   * This UI needs to display the human-readable version, not the E.164 format.
+   */
+  onPhoneNumberChange = (value) => {
+    this.setState({ value }, () =>
+      this.props.input.onChange(formatNumber({ country: this.state.country, phone: value }, 'E.164'))
+    );
+  }
 }
-
-mixIntlTelInput.propTypes = {
-  componentClass: PropTypes.string,
-  bsClass: PropTypes.string,
-  className: PropTypes.string,
-  children: PropTypes.array,
-  isDisabled: PropTypes.bool,
-  id: PropTypes.string,
-  input: PropTypes.object.isRequired,
-  inputRef: PropTypes.func,
-  onBlur: PropTypes.func,
-  onFocus: PropTypes.func,
-  onChange: PropTypes.func,
-  onCodeChange: PropTypes.func,
-  name: PropTypes.string.isRequired,
-  ccName: PropTypes.string,
-  maxLength: PropTypes.string,
-  meta: PropTypes.object.isRequired,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
-  tooltipEnabled: PropTypes.bool,
-  type: PropTypes.string,
-  min: PropTypes.string,
-  max: PropTypes.string,
-  step: PropTypes.string,
-  defaultValue: PropTypes.string,
-  onSelectFlag: PropTypes.func,
-  preferredCountries: PropTypes.array,
-};
-
-export default mixIntlTelInput;
