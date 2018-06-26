@@ -127,13 +127,13 @@ export default function appReducer(state = initialState, action) {
     case FETCH_STUDIES_FOR_ADMIN:
       baseDataInnerState = {
         studies: {
-          details: state.studies.details,
+          details: state.baseData.studies.details,
           fetching: true,
           error: null,
         },
         studiesPaginationOptions: {
           hasMoreItems: false,
-          page: state.studiesPaginationOptions.page,
+          page: state.baseData.studiesPaginationOptions.page,
         },
       };
       break;
@@ -142,7 +142,7 @@ export default function appReducer(state = initialState, action) {
         newStudiesList = action.payload.studies;
       } else {
         const studiesCopy = [
-          ...state.studies.details,
+          ...state.baseData.studies.details,
         ];
         newStudiesList = studiesCopy.concat(action.payload.studies);
       }
@@ -170,7 +170,7 @@ export default function appReducer(state = initialState, action) {
     case FETCH_TOTALS_FOR_ADMIN:
       baseDataInnerState = {
         totals: {
-          details: state.totals.details,
+          details: state.baseData.totals.details,
           fetching: true,
           error: null,
         },
@@ -224,11 +224,11 @@ export default function appReducer(state = initialState, action) {
       break;
     case ADD_CUSTOM_FILTER:
       baseDataInnerState = {
-        customFilters: [...state.customFilters, action.payload],
+        customFilters: [...state.baseData.customFilters, action.payload],
       };
       break;
     case REMOVE_CUSTOM_FILTER:
-      const newCustomFilters = [...state.customFilters];
+      const newCustomFilters = [...state.baseData.customFilters];
       if (action.payload && action.payload.key) {
         pullAt(newCustomFilters, newCustomFilters.findIndex((e) => e.key === action.payload.key));
       }

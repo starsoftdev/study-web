@@ -66,7 +66,7 @@ export class StudyInfo extends Component {
 
   loadItems() {
     if (this.props.studies.details.length > 0) {
-      this.props.fetchStudiesAccordingToFilters(null, null, true);
+      this.props.fetchStudiesAccordingToFilters(true);
     }
   }
 
@@ -74,7 +74,7 @@ export class StudyInfo extends Component {
     const { changeAdminFilters, fetchStudiesAccordingToFilters } = this.props;
     changeAdminFilters('campaign', val);
     setTimeout(() => {
-      fetchStudiesAccordingToFilters(null, null, false);
+      fetchStudiesAccordingToFilters();
     }, 200);
   }
 
