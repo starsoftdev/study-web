@@ -214,11 +214,17 @@ class CallCenterPatientPage extends Component {
   onPatientScheduleSubmit = (e) => {
     e.preventDefault();
 
-    const { patient, submitPatientUpdate } = this.props;
+    const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
     submitPatientUpdate({
       patientId: patient.details.id,
       callCenterPatientCategoryId: 5,
       patientCategoryId: 2, // Call / Text Attempted
+    });
+
+    // Clear the patient disposition
+    submitPatientDisposition({
+      patientId: patient.details.id,
+      dispositionKey: undefined,
     });
 
     this.setState({ isScheduleModalVisible: false });
