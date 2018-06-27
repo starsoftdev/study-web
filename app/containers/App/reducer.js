@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 
-import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy } from 'lodash';
+import { forEach, map, remove, cloneDeep, findIndex, concat, sortBy, find } from 'lodash';
 import { getItem } from '../../utils/localStorage';
 
 import {
@@ -354,7 +354,7 @@ export default function appReducer(state = initialState, action) {
           userRoleType = 'sponsor';
         } else if (action.payload.userData.roleForClient) {
           userRoleType = 'client';
-        } else if (action.payload.userData.roleForCallCenter) {
+        } else if (action.payload.userData.roleForCallCenter || (action.payload.userData.roles && action.payload.userData.roles.length > 0 && find(action.payload.userData.roles, (item) => ((item.name === 'cc' || item.name === 'callCenterManager'))))) {
           userRoleType = 'callCenter';
         } else if (action.payload.userData.roleForVendor) {
           userRoleType = 'vendor';
