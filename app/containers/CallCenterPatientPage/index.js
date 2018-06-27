@@ -233,7 +233,6 @@ class CallCenterPatientPage extends Component {
   render() {
     const { carouselIndex, selectedTab, isScheduleModalVisible } = this.state;
     const { patient, protocols, socket, currentUser } = this.props;
-    const bucket = process.env.AWS_BUCKET || 'studykik-dev';
 
     let formattedPatient;
     let siteForPatient;
@@ -250,7 +249,7 @@ class CallCenterPatientPage extends Component {
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
-        pdfURL = `https://s3.amazonaws.com/${bucket}/${protocolForPatient.filename}`;
+        pdfURL = protocolForPatient.pdfurl;
       }
 
       patientIndications = patient.details.patientIndications;
