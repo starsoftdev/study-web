@@ -12,6 +12,7 @@ import settings from '../../../common/settings/app-settings.json';
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
+import { setSocketConnection } from '../GlobalNotifications/actions';
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
@@ -51,9 +52,10 @@ class CallCenterPatientPage extends Component {
     patient: PropTypes.object,
     protocols: PropTypes.object,
     scheduledModalFormValues: PropTypes.object,
+    setSocketConnection: PropTypes.func,
     socket: PropTypes.any,
-    submitPatientUpdate: React.PropTypes.func,
-    submitPatientDisposition: React.PropTypes.func,
+    submitPatientUpdate: PropTypes.func,
+    submitPatientDisposition: PropTypes.func,
   };
 
   static defaultProps = {
@@ -73,11 +75,18 @@ class CallCenterPatientPage extends Component {
       fetchCallCenterPatientCategories,
       fetchPatient,
       fetchProtocols,
+      setSocketConnection,
     } = this.props;
 
     fetchCallCenterPatientCategories();
     fetchPatient(patientId);
     fetchProtocols();
+
+    // initialize socket
+    setSocketConnection({
+      nsp: 'nsp',
+      cb: () => console.log('Socket initialized in CallCenterPatientPage!'),
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -310,13 +319,12 @@ class CallCenterPatientPage extends Component {
                     {translate('container.page.callCenterPatient.carousel.tab.calendar')}
                   </li>
                 </ol>
-                {}
                 {
                   patient && patient.details && (
                     <div className="carousel-inner" role="listbox">
                       <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                      {<NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />}
-                      {<EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />}
+                      <NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />
+                      <EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />
                     </div>
                   )
                 }
@@ -351,6 +359,7 @@ function mapDispatchToProps(dispatch) {
     fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    setSocketConnection: (payload) => dispatch(setSocketConnection(payload)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
     submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
   };
