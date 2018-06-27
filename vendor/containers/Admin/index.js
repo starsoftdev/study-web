@@ -87,7 +87,7 @@ class VendorAdminPage extends Component {
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
-        <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmin')}</h2>
+        <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmins')}</h2>
         <div className="clearfix container-fluid">
           <form action="#" className="form-search pull-left" onSubmit={this.onSubmit}>
             <div className="fields-holder">
