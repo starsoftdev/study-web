@@ -53,6 +53,8 @@ class TextSection extends React.Component {
     this.renderTextArea = this.renderTextArea.bind(this);
     this.submitText = this.submitText.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
+    this.initMessages = this.initMessages.bind(this);
+    this.initSocket = this.initSocket.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
 
     this.state = {
@@ -64,17 +66,29 @@ class TextSection extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.initMessages(this.props);
+    this.initSocket();
+  }
+
   componentWillReceiveProps(newProps) {
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
 
-    if (newProps.active && newProps.currentPatient) {
-      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
-        this.initStudyPatientMessagesFetch(newProps);
+    this.initMessages(newProps);
+    this.initSocket();
+  }
+
+  initMessages(props) {
+    if (props.active && props.currentPatient) {
+      this.setState({ twilioMessages: [], patientToFetchMessages: props.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(props);
       });
     }
+  }
 
+  initSocket() {
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         if (this.props.active && newMessage && this.props.currentPatient) {
