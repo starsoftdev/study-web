@@ -62,7 +62,7 @@ export class StatsBox extends Component { // eslint-disable-line react/prefer-st
       <div id="statsBox">
         <div className="section section1">
           <ul>
-            <li><strong>Last 24 hours:</strong> {details.total_today || 0}</li>
+            <li><strong>Last 24 hours:</strong> {details.total_hours || 0}</li>
             <li><strong>Campaign Total:</strong> {campaingSelected ? (details.total_campaign || 0) : 'N/A'}</li>
             <li><strong>Grand Total:</strong> {details.total_grand || 0}</li>
           </ul>
