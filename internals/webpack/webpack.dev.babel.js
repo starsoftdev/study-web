@@ -25,6 +25,11 @@ const plugins = [
     chunks: ['admin'],
     templateContent: templateContent('admin/index.html')
   }),
+  new HtmlWebpackPlugin({
+    filename: 'vendor.html',
+    chunks: ['vendor'],
+    templateContent: templateContent('vendor/index.html')
+  }),
 ];
 
 module.exports = require('./webpack.base.babel')({
@@ -46,6 +51,12 @@ module.exports = require('./webpack.base.babel')({
       'eventsource-polyfill', // Necessary for hot reloading with IE
       'webpack-hot-middleware/client',
       path.join(process.cwd(), 'corporate/app.js'), // Start with js/app.js
+    ],
+    'vendor': [
+      'babel-polyfill', // Necessary for browser usage
+      'eventsource-polyfill', // Necessary for hot reloading with IE
+      'webpack-hot-middleware/client',
+      path.join(process.cwd(), 'vendor/app.js'), // Start with js/app.js
     ],
   },
 
