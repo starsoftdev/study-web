@@ -28,8 +28,8 @@ export function* fetchPatientsWatcher() {
       const offset = 0;
       query = {
         userId,
-        limit: limit || 50,
-        offset: offset || 0,
+        // limit: limit || 50,
+        // offset: offset || 0,
       };
       const params = {
         method: 'GET',
