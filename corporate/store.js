@@ -8,6 +8,7 @@ import createSagaMiddleware from 'redux-saga';
 import LogRocket from 'logrocket';
 
 import globalSagas from '../app/common/sagas';
+import trackCorpPage from './sagas/corpTrackingSaga';
 import createReducer from './reducers';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -36,6 +37,9 @@ export default function configureStore(initialState = {}, history) {
 
   // We run the root saga automatically
   sagaMiddleware.run(globalSagas);
+
+  // Run tracking saga
+  sagaMiddleware.run(trackCorpPage);
   // Create hook for async sagas
   store.runSaga = sagaMiddleware.run;
   // Initialize it with no other reducers
