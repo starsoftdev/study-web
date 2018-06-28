@@ -400,9 +400,9 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
     const selectedStudy = _.find(this.props.studies.details, (o) => (o.studyId === this.state.selectedStudyId));
     const pqsIsSelected = (selectedStudy.patientQualificationSuite === 'Off' && upgradeStudyFormValues.addPatientQualificationSuite);
     const levelIsSelected = upgradeStudyFormValues.level;
-    const callTrackingIsSelected = (!selectedStudy.callTracking && upgradeStudyFormValues.callTracking);
+    const mediaTrackingIsSelected = (!selectedStudy.mediaTracking && upgradeStudyFormValues.mediaTracking);
 
-    if (!pqsIsSelected && !levelIsSelected && !callTrackingIsSelected) {
+    if (!pqsIsSelected && !levelIsSelected && !mediaTrackingIsSelected) {
       return;
     }
 
