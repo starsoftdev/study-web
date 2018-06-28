@@ -73,7 +73,7 @@ describe('<StudyPage />', () => {
           zip: null,
         },
         study: {
-          callTracking: true,
+          mediaTracking: true,
           condenseTwoWeeks: null,
           created: '2016-11-09T14:51:48.077Z',
           description: 'Study for acne',
