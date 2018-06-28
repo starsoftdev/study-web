@@ -12,6 +12,7 @@ import settings from '../../../common/settings/app-settings.json';
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
 
+import { setSocketConnection } from '../GlobalNotifications/actions';
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
@@ -38,8 +39,6 @@ import EmailSection from './PatientDetail/EmailSection';
 
 import './styles.less';
 
-const questionnaireUrl = 'https://s3-us-west-2.amazonaws.com/static-assets.studykik.com/Advertising+Scripts+-+Prescreening+Questionnaire+-+StudyKIK+-+Osman.pdf';
-
 const formName = 'callCenterPatientPage';
 @reduxForm({ form: formName })
 class CallCenterPatientPage extends Component {
@@ -53,9 +52,10 @@ class CallCenterPatientPage extends Component {
     patient: PropTypes.object,
     protocols: PropTypes.object,
     scheduledModalFormValues: PropTypes.object,
+    setSocketConnection: PropTypes.func,
     socket: PropTypes.any,
-    submitPatientUpdate: React.PropTypes.func,
-    submitPatientDisposition: React.PropTypes.func,
+    submitPatientUpdate: PropTypes.func,
+    submitPatientDisposition: PropTypes.func,
   };
 
   static defaultProps = {
@@ -75,11 +75,18 @@ class CallCenterPatientPage extends Component {
       fetchCallCenterPatientCategories,
       fetchPatient,
       fetchProtocols,
+      setSocketConnection,
     } = this.props;
 
     fetchCallCenterPatientCategories();
     fetchPatient(patientId);
     fetchProtocols();
+
+    // initialize socket
+    setSocketConnection({
+      nsp: 'nsp',
+      cb: () => console.log('Socket initialized in CallCenterPatientPage!'),
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -105,7 +112,10 @@ class CallCenterPatientPage extends Component {
           const { dispositions } = patient.details;
           if (dispositions) {
             const disposition = dispositions.find(item => item.userId === currentUser.id);
-            this.updateTabFromDisposition(disposition.dispositionKey);
+            if (disposition) {
+              this.updateTabFromDisposition(disposition.dispositionKey);
+              return;
+            }
           }
           break;
         }
@@ -177,12 +187,10 @@ class CallCenterPatientPage extends Component {
       patientCategoryId,
     });
 
-    if (dispositionKey !== undefined) {
-      submitPatientDisposition({
-        patientId: patient.details.id,
-        dispositionKey,
-      });
-    }
+    submitPatientDisposition({
+      patientId: patient.details.id,
+      dispositionKey,
+    });
   }
 
   updateTabFromDisposition = (dispositionKey) => {
@@ -215,11 +223,17 @@ class CallCenterPatientPage extends Component {
   onPatientScheduleSubmit = (e) => {
     e.preventDefault();
 
-    const { patient, submitPatientUpdate } = this.props;
+    const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
     submitPatientUpdate({
       patientId: patient.details.id,
       callCenterPatientCategoryId: 5,
       patientCategoryId: 2, // Call / Text Attempted
+    });
+
+    // Clear the patient disposition
+    submitPatientDisposition({
+      patientId: patient.details.id,
+      dispositionKey: undefined,
     });
 
     this.setState({ isScheduleModalVisible: false });
@@ -235,6 +249,7 @@ class CallCenterPatientPage extends Component {
     let patientIndications;
     let studyId;
     let ePMS;
+    let pdfURL = '';
 
     if (patient && patient.details) {
       siteForPatient = patient.details.site;
@@ -243,6 +258,7 @@ class CallCenterPatientPage extends Component {
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
+        pdfURL = protocolForPatient.pdfurl;
       }
 
       patientIndications = patient.details.patientIndications;
@@ -282,8 +298,8 @@ class CallCenterPatientPage extends Component {
             </div>
           </div>
           <div className="middle-section">
-            <object data={questionnaireUrl} width="100%" height="100%" type="application/pdf">
-              <embed src={questionnaireUrl} width="100%" height="100%" type="application/pdf" />
+            <object data={pdfURL} width="100%" height="100%" type="application/pdf">
+              <embed src={pdfURL} width="100%" height="100%" type="application/pdf" />
             </object>
           </div>
           <div className="right-section">
@@ -303,14 +319,12 @@ class CallCenterPatientPage extends Component {
                     {translate('container.page.callCenterPatient.carousel.tab.calendar')}
                   </li>
                 </ol>
-                {}
                 {
-                  /* TODO: Content here */
                   patient && patient.details && (
                     <div className="carousel-inner" role="listbox">
                       <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                      {<NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />}
-                      {<EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />}
+                      <NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />
+                      <EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />
                     </div>
                   )
                 }
@@ -345,6 +359,7 @@ function mapDispatchToProps(dispatch) {
     fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    setSocketConnection: (payload) => dispatch(setSocketConnection(payload)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
     submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
   };
