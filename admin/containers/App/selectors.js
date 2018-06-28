@@ -116,6 +116,11 @@ const selectTotals = () => createSelector(
   (substate) => get(substate, 'baseData.totals', {})
 );
 
+const selectMediaTotals = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.mediaTotals', {})
+);
+
 const selectCustomFilters = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.customFilters', {})
@@ -154,6 +159,7 @@ export {
   selectFilterFormValues,
   selectStudies,
   selectTotals,
+  selectMediaTotals,
   selectCustomFilters,
   selectStudiesPaginationOptions,
 };

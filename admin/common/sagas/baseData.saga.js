@@ -17,6 +17,7 @@ import {
   FETCH_USERS_BY_ROLE,
   FETCH_STUDIES_FOR_ADMIN,
   FETCH_TOTALS_FOR_ADMIN,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN,
 } from '../../containers/App/constants';
 
 import {
@@ -38,6 +39,8 @@ import {
   fetchStudiesForAdminSuccess,
   fetchTotalsForAdminError,
   fetchTotalsForAdminSuccess,
+  fetchMediaTotalsForAdminError,
+  fetchMediaTotalsForAdminSuccess,
 } from '../../containers/App/actions';
 import { translate } from '../../../common/utilities/localization';
 
@@ -51,6 +54,7 @@ export default function* baseDataSaga() {
   yield fork(fetchUsersByRoleWatcher);
   yield fork(fetchStudiesForAdminWatcher);
   yield fork(fetchTotalsForAdminWatcher);
+  yield fork(fetchMediaTotalsForAdminWatcher);
 }
 
 function* fetchIndicationsWatcher() {
@@ -229,6 +233,7 @@ export function* fetchStudiesForAdminWorker(action) {
     const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
     params.limit = limit;
     params.offset = offset;
+    params.getCampaignsStats = true;
 
     const options = {
       method: 'POST',
@@ -276,5 +281,27 @@ export function* fetchTotalsForAdminWorker(action) {
   } catch (err) {
     console.log(err);
     yield put(fetchTotalsForAdminError(err));
+  }
+}
+
+export function* fetchMediaTotalsForAdminWatcher() {
+  yield* takeLatest(FETCH_MEDIA_TOTALS_FOR_ADMIN, fetchMediaTotalsForAdminWorker);
+}
+
+export function* fetchMediaTotalsForAdminWorker(action) {
+  const { params } = action;
+  try {
+    const requestURL = `${API_URL}/studies/getMediaTotalsForDashboard`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchMediaTotalsForAdminSuccess(response));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchMediaTotalsForAdminError(err));
   }
 }

@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 
 import Filter from './index';
-import { clearCustomFilters, removeCustomFilter, clearStudies } from '../../containers/App/actions';
+import { removeCustomFilter, clearStudies } from '../../containers/App/actions';
 import { selectCustomFilters, selectFilterFormValues } from '../../containers/App/selectors';
 
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
@@ -14,10 +14,10 @@ export class FilterQueryForm extends Component {
   static propTypes = {
     resetForm: React.PropTypes.func.isRequired,
     changeAdminFilters: React.PropTypes.func.isRequired,
-    clearCustomFilters: React.PropTypes.func.isRequired,
     clearStudies: React.PropTypes.func.isRequired,
     removeCustomFilter: React.PropTypes.func.isRequired,
     applyFilters: React.PropTypes.func.isRequired,
+    clearFilters: React.PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
     filterUnchanged: PropTypes.bool.isRequired,
@@ -27,7 +27,6 @@ export class FilterQueryForm extends Component {
     super(props);
 
     this.formatFilterName = this.formatFilterName.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.mapFilterValues = this.mapFilterValues.bind(this);
   }
@@ -35,13 +34,6 @@ export class FilterQueryForm extends Component {
   formatFilterName(filter) {
     const name = filter.name;
     return { ...filter, name };
-  }
-
-  clearFilters() {
-    const { resetForm, clearCustomFilters, clearStudies } = this.props;
-    clearCustomFilters();
-    resetForm();
-    clearStudies();
   }
 
   removeFilter(filter) {
@@ -79,7 +71,7 @@ export class FilterQueryForm extends Component {
   }
 
   render() {
-    const { filtersFormValues, customFilters, applyFilters, filterUnchanged } = this.props;
+    const { filtersFormValues, customFilters, applyFilters, filterUnchanged, clearFilters } = this.props;
 
     const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
     if (filters.length > 0) {
@@ -101,7 +93,7 @@ export class FilterQueryForm extends Component {
               </div>
             </div>
             <div className="gray-outline">
-              <button className="pull-right btn btn-clear clear" onClick={() => this.clearFilters()}>
+              <button className="pull-right btn btn-clear clear" onClick={() => clearFilters()}>
                 Clear
               </button>
               <button className="pull-right btn btn-default" disabled={filterUnchanged} onClick={() => applyFilters()}>
@@ -124,7 +116,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  clearCustomFilters: () => dispatch(clearCustomFilters()),
   clearStudies: () => dispatch(clearStudies()),
   removeCustomFilter: (filter) => dispatch(removeCustomFilter(filter)),
 });
