@@ -125,7 +125,7 @@ export class RequestProposalCart extends Component {
       total += QUALIFICATION_SUITE_PRICE * months.value;
     }
 
-    if (formValues.callTracking) {
+    if (formValues.mediaTracking) {
       total += CALL_TRACKING_PRICE;
     }
 
@@ -186,8 +186,8 @@ export class RequestProposalCart extends Component {
     const { formValues, levels, indicationLevelPrice } = this.props;
 
     const level = find(levels, { id: formValues.level_id });
-    const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
-    if (level && months && indicationLevelPrice) {
+    if (level && formValues.campaignLength && indicationLevelPrice) {
+      const months = find(CAMPAIGN_LENGTH_LIST, { value: formValues.campaignLength });
       const levelLabel = translate(`common.exposureLevel.id${level.id}`);
       products.push({
         title: ((formValues.condenseTwoWeeks && months.value === 1) ? `${translate('portals.component.requestProposalCart.2weeks')} ${levelLabel}` : `${months.label} ${levelLabel}`),
@@ -195,18 +195,17 @@ export class RequestProposalCart extends Component {
         quantity: months.value,
         total: indicationLevelPrice * months.value,
       });
+      if (formValues.patientQualificationSuite) {
+        products.push({
+          title: translate('portals.component.requestProposalCart.pqs'),
+          price: QUALIFICATION_SUITE_PRICE,
+          quantity: months.value,
+          total: QUALIFICATION_SUITE_PRICE * months.value,
+        });
+      }
     }
 
-    if (formValues.patientQualificationSuite) {
-      products.push({
-        title: translate('portals.component.requestProposalCart.pqs'),
-        price: QUALIFICATION_SUITE_PRICE,
-        quantity: months.value,
-        total: QUALIFICATION_SUITE_PRICE * months.value,
-      });
-    }
-
-    if (formValues.callTracking) {
+    if (formValues.mediaTracking) {
       products.push({
         title: translate('portals.component.requestProposalCart.mediaTracking'),
         price: CALL_TRACKING_PRICE,
