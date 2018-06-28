@@ -212,7 +212,10 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
 
   renderCampaignTotalLines() {
     const { campaignSelected, mediaTotals } = this.props;
-    const campaign = (mediaTotals.details.length) ? find(mediaTotals.details, { type: 'campaign' }) : find(defaultStats, { type: 'campaign' });
+    let campaign = (mediaTotals.details.length) ? find(mediaTotals.details, { type: 'campaign' }) : find(defaultStats, { type: 'campaign' });
+    if (!campaign) {
+      campaign = find(defaultStats, { type: 'campaign' });
+    }
     const countNotContacted = !campaignSelected ? 'N/A' : campaign.count_not_contacted;
     const callAttempted = !campaignSelected ? 'N/A' : campaign.call_attempted;
     const dnq = !campaignSelected ? 'N/A' : campaign.dnq;

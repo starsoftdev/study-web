@@ -17,7 +17,7 @@ export class StatsBox extends Component { // eslint-disable-line react/prefer-st
 
   render() {
     const { totals, campaignSelected } = this.props;
-    const details = (totals && totals.details) ? totals : {};
+    const details = (totals && totals.details) ? totals.details : {};
 
     const redCount = parseInt(details.total_red) || 0;
     const yellowCount = parseInt(details.total_yellow) || 0;
