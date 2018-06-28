@@ -34,21 +34,21 @@ const selectGetListNewStudyFormErrors = () => createSelector(
 );
 
 /**
- * ListNewStudyForm -> `callTracking`
+ * ListNewStudyForm -> `mediaTracking`
  */
 const selectCallTracking = () => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, 'listNewStudy.values.callTracking')
+  (substate) => get(substate, 'listNewStudy.values.mediaTracking')
 );
 
 /**
- * ListNewStudyForm -> count of `leads`
+ * ListNewStudyForm -> count of `mediaTypes`
  */
 const selectLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'listNewStudy.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'listNewStudy.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 
