@@ -40,6 +40,10 @@ import {
   FETCH_TOTALS_FOR_ADMIN_SUCCESS,
   FETCH_TOTALS_FOR_ADMIN_ERROR,
 
+  FETCH_MEDIA_TOTALS_FOR_ADMIN,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR,
+
   ADD_CUSTOM_FILTER,
   REMOVE_CUSTOM_FILTER,
   CLEAR_CUSTOM_FILTERS,
@@ -289,6 +293,27 @@ export function fetchTotalsForAdminSuccess(payload) {
 export function fetchTotalsForAdminError(payload) {
   return {
     type: FETCH_TOTALS_FOR_ADMIN_ERROR,
+    payload,
+  };
+}
+
+export function fetchMediaTotalsForAdmin(params) {
+  return {
+    type: FETCH_MEDIA_TOTALS_FOR_ADMIN,
+    params,
+  };
+}
+
+export function fetchMediaTotalsForAdminSuccess(payload) {
+  return {
+    type: FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchMediaTotalsForAdminError(payload) {
+  return {
+    type: FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR,
     payload,
   };
 }

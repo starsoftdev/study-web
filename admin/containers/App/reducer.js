@@ -33,6 +33,10 @@ import {
   FETCH_TOTALS_FOR_ADMIN_ERROR,
   FETCH_TOTALS_FOR_ADMIN_SUCCESS,
 
+  FETCH_MEDIA_TOTALS_FOR_ADMIN,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR,
+  FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS,
+
   CLEAR_FILTERS,
 
   ADD_CUSTOM_FILTER,
@@ -59,6 +63,11 @@ const initialState = {
       page: 0,
     },
     totals: {
+      details: {},
+      fetching: false,
+      error: null,
+    },
+    mediaTotals: {
       details: {},
       fetching: false,
       error: null,
@@ -181,16 +190,43 @@ export default function appReducer(state = initialState, action) {
         totals: {
           details: action.payload.totals,
           fetching: false,
-          error: true,
+          error: null,
         },
       };
       break;
     case FETCH_TOTALS_FOR_ADMIN_ERROR:
       baseDataInnerState = {
         totals: {
-          details: action.payload.totals,
+          details: {},
+          fetching: false,
+          error: action.payload,
+        },
+      };
+      break;
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN:
+      baseDataInnerState = {
+        mediaTotals: {
+          details: state.baseData.mediaTotals.details,
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN_SUCCESS:
+      baseDataInnerState = {
+        mediaTotals: {
+          details: action.payload,
           fetching: false,
           error: null,
+        },
+      };
+      break;
+    case FETCH_MEDIA_TOTALS_FOR_ADMIN_ERROR:
+      baseDataInnerState = {
+        mediaTotals: {
+          details: {},
+          fetching: false,
+          error: action.payload,
         },
       };
       break;
