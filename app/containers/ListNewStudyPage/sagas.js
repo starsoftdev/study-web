@@ -31,7 +31,7 @@ export function* submitFormWatcher() {
       _.forEach(formValues, (value, index) => {
         if (index === 'file') {
           data.append(index, value[0]);
-        } else if (index === 'emailNotifications' || index === 'leadSource') {
+        } else if (index === 'emailNotifications' || index === 'mediaType') {
           data.append(index, JSON.stringify(value));
         } else if (index === 'startDate') {
           // start date may have a null value due to not determined start date status
