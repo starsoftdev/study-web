@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 
 import {
   FETCH_NOTE,
@@ -89,13 +88,9 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
-  EDIT_STUDY_LEAD_SOURCES,
-  EDIT_STUDY_LEAD_SOURCES_SUCCESS,
-  EDIT_STUDY_LEAD_SOURCES_ERROR,
-
-  DELETE_STUDY_LEAD_SOURCE,
-  DELETE_STUDY_LEAD_SOURCE_ERROR,
-  DELETE_STUDY_LEAD_SOURCE_SUCCESS,
+  EDIT_MEDIA_TYPES,
+  EDIT_MEDIA_TYPES_SUCCESS,
+  EDIT_MEDIA_TYPES_ERROR,
 } from './constants';
 
 import {
@@ -105,9 +100,6 @@ import {
   FETCH_SPONSORS_SUCCESS,
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_USERS_BY_ROLE_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES_SUCCESS,
-  FETCH_STUDY_LEAD_SOURCES_ERROR,
 } from '../../App/constants';
 
 const initialState = {
@@ -216,22 +208,9 @@ const initialState = {
     deleting: false,
     error: false,
   },
-  deletedLeadSource: {
-    index: null,
-    details: null,
-  },
-  deleteStudyLeadSourceProcess: {
-    deleting: false,
-    error: false,
-  },
-  editStudyLeadSourcesProcess: {
+  editMediaTypesProcess: {
     saving: false,
     error: false,
-  },
-  studyLeadSources: {
-    details: [],
-    fetching: false,
-    error: null,
   },
   updatedStudyAd: null,
   removedStudyAd: null,
@@ -253,66 +232,21 @@ export default function dashboardPageReducer(state = initialState, action) {
   let foundUserIndex = null;
 
   switch (action.type) {
-
-    case FETCH_STUDY_LEAD_SOURCES:
+    case EDIT_MEDIA_TYPES:
       return {
         ...state,
-        studyLeadSources: {
-          details: state.studyLeadSources.details,
-          fetching: true,
-          error: null,
-        },
-      };
-
-    case FETCH_STUDY_LEAD_SOURCES_SUCCESS:
-      return {
-        ...state,
-        studyLeadSources: {
-          details: action.payload.map((item) => {
-            return {
-              source: { value: item.source_id, label: item.type },
-              source_name: item.source_name,
-              studySourceId: item.studySourceId,
-              landingPageId: item.landingPageId,
-              recruitmentPhone: normalizePhoneDisplay(item.recruitmentPhone),
-              messagingNumber: item.phoneNumberId ? { value: item.phoneNumberId, label:item.phoneNumber } : null,
-              googleUrl: item.googleUrl,
-              url: item.url,
-              studyId: item.studyId,
-              landingPageUrl: item.landingPageUrl,
-              patientsCount: parseInt(item.patientsCount),
-            };
-          }),
-          fetching: false,
-          error: null,
-        },
-      };
-
-    case FETCH_STUDY_LEAD_SOURCES_ERROR:
-      return {
-        ...state,
-        studyLeadSources: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
-      };
-
-    case EDIT_STUDY_LEAD_SOURCES:
-      return {
-        ...state,
-        editStudyLeadSourcesProcess: {
+        editMediaTypesProcess: {
           saving: true,
           error: false,
         },
       };
 
-    case EDIT_STUDY_LEAD_SOURCES_SUCCESS: {
+    case EDIT_MEDIA_TYPES_SUCCESS: {
       const studiesCopy = state.studies.details.map(study => {
         if (study.study_id === action.studyId) {
           return {
             ...study,
-            callTracking: action.callTracking,
+            mediaTracking: action.mediaTracking,
           };
         } else {
           return study;
@@ -321,12 +255,12 @@ export default function dashboardPageReducer(state = initialState, action) {
 
       return {
         ...state,
-        editStudyLeadSourcesProcess: {
+        editMediaTypesProcess: {
           saving: false,
           error: false,
         },
-        studyLeadSources: {
-          details: action.leadSources.map((item) => {
+        mediaTypes: {
+          details: action.mediaTypes.map((item) => {
             return {
               ...item,
             };
@@ -341,54 +275,14 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     }
-    case EDIT_STUDY_LEAD_SOURCES_ERROR:
+    case EDIT_MEDIA_TYPES_ERROR:
       return {
         ...state,
-        editStudyLeadSourcesProcess: {
+        editMediaTypesProcess: {
           saving: false,
           error: true,
         },
       };
-
-    case DELETE_STUDY_LEAD_SOURCE:
-      return {
-        ...state,
-        deleteStudyLeadSourceProcess: {
-          deleting: true,
-          error: false,
-        },
-        deletedLeadSource: {
-          index: null,
-          details: null,
-        },
-      };
-
-    case DELETE_STUDY_LEAD_SOURCE_SUCCESS:
-      return {
-        ...state,
-        deleteStudyLeadSourceProcess: {
-          deleting: false,
-          error: false,
-        },
-        deletedLeadSource: {
-          index: action.index,
-          details: action.leadSource,
-        },
-      };
-
-    case DELETE_STUDY_LEAD_SOURCE_ERROR:
-      return {
-        ...state,
-        deleteStudyLeadSourceProcess: {
-          deleting: false,
-          error: true,
-        },
-        deletedLeadSource: {
-          index: null,
-          details: null,
-        },
-      };
-
     case FETCH_STUDY_INDICATION_TAG:
       return {
         ...state,
@@ -1143,7 +1037,6 @@ export default function dashboardPageReducer(state = initialState, action) {
         },
       };
     case FETCH_MESSAGING_NUMBERS_SUCCESS:
-
       return {
         ...state,
         messagingNumbers: {
