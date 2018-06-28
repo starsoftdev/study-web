@@ -399,7 +399,7 @@ export default class UploadPatientsForm extends Component {
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const mapSourceOptions = uploadSources.map(s => ({
-      label: s.source_name ? s.source_name : s.source.label,
+      label: s.sourceName ? s.sourceName : s.source.label,
       value: s.studySourceId,
     }));
     let disabled = false;
