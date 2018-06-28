@@ -1,5 +1,5 @@
 /*
- *  saga to load auth user details from the just token
+ *  saga to track corp landing pages
  */
 import { take } from 'redux-saga/effects';
 
