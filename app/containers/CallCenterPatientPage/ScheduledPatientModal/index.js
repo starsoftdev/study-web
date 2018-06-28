@@ -47,7 +47,7 @@ class ScheduledPatientModal extends Component {
 
   handleSelect = (date) => {
     const chosenDate = getMomentFromDate(date, this.timezone);
-    this.setState({ date: chosenDate });
+    this.setState({ date: moment(date) });
     this.props.handleDateChange(chosenDate);
   }
 
@@ -56,7 +56,7 @@ class ScheduledPatientModal extends Component {
 
     this.calendar.focusToDate(today);
     this.setState({
-      date: getMomentFromDate(today, this.timezone),
+      date: moment(today),
     });
     this.props.handleDateChange(getMomentFromDate(today, this.timezone));
   }
