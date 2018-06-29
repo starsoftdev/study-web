@@ -84,12 +84,12 @@ const reserveSsrRoutes = (app, fs, environment, templatePath) => {
       }
       const facebookDescription = `Interested in a ${locals.title.replace(/study/gi, 'Research Study')}? Click this Link and Sign Up for more information. Your local research site will call you with more information.`;
 
-      // Add correct gtm values based on environment prod inserted into template by default
+      // Add correct gtm values based on environment
+      const re = new RegExp('GTM_ACCOUNT_ID', 'g');
       if (environment === 'development') {
-        const re = new RegExp(settings.gtm.PROD, 'g');
         templateStr = file.toString().replace(re, settings.gtm.DEV);
       } else if (environment === 'production') {
-        templateStr = file.toString();
+        templateStr = file.toString().replace(re, settings.gtm.PROD);
       }
       // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
       const result = templateStr      // If there are no needs for SSR for SEO purpose, just comment out below line and just keep medias tags as SSR.
