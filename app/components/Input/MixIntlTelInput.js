@@ -8,6 +8,8 @@ import React, { PropTypes } from 'react';
 import IntlTelInput from 'react-intl-tel-input';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { InputSmart } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+import 'react-phone-number-input/rrui.css';
 
 import classNames from 'classnames';
 import { formatNumber } from 'libphonenumber-js';
