@@ -9,6 +9,7 @@ const lookup = require('country-code-lookup');
 const packageJson = require('../../package.json');
 const PagesService = require('../services/pages.service');
 const getLandingPageLocals = require('../views/landing-page.locals');
+const settings = require('../../common/settings/app-settings.json');
 
 const readFile = (fs, filePath) => {
   return new Promise((resolve, reject) => {
@@ -61,14 +62,14 @@ const logView = (req) => {
  * @param {Object} fs File system utility
  * @param {String} templatePath Path to React HTML template
  */
-const reserveSsrRoutes = (app, fs, templatePath) => {
+const reserveSsrRoutes = (app, fs, environment, templatePath) => {
   app.get('/:landingId([0-9]+)-*/', async (req, res) => {
     try {
       logView(req);
       const landingId = req.params.landingId;
       const landing = await PagesService.fetchLanding(landingId);
       const file = await readFile(fs, templatePath);
-      const templateStr = file.toString();
+      let templateStr = null;
       const viewPath = path.join(__dirname, '../views/landing-page.pug');
       const locals = getLandingPageLocals(landing);
       const ipcountry = req.headers['cf-ipcountry'] || null;
@@ -83,6 +84,13 @@ const reserveSsrRoutes = (app, fs, templatePath) => {
       }
       const facebookDescription = `Interested in a ${locals.title.replace(/study/gi, 'Research Study')}? Click this Link and Sign Up for more information. Your local research site will call you with more information.`;
 
+      // Add correct gtm values based on environment
+      const re = new RegExp('GTM_ACCOUNT_ID', 'g');
+      if (environment === 'development') {
+        templateStr = file.toString().replace(re, settings.gtm.DEV);
+      } else if (environment === 'production') {
+        templateStr = file.toString().replace(re, settings.gtm.PROD);
+      }
       // Meta tags can be put inside body, but better to put inside head tag to be a valid HTML.
       const result = templateStr      // If there are no needs for SSR for SEO purpose, just comment out below line and just keep medias tags as SSR.
         .replace('<div id="app"></div>', ssrContent)
@@ -209,7 +217,7 @@ const addDevMiddlewares = (app, webpackConfig) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
 
-  reserveSsrRoutes(app, fs, path.join(compiler.outputPath, 'corporate.html'));
+  reserveSsrRoutes(app, fs, 'development', path.join(compiler.outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'corporate.html'), (err, file) => {
@@ -297,7 +305,7 @@ const addProdMiddlewares = (app, options) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
 
-  reserveSsrRoutes(app, require('fs'), path.resolve(outputPath, 'corporate.html'));
+  reserveSsrRoutes(app, require('fs'), 'production', path.resolve(outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
     res.status(404).sendFile(path.resolve(outputPath, 'corporate.html'));
