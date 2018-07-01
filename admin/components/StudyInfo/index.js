@@ -264,7 +264,7 @@ export class StudyInfo extends Component {
 
     return (
       <div id="infoSection">
-        {(totals.details && totals.details.total_studies) && (
+        {(studies.details && studies.details.length > 0) && (
           <div className="head">
             <h2 className="pull-left">
               <span>Active: {totals.details.total_active || 0}</span>

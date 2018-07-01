@@ -875,6 +875,27 @@ export default function createRoutes(store) {
         importModules.catch(errorLoading);
       },
     }, {
+      onEnter: redirectToLogin,
+      path: '/app/vendor/admins',
+      name: 'vendorAdminPage',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          System.import('../vendor/containers/Admin/reducer'),
+          System.import('../vendor/containers/Admin/sagas'),
+          System.import('../vendor/containers/Admin'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('vendorAdminPage', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '/app*',
       name: 'notfound',
       getComponent(nextState, cb) {

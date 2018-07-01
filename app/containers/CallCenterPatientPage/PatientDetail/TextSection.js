@@ -20,7 +20,7 @@ import {
   setProcessingStatus,
 } from '../../GlobalNotifications/actions';
 
-import { selectClientCredits, selectClientSites } from '../../App/selectors';
+import { selectClientSites } from '../../App/selectors';
 import PatientText from './PatientText';
 
 const formName = 'CallCenterPatientPage.Text';
@@ -33,7 +33,6 @@ class TextSection extends React.Component {
     active: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    clientCredits: React.PropTypes.object,
     fetchStudyPatientMessages: React.PropTypes.func.isRequired,
     sendStudyPatientMessages: React.PropTypes.func.isRequired,
     setProcessingStatus: React.PropTypes.func,
@@ -54,6 +53,8 @@ class TextSection extends React.Component {
     this.renderTextArea = this.renderTextArea.bind(this);
     this.submitText = this.submitText.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
+    this.initMessages = this.initMessages.bind(this);
+    this.initSocket = this.initSocket.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
 
     this.state = {
@@ -65,17 +66,29 @@ class TextSection extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.initMessages(this.props);
+    this.initSocket();
+  }
+
   componentWillReceiveProps(newProps) {
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
 
-    if (newProps.active && newProps.currentPatient) {
-      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
-        this.initStudyPatientMessagesFetch(newProps);
+    this.initMessages(newProps);
+    this.initSocket();
+  }
+
+  initMessages(props) {
+    if (props.active && props.currentPatient) {
+      this.setState({ twilioMessages: [], patientToFetchMessages: props.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(props);
       });
     }
+  }
 
+  initSocket() {
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         if (this.props.active && newMessage && this.props.currentPatient) {
@@ -135,15 +148,11 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
-    if (clientCredits === 0 || clientCredits === null) {
-      toastr.error('', translate('client.component.textSection.toastrCreditsError'));
-      return;
-    }
     const textarea = this.textarea;
     const options = {
       studyId,
       currentUserId: currentUser.id,
+      isCallCenter: true,
       isProxy: currentUser.isProxy,
       patientId: currentPatient.id,
       body: textarea.value,
@@ -246,19 +255,17 @@ class TextSection extends React.Component {
 
   render() {
     const { currentPatient, active, ePMS } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null);
     const notValidPhone = !currentPatient.phone;
-    const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
+    const sendDisabled = !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
 
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          {this.renderTextArea(disabled || unsubscribed || !ePMS)}
+          {this.renderTextArea(unsubscribed || !ePMS)}
         </div>
         <div className="btns-section">
           <span className="remaining-counter">
@@ -280,7 +287,6 @@ class TextSection extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  clientCredits: selectClientCredits(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   site: selectClientSites(),
 });
