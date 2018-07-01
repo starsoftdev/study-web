@@ -39,30 +39,37 @@ export default class ReportTabTable extends Component { // eslint-disable-line r
   }
 
   render() {
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>Study #</th>
-            <th>SITE LOCATION</th>
-            <th>SITE ADDRESS</th>
-            <th>EXPOSURE LEVEL</th>
-            <th>START DATE</th>
-            <th>END DATE</th>
-            <th>GOAL</th>
-            <th>TIER</th>
-            <th>COLOR</th>
-            <th>TOTAL</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            items.map((item, key) => {
-              return this.renderItems(item, key);
-            })
-          }
-        </tbody>
-      </table>
-    );
+    const active = false;
+    if (active) {
+      return (
+        <table>
+          <thead>
+            <tr>
+              <th>Study #</th>
+              <th>SITE LOCATION</th>
+              <th>SITE ADDRESS</th>
+              <th>EXPOSURE LEVEL</th>
+              <th>START DATE</th>
+              <th>END DATE</th>
+              <th>GOAL</th>
+              <th>TIER</th>
+              <th>COLOR</th>
+              <th>TOTAL</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              items.map((item, key) => {
+                return this.renderItems(item, key);
+              })
+            }
+          </tbody>
+        </table>
+      );
+    } else {
+      return (
+        <p className="text-center">No study end date range specified.</p>
+      );
+    }
   }
 }

@@ -93,7 +93,7 @@ export class FilterQueryForm extends Component {
               </div>
             </div>
             <div className="gray-outline">
-              <button className="pull-right btn btn-clear clear" onClick={() => clearFilters()}>
+              <button className="pull-right btn btn-clear clear" onClick={clearFilters}>
                 Clear
               </button>
               <button className="pull-right btn btn-default" disabled={filterUnchanged} onClick={() => applyFilters()}>
