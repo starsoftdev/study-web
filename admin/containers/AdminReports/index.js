@@ -7,7 +7,7 @@ import React, { Component, PropTypes } from 'react';
 import { change, reset, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _ from 'lodash';
+import _, { isEqual } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
 import FiltersPageForm from '../../components/FiltersPageForm';
@@ -15,13 +15,14 @@ import ReportTabs from '../../components/ReportTabs';
 import RangePopups from '../../components/RangePopups';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import {
-  clearCustomFilters, clearFilters, clearStudies, fetchCro, fetchIndications, fetchProtocols, fetchSources,
-  fetchSponsors, fetchStudiesForAdmin, fetchTotalsForAdmin, fetchUsersByRole,
+  clearCustomFilters, clearFilters, clearStudies, fetchCro, fetchIndications, fetchMediaTotalsForAdmin, fetchProtocols,
+  fetchSources, fetchSponsors, fetchStudiesForAdmin, fetchTotalsForAdmin, fetchUsersByRole,
 } from '../App/actions';
 import { selectCustomFilters, selectSources, selectStudiesPaginationOptions, selectTotals, selectFilterFormValues,
   selectMediaTotals, selectStudies,
 } from '../App/selectors';
-const formName = 'adminReportsFilters';
+
+const formName = 'adminDashboardFilters';
 
 @reduxForm({
   form: 'adminFilter',
@@ -35,6 +36,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     changeAdminFilters: PropTypes.func.isRequired,
     fetchStudiesForAdmin: PropTypes.func,
     fetchTotalsForAdmin: PropTypes.func,
+    fetchMediaTotalsForAdmin: PropTypes.func,
     fetchSources: PropTypes.func,
     studies: PropTypes.object,
     totals: PropTypes.object,
@@ -45,6 +47,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     sponsors: PropTypes.object,
     cro: PropTypes.object,
     usersByRoles: PropTypes.object,
+    paginationOptions: PropTypes.object,
     customFilters: PropTypes.array.isRequired,
     fetchIndications: PropTypes.func,
     fetchProtocols: PropTypes.func,
@@ -63,6 +66,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
       modalOpen: false,
       activateManually: null,
       prevTotalsFilters: null,
+      prevOffset: null,
     };
 
     this.manuallySetActiveTab = this.manuallySetActiveTab.bind(this);
@@ -74,7 +78,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
   componentWillMount() {
     const { sources, fetchSources, indications, fetchIndications, protocols, fetchProtocols, sponsors, fetchSponsors,
       cro, fetchCro, usersByRoles, fetchUsersByRole } = this.props;
-    if (!sources || sources.length) {
+    if (!sources || !sources.length) {
       fetchSources();
     }
     if (!indications || !indications.length) {
@@ -95,6 +99,22 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     this.applyFilters();
   }
 
+  componentWillReceiveProps(newProps) {
+    const equal = isEqual(newProps.studies.details, this.props.studies.details);
+    let studyIdsArr = [];
+
+    if (newProps.studies.details.length  && !equal) {
+      studyIdsArr = newProps.studies.details.map(s => s.study_id);
+
+      this.props.fetchMediaTotalsForAdmin({
+        studyIds: studyIdsArr,
+        campaign: null,
+        startDate: null,
+        endDate: null,
+      });
+    }
+  }
+
   getCurrentFilters() {
     const { filtersFormValues, customFilters, sources } = this.props;
     const allSources = _.cloneDeep(sources);
@@ -110,6 +130,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     if (filters['admin-search-value']) {
       delete filters['admin-search-value'];
     }
+    delete filters.campaign;
     customFilters.forEach(cf => {
       if (cf.key === 'studyNumber' && cf.value) {
         filters = { ...filters, search: { value: cf.value.trim() } };
@@ -140,9 +161,9 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     return filters;
   }
 
-  applyFilters() {
-    const { change, totals, clearFilters, fetchTotalsForAdmin, fetchStudiesForAdmin, sources } = this.props;
-    const { prevTotalsFilters } = this.state;
+  applyFilters(fetchByScroll = false) {
+    const { change, totals, clearFilters, fetchTotalsForAdmin, fetchStudiesForAdmin, sources, paginationOptions } = this.props;
+    const { prevTotalsFilters, prevOffset } = this.state;
 
     const allSources = _.cloneDeep(sources);
     const defaultSource = allSources.find(s => {
@@ -157,8 +178,14 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
       }
     });
 
-    const offset = 0;
+    let offset = 0;
     const limit = 50;
+
+    if (fetchByScroll) {
+      offset = paginationOptions.page * limit;
+    } else {
+      clearStudies();
+    }
 
     if (defaultSource && filters.source === defaultSource.id) {
       change('dashboardFilters', 'source', defaultSource.id);
@@ -170,14 +197,16 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
       clearFilters();
       this.setState({ prevTotalsFilters: null });
     } else if (_.isEqual(prevTotalsFilters, filters)) {
-      if (_.isEmpty(totals.details)) {
+      if (prevOffset !== offset || _.isEmpty(totals.details)) {
         fetchTotalsForAdmin(filters);
         fetchStudiesForAdmin(filters, limit, offset);
+        this.setState({ prevOffset: offset });
       }
     } else {
       this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
       fetchTotalsForAdmin(filters);
       fetchStudiesForAdmin(filters, limit, offset);
+      this.setState({ prevOffset: offset });
     }
   }
 
@@ -190,12 +219,12 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     clearCustomFilters();
     resetForm();
     clearStudies();
-    this.setState({ prevTotalsFilters: null });
+    this.setState({ prevOffset: null, prevTotalsFilters: null });
   }
 
   render() {
     const { activateManually } = this.state;
-    const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies } = this.props;
+    const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
@@ -220,11 +249,15 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
           totals={totals}
           campainSelected={campaignSelected}
         />
-        <ReportTabs
-          activateManually={activateManually}
-          mediaTotals={mediaTotals}
-          studies={studies}
-        />
+        {(totals.details && totals.details.total_studies) && (
+          <ReportTabs
+            activateManually={activateManually}
+            mediaTotals={mediaTotals}
+            studies={studies}
+            paginationOptions={paginationOptions}
+            loadItems={() => this.applyFilters(true)}
+          />
+        )}
       </div>
     );
   }
@@ -245,6 +278,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeAdminFilters: (name, value) => dispatch(change(formName, name, value)),
   fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
   fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
+  fetchMediaTotalsForAdmin: (params) => dispatch(fetchMediaTotalsForAdmin(params)),
   resetForm: () => dispatch(reset(formName)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),

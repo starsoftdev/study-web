@@ -242,6 +242,11 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
+        mediaTotals: {
+          details: {},
+          fetching: false,
+          error: null,
+        },
       };
       break;
     case CLEAR_FILTERS:
