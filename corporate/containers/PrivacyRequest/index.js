@@ -42,6 +42,7 @@ function mapDispatchToProps(dispatch) {
     change: (name, value) => dispatch(change(formName, name, value)),
     resetForm: () => dispatch(reset(formName)),
     touchFields: () => dispatch(touch(formName, ...fields)),
+    resetField: (name) => dispatch(change(formName, name, null)),
   };
 }
 
@@ -61,6 +62,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     resetForm: React.PropTypes.func.isRequired,
     privacyRequest: React.PropTypes.any,
     touchFields: React.PropTypes.func.isRequired,
+    resetField: React.PropTypes.func.any,
   };
 
   constructor(props) {
@@ -114,10 +116,10 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     } else {
       this.setState({ requestId: 0 });
     }
-    const { privacyRequest } = this.props;
+    const { privacyRequest, resetField } = this.props;
 
-    privacyRequest.subrequest = '';
-    privacyRequest.message = '';
+    resetField('subrequest');
+    privacyRequest.message = null;
     if (selected && selected.id !== 4) {
       privacyRequest.subrequest2 = 'ignore';
     } else {
@@ -244,7 +246,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
   }
 
   render() {
-    const company = { Yourcompany: 'Yourcompany' };
+
     const opt = [
       { id: 1, name: 'I\'m a person', value: 'I\'m a person' },
       { id: 2, name: 'I\'m representing an organization', value: 'I\'m representing an organization' },
@@ -257,8 +259,8 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
           <section className="privacy-request">
             <header className="text-center">
               <h2 className="main-heading">{translate('corporate.page.privacyrequest.header')}</h2>
-              <h3 dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyrequest.headerText', company) }} />
-              <p>{translate('corporate.page.privacyrequest.effective')} <a href="/">{company.Yourcompany}</a></p>
+              <h3 dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyrequest.headerText') }} />
+              <p>{translate('corporate.page.privacyrequest.effective')}</p>
             </header>
             <form
               ref={(animatedForm) => { this.animatedForm = animatedForm; }}
