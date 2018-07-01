@@ -1,12 +1,12 @@
 /* eslint-disable no-constant-condition, consistent-return */
 
-import { take, call, put, fork, select } from 'redux-saga/effects';
+import { take, call, put, fork, select, cancel } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
 import { takeLatest } from 'redux-saga';
 import { reset } from 'redux-form';
 import moment from 'moment-timezone';
-import { push } from 'react-router-redux';
+import { LOCATION_CHANGE, push } from 'react-router-redux';
 
 import { removeItem, setItem } from '../../utils/localStorage';
 import request from '../../utils/request';
@@ -65,7 +65,7 @@ import {
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_PATIENT_CATEGORIES,
   FETCH_STUDY_SOURCES,
-  FETCH_STUDY_LEAD_SOURCES,
+  FETCH_MEDIA_TYPES,
   PRIVACY_REQUEST,
 } from '../../containers/App/constants';
 
@@ -172,11 +172,15 @@ import {
   patientCategoriesFetchingError,
   fetchStudySourcesSuccess,
   fetchStudySourcesError,
-  fetchStudyLeadSourcesSuccess,
-  fetchStudyLeadSourcesError,
+  fetchMediaTypesSuccess,
+  fetchMediaTypesError,
   privacyRequestSuccess,
 } from '../../containers/App/actions';
+import { DELETE_MEDIA_TYPE } from '../../components/CallTrackingPageModal/constants';
+import { deleteMediaTypeSuccess } from '../../components/CallTrackingPageModal/actions';
 
+
+let deleteMediaTypesWatcher = false;
 export default function* baseDataSaga() {
   yield fork(fetchIndicationsWatcher);
   yield fork(fetchSourcesWatcher);
@@ -230,7 +234,19 @@ export default function* baseDataSaga() {
   yield fork(submitCnsWatcher);
   yield fork(readStudyPatientMessagesWatcher);
   yield fork(fetchStudySources);
-  yield fork(fetchStudyLeadSources);
+  yield fork(fetchMediaTypes);
+  if (!deleteMediaTypesWatcher) {
+    deleteMediaTypesWatcher = yield fork(deleteMediaType);
+  }
+
+  // Suspend execution until location changes
+  const options = yield take(LOCATION_CHANGE);
+  if (options.payload.pathname !== '/app') {
+    if (deleteMediaTypesWatcher) {
+      yield cancel(deleteMediaTypesWatcher);
+      deleteMediaTypesWatcher = false;
+    }
+  }
 }
 
 function* fetchIndicationsWatcher() {
@@ -1400,20 +1416,49 @@ function* fetchStudySources() {
   }
 }
 
-function* fetchStudyLeadSources() {
+function* fetchMediaTypes() {
   while (true) {
-    const { studyId } = yield take(FETCH_STUDY_LEAD_SOURCES);
+    const { studyId } = yield take(FETCH_MEDIA_TYPES);
     try {
       const options = {
         method: 'GET',
       };
 
-      const requestURL = `${API_URL}/studies/${studyId}/studyLeadSources`;
+      const requestURL = `${API_URL}/studies/${studyId}/studyMediaTypes`;
       const response = yield call(request, requestURL, options);
 
-      yield put(fetchStudyLeadSourcesSuccess(response));
+      yield put(fetchMediaTypesSuccess(response));
     } catch (err) {
-      yield put(fetchStudyLeadSourcesError(err));
+      yield put(fetchMediaTypesError(err));
+    }
+  }
+}
+
+export function* deleteMediaType() {
+  yield* takeLatest(DELETE_MEDIA_TYPE, deleteMediaTypeWorker);
+}
+
+export function* deleteMediaTypeWorker(action) {
+  try {
+    if (action.studySourceId) {
+      const requestURL = `${API_URL}/studies/${action.studyId}/canDeleteSource/${action.studySourceId}`;
+      const response = yield call(request, requestURL);
+      if (response.canDelete) {
+        yield put(deleteMediaTypeSuccess(action.index));
+      } else {
+        toastr.error('', 'Error! There is patient data for a deleted media type in the study.');
+      }
+    } else {
+      // if there is no study source id, this means that there is no studySource created on the server either, so we
+      // can just remove this straightaway from the client side
+      yield put(deleteMediaTypeSuccess(action.index));
+    }
+  } catch (err) {
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', 'Something went wrong when validating the delete for media type.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
     }
   }
 }
