@@ -73,6 +73,15 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     if (newProps.filtersFormValues.campaign !== this.props.filtersFormValues.campaign) {
       this.fetchStudiesAccordingToFilters();
     }
+
+    if (newProps.sources !== this.props.sources) {
+      const allSources = _.cloneDeep(newProps.sources);
+      const defaultSource = allSources.find(s => {
+        return s.type === 'StudyKIK';
+      });
+
+      newProps.fetchTotalsForAdmin({ source: defaultSource.id }, null, null);
+    }
   }
 
   componentWillMount() {
@@ -223,7 +232,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
           totals={totals}
           campainSelected={campaignSelected}
         />
-        {(totals.details && totals.details.total_studies) && (
+        {(studies.details && studies.details.length > 0) && (
           <div id="mediaStatsBox">
             <ExpandableSection
               content={

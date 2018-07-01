@@ -121,7 +121,7 @@ const defaultStats = [
   },
 ];
 
-export class MediaStatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
+export class MediaStatsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studies: PropTypes.object,
     mediaTotals: PropTypes.object,
@@ -130,7 +130,7 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
     campaignSelected: PropTypes.bool,
     fetchMediaTotalsForAdmin: PropTypes.func,
     startDate: PropTypes.any,
-    endDate: PropTypes.func,
+    endDate: PropTypes.any,
   };
 
   constructor() {
@@ -140,6 +140,20 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
     this.renderLines = this.renderLines.bind(this);
     this.renderCampaignTotalLines = this.renderCampaignTotalLines.bind(this);
     this.renderGrandTotalLines = this.renderGrandTotalLines.bind(this);
+  }
+
+  componentWillMount() {
+    const studyIdsArr = [];
+    for (const study of this.props.studies.details) {
+      studyIdsArr.push(study.study_id);
+    }
+
+    this.props.fetchMediaTotalsForAdmin({
+      studyIds: studyIdsArr,
+      campaign: this.props.campaign,
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
+    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -271,4 +285,4 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
   }
 }
 
-export default MediaStatsBox;
+export default MediaStatsTable;
