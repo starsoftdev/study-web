@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
+import LeadGenEdit from '../LeadGenEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -15,7 +16,13 @@ const tabs = [
 
 export default class EditStudyTabs extends Component {
   static propTypes = {
+    studyId: PropTypes.any,
     activateManually: PropTypes.string,
+    note: PropTypes.object,
+    addNote: PropTypes.func,
+    deleteNote: PropTypes.func,
+    formValues: PropTypes.any,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -55,6 +62,7 @@ export default class EditStudyTabs extends Component {
 
   render() {
     const { activeTab } = this.state;
+    const { note, currentUser, studyId, addNote, deleteNote, formValues } = this.props;
     return (
       <div id="editStudyTabs">
         <div className="tabs-holder">
@@ -66,13 +74,22 @@ export default class EditStudyTabs extends Component {
         </div>
         <div className="content-holder">
           <section className={classNames('notes', { active: (activeTab === 'notes') })}>
-            <NotesTabContent />
+            <NotesTabContent
+              note={note}
+              studyId={studyId}
+              currentUser={currentUser}
+              addNote={addNote}
+              deleteNote={deleteNote}
+              formValues={formValues}
+            />
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
             <LandingPageEdit />
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
-          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
+          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
+            <LeadGenEdit />
+          </section>
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })} />
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
