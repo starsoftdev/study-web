@@ -21,6 +21,10 @@ const tabs = [
 export default class ReportTabs extends Component {
   static propTypes = {
     activateManually: PropTypes.string,
+    mediaTotals: PropTypes.object,
+    studies: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    loadItems: PropTypes.func,
   };
 
   constructor(props) {
@@ -60,6 +64,7 @@ export default class ReportTabs extends Component {
 
   render() {
     const { activeTab } = this.state;
+    const { mediaTotals, studies, paginationOptions, loadItems } = this.props;
     return (
       <div id="reportTabs">
         <div className="tabs-holder">
@@ -71,31 +76,78 @@ export default class ReportTabs extends Component {
         </div>
         <div className="content-holder">
           <section className={classNames('total', { active: (activeTab === 'total') })}>
-            <TotalTabContent />
+            <TotalTabContent mediaTotals={mediaTotals} />
           </section>
           <section className={classNames('studykik', { active: (activeTab === 'studykik') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="studykik"
+              active={(activeTab === 'studykik')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('database', { active: (activeTab === 'database') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="database"
+              active={(activeTab === 'database')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('tv', { active: (activeTab === 'tv') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="tv"
+              active={(activeTab === 'tv')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('radio', { active: (activeTab === 'radio') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="radio"
+              active={(activeTab === 'radio')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('digital', { active: (activeTab === 'digital') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="digital"
+              active={(activeTab === 'digital')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('print', { active: (activeTab === 'print') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="print"
+              active={(activeTab === 'print')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('other', { active: (activeTab === 'other') })}>
-            <MediaSourceTabContent />
+            <MediaSourceTabContent
+              studies={studies}
+              type="other"
+              active={(activeTab === 'other')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('disposition', { active: (activeTab === 'disposition') })}>
-            <DispositionTabContent />
+            <DispositionTabContent
+              studies={studies}
+              active={(activeTab === 'disposition')}
+              paginationOptions={paginationOptions}
+              loadItems={loadItems}
+            />
           </section>
           <section className={classNames('disposition', { active: (activeTab === 'studyEndDateRange') })}>
             <StudyEndDateRangeTab />
