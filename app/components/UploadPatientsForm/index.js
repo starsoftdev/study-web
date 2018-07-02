@@ -165,7 +165,9 @@ export default class UploadPatientsForm extends Component {
         const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
         change('protocol', newSelectedProtocol.studyId);
         change('indication', newSelectedProtocol.indicationId);
-        this.setState({ needToUpdateProtocol : false });
+        this.setState({ needToUpdateProtocol : false }, () => {
+          this.protocolField.props.onChange(newSelectedProtocol.studyId);
+        });
       }
     }
 
@@ -399,7 +401,7 @@ export default class UploadPatientsForm extends Component {
     }
     protocolOptions.unshift({ id: 'add-new-protocol', name: 'No Protocol' });
     const mapSourceOptions = uploadSources.map(s => ({
-      label: s.source_name ? s.source_name : s.source.label,
+      label: s.sourceName ? s.sourceName : s.source.label,
       value: s.studySourceId,
     }));
     let disabled = false;
@@ -534,6 +536,7 @@ export default class UploadPatientsForm extends Component {
                 options={protocolOptions}
                 disabled={isFetchingProtocols || !this.state.siteLocation}
                 onChange={this.selectProtocol}
+                ref={(node) => this.protocolField = node}
               />
             </div>
           }

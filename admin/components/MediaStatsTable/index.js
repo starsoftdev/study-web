@@ -121,16 +121,16 @@ const defaultStats = [
   },
 ];
 
-export class MediaStatsBox extends Component { // eslint-disable-line react/prefer-stateless-function
+export class MediaStatsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studies: PropTypes.object,
     mediaTotals: PropTypes.object,
     sources: PropTypes.array,
     campaign: PropTypes.string,
-    campaingSelected: PropTypes.bool,
+    campaignSelected: PropTypes.bool,
     fetchMediaTotalsForAdmin: PropTypes.func,
     startDate: PropTypes.any,
-    endDate: PropTypes.func,
+    endDate: PropTypes.any,
   };
 
   constructor() {
@@ -140,6 +140,20 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
     this.renderLines = this.renderLines.bind(this);
     this.renderCampaignTotalLines = this.renderCampaignTotalLines.bind(this);
     this.renderGrandTotalLines = this.renderGrandTotalLines.bind(this);
+  }
+
+  componentWillMount() {
+    const studyIdsArr = [];
+    for (const study of this.props.studies.details) {
+      studyIdsArr.push(study.study_id);
+    }
+
+    this.props.fetchMediaTotalsForAdmin({
+      studyIds: studyIdsArr,
+      campaign: this.props.campaign,
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
+    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -211,17 +225,20 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
   }
 
   renderCampaignTotalLines() {
-    const { campaingSelected, mediaTotals } = this.props;
-    const campaign = (mediaTotals.details.length) ? find(mediaTotals.details, { type: 'campaign' }) : find(defaultStats, { type: 'campaign' });
-    const countNotContacted = !campaingSelected ? 'N/A' : campaign.count_not_contacted;
-    const callAttempted = !campaingSelected ? 'N/A' : campaign.call_attempted;
-    const dnq = !campaingSelected ? 'N/A' : campaign.dnq;
-    const actionNeeded = !campaingSelected ? 'N/A' : campaign.action_needed;
-    const scheduled = !campaingSelected ? 'N/A' : campaign.scheduled;
-    const consented = !campaingSelected ? 'N/A' : campaign.consented;
-    const screenFailed = !campaingSelected ? 'N/A' : campaign.screen_failed;
-    const randomized = !campaingSelected ? 'N/A' : campaign.randomized;
-    const total = !campaingSelected ? 'N/A' : (parseInt(campaign.count_not_contacted) + parseInt(campaign.call_attempted) + parseInt(campaign.dnq) + parseInt(campaign.action_needed) + parseInt(campaign.scheduled) + parseInt(campaign.consented) + parseInt(campaign.screen_failed) + parseInt(campaign.randomized));
+    const { campaignSelected, mediaTotals } = this.props;
+    let campaign = (mediaTotals.details.length) ? find(mediaTotals.details, { type: 'campaign' }) : find(defaultStats, { type: 'campaign' });
+    if (!campaign) {
+      campaign = find(defaultStats, { type: 'campaign' });
+    }
+    const countNotContacted = !campaignSelected ? 'N/A' : campaign.count_not_contacted;
+    const callAttempted = !campaignSelected ? 'N/A' : campaign.call_attempted;
+    const dnq = !campaignSelected ? 'N/A' : campaign.dnq;
+    const actionNeeded = !campaignSelected ? 'N/A' : campaign.action_needed;
+    const scheduled = !campaignSelected ? 'N/A' : campaign.scheduled;
+    const consented = !campaignSelected ? 'N/A' : campaign.consented;
+    const screenFailed = !campaignSelected ? 'N/A' : campaign.screen_failed;
+    const randomized = !campaignSelected ? 'N/A' : campaign.randomized;
+    const total = !campaignSelected ? 'N/A' : (parseInt(campaign.count_not_contacted) + parseInt(campaign.call_attempted) + parseInt(campaign.dnq) + parseInt(campaign.action_needed) + parseInt(campaign.scheduled) + parseInt(campaign.consented) + parseInt(campaign.screen_failed) + parseInt(campaign.randomized));
 
     return (
       <tr className="alwaysVisible">
@@ -268,4 +285,4 @@ export class MediaStatsBox extends Component { // eslint-disable-line react/pref
   }
 }
 
-export default MediaStatsBox;
+export default MediaStatsTable;
