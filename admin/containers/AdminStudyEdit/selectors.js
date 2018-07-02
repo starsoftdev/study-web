@@ -1,20 +1,32 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
 
-const selectAdminHomeDomain = () => state => state.adminHome;
+const selectAdminStudyEditDomain = () => state => state.AdminStudyEditPage;
 const selectFormDomain = () => state => state.form;
 
-const selectAdminHomePage = () => createSelector(
-  selectAdminHomeDomain(),
+const selectAdminStudyEditPage = () => createSelector(
+  selectAdminStudyEditDomain(),
   substate => substate
 );
 
-const selectFilterFormValues = () => createSelector(
+const selectAdminDashboardEditNoteFormValues = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'adminReportsFilters.values', {})
+  substate => get(substate, 'AdminEditStudy.Notes.values', {})
 );
 
-export default selectAdminHomePage;
+const selectAdminDashboardNote = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.note
+);
+
+const selectAdminDashboardEditNoteProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.editNoteProcess
+);
+
+export default selectAdminStudyEditPage;
 export {
-  selectFilterFormValues,
+  selectAdminDashboardEditNoteFormValues,
+  selectAdminDashboardNote,
+  selectAdminDashboardEditNoteProcess,
 };
