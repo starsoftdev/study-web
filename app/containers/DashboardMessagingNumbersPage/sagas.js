@@ -77,7 +77,6 @@ export function* addMessagingNumberWatcher() {
 
 export function* addMessagingNumberWorker(action) {
   try {
-    // yield put(addMessagingNumberError('adding a messaging number is not implemented yet'));
     console.log('adding messaging number: ', action.payload);
     const requestURL = `${API_URL}/twilioNumbers/buyNumber`;
 
