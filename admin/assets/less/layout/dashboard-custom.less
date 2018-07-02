@@ -122,7 +122,7 @@
 #reportTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; display: inline-block; padding: 10px; text-transform: uppercase; }
 #reportTabs .tab:last-child { border-right: 2px solid #00afef; }
 #reportTabs .tab:hover, #reportTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
-#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 20px; }
+#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 10px; }
 #reportTabs section { display: none; font-size: 16px; margin: 0; min-height: 100px; visibility: hidden; }
 #reportTabs section.active { display: block; visibility: visible; }
 #reportTabs section.total { margin-top: -10px; }
@@ -131,6 +131,7 @@
 
 #totalTabContent tr { line-height: 35px; }
 #totalTabContent th { text-transform: uppercase; }
+#totalTabContent td { text-align: center; }
 #totalTabContent thead th { padding: 0 5px; }
 #totalTabContent thead th:first-child { padding: 0; }
 @media screen and (max-width: 1330px) {
@@ -138,13 +139,17 @@
   #totalTabContent tr { line-height: 32px; }
 }
 
-#mediaSourceTabContent th { text-transform: uppercase; }
+#mediaSourceTabContent th { padding: 5px; text-transform: uppercase; vertical-align: top; }
+#mediaSourceTabContent th:first-child { padding-left: 0; }
+#mediaSourceTabContent td { padding: 5px; vertical-align: top; }
 #mediaSourceTabContent thead th { padding: 0 6px; }
 #mediaSourceTabContent thead th:first-child { padding: 0; }
 @media screen and (max-width: 1380px) {
   #mediaSourceTabContent th { font-size: 14px; }
 }
-#dispositionTable th { text-transform: uppercase; }
+#dispositionTable th { padding: 5px; text-transform: uppercase; vertical-align: top; }
+#dispositionTable th:first-child { padding-left: 0; }
+#dispositionTable td { padding: 5px; vertical-align: top; }
 #dispositionTable thead th { padding: 0 6px; }
 #dispositionTable thead th:first-child { padding: 0; }
 

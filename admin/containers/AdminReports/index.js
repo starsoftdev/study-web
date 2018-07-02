@@ -7,35 +7,56 @@ import React, { Component, PropTypes } from 'react';
 import { change, reset, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import _, { cloneDeep, concat, findIndex, mapKeys, pullAt } from 'lodash';
+import _, { isEqual } from 'lodash';
 
 import StatsBox from '../../components/StatsBox';
 import FiltersPageForm from '../../components/FiltersPageForm';
 import ReportTabs from '../../components/ReportTabs';
 import RangePopups from '../../components/RangePopups';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
-import { selectFilterFormValues } from './selectors';
-const formName = 'adminReportsFilters';
+import {
+  clearCustomFilters, clearFilters, clearStudies, fetchCro, fetchIndications, fetchMediaTotalsForAdmin, fetchProtocols,
+  fetchSources, fetchSponsors, fetchStudiesForAdmin, fetchTotalsForAdmin, fetchUsersByRole,
+} from '../App/actions';
+import { selectCustomFilters, selectSources, selectStudiesPaginationOptions, selectTotals, selectFilterFormValues,
+  selectMediaTotals, selectStudies,
+} from '../App/selectors';
 
-const mapStateToProps = createStructuredSelector({
-  filtersFormValues: selectFilterFormValues(),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  change: (formName, name, value) => dispatch(change(formName, name, value)),
-  resetForm: () => dispatch(reset(formName)),
-});
+const formName = 'adminDashboardFilters';
 
 @reduxForm({
   form: 'adminFilter',
   enableReinitialize: true,
 })
-@connect(mapStateToProps, mapDispatchToProps)
-export class AdminReports extends Component { // eslint-disable-line react/prefer-stateless-function
+export class AdminReportsPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     change: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
+    changeAdminFilters: PropTypes.func.isRequired,
+    fetchStudiesForAdmin: PropTypes.func,
+    fetchTotalsForAdmin: PropTypes.func,
+    fetchMediaTotalsForAdmin: PropTypes.func,
+    fetchSources: PropTypes.func,
+    studies: PropTypes.object,
+    totals: PropTypes.object,
+    mediaTotals: PropTypes.object,
+    sources: PropTypes.array,
+    indications: PropTypes.array,
+    protocols: PropTypes.object,
+    sponsors: PropTypes.object,
+    cro: PropTypes.object,
+    usersByRoles: PropTypes.object,
+    paginationOptions: PropTypes.object,
+    customFilters: PropTypes.array.isRequired,
+    fetchIndications: PropTypes.func,
+    fetchProtocols: PropTypes.func,
+    fetchSponsors: PropTypes.func,
+    fetchCro: PropTypes.func,
+    fetchUsersByRole: PropTypes.func,
+    clearFilters: PropTypes.func,
+    clearStudies: PropTypes.func,
+    clearCustomFilters: PropTypes.func,
   };
 
   constructor(props) {
@@ -43,117 +64,231 @@ export class AdminReports extends Component { // eslint-disable-line react/prefe
 
     this.state = {
       modalOpen: false,
-      customFilters: [],
       activateManually: null,
+      prevTotalsFilters: null,
+      prevOffset: null,
     };
 
-    this.addFilter = this.addFilter.bind(this);
-    this.updateFilters = this.updateFilters.bind(this);
-    this.clearFilters = this.clearFilters.bind(this);
-    this.removeFilter = this.removeFilter.bind(this);
-    this.mapFilterValues = this.mapFilterValues.bind(this);
     this.manuallySetActiveTab = this.manuallySetActiveTab.bind(this);
+    this.getCurrentFilters = this.getCurrentFilters.bind(this);
+    this.applyFilters = this.applyFilters.bind(this);
+    this.clearFiltersAndClean = this.clearFiltersAndClean.bind(this);
   }
 
-  addFilter(options) {
-    const { customFilters } = this.state;
-    if (customFilters.length === 0) {
-      const newOptions = {
-        ...options,
-        onClose: () => this.removeFilter({ name: 'search' }),
-      };
-      customFilters.push(newOptions);
-      this.setState({ customFilters });
+  componentWillMount() {
+    const { sources, fetchSources, indications, fetchIndications, protocols, fetchProtocols, sponsors, fetchSponsors,
+      cro, fetchCro, usersByRoles, fetchUsersByRole } = this.props;
+    if (!sources || !sources.length) {
+      fetchSources();
+    }
+    if (!indications || !indications.length) {
+      fetchIndications();
+    }
+    if (!protocols || !protocols.details.length) {
+      fetchProtocols();
+    }
+    if (!sponsors || !sponsors.details.length) {
+      fetchSponsors();
+    }
+    if (!cro || !cro.details.length) {
+      fetchCro();
+    }
+    if (!usersByRoles || ![...usersByRoles.sm, ...usersByRoles.bd, ...usersByRoles.ae, ...usersByRoles.cc].length) {
+      fetchUsersByRole();
+    }
+    this.applyFilters();
+  }
+
+  componentWillReceiveProps(newProps) {
+    const equal = isEqual(newProps.studies.details, this.props.studies.details);
+    let studyIdsArr = [];
+
+    if (newProps.studies.details.length  && !equal) {
+      studyIdsArr = newProps.studies.details.map(s => s.study_id);
+
+      this.props.fetchMediaTotalsForAdmin({
+        studyIds: studyIdsArr,
+        campaign: null,
+        startDate: null,
+        endDate: null,
+      });
     }
   }
 
-  updateFilters(key, value) {
-    this.props.change('adminReportsFilters', key, value);
-  }
-
-  clearFilters() {
-    const { resetForm } = this.props;
-    this.setState({
-      customFilters: [],
+  getCurrentFilters() {
+    const { filtersFormValues, customFilters, sources } = this.props;
+    const allSources = _.cloneDeep(sources);
+    const defaultSource = allSources.find(s => {
+      return s.type === 'StudyKIK';
     });
-    resetForm();
-  }
+    let filters = _.cloneDeep(filtersFormValues);
 
-  removeFilter(filter) {
-    const { customFilters } = this.state;
-    const { change, filtersFormValues } = this.props;
-    const filters = cloneDeep(filtersFormValues);
-
-    if (filter.type === 'search') {
-      pullAt(customFilters, findIndex(customFilters, filter));
-      this.setState({ customFilters });
-
-      change('adminReportsFilters', 'search', []);
-    } else if (filters[filter.name]) {
-      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
-      pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
-
-      change('adminReportsFilters', filter.name, filters[filter.name]);
+    // adding custom filters and remove unneeded attributes
+    if (filters['admin-search-type']) {
+      delete filters['admin-search-type'];
     }
-  }
-
-  mapFilterValues(filters) {
-    const newFilters = [];
-    mapKeys(filters, (filterValues, key) => {
-      if (key !== 'campaign' && key !== 'search') {
-        _.forEach(filterValues, (v) => {
-          if ((v.label !== 'All') || (v.label === 'All' && filterValues.length === 1)) {
-            newFilters.push({
-              name: key,
-              type: 'value',
-              value: v.label,
-            });
-          }
-        });
+    if (filters['admin-search-value']) {
+      delete filters['admin-search-value'];
+    }
+    delete filters.campaign;
+    customFilters.forEach(cf => {
+      if (cf.key === 'studyNumber' && cf.value) {
+        filters = { ...filters, search: { value: cf.value.trim() } };
+      } else if (cf.key === 'address' && cf.value) {
+        filters = { ...filters, address: { value: cf.value.trim() } };
+      } else if (cf.key === 'postalCode' && cf.value) {
+        filters = { ...filters, postalCode: { value: cf.value.trim() } };
       }
     });
-    return newFilters;
+
+    _.forEach(filters, (filter, k) => {
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address') {
+        const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
+        filters[k] = withoutAll;
+      }
+    });
+
+    if (!filters.source && defaultSource) {
+      change('dashboardFilters', 'source', defaultSource.id);
+      filters.source = defaultSource.id;
+    }
+
+    if (filters.source === -1) {
+      change('dashboardFilters', 'source', null);
+      delete filters.source;
+    }
+
+    return filters;
+  }
+
+  applyFilters(fetchByScroll = false) {
+    const { change, totals, clearFilters, fetchTotalsForAdmin, fetchStudiesForAdmin, sources, paginationOptions } = this.props;
+    const { prevTotalsFilters, prevOffset } = this.state;
+
+    const allSources = _.cloneDeep(sources);
+    const defaultSource = allSources.find(s => {
+      return s.type === 'StudyKIK';
+    });
+    const filters = this.getCurrentFilters();
+    let isEmpty = true;
+
+    _.forEach(filters, (filter) => {
+      if (!_.isEmpty(filter)) {
+        isEmpty = false;
+      }
+    });
+
+    let offset = 0;
+    const limit = 50;
+
+    if (fetchByScroll) {
+      offset = paginationOptions.page * limit;
+    } else {
+      clearStudies();
+    }
+
+    if (defaultSource && filters.source === defaultSource.id) {
+      change('dashboardFilters', 'source', defaultSource.id);
+    } else if (!filters.source) {
+      change('dashboardFilters', 'source', null);
+    }
+
+    if (isEmpty) {
+      clearFilters();
+      this.setState({ prevTotalsFilters: null });
+    } else if (_.isEqual(prevTotalsFilters, filters)) {
+      if (prevOffset !== offset || _.isEmpty(totals.details)) {
+        fetchTotalsForAdmin(filters);
+        fetchStudiesForAdmin(filters, limit, offset);
+        this.setState({ prevOffset: offset });
+      }
+    } else {
+      this.setState({ prevTotalsFilters: _.cloneDeep(filters) });
+      fetchTotalsForAdmin(filters);
+      fetchStudiesForAdmin(filters, limit, offset);
+      this.setState({ prevOffset: offset });
+    }
   }
 
   manuallySetActiveTab(activeTab) {
     this.setState({ activateManually: activeTab });
   }
 
+  clearFiltersAndClean() {
+    const { resetForm, clearCustomFilters, clearStudies } = this.props;
+    clearCustomFilters();
+    resetForm();
+    clearStudies();
+    this.setState({ prevOffset: null, prevTotalsFilters: null });
+  }
+
   render() {
-    const { customFilters, activateManually } = this.state;
-    const { resetForm, change, filtersFormValues } = this.props;
-    const filters = concat(this.mapFilterValues(filtersFormValues), customFilters);
+    const { activateManually } = this.state;
+    const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions } = this.props;
+    const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
+
+    const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
         <div className="fixed-header clearfix">
           <h1 className="main-heading pull-left">Admin portal</h1>
-          <FiltersPageForm
-            change={change}
-            resetForm={resetForm}
-            updateFilters={this.updateFilters}
-            addFilter={this.addFilter}
-            filtersFormValues={filtersFormValues}
-          />
+          <FiltersPageForm />
         </div>
-        {(filters.length > 0) &&
         <FilterQueryForm
-          clearFilters={this.clearFilters}
-          filters={filters}
-          removeFilter={this.removeFilter}
           resetForm={resetForm}
+          changeAdminFilters={changeAdminFilters}
+          applyFilters={this.applyFilters}
+          clearFilters={this.clearFiltersAndClean}
+          filterUnchanged={filterUnchanged}
         />
-        }
         <RangePopups
           manuallySetActiveTab={this.manuallySetActiveTab}
         />
-        <StatsBox />
-        <ReportTabs
-          activateManually={activateManually}
+        <StatsBox
+          totals={totals}
+          campainSelected={campaignSelected}
         />
+        {(totals.details && totals.details.total_studies) && (
+          <ReportTabs
+            activateManually={activateManually}
+            mediaTotals={mediaTotals}
+            studies={studies}
+            paginationOptions={paginationOptions}
+            loadItems={() => this.applyFilters(true)}
+          />
+        )}
       </div>
     );
   }
 }
 
-export default AdminReports;
+const mapStateToProps = createStructuredSelector({
+  filtersFormValues: selectFilterFormValues(),
+  paginationOptions: selectStudiesPaginationOptions(),
+  totals: selectTotals(),
+  studies: selectStudies(),
+  mediaTotals: selectMediaTotals(),
+  sources: selectSources(),
+  customFilters: selectCustomFilters(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  change: (fName, name, value) => dispatch(change(fName, name, value)),
+  changeAdminFilters: (name, value) => dispatch(change(formName, name, value)),
+  fetchStudiesForAdmin: (params, limit, offset) => dispatch(fetchStudiesForAdmin(params, limit, offset)),
+  fetchTotalsForAdmin: (params, limit, offset) => dispatch(fetchTotalsForAdmin(params, limit, offset)),
+  fetchMediaTotalsForAdmin: (params) => dispatch(fetchMediaTotalsForAdmin(params)),
+  resetForm: () => dispatch(reset(formName)),
+  fetchIndications: () => dispatch(fetchIndications()),
+  fetchProtocols: () => dispatch(fetchProtocols()),
+  fetchSponsors: () => dispatch(fetchSponsors()),
+  fetchSources: () => dispatch(fetchSources()),
+  fetchUsersByRole: () => dispatch(fetchUsersByRole()),
+  fetchCro: () => dispatch(fetchCro()),
+  clearFilters: () => dispatch(clearFilters()),
+  clearStudies: () => dispatch(clearStudies()),
+  clearCustomFilters: () => dispatch(clearCustomFilters()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminReportsPage);
