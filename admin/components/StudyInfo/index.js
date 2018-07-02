@@ -65,7 +65,7 @@ export class StudyInfo extends Component {
 
   loadItems() {
     if (this.props.studies.details.length > 0) {
-      this.props.fetchStudiesAccordingToFilters(null, null, true);
+      this.props.fetchStudiesAccordingToFilters(true);
     }
   }
 
@@ -73,7 +73,7 @@ export class StudyInfo extends Component {
     const { changeAdminFilters, fetchStudiesAccordingToFilters } = this.props;
     changeAdminFilters('campaign', val);
     setTimeout(() => {
-      fetchStudiesAccordingToFilters(null, null, false);
+      fetchStudiesAccordingToFilters();
     }, 200);
   }
 
@@ -264,7 +264,7 @@ export class StudyInfo extends Component {
 
     return (
       <div id="infoSection">
-        {(totals.details && totals.details.total_studies) && (
+        {(studies.details && studies.details.length > 0) && (
           <div className="head">
             <h2 className="pull-left">
               <span>Active: {totals.details.total_active || 0}</span>

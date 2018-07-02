@@ -14,10 +14,14 @@ import FiltersPageForm from '../../components/FiltersPageForm';
 import MediaStatsTable from '../../components/MediaStatsTable';
 import FilterQueryForm from '../../components/Filter/FilterQueryForm';
 import StudyInfo from '../../components/StudyInfo';
-import { selectFilterFormValues, selectStudies, selectTotals, selectPaginationOptions, selectCustomFilters, selectMediaTotals } from './selectors';
-import { fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies, fetchMediaTotalsForAdmin } from './actions';
-import { selectSources } from '../App/selectors';
-import { fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole } from '../App/actions';
+import {
+  selectFilterFormValues, selectStudies, selectTotals, selectSources, selectCustomFilters, selectMediaTotals,
+  selectStudiesPaginationOptions, selectIndications, selectProtocols, selectSponsors, selectUsersByRoles, selectCro,
+} from '../App/selectors';
+import {
+  fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
+  fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies, fetchMediaTotalsForAdmin, clearCustomFilters,
+} from '../App/actions';
 
 const formName = 'adminDashboardFilters';
 export class AdminHomePage extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -30,6 +34,11 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     mediaTotals: PropTypes.object,
     studies: PropTypes.object,
     sources: PropTypes.array,
+    indications: PropTypes.array,
+    protocols: PropTypes.object,
+    sponsors: PropTypes.object,
+    cro: PropTypes.object,
+    usersByRoles: PropTypes.object,
     filtersFormValues: PropTypes.object.isRequired,
     customFilters: PropTypes.array.isRequired,
     fetchStudiesForAdmin: PropTypes.func,
@@ -42,6 +51,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     fetchMediaTotalsForAdmin: PropTypes.func,
     clearFilters: PropTypes.func,
     clearStudies: PropTypes.func,
+    clearCustomFilters: PropTypes.func,
     paginationOptions: PropTypes.object,
   };
 
@@ -56,25 +66,48 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
 
     this.fetchStudiesAccordingToFilters = this.fetchStudiesAccordingToFilters.bind(this);
     this.getCurrentFilters = this.getCurrentFilters.bind(this);
+    this.clearFiltersAndClean = this.clearFiltersAndClean.bind(this);
   }
-
 
   componentWillReceiveProps(newProps) {
     if (newProps.filtersFormValues.campaign !== this.props.filtersFormValues.campaign) {
-      this.fetchStudiesAccordingToFilters(null, null, false);
+      this.fetchStudiesAccordingToFilters();
+    }
+
+    if (newProps.sources !== this.props.sources) {
+      const allSources = _.cloneDeep(newProps.sources);
+      const defaultSource = allSources.find(s => {
+        return s.type === 'StudyKIK';
+      });
+
+      newProps.fetchTotalsForAdmin({ source: defaultSource.id }, null, null);
     }
   }
 
   componentWillMount() {
-    this.props.fetchSources();
-    this.props.fetchIndications();
-    this.props.fetchProtocols();
-    this.props.fetchSponsors();
-    this.props.fetchCro();
-    this.props.fetchUsersByRole();
+    const { sources, fetchSources, indications, fetchIndications, protocols, fetchProtocols, sponsors, fetchSponsors,
+      cro, fetchCro, usersByRoles, fetchUsersByRole } = this.props;
+    if (!sources.length) {
+      fetchSources();
+    }
+    if (!indications.length) {
+      fetchIndications();
+    }
+    if (!protocols.details.length) {
+      fetchProtocols();
+    }
+    if (!sponsors.details.length) {
+      fetchSponsors();
+    }
+    if (!cro.details.length) {
+      fetchCro();
+    }
+    if (![...usersByRoles.sm, ...usersByRoles.bd, ...usersByRoles.ae, ...usersByRoles.cc].length) {
+      fetchUsersByRole();
+    }
   }
 
-  fetchStudiesAccordingToFilters(value, key, fetchByScroll) {
+  fetchStudiesAccordingToFilters(fetchByScroll = false) {
     const { change, totals, paginationOptions, clearFilters, fetchStudiesForAdmin, fetchTotalsForAdmin, sources, clearStudies } = this.props;
     const { prevTotalsFilters, prevOffset } = this.state;
 
@@ -82,13 +115,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     const defaultSource = allSources.find(s => {
       return s.type === 'StudyKIK';
     });
-    let filters = this.getCurrentFilters();
-
-    if ((value && key) || (key === 'campaign') || (key === 'source')) {
-      const newFilterValues = _.cloneDeep(value);
-      filters = { ...filters, [key]:newFilterValues };
-    }
-
+    const filters = this.getCurrentFilters();
     let isEmpty = true;
 
     _.forEach(filters, (filter) => {
@@ -174,12 +201,20 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     return filters;
   }
 
+  clearFiltersAndClean() {
+    const { resetForm, clearCustomFilters, clearStudies } = this.props;
+    clearCustomFilters();
+    resetForm();
+    clearStudies();
+    this.setState({ prevOffset: null, prevTotalsFilters: null });
+  }
+
   render() {
-    const { resetForm, studies, mediaTotals, sources, totals, filtersFormValues, changeAdminFilters, paginationOptions,
+    const { studies, mediaTotals, sources, totals, filtersFormValues, changeAdminFilters, paginationOptions,
       fetchMediaTotalsForAdmin } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
-    const campaingSelected = (typeof filtersFormValues.campaign === 'string');
+    const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -188,21 +223,21 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
           <FiltersPageForm />
         </div>
         <FilterQueryForm
-          resetForm={resetForm}
+          clearFilters={this.clearFiltersAndClean}
           changeAdminFilters={changeAdminFilters}
-          fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+          applyFilters={this.fetchStudiesAccordingToFilters}
           filterUnchanged={filterUnchanged}
         />
         <StatsBox
           totals={totals}
-          campaingSelected={campaingSelected}
+          campainSelected={campaignSelected}
         />
-        {(totals.details && totals.details.total_studies) && (
+        {(studies.details && studies.details.length > 0) && (
           <div id="mediaStatsBox">
             <ExpandableSection
               content={
                 <MediaStatsTable
-                  campaingSelected={campaingSelected}
+                  campaignSelected={campaignSelected}
                   campaign={filtersFormValues.campaign}
                   startDate={filtersFormValues.startDate}
                   endDate={filtersFormValues.endDate}
@@ -230,12 +265,17 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
 
 const mapStateToProps = createStructuredSelector({
   filtersFormValues: selectFilterFormValues(),
-  paginationOptions: selectPaginationOptions(),
+  paginationOptions: selectStudiesPaginationOptions(),
   studies: selectStudies(),
   totals: selectTotals(),
   mediaTotals: selectMediaTotals(),
   sources: selectSources(),
   customFilters: selectCustomFilters(),
+  indications: selectIndications(),
+  protocols: selectProtocols(),
+  sponsors: selectSponsors(),
+  cro: selectCro(),
+  usersByRoles: selectUsersByRoles(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -253,6 +293,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCro: () => dispatch(fetchCro()),
   clearFilters: () => dispatch(clearFilters()),
   clearStudies: () => dispatch(clearStudies()),
+  clearCustomFilters: () => dispatch(clearCustomFilters()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminHomePage);
