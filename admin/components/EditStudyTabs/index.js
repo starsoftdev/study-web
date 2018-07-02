@@ -15,7 +15,13 @@ const tabs = [
 
 export default class EditStudyTabs extends Component {
   static propTypes = {
+    studyId: PropTypes.any,
     activateManually: PropTypes.string,
+    note: PropTypes.object,
+    addNote: PropTypes.func,
+    deleteNote: PropTypes.func,
+    formValues: PropTypes.any,
+    currentUser: PropTypes.object,
   };
 
   constructor(props) {
@@ -55,6 +61,7 @@ export default class EditStudyTabs extends Component {
 
   render() {
     const { activeTab } = this.state;
+    const { note, currentUser, studyId, addNote, deleteNote, formValues } = this.props;
     return (
       <div id="editStudyTabs">
         <div className="tabs-holder">
@@ -66,7 +73,14 @@ export default class EditStudyTabs extends Component {
         </div>
         <div className="content-holder">
           <section className={classNames('notes', { active: (activeTab === 'notes') })}>
-            <NotesTabContent />
+            <NotesTabContent
+              note={note}
+              studyId={studyId}
+              currentUser={currentUser}
+              addNote={addNote}
+              deleteNote={deleteNote}
+              formValues={formValues}
+            />
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
             <LandingPageEdit />
