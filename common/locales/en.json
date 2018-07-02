@@ -4,6 +4,13 @@
     "common.layout.placeholder.selectfilter": "Select Filter",
     "common.layout.placeholder.search": "Search",
 
+    "admin.component.patientNote.labelName": "Name:",
+    "admin.component.patientNote.labelDate": "Date:",
+    "admin.component.patientNote.labelTime": "Time:",
+    "admin.component.patientNote.dateMask": "MM/DD/YY",
+    "admin.component.patientNote.timeMask": "h:mm A",
+    "admin.component.patientNote.studyKIK": "StudyKIK",
+
     "client.component.alertModal.name": "Please select ${name}(s).",
     "client.component.alertModal.ok": "ok",
 
