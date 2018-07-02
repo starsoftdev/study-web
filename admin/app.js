@@ -34,7 +34,6 @@ import createRoutes from './routes';
 // this uses the singleton browserHistory provided by react-router
 // Optionally, this could be changed to leverage a created history
 // e.g. `const browserHistory = useRouterHistory(createBrowserHistory)();`
-console.log('executing admin/app.js!');
 const initialState = {};
 const store = configureStore(initialState, browserHistory);
 
