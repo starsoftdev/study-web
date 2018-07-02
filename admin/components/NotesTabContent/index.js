@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, reset } from 'redux-form';
 
 import Input from '../Input';
 
@@ -8,7 +9,15 @@ import Input from '../Input';
 import StudyNote from '../../components/StudyNote';
 
 const formName = 'AdminEditStudy.Notes';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    reset: () => dispatch(reset(formName)),
+  };
+}
+
 @reduxForm({ form: formName })
+@connect(null, mapDispatchToProps)
 export class NotesTabContent extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     studyId: PropTypes.any,
@@ -17,6 +26,7 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
     deleteNote: PropTypes.func,
     currentUser: PropTypes.object,
     formValues: PropTypes.any,
+    reset: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -42,7 +52,7 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
 
   addNote(ev) {
     ev.preventDefault();
-    const { studyId, formValues, currentUser } = this.props;
+    const { studyId, formValues, currentUser, reset } = this.props;
     const nParam = {
       noteData: formValues.noteData,
       study_id: studyId,
@@ -50,6 +60,7 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
     };
 
     this.props.addNote(nParam);
+    reset();
   }
 
   render() {
