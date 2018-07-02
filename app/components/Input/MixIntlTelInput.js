@@ -22,6 +22,7 @@ export default class MixIntlTelInput extends React.PureComponent {
     meta: PropTypes.object.isRequired,
     input: PropTypes.object.isRequired,
     tooltipEnabled: PropTypes.bool,
+    onChange: PropTypes.func,
   };
 
   constructor(props, context) {
@@ -29,16 +30,17 @@ export default class MixIntlTelInput extends React.PureComponent {
 
     // We have to detach the visual display (UX) from the actual (correctly-formatted for data use).
     let country = 'US';  // automatic default
-    let value = null;
+    let inputValue = null;
     try {
       country = props.preferredCountries && props.preferredCountries.length && props.preferredCountries[0].toUpperCase();
-      value =  props.input.value;
+      inputValue =  props.input.value;
     } catch (e) {
       // no-op
     }
     this.state = {
       country,
-      value,
+      inputValue,
+      value: null,
     };
   }
 
@@ -72,11 +74,12 @@ export default class MixIntlTelInput extends React.PureComponent {
     const props = Object.assign({}, this.props.input);
     delete props.onChange;
     delete props.value;
+    delete props.onBlur;
 
     const inputComponent = (
       <InputSmart
         onChange={this.onPhoneNumberChange}
-        value={this.state.value}
+        value={this.state.inputValue}
         country={this.state.country}
         metadata={metadata}
         className="intl-tel-input form-control input-lg phone-input"
@@ -116,9 +119,10 @@ export default class MixIntlTelInput extends React.PureComponent {
    * We're bypassing the loop where redux-form attempts to set the value.
    * This UI needs to display the human-readable version, not the E.164 format.
    */
-  onPhoneNumberChange = (value) => {
-    this.setState({ value }, () =>
-      this.props.input.onChange(formatNumber({ country: this.state.country, phone: value }, 'E.164'))
-    );
+  onPhoneNumberChange = (inputValue) => {
+    const value = formatNumber({ country: this.state.country, phone: inputValue }, 'E.164');
+    this.setState({ inputValue, value }, () => {
+      this.props.input.onChange(value);
+    });
   }
 }
