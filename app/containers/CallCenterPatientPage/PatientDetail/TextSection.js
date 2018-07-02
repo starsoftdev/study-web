@@ -8,14 +8,14 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
+import { readStudyPatientMessages } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import { translate } from '../../../../common/utilities/localization';
 import * as Selector from '../selectors';
 
 import {
-  sendStudyPatientMessages,
+  sendPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
 } from '../../GlobalNotifications/actions';
@@ -34,14 +34,13 @@ class TextSection extends React.Component {
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     fetchStudyPatientMessages: React.PropTypes.func.isRequired,
-    sendStudyPatientMessages: React.PropTypes.func.isRequired,
+    sendPatientMessages: React.PropTypes.func.isRequired,
     setProcessingStatus: React.PropTypes.func,
     socket: React.PropTypes.any,
     studyId: React.PropTypes.any,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
-    updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
@@ -97,9 +96,6 @@ class TextSection extends React.Component {
           });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
-          this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
-            unreadMessageCount: 0,
-          });
         }
       });
       this.setState({ socketBinded: true });
@@ -147,7 +143,7 @@ class TextSection extends React.Component {
   }
 
   submitText() {
-    const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
+    const { currentUser, currentPatient, sendPatientMessages, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
       studyId,
@@ -158,19 +154,10 @@ class TextSection extends React.Component {
       body: textarea.value,
       to: currentPatient.phone,
     };
-    this.props.sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
-          lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
-          updatedAt: data.dateCreated,
-        });
-        this.setState({ enteredCharactersLength: 0 }, () => {
-          textarea.value = '';
-        });
-      } else {
-        const errorMessage = err.errorMessage || err.message;
-        toastr.error('', errorMessage);
-      }
+
+    sendPatientMessages(options);
+    this.setState({ enteredCharactersLength: 0 }, () => {
+      textarea.value = '';
     });
   }
 
@@ -292,13 +279,12 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+  sendPatientMessages: (payload) => dispatch(sendPatientMessages(payload)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
-  updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);
