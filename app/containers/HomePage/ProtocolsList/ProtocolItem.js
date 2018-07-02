@@ -92,7 +92,7 @@ class ProtocolItem extends Component { // eslint-disable-line react/prefer-state
           <span>{indication}</span>
         </td>
         <td>
-          <span>{croName}</span>
+          <span>{croName || translate('common.constants.na')}</span>
         </td>
         <td className={classNames('patient-messaging-suite', { off: (patientMessagingSuiteText === 'Off') })}>
           <span className="patient-messaging-suite-status">{patientMessagingSuiteText}</span>
