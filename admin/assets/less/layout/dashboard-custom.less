@@ -182,7 +182,22 @@
 
 /************************** Notes tab **************************************/
 #notesTabContent { height: 100%; }
-#notesTabContent .notesList { border: 2px solid #646464; height: calc(~"100% - 210px"); margin-bottom: 20px; }
+#notesTabContent form { padding: 0; }
+#notesTabContent .notesList { border: 2px solid #646464; height: calc(~"100% - 210px"); margin-bottom: 20px; overflow-y: auto; }
+#notesTabContent .notesList .note-msg { margin: 25px; position: relative; }
+#notesTabContent .notesList .note-msg .note { border: 2px solid #636363; background-color: #f9f4b5; color: #101010; }
+#notesTabContent .notesList .note-msg .note-header { border-bottom: 2px solid #636363; background-color: #f8f197; height: 41px; position: relative; width: 100%; }
+#notesTabContent .notesList .note-msg .note-header .btn-trash { position: absolute; right: 10px; top: 7px; }
+#notesTabContent .notesList .note-msg .note-header .btn-trash:hover { cursor: pointer; }
+#notesTabContent .notesList .note-msg .note-content { .font(18px); margin: 0 0 5px; min-height: 45px; position: relative; padding: 25px 25px 0px; }
+#notesTabContent .notesList .note-msg .note-content p { color: #636363; word-wrap: break-word; }
+#notesTabContent .notesList .note-msg .note-userinfo { align-items: center; border-top: 2px solid #636363; display: flex; margin: 25px 25px 5px 25px; position: relative; }
+#notesTabContent .notesList .note-msg .note-userinfo .img-holder { left: 0; position: relative; top: 0; }
+#notesTabContent .notesList .note-msg .note-userinfo .info { flex: 1; margin-left: 15px; padding: 10px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line { display: flex; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .label { display: block; text-align: left; width: 65px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .content { border-bottom: 1px solid #636363; flex: 1; position: relative; top: -3px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .content span { color: #636363; padding: 0 0 5px; }
 #notesTabContent textarea { border-radius: 0; height: 130px; margin-bottom: 20px; resize: none; }
 #notesTabContent button { float: right; }
 
