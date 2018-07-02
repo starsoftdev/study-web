@@ -876,7 +876,7 @@ export default function createRoutes(store) {
       },
     }, {
       onEnter: redirectToLogin,
-      path: '/app/vendor/admins',
+      path: '/app/dashboard-vendor-admins',
       name: 'vendorAdminPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
