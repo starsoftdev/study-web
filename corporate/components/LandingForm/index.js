@@ -9,7 +9,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import Input from '../../../app/components/Input';
 import MixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
-import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
+import { formatPhone } from '../../../app/common/helper/functions';
 import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
@@ -56,8 +56,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     };
 
     this.setVisible = this.setVisible.bind(this);
-    this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.onCodeChange = this.onCodeChange.bind(this);
     this.onSelectFlag = this.onSelectFlag.bind(this);
   }
 
@@ -67,22 +65,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
   componentWillUnmount() {
     this.watcher.dispose();
-  }
-
-  onPhoneBlur(event) {
-    const { blur } = this.props;
-    const { selectedCountryData } = this.state;
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value, selectedCountryData);
-
-    blur('phone', formattedPhoneNumber);
-  }
-
-  onCodeChange(status, value, countryData, number) {
-    const { change } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    this.setState({ phone: formattedPhoneNumber, codeLength: countryData.dialCode.length, selectedCountryData: countryData }, () => {
-      change('code', value);
-    });
   }
 
   onSelectFlag(code, selectedCountryData) {
@@ -122,10 +104,9 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         placeholder={phonePlaceholder}
         className="field-row fixed-height"
         bsClass={bsClass}
-        onBlur={this.onPhoneBlur}
         preferredCountries={[ipcountryValue.toLowerCase()]}
         onSelectFlag={this.onSelectFlag}
-        onCodeChange={this.onCodeChange}
+        onChange={this.onCodeChange}
       />);
 
     if (subscriptionError) {
