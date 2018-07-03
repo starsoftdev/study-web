@@ -24,6 +24,11 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectEditMediaTypesProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.editMediaTypesProcess
+);
+
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   substate => substate.updateThankYouPageProcess
@@ -49,6 +54,7 @@ export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectEditMediaTypesProcess,
   selectThankYouPageUpdateProcess,
   selectLanding,
   selectLandingIsFetching,

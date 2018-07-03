@@ -32,6 +32,10 @@ const initialState = {
     deleting: false,
     error: null,
   },
+  editMediaTypesProcess: {
+    saving: false,
+    error: false,
+  },
   updateThankYouPageProcess: {
     success: false,
     saving: false,
