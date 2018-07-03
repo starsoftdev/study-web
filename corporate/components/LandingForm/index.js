@@ -13,6 +13,7 @@ import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/f
 import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
+import { translate } from '../../../common/utilities/localization';
 
 const formName = 'LandingPage';
 
@@ -190,6 +191,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             bsClass="form-control input-lg"
           />
           {phoneInput}
+          {ipcountryValue !== 'US' && this.renderGDPR()}
           <div className="field-row fixed-height">
             <input className="btn btn-default btn-block input-lg" disabled={submitting} value={signupButtonText} type="submit" />
           </div>
@@ -211,6 +213,33 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           }
         </div>
       </form>
+    );
+  }
+
+  renderGDPR() {
+    return (
+      <React.Fragment>
+        <label>
+          <Field
+            type="checkbox"
+            name="gdprPhoneNumber"
+            component={Input}
+            className="field-row fixed-height"
+            bsClass="form-control input-lg"
+          />
+          {translate('client.component.landingPage.gdpr.phoneNumber')}
+        </label>
+        <label>
+          <Field
+            type="checkbox"
+            name="gdprTermsAndConditions"
+            component={Input}
+            className="field-row fixed-height"
+            bsClass="form-control input-lg"
+          />
+          {translate('client.component.landingPage.gdpr.termsAndConditions')}
+        </label>
+      </React.Fragment>
     );
   }
 }
