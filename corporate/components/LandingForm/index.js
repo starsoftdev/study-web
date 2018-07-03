@@ -252,10 +252,11 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   renderGdprPhone() {
     return (
       <div className="field-row checkbox">
-        <label onClick={this.changeGdprPhoneNumber}>
+        <label>
           <Checkbox
             name="gdprPhoneNumber"
             input={{ checked: this.state.gdprPhoneNumber }}
+            onClick={this.changeGdprPhoneNumber}
           />
           <span>{translate('client.component.landingPage.gdpr.phoneNumber')}</span>
         </label>
@@ -265,12 +266,13 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   renderGdprToc() {
     return (
       <div className="field-row checkbox">
-        <label onClick={this.changeGdprToc}>
+        <label>
           <Checkbox
             name="gdprTermsAndConditions"
             input={{ checked: this.state.gdprTermsAndConditions }}
+            onClick={this.changeGdprToc}
           />
-          <span>{translate('client.component.landingPage.gdpr.termsAndConditions')}</span>
+          <span dangerouslySetInnerHTML={{ __html: translate('client.component.landingPage.gdpr.termsAndConditions') }} />
         </label>
       </div>
     );
