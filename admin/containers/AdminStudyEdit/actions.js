@@ -14,6 +14,10 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -76,5 +80,32 @@ export function deleteNoteError(payload) {
   return {
     type: DELETE_NOTE_ERROR,
     payload,
+  };
+}
+
+export function updateThankYouPage(params) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE,
+    params,
+  };
+}
+
+export function updateThankYouPageSuccess(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateThankYouPageError(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function resetThankYouPageState() {
+  return {
+    type: RESET_THANK_YOU_PAGE_STATE,
   };
 }
