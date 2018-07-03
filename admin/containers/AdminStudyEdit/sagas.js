@@ -10,6 +10,8 @@ import {
   FETCH_NOTE,
   ADD_NOTE,
   DELETE_NOTE,
+  UPDATE_THANK_YOU_PAGE,
+  FETCH_LANDING,
 } from './constants';
 
 import {
@@ -19,6 +21,10 @@ import {
   addNoteError,
   deleteNoteSuccess,
   deleteNoteError,
+  updateThankYouPageSuccess,
+  updateThankYouPageError,
+  landingFetched,
+  fetchLandingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -103,14 +109,62 @@ export function* deleteNoteWorker(action) {
   }
 }
 
+export function* updateThankYouPageWatcher() {
+  yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
+}
+
+export function* updateThankYouPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updateThankYouPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateThankYouPageSuccess(response));
+  } catch (err) {
+    yield put(updateThankYouPageError(err));
+  }
+}
+
+export function* fetchLandingForAdminWatcher() {
+  yield* takeLatest(FETCH_LANDING, fetchLandingForAdminWorker);
+}
+
+export function* fetchLandingForAdminWorker(action) {
+  const { studyId, utm } = action;
+  try {
+    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      query: {
+        utm,
+      },
+    });
+    yield put(landingFetched(response));
+    if (!response.isUtmValid) {
+      toastr.error('', 'Error! Invalid UTM.');
+    }
+  } catch (err) {
+    yield put(fetchLandingError(err));
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
   const deleteNoteWatcher1 = yield fork(deleteNoteWatcher);
+  const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
+  const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
 
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
   yield cancel(addNoteWatcher1);
   yield cancel(deleteNoteWatcher1);
+  yield cancel(updateThankYouPageWatcher1);
+  yield cancel(fetchLandingForAdminWatcher1);
 }

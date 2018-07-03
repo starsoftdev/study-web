@@ -343,4 +343,3 @@ export function clearStudies() {
     type: CLEAR_STUDIES,
   };
 }
-
