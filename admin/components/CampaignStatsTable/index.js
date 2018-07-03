@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 export class CampaignStatsTable extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    stats: PropTypes.array,
+    stats: PropTypes.object,
   };
 
   render() {
