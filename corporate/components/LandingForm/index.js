@@ -6,6 +6,7 @@ import { blur, change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
+import Checkbox from '../../../app/components/Input/Checkbox';
 import Input from '../../../app/components/Input';
 import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
@@ -14,6 +15,7 @@ import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
 import { translate } from '../../../common/utilities/localization';
+import './styles.less';
 
 const formName = 'LandingPage';
 
@@ -34,6 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
 })
 @connect(mapStateToProps, mapDispatchToProps)
 
+
 export class LandingForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
@@ -44,6 +47,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     onSubmit: React.PropTypes.func.isRequired,
     subscriptionError: React.PropTypes.object,
     submitting: React.PropTypes.bool.isRequired,
+    valid: React.PropTypes.bool, // provided by redux-form and required by lint
   };
 
   constructor(props) {
@@ -54,12 +58,17 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
       phone: '',
       codeLength: null,
       selectedCountryData: null,
+      gdprPhoneNumber: true,
+      gdprTermsAndConditions: false,
     };
 
     this.setVisible = this.setVisible.bind(this);
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onSelectFlag = this.onSelectFlag.bind(this);
+
+    this.changeGdprPhoneNumber = this.changeGdprPhoneNumber.bind(this);
+    this.changeGdprToc = this.changeGdprToc.bind(this);
   }
 
   componentDidMount() {
@@ -96,7 +105,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   render() {
-    const { landing, handleSubmit, subscriptionError, submitting } = this.props;
+    const { landing, handleSubmit, subscriptionError } = this.props;
 
     const city = (landing.city) ? landing.city : '';
     const state = (landing.state) ? landing.state : '';
@@ -112,8 +121,8 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const signupButtonText = (landing.signupButtonText) ? landing.signupButtonText : 'Sign up now!';
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
-    const ipcountryValue = document.head.querySelector('[property=ipcountry]').content;
-    const inputWrap = (ipcountryValue !== 'US') ? mixIntlTelInput : Input;
+    const ipcountryValue = landing.country.toLowerCase();
+    const inputWrap = mixIntlTelInput;
     const bsClass = `form-control input-lg ${(this.state.codeLength) ? `length-${this.state.codeLength}` : ''}`;
     let errorMessage = '';
     const phoneInput =
@@ -191,9 +200,10 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             bsClass="form-control input-lg"
           />
           {phoneInput}
-          {ipcountryValue !== 'US' && this.renderGDPR()}
+          {ipcountryValue !== 'US' && this.renderGdprPhone()}
+          {ipcountryValue !== 'US' && this.renderGdprToc()}
           <div className="field-row fixed-height">
-            <input className="btn btn-default btn-block input-lg" disabled={submitting} value={signupButtonText} type="submit" />
+            <input className="btn btn-default btn-block input-lg" disabled={this.isButtonDisabled()} value={signupButtonText} type="submit" />
           </div>
           {!landing.hideClickToCall &&
             <div className="field-row">
@@ -216,30 +226,53 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     );
   }
 
-  renderGDPR() {
+  isButtonDisabled(ipcountryValue) {
+    let countryCheck = false;
+    if (ipcountryValue !== 'US') {
+      countryCheck = this.state.gdprPhoneNumber && this.state.gdprTermsAndConditions;
+    }
+
+    return !countryCheck || this.props.submitting || !this.props.valid;
+  }
+
+  changeGdprPhoneNumber(e) {
+    e.preventDefault();
+    this.setState({
+      gdprPhoneNumber: !this.state.gdprPhoneNumber,
+    });
+  }
+
+  changeGdprToc(e) {
+    e.preventDefault();
+    this.setState({
+      gdprTermsAndConditions: !this.state.gdprTermsAndConditions,
+    });
+  }
+
+  renderGdprPhone() {
     return (
-      <React.Fragment>
-        <label>
-          <Field
-            type="checkbox"
+      <div className="field-row checkbox">
+        <label onClick={this.changeGdprPhoneNumber}>
+          <Checkbox
             name="gdprPhoneNumber"
-            component={Input}
-            className="field-row fixed-height"
-            bsClass="form-control input-lg"
+            input={{ checked: this.state.gdprPhoneNumber }}
           />
-          {translate('client.component.landingPage.gdpr.phoneNumber')}
+          <span>{translate('client.component.landingPage.gdpr.phoneNumber')}</span>
         </label>
-        <label>
-          <Field
-            type="checkbox"
+      </div>
+    );
+  }
+  renderGdprToc() {
+    return (
+      <div className="field-row checkbox">
+        <label onClick={this.changeGdprToc}>
+          <Checkbox
             name="gdprTermsAndConditions"
-            component={Input}
-            className="field-row fixed-height"
-            bsClass="form-control input-lg"
+            input={{ checked: this.state.gdprTermsAndConditions }}
           />
-          {translate('client.component.landingPage.gdpr.termsAndConditions')}
+          <span>{translate('client.component.landingPage.gdpr.termsAndConditions')}</span>
         </label>
-      </React.Fragment>
+      </div>
     );
   }
 }
