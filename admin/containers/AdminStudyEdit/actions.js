@@ -68,6 +68,12 @@ export function addNoteSuccess(payload) {
     payload,
   };
 }
+export function fetchCampaignsByStudy(payload) {
+  return {
+    type: 'FETCH_CAMPAIGNS_BY_STUDY',
+    payload,
+  };
+}
 
 export function addNoteError(payload) {
   return {
@@ -87,12 +93,42 @@ export function deleteNoteSuccess(payload) {
   return {
     type: DELETE_NOTE_SUCCESS,
     payload,
+    campaignInfo,
+  };
+}
+export function editCampaign(payload, campaignInfo) {
+  return {
+    type: 'EDIT_CAMPAIGN',
+    payload,
+    campaignInfo,
+  };
+}
+
+export function editCampaignSuccess(payload, campaignInfo) {
+  return {
+    type: 'EDIT_CAMPAIGN_SUCCESS',
+    payload,
+    campaignInfo,
+  };
+}
+
+export function editCampaignError(payload) {
+  return {
+    type: 'EDIT_CAMPAIGN_ERROR',
+    payload,
   };
 }
 
 export function deleteNoteError(payload) {
   return {
     type: DELETE_NOTE_ERROR,
+    payload,
+  };
+}
+
+export function deleteCampaign(payload) {
+  return {
+    type: 'DELETE_CAMPAIGN',
     payload,
   };
 }
@@ -187,3 +223,9 @@ export function fetchLandingError(payload) {
     payload,
   };
 }
+export function fetchFive9List() {
+  return {
+    type: 'FETCH_FIVE_9_LIST',
+  };
+}
+
