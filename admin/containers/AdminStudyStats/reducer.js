@@ -34,7 +34,6 @@ export default function adminStudyStatsReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_FOR_ADMIN_SUCCESS:
-      console.log(FETCH_STUDIES_FOR_ADMIN_SUCCESS, action);
       return {
         ...state,
         studyInfo: {
