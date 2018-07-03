@@ -24,9 +24,15 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectThankYouPageUpdateProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updateThankYouPageProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectThankYouPageUpdateProcess,
 };
