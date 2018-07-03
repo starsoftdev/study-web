@@ -352,7 +352,6 @@ export function clearStudies() {
   };
 }
 
-
 export function fetchMediaTypes(studyId) {
   return {
     type: FETCH_MEDIA_TYPES,

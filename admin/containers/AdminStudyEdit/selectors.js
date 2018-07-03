@@ -29,10 +29,34 @@ const selectEditMediaTypesProcess = () => createSelector(
   (substate) => substate.editMediaTypesProcess
 );
 
+const selectThankYouPageUpdateProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updateThankYouPageProcess
+);
+
+const selectLanding = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing.details
+);
+
+const selectLandingIsFetching = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing.fetching
+);
+
+const selectLandingError = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing.error
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
   selectEditMediaTypesProcess,
+  selectThankYouPageUpdateProcess,
+  selectLanding,
+  selectLandingIsFetching,
+  selectLandingError,
 };
