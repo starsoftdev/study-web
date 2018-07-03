@@ -1,0 +1,301 @@
+
+/* sidebar */
+#sidebar {
+	top: -29px;
+	left: 0;
+	bottom: 0;
+	z-index: 10;
+	width: 261px;
+	position: fixed;
+
+	background: #fff;
+	padding: 100px 0 0px;
+
+	.sidebar-holder {
+		max-height: 100%;
+		padding: 0 12px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+}
+
+/* sidenav */
+
+.sidenav {
+  font-weight: 600;
+  .font(20px, 18px);
+  position: relative;
+  text-transform: uppercase;
+  ul {
+    margin: 0 0 26px;
+    padding: 0 0 25px;
+    border-bottom: solid 2px #a0cf67;
+  }
+  li + li {
+    margin: 20px 0 0;
+  }
+  a {
+    display: block;
+    color: #636363;
+    min-height: 32px;
+    position: relative;
+    padding: 7px 5px 5px 50px;
+    outline: none;
+
+    &.menu-manage-sites-users {
+      padding-right: 25px;
+    }
+
+    i::before {
+      vertical-align: baseline;
+    }
+
+    > [class^="icomoon-"], > [class*=" icomoon-"] {
+      top: 50%;
+      left: 0;
+      width: 60px;
+      font-size: 22px;
+      text-indent: 13px;
+      position: absolute;
+      transition: all 0.25s;
+      .transform(translate(0, -50%));
+    }
+    .icomoon-icon_house_alt {
+			color: #3cf;
+			text-indent: 16px;
+    }
+    .icomoon-screen {
+      font-size: 20px;
+      text-indent: 12px;
+      color: #99cc66;
+    }
+    .icomoon-irb {
+      color: #c00;
+      font-size: 19px;
+      text-indent: 15px;
+    }
+    .icomoon-doller {
+      color: #f0f;
+      font-size: 28px;
+      text-indent: 13px;
+    }
+    .icomoon-signout {
+      color: #0c9;
+      font-size: 24px;
+      text-indent: 15px;
+    }
+    .icomoon-icon_calendar {
+      color: #f60;
+      text-indent: 16px
+    }
+    .icomoon-icon_group {
+      color: #c06;
+      text-indent: 17px;
+    }
+    .icomoon-icon_contacts {
+      color: #63c;
+      text-indent: 16px;
+    }
+    .icomoon-gift {
+      color: #f33;
+      text-indent: 14px;
+    }
+    .icomoon-star {
+      color: #ffe11a;
+      text-indent: 15px;
+    }
+    .icomoon-help-with-circle {
+      color: #0c9;
+      font-size: 26px;
+		}
+		.icomoon-icon_note:before {
+			display: block;
+			content: " ";
+			background: url('../../../assets/images/fonts/Icon4.png');
+			background-size: contain;
+			background-position: center;
+			height: 27px;
+			width: 58px;
+			background-repeat: no-repeat;
+		}
+		.icomoon-icon_database:before {
+			display: block;
+			content: " ";
+			background: url('../../../assets/images/fonts/Icon5.png');
+			background-size: contain;
+			background-position: center;
+			height: 29px;
+			width: 54px;
+			background-repeat: no-repeat;
+		}
+		.icomoon-icon_new:before {
+			display: block;
+			content: " ";
+			background: url('../../../assets/images/fonts/Icon6.png');
+			background-size: contain;
+			background-position: center;
+			height: 25px;
+			width: 54px;
+			background-repeat: no-repeat;
+		}
+  }
+  a:hover,
+  .active {
+    color: #fff;
+    background: #a0cf67;
+    > [class^="icomoon-"], > [class*=" icomoon-"] {
+      color: #fff !important;
+		}
+		.icomoon-icon_note:before {
+			background: url('../../../assets/images/fonts/Icon4_hover.png');
+			background-size: contain;
+			background-position: center;
+			height: 27px;
+			width: 58px;
+			background-repeat: no-repeat;
+		}
+		.icomoon-icon_database:before {
+			background: url('../../../assets/images/fonts/Icon5_hover.png');
+			background-size: contain;
+			background-position: center;
+			height: 29px;
+			width: 54px;
+			background-repeat: no-repeat;
+		}
+		.icomoon-icon_new:before {
+			background: url('../../../assets/images/fonts/Icon6_hover.png');
+			background-size: contain;
+			background-position: center;
+			height: 25px;
+			width: 54px;
+			background-repeat: no-repeat;
+		}
+  }
+}
+
+/* helpline */
+.helpline {
+	color: #666;
+	.font(14px, 22px);
+  margin: 0 0 20px 3px;
+
+	h2 {
+		.font(17px);
+		color: #00afef;
+		font-weight: 600;
+		margin: 0 0 13px 9px;
+		letter-spacing: -0.05rem;
+	}
+
+	.area {
+		position: relative;
+		padding: 0 0 8px 10px;
+    word-wrap: break-word;
+	}
+
+	.sub-logo {
+		top: 4px;
+		left: 11px;
+		position: absolute;
+	}
+
+	p { margin: 0 0 7px; }
+
+	p a {
+		.color(#666);
+	}
+
+	.bgn-chat {
+		margin: 0 3px 0 0;
+	}
+}
+
+/* bgn-chat */
+.bgn-chat {
+	color: #fff;
+	display: block;
+	padding: 0 10px;
+	overflow: hidden;
+	font-weight: 600;
+	.font(18px, 26px);
+	border-radius: 3px;
+	position: relative;
+	text-align: center;
+	background: #f78e1e;
+
+	&:focus,
+	&:active:focus,
+	&:hover {
+		color: #fff;
+		background: #ffc689;
+	}
+
+	.text {
+		z-index: 1;
+		position: relative;
+	}
+
+	.icomoon-bg {
+		top: 0;
+		left: 0;
+		display: none;
+		font-size: 40px;
+		position: absolute;
+		background: #afda7d;
+	}
+
+
+	&:before {
+		.font(18px, 26px);
+		content: attr(data-text);
+	}
+
+	&:hover {
+		&:before {
+			content: attr(data-hovertext);
+		}
+	}
+
+}
+
+@media screen and (max-width: @psd) {
+
+	#sidebar {
+		width: 220px;
+	}
+
+	.sidenav {
+		.font(14px, 22px);
+
+		li + li { margin: 10px 0 0; }
+
+		a {
+			padding-left: 55px;
+		}
+	}
+
+	.helpline {
+		font-size: 12px;
+
+		h2 {
+			font-size: 14px;
+		}
+
+		.area {
+			padding-left: 9px;
+		}
+
+		.sub-logo {
+			left: 0;
+			top: 10px;
+			.size(46px, auto);
+		}
+	}
+
+}
+
+@media screen and (max-width: 1010px) {
+	#sidebar {
+		/*padding: 145px 0 20px;*/
+	}
+}

@@ -1,0 +1,62 @@
+.multi-select-checkbox{
+  .multi-select-checkbox-input{
+    .caret-arrow{
+      right: 25px;
+      position: absolute;
+      top: 21px;
+
+      &:before {
+        border-width: 4px 4px 0;
+        border-color: #636363 transparent transparent;
+      }
+    }
+  }
+  .has-error{
+    border-color: #f00;
+  }
+  .multi-select-checkbox-dropdown-wrap{
+    border: 2px solid #ccc;
+    padding: 3px;
+    .multi-select-checkbox-dropdown-search-input{
+      border-color: #ccc;
+    }
+    .multi-select-checkbox-dropdown-list-row{
+      padding: 8px 7px 8px 5px;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+.multi-select-checkbox-selected-wrap{
+  margin: 15px 0 15px;
+  border-radius: 3px;
+  max-height: 200px;
+  overflow: auto;
+  border: 2px solid #636363;
+  .multi-select-checkbox-selected-item-wrap{
+    border-width: 0;
+    background: none;
+    font-size: 18px;
+    line-height: 1.42857;
+    padding: 7px 50px 7px 15px;
+    position: relative;
+    &:hover{
+      font-weight: 600;
+      background: #f1f1f1;
+    }
+
+    .btn-remove{
+      top: 50%;
+      right: 15px;
+      color: #636363;
+      position: absolute;
+      transform: translate(0, -50%);
+      &:hover{
+        color: #999;
+        cursor: pointer;
+      }
+    }
+  }
+}
