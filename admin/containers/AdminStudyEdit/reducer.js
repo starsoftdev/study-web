@@ -12,6 +12,13 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
 } from './constants';
 
 const initialState = {
@@ -23,6 +30,16 @@ const initialState = {
   editNoteProcess: {
     saving: false,
     deleting: false,
+    error: null,
+  },
+  updateThankYouPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  landing: {
+    details: null,
+    fetching: false,
     error: null,
   },
 };
@@ -131,6 +148,69 @@ export default function adminStudyEditReducer(state = initialState, action) {
         editNoteProcess: {
           saving: false,
           deleting: false,
+          error: action.payload,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_ERROR:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_THANK_YOU_PAGE_STATE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case FETCH_LANDING:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_SUCCESS:
+      return {
+        ...state,
+        landing: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_ERROR:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: false,
           error: action.payload,
         },
       };
