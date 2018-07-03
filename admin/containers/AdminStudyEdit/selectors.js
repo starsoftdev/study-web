@@ -3,6 +3,8 @@ import { get } from 'lodash';
 
 const selectAdminStudyEditDomain = () => state => state.AdminStudyEditPage;
 const selectFormDomain = () => state => state.form;
+const selectDashboardPageDomain = () => state => state.dashboardPage;
+
 
 const selectAdminStudyEditPage = () => createSelector(
   selectAdminStudyEditDomain(),
@@ -59,4 +61,38 @@ export {
   selectLanding,
   selectLandingIsFetching,
   selectLandingError,
+};
+
+
+const selectDashboardCampaigns = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.campaigns
+);
+
+const selectDashboardEditCampaignProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.editCampaignProcess
+);
+
+const selectDashboardDeleteCampaignProcess = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.deleteCampaignProcess
+);
+
+const selectLevels = () => createSelector(
+  selectDashboardPageDomain(),
+  substate => substate.levels
+);
+
+const selectDashboardfive9List = () => createSelector(
+  selectDashboardPageDomain(),
+  (substate) => substate.five9List
+);
+
+export {
+  selectDashboardCampaigns,
+  selectDashboardEditCampaignProcess,
+  selectDashboardDeleteCampaignProcess,
+  selectLevels,
+  selectDashboardfive9List,
 };

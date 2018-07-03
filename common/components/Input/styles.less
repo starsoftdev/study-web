@@ -1,0 +1,117 @@
+@import "~react-select/less/select.less";
+@import "../../assets/less/_custom.less";
+
+/* react-select styles */
+.Select.form-control {
+  padding: 0 !important;
+
+  .Select-control {
+    .Select-clear-zone {
+      display: none;
+    }
+  }
+  
+  &.has-value {
+    .Select-control {
+      .Select-clear-zone {
+        display: table-cell;
+      }
+    }
+  }
+}
+
+.Select-control {
+  border: none !important;
+  cursor: pointer;
+}
+
+.Select.is-disabled > .Select-control {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.Select-placeholder {
+  color: @input-color !important;
+  padding-left: 15px !important;
+}
+
+.Select-menu-outer {
+  margin: 2px 0 0 -2px;
+  box-sizing: initial !important;
+  border: 2px solid #CCC;
+  z-index: 5;
+  max-height: 300px;
+  div {
+    margin: 1px;
+  }
+  .Select-option {
+    word-wrap: break-word;
+  }
+}
+
+.Select-option:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.top-positioned .Select-menu-outer {
+  top: auto;
+  bottom: 100%;
+}
+
+.Select-arrow-zone {
+  padding-right: 10px;
+}
+
+.Select-option.is-focused {
+  background-color: #00AFEF;
+  color: #FFF;
+}
+
+/* react-toggle-button styles */
+
+div.toggle > div:first-child {
+  width: 160px !important;
+
+  > div {
+    color: red;
+  }
+}
+div.toggle.has-error > div:first-child {
+  border: solid 1px red;
+}
+.toggleDisabled:after {
+  content: '';
+  position: absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width: 162px;
+  background-color: grey;
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.chat-text {
+  width: 100%;
+  position: relative;
+}
+
+.remaining-counter {
+    font-size: 18px;
+    font-weight: 600;
+    color: #a0cf67;
+    position: absolute;
+    top: 30px;
+    right: 123px;
+  }
+
+.has-error .geosuggest__input {
+  border: solid 2px red !important;
+}
+@media (max-width: 767px){
+  .form-lightbox .field-row > select, .modal-body select.form-control {
+    font-size: 16px !important;
+    padding-left: 16px;
+  }
+}
