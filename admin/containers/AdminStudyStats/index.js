@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 
 import ExpandableSection from '../../components/ExpandableSection';
 import CampaignStatsTable from '../../components/CampaignStatsTable';
-import { fetchStudiesForAdmin } from '../AdminHome/actions';
+import { fetchStudiesForAdmin } from '../App/actions';
 import { fetchStudyCampaignsStats, fetchCampaignDetailStats } from './actions';
 import { selectStudyInfo, selectStudyCampaigns } from './selectors';
 
