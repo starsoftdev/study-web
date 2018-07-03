@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
-import LeadGenEdit from '../LeadGenEdit';
+import PatientThankYouEmailModal from '../PatientThankYouEmailModal';
+import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -14,7 +18,7 @@ const tabs = [
   { type: 'patientThankYouEmail', title: 'patient thank you email' },
 ];
 
-export default class EditStudyTabs extends Component {
+export class EditStudyTabs extends Component {
   static propTypes = {
     studyId: PropTypes.any,
     activateManually: PropTypes.string,
@@ -23,6 +27,7 @@ export default class EditStudyTabs extends Component {
     deleteNote: PropTypes.func,
     formValues: PropTypes.any,
     currentUser: PropTypes.object,
+    updatePatientThankYouEmail: PropTypes.func,
   };
 
   constructor(props) {
@@ -60,6 +65,10 @@ export default class EditStudyTabs extends Component {
     );
   }
 
+  submitPatientThankYouForm = (formData) => {
+    this.props.updatePatientThankYouEmail(formData);
+  }
+
   render() {
     const { activeTab } = this.state;
     const { note, currentUser, studyId, addNote, deleteNote, formValues } = this.props;
@@ -87,14 +96,24 @@ export default class EditStudyTabs extends Component {
             <LandingPageEdit />
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
-          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
-            <LeadGenEdit />
-          </section>
+          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })} />
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailModal onSubmit={this.submitPatientThankYouForm} /></section>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updatePatientThankYouEmail: (values) => dispatch(updatePatientThankYouEmail(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudyTabs);
