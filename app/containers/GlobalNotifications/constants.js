@@ -15,6 +15,8 @@ export const SUBSCRIBE_TO_CHAT_EVENT = 'app/GlobalNotifications/SUBSCRIBE_TO_CHA
 
 export const FETCH_STUDY_PATIENT_MESSAGES = 'app/GlobalNotifications/FETCH_STUDY_PATIENT_MESSAGES';
 export const SEND_STUDY_PATIENT_MESSAGES = 'app/GlobalNotifications/SEND_STUDY_PATIENT_MESSAGES';
+export const SEND_PATIENT_MESSAGES = 'app/GlobalNotifications/SEND_PATIENT_MESSAGES';
+export const SEND_PATIENT_MESSAGES_SUCCESS = 'app/GlobalNotifications/SEND_PATIENT_MESSAGES_SUCCESS';
 export const SET_PROCESSING_STATUS = 'app/GlobalNotifications/SET_PROCESSING_STATUS';
 
 export const FETCH_NOTIFICATIONS = 'app/GlobalNotifications/FETCH_NOTIFICATIONS';
