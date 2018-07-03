@@ -24,8 +24,6 @@ import {
   FETCH_EMAILS_SUCCESS,
   FETCH_EMAILS_ERROR,
 
-  UPDATE_PATIENT_SUCCESS,
-
   SUBMIT_PATIENT_DISPOSITION,
   SUBMIT_PATIENT_DISPOSITION_SUCCESS,
   SUBMIT_PATIENT_DISPOSITION_ERROR,
@@ -169,13 +167,6 @@ export function emailsFetched(payload) {
 export function emailsFetchError(payload) {
   return {
     type: FETCH_EMAILS_ERROR,
-    payload,
-  };
-}
-
-export function updatePatientSuccess(payload) {
-  return {
-    type: UPDATE_PATIENT_SUCCESS,
     payload,
   };
 }
