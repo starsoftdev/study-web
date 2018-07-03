@@ -24,9 +24,15 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectEditMediaTypesProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.editMediaTypesProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectEditMediaTypesProcess,
 };

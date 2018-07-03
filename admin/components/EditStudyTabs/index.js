@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
+import MediaTrackingEdit from '../MediaTrackingEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -87,7 +88,9 @@ export default class EditStudyTabs extends Component {
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
-          <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
+          <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })}>
+            <MediaTrackingEdit studyId={studyId} />
+          </section>
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })} />
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
         </div>
