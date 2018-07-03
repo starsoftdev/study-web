@@ -12,6 +12,12 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
 } from './constants';
 
 const initialState = {
@@ -23,6 +29,16 @@ const initialState = {
   editNoteProcess: {
     saving: false,
     deleting: false,
+    error: null,
+  },
+  landing: {
+    details: null,
+    fetching: true,
+    error: null,
+  },
+  updatePatientThankYouEmailProcess: {
+    success: false,
+    saving: false,
     error: null,
   },
 };
@@ -132,6 +148,60 @@ export default function adminStudyEditReducer(state = initialState, action) {
           saving: false,
           deleting: false,
           error: action.payload,
+        },
+      };
+    case FETCH_LANDING:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_SUCCESS:
+      return {
+        ...state,
+        landing: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_ERROR:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_SUCCESS:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_ERROR:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: false,
+          error: true,
         },
       };
     default:
