@@ -16,6 +16,9 @@ import {
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
   RESET_THANK_YOU_PAGE_STATE,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
 } from './constants';
 
 const initialState = {
@@ -32,6 +35,11 @@ const initialState = {
   updateThankYouPageProcess: {
     success: false,
     saving: false,
+    error: null,
+  },
+  landing: {
+    details: null,
+    fetching: false,
     error: null,
   },
 };
@@ -177,6 +185,33 @@ export default function adminStudyEditReducer(state = initialState, action) {
           success: false,
           saving: false,
           error: null,
+        },
+      };
+    case FETCH_LANDING:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_SUCCESS:
+      return {
+        ...state,
+        landing: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_LANDING_ERROR:
+      return {
+        ...state,
+        landing: {
+          details: null,
+          fetching: false,
+          error: action.payload,
         },
       };
     default:

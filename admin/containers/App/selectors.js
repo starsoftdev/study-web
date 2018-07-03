@@ -131,21 +131,6 @@ const selectStudiesPaginationOptions = () => createSelector(
   (substate) => get(substate, 'baseData.studiesPaginationOptions', {})
 );
 
-const selectLanding = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.landing.details', {})
-);
-
-const selectLandingIsFetching = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.landing.fetching', {})
-);
-
-const selectLandingError = () => createSelector(
-  selectGlobal(),
-  (substate) => get(substate, 'baseData.landing.error', {})
-);
-
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
 
 export {
@@ -177,8 +162,4 @@ export {
   selectMediaTotals,
   selectCustomFilters,
   selectStudiesPaginationOptions,
-
-  selectLanding,
-  selectLandingIsFetching,
-  selectLandingError,
 };
