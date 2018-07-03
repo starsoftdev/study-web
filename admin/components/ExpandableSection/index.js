@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 export class ExpandableSection extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     content: PropTypes.object,
+    seeMoreHandler: PropTypes.any,
   };
 
   constructor() {
@@ -17,6 +18,9 @@ export class ExpandableSection extends Component { // eslint-disable-line react/
 
   handleShowMoreBtn() {
     this.setState({ expanded: !this.state.expanded });
+    if (!this.state.expanded) {
+      this.props.seeMoreHandler();
+    }
   }
 
   render() {

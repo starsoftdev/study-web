@@ -8,18 +8,30 @@ import {
   FETCH_NOTE,
   FETCH_NOTE_SUCCESS,
   FETCH_NOTE_ERROR,
+
   ADD_NOTE,
   ADD_NOTE_SUCCESS,
   ADD_NOTE_ERROR,
+
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+
   DELETE_MEDIA_TYPE,
   DELETE_MEDIA_TYPE_SUCCESS,
 
   EDIT_MEDIA_TYPES,
   EDIT_MEDIA_TYPES_ERROR,
   EDIT_MEDIA_TYPES_SUCCESS,
+
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -127,3 +139,51 @@ export function editMediaTypesError(payload) {
   };
 }
 
+export function updateThankYouPage(params) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE,
+    params,
+  };
+}
+
+export function updateThankYouPageSuccess(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateThankYouPageError(payload) {
+  return {
+    type: UPDATE_THANK_YOU_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function resetThankYouPageState() {
+  return {
+    type: RESET_THANK_YOU_PAGE_STATE,
+  };
+}
+
+export function fetchLanding(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
