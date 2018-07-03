@@ -131,6 +131,11 @@ const selectStudiesPaginationOptions = () => createSelector(
   (substate) => get(substate, 'baseData.studiesPaginationOptions', {})
 );
 
+const selectMessagingNumbers = () => createSelector(
+  selectGlobal(),
+  substate => get(substate, 'baseData.messagingNumbers', {})
+);
+
 const selectLocationState = () => state => state.routing.locationBeforeTransitions;
 
 export {
@@ -162,4 +167,6 @@ export {
   selectMediaTotals,
   selectCustomFilters,
   selectStudiesPaginationOptions,
+
+  selectMessagingNumbers,
 };
