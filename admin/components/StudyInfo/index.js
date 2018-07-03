@@ -26,7 +26,6 @@ export class StudyInfo extends Component {
     paginationOptions: PropTypes.object,
     fetchStudiesAccordingToFilters: PropTypes.func,
     changeAdminFilters: PropTypes.func.isRequired,
-    setDates: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -66,7 +65,7 @@ export class StudyInfo extends Component {
 
   loadItems() {
     if (this.props.studies.details.length > 0) {
-      this.props.fetchStudiesAccordingToFilters(null, null, true);
+      this.props.fetchStudiesAccordingToFilters(true);
     }
   }
 
@@ -74,7 +73,7 @@ export class StudyInfo extends Component {
     const { changeAdminFilters, fetchStudiesAccordingToFilters } = this.props;
     changeAdminFilters('campaign', val);
     setTimeout(() => {
-      fetchStudiesAccordingToFilters(null, null, false);
+      fetchStudiesAccordingToFilters();
     }, 200);
   }
 
@@ -92,7 +91,7 @@ export class StudyInfo extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { setDates } = this.props;
+    const { changeAdminFilters, fetchStudiesAccordingToFilters } = this.props;
     const range = this.state.predefined;
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
@@ -110,7 +109,11 @@ export class StudyInfo extends Component {
       },
     }, () => {
       this.hidePopup();
-      setDates(startDate.toISOString(), endDate.toISOString());
+      changeAdminFilters('startDate', startDate);
+      changeAdminFilters('endDate', endDate);
+      setTimeout(() => {
+        fetchStudiesAccordingToFilters(null, null, false);
+      }, 200);
     });
   }
 
@@ -261,7 +264,7 @@ export class StudyInfo extends Component {
 
     return (
       <div id="infoSection">
-        {(totals.details && totals.details.total_studies) && (
+        {(studies.details && studies.details.length > 0) && (
           <div className="head">
             <h2 className="pull-left">
               <span>Active: {totals.details.total_active || 0}</span>
