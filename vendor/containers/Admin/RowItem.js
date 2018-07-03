@@ -13,10 +13,10 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
     return (
       <tr>
         <td>
-          {this.props.item.company_name}
+          {this.props.item.vendorName}
         </td>
         <td>
-          {`${this.props.item.first_name} ${this.props.item.last_name}`}
+          {`${this.props.item.firstName} ${this.props.item.lastName}`}
         </td>
         <td>
           {this.props.item.email}

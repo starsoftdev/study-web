@@ -3,7 +3,7 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import Button from 'react-bootstrap/lib/Button';
 import { reduxForm, Field } from 'redux-form';
@@ -15,6 +15,8 @@ import { createStructuredSelector } from 'reselect';
 import RowItem from './RowItem';
 import Input from '../../../app/components/Input';
 import { translate } from '../../../common/utilities/localization';
+import { addVendorAdmin, fetchVendorAdmins } from './actions';
+import { selectVendorAdmins } from './selectors';
 
 import CenteredModal from '../../../app/components/CenteredModal/index';
 
@@ -25,11 +27,28 @@ import './style.less';
 
 const pageTitle = 'Vendor Admins - StudyKIK';
 const formName = 'vendorAdminSearch';
-@reduxForm({ form: formName })
 
-class VendorAdminPage extends Component {
+const mapStateToProps = createStructuredSelector({
+  vendorAdmins: selectVendorAdmins(),
+});
+
+const mapDispatchToProps = {
+  addVendorAdmin,
+  fetchVendorAdmins,
+};
+
+@reduxForm({ form: formName })
+@connect(mapStateToProps, mapDispatchToProps)
+export default class VendorAdminPage extends Component {
 
   static propTypes = {
+    addVendorAdmin: PropTypes.func.isRequired,
+    fetchVendorAdmins: PropTypes.func.isRequired,
+    vendorAdmins: PropTypes.array,
+  };
+
+  static defaultValues = {
+    vendorAdmins: [],
   };
 
   constructor(props) {
@@ -50,6 +69,8 @@ class VendorAdminPage extends Component {
   }
 
   componentDidMount() {
+    const { fetchVendorAdmins } = this.props;
+    fetchVendorAdmins();
   }
 
   openStudyModal() {
@@ -73,23 +94,16 @@ class VendorAdminPage extends Component {
   }
 
   render() {
-
+    const { vendorAdmins } = this.props;
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
-
-    const vendorAdmins = [{
-      company_name: 'Wanye Enterprise',
-      first_name: 'Bruce',
-      last_name: 'Wanye',
-      email: 'bruce@we.com',
-    }];
 
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
         <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmins')}</h2>
         <div className="clearfix container-fluid">
-          <form action="#" className="form-search pull-left" onSubmit={this.onSubmit}>
+          <form className="form-search pull-left" onSubmit={this.onSubmit}>
             <div className="fields-holder">
               <div className="pull-left col no-left-padding">
                 <div className="has-feedback ">
@@ -178,13 +192,3 @@ class VendorAdminPage extends Component {
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-});
-
-function mapDispatchToProps() {
-  return {
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VendorAdminPage);
