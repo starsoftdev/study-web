@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
 import LeadGenEdit from '../LeadGenEdit';
+import ThankYouEdit from '../ThankYouEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -29,7 +30,7 @@ export default class EditStudyTabs extends Component {
     super(props);
 
     this.state = {
-      activeTab: 'notes',
+      activeTab: 'thankYou',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -91,7 +92,13 @@ export default class EditStudyTabs extends Component {
             <LeadGenEdit />
           </section>
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
-          <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })} />
+          <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })}>
+            {(activeTab === 'thankYou') &&
+              <ThankYouEdit
+                studyId={studyId}
+              />
+            }
+          </section>
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
         </div>
       </div>

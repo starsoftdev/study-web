@@ -50,6 +50,10 @@ import {
 
   CLEAR_STUDIES,
   CLEAR_FILTERS,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -341,6 +345,28 @@ export function clearCustomFilters() {
 export function clearStudies() {
   return {
     type: CLEAR_STUDIES,
+  };
+}
+
+export function fetchLanding(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
   };
 }
 
