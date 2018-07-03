@@ -111,6 +111,7 @@ class PatientCategory extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
+    disableDrag: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -158,7 +159,7 @@ class PatientCategory extends React.Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
+    const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite, disableDrag } = this.props;
     const patient = category.patients[index];
     return (
       <Patient
@@ -172,6 +173,7 @@ class PatientCategory extends React.Component {
         onPatientClick={onPatientClick}
         onPatientTextClick={onPatientTextClick}
         style={style}
+        disableDrag={disableDrag}
       />
     );
   }
@@ -179,6 +181,7 @@ class PatientCategory extends React.Component {
   myList = ({
     virtual,
     itemHeight,
+    disableDrag,
   }) => (
     <ul className="list-unstyled auto-height" style={virtual.style}>
       {virtual.items.map(patient => (
@@ -193,6 +196,7 @@ class PatientCategory extends React.Component {
           onPatientClick={this.props.onPatientClick}
           onPatientTextClick={this.props.onPatientTextClick}
           style={{ height: itemHeight }}
+          disableDrag={disableDrag}
         />
       ))}
     </ul>
@@ -225,7 +229,7 @@ class PatientCategory extends React.Component {
   }
 
   renderPatients() {
-    const { category } = this.props;
+    const { category, disableDrag } = this.props;
     if (category.patients.length > 0) {
       const MyVirtualList = VirtualList()(this.myList);
       return (
@@ -234,6 +238,7 @@ class PatientCategory extends React.Component {
             <MyVirtualList
               items={category.patients}
               itemHeight={178}
+              disableDrag={disableDrag}
             />
           </div>
         </div>
@@ -243,7 +248,7 @@ class PatientCategory extends React.Component {
   }
 
   render() {
-    const { category, connectDropTarget, patientCategoriesTotals } = this.props;
+    const { category, connectDropTarget, patientCategoriesTotals, disableDrag } = this.props;
     const name = translate(`common.patientCategory.id${category.id}`);
     const total = _.find(patientCategoriesTotals, item => (
       item.patientCategoryId === category.id
@@ -252,6 +257,23 @@ class PatientCategory extends React.Component {
     const openerStyle = {
       width: this.state.columnWidth,
     };
+    if (disableDrag) {
+      return (
+        <li
+          key={category.id}
+          ref={(patientColumn) => {
+            this.patientColumn = patientColumn;
+          }}
+          className={classNames({ active: this.state.hover, hover: this.state.hover })}
+        >
+          <span className="opener" style={openerStyle}>
+            <strong className="number">{(total) ? total.count : 0}</strong>
+            <span className="text">{name}</span>
+          </span>
+          {this.renderPatients()}
+        </li>
+      );
+    }
     return connectDropTarget(
       <li
         key={category.id}
