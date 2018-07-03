@@ -8,7 +8,7 @@ import { translate } from '../../../common/utilities/localization';
 
 import {
   FETCH_STUDIES_FOR_ADMIN,
-} from '../AdminHome/constants';
+} from '../App/constants';
 
 import {
   FETCH_STUDY_CAMPAIGNS_STATS,
@@ -18,7 +18,7 @@ import {
 import {
   fetchStudiesForAdminSuccess,
   fetchStudiesForAdminError,
-} from '../AdminHome/actions';
+} from '../App/actions';
 
 import {
   fetchStudyCampaignsStatsSuccess,
