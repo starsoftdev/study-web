@@ -10,7 +10,7 @@ import { translate } from '../../../../common/utilities/localization';
 
 export class AddVendorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    handleSubmit: PropTypes.func,
+    handleSubmit: PropTypes.func.isRequired,
     saving: PropTypes.bool,
   }
 
@@ -24,15 +24,19 @@ export class AddVendorAdminForm extends React.Component { // eslint-disable-line
   renderNumbers = () => {
     return this.state.numbers.map((item) => {
       return (<span className="number-span" key={item}>
-        {item} <a className="btn-close"><i className="icomoon-icon_close"></i></a>
+        {item} <a className="btn-close">
+          <i className="icomoon-icon_close" />
+        </a>
       </span>);
     });
   }
 
   render() {
 
+    const { handleSubmit } = this.props;
+
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox study-number-form" onSubmit={this.props.handleSubmit}>
+      <form className="form-lightbox dashboard-lightbox study-number-form" onSubmit={handleSubmit}>
 
         <div className="field-row">
           <div className="field">
