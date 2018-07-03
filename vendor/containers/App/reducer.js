@@ -27,6 +27,7 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SET_USER_DATA:
+      console.log('SET_USER_DATA');
       if (action.payload.userData) {
         if (action.payload.userData.roleForSponsor) {
           userRoleType = 'sponsor';
