@@ -25,6 +25,10 @@ const initialState = {
     deleting: false,
     error: null,
   },
+  editMediaTypesProcess: {
+    saving: false,
+    error: false,
+  },
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {

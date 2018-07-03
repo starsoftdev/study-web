@@ -50,6 +50,14 @@ import {
 
   CLEAR_STUDIES,
   CLEAR_FILTERS,
+
+  FETCH_MEDIA_TYPES,
+  FETCH_MEDIA_TYPES_ERROR,
+  FETCH_MEDIA_TYPES_SUCCESS,
+
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -344,3 +352,44 @@ export function clearStudies() {
   };
 }
 
+
+export function fetchMediaTypes(studyId) {
+  return {
+    type: FETCH_MEDIA_TYPES,
+    studyId,
+  };
+}
+
+export function fetchMediaTypesSuccess(payload) {
+  return {
+    type: FETCH_MEDIA_TYPES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchMediaTypesError(payload) {
+  return {
+    type: FETCH_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+
+export function fetchMessagingNumbers() {
+  return {
+    type: FETCH_MESSAGING_NUMBERS,
+  };
+}
+
+export function fetchMessagingNumbersSuccess(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchMessagingNumbersError(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_ERROR,
+    payload,
+  };
+}
