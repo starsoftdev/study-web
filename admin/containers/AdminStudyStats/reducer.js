@@ -2,7 +2,7 @@
 
 import {
   FETCH_STUDIES_FOR_ADMIN, FETCH_STUDIES_FOR_ADMIN_ERROR, FETCH_STUDIES_FOR_ADMIN_SUCCESS,
-} from '../AdminHome/constants';
+} from '../App/constants';
 
 import {
   FETCH_STUDY_CAMPAIGNS_STATS, FETCH_STUDY_CAMPAIGNS_STATS_ERROR, FETCH_STUDY_CAMPAIGNS_STATS_SUCCESS,
@@ -34,6 +34,7 @@ export default function adminStudyStatsReducer(state = initialState, action) {
         },
       };
     case FETCH_STUDIES_FOR_ADMIN_SUCCESS:
+      console.log(FETCH_STUDIES_FOR_ADMIN_SUCCESS, action);
       return {
         ...state,
         studyInfo: {
