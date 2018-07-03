@@ -30,7 +30,7 @@ export default class EditStudyTabs extends Component {
     super(props);
 
     this.state = {
-      activeTab: 'thankYou',
+      activeTab: 'notes',
     };
 
     this.handleClick = this.handleClick.bind(this);
