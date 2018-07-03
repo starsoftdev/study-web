@@ -44,10 +44,6 @@ import {
   CLEAR_CUSTOM_FILTERS,
 
   CLEAR_STUDIES,
-
-  FETCH_LANDING,
-  FETCH_LANDING_SUCCESS,
-  FETCH_LANDING_ERROR,
 } from './constants';
 
 
@@ -100,11 +96,6 @@ const initialState = {
       bd: [],
       ae: [],
       cc: [],
-    },
-    landing: {
-      details: null,
-      fetching: false,
-      error: null,
     },
   },
 };
@@ -409,33 +400,6 @@ export default function appReducer(state = initialState, action) {
     case FETCH_USERS_BY_ROLE_SUCCESS:
       baseDataInnerState = {
         usersByRoles: action.payload,
-      };
-      break;
-    case FETCH_LANDING:
-      baseDataInnerState = {
-        landing: {
-          details: null,
-          fetching: true,
-          error: null,
-        },
-      };
-      break;
-    case FETCH_LANDING_SUCCESS:
-      baseDataInnerState = {
-        landing: {
-          details: action.payload,
-          fetching: false,
-          error: null,
-        },
-      };
-      break;
-    case FETCH_LANDING_ERROR:
-      baseDataInnerState = {
-        landing: {
-          details: null,
-          fetching: false,
-          error: action.payload,
-        },
       };
       break;
     default:

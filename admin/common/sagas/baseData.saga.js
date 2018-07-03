@@ -18,7 +18,6 @@ import {
   FETCH_STUDIES_FOR_ADMIN,
   FETCH_TOTALS_FOR_ADMIN,
   FETCH_MEDIA_TOTALS_FOR_ADMIN,
-  FETCH_LANDING,
 } from '../../containers/App/constants';
 
 import {
@@ -42,8 +41,6 @@ import {
   fetchTotalsForAdminSuccess,
   fetchMediaTotalsForAdminError,
   fetchMediaTotalsForAdminSuccess,
-  landingFetched,
-  fetchLandingError,
 } from '../../containers/App/actions';
 import { translate } from '../../../common/utilities/localization';
 
@@ -58,7 +55,6 @@ export default function* baseDataSaga() {
   yield fork(fetchStudiesForAdminWatcher);
   yield fork(fetchTotalsForAdminWatcher);
   yield fork(fetchMediaTotalsForAdminWatcher);
-  yield fork(fetchLandingForAdminWatcher);
 }
 
 function* fetchIndicationsWatcher() {
@@ -307,28 +303,5 @@ export function* fetchMediaTotalsForAdminWorker(action) {
   } catch (err) {
     console.log(err);
     yield put(fetchMediaTotalsForAdminError(err));
-  }
-}
-
-export function* fetchLandingForAdminWatcher() {
-  yield* takeLatest(FETCH_LANDING, fetchLandingForAdminWorker);
-}
-
-export function* fetchLandingForAdminWorker(action) {
-  const { studyId, utm } = action;
-  try {
-    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-      query: {
-        utm,
-      },
-    });
-    yield put(landingFetched(response));
-    if (!response.isUtmValid) {
-      toastr.error('', 'Error! Invalid UTM.');
-    }
-  } catch (err) {
-    yield put(fetchLandingError(err));
   }
 }
