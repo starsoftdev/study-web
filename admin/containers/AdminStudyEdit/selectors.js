@@ -24,9 +24,21 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectLanding = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing
+);
+
+const selectUpdatePatientThankYouEmailProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updatePatientThankYouEmailProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectLanding,
+  selectUpdatePatientThankYouEmailProcess,
 };

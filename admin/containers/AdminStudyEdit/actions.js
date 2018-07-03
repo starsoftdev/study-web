@@ -14,6 +14,12 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -75,6 +81,49 @@ export function deleteNoteSuccess(payload) {
 export function deleteNoteError(payload) {
   return {
     type: DELETE_NOTE_ERROR,
+    payload,
+  };
+}
+
+export function fetchLanding(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+
+export function fetchLandingSuccess(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmail(params) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU,
+    params,
+  };
+}
+
+export function updatePatientThankYouEmailSuccess(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_SUCCESS,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmailError(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_ERROR,
     payload,
   };
 }
