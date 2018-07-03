@@ -44,6 +44,10 @@ import {
   CLEAR_CUSTOM_FILTERS,
 
   CLEAR_STUDIES,
+
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
 } from './constants';
 
 
@@ -96,6 +100,11 @@ const initialState = {
       bd: [],
       ae: [],
       cc: [],
+    },
+    messagingNumbers: {
+      details: [],
+      fetching: false,
+      error: null,
     },
   },
 };
@@ -400,6 +409,33 @@ export default function appReducer(state = initialState, action) {
     case FETCH_USERS_BY_ROLE_SUCCESS:
       baseDataInnerState = {
         usersByRoles: action.payload,
+      };
+      break;
+    case FETCH_MESSAGING_NUMBERS:
+      baseDataInnerState = {
+        messagingNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_MESSAGING_NUMBERS_SUCCESS:
+      baseDataInnerState = {
+        messagingNumbers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_MESSAGING_NUMBERS_ERROR:
+      baseDataInnerState = {
+        messagingNumbers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
       };
       break;
     default:
