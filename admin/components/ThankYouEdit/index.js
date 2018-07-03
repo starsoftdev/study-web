@@ -9,11 +9,9 @@ import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
-import { updateThankYouPage, resetThankYouPageState } from '../../containers/AdminStudyEdit/actions';
-import { selectThankYouPageUpdateProcess } from '../../containers/AdminStudyEdit/selectors';
+import { updateThankYouPage, resetThankYouPageState, fetchLanding } from '../../containers/AdminStudyEdit/actions';
+import { selectThankYouPageUpdateProcess, selectLanding } from '../../containers/AdminStudyEdit/selectors';
 
-import { fetchLanding } from '../../containers/App/actions';
-import { selectLanding } from '../../containers/App/selectors';
 import formValidator, { fields } from './validator';
 
 const formName = 'thankYou';
@@ -259,4 +257,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ThankYouEdit);
-
