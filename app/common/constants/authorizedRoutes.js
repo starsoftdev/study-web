@@ -39,6 +39,7 @@ export default {
     '/app/dashboard-portals',
     '/app/dashboard-messaging-numbers',
     '/app/dashboard-messaging-numbers/add',
+    '/app/dashboard-vendor-admins',
     '/confirm-password-change',
   ],
 };
