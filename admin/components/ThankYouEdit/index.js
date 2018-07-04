@@ -67,17 +67,17 @@ export class ThankYouEdit extends Component {
         this.setState({
           initialValuesEntered: true,
         }, () => {
-          const isHideLocationData = (thankYouPage.isHideLocationData) ? thankYouPage.isHideLocationData : PrefilledThankYouPageValues.visitOurWebsiteText;
-          const visitOurWebsiteText = (thankYouPage.visitOurWebsiteText) ? thankYouPage.visitOurWebsiteText : PrefilledThankYouPageValues.websiteLink;
+          const visitOurWebsiteText = (thankYouPage.visitOurWebsiteText) ? thankYouPage.visitOurWebsiteText : PrefilledThankYouPageValues.visitOurWebsiteText;
+          const websiteLink = (thankYouPage.websiteLink) ? thankYouPage.websiteLink : PrefilledThankYouPageValues.websiteLink;
           change('thankyouFor', thankYouPage.thankyouFor);
           change('youWillBe', thankYouPage.youWillBe);
           change('herIsThe', thankYouPage.herIsThe);
           change('lookingForwardText', thankYouPage.lookingForwardText);
           change('isSharePhone', thankYouPage.isSharePhone);
           change('isShareLocation', thankYouPage.isShareLocation);
-          change('isHideLocationData', isHideLocationData);
+          change('isHideLocationData', thankYouPage.isHideLocationData);
           change('visitOurWebsiteText', visitOurWebsiteText);
-          change('websiteLink', thankYouPage.websiteLink);
+          change('websiteLink', websiteLink);
           change('cns', thankYouPage.cns);
         });
       }
