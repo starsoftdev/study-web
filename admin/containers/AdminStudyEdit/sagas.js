@@ -12,6 +12,7 @@ import {
   DELETE_NOTE,
   FETCH_LANDING,
   EDIT_PATIENT_THANK_YOU,
+  UPDATE_THANK_YOU_PAGE,
 } from './constants';
 
 import {
@@ -21,7 +22,9 @@ import {
   addNoteError,
   deleteNoteSuccess,
   deleteNoteError,
-  fetchLandingSuccess,
+  updateThankYouPageSuccess,
+  updateThankYouPageError,
+  landingFetched,
   fetchLandingError,
   updatePatientThankYouEmailSuccess,
   updatePatientThankYouEmailError,
@@ -109,31 +112,6 @@ export function* deleteNoteWorker(action) {
   }
 }
 
-export function* fetchLandingWatcher() {
-  yield* takeLatest(FETCH_LANDING, fetchLandingWorker);
-}
-
-export function* fetchLandingWorker(action) {
-  const { studyId, utm } = action;
-
-  // put the fetching study action in case of a navigation action
-  try {
-    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
-    const response = yield call(request, requestURL, {
-      method: 'GET',
-      query: {
-        utm,
-      },
-    });
-    yield put(fetchLandingSuccess(response));
-    if (!response.isUtmValid) {
-      toastr.error('', 'Error! Invalid UTM.');
-    }
-  } catch (err) {
-    yield put(fetchLandingError(err));
-  }
-}
-
 export function* updatePatientThankYouEmailWatcher() {
   yield* takeLatest(EDIT_PATIENT_THANK_YOU, updatePatientThankYouEmailWorker);
 }
@@ -155,18 +133,64 @@ export function* updatePatientThankYouEmailWorker(action) {
   }
 }
 
+export function* updateThankYouPageWatcher() {
+  yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
+}
+
+export function* updateThankYouPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updateThankYouPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateThankYouPageSuccess(response));
+  } catch (err) {
+    yield put(updateThankYouPageError(err));
+  }
+}
+
+export function* fetchLandingForAdminWatcher() {
+  yield* takeLatest(FETCH_LANDING, fetchLandingForAdminWorker);
+}
+
+export function* fetchLandingForAdminWorker(action) {
+  const { studyId, utm } = action;
+  try {
+    const requestURL = `${API_URL}/landingPages/${studyId}/fetchLanding`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+      query: {
+        utm,
+      },
+    });
+    yield put(landingFetched(response));
+    if (!response.isUtmValid) {
+      toastr.error('', 'Error! Invalid UTM.');
+    }
+  } catch (err) {
+    yield put(fetchLandingError(err));
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
   const deleteNoteWatcher1 = yield fork(deleteNoteWatcher);
-  const fetchLandingWatcher1 = yield fork(fetchLandingWatcher);
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
+  const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
+  const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
 
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
   yield cancel(addNoteWatcher1);
   yield cancel(deleteNoteWatcher1);
-  yield cancel(fetchLandingWatcher1);
   yield cancel(updatePatientThankYouEmailWatcher1);
+  yield cancel(updateThankYouPageWatcher1);
+  yield cancel(fetchLandingForAdminWatcher1);
 }

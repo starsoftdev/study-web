@@ -2,6 +2,7 @@ import {
   FETCH_ME_FROM_TOKEN,
   SET_AUTH_STATE,
   SET_USER_DATA,
+  LOGOUT_REQUEST,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -29,5 +30,11 @@ export function setUserData(userData) {
     payload: {
       userData,
     },
+  };
+}
+
+export function logout() {
+  return {
+    type: LOGOUT_REQUEST,
   };
 }

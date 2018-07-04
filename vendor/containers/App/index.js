@@ -23,6 +23,9 @@ import { logout } from '../../../app/containers/LoginPage/actions';
 import { fetchMeFromToken } from './actions';
 import { getItem } from '../../../app/utils/localStorage';
 import IdleModal from '../../../app/components/IdleModal';
+import TopHeaderBar from '../../components/TopHeaderBar';
+import SideNavBar from '../../components/SideNavBar';
+import SetTimeZoneModal from '../../components/SetTimeZoneModal';
 
 import { selectAuthState, selectCurrentUser } from './selectors';
 
@@ -45,6 +48,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
       forceLogout: parseInt(FORCE_LOGOUT), // should be 10 hours in milliseconds
       timeout: parseInt(IDLE_TIMEOUT), // should be 2 hours in milliseconds
       showIdleModal: false,
+      showSetTimeZoneModal: false,
     };
   }
 
@@ -82,6 +86,12 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           userId: nextProps.userData.id,
         }, () => {});
       });
+    }
+
+    if (nextProps.userData && nextProps.userData.needSetup && nextProps.location.pathname !== '/app/me/profile') {
+      this.setState({ showSetTimeZoneModal: true });
+    } else {
+      this.setState({ showSetTimeZoneModal: false });
     }
 
     if (process.env.NODE_ENV !== 'development') {
@@ -138,10 +148,17 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         startOnLoad
         format="MM-DD-YYYY HH:MM:ss.SSS"
       >
-        <div id="wrapper" className="dashboard">
+        <div id="wrapper">
+          <TopHeaderBar />
+          <SideNavBar
+            location={this.props.location}
+          />
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
+
+          <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType="vendor" />
+
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
