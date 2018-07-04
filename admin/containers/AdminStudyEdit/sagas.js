@@ -10,8 +10,9 @@ import {
   FETCH_NOTE,
   ADD_NOTE,
   DELETE_NOTE,
-  UPDATE_THANK_YOU_PAGE,
   FETCH_LANDING,
+  EDIT_PATIENT_THANK_YOU,
+  UPDATE_THANK_YOU_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE,
 } from './constants';
 
@@ -26,6 +27,8 @@ import {
   updateThankYouPageError,
   landingFetched,
   fetchLandingError,
+  updatePatientThankYouEmailSuccess,
+  updatePatientThankYouEmailError,
   updateFacebookLandingPageError,
   updateFacebookLandingPageSuccess,
 } from './actions';
@@ -112,6 +115,27 @@ export function* deleteNoteWorker(action) {
   }
 }
 
+export function* updatePatientThankYouEmailWatcher() {
+  yield* takeLatest(EDIT_PATIENT_THANK_YOU, updatePatientThankYouEmailWorker);
+}
+
+export function* updatePatientThankYouEmailWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updatePatientThankYouEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updatePatientThankYouEmailSuccess(response));
+  } catch (err) {
+    yield put(updatePatientThankYouEmailError(err));
+  }
+}
+
 export function* updateThankYouPageWatcher() {
   yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
 }
@@ -181,6 +205,7 @@ export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
   const deleteNoteWatcher1 = yield fork(deleteNoteWatcher);
+  const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
   const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
@@ -190,6 +215,7 @@ export function* adminStudyEditSaga() {
   yield cancel(fetchNoteWatcher1);
   yield cancel(addNoteWatcher1);
   yield cancel(deleteNoteWatcher1);
+  yield cancel(updatePatientThankYouEmailWatcher1);
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
   yield cancel(updateFacebookLandingPageWatcher1);
