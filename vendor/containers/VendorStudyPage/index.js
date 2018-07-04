@@ -12,20 +12,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
-import { selectSitePatients, selectCurrentUser, selectSources } from '../../../app/containers/App/selectors';
-import { fetchStudySources } from '../../../app/containers/App/actions';
+import { selectSitePatients, selectCurrentUser, selectSources } from '../App/selectors';
+import { fetchStudySources } from '../App/actions';
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../../app/containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
-import PatientBoard from '../../../app/components/PatientBoard/vendorIndex';
+import PatientBoard from '../../components/PatientBoard/Index';
 import * as Selector from './selectors';
 import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
-import { clientOpenedStudyPage, clientClosedStudyPage } from '../../../app/containers/GlobalNotifications/actions';
+import { clientOpenedStudyPage, clientClosedStudyPage } from '../GlobalNotifications/actions';
 import {
   selectSocket,
-} from '../../../app/containers/GlobalNotifications/selectors';
-import { getItem } from '../../../app/utils/localStorage';
+} from '../GlobalNotifications/selectors';
+import { getItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
