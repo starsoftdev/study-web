@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-
+import { get } from 'lodash';
 /**
  * Direct selector to the app state domain
  */
@@ -35,6 +35,11 @@ const selectUserRoleType = () => createSelector(
   (substate) => substate.userRoleType
 );
 
+const selectSites = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sites.details', [])
+);
+
 export {
   selectGlobal,
   selectAuthState,
@@ -43,4 +48,5 @@ export {
   selectCurrentUserEmail,
   selectCurrentUserFullName,
   selectCurrentUserId,
+  selectSites,
 };
