@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 
+import LeadGenEdit from '../../components/LeadGenEdit';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
 import MediaTrackingEdit from '../MediaTrackingEdit';
