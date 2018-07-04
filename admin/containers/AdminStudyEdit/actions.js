@@ -16,9 +16,7 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
-  FETCH_LANDING,
-  FETCH_LANDING_SUCCESS,
-  FETCH_LANDING_ERROR,
+
   EDIT_PATIENT_THANK_YOU,
   EDIT_PATIENT_THANK_YOU_SUCCESS,
   EDIT_PATIENT_THANK_YOU_ERROR,
@@ -34,6 +32,14 @@ import {
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
   RESET_THANK_YOU_PAGE_STATE,
+
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -208,5 +214,26 @@ export function updateThankYouPageError(payload) {
 export function resetThankYouPageState() {
   return {
     type: RESET_THANK_YOU_PAGE_STATE,
+  };
+}
+
+export function updateFacebookLandingPage(params) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateFacebookLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPageError(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+    payload,
   };
 }

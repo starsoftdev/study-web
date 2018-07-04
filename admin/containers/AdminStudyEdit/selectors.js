@@ -54,6 +54,11 @@ const selectLandingError = () => createSelector(
   (substate) => substate.landing.error
 );
 
+const selectFacebookLandingPageUpdateProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updateFacebookLandingPageProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -65,4 +70,5 @@ export {
   selectThankYouPageUpdateProcess,
   selectLandingIsFetching,
   selectLandingError,
+  selectFacebookLandingPageUpdateProcess,
 };
