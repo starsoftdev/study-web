@@ -15,9 +15,9 @@ import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
 
 import { SchedulePatientModalType } from '../../../app/common/constants/index';
-import LoadingSpinner from '../../../app/components/LoadingSpinner';
+import LoadingSpinner from '../LoadingSpinner';
 import PatientDetailModal from '../../containers/VendorStudyPage/PatientDetail/PatientDetailModal';
-import ScheduledPatientModal from '../../../app/containers/StudyPage/ScheduledPatientModal/index';
+import ScheduledPatientModal from '../../containers/VendorStudyPage/ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   showScheduledModal,
@@ -31,11 +31,10 @@ import {
   changeScheduledDate,
   submitSchedule,
   updatePatientSuccess,
-} from '../../../app/containers/StudyPage/actions';
-import { selectCurrentUser, selectSites } from '../../../app/containers/App/selectors';
-import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../app/containers/App/actions';
-import { fields } from '../../../app/containers/StudyPage/ScheduledPatientModal/validator';
-import * as Selector from '../../../app/containers/StudyPage/selectors';
+} from '../../containers/VendorStudyPage/actions';
+import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
+import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
+import * as Selector from '../../containers/VendorStudyPage/selectors';
 import PatientCategory from './PatientCategory';
 import { selectValues } from '../../../app/common/selectors/form.selector';
 const scroll = Scroll.animateScroll;
@@ -68,8 +67,6 @@ class PatientBoard extends React.Component {
     submitSchedule: React.PropTypes.func.isRequired,
     schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
-    markAsReadPatientMessages: React.PropTypes.func,
-    deleteMessagesCountStat: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
@@ -143,7 +140,6 @@ class PatientBoard extends React.Component {
       setOpenPatientModal,
       switchToTextSection,
       readStudyPatientMessages,
-      deleteMessagesCountStat,
     } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
@@ -151,8 +147,6 @@ class PatientBoard extends React.Component {
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id, category.id);
       readStudyPatientMessages(patient.id);
-      // markAsReadPatientMessages(patient.id);
-      deleteMessagesCountStat(patient.unreadMessageCount);
       this.props.updatePatientSuccess(patient.id, category.id, {
         unreadMessageCount: 0,
       });
@@ -347,8 +341,6 @@ const mapDispatchToProps = (dispatch) => (
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
-    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
-    deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
