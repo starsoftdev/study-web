@@ -107,7 +107,7 @@ export function fetchLanding(studyId, utm) {
   };
 }
 
-export function fetchLandingSuccess(payload) {
+export function landingFetched(payload) {
   return {
     type: FETCH_LANDING_SUCCESS,
     payload,

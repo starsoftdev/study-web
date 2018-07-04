@@ -15,7 +15,7 @@ const formName = 'patientEmailBlockForm';
   validate: formValidator,
 })
 
-export class PatientThankYouEmailModal extends React.Component {
+export class PatientThankYouEmailTab extends React.Component {
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,
@@ -97,4 +97,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientThankYouEmailModal);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientThankYouEmailTab);

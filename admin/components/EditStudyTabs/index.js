@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
 import MediaTrackingEdit from '../MediaTrackingEdit';
-import PatientThankYouEmailModal from '../PatientThankYouEmailModal';
+import PatientThankYouEmailTab from '../PatientThankYouEmailTab';
 import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
 import ThankYouEdit from '../ThankYouEdit';
 
@@ -109,7 +109,7 @@ export class EditStudyTabs extends Component {
               />
             }
           </section>
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailModal onSubmit={this.submitPatientThankYouForm} /></section>
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
         </div>
       </div>
     );
