@@ -12,6 +12,7 @@ import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.s
 import { updateThankYouPage, resetThankYouPageState, fetchLanding } from '../../containers/AdminStudyEdit/actions';
 import { selectThankYouPageUpdateProcess, selectLanding } from '../../containers/AdminStudyEdit/selectors';
 
+import { PrefilledThankYouPageValues } from '../../common/constants';
 import formValidator, { fields } from './validator';
 
 const formName = 'thankYou';
@@ -47,7 +48,11 @@ export class ThankYouEdit extends Component {
   }
 
   componentWillMount() {
-    const { studyId, fetchLanding } = this.props;
+    const { studyId, fetchLanding, change } = this.props;
+
+    change('visitOurWebsiteText', PrefilledThankYouPageValues.visitOurWebsiteText);
+    change('websiteLink', PrefilledThankYouPageValues.websiteLink);
+
     fetchLanding(studyId);
   }
 
@@ -62,14 +67,16 @@ export class ThankYouEdit extends Component {
         this.setState({
           initialValuesEntered: true,
         }, () => {
+          const isHideLocationData = (thankYouPage.isHideLocationData) ? thankYouPage.isHideLocationData : PrefilledThankYouPageValues.visitOurWebsiteText;
+          const visitOurWebsiteText = (thankYouPage.visitOurWebsiteText) ? thankYouPage.visitOurWebsiteText : PrefilledThankYouPageValues.websiteLink;
           change('thankyouFor', thankYouPage.thankyouFor);
           change('youWillBe', thankYouPage.youWillBe);
           change('herIsThe', thankYouPage.herIsThe);
           change('lookingForwardText', thankYouPage.lookingForwardText);
           change('isSharePhone', thankYouPage.isSharePhone);
           change('isShareLocation', thankYouPage.isShareLocation);
-          change('isHideLocationData', thankYouPage.isHideLocationData);
-          change('visitOurWebsiteText', thankYouPage.visitOurWebsiteText);
+          change('isHideLocationData', isHideLocationData);
+          change('visitOurWebsiteText', visitOurWebsiteText);
           change('websiteLink', thankYouPage.websiteLink);
           change('cns', thankYouPage.cns);
         });
