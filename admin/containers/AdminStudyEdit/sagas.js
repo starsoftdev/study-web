@@ -3,6 +3,7 @@ import { call, put, fork, cancel, take } from 'redux-saga/effects';
 import { get } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { translate } from '../../../common/utilities/localization';
 
 import request from '../../utils/request';
 
@@ -13,6 +14,10 @@ import {
   UPDATE_THANK_YOU_PAGE,
   FETCH_LANDING,
   UPDATE_FACEBOOK_LANDING_PAGE,
+  GET_STUDY_INFO,
+  UPDATE_DASHBOARD_STUDY,
+  FETCH_SITE_LOCATIONS,
+  FETCH_MESSAGING_NUMBERS,
 } from './constants';
 
 import {
@@ -28,6 +33,14 @@ import {
   fetchLandingError,
   updateFacebookLandingPageError,
   updateFacebookLandingPageSuccess,
+  fetchStudiesDashboardSuccess,
+  fetchStudiesDashboardError,
+  updateDashboardStudySuccess,
+  updateDashboardStudyError,
+  fetchSiteLocationsSuccess,
+  fetchSiteLocationsError,
+  fetchMessagingNumbersDashboardSuccess,
+  fetchMessagingNumbersDashboardError,
 } from './actions';
 
 // Bootstrap sagas
@@ -177,6 +190,114 @@ export function* updateFacebookLandingPageWorker(action) {
   }
 }
 
+export function* fetchStudiesDashboardWatcher() {
+  yield* takeLatest(GET_STUDY_INFO, fetchStudiesDashboardWorker);
+}
+
+export function* fetchStudiesDashboardWorker(action) {
+  const { params, limit, offset } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    let hasMore = true;
+    const page = (offset / 50) + 1;
+    if (response.studies.length < 50) {
+      hasMore = false;
+    }
+
+    if (response.studies.length === 0 && offset === 0) {
+      toastr.error('', translate('portals.client.component.studiesList.fetchStudiesToastrError'));
+    }
+
+    yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchStudiesDashboardError(err));
+  }
+}
+
+export function* updateDashboardStudyWatcher() {
+  yield* takeLatest(UPDATE_DASHBOARD_STUDY, updateDashboardStudyWorker);
+}
+
+export function* updateDashboardStudyWorker(action) {
+  const { id, formValues, params, stopSubmit } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    yield call(request, requestURL, options);
+
+    yield put(updateDashboardStudySuccess(id, params, formValues));
+    stopSubmit();
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.updateStudyToastrError'));
+    toastr.error('', errorMessage);
+    console.log(err);
+    stopSubmit(err);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchSiteLocationsWatcher() {
+  yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocationsWorker);
+}
+
+export function* fetchSiteLocationsWorker() {
+  try {
+    const requestURL = `${API_URL}/sites/getSiteLocations`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchSiteLocationsSuccess(response));
+  } catch (err) {
+    yield put(fetchSiteLocationsError(err));
+  }
+}
+
+export function* fetchMessagingNumbersWatcher() {
+  yield* takeLatest(FETCH_MESSAGING_NUMBERS, fetchMessagingNumbersWorker);
+}
+
+export function* fetchMessagingNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getNotAssignedPhoneNumbers`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchMessagingNumbersDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchMessagingNumbersDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -184,7 +305,10 @@ export function* adminStudyEditSaga() {
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
   const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
-
+  const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
+  const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
+  const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
+  const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
@@ -193,4 +317,8 @@ export function* adminStudyEditSaga() {
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
   yield cancel(updateFacebookLandingPageWatcher1);
+  yield cancel(fetchStudiesDashboardWatcher1);
+  yield cancel(updateDashboardStudyWatcher1);
+  yield cancel(fetchSiteLocationsWatcher1);
+  yield cancel(fetchMessagingNumbersWatcher1);
 }

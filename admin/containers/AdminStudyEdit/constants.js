@@ -32,3 +32,18 @@ export const UPDATE_FACEBOOK_LANDING_PAGE         = 'DashboardPage/UPDATE_FACEBO
 export const UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS';
 export const UPDATE_FACEBOOK_LANDING_PAGE_ERROR   = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_ERROR';
 
+export const GET_STUDY_INFO                       = 'AdminStudyEditPage/GET_STUDY_INFO';
+export const GET_STUDY_INFO_SUCCESS               = 'AdminStudyEditPage/GET_STUDY_INFO_SUCCESS';
+export const GET_STUDY_INFO_ERROR                 = 'AdminStudyEditPage/GET_STUDY_INFO_ERROR';
+
+export const UPDATE_DASHBOARD_STUDY               = 'AdminStudyEditPage/UPDATE_DASHBOARD_STUDY';
+export const UPDATE_DASHBOARD_STUDY_SUCCESS       = 'AdminStudyEditPage/UPDATE_DASHBOARD_STUDY_SUCCESS';
+export const UPDATE_DASHBOARD_STUDY_ERROR         = 'AdminStudyEditPage/UPDATE_DASHBOARD_STUDY_ERROR';
+
+export const FETCH_SITE_LOCATIONS                 = 'AdminStudyEditPage/FETCH_SITE_LOCATIONS';
+export const FETCH_SITE_LOCATIONS_SUCCESS         = 'AdminStudyEditPage/FETCH_SITE_LOCATIONS_SUCCESS';
+export const FETCH_SITE_LOCATIONS_ERROR           = 'AdminStudyEditPage/FETCH_SITE_LOCATIONS_ERROR';
+
+export const FETCH_MESSAGING_NUMBERS              = 'AdminStudyEditPage/FETCH_MESSAGING_NUMBERS';
+export const FETCH_MESSAGING_NUMBERS_SUCCESS      = 'AdminStudyEditPage/FETCH_MESSAGING_NUMBERS_SUCCESS';
+export const FETCH_MESSAGING_NUMBERS_ERROR        = 'AdminStudyEditPage/FETCH_MESSAGING_NUMBERS_ERROR';

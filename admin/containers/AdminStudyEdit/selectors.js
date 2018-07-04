@@ -54,6 +54,46 @@ const selectFacebookLandingPageUpdateProcess = () => createSelector(
   substate => substate.updateFacebookLandingPageProcess
 );
 
+const selectStudyInfo = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.studyInfo
+);
+
+const selectIndications = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.indications
+);
+
+const selectSponsors = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.sponsors
+);
+
+const selectProtocols = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.protocols
+);
+
+const selectCro = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.cro
+);
+
+const selectSiteLocations = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.siteLocations
+);
+
+const selectUsersByRoles = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.usersByRoles
+);
+
+const selectMessagingNumbers = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.messagingNumbers
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -65,4 +105,12 @@ export {
   selectLandingIsFetching,
   selectLandingError,
   selectFacebookLandingPageUpdateProcess,
+  selectStudyInfo,
+  selectIndications,
+  selectCro,
+  selectProtocols,
+  selectSponsors,
+  selectSiteLocations,
+  selectUsersByRoles,
+  selectMessagingNumbers,
 };
