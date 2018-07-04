@@ -54,7 +54,6 @@ class Patient extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
     unreadMessageCount: React.PropTypes.number,
-    disableDrag: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -117,7 +116,7 @@ class Patient extends React.Component {
   }
 
   render() {
-    const { connectDragSource, category, currentPatientId, onPatientClick, patient, disableDrag } = this.props;
+    const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
     let patientPhone;
     if (patient.phone) {
       // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
@@ -127,32 +126,7 @@ class Patient extends React.Component {
         patientPhone = patient.phone;
       }
     }
-    if (disableDrag) {
-      return (
-        <li
-          className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
-          data-patient-id={patient.id}
-        >
-          <div className="patient-inner">
-            <a
-              className="top"
-              onClick={() => {
-                onPatientClick(category, patient);
-              }}
-            >
-              <strong className="name">
-                <span className="first-name">{patient.firstName}</span>
-                <span> </span>
-                <span className="last-name">{patient.lastName}</span>
-              </strong>
-              <span className="email">{patient.email}</span>
-              <span className="phone">{patientPhone}</span>
-            </a>
-            {this.renderPatientTextMessageSummary()}
-          </div>
-        </li>
-      );
-    }
+
     return connectDragSource(
       <li
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
