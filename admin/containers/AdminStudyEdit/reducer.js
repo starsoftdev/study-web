@@ -22,6 +22,9 @@ import {
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
   RESET_THANK_YOU_PAGE_STATE,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -50,6 +53,11 @@ const initialState = {
     error: false,
   },
   updateThankYouPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updateFacebookLandingPageProcess: {
     success: false,
     saving: false,
     error: null,
@@ -248,6 +256,33 @@ export default function adminStudyEditReducer(state = initialState, action) {
       return {
         ...state,
         updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
           success: false,
           saving: false,
           error: true,

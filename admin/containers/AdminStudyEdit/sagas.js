@@ -13,6 +13,7 @@ import {
   FETCH_LANDING,
   EDIT_PATIENT_THANK_YOU,
   UPDATE_THANK_YOU_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE,
 } from './constants';
 
 import {
@@ -28,6 +29,8 @@ import {
   fetchLandingError,
   updatePatientThankYouEmailSuccess,
   updatePatientThankYouEmailError,
+  updateFacebookLandingPageError,
+  updateFacebookLandingPageSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -177,6 +180,27 @@ export function* fetchLandingForAdminWorker(action) {
   }
 }
 
+export function* updateFacebookLandingPageWatcher() {
+  yield* takeLatest(UPDATE_FACEBOOK_LANDING_PAGE, updateFacebookLandingPageWorker);
+}
+
+export function* updateFacebookLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateFacebookLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateFacebookLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateFacebookLandingPageError(err));
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -184,6 +208,7 @@ export function* adminStudyEditSaga() {
   const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
+  const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
 
 
   yield take(LOCATION_CHANGE);
@@ -193,4 +218,5 @@ export function* adminStudyEditSaga() {
   yield cancel(updatePatientThankYouEmailWatcher1);
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
+  yield cancel(updateFacebookLandingPageWatcher1);
 }
