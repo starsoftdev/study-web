@@ -32,6 +32,10 @@ import {
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
   FETCH_LANDING_ERROR,
+
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -184,6 +188,27 @@ export function landingFetched(payload) {
 export function fetchLandingError(payload) {
   return {
     type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPage(params) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateFacebookLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateFacebookLandingPageError(payload) {
+  return {
+    type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
     payload,
   };
 }
