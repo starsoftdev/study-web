@@ -36,6 +36,22 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+
+  GET_STUDY_INFO,
+  GET_STUDY_INFO_SUCCESS,
+  GET_STUDY_INFO_ERROR,
+
+  UPDATE_DASHBOARD_STUDY,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_ERROR,
+
+  FETCH_SITE_LOCATIONS,
+  FETCH_SITE_LOCATIONS_SUCCESS,
+  FETCH_SITE_LOCATIONS_ERROR,
+
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -209,6 +225,97 @@ export function updateFacebookLandingPageSuccess(payload) {
 export function updateFacebookLandingPageError(payload) {
   return {
     type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudiesDashboard(params, limit, offset) {
+  return {
+    type: GET_STUDY_INFO,
+    params,
+    limit,
+    offset,
+  };
+}
+
+export function fetchStudiesDashboardSuccess(payload, hasMoreItems, page) {
+  return {
+    type: GET_STUDY_INFO_SUCCESS,
+    payload,
+    hasMoreItems,
+    page,
+  };
+}
+
+export function fetchStudiesDashboardError(payload) {
+  return {
+    type: GET_STUDY_INFO_ERROR,
+    payload,
+  };
+}
+
+export function updateDashboardStudy(id, params, stopSubmit, formValues) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY,
+    id,
+    params,
+    stopSubmit,
+    formValues,
+  };
+}
+
+export function updateDashboardStudySuccess(studyId, updatedStudyParams, formValues) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY_SUCCESS,
+    studyId,
+    updatedStudyParams,
+    formValues,
+  };
+}
+
+export function updateDashboardStudyError(payload) {
+  return {
+    type: UPDATE_DASHBOARD_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function fetchSiteLocations() {
+  return {
+    type: FETCH_SITE_LOCATIONS,
+  };
+}
+
+export function fetchSiteLocationsSuccess(payload) {
+  return {
+    type: FETCH_SITE_LOCATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchSiteLocationsError(payload) {
+  return {
+    type: FETCH_SITE_LOCATIONS_ERROR,
+    payload,
+  };
+}
+
+export function fetchMessagingNumbersDashboard() {
+  return {
+    type: FETCH_MESSAGING_NUMBERS,
+  };
+}
+
+export function fetchMessagingNumbersDashboardSuccess(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchMessagingNumbersDashboardError(payload) {
+  return {
+    type: FETCH_MESSAGING_NUMBERS_ERROR,
     payload,
   };
 }

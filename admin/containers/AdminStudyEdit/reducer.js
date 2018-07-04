@@ -22,7 +22,22 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  GET_STUDY_INFO,
+  GET_STUDY_INFO_SUCCESS,
+  GET_STUDY_INFO_ERROR,
+  FETCH_SITE_LOCATIONS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
 } from './constants';
+
+import {
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_CRO_SUCCESS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_USERS_BY_ROLE_SUCCESS,
+} from '../../../app/containers/App/constants';
 
 const initialState = {
   note: {
@@ -52,6 +67,22 @@ const initialState = {
   updateFacebookLandingPageProcess: {
     success: false,
     saving: false,
+    error: null,
+  },
+  studyInfo: {
+    details: null,
+    fetching: false,
+    error: null,
+  },
+  indications: [],
+  sponsors: [],
+  protocols: [],
+  cro: [],
+  siteLocations: [],
+  usersByRoles: {},
+  messagingNumbers: {
+    details: [],
+    fetching: false,
     error: null,
   },
 };
@@ -251,6 +282,90 @@ export default function adminStudyEditReducer(state = initialState, action) {
           success: false,
           saving: false,
           error: true,
+        },
+      };
+    case GET_STUDY_INFO:
+      return {
+        ...state,
+        studyInfo: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case GET_STUDY_INFO_SUCCESS:
+      return {
+        ...state,
+        studyInfo: {
+          details: action.payload.studies[0],
+          fetching: false,
+          error: null,
+        },
+      };
+    case GET_STUDY_INFO_ERROR:
+      return {
+        ...state,
+        studyInfo: {
+          details: null,
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_INDICATIONS_SUCCESS:
+      return {
+        ...state,
+        indications: action.payload,
+      };
+    case FETCH_SPONSORS_SUCCESS:
+      return {
+        ...state,
+        sponsors: action.payload,
+      };
+    case FETCH_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        protocols: action.payload,
+      };
+    case FETCH_CRO_SUCCESS:
+      return {
+        ...state,
+        cro: action.payload,
+      };
+    case FETCH_SITE_LOCATIONS_SUCCESS:
+      return {
+        ...state,
+        siteLocations: action.payload,
+      };
+    case FETCH_USERS_BY_ROLE_SUCCESS:
+      return {
+        ...state,
+        usersByRoles: action.payload,
+      };
+    case FETCH_MESSAGING_NUMBERS:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_MESSAGING_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_MESSAGING_NUMBERS_ERROR:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
         },
       };
     default:
