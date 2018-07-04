@@ -17,6 +17,10 @@ import {
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
 
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
+
   DELETE_MEDIA_TYPE,
   DELETE_MEDIA_TYPE_SUCCESS,
 
@@ -101,6 +105,49 @@ export function deleteNoteError(payload) {
   };
 }
 
+export function fetchLanding(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmail(params) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU,
+    params,
+  };
+}
+
+export function updatePatientThankYouEmailSuccess(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_SUCCESS,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmailError(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_ERROR,
+    payload,
+  };
+}
+
 export function deleteMediaType(studyId, studySourceId, index) {
   return {
     type: DELETE_MEDIA_TYPE,
@@ -167,28 +214,6 @@ export function updateThankYouPageError(payload) {
 export function resetThankYouPageState() {
   return {
     type: RESET_THANK_YOU_PAGE_STATE,
-  };
-}
-
-export function fetchLanding(studyId, utm) {
-  return {
-    type: FETCH_LANDING,
-    studyId,
-    utm,
-  };
-}
-
-export function landingFetched(payload) {
-  return {
-    type: FETCH_LANDING_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchLandingError(payload) {
-  return {
-    type: FETCH_LANDING_ERROR,
-    payload,
   };
 }
 
