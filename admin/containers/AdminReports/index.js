@@ -109,8 +109,8 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
       this.props.fetchMediaTotalsForAdmin({
         studyIds: studyIdsArr,
         campaign: null,
-        startDate: null,
-        endDate: null,
+        startDate: newProps.filtersFormValues.startDate || null,
+        endDate: newProps.filtersFormValues.endDate || null,
       });
     }
   }
@@ -173,7 +173,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     let isEmpty = true;
 
     _.forEach(filters, (filter) => {
-      if (!_.isEmpty(filter)) {
+      if (!_.isEmpty(filter) || filter > 0) {
         isEmpty = false;
       }
     });
@@ -224,7 +224,8 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
 
   render() {
     const { activateManually } = this.state;
-    const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions } = this.props;
+    const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions,
+      fetchMediaTotalsForAdmin } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
@@ -244,6 +245,10 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
         />
         <RangePopups
           manuallySetActiveTab={this.manuallySetActiveTab}
+          fetchMediaTotalsForAdmin={fetchMediaTotalsForAdmin}
+          studies={studies}
+          changeAdminFilters={changeAdminFilters}
+          applyFilters={this.applyFilters}
         />
         <StatsBox
           totals={totals}
