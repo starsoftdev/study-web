@@ -19,6 +19,9 @@ import {
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
   FETCH_LANDING_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
 } from './constants';
 
 const initialState = {
@@ -44,6 +47,11 @@ const initialState = {
   landing: {
     details: null,
     fetching: false,
+    error: null,
+  },
+  updateFacebookLandingPageProcess: {
+    success: false,
+    saving: false,
     error: null,
   },
 };
@@ -216,6 +224,33 @@ export default function adminStudyEditReducer(state = initialState, action) {
           details: null,
           fetching: false,
           error: action.payload,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
         },
       };
     default:
