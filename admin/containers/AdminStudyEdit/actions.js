@@ -17,12 +17,12 @@ import {
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
 
-  DELETE_MEDIA_TYPE,
-  DELETE_MEDIA_TYPE_SUCCESS,
+  DELETE_STUDY_MEDIA_TYPE,
+  DELETE_STUDY_MEDIA_TYPE_SUCCESS,
 
-  EDIT_MEDIA_TYPES,
-  EDIT_MEDIA_TYPES_ERROR,
-  EDIT_MEDIA_TYPES_SUCCESS,
+  EDIT_STUDY_MEDIA_TYPES,
+  EDIT_STUDY_MEDIA_TYPES_ERROR,
+  EDIT_STUDY_MEDIA_TYPES_SUCCESS,
 
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
@@ -36,6 +36,10 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+
+  FETCH_STUDY_MEDIA_TYPES,
+  FETCH_STUDY_MEDIA_TYPES_ERROR,
+  FETCH_STUDY_MEDIA_TYPES_SUCCESS,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -101,44 +105,64 @@ export function deleteNoteError(payload) {
   };
 }
 
-export function deleteMediaType(studyId, studySourceId, index) {
+export function fetchStudyMediaTypes(studyId) {
   return {
-    type: DELETE_MEDIA_TYPE,
+    type: FETCH_STUDY_MEDIA_TYPES,
+    studyId,
+  };
+}
+
+export function fetchStudyMediaTypesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyMediaTypesError(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+export function deleteStudyMediaType(studyId, studySourceId, index) {
+  return {
+    type: DELETE_STUDY_MEDIA_TYPE,
     studyId,
     studySourceId,
     index,
   };
 }
 
-export function deleteMediaTypeSuccess(index) {
+export function deleteStudyMediaTypeSuccess(index) {
   return {
-    type: DELETE_MEDIA_TYPE_SUCCESS,
+    type: DELETE_STUDY_MEDIA_TYPE_SUCCESS,
     index,
   };
 }
 
 
-export function editMediaTypes(studyId, mediaTypes, mediaTracking) {
+export function editStudyMediaTypes(studyId, mediaTypes, mediaTracking) {
   return {
-    type: EDIT_MEDIA_TYPES,
+    type: EDIT_STUDY_MEDIA_TYPES,
     studyId,
     mediaTypes,
     mediaTracking,
   };
 }
 
-export function editMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
+export function editStudyMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
   return {
-    type: EDIT_MEDIA_TYPES_SUCCESS,
+    type: EDIT_STUDY_MEDIA_TYPES_SUCCESS,
     mediaTypes,
     studyId,
     mediaTracking,
   };
 }
 
-export function editMediaTypesError(payload) {
+export function editStudyMediaTypesError(payload) {
   return {
-    type: EDIT_MEDIA_TYPES_ERROR,
+    type: EDIT_STUDY_MEDIA_TYPES_ERROR,
     payload,
   };
 }
