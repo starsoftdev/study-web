@@ -12,6 +12,7 @@ import {
   DELETE_NOTE,
   UPDATE_THANK_YOU_PAGE,
   FETCH_LANDING,
+  UPDATE_FACEBOOK_LANDING_PAGE,
 } from './constants';
 
 import {
@@ -25,6 +26,8 @@ import {
   updateThankYouPageError,
   landingFetched,
   fetchLandingError,
+  updateFacebookLandingPageError,
+  updateFacebookLandingPageSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -153,12 +156,34 @@ export function* fetchLandingForAdminWorker(action) {
   }
 }
 
+export function* updateFacebookLandingPageWatcher() {
+  yield* takeLatest(UPDATE_FACEBOOK_LANDING_PAGE, updateFacebookLandingPageWorker);
+}
+
+export function* updateFacebookLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateFacebookLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateFacebookLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateFacebookLandingPageError(err));
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
   const deleteNoteWatcher1 = yield fork(deleteNoteWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
+  const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
 
 
   yield take(LOCATION_CHANGE);
@@ -167,4 +192,5 @@ export function* adminStudyEditSaga() {
   yield cancel(deleteNoteWatcher1);
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
+  yield cancel(updateFacebookLandingPageWatcher1);
 }
