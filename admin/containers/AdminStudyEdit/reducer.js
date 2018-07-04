@@ -12,13 +12,16 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
   RESET_THANK_YOU_PAGE_STATE,
-  FETCH_LANDING,
-  FETCH_LANDING_SUCCESS,
-  FETCH_LANDING_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
@@ -35,6 +38,16 @@ const initialState = {
     deleting: false,
     error: null,
   },
+  landing: {
+    details: null,
+    fetching: true,
+    error: null,
+  },
+  updatePatientThankYouEmailProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
   editMediaTypesProcess: {
     saving: false,
     error: false,
@@ -42,11 +55,6 @@ const initialState = {
   updateThankYouPageProcess: {
     success: false,
     saving: false,
-    error: null,
-  },
-  landing: {
-    details: null,
-    fetching: false,
     error: null,
   },
   updateFacebookLandingPageProcess: {
@@ -224,6 +232,33 @@ export default function adminStudyEditReducer(state = initialState, action) {
           details: null,
           fetching: false,
           error: action.payload,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_SUCCESS:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_ERROR:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: false,
+          error: true,
         },
       };
     case UPDATE_FACEBOOK_LANDING_PAGE:
