@@ -36,7 +36,7 @@ import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
 import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/VendorStudyPage/selectors';
 import PatientCategory from './PatientCategory';
-import { selectValues } from '../../../app/common/selectors/form.selector';
+import { selectValues } from '../../containers/App/form.selectors';
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)

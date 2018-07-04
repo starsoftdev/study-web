@@ -40,6 +40,16 @@ const selectSites = () => createSelector(
   (substate) => get(substate, 'baseData.sites.details', [])
 );
 
+const selectSources = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sources', [])
+);
+
+const selectSitePatients = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sitePatients', {})
+);
+
 export {
   selectGlobal,
   selectAuthState,
@@ -49,4 +59,6 @@ export {
   selectCurrentUserFullName,
   selectCurrentUserId,
   selectSites,
+  selectSources,
+  selectSitePatients,
 };
