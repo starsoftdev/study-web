@@ -250,10 +250,9 @@ class TextSection extends React.Component {
 
   render() {
     const { currentPatient, active, ePMS } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null);
+    const disabled = true;
     const notValidPhone = !currentPatient.phone;
     this.scrollElement();
 
