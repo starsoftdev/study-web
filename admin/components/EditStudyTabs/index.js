@@ -85,28 +85,32 @@ export class EditStudyTabs extends Component {
         </div>
         <div className="content-holder">
           <section className={classNames('notes', { active: (activeTab === 'notes') })}>
-            <NotesTabContent
-              note={note}
-              studyId={studyId}
-              currentUser={currentUser}
-              addNote={addNote}
-              deleteNote={deleteNote}
-              formValues={formValues}
-            />
+            {(activeTab === 'notes') &&
+              <NotesTabContent
+                note={note}
+                studyId={studyId}
+                currentUser={currentUser}
+                addNote={addNote}
+                deleteNote={deleteNote}
+                formValues={formValues}
+              />
+            }
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
             <LandingPageEdit />
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
-          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
+          <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
+            {(activeTab === 'leadGen') &&
+              <LeadGenEdit studyId={studyId} />
+            }
+          </section>
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })}>
             <MediaTrackingEdit studyId={studyId} />
           </section>
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })}>
             {(activeTab === 'thankYou') &&
-              <ThankYouEdit
-                studyId={studyId}
-              />
+              <ThankYouEdit studyId={studyId} />
             }
           </section>
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
