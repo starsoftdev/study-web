@@ -67,7 +67,7 @@ export default function createRoutes(store) {
     },
     {
       onEnter: redirectToLogin,
-      path: '/admin/studyStats/:studyId',
+      path: '/admin/studies/:studyId/stats',
       name: 'AdminStudyStatsPage',
       getComponent(nextState, cb) {
         const importModules = Promise.all([
