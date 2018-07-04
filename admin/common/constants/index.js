@@ -59,3 +59,8 @@ export const SchedulePatientModalType = {
   UPDATE: 'UPDATE',
   HIDDEN: 'HIDDEN',
 };
+
+export const PrefilledThankYouPageValues = {
+  visitOurWebsiteText: 'P.S.: Have a Story to Share? Earn Rewards (Including a $150 Amazon Gift Card) by Signing Up for CureUp today.',
+  websiteLink: 'http://cureup.org/rewards-program/?utm_source=Dash&utm_medium=Thanks&utm_campaign=TYPage',
+};
