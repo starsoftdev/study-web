@@ -18,6 +18,10 @@ import {
   EDIT_PATIENT_THANK_YOU,
   EDIT_PATIENT_THANK_YOU_SUCCESS,
   EDIT_PATIENT_THANK_YOU_ERROR,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_THANK_YOU_PAGE_SUCCESS,
+  UPDATE_THANK_YOU_PAGE_ERROR,
+  RESET_THANK_YOU_PAGE_STATE,
 } from './constants';
 
 const initialState = {
@@ -37,6 +41,15 @@ const initialState = {
     error: null,
   },
   updatePatientThankYouEmailProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  editMediaTypesProcess: {
+    saving: false,
+    error: false,
+  },
+  updateThankYouPageProcess: {
     success: false,
     saving: false,
     error: null,
@@ -148,6 +161,42 @@ export default function adminStudyEditReducer(state = initialState, action) {
           saving: false,
           deleting: false,
           error: action.payload,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_THANK_YOU_PAGE_ERROR:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_THANK_YOU_PAGE_STATE:
+      return {
+        ...state,
+        updateThankYouPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
         },
       };
     case FETCH_LANDING:
