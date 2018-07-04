@@ -203,9 +203,7 @@ class OtherSection extends React.Component {
                 { !pi.isOriginal &&
                 <span
                   className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(pi.indication);
-                  }}
+                  onClick={() => {}}
                 />
                 }
               </span>
