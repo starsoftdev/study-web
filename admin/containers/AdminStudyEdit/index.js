@@ -9,6 +9,7 @@ import {
   fetchNote,
   addNote,
   deleteNote,
+  fetchLanding,
 } from './actions';
 
 import {
@@ -30,6 +31,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchNote: (studyId) => dispatch(fetchNote(studyId)),
   addNote: (payload) => dispatch(addNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
+  fetchLanding: (studyId, utm) => dispatch(fetchLanding(studyId, utm)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -43,15 +45,17 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     formValues: PropTypes.any,
     note: PropTypes.object,
     currentUser: PropTypes.object,
+    fetchLanding: PropTypes.func,
   };
 
   componentDidMount() {
-    const { fetchNote } = this.props;
+    const { fetchNote, fetchLanding } = this.props;
     const { studyId } = this.props.params;
 
     if (studyId) {
       // load studyId related data.
       fetchNote(studyId);
+      fetchLanding(studyId, null);
     }
   }
 

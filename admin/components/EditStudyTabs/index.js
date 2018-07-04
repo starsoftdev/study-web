@@ -1,9 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
+import LeadGenEdit from '../../components/LeadGenEdit';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
 import MediaTrackingEdit from '../MediaTrackingEdit';
-import LeadGenEdit from '../LeadGenEdit';
+import PatientThankYouEmailTab from '../PatientThankYouEmailTab';
+import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
 import ThankYouEdit from '../ThankYouEdit';
 
 const tabs = [
@@ -16,7 +21,7 @@ const tabs = [
   { type: 'patientThankYouEmail', title: 'patient thank you email' },
 ];
 
-export default class EditStudyTabs extends Component {
+export class EditStudyTabs extends Component {
   static propTypes = {
     studyId: PropTypes.any,
     activateManually: PropTypes.string,
@@ -25,6 +30,7 @@ export default class EditStudyTabs extends Component {
     deleteNote: PropTypes.func,
     formValues: PropTypes.any,
     currentUser: PropTypes.object,
+    updatePatientThankYouEmail: PropTypes.func,
   };
 
   constructor(props) {
@@ -60,6 +66,10 @@ export default class EditStudyTabs extends Component {
         {title}
       </div>
     );
+  }
+
+  submitPatientThankYouForm = (formData) => {
+    this.props.updatePatientThankYouEmail(formData);
   }
 
   render() {
@@ -104,9 +114,21 @@ export default class EditStudyTabs extends Component {
               <ThankYouEdit studyId={studyId} />
             }
           </section>
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updatePatientThankYouEmail: (values) => dispatch(updatePatientThankYouEmail(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudyTabs);
