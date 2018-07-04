@@ -5,8 +5,10 @@ import { connect } from 'react-redux';
 
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
+import MediaTrackingEdit from '../MediaTrackingEdit';
 import PatientThankYouEmailModal from '../PatientThankYouEmailModal';
 import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
+import ThankYouEdit from '../ThankYouEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -97,8 +99,16 @@ export class EditStudyTabs extends Component {
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })} />
-          <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })} />
-          <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })} />
+          <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })}>
+            <MediaTrackingEdit studyId={studyId} />
+          </section>
+          <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })}>
+            {(activeTab === 'thankYou') &&
+              <ThankYouEdit
+                studyId={studyId}
+              />
+            }
+          </section>
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailModal onSubmit={this.submitPatientThankYouForm} /></section>
         </div>
       </div>

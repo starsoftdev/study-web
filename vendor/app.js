@@ -47,7 +47,6 @@ const rootRoute = {
 };
 
 const render = () => {
-  console.log(3);
   ReactDOM.render(
     <Provider store={store}>
       <div>
