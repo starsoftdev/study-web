@@ -18,13 +18,14 @@ import {
   selectAdminDashboardEditNoteFormValues,
 } from './selectors';
 
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectStudies } from '../App/selectors';
 
 const mapStateToProps = createStructuredSelector({
   note: selectAdminDashboardNote(),
   editNoteProcess: selectAdminDashboardEditNoteProcess(),
   formValues: selectAdminDashboardEditNoteFormValues(),
   currentUser: selectCurrentUser(),
+  studies: selectStudies(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -45,6 +46,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     formValues: PropTypes.any,
     note: PropTypes.object,
     currentUser: PropTypes.object,
+    studies: PropTypes.object,
     fetchLanding: PropTypes.func,
   };
 
@@ -60,15 +62,20 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { note, currentUser, addNote, deleteNote, formValues } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, studies } = this.props;
     const { studyId } = this.props.params;
+    let foundStudy = null;
+    if (studies && studies.details.length) {
+      foundStudy = studies.details.find(s => s.id === +studyId);
+    }
+    const selectedStudy = { ...foundStudy, id: +studyId } || { id: +studyId };
 
     return (
       <div id="adminStudyEditPage">
-        <StudyInfoSection study={{ id: studyId }} />
+        <StudyInfoSection study={selectedStudy} />
         <div id="studyEditSection">
           <EditStudyTabs
-            studyId={studyId}
+            study={selectedStudy}
             note={note}
             currentUser={currentUser}
             addNote={addNote}

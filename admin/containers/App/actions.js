@@ -51,10 +51,6 @@ import {
   CLEAR_STUDIES,
   CLEAR_FILTERS,
 
-  FETCH_MEDIA_TYPES,
-  FETCH_MEDIA_TYPES_ERROR,
-  FETCH_MEDIA_TYPES_SUCCESS,
-
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_ERROR,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
@@ -349,27 +345,6 @@ export function clearCustomFilters() {
 export function clearStudies() {
   return {
     type: CLEAR_STUDIES,
-  };
-}
-
-export function fetchMediaTypes(studyId) {
-  return {
-    type: FETCH_MEDIA_TYPES,
-    studyId,
-  };
-}
-
-export function fetchMediaTypesSuccess(payload) {
-  return {
-    type: FETCH_MEDIA_TYPES_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchMediaTypesError(payload) {
-  return {
-    type: FETCH_MEDIA_TYPES_ERROR,
-    payload,
   };
 }
 

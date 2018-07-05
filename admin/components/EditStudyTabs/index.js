@@ -23,7 +23,7 @@ const tabs = [
 
 export class EditStudyTabs extends Component {
   static propTypes = {
-    studyId: PropTypes.any,
+    study: PropTypes.object,
     activateManually: PropTypes.string,
     note: PropTypes.object,
     addNote: PropTypes.func,
@@ -74,7 +74,7 @@ export class EditStudyTabs extends Component {
 
   render() {
     const { activeTab } = this.state;
-    const { note, currentUser, studyId, addNote, deleteNote, formValues } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, study } = this.props;
     return (
       <div id="editStudyTabs">
         <div className="tabs-holder">
@@ -89,7 +89,7 @@ export class EditStudyTabs extends Component {
             {(activeTab === 'notes') &&
               <NotesTabContent
                 note={note}
-                studyId={studyId}
+                studyId={study.id}
                 currentUser={currentUser}
                 addNote={addNote}
                 deleteNote={deleteNote}
@@ -103,15 +103,17 @@ export class EditStudyTabs extends Component {
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
             {(activeTab === 'leadGen') &&
-              <LeadGenEdit studyId={studyId} />
+              <LeadGenEdit studyId={study.id} />
             }
           </section>
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })}>
-            <MediaTrackingEdit studyId={studyId} />
+            {(activeTab === 'mediaTracking') &&
+              <MediaTrackingEdit study={study} />
+            }
           </section>
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })}>
             {(activeTab === 'thankYou') &&
-              <ThankYouEdit studyId={studyId} />
+              <ThankYouEdit studyId={study.id} />
             }
           </section>
           <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
