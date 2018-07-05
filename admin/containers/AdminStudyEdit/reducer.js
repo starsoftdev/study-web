@@ -12,13 +12,30 @@ import {
   DELETE_NOTE,
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
+  FETCH_LANDING,
+  FETCH_LANDING_SUCCESS,
+  FETCH_LANDING_ERROR,
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
   RESET_THANK_YOU_PAGE_STATE,
-  FETCH_LANDING,
-  FETCH_LANDING_SUCCESS,
-  FETCH_LANDING_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE_ERROR,
+  RESET_LANDING_PAGE_STATE,
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
+  RESET_CHANGE_STUDY_AD_STATE,
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
 } from './constants';
 
 const initialState = {
@@ -32,6 +49,16 @@ const initialState = {
     deleting: false,
     error: null,
   },
+  landing: {
+    details: null,
+    fetching: true,
+    error: null,
+  },
+  updatePatientThankYouEmailProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
   editMediaTypesProcess: {
     saving: false,
     error: false,
@@ -41,11 +68,23 @@ const initialState = {
     saving: false,
     error: null,
   },
-  landing: {
-    details: null,
-    fetching: false,
+  updateFacebookLandingPageProcess: {
+    success: false,
+    saving: false,
     error: null,
   },
+  updateLandingPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  changeStudyAdProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updatedStudyAd: null,
+  removedStudyAdId: null,
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {
@@ -216,6 +255,153 @@ export default function adminStudyEditReducer(state = initialState, action) {
           details: null,
           fetching: false,
           error: action.payload,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_SUCCESS:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case EDIT_PATIENT_THANK_YOU_ERROR:
+      return {
+        ...state,
+        updatePatientThankYouEmailProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_FACEBOOK_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateFacebookLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case UPDATE_LANDING_PAGE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_LANDING_PAGE_STATE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        updatedStudyAd: action.payload.imgSrc,
+        changeStudyAdProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case REMOVE_STUDY_AD:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case REMOVE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        removedStudyAdId: action.studyId,
+        updatedStudyAd: null,
+      };
+    case REMOVE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case RESET_CHANGE_STUDY_AD_STATE:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        removedStudyAdId: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: false,
+          error: null,
         },
       };
     default:

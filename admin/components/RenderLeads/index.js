@@ -28,7 +28,7 @@ class RenderLeads extends React.Component { // eslint-disable-line react/prefer-
     sources: PropTypes.array,
     fetchSources: PropTypes.func,
     landingPageUrl: PropTypes.string,
-    studyId: PropTypes.string,
+    studyId: PropTypes.number,
   };
 
   constructor(props) {
