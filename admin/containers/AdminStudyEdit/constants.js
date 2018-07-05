@@ -35,3 +35,7 @@ export const EDIT_STUDY_MEDIA_TYPES_SUCCESS       = 'AdminStudyEditPage/EDIT_STU
 
 export const DELETE_STUDY_MEDIA_TYPE              = 'AdminStudyEditPage/DELETE_STUDY_MEDIA_TYPE';
 export const DELETE_STUDY_MEDIA_TYPE_SUCCESS      = 'AdminStudyEditPage/DELETE_STUDY_MEDIA_TYPE_SUCCESS';
+
+export const EDIT_PATIENT_THANK_YOU               = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU';
+export const EDIT_PATIENT_THANK_YOU_SUCCESS       = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU_SUCCESS';
+export const EDIT_PATIENT_THANK_YOU_ERROR         = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU_ERROR';
