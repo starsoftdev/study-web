@@ -5,7 +5,7 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
 import request from '../../../app/utils/request';
-import { FETCH_VENDOR_ADMINS, ADD_VENDOR_ADMIN } from './constants';
+import { FETCH_VENDOR_ADMINS, ADD_VENDOR_ADMIN, FETCH_VENDOR_ROLE_STUDIES, SET_VENDOR_ROLE_STUDIES } from './constants';
 import { fetchVendorAdminsSucceeded, addVendorAdminSucceeded } from './actions';
 
 function* addVendorAdminWatcher() {
@@ -36,13 +36,23 @@ function* fetchVendorAdminsWatcher() {
   yield takeLatest(FETCH_VENDOR_ADMINS, fetchVendorAdminsWorker);
 }
 
-function* fetchVendorAdminsWorker() {
+function* fetchVendorAdminsWorker(action) {
   try {
     const requestURL = `${API_URL}/vendors/admins`;
 
     const params = {
       method: 'GET',
+      query: {},
     };
+    if (action.search) {
+      params.query.search = action.search;
+    }
+    if (action.limit) {
+      params.query.limit = action.limit;
+    }
+    if (action.offset) {
+      params.query.offset = action.offset;
+    }
     const response = yield call(request, requestURL, params);
 
     yield put(fetchVendorAdminsSucceeded(response));
