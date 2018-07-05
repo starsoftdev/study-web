@@ -1,9 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
+import LeadGenEdit from '../../components/LeadGenEdit';
 import NotesTabContent from '../NotesTabContent';
 import LandingPageEdit from '../LandingPageEdit';
 import MediaTrackingEdit from '../MediaTrackingEdit';
-import LeadGenEdit from '../LeadGenEdit';
+import PatientThankYouEmailTab from '../PatientThankYouEmailTab';
+import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
 import ThankYouEdit from '../ThankYouEdit';
 
 const tabs = [
@@ -16,15 +21,16 @@ const tabs = [
   { type: 'patientThankYouEmail', title: 'patient thank you email' },
 ];
 
-export default class EditStudyTabs extends Component {
+export class EditStudyTabs extends Component {
   static propTypes = {
-    studyId: PropTypes.any,
+    study: PropTypes.object,
     activateManually: PropTypes.string,
     note: PropTypes.object,
     addNote: PropTypes.func,
     deleteNote: PropTypes.func,
     formValues: PropTypes.any,
     currentUser: PropTypes.object,
+    updatePatientThankYouEmail: PropTypes.func,
   };
 
   constructor(props) {
@@ -62,9 +68,13 @@ export default class EditStudyTabs extends Component {
     );
   }
 
+  submitPatientThankYouForm = (formData) => {
+    this.props.updatePatientThankYouEmail(formData);
+  }
+
   render() {
     const { activeTab } = this.state;
-    const { note, currentUser, studyId, addNote, deleteNote, formValues } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, study } = this.props;
     return (
       <div id="editStudyTabs">
         <div className="tabs-holder">
@@ -79,7 +89,7 @@ export default class EditStudyTabs extends Component {
             {(activeTab === 'notes') &&
               <NotesTabContent
                 note={note}
-                studyId={studyId}
+                studyId={study.id}
                 currentUser={currentUser}
                 addNote={addNote}
                 deleteNote={deleteNote}
@@ -88,25 +98,43 @@ export default class EditStudyTabs extends Component {
             }
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
-            <LandingPageEdit />
+            {(activeTab === 'landingPage') &&
+              <LandingPageEdit studyId={study.id} />
+            }
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
             {(activeTab === 'leadGen') &&
-              <LeadGenEdit studyId={studyId} />
+              <LeadGenEdit studyId={study.id} />
             }
           </section>
           <section className={classNames('mediaTracking', { active: (activeTab === 'mediaTracking') })}>
-            <MediaTrackingEdit studyId={studyId} />
+            {(activeTab === 'mediaTracking') &&
+              <MediaTrackingEdit study={study} />
+            }
           </section>
           <section className={classNames('thankYou', { active: (activeTab === 'thankYou') })}>
             {(activeTab === 'thankYou') &&
-              <ThankYouEdit studyId={studyId} />
+              <ThankYouEdit studyId={study.id} />
             }
           </section>
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })} />
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}>
+            <PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} />
+          </section>
         </div>
       </div>
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+
+});
+
+function mapDispatchToProps(dispatch) {
+  return {
+    updatePatientThankYouEmail: (values) => dispatch(updatePatientThankYouEmail(values)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudyTabs);

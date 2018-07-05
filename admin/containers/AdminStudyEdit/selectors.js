@@ -24,6 +24,16 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectLanding = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing
+);
+
+const selectUpdatePatientThankYouEmailProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updatePatientThankYouEmailProcess
+);
+
 const selectEditMediaTypesProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   (substate) => substate.editMediaTypesProcess
@@ -32,11 +42,6 @@ const selectEditMediaTypesProcess = () => createSelector(
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   substate => substate.updateThankYouPageProcess
-);
-
-const selectLanding = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.landing.details
 );
 
 const selectLandingIsFetching = () => createSelector(
@@ -52,6 +57,26 @@ const selectLandingError = () => createSelector(
 const selectFacebookLandingPageUpdateProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   substate => substate.updateFacebookLandingPageProcess
+);
+
+const selectLandingPageUpdateProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updateLandingPageProcess
+);
+
+const selectUpdatedStudyAd = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updatedStudyAd
+);
+
+const selectChangeStudyAdProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.changeStudyAdProcess
+);
+
+const selectRemovedStudyAdId = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.removedStudyAdId
 );
 
 const selectStudyInfo = () => createSelector(
@@ -109,12 +134,17 @@ export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectLanding,
+  selectUpdatePatientThankYouEmailProcess,
   selectEditMediaTypesProcess,
   selectThankYouPageUpdateProcess,
-  selectLanding,
   selectLandingIsFetching,
   selectLandingError,
   selectFacebookLandingPageUpdateProcess,
+  selectLandingPageUpdateProcess,
+  selectUpdatedStudyAd,
+  selectChangeStudyAdProcess,
+  selectRemovedStudyAdId,
   selectStudyInfo,
   selectIndications,
   selectCro,
