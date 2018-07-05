@@ -59,6 +59,26 @@ const selectFacebookLandingPageUpdateProcess = () => createSelector(
   substate => substate.updateFacebookLandingPageProcess
 );
 
+const selectLandingPageUpdateProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updateLandingPageProcess
+);
+
+const selectUpdatedStudyAd = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updatedStudyAd
+);
+
+const selectChangeStudyAdProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.changeStudyAdProcess
+);
+
+const selectRemovedStudyAdId = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.removedStudyAdId
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -71,4 +91,8 @@ export {
   selectLandingIsFetching,
   selectLandingError,
   selectFacebookLandingPageUpdateProcess,
+  selectLandingPageUpdateProcess,
+  selectUpdatedStudyAd,
+  selectChangeStudyAdProcess,
+  selectRemovedStudyAdId,
 };
