@@ -55,6 +55,8 @@
     "client.component.dateOfBirthPicker.placeholderDay": "Day",
     "client.component.dateOfBirthPicker.placeholderMonth": "Month",
 
+    "client.component.landingPage.gdpr.phoneNumber": "By providing my phone number and email to StudyKIK, I agree and acknowledge that I may receive medical information on studies via text message, phone or email.",
+    "client.component.landingPage.gdpr.termsAndConditions": "I have read and agree to StudyKIK's <a href='/terms-and-conditions' target='_blank'>Terms and Conditions</a>, <a href='/privacy-policy' target='_blank'>Privacy Policy</a>, and <a href='/cookies' target='_blank'>Cookie Policy</a>, and I confirm that I am at least 18 years old.",
     "client.component.receiptsTable.date": "Date",
     "client.component.receiptsTable.siteName": "Site name",
     "client.component.receiptsTable.invoiceNumber": "Invoice number",
@@ -975,7 +977,7 @@
     "sponsor.page.reportViewPage.dispositions.key1": "Passed Prescreener",
     "sponsor.page.reportViewPage.dispositions.key2": "Did Not Pass",
     "sponsor.page.reportViewPage.dispositions.key3": "Not Interested",
-    "sponsor.page.reportViewPage.dispositions.key4": "All Attempts Made",    
+    "sponsor.page.reportViewPage.dispositions.key4": "All Attempts Made",
 
     "portals.component.addCreditCardModal.modalTitle": "ADD NEW CARD",
 
