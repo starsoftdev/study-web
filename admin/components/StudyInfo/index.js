@@ -56,7 +56,7 @@ export class StudyInfo extends Component {
   }
 
   goToStudyStatsPage(studyId) {
-    browserHistory.push(`/admin/studyStats/${studyId}`);
+    browserHistory.push(`/admin/studies/${studyId}/stats`);
   }
 
   goToStudyEditPage(studyId) {
