@@ -24,6 +24,16 @@ const selectAdminDashboardEditNoteProcess = () => createSelector(
   (substate) => substate.editNoteProcess
 );
 
+const selectLanding = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.landing
+);
+
+const selectUpdatePatientThankYouEmailProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.updatePatientThankYouEmailProcess
+);
+
 const selectEditMediaTypesProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   (substate) => substate.editMediaTypesProcess
@@ -32,11 +42,6 @@ const selectEditMediaTypesProcess = () => createSelector(
 const selectThankYouPageUpdateProcess = () => createSelector(
   selectAdminStudyEditDomain(),
   substate => substate.updateThankYouPageProcess
-);
-
-const selectLanding = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.landing.details
 );
 
 const selectLandingIsFetching = () => createSelector(
@@ -59,9 +64,10 @@ export {
   selectAdminDashboardEditNoteFormValues,
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
+  selectLanding,
+  selectUpdatePatientThankYouEmailProcess,
   selectEditMediaTypesProcess,
   selectThankYouPageUpdateProcess,
-  selectLanding,
   selectLandingIsFetching,
   selectLandingError,
   selectFacebookLandingPageUpdateProcess,
