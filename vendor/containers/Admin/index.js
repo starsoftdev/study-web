@@ -5,28 +5,25 @@
 
 import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import Button from 'react-bootstrap/lib/Button';
-import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import RowItem from './RowItem';
-import Input from '../../../app/components/Input';
 import { translate } from '../../../common/utilities/localization';
 import { addVendorAdmin, fetchVendorAdmins } from './actions';
 import { selectVendorAdmins } from './selectors';
 
 import CenteredModal from '../../../app/components/CenteredModal/index';
 
+import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';
 import SearchStudyForm from './SearchStudyForm';
 
 import './style.less';
 
 const pageTitle = 'Vendor Admins - StudyKIK';
-const formName = 'vendorAdminSearch';
 
 const mapStateToProps = createStructuredSelector({
   vendorAdmins: selectVendorAdmins(),
@@ -37,7 +34,6 @@ const mapDispatchToProps = {
   fetchVendorAdmins,
 };
 
-@reduxForm({ form: formName })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class VendorAdminPage extends Component {
 
@@ -65,6 +61,7 @@ export default class VendorAdminPage extends Component {
     this.openVendorModal = this.openVendorModal.bind(this);
     this.closeVendorModal = this.closeVendorModal.bind(this);
 
+    this.searchForVendorAdmin = this.searchForVendorAdmin.bind(this);
     this.addVendorAdmin = this.addVendorAdmin.bind(this);
   }
 
@@ -89,44 +86,29 @@ export default class VendorAdminPage extends Component {
     this.setState({ addVendorModalOpen: false });
   }
 
-  addVendorAdmin() {
+  searchForVendorAdmin(data) {
+    const { fetchVendorAdmins } = this.props;
+    fetchVendorAdmins(data.search);
+  }
+
+  addVendorAdmin(data) {
+    const { addVendorAdmin } = this.props;
+    addVendorAdmin(data);
     this.closeVendorModal();
   }
 
   render() {
     const { vendorAdmins } = this.props;
-    const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
 
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
         <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmins')}</h2>
         <div className="clearfix container-fluid">
-          <form className="form-search pull-left" onSubmit={this.onSubmit}>
-            <div className="fields-holder">
-              <div className="pull-left col no-left-padding">
-                <div className="has-feedback ">
-                  <Button
-                    className="btn-enter"
-                    onClick={this.setQueryParam}
-                  >
-                    <i className="icomoon-icon_search2" />
-                  </Button>
-                  <Field
-                    name="name"
-                    component={Input}
-                    type="text"
-                    placeholder="Search"
-                    className="keyword-search"
-                    onChange={(e) => (this.setState({
-                      query: e.target.value,
-                    }))}
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
+          <SearchForVendorAdminForm
+            onSubmit={this.searchForVendorAdmin}
+            saving={false}
+          />
           <div className="btns-area pull-right">
             <div className="col pull-left no-right-padding">
               <a className="btn btn-primary lightbox-opener" onClick={this.openVendorModal}>{translate('client.page.vendor.admin.addVendorAdmin')}</a>
