@@ -17,12 +17,9 @@ import {
   DELETE_NOTE_SUCCESS,
   DELETE_NOTE_ERROR,
 
-  DELETE_MEDIA_TYPE,
-  DELETE_MEDIA_TYPE_SUCCESS,
-
-  EDIT_MEDIA_TYPES,
-  EDIT_MEDIA_TYPES_ERROR,
-  EDIT_MEDIA_TYPES_SUCCESS,
+  EDIT_PATIENT_THANK_YOU,
+  EDIT_PATIENT_THANK_YOU_SUCCESS,
+  EDIT_PATIENT_THANK_YOU_ERROR,
 
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
@@ -32,6 +29,35 @@ import {
   FETCH_LANDING,
   FETCH_LANDING_SUCCESS,
   FETCH_LANDING_ERROR,
+
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+  UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+
+  FETCH_STUDY_MEDIA_TYPES,
+  FETCH_STUDY_MEDIA_TYPES_ERROR,
+  FETCH_STUDY_MEDIA_TYPES_SUCCESS,
+
+  EDIT_STUDY_MEDIA_TYPES,
+  EDIT_STUDY_MEDIA_TYPES_ERROR,
+  EDIT_STUDY_MEDIA_TYPES_SUCCESS,
+
+  DELETE_STUDY_MEDIA_TYPE,
+  DELETE_STUDY_MEDIA_TYPE_SUCCESS,
+
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE_ERROR,
+  RESET_LANDING_PAGE_STATE,
+
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
+  RESET_CHANGE_STUDY_AD_STATE,
+
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -135,43 +161,113 @@ export function deleteCampaign(payload) {
 
 export function deleteMediaType(studyId, studySourceId, index) {
   return {
-    type: DELETE_MEDIA_TYPE,
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+export function fetchLanding(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
+
+export function landingFetched(payload) {
+  return {
+    type: FETCH_LANDING_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchLandingError(payload) {
+  return {
+    type: FETCH_LANDING_ERROR,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmail(params) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU,
+    params,
+  };
+}
+
+export function updatePatientThankYouEmailSuccess(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_SUCCESS,
+    payload,
+  };
+}
+
+export function updatePatientThankYouEmailError(payload) {
+  return {
+    type: EDIT_PATIENT_THANK_YOU_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudyMediaTypes(studyId) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES,
+    studyId,
+  };
+}
+
+export function fetchStudyMediaTypesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyMediaTypesError(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+
+export function editStudyMediaTypes(studyId, mediaTypes, mediaTracking) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES,
+    studyId,
+    mediaTypes,
+    mediaTracking,
+  };
+}
+
+export function editStudyMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES_SUCCESS,
+    mediaTypes,
+    studyId,
+    mediaTracking,
+  };
+}
+
+export function editStudyMediaTypesError(payload) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+
+export function deleteStudyMediaType(studyId, studySourceId, index) {
+  return {
+    type: DELETE_STUDY_MEDIA_TYPE,
     studyId,
     studySourceId,
     index,
   };
 }
 
-export function deleteMediaTypeSuccess(index) {
+export function deleteStudyMediaTypeSuccess(index) {
   return {
-    type: DELETE_MEDIA_TYPE_SUCCESS,
+    type: DELETE_STUDY_MEDIA_TYPE_SUCCESS,
     index,
-  };
-}
-
-
-export function editMediaTypes(studyId, mediaTypes, mediaTracking) {
-  return {
-    type: EDIT_MEDIA_TYPES,
-    studyId,
-    mediaTypes,
-    mediaTracking,
-  };
-}
-
-export function editMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
-  return {
-    type: EDIT_MEDIA_TYPES_SUCCESS,
-    mediaTypes,
-    studyId,
-    mediaTracking,
-  };
-}
-
-export function editMediaTypesError(payload) {
-  return {
-    type: EDIT_MEDIA_TYPES_ERROR,
-    payload,
   };
 }
 
@@ -202,24 +298,44 @@ export function resetThankYouPageState() {
   };
 }
 
-export function fetchLanding(studyId, utm) {
+export function updateFacebookLandingPage(params) {
   return {
-    type: FETCH_LANDING,
-    studyId,
-    utm,
+    type: UPDATE_FACEBOOK_LANDING_PAGE,
+    params,
   };
 }
 
-export function landingFetched(payload) {
+export function updateFacebookLandingPageSuccess(payload) {
   return {
-    type: FETCH_LANDING_SUCCESS,
+    type: UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
     payload,
   };
 }
 
-export function fetchLandingError(payload) {
+export function updateFacebookLandingPageError(payload) {
   return {
-    type: FETCH_LANDING_ERROR,
+    type: UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
+    payload,
+  };
+}
+
+export function updateLandingPage(params) {
+  return {
+    type: UPDATE_LANDING_PAGE,
+    params,
+  };
+}
+
+export function updateLandingPageSuccess(payload) {
+  return {
+    type: UPDATE_LANDING_PAGE_SUCCESS,
+    payload,
+  };
+}
+
+export function updateLandingPageError(payload) {
+  return {
+    type: UPDATE_LANDING_PAGE_ERROR,
     payload,
   };
 }
@@ -229,3 +345,56 @@ export function fetchFive9List() {
   };
 }
 
+
+export function resetLandingPageState() {
+  return {
+    type: RESET_LANDING_PAGE_STATE,
+  };
+}
+
+export function changeStudyAd(payload) {
+  return {
+    type: CHANGE_STUDY_AD,
+    payload,
+  };
+}
+
+export function changeStudyAdSuccess(payload) {
+  return {
+    type: CHANGE_STUDY_AD_SUCCESS,
+    payload,
+  };
+}
+
+export function changeStudyAdError(payload) {
+  return {
+    type: CHANGE_STUDY_AD_ERROR,
+    payload,
+  };
+}
+
+export function removeStudyAd(studyId) {
+  return {
+    type: REMOVE_STUDY_AD,
+    studyId,
+  };
+}
+
+export function removeStudyAdSuccess(studyId) {
+  return {
+    type: REMOVE_STUDY_AD_SUCCESS,
+    studyId,
+  };
+}
+
+export function removeStudyAdError() {
+  return {
+    type: REMOVE_STUDY_AD_ERROR,
+  };
+}
+
+export function resetChangeStudyAdState() {
+  return {
+    type: RESET_CHANGE_STUDY_AD_STATE,
+  };
+}
