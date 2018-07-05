@@ -12,15 +12,15 @@ import classNames from 'classnames';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
 
-import * as Selector from '../../../app/containers/StudyPage/selectors';
-import { selectCurrentUser } from '../../../app/containers/App/selectors';
+import * as Selector from '../../containers/VendorStudyPage/selectors';
+import { selectCurrentUser } from '../../containers/App/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import {
   schedulePatient,
   submitMovePatientBetweenCategories,
   showScheduledModal,
-} from '../../../app/containers/StudyPage/actions';
+} from '../../containers/VendorStudyPage/actions';
 import { translate } from '../../../common/utilities/localization';
 /**
  * Specifies the drop target contract.
