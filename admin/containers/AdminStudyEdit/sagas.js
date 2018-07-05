@@ -18,6 +18,10 @@ import {
   UPDATE_DASHBOARD_STUDY,
   FETCH_SITE_LOCATIONS,
   FETCH_MESSAGING_NUMBERS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  ADD_EMAIL_NOTIFICATION_USER,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
 } from './constants';
 
 import {
@@ -41,6 +45,12 @@ import {
   fetchSiteLocationsError,
   fetchMessagingNumbersDashboardSuccess,
   fetchMessagingNumbersDashboardError,
+  fetchAllStudyEmailNotificationsSuccess,
+  fetchAllStudyEmailNotificationsError,
+  addEmailNotificationUserSuccess,
+  fetchCustomNotificationEmailsSuccess,
+  fetchCustomNotificationEmailsError,
+  addCustomEmailNotificationSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -298,6 +308,100 @@ export function* fetchMessagingNumbersWorker() {
   }
 }
 
+export function* fetchAllClientUsersWatcher() {
+  yield* takeLatest(FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS, fetchAllClientUsersWorker);
+}
+
+export function* fetchAllClientUsersWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getAllStudyNotificationEmails`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        clientId: action.clientId,
+        studyId: action.studyId,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchAllStudyEmailNotificationsSuccess(response));
+  } catch (err) {
+    yield put(fetchAllStudyEmailNotificationsError(err));
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.fetchAllStudyEmailNotificationsError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* addEmailNotificationUserWatcher() {
+  yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
+}
+
+export function* addEmailNotificationUserWorker(action) {
+  const { payload } = action;
+  try {
+    const clientId = payload.clientId;
+    delete payload.clientId;
+
+    const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email, response.user));
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addEmailNotifToastrError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchCustomNotificationEmailsWatcher() {
+  yield* takeLatest(FETCH_CUSTOM_NOTIFICATION_EMAILS, fetchCustomNotificationEmailsWorker);
+}
+
+export function* fetchCustomNotificationEmailsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.id}/customNotificationEmails`;
+    const response = yield call(request, requestURL);
+
+    yield put(fetchCustomNotificationEmailsSuccess(response));
+  } catch (err) {
+    yield put(fetchCustomNotificationEmailsError(err));
+  }
+}
+
+export function* addCustomEmailNotificationWatcher() {
+  yield* takeLatest(ADD_CUSTOM_EMAIL_NOTIFICATION, addCustomEmailNotificationWorker);
+}
+
+export function* addCustomEmailNotificationWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(addCustomEmailNotificationSuccess(response.id, response.email));
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addCustomEmailNotifToastrError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -309,6 +413,11 @@ export function* adminStudyEditSaga() {
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
   const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
+  const fetchAllClientUsersWatcher1 = yield fork(fetchAllClientUsersWatcher);
+  const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
+  const fetchCustomNotificationEmailsWatcher1 = yield fork(fetchCustomNotificationEmailsWatcher);
+  const addCustomEmailNotificationWatcher1 = yield fork(addCustomEmailNotificationWatcher);
+
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
@@ -321,4 +430,8 @@ export function* adminStudyEditSaga() {
   yield cancel(updateDashboardStudyWatcher1);
   yield cancel(fetchSiteLocationsWatcher1);
   yield cancel(fetchMessagingNumbersWatcher1);
+  yield cancel(fetchAllClientUsersWatcher1);
+  yield cancel(addEmailNotificationUserWatcher1);
+  yield cancel(fetchCustomNotificationEmailsWatcher1);
+  yield cancel(addCustomEmailNotificationWatcher1);
 }

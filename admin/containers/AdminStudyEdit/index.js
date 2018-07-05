@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
-
+import { stopSubmit } from 'redux-form';
 import StudyInfoSection from '../../components/StudyInfoSection';
 import EditStudyTabs from '../../components/EditStudyTabs';
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
@@ -21,6 +21,9 @@ import {
   fetchStudiesDashboard,
   fetchSiteLocations,
   fetchMessagingNumbersDashboard,
+  fetchAllStudyEmailNotificationsDashboard,
+  fetchCustomNotificationEmails,
+  updateDashboardStudy,
 } from './actions';
 
 import {
@@ -28,6 +31,8 @@ import {
   selectAdminDashboardEditNoteProcess,
   selectAdminDashboardEditNoteFormValues,
   selectStudyInfo,
+  selectAllClientUsers,
+  selectAllCustomNotificationEmails,
 } from './selectors';
 
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -38,6 +43,8 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectAdminDashboardEditNoteFormValues(),
   currentUser: selectCurrentUser(),
   studyInfo: selectStudyInfo(),
+  allClientUsers: selectAllClientUsers(),
+  customNotificationEmails: selectAllCustomNotificationEmails(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -52,11 +59,16 @@ const mapDispatchToProps = (dispatch) => ({
   fetchSiteLocations: () => dispatch(fetchSiteLocations()),
   fetchUsersByRole: () => dispatch(fetchUsersByRole()),
   fetchMessagingNumbersDashboard: () => dispatch(fetchMessagingNumbersDashboard()),
+  fetchAllStudyEmailNotificationsDashboard: (clientId, studyId) => dispatch(fetchAllStudyEmailNotificationsDashboard(clientId, studyId)),
+  fetchCustomNotificationEmails: (studyId) => dispatch(fetchCustomNotificationEmails(studyId)),
+  updateDashboardStudy: (id, params, stopSubmit, formValues) => dispatch(updateDashboardStudy(id, params, stopSubmit, formValues)),
+  stopSubmit: (errors) => dispatch(stopSubmit('Admin.EditStudyForm', errors)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
 export class AdminStudyEditPage extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
+    updateDashboardStudy: PropTypes.func.isRequired,
     params: PropTypes.object,
     editNoteProcess: PropTypes.object,
     fetchNote: PropTypes.func,
@@ -74,7 +86,14 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     fetchUsersByRole: PropTypes.func,
     studyInfo: PropTypes.object,
     fetchMessagingNumbersDashboard: PropTypes.func,
+    allClientUsers: PropTypes.object.isRequired,
+    fetchAllStudyEmailNotificationsDashboard: PropTypes.func,
+    customNotificationEmails: PropTypes.object.isRequired,
+    fetchCustomNotificationEmails: PropTypes.func.isRequired,
+    stopSubmit: PropTypes.func.isRequired,
   };
+
+  static emailNotificationFields = [];
 
   componentDidMount() {
     const { fetchNote, fetchStudiesDashboard } = this.props;
@@ -95,6 +114,44 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { allClientUsers, customNotificationEmails } = this.props;
+    if (this.props.studyInfo.fetching && !nextProps.studyInfo.fetching){
+      this.props.fetchAllStudyEmailNotificationsDashboard(nextProps.studyInfo.details.client_id, nextProps.studyInfo.details.study_id);
+      this.props.fetchCustomNotificationEmails(nextProps.studyInfo.details.study_id);
+    }
+
+    if (allClientUsers.fetching && !nextProps.allClientUsers.fetching) {
+      this.emailNotificationFields = [];
+      // notification email records for users
+      for (const item of nextProps.allClientUsers.details) {
+        // set internal state to hold the value for the fields without triggering component updates
+        this.emailNotificationFields.push({
+          email: item.email,
+          userId: item.user_id,
+          isChecked: item.isChecked,
+        });
+      }
+    }else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
+      this.customEmailNotificationFields = [];
+      let isAllCustomChecked = true;
+      nextProps.customNotificationEmails.details.forEach(item => {
+        const isChecked = item.type === 'active';
+        if (!isChecked) {
+          isAllCustomChecked = false;
+        }
+        // set internal state to hold the value for the field boolean without triggering component updates
+        this.customEmailNotificationFields.push({
+          id: item.id,
+          email: item.email,
+          isChecked,
+        });
+      });
+      // set internal state to hold the value for the field boolean without triggering component updates
+      this.checkAllCustomEmailNotificationFields = isAllCustomChecked;
+    }
+  }
+
   getEditStudyInitialValues = (study) => {
     if (study) {
       const initialValues = Object.assign({}, study);
@@ -102,22 +159,20 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       initialValues.site = study.site_id;
       delete initialValues.site_id;
       initialValues.messagingNumber = study.text_number_id;
+
       // populate the user email notifications
-      //initialValues.emailNotifications = this.emailNotificationFields;
-      //initialValues.checkAllInput = this.checkAllEmailNotificationFields;
+      initialValues.emailNotifications = this.emailNotificationFields;
+
       // populate the custom email notifications
-      //initialValues.customEmailNotifications = this.customEmailNotificationFields;
-      //initialValues.checkAllCustomInput = this.checkAllCustomEmailNotificationFields;
-      // set the tagged indications for the study
-      //initialValues.taggedIndicationsForStudy = this.taggedIndicationsForStudy;
+      initialValues.customEmailNotifications = this.customEmailNotificationFields;
+
       return initialValues;
     }
     return null;
   }
 
   updateStudy = (values) => {
-    console.log('updateStudy', values);
-    const { studyInfo } = this.props;
+    const { studyInfo, updateDashboardStudy, stopSubmit } = this.props;
     const initialFormValues = this.getEditStudyInitialValues(studyInfo.details);
     // diff the updated form values
     const newParam = _.pickBy(values, (value, key) => (
@@ -126,14 +181,17 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     // delete tagged indications from the request because we already submitted the changes for the tagged indications
     delete newParam.taggedIndicationsForStudy;
     if (newParam.recruitment_phone) {
-      newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
+        newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
     }
     // check the diff between the initial values of email notifications
     if (newParam.emailNotifications) {
       if (initialFormValues.emailNotifications) {
-        newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => (
-          value.isChecked !== initialFormValues.emailNotifications[key].isChecked
-        ));
+        newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => {
+          if (initialFormValues.emailNotifications[key]){
+            return value.isChecked !== initialFormValues.emailNotifications[key].isChecked
+          }
+          return true;
+        });
       }
       // the diff'ed email notifications are empty, don't include in the request
       if (newParam.emailNotifications.length === 0) {
@@ -143,9 +201,12 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     // check the diff between the initial values of custom email notifications
     if (newParam.customEmailNotifications) {
       if (initialFormValues.customEmailNotifications) {
-        newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => (
-          value.isChecked !== initialFormValues.customEmailNotifications[key].isChecked
-        ));
+        newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => {
+          if (initialFormValues.customEmailNotifications[key]){
+            return value.isChecked !== initialFormValues.customEmailNotifications[key].isChecked;
+          }
+          return true;
+        });
       }
       // the diff'ed email notifications are empty, don't include in the request
       if (newParam.customEmailNotifications.length === 0) {
@@ -153,9 +214,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       }
     }
 
-    console.log(newParam);
+    if (newParam.cnsCode){
+      delete newParam.cnsCode
 
-    //updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
+    }
+
+    console.log(newParam);
+    //updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, values);
   }
 
   render() {
@@ -165,7 +230,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
 
     return (
       <div id="adminStudyEditPage">
-        {initialValues && <StudyInfoSection initialValues={initialValues} studyId={studyId} onSubmit={this.updateStudy} />}
+        {initialValues && <StudyInfoSection currentUser={currentUser} initialValues={initialValues} studyId={studyId} onSubmit={this.updateStudy} />}
         <div id="studyEditSection">
           <EditStudyTabs
             studyId={studyId}

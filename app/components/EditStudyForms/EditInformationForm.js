@@ -209,8 +209,8 @@ export default class EditInformationForm extends React.Component {
           delete newParam.customEmailNotifications;
         }
       }
-      console.log(44, newParam);
-      //updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
+
+      updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, formValues);
     } else if (formErrors.landingPageUrl) {
       toastr.error('', 'Error! Study Url is required.');
     }
