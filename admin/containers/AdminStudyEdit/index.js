@@ -18,6 +18,7 @@ import {
   fetchNote,
   addNote,
   deleteNote,
+  fetchLanding,
   fetchStudiesDashboard,
   fetchSiteLocations,
   fetchMessagingNumbersDashboard,
@@ -35,13 +36,14 @@ import {
   selectAllCustomNotificationEmails,
 } from './selectors';
 
-import { selectCurrentUser } from '../../containers/App/selectors';
+import { selectCurrentUser, selectStudies } from '../App/selectors';
 
 const mapStateToProps = createStructuredSelector({
   note: selectAdminDashboardNote(),
   editNoteProcess: selectAdminDashboardEditNoteProcess(),
   formValues: selectAdminDashboardEditNoteFormValues(),
   currentUser: selectCurrentUser(),
+  studies: selectStudies(),
   studyInfo: selectStudyInfo(),
   allClientUsers: selectAllClientUsers(),
   customNotificationEmails: selectAllCustomNotificationEmails(),
@@ -51,6 +53,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchNote: (studyId) => dispatch(fetchNote(studyId)),
   addNote: (payload) => dispatch(addNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
+  fetchLanding: (studyId, utm) => dispatch(fetchLanding(studyId, utm)),
   fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),
@@ -77,6 +80,8 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     formValues: PropTypes.any,
     note: PropTypes.object,
     currentUser: PropTypes.object,
+    studies: PropTypes.object,
+    fetchLanding: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchProtocols: PropTypes.func,
@@ -96,12 +101,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
   static emailNotificationFields = [];
 
   componentDidMount() {
-    const { fetchNote, fetchStudiesDashboard } = this.props;
+    const { fetchNote, fetchLanding, fetchStudiesDashboard } = this.props;
     const { studyId } = this.props.params;
 
     if (studyId) {
       // load studyId related data.
       fetchNote(studyId);
+      fetchLanding(studyId, null);
       fetchStudiesDashboard({search: {value: studyId} }, 1, 0);
 
       this.props.fetchIndications();
@@ -224,8 +230,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { note, currentUser, addNote, deleteNote, formValues, studyInfo } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, studyInfo, studies } = this.props;
     const { studyId } = this.props.params;
+    let foundStudy = null;
+    if (studies && studies.details.length) {
+      foundStudy = studies.details.find(s => s.id === +studyId);
+    }
+    const selectedStudy = { ...foundStudy, id: +studyId } || { id: +studyId };
     const initialValues = this.getEditStudyInitialValues(studyInfo.details);
 
     return (
@@ -233,7 +244,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
         {initialValues && <StudyInfoSection currentUser={currentUser} initialValues={initialValues} studyId={studyId} onSubmit={this.updateStudy} />}
         <div id="studyEditSection">
           <EditStudyTabs
-            studyId={studyId}
+            study={selectedStudy}
             note={note}
             currentUser={currentUser}
             addNote={addNote}
