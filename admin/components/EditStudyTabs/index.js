@@ -118,7 +118,9 @@ export class EditStudyTabs extends Component {
               <ThankYouEdit studyId={study.id} />
             }
           </section>
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}>
+            <PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} />
+          </section>
         </div>
       </div>
     );
