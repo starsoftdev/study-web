@@ -66,9 +66,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     this.onPhoneBlur = this.onPhoneBlur.bind(this);
     this.onCodeChange = this.onCodeChange.bind(this);
     this.onSelectFlag = this.onSelectFlag.bind(this);
-
-    this.changeGdprPhoneNumber = this.changeGdprPhoneNumber.bind(this);
-    this.changeGdprToc = this.changeGdprToc.bind(this);
   }
 
   componentDidMount() {
@@ -235,14 +232,14 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     return !countryCheck || this.props.submitting || !this.props.valid;
   }
 
-  changeGdprPhoneNumber(e) {
+  changeGdprPhoneNumber = (e) => {
     e.preventDefault();
     this.setState({
       gdprPhoneNumber: !this.state.gdprPhoneNumber,
     });
   }
 
-  changeGdprToc(e) {
+  changeGdprToc = (e) => {
     e.preventDefault();
     this.setState({
       gdprTermsAndConditions: !this.state.gdprTermsAndConditions,
