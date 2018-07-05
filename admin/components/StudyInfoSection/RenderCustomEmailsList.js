@@ -29,12 +29,12 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
 
   addEmailNotificationClick() {
     const { addEmailNotificationClick } = this.props;
-    addEmailNotificationClick();
+    addEmailNotificationClick(true);
   }
 
   selectEmail(e, index) {
     const { change } = this.props;
-    change(`emailNotifications[${index}].isChecked`, (e === 'true'));
+    change(`customEmailNotifications[${index}].isChecked`, (e === 'true'));
   }
 
   renderEmailList(email, index) {
@@ -46,7 +46,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
       <li key={index}>
         <div className="field-row right-to-left">
           <strong className="label">
-            <label htmlFor="new-patient-phone">{formValues.emailNotifications[index].email}</label>
+            <label htmlFor="new-patient-phone">{formValues.customEmailNotifications[index].email}</label>
           </strong>
           <div className="field">
             <Field
@@ -66,8 +66,8 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
     const { fields, formValues } = this.props;
     let formValuesLength;
 
-    if (formValues.emailNotifications) {
-      formValuesLength = formValues.emailNotifications.length;
+    if (formValues.customEmailNotifications) {
+      formValuesLength = formValues.customEmailNotifications.length;
     } else {
       formValuesLength = 0;
     }

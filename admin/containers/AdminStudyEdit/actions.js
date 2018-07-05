@@ -52,6 +52,21 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
+
+  ADD_EMAIL_NOTIFICATION_USER,
+  ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+  ADD_EMAIL_NOTIFICATION_USER_ERROR,
+
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
+  ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -317,5 +332,86 @@ export function fetchMessagingNumbersDashboardError(payload) {
   return {
     type: FETCH_MESSAGING_NUMBERS_ERROR,
     payload,
+  };
+}
+
+export function fetchAllStudyEmailNotificationsDashboard(clientId, studyId) {
+  return {
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+    clientId,
+    studyId,
+  };
+}
+
+export function fetchAllStudyEmailNotificationsSuccess(payload) {
+  return {
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchAllStudyEmailNotificationsError(payload) {
+  return {
+    type: FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
+    payload,
+  };
+}
+
+export function addEmailNotificationUser(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER,
+    payload,
+  };
+}
+
+export function addEmailNotificationUserSuccess(userId, email, user = null) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_SUCCESS,
+    userId,
+    email,
+    user,
+  };
+}
+
+export function addEmailNotificationUserError(payload) {
+  return {
+    type: ADD_EMAIL_NOTIFICATION_USER_ERROR,
+    payload,
+  };
+}
+
+export function fetchCustomNotificationEmails(id) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS,
+    id,
+  };
+}
+
+export function fetchCustomNotificationEmailsSuccess(payload) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCustomNotificationEmailsError(payload) {
+  return {
+    type: FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+    payload,
+  };
+}
+
+export function addCustomEmailNotification(payload) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION,
+    payload,
+  };
+}
+
+export function addCustomEmailNotificationSuccess(id, email) {
+  return {
+    type: ADD_CUSTOM_EMAIL_NOTIFICATION_SUCCESS,
+    id,
+    email,
   };
 }

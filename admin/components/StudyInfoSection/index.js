@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
+import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { arrayRemoveAll, arrayPush, blur, change, Field, FieldArray, reduxForm, startSubmit, stopSubmit } from 'redux-form';
@@ -7,9 +8,13 @@ import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import RenderEmailsList from './RenderEmailsList';
-
+import RenderCustomEmailsList from './RenderCustomEmailsList';
+import { selectValues } from '../../common/selectors/form.selector';
 import { selectStudyInfo, selectIndications, selectProtocols, selectSponsors, selectCro, selectSiteLocations, selectUsersByRoles, selectMessagingNumbers } from  '../../containers/AdminStudyEdit/selectors';
+import { addEmailNotificationUser, addCustomEmailNotification } from '../../containers/AdminStudyEdit/actions';
 import Checkbox from '../Input/Checkbox';
+import CenteredModal from '../../components/CenteredModal';
+import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
 
 const formName = 'Admin.EditStudyForm';
 import formValidator from './validator';
@@ -17,6 +22,8 @@ import formValidator from './validator';
 @reduxForm({
   form: formName,
   validate: formValidator,
+  enableReinitialize: true,
+  keepDirtyOnReinitialize: true,
 })
 @connect(mapStateToProps, mapDispatchToProps)
 export class StudyInfoSection extends Component { // eslint-disable-line react/prefer-stateless-function
@@ -29,6 +36,9 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     siteLocations: PropTypes.array.isRequired,
     usersByRoles: PropTypes.object.isRequired,
     messagingNumbers: PropTypes.object.isRequired,
+    formValues: PropTypes.object,
+    currentUser: PropTypes.object,
+    addCustomEmailNotification: PropTypes.func,
   };
 
   constructor() {
@@ -37,16 +47,8 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     this.onCheckboxClick = this.onCheckboxClick.bind(this);
 
     this.state = {
-      userEmailNotif: [
-        {
-          email: 'mo@studykik.com',
-          checked: false,
-        },
-        {
-          email: 'bob@studykik.com',
-          checked: true,
-        },
-      ],
+      addEmailModalShow: false,
+      customAddEmailModal: false,
       emailNotif: [
         {
           email: 'joe@studykik.com',
@@ -72,9 +74,40 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     });
   }
 
+  addEmailNotificationClick = (custom = false) => {
+    this.setState({ addEmailModalShow: true, customAddEmailModal: custom });
+  }
+
+  closeAddEmailModal = (custom = false) => {
+    this.setState({ addEmailModalShow: false, customAddEmailModal: custom });
+  }
+
+  addEmailNotificationSubmit = (values) => {
+    const { addEmailNotificationUser, addCustomEmailNotification, studyInfo } = this.props;
+    const { customAddEmailModal } = this.state;
+    if (!customAddEmailModal) {
+      addEmailNotificationUser({
+        ...values,
+        clientId: studyInfo.details.client_id,
+        clientRole: {
+          siteId: studyInfo.details.site_id,
+        },
+      });
+    } else {
+      addCustomEmailNotification({
+        ...values,
+        type: 'inactive',
+        clientId: studyInfo.details.client_id,
+        studyId: studyInfo.details.study_id,
+      });
+    }
+
+    this.closeAddEmailModal();
+  }
+
   render() {
-    const { userEmailNotif, emailNotif } = this.state;
-    const { change, indications, sponsors, protocols, cro, siteLocations, usersByRoles, messagingNumbers } = this.props;
+    const { emailNotif } = this.state;
+    const { change, indications, sponsors, protocols, cro, siteLocations, usersByRoles, messagingNumbers, formValues } = this.props;
 
     const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
     const sponsorsOptions = sponsors.map(item => ({ value: item.id, label: item.name }));
@@ -335,39 +368,27 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
         <div className="section">
           <div className="smallSection">
             <h3>USER EMAIL NOTIFICATION</h3>
-            <ul>
-              <div className="field-row">
-                <strong className="label"><label>USER EMAIL NOTIFICATIONS</label></strong>
-                <div className="field">
-                  <div className="emails-list-holder">
-                    {<FieldArray
-                      name="emailNotifications"
-                      component={RenderEmailsList}
-                      change={change}
-                      formValues={formValues}
-                      addEmailNotificationClick={addEmailNotificationClick}
-                    />}
-                  </div>
-                </div>
-              </div>
-            </ul>
-            <Button bsStyle="primary" type="submit">Add</Button>
+            <div>
+              {<FieldArray
+                name="emailNotifications"
+                component={RenderEmailsList}
+                change={change}
+                formValues={formValues}
+                addEmailNotificationClick={this.addEmailNotificationClick}
+              />}
+            </div>
           </div>
           <div className="smallSection">
             <h4>EMAIL NOTIFICATION</h4>
-            <ul>
-              {
-                emailNotif.map((e, i) => {
-                  return (
-                    <li key={i} className="hasCheckbox">
-                      <Checkbox name="emailNotif" input={{ checked: e.checked, onChange: (v) => this.onCheckboxClick('emailNotif', i, v) }} />
-                      {e.email}
-                    </li>
-                  );
-                })
-              }
-            </ul>
-            <Button bsStyle="primary" type="submit">Add</Button>
+            <div>
+              {<FieldArray
+                name="customEmailNotifications"
+                component={RenderCustomEmailsList}
+                change={change}
+                formValues={formValues}
+                addEmailNotificationClick={this.addEmailNotificationClick}
+              />}
+            </div>
           </div>
         </div>
         <ul className="section">
@@ -440,14 +461,58 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
               />
             </div>
           </div></li>
-          <li>FACEBOOK URL: </li>
-          <li>CNS CODE: </li>
+          <li><div className="field-row">
+            <strong className="label required">
+              <label htmlFor="new-patient-first-name">FACEBOOK URL:</label>
+            </strong>
+            <div className="field">
+              <Field
+                type="text"
+                id="edit-information-page-name"
+                name="facebookUrl"
+                component={Input}
+              />
+            </div>
+          </div></li>
+          <li><div className="field-row">
+            <strong className="label required">
+              <label htmlFor="new-patient-first-name">CNS CODE:</label>
+            </strong>
+            <div className="field">
+              <Field
+                type="text"
+                id="edit-information-page-name"
+                name="cnsCode"
+                component={Input}
+              />
+            </div>
+          </div></li>
         </ul>
         <div className="btn-block text-right">
           <button type="submit" className="btn btn-default btn-add-row">
             <span>Update</span>
           </button>
         </div>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.state.addEmailModalShow}
+          onHide={this.closeAddEmailModal}
+          backdrop
+          keyboard
+        >
+          <Modal.Header>
+            <Modal.Title>ADD EMAIL NOTIFICATION</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeAddEmailModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <AddEmailNotificationForm
+              onSubmit={this.addEmailNotificationSubmit}
+              custom={this.state.customAddEmailModal}
+            />
+          </Modal.Body>
+        </Modal>
       </form>
     );
   }
@@ -456,6 +521,8 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
 function mapDispatchToProps(dispatch) {
   return {
     change: (field, value) => dispatch(change(formName, field, value)),
+    addEmailNotificationUser: (payload) => dispatch(addEmailNotificationUser(payload)),
+    addCustomEmailNotification: (payload) => dispatch(addCustomEmailNotification(payload)),
   };
 }
 
@@ -468,6 +535,7 @@ const mapStateToProps = createStructuredSelector({
   siteLocations: selectSiteLocations(),
   usersByRoles: selectUsersByRoles(),
   messagingNumbers: selectMessagingNumbers(),
+  formValues: selectValues(formName),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyInfoSection);

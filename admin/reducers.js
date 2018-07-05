@@ -7,6 +7,7 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
+import { default as editAdminStudyReducer } from './components/StudyInfoSection/reducer';
 import appReducer from './containers/App/reducer';
 
 /**
@@ -16,6 +17,7 @@ export default function createReducer(asyncReducers) {
   return combineReducers({
     routing: routerReducer,
     form: formReducer.plugin({
+      'Admin.EditStudyForm': editAdminStudyReducer,
     }),
     toastr: toastrReducer,
     global: appReducer,
