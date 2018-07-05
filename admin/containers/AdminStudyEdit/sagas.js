@@ -14,6 +14,9 @@ import {
   EDIT_PATIENT_THANK_YOU,
   UPDATE_THANK_YOU_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE,
+  UPDATE_LANDING_PAGE,
+  CHANGE_STUDY_AD,
+  REMOVE_STUDY_AD,
 } from './constants';
 
 import {
@@ -31,6 +34,12 @@ import {
   updatePatientThankYouEmailError,
   updateFacebookLandingPageError,
   updateFacebookLandingPageSuccess,
+  updateLandingPageError,
+  updateLandingPageSuccess,
+  removeStudyAdError,
+  removeStudyAdSuccess,
+  changeStudyAdError,
+  changeStudyAdSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -201,6 +210,85 @@ export function* updateFacebookLandingPageWorker(action) {
   }
 }
 
+export function* updateLandingPageWatcher() {
+  yield* takeLatest(UPDATE_LANDING_PAGE, updateLandingPageWorker);
+}
+
+export function* updateLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateLandingPageError(err));
+  }
+}
+
+export function* changeStudyAdWatcher() {
+  yield* takeLatest(CHANGE_STUDY_AD, changeStudyAdWorker);
+}
+
+export function* changeStudyAdWorker(action) {
+  const { payload } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/change-study-add`;
+    const data = new FormData();
+    data.append('file', payload.file);
+    data.append('study_id', payload.study_id);
+
+    const options = {
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
+    };
+
+    const response = yield call(request, requestURL, options);
+    toastr.success('', 'Success! Study ad has been updated.');
+    yield put(changeStudyAdSuccess(response));
+  } catch (err) {
+    toastr.error('', 'Error! Unable to read file. Please try a different one.');
+    yield put(changeStudyAdError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* removeStudyAdWatcher() {
+  yield* takeLatest(REMOVE_STUDY_AD, removeStudyAdWorker);
+}
+
+export function* removeStudyAdWorker(action) {
+  const { studyId } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/remove-study-add`;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ studyId }),
+    };
+
+    yield call(request, requestURL, options);
+    toastr.success('', 'Success! Study ad has been removed.');
+    yield put(removeStudyAdSuccess(studyId));
+  } catch (err) {
+    toastr.error('Error!');
+    yield put(removeStudyAdError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -209,6 +297,9 @@ export function* adminStudyEditSaga() {
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
   const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
+  const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
+  const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
+  const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
 
 
   yield take(LOCATION_CHANGE);
@@ -219,4 +310,7 @@ export function* adminStudyEditSaga() {
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
   yield cancel(updateFacebookLandingPageWatcher1);
+  yield cancel(updateLandingPageWatcher1);
+  yield cancel(changeStudyAdWatcher1);
+  yield cancel(removeStudyAdWatcher1);
 }

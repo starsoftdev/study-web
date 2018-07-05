@@ -28,10 +28,24 @@ export const EDIT_MEDIA_TYPES                     = 'AdminStudyEditPage/EDIT_MED
 export const EDIT_MEDIA_TYPES_ERROR               = 'AdminStudyEditPage/EDIT_MEDIA_TYPES_ERROR';
 export const EDIT_MEDIA_TYPES_SUCCESS             = 'AdminStudyEditPage/EDIT_MEDIA_TYPES_SUCCESS';
 
-export const UPDATE_FACEBOOK_LANDING_PAGE         = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE';
-export const UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS';
-export const UPDATE_FACEBOOK_LANDING_PAGE_ERROR   = 'DashboardPage/UPDATE_FACEBOOK_LANDING_PAGE_ERROR';
+export const UPDATE_FACEBOOK_LANDING_PAGE         = 'AdminStudyEditPage/UPDATE_FACEBOOK_LANDING_PAGE';
+export const UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS = 'AdminStudyEditPage/UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS';
+export const UPDATE_FACEBOOK_LANDING_PAGE_ERROR   = 'AdminStudyEditPage/UPDATE_FACEBOOK_LANDING_PAGE_ERROR';
 
-export const EDIT_PATIENT_THANK_YOU         = 'DashboardPage/EDIT_PATIENT_THANK_YOU';
-export const EDIT_PATIENT_THANK_YOU_SUCCESS = 'DashboardPage/EDIT_PATIENT_THANK_YOU_SUCCESS';
-export const EDIT_PATIENT_THANK_YOU_ERROR   = 'DashboardPage/EDIT_PATIENT_THANK_YOU_ERROR';
+export const EDIT_PATIENT_THANK_YOU               = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU';
+export const EDIT_PATIENT_THANK_YOU_SUCCESS       = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU_SUCCESS';
+export const EDIT_PATIENT_THANK_YOU_ERROR         = 'AdminStudyEditPage/EDIT_PATIENT_THANK_YOU_ERROR';
+
+export const UPDATE_LANDING_PAGE                  = 'AdminStudyEditPage/UPDATE_LANDING_PAGE';
+export const UPDATE_LANDING_PAGE_SUCCESS          = 'AdminStudyEditPage/UPDATE_LANDING_PAGE_SUCCESS';
+export const UPDATE_LANDING_PAGE_ERROR            = 'AdminStudyEditPage/UPDATE_LANDING_PAGE_ERROR';
+export const RESET_LANDING_PAGE_STATE             = 'AdminStudyEditPage/RESET_LANDING_PAGE_STATE';
+
+export const CHANGE_STUDY_AD                      = 'AdminStudyEditPage/CHANGE_STUDY_AD';
+export const CHANGE_STUDY_AD_SUCCESS              = 'AdminStudyEditPage/CHANGE_STUDY_AD_SUCCESS';
+export const CHANGE_STUDY_AD_ERROR                = 'AdminStudyEditPage/CHANGE_STUDY_AD_ERROR';
+export const RESET_CHANGE_STUDY_AD_STATE          = 'AdminStudyEditPage/RESET_CHANGE_STUDY_AD_STATE';
+
+export const REMOVE_STUDY_AD                      = 'AdminStudyEditPage/REMOVE_STUDY_AD';
+export const REMOVE_STUDY_AD_SUCCESS              = 'AdminStudyEditPage/REMOVE_STUDY_AD_SUCCESS';
+export const REMOVE_STUDY_AD_ERROR                = 'AdminStudyEditPage/REMOVE_STUDY_AD_ERROR';
