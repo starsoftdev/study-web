@@ -25,6 +25,17 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE,
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE,
+  UPDATE_LANDING_PAGE_SUCCESS,
+  UPDATE_LANDING_PAGE_ERROR,
+  RESET_LANDING_PAGE_STATE,
+  CHANGE_STUDY_AD,
+  CHANGE_STUDY_AD_SUCCESS,
+  CHANGE_STUDY_AD_ERROR,
+  RESET_CHANGE_STUDY_AD_STATE,
+  REMOVE_STUDY_AD,
+  REMOVE_STUDY_AD_SUCCESS,
+  REMOVE_STUDY_AD_ERROR,
 } from './constants';
 
 const initialState = {
@@ -62,6 +73,18 @@ const initialState = {
     saving: false,
     error: null,
   },
+  updateLandingPageProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  changeStudyAdProcess: {
+    success: false,
+    saving: false,
+    error: null,
+  },
+  updatedStudyAd: null,
+  removedStudyAdId: null,
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {
@@ -286,6 +309,99 @@ export default function adminStudyEditReducer(state = initialState, action) {
           success: false,
           saving: false,
           error: true,
+        },
+      };
+    case UPDATE_LANDING_PAGE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_SUCCESS:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_LANDING_PAGE_ERROR:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case RESET_LANDING_PAGE_STATE:
+      return {
+        ...state,
+        updateLandingPageProcess: {
+          success: false,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: true,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        updatedStudyAd: action.payload.imgSrc,
+        changeStudyAdProcess: {
+          success: true,
+          saving: false,
+          error: null,
+        },
+      };
+    case CHANGE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: false,
+          error: true,
+        },
+      };
+    case REMOVE_STUDY_AD:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case REMOVE_STUDY_AD_SUCCESS:
+      return {
+        ...state,
+        removedStudyAdId: action.studyId,
+        updatedStudyAd: null,
+      };
+    case REMOVE_STUDY_AD_ERROR:
+      return {
+        ...state,
+        removedStudyAdId: null,
+      };
+    case RESET_CHANGE_STUDY_AD_STATE:
+      return {
+        ...state,
+        updatedStudyAd: null,
+        removedStudyAdId: null,
+        changeStudyAdProcess: {
+          success: false,
+          saving: false,
+          error: null,
         },
       };
     default:

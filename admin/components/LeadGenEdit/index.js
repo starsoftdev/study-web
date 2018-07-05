@@ -55,8 +55,8 @@ export class LeadGenEdit extends Component { // eslint-disable-line react/prefer
   componentWillReceiveProps(newProps) {
     const { change } = this.props;
 
-    if (newProps.landing) {
-      const landing = newProps.landing;
+    if (newProps.landing && newProps.landing.details) {
+      const landing = newProps.landing.details;
 
       if (!this.state.initialValuesEntered) {
         this.setState({
@@ -69,10 +69,6 @@ export class LeadGenEdit extends Component { // eslint-disable-line react/prefer
           change('facebookPageInnerId', landing.facebookLandingForm ? landing.facebookLandingForm.facebookPage.id : null);
         });
       }
-    }
-
-    if ((this.props.updateFacebookLandingPageProcess.saving && !newProps.updateFacebookLandingPageProcess.saving) && newProps.updateFacebookLandingPageProcess.success) {
-      // ..
     }
   }
 
