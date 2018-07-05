@@ -8,19 +8,19 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
-import { readStudyPatientMessages, updatePatientSuccess } from '../actions';
+import { readStudyPatientMessages } from '../actions';
 import CallItem from '../../../components/GlobalPMSModal/CallItem';
 import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import { translate } from '../../../../common/utilities/localization';
 import * as Selector from '../selectors';
 
 import {
-  sendStudyPatientMessages,
+  sendPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
 } from '../../GlobalNotifications/actions';
 
-import { selectClientCredits, selectClientSites } from '../../App/selectors';
+import { selectClientSites } from '../../App/selectors';
 import PatientText from './PatientText';
 
 const formName = 'CallCenterPatientPage.Text';
@@ -33,16 +33,14 @@ class TextSection extends React.Component {
     active: React.PropTypes.bool.isRequired,
     currentPatient: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    clientCredits: React.PropTypes.object,
     fetchStudyPatientMessages: React.PropTypes.func.isRequired,
-    sendStudyPatientMessages: React.PropTypes.func.isRequired,
+    sendPatientMessages: React.PropTypes.func.isRequired,
     setProcessingStatus: React.PropTypes.func,
     socket: React.PropTypes.any,
     studyId: React.PropTypes.any,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
-    updatePatientSuccess: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
@@ -54,6 +52,8 @@ class TextSection extends React.Component {
     this.renderTextArea = this.renderTextArea.bind(this);
     this.submitText = this.submitText.bind(this);
     this.textAreaChange = this.textAreaChange.bind(this);
+    this.initMessages = this.initMessages.bind(this);
+    this.initSocket = this.initSocket.bind(this);
     this.initStudyPatientMessagesFetch = this.initStudyPatientMessagesFetch.bind(this);
 
     this.state = {
@@ -65,17 +65,29 @@ class TextSection extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.initMessages(this.props);
+    this.initSocket();
+  }
+
   componentWillReceiveProps(newProps) {
     if (!newProps.currentPatient) {
       this.textarea.value = '';
     }
 
-    if (newProps.active && newProps.currentPatient) {
-      this.setState({ twilioMessages: [], patientToFetchMessages: newProps.currentPatient.id }, () => {
-        this.initStudyPatientMessagesFetch(newProps);
+    this.initMessages(newProps);
+    this.initSocket();
+  }
+
+  initMessages(props) {
+    if (props.active && props.currentPatient) {
+      this.setState({ twilioMessages: [], patientToFetchMessages: props.currentPatient.id }, () => {
+        this.initStudyPatientMessagesFetch(props);
       });
     }
+  }
 
+  initSocket() {
     if (this.props.socket && this.state.socketBinded === false) {
       this.props.socket.on('notifyMessage', (newMessage) => {
         if (this.props.active && newMessage && this.props.currentPatient) {
@@ -84,9 +96,6 @@ class TextSection extends React.Component {
           });
           this.props.readStudyPatientMessages(this.props.currentPatient.id);
           this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
-          this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
-            unreadMessageCount: 0,
-          });
         }
       });
       this.setState({ socketBinded: true });
@@ -134,34 +143,21 @@ class TextSection extends React.Component {
   }
 
   submitText() {
-    const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
-    if (clientCredits === 0 || clientCredits === null) {
-      toastr.error('', translate('client.component.textSection.toastrCreditsError'));
-      return;
-    }
+    const { currentUser, currentPatient, sendPatientMessages, studyId } = this.props;
     const textarea = this.textarea;
     const options = {
       studyId,
       currentUserId: currentUser.id,
+      isCallCenter: true,
       isProxy: currentUser.isProxy,
       patientId: currentPatient.id,
       body: textarea.value,
       to: currentPatient.phone,
     };
-    this.props.sendStudyPatientMessages(options, (err, data) => {
-      if (!err) {
-        this.props.updatePatientSuccess(currentPatient.id, currentPatientCategory.id, {
-          lastTextMessage: { body: data.body, dateCreated: data.dateCreated },
-          updatedAt: data.dateCreated,
-        });
-        this.setState({ enteredCharactersLength: 0 }, () => {
-          textarea.value = '';
-        });
-      } else {
-        const errorMessage = err.errorMessage || err.message;
-        toastr.error('', errorMessage);
-      }
+
+    sendPatientMessages(options);
+    this.setState({ enteredCharactersLength: 0 }, () => {
+      textarea.value = '';
     });
   }
 
@@ -246,19 +242,17 @@ class TextSection extends React.Component {
 
   render() {
     const { currentPatient, active, ePMS } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null);
     const notValidPhone = !currentPatient.phone;
-    const sendDisabled = disabled || !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
+    const sendDisabled = !ePMS || unsubscribed || notValidPhone || (this.textarea && this.textarea.value === '');
     this.scrollElement();
 
     return (
       <div className={classNames('item text', { active })}>
         {this.renderText()}
         <div className="textarea">
-          {this.renderTextArea(disabled || unsubscribed || !ePMS)}
+          {this.renderTextArea(unsubscribed || !ePMS)}
         </div>
         <div className="btns-section">
           <span className="remaining-counter">
@@ -280,19 +274,17 @@ class TextSection extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  clientCredits: selectClientCredits(),
   currentPatientCategory: Selector.selectCurrentPatientCategory(),
   site: selectClientSites(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  sendStudyPatientMessages: (payload, cb) => dispatch(sendStudyPatientMessages(payload, cb)),
+  sendPatientMessages: (payload) => dispatch(sendPatientMessages(payload)),
   fetchStudyPatientMessages: (payload) => dispatch(fetchStudyPatientMessages(payload)),
   setProcessingStatus: (payload) => dispatch(setProcessingStatus(payload)),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
-  updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TextSection);

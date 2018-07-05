@@ -5,7 +5,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import { Field, reduxForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -18,7 +18,6 @@ import { fetchPatients, fetchSchedules } from './actions';
 import { selectFetchedPatients, selectSchedules } from './selectors';
 
 import CenteredModal from '../../components/CenteredModal';
-import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
 import FiltersForm from './FiltersForm/';
 
@@ -91,14 +90,6 @@ class CallCenterHomePage extends Component {
                 </div>
               </Modal.Body>
             </Modal>
-            <Field
-              name="ccUser"
-              component={ReactSelect}
-              placeholder={translate('common.layout.placeholder.selectuser')}
-              options={siteOptions}
-              disabled={false}
-              className="field"
-            />
             <div className="field">
               <Button className="btn-enter" type="submit">
                 <i className="icomoon-icon_search2" />

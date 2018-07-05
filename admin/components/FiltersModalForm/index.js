@@ -6,10 +6,9 @@ import { Field, reduxForm } from 'redux-form';
 
 import ReactMultiCheckBox from '../Input/ReactMultiCheckbox';
 import formValidator from './validator';
+import { selectIndications, selectProtocols, selectSponsors, selectCro, selectUsersByRoles } from '../../containers/App/selectors';
 
 const formName = 'adminDashboardFilters';
-const mapStateToProps = createStructuredSelector({
-});
 
 const filterOptions = {
   statusOptions : [
@@ -61,23 +60,20 @@ const filterOptions = {
       value: '4',
     },
   ],
-  indicationsOptions : [],
-  sponsorsOptions : [],
-  protocolsOptions : [],
-  croOptions : [],
-  adOptions : [],
-  smOptions : [],
-  bdOptions : [],
 };
 
 @reduxForm({ form: formName, validate: formValidator, destroyOnUnmount: false })
-@connect(mapStateToProps)
 
 class FiltersModalForm extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     initialValues: PropTypes.object || PropTypes.arrayOf(PropTypes.object),
     updateFilters: PropTypes.func,
     handleSubmit: PropTypes.func,
+    indications: PropTypes.array,
+    protocols: PropTypes.object,
+    sponsors: PropTypes.object,
+    cro: PropTypes.object,
+    usersByRoles: PropTypes.object,
   };
 
   initSearch(value, key) {
@@ -85,9 +81,31 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { handleSubmit, initialValues } = this.props;
+    const { handleSubmit, initialValues, indications, protocols, sponsors, cro, usersByRoles } = this.props;
 
     const colorOptions = _.orderBy(filterOptions.colorOptions, 'label');
+
+    let indicationsOptions = indications.map((item, key) => ({ id: (key + 1), value: item.id, label: item.name }));
+    indicationsOptions = _.orderBy(indicationsOptions, 'label');
+
+    let protocolsOptions = protocols.details.map((item, key) => ({ id: (key + 1), value: item.id, label: item.number }));
+    protocolsOptions = _.orderBy(protocolsOptions, 'label');
+    protocolsOptions = [{ id: (protocolsOptions.length + 1), label: 'None', value: 'none' }].concat(protocolsOptions);
+
+    let sponsorsOptions = sponsors.details.map((item, key) => ({ id: (key + 1), value: item.id, label: item.name }));
+    sponsorsOptions = _.orderBy(sponsorsOptions, 'label');
+
+    let croOptions = cro.details.map((item, key) => ({ id: (key + 1), value: item.id, label: item.name }));
+    croOptions = _.orderBy(croOptions, 'label');
+
+    let ccOptions = usersByRoles.cc.map((item, key) => ({ id: (key + 1), value: item.id, label: `${item.first_name} ${item.last_name}` }));
+    ccOptions = _.orderBy(ccOptions, 'label');
+
+    let bdOptions = usersByRoles.bd.map((item, key) => ({ id: (key + 1), value: item.id, label: `${item.first_name} ${item.last_name}` }));
+    bdOptions = _.orderBy(bdOptions, 'label');
+
+    let aoOptions = usersByRoles.ae.map((item, key) => ({ id: (key + 1), value: item.id, label: `${item.first_name} ${item.last_name}` }));
+    aoOptions = _.orderBy(aoOptions, 'label');
 
     return (
       <form className="form-filters" onSubmit={handleSubmit}>
@@ -152,7 +170,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'indication')}
-              dataSource={filterOptions.indicationsOptions}
+              dataSource={indicationsOptions}
               initialValue={initialValues.indication}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -170,7 +188,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'protocol')}
-              dataSource={filterOptions.protocolsOptions}
+              dataSource={protocolsOptions}
               initialValue={initialValues.protocol}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -188,7 +206,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'sponsor')}
-              dataSource={filterOptions.sponsorsOptions}
+              dataSource={sponsorsOptions}
               initialValue={initialValues.sponsor}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -206,7 +224,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'cro')}
-              dataSource={filterOptions.croOptions}
+              dataSource={croOptions}
               initialValue={initialValues.cro}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -214,7 +232,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
 
           <div className="field-row">
             <Field
-              name="ad"
+              name="ao"
               className="filter-field"
               component={ReactMultiCheckBox}
               placeholder="AD OPERATION"
@@ -223,8 +241,8 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               searchable
               includeAllOption
               onChange={(e) => this.initSearch(e, 'ao')}
-              dataSource={filterOptions.adOptions}
-              initialValue={initialValues.ad}
+              dataSource={aoOptions}
+              initialValue={initialValues.ao}
               customSearchIconClass="icomoon-icon_search2"
             />
           </div>
@@ -240,7 +258,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               searchable
               includeAllOption
               onChange={(e) => this.initSearch(e, 'bd')}
-              dataSource={filterOptions.bdOptions}
+              dataSource={bdOptions}
               initialValue={initialValues.bd}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -258,7 +276,7 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
               multiple
               includeAllOption
               onChange={(e) => this.initSearch(e, 'cc')}
-              dataSource={filterOptions.smOptions}
+              dataSource={ccOptions}
               initialValue={initialValues.cc}
               customSearchIconClass="icomoon-icon_search2"
             />
@@ -269,4 +287,12 @@ class FiltersModalForm extends Component { // eslint-disable-line react/prefer-s
   }
 }
 
-export default FiltersModalForm;
+const mapStateToProps = createStructuredSelector({
+  indications: selectIndications(),
+  protocols: selectProtocols(),
+  sponsors: selectSponsors(),
+  cro: selectCro(),
+  usersByRoles: selectUsersByRoles(),
+});
+
+export default connect(mapStateToProps, null)(FiltersModalForm);

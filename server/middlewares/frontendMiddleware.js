@@ -42,6 +42,7 @@ const logView = (req) => {
           cookie: req.headers.cookie,
           method: req.method,
           ip: req.connection.remoteAddress,
+          rejectUnauthorized: process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test',
         },
         rejectUnauthorized: (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test'),
       };
@@ -172,6 +173,16 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
+  app.get('/app/vendor*', (req, res) => {
+    fs.readFile(path.join(compiler.outputPath, 'vendor.html'), (err, file) => {
+      if (err) {
+        res.sendStatus(404);
+      } else {
+        res.send(file.toString());
+      }
+    });
+  });
+
   app.get('/app*', (req, res) => {
     fs.readFile(path.join(compiler.outputPath, 'app.html'), (err, file) => {
       if (err) {
@@ -249,6 +260,8 @@ const addProdMiddlewares = (app, options) => {
 
   const serverPublicPath = options.serverPublicPath || path.resolve(process.cwd(), 'public');
   app.use('/images', express.static(serverPublicPath));
+
+  app.get('/app/vendor*', (req, res) => res.sendFile(path.resolve(outputPath, 'vendor.html')));
 
   app.get('/app*', (req, res) => res.sendFile(path.resolve(outputPath, 'app.html')));
 

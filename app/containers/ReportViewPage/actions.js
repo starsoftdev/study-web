@@ -24,6 +24,9 @@ import {
   FETCH_DISPOSITION_TOTALS,
   FETCH_DISPOSITION_TOTALS_SUCCESS,
   FETCH_DISPOSITION_TOTALS_ERROR,
+  FETCH_MEDIA_SOURCES,
+  FETCH_MEDIA_SOURCES_SUCCESS,
+  FETCH_MEDIA_SOURCES_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
@@ -171,6 +174,30 @@ export function getDispositionTotalsSuccess(payload) {
 export function getDispositionTotalsError(payload) {
   return {
     type: FETCH_DISPOSITION_TOTALS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// media sources
+// ///////////////////////////////////////////
+export function fetchMediaSources(searchParams) {
+  return {
+    type: FETCH_MEDIA_SOURCES,
+    searchParams,
+  };
+}
+
+export function mediaSourcesFetched(payload) {
+  return {
+    type: FETCH_MEDIA_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function mediaSourcesFetchingError(payload) {
+  return {
+    type: FETCH_MEDIA_SOURCES_ERROR,
     payload,
   };
 }

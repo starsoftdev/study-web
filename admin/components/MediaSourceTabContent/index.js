@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class MediaSourceTabContent extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class MediaSourceTabContent extends Component { // eslint-disable-line react/prefer-stateless-function
 
   render() {
     return (

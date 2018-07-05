@@ -1,3 +1,4 @@
+import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { get } from 'lodash';
@@ -7,6 +8,7 @@ import request from '../../utils/request';
 import { getItem, removeItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 
+import { SEND_PATIENT_MESSAGES } from '../GlobalNotifications/constants';
 import {
   FETCH_CALL_CENTER_PATIENT_CATEGORIES,
   FETCH_PATIENT,
@@ -29,6 +31,10 @@ import {
   patientDispositionSubmitted,
   patientDispositionSubmissionError,
 } from './actions';
+
+import {
+  sendPatientMessagesSuccess,
+} from '../GlobalNotifications/actions';
 
 export function* fetchPatientWatcher() {
   while (true) {
@@ -205,6 +211,7 @@ function* submitEmail() {
           userId: currentUser.id,
           message,
           subject,
+          isCallCenter: true,
         }),
       });
       yield put(submitEmailSuccess(response));
@@ -314,6 +321,32 @@ function* submitPatientDisposition() {
   }
 }
 
+function* sendPatientMessagesWatcher() {
+  yield* takeLatest(SEND_PATIENT_MESSAGES, sendPatientMessagesWorker);
+}
+
+function* sendPatientMessagesWorker(action) {
+  try {
+    const { patientId } = action.payload;
+    if (patientId && patientId > 0) {
+      const requestURL = `${API_URL}/twilioTextMessages/saveTwilioTextMessages`;
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(action.payload),
+      };
+      const response = yield call(request, requestURL, options);
+
+      yield put(sendPatientMessagesSuccess(response));
+    }
+  } catch (err) {
+    toastr.error('', err.message);
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* callCenterPatientPageSaga() {
   try {
     const watcherA = yield fork(fetchPatientWatcher);
@@ -323,6 +356,7 @@ export function* callCenterPatientPageSaga() {
     const watcherE = yield fork(fetchCallCenterPatientCategoriesWatcher);
     const watcherF = yield fork(submitPatientUpdate);
     const watcherG = yield fork(submitPatientDisposition);
+    const watcherH = yield fork(sendPatientMessagesWatcher);
 
     yield take(LOCATION_CHANGE);
 
@@ -333,6 +367,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
+    yield cancel(watcherH);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

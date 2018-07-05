@@ -24,8 +24,8 @@ import PatientNote from './PatientNote';
 import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, getDispositionTotals } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectDispositionTotals } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, fetchMediaSources, getDispositionTotals } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectMediaSources, selectDispositionTotals } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
 
 const dispositions = [
@@ -61,6 +61,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     currentUser: PropTypes.object,
     changeProtocolStatus: PropTypes.func,
     getReportsTotals: PropTypes.func,
+    fetchMediaSources: PropTypes.func,
     totals: PropTypes.object,
     getCategoryNotes: PropTypes.func,
     categoryNotes: PropTypes.object,
@@ -71,6 +72,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     sources: PropTypes.array,
     dispositionTotals: PropTypes.object,
     getDispositionTotals: PropTypes.func,
+    mediaSources: PropTypes.object,
   };
 
   constructor(props) {
@@ -108,6 +110,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList(filters);
     this.props.getReportsTotals(filters);
+    this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
     this.props.fetchSources();
   }
@@ -270,6 +273,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           sources={this.props.sources}
           dispositions={dispositions}
           dispositionTotals={this.props.dispositionTotals}
+          mediaSources={this.props.mediaSources}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
@@ -332,6 +336,7 @@ const mapStateToProps = createStructuredSelector({
   notesPaginationOptions: selectNotesPaginationOptions(),
   sources: selectSources(),
   dispositionTotals: selectDispositionTotals(),
+  mediaSources: selectMediaSources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -342,6 +347,7 @@ function mapDispatchToProps(dispatch) {
     changeProtocolStatus: (payload) => dispatch(changeProtocolStatus(payload)),
     getReportsTotals: searchParams => dispatch(getReportsTotals(searchParams)),
     getCategoryNotes: (searchParams, category, studyId, limit, offset) => dispatch(getCategoryNotes(searchParams, category, studyId, limit, offset)),
+    fetchMediaSources: (searchParams) => dispatch(fetchMediaSources(searchParams)),
     fetchSources: () => dispatch(fetchSources()),
     getDispositionTotals: searchParams => dispatch(getDispositionTotals(searchParams)),
     clearReportList: () => dispatch(clearReportList()),

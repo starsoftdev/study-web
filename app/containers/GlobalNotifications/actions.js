@@ -20,6 +20,8 @@ import {
   RECEIVE_NOTIFICATION,
   FETCH_STUDY_PATIENT_MESSAGES,
   SEND_STUDY_PATIENT_MESSAGES,
+  SEND_PATIENT_MESSAGES,
+  SEND_PATIENT_MESSAGES_SUCCESS,
   SET_PROCESSING_STATUS,
   MARK_NOTIFICATIONS_READ,
   SUBSCRIBE_TO_UPLOAD_PROGRESS_SOCKET,
@@ -72,11 +74,28 @@ export function fetchStudyPatientMessages(payload) {
   };
 }
 
+/* TODO remove this action eventually, since it is a legacy action using socket.io, which we are moving away from for
+   sending text messages
+*/
 export function sendStudyPatientMessages(payload, cb) {
   return {
     type: SEND_STUDY_PATIENT_MESSAGES,
     payload,
     cb,
+  };
+}
+
+export function sendPatientMessages(payload) {
+  return {
+    type: SEND_PATIENT_MESSAGES,
+    payload,
+  };
+}
+
+export function sendPatientMessagesSuccess(payload) {
+  return {
+    type: SEND_PATIENT_MESSAGES_SUCCESS,
+    payload,
   };
 }
 
