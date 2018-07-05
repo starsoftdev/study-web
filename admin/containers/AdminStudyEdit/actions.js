@@ -21,13 +21,6 @@ import {
   EDIT_PATIENT_THANK_YOU_SUCCESS,
   EDIT_PATIENT_THANK_YOU_ERROR,
 
-  DELETE_MEDIA_TYPE,
-  DELETE_MEDIA_TYPE_SUCCESS,
-
-  EDIT_MEDIA_TYPES,
-  EDIT_MEDIA_TYPES_ERROR,
-  EDIT_MEDIA_TYPES_SUCCESS,
-
   UPDATE_THANK_YOU_PAGE,
   UPDATE_THANK_YOU_PAGE_SUCCESS,
   UPDATE_THANK_YOU_PAGE_ERROR,
@@ -41,6 +34,17 @@ import {
   UPDATE_FACEBOOK_LANDING_PAGE_ERROR,
   UPDATE_FACEBOOK_LANDING_PAGE_SUCCESS,
 
+  FETCH_STUDY_MEDIA_TYPES,
+  FETCH_STUDY_MEDIA_TYPES_ERROR,
+  FETCH_STUDY_MEDIA_TYPES_SUCCESS,
+
+  EDIT_STUDY_MEDIA_TYPES,
+  EDIT_STUDY_MEDIA_TYPES_ERROR,
+  EDIT_STUDY_MEDIA_TYPES_SUCCESS,
+
+  DELETE_STUDY_MEDIA_TYPE,
+  DELETE_STUDY_MEDIA_TYPE_SUCCESS,
+
   UPDATE_LANDING_PAGE,
   UPDATE_LANDING_PAGE_SUCCESS,
   UPDATE_LANDING_PAGE_ERROR,
@@ -50,6 +54,7 @@ import {
   CHANGE_STUDY_AD_SUCCESS,
   CHANGE_STUDY_AD_ERROR,
   RESET_CHANGE_STUDY_AD_STATE,
+
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
@@ -161,45 +166,65 @@ export function updatePatientThankYouEmailError(payload) {
   };
 }
 
-export function deleteMediaType(studyId, studySourceId, index) {
+export function fetchStudyMediaTypes(studyId) {
   return {
-    type: DELETE_MEDIA_TYPE,
+    type: FETCH_STUDY_MEDIA_TYPES,
+    studyId,
+  };
+}
+
+export function fetchStudyMediaTypesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudyMediaTypesError(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+
+export function editStudyMediaTypes(studyId, mediaTypes, mediaTracking) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES,
+    studyId,
+    mediaTypes,
+    mediaTracking,
+  };
+}
+
+export function editStudyMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES_SUCCESS,
+    mediaTypes,
+    studyId,
+    mediaTracking,
+  };
+}
+
+export function editStudyMediaTypesError(payload) {
+  return {
+    type: EDIT_STUDY_MEDIA_TYPES_ERROR,
+    payload,
+  };
+}
+
+export function deleteStudyMediaType(studyId, studySourceId, index) {
+  return {
+    type: DELETE_STUDY_MEDIA_TYPE,
     studyId,
     studySourceId,
     index,
   };
 }
 
-export function deleteMediaTypeSuccess(index) {
+export function deleteStudyMediaTypeSuccess(index) {
   return {
-    type: DELETE_MEDIA_TYPE_SUCCESS,
+    type: DELETE_STUDY_MEDIA_TYPE_SUCCESS,
     index,
-  };
-}
-
-
-export function editMediaTypes(studyId, mediaTypes, mediaTracking) {
-  return {
-    type: EDIT_MEDIA_TYPES,
-    studyId,
-    mediaTypes,
-    mediaTracking,
-  };
-}
-
-export function editMediaTypesSuccess(mediaTypes, studyId, mediaTracking) {
-  return {
-    type: EDIT_MEDIA_TYPES_SUCCESS,
-    mediaTypes,
-    studyId,
-    mediaTracking,
-  };
-}
-
-export function editMediaTypesError(payload) {
-  return {
-    type: EDIT_MEDIA_TYPES_ERROR,
-    payload,
   };
 }
 
