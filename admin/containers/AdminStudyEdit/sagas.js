@@ -10,8 +10,16 @@ import {
   FETCH_NOTE,
   ADD_NOTE,
   DELETE_NOTE,
-  UPDATE_THANK_YOU_PAGE,
   FETCH_LANDING,
+  EDIT_PATIENT_THANK_YOU,
+  UPDATE_THANK_YOU_PAGE,
+  UPDATE_FACEBOOK_LANDING_PAGE,
+  FETCH_STUDY_MEDIA_TYPES,
+  DELETE_STUDY_MEDIA_TYPE,
+  EDIT_STUDY_MEDIA_TYPES,
+  UPDATE_LANDING_PAGE,
+  CHANGE_STUDY_AD,
+  REMOVE_STUDY_AD,
 } from './constants';
 
 import {
@@ -25,6 +33,21 @@ import {
   updateThankYouPageError,
   landingFetched,
   fetchLandingError,
+  updatePatientThankYouEmailSuccess,
+  updatePatientThankYouEmailError,
+  updateFacebookLandingPageError,
+  updateFacebookLandingPageSuccess,
+  fetchStudyMediaTypesError,
+  fetchStudyMediaTypesSuccess,
+  deleteStudyMediaTypeSuccess,
+  editStudyMediaTypesSuccess,
+  editStudyMediaTypesError,
+  updateLandingPageError,
+  updateLandingPageSuccess,
+  removeStudyAdError,
+  removeStudyAdSuccess,
+  changeStudyAdError,
+  changeStudyAdSuccess,
 } from './actions';
 
 // Bootstrap sagas
@@ -109,6 +132,27 @@ export function* deleteNoteWorker(action) {
   }
 }
 
+export function* updatePatientThankYouEmailWatcher() {
+  yield* takeLatest(EDIT_PATIENT_THANK_YOU, updatePatientThankYouEmailWorker);
+}
+
+export function* updatePatientThankYouEmailWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/thankYouPages/updatePatientThankYouEmail`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updatePatientThankYouEmailSuccess(response));
+  } catch (err) {
+    yield put(updatePatientThankYouEmailError(err));
+  }
+}
+
 export function* updateThankYouPageWatcher() {
   yield* takeLatest(UPDATE_THANK_YOU_PAGE, updateThankYouPageWorker);
 }
@@ -153,18 +197,226 @@ export function* fetchLandingForAdminWorker(action) {
   }
 }
 
+export function* updateFacebookLandingPageWatcher() {
+  yield* takeLatest(UPDATE_FACEBOOK_LANDING_PAGE, updateFacebookLandingPageWorker);
+}
+
+export function* updateFacebookLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateFacebookLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateFacebookLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateFacebookLandingPageError(err));
+  }
+}
+
+export function* fetchStudyMediaTypes() {
+  while (true) {
+    const { studyId } = yield take(FETCH_STUDY_MEDIA_TYPES);
+    try {
+      const options = {
+        method: 'GET',
+      };
+
+      const requestURL = `${API_URL}/studies/${studyId}/studyMediaTypes`;
+      const response = yield call(request, requestURL, options);
+
+      yield put(fetchStudyMediaTypesSuccess(response));
+    } catch (err) {
+      yield put(fetchStudyMediaTypesError(err));
+    }
+  }
+}
+
+export function* deleteStudyMediaType() {
+  yield* takeLatest(DELETE_STUDY_MEDIA_TYPE, deleteStudyMediaTypeWorker);
+}
+
+export function* deleteStudyMediaTypeWorker(action) {
+  try {
+    if (action.studySourceId) {
+      const requestURL = `${API_URL}/studies/${action.studyId}/canDeleteSource/${action.studySourceId}`;
+      const response = yield call(request, requestURL);
+      if (response.canDelete) {
+        yield put(deleteStudyMediaTypeSuccess(action.index));
+      } else {
+        toastr.error('', 'Error! There is patient data for a deleted media type in the study.');
+      }
+    } else {
+      // if there is no study source id, this means that there is no studySource created on the server either, so we
+      // can just remove this straightaway from the client side
+      yield put(deleteStudyMediaTypeSuccess(action.index));
+    }
+  } catch (err) {
+    // give a redux toastr message in case there's an error
+    const errorMessage = get(err, 'message', 'Something went wrong when validating the delete for media type.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* editStudyMediaTypesWatcher() {
+  yield* takeLatest(EDIT_STUDY_MEDIA_TYPES, editStudyMediaTypesWorker);
+}
+
+export function* editStudyMediaTypesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.studyId}/editMediaTypes`;
+    const params = {
+      method: 'POST',
+      body: JSON.stringify({
+        mediaTypes: action.mediaTypes,
+        mediaTracking: action.mediaTracking,
+      }),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(editStudyMediaTypesSuccess(action.mediaTypes, action.studyId, action.mediaTracking));
+      toastr.success('', 'The request has been submitted successfully.');
+      // fetch the media types to get the new study source ids (if any were created)
+      if (action.mediaTypes.length > 0) {
+        let created = false;
+        for (const mediaType of action.mediaTypes) {
+          if (!mediaType.studySourceId) {
+            // this media type doesn't have a studySourceId, so it is brand new, and needs an API call to get the study source id
+            created = true;
+            break;
+          }
+        }
+        if (created) {
+          yield put(fetchStudyMediaTypes(action.studyId));
+        }
+      }
+    } else {
+      yield put(editStudyMediaTypesError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(editStudyMediaTypesError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+
+export function* updateLandingPageWatcher() {
+  yield* takeLatest(UPDATE_LANDING_PAGE, updateLandingPageWorker);
+}
+
+export function* updateLandingPageWorker(action) {
+  const { params } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/updateLandingPage`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(updateLandingPageSuccess(response));
+  } catch (err) {
+    yield put(updateLandingPageError(err));
+  }
+}
+
+export function* changeStudyAdWatcher() {
+  yield* takeLatest(CHANGE_STUDY_AD, changeStudyAdWorker);
+}
+
+export function* changeStudyAdWorker(action) {
+  const { payload } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/change-study-add`;
+    const data = new FormData();
+    data.append('file', payload.file);
+    data.append('study_id', payload.study_id);
+
+    const options = {
+      method: 'POST',
+      body: data,
+      useDefaultContentType: true,
+    };
+
+    const response = yield call(request, requestURL, options);
+    toastr.success('', 'Success! Study ad has been updated.');
+    yield put(changeStudyAdSuccess(response));
+  } catch (err) {
+    toastr.error('', 'Error! Unable to read file. Please try a different one.');
+    yield put(changeStudyAdError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* removeStudyAdWatcher() {
+  yield* takeLatest(REMOVE_STUDY_AD, removeStudyAdWorker);
+}
+
+export function* removeStudyAdWorker(action) {
+  const { studyId } = action;
+
+  try {
+    const requestURL = `${API_URL}/landingPages/remove-study-add`;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ studyId }),
+    };
+
+    yield call(request, requestURL, options);
+    toastr.success('', 'Success! Study ad has been removed.');
+    yield put(removeStudyAdSuccess(studyId));
+  } catch (err) {
+    toastr.error('Error!');
+    yield put(removeStudyAdError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
   const deleteNoteWatcher1 = yield fork(deleteNoteWatcher);
+  const updatePatientThankYouEmailWatcher1 = yield fork(updatePatientThankYouEmailWatcher);
   const updateThankYouPageWatcher1 = yield fork(updateThankYouPageWatcher);
   const fetchLandingForAdminWatcher1 = yield fork(fetchLandingForAdminWatcher);
+  const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
+  const deleteStudyMediaTypeWatcher1 = yield fork(deleteStudyMediaType);
+  const editStudyMediaTypesWatcher1 = yield fork(editStudyMediaTypesWatcher);
+  yield fork(fetchStudyMediaTypes);
+  const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
+  const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
+  const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
 
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
   yield cancel(addNoteWatcher1);
   yield cancel(deleteNoteWatcher1);
+  yield cancel(updatePatientThankYouEmailWatcher1);
   yield cancel(updateThankYouPageWatcher1);
   yield cancel(fetchLandingForAdminWatcher1);
+  yield cancel(updateFacebookLandingPageWatcher1);
+  yield cancel(deleteStudyMediaTypeWatcher1);
+  yield cancel(editStudyMediaTypesWatcher1);
+  yield cancel(updateLandingPageWatcher1);
+  yield cancel(changeStudyAdWatcher1);
+  yield cancel(removeStudyAdWatcher1);
 }
