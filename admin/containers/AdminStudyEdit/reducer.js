@@ -29,6 +29,12 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
   FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
 } from './constants';
 
 import {
@@ -81,6 +87,16 @@ const initialState = {
   siteLocations: [],
   usersByRoles: {},
   messagingNumbers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  allClientUsers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  allCustomNotificationEmails: {
     details: [],
     fetching: false,
     error: null,
@@ -363,6 +379,60 @@ export default function adminStudyEditReducer(state = initialState, action) {
       return {
         ...state,
         messagingNumbers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: state.allClientUsers.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: action.payload.map(e => (e.isChecked ? e : state.allClientUsers.details.find((el) => (el.user_id === e.user_id && el.isChecked)) || e)),
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR:
+      return {
+        ...state,
+        allClientUsers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
           details: [],
           fetching: false,
           error: action.payload,
