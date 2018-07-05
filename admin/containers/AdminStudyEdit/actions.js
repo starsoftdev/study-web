@@ -119,7 +119,6 @@ export function deleteNoteSuccess(payload) {
   return {
     type: DELETE_NOTE_SUCCESS,
     payload,
-    campaignInfo,
   };
 }
 export function editCampaign(payload, campaignInfo) {
@@ -159,7 +158,7 @@ export function deleteCampaign(payload) {
   };
 }
 
-export function deleteMediaType(studyId, studySourceId, index) {
+export function deleteMediaType(studyId, utm) {
   return {
     type: FETCH_LANDING,
     studyId,
