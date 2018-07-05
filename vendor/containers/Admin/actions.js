@@ -19,9 +19,10 @@ export function addVendorAdminSucceeded(response) {
   };
 }
 
-export function fetchVendorAdmins(limit, offset) {
+export function fetchVendorAdmins(search, limit, offset) {
   return {
     type: FETCH_VENDOR_ADMINS,
+    search,
     limit,
     offset,
   };
