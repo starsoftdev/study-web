@@ -8,7 +8,7 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import appReducer from './containers/App/reducer';
-import globalNotificationsReducer from '../app/containers/GlobalNotifications/reducer';
+import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
 /**
  * Creates the main reducer with the asynchronously loaded ones

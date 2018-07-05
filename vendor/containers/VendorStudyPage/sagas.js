@@ -10,9 +10,9 @@ import { actions as toastrActions, toastr } from 'react-redux-toastr';
 import FaSpinner from 'react-icons/lib/fa/spinner';
 import { get } from 'lodash';
 import moment from 'moment-timezone';
-import request from '../../../app/utils/request';
-import composeQueryString from '../../../app/utils/composeQueryString';
-import { getItem, removeItem } from '../../../app/utils/localStorage';
+import request from '../../utils/request';
+import composeQueryString from '../../utils/composeQueryString';
+import { getItem, removeItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 import {
   FIND_PATIENTS_TEXT_BLAST,

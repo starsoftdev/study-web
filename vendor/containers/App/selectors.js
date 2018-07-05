@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash';
+import { translate } from '../../../common/utilities/localization';
 /**
  * Direct selector to the app state domain
  */
@@ -50,6 +51,31 @@ const selectSitePatients = () => createSelector(
   (substate) => get(substate, 'baseData.sitePatients', {})
 );
 
+const selectSelectedUser = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.selectedUser', {})
+);
+
+const selectIndications = () => createSelector(
+  selectGlobal(),
+  (substate) => {
+    const indications = get(substate, 'baseData.indications', []);
+
+    return indications.map(e => {
+      let translatedName = translate(`common.indication.id${e.id}`);
+      if (translatedName.startsWith('[TRANSLATE ERR]')) {
+        translatedName = e.name;
+      }
+      return { ...e, originalName: e.name, name: translatedName };
+    });
+  }
+);
+
+const selectClientCredits = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.clientCredits', {})
+);
+
 export {
   selectGlobal,
   selectAuthState,
@@ -61,4 +87,7 @@ export {
   selectSites,
   selectSources,
   selectSitePatients,
+  selectSelectedUser,
+  selectIndications,
+  selectClientCredits,
 };

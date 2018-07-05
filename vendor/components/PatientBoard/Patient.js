@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
 import Button from 'react-bootstrap/lib/Button';
-import { formatPhone } from '../../../app/common/helper/functions';
+import { formatPhone } from '../../common/helper/functions';
 import { translate } from '../../../common/utilities/localization';
 import DragTypes from './dragSourceTypes';
 
