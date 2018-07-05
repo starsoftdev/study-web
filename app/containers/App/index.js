@@ -159,6 +159,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
         subscriptionType: 'pro',
       });
     }
+
+    if (nextProps.currentUserRoleType && !this.props.currentUserRoleType && nextProps.currentUserRoleType === 'vendor') {
+      this.gotoVendorHome();
+    }
   }
 
   handleChangePassword(ev) { // eslint-disable-line react/prefer-stateless-function
@@ -195,6 +199,10 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
     return null;
   }
 
+  gotoVendorHome = () => {
+    location.href = '/app/vendor';
+  }
+
   render() {
     const { isLoggedIn, userData, pageEvents, currentUserRoleType } = this.props;
 
@@ -216,6 +224,9 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           </div>
         </div>
       );
+    }
+    if (currentUserRoleType === 'vendor') {
+      return <div id="wrapper"></div>;
     }
 
     if (currentUserRoleType === 'client' || currentUserRoleType === 'sponsor') {

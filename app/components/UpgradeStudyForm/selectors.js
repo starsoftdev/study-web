@@ -37,7 +37,7 @@ const selectUpgradeStudyFormPatientMessagingSuiteValue = () => createSelector(
 
 const selectUpgradeStudyFormCallTrackingValue = () => createSelector(
   selectFormDomain(),
-  substate => get(substate, 'upgradeStudy.values.callTracking', null)
+  substate => get(substate, 'upgradeStudy.values.mediaTracking', null)
 );
 
 const selectUpgradeStudyFormNotesValue = () => createSelector(
@@ -48,8 +48,8 @@ const selectUpgradeStudyFormNotesValue = () => createSelector(
 const selectUpgradeStudyFormLeadsCount = () => createSelector(
   selectFormDomain(),
   (substate) => {
-    const leads = get(substate, 'upgradeStudy.values.leadSource', []);
-    return leads.length;
+    const mediaTypes = get(substate, 'upgradeStudy.values.mediaType', []);
+    return mediaTypes.length;
   }
 );
 

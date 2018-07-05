@@ -1,11 +1,16 @@
-import React, { PropTypes } from 'react';
-import { Field } from 'redux-form';
+import React, { Component, PropTypes } from 'react';
+import { Field, change, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
 import CenteredModal from '../../components/CenteredModal';
 import FiltersModalForm from '../../components/FiltersModalForm';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
+import { selectCustomFilters, selectFilterFormValues } from '../../containers/AdminHome/selectors';
+import { addCustomFilter, removeCustomFilter } from '../../containers/AdminHome/actions';
 
 const filterOptions = {
   searchOptions : [
@@ -22,13 +27,15 @@ const filterOptions = {
   ],
 };
 
-export default class FiltersPageForm extends React.Component {
+const formName = 'adminDashboardFilters';
+@reduxForm({ form: formName, destroyOnUnmount: false })
+export class FiltersPageForm extends Component {
   static propTypes = {
     change: PropTypes.func.isRequired,
-    resetForm: PropTypes.func.isRequired,
-    updateFilters: PropTypes.func.isRequired,
-    addFilter: PropTypes.func.isRequired,
     filtersFormValues: PropTypes.object.isRequired,
+    customFilters: PropTypes.array.isRequired,
+    addCustomFilter: PropTypes.func.isRequired,
+    removeCustomFilter: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -41,8 +48,10 @@ export default class FiltersPageForm extends React.Component {
     this.mapSearchLabels = this.mapSearchLabels.bind(this);
     this.openFiltersModal = this.openFiltersModal.bind(this);
     this.closeFiltersModal = this.closeFiltersModal.bind(this);
+    this.updateFilters = this.updateFilters.bind(this);
+    this.addFilter = this.addFilter.bind(this);
 
-    this.searchType = null;
+    this.searchType = 'studyNumber';
     this.searchValue = null;
   }
 
@@ -67,8 +76,23 @@ export default class FiltersPageForm extends React.Component {
     }
   }
 
+  updateFilters(key, value) {
+    this.props.change(key, value);
+  }
+
+  addFilter(options) {
+    if (!options.value) {
+      return;
+    }
+    const { customFilters, addCustomFilter, removeCustomFilter } = this.props;
+    if (customFilters.length !== 0) {
+      removeCustomFilter(options);
+    }
+    addCustomFilter(options);
+  }
+
   render() {
-    const { filtersFormValues, updateFilters, addFilter } = this.props;
+    const { filtersFormValues } = this.props;
 
     return (
       <div className="filters-btns pull-right">
@@ -79,8 +103,9 @@ export default class FiltersPageForm extends React.Component {
           <Button
             className="btn-enter"
             type="submit"
-            onClick={() => addFilter({
+            onClick={() => this.addFilter({
               name: this.mapSearchLabels(this.searchType),
+              key: this.searchType,
               type: 'search',
               value: this.searchValue,
             })}
@@ -101,8 +126,9 @@ export default class FiltersPageForm extends React.Component {
           name="admin-search-type"
           className="admin-search-type pull-right"
           component={ReactSelect}
-          placeholder="Select Type"
+          clearable={false}
           searchable
+          selectedValue={this.searchType}
           options={filterOptions.searchOptions}
           onChange={(e) => {
             this.searchType = e;
@@ -122,7 +148,7 @@ export default class FiltersPageForm extends React.Component {
                 <FiltersModalForm
                   initialValues={filtersFormValues}
                   handleSubmit={() => {}}
-                  updateFilters={updateFilters}
+                  updateFilters={this.updateFilters}
                 />
               </div>
             </div>
@@ -133,3 +159,16 @@ export default class FiltersPageForm extends React.Component {
     );
   }
 }
+
+const mapStateToProps = createStructuredSelector({
+  customFilters: selectCustomFilters(),
+  filtersFormValues: selectFilterFormValues(),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addCustomFilter: (filter) => dispatch(addCustomFilter(filter)),
+  removeCustomFilter: (filter) => dispatch(removeCustomFilter(filter)),
+  change: (name, value) => dispatch(change(name, value)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FiltersPageForm);

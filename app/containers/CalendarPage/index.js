@@ -283,7 +283,7 @@ export default class CalendarPage extends React.Component {
       submitData = {
         patientId: data.patient.value,
         clientRoleId: currentUser.roleForClient.id,
-        time: time.utc(),
+        time: time.toISOString(),
         textReminder: data.textReminder,
       };
     } else { // UPDATE
@@ -293,14 +293,12 @@ export default class CalendarPage extends React.Component {
       } else {  // React Datepicker doesn't submit its initial value
         updatedDate = moment(this.selectedCellInfo.data.time).startOf('day');
       }
-      const nn = updatedDate.clone().add(data.period === 'AM' ?
+      updatedDate = updatedDate.clone().add(data.period === 'AM' ?
         data.hour % 12 :
         (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes');
       submitData = {
         id: this.selectedCellInfo.data.id,
-        time: updatedDate.clone().add(data.period === 'AM' ?
-          data.hour % 12 :
-          (data.hour % 12) + 12, 'hours').add(data.minute, 'minutes'),
+        time: updatedDate.toISOString(),
         clientRoleId: currentUser.roleForClient.id,
         patientId: data.patient.value,
         textReminder: data.textReminder,
