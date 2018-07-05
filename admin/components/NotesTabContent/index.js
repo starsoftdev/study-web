@@ -39,7 +39,6 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
 
   submitDeleteNote(noteId) {
     const { deleteNote } = this.props;
-    console.log('submitDeleteNote', noteId);
     deleteNote(noteId);
   }
 

@@ -98,7 +98,9 @@ export class EditStudyTabs extends Component {
             }
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
-            <LandingPageEdit />
+            {(activeTab === 'landingPage') &&
+              <LandingPageEdit studyId={study.id} />
+            }
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
@@ -116,7 +118,9 @@ export class EditStudyTabs extends Component {
               <ThankYouEdit studyId={study.id} />
             }
           </section>
-          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}><PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} /></section>
+          <section className={classNames('patientThankYouEmail', { active: (activeTab === 'patientThankYouEmail') })}>
+            <PatientThankYouEmailTab onSubmit={this.submitPatientThankYouForm} />
+          </section>
         </div>
       </div>
     );
