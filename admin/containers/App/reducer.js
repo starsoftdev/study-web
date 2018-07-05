@@ -32,6 +32,16 @@ import {
   FETCH_PROTOCOLS_SUCCESS,
   FETCH_PROTOCOLS_ERROR,
 
+  FETCH_SPONSORS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_SPONSORS_ERROR,
+
+  FETCH_CRO,
+  FETCH_CRO_SUCCESS,
+  FETCH_CRO_ERROR,
+
+  FETCH_USERS_BY_ROLE_SUCCESS,
+
   SAVE_CARD,
   SAVE_CARD_SUCCESS,
   SAVE_CARD_ERROR,
@@ -245,6 +255,22 @@ const initialState = {
       details: [],
       fetching: false,
       error: null,
+    },
+    sponsors: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
+    cro: {
+      details: [],
+      fetching: false,
+      error: null,
+    },
+    usersByRoles: {
+      sm: [],
+      bd: [],
+      ae: [],
+      cc: [],
     },
     clientRoles: {
       details: [],
@@ -657,6 +683,65 @@ export default function appReducer(state = initialState, action) {
           fetching: false,
           error: action.payload,
         },
+      };
+      break;
+    case FETCH_SPONSORS:
+      baseDataInnerState = {
+        sponsors: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_SPONSORS_SUCCESS:
+      baseDataInnerState = {
+        sponsors: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_SPONSORS_ERROR:
+      baseDataInnerState = {
+        sponsors: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+      break;
+    case FETCH_CRO:
+      baseDataInnerState = {
+        cro: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CRO_SUCCESS:
+      baseDataInnerState = {
+        cro: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+      break;
+    case FETCH_CRO_ERROR:
+      baseDataInnerState = {
+        cro: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+      break;
+    case FETCH_USERS_BY_ROLE_SUCCESS:
+      baseDataInnerState = {
+        usersByRoles: action.payload,
       };
       break;
     case FETCH_CARDS:

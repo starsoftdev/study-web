@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
@@ -15,7 +15,7 @@ import {
 } from '../../containers/App/selectors';
 
 
-class AdminHeaderBar extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class AdminHeaderBar extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     socket: React.PropTypes.any,
     currentUser: PropTypes.any,

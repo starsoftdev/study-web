@@ -1,10 +1,10 @@
 /* eslint-disable react/prefer-stateless-function */
 
-import React from 'react';
+import React, { Component } from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../../components/CenteredModal';
 
-class IdleModal extends React.Component {
+class IdleModal extends Component {
   static propTypes = {
     show: React.PropTypes.bool.isRequired,
     logout: React.PropTypes.func,

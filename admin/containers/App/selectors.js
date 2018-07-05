@@ -154,6 +154,21 @@ const selectProtocols = () => createSelector(
   (substate) => get(substate, 'baseData.protocols', {})
 );
 
+const selectSponsors = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.sponsors', {})
+);
+
+const selectCro = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.cro', {})
+);
+
+const selectUsersByRoles = () => createSelector(
+  selectGlobal(),
+  (substate) => get(substate, 'baseData.usersByRoles', {})
+);
+
 const selectRewards = () => createSelector(
   selectGlobal(),
   (substate) => get(substate, 'baseData.rewards', [])
@@ -480,6 +495,9 @@ export {
   selectStudyLevels,
   selectCoupon,
   selectProtocols,
+  selectSponsors,
+  selectCro,
+  selectUsersByRoles,
   selectRewards,
   selectRewardsBalance,
   selectCards,

@@ -76,6 +76,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     manualDisableSubmit: PropTypes.bool,
     showAddNewCard: PropTypes.func,
     currentUser: React.PropTypes.object,
+    invalid: PropTypes.bool,
   };
 
   constructor(props) {
@@ -175,7 +176,7 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
     const title = this.props.title || translate('portals.component.shoppingCartForm.defaultTitle');
     const noBorderClassName = (this.props.noBorder) ? 'no-border' : '';
     const formClassName = `form-shopping-cart ${noBorderClassName}`;
-    const { addOns, coupon, couponId, change, showCards, cards, submitting, validateAndSubmit, manualDisableSubmit, clearCoupon } = this.props;
+    const { addOns, coupon, couponId, showCards, cards, invalid, submitting, validateAndSubmit, manualDisableSubmit } = this.props;
     const { subTotal, discount, total } = this.calculateTotal();
     let addOnsContent = null;
     let couponSelected = false;
@@ -342,11 +343,10 @@ class ShoppingCartForm extends Component { // eslint-disable-line react/prefer-s
             </div>
             {cardsPanelContent}
             <Button
-              disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit}
+              disabled={coupon.fetching || cards.fetching || submitting || manualDisableSubmit || invalid}
+              className={(invalid) ? 'disabled' : ''}
               onClick={(ev) => {
                 this.setState({ showLoading: true });
-                clearCoupon();
-                change('couponId', '');
                 validateAndSubmit(ev);
               }}
             >

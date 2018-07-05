@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import RichTextEditor from 'react-rte';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../components/Input';
@@ -13,7 +13,7 @@ const formName = 'landingPageForm';
   validate: null,
 })
 
-export default class LandingPageEdit extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export default class LandingPageEdit extends Component { // eslint-disable-line react/prefer-stateless-function
 
   constructor(props) {
     super(props);

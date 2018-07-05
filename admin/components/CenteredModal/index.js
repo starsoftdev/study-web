@@ -2,10 +2,10 @@
  * Created by mike on 10/4/16.
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
-class CenteredModal extends React.Component {
+class CenteredModal extends Component {
   static propTypes = {
     /**
      * A css class to apply to the Modal dialog DOM node.
