@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import _, { map, mapKeys, concat, findIndex, pullAt } from 'lodash';
+import _, { map, mapKeys, concat, findIndex, pullAt, isArray } from 'lodash';
 import moment from 'moment-timezone';
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
@@ -238,18 +238,18 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
       pullAt(customFilters, findIndex(customFilters, filter));
       this.setState({ customFilters });
 
-      change('dashboardFilters', 'search', []);
+      change(formName, 'search', []);
     } else if (filter.name === 'percentage') {
-      change('dashboardFilters', 'percentage', []);
+      change(formName, 'percentage', []);
     } else if (filter.name === 'nearbyStudies') {
-      change('dashboardFilters', 'nearbyStudies', []);
+      change(formName, 'nearbyStudies', []);
     } else if (filter.name === 'address') {
-      change('dashboardFilters', 'address', []);
+      change(formName, 'address', []);
     } else if (filters[filter.name]) {
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', filter.value]));
       pullAt(filters[filter.name], findIndex(filters[filter.name], ['label', 'All']));
 
-      change('dashboardFilters', filter.name, filters[filter.name]);
+      change(formName, filter.name, filters[filter.name]);
     }
   }
 
@@ -328,7 +328,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
             onChange: this.nearbyFilterChange,
             onSubmit: this.nearbyFilterSubmit,
           });
-        } else if (key === 'address') {
+        } else if (key === 'address' && !isArray(filterValues)) {
           newFilters.push({
             name: key,
             type: 'address',
@@ -352,7 +352,7 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
   }
 
   updateFilters(key, value) {
-    this.props.change('dashboardFilters', key, value);
+    this.props.change(formName, key, value);
   }
 
   fetchStudiesAccordingToFilters(value, key, fetchByScroll, filtersFormValues) {
@@ -389,11 +389,11 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
     if (!filters.source && defaultSource) {
       filters.source = defaultSource.id;
-      change('dashboardFilters', 'source', defaultSource.id);
+      change(formName, 'source', defaultSource.id);
     }
 
     if (filters.source === -1) {
-      change('dashboardFilters', 'source', null);
+      change(formName, 'source', null);
       delete filters.source;
     }
 
@@ -415,32 +415,32 @@ export default class AdminDashboard extends Component { // eslint-disable-line r
 
   percentageFilterChange(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'percentage', e);
+    change(formName, 'percentage', e);
   }
 
   percentageFilterSubmit(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'percentage', { ...this.props.filtersFormValues.percentage, arg: e });
+    change(formName, 'percentage', { ...this.props.filtersFormValues.percentage, arg: e });
   }
 
   nearbyFilterChange(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'nearbyStudies', e);
+    change(formName, 'nearbyStudies', e);
   }
 
   nearbyFilterSubmit(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e });
+    change(formName, 'nearbyStudies', { ...this.props.filtersFormValues.nearbyStudies, arg: e });
   }
 
   searchFilterSubmit(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'search', { value: e });
+    change(formName, 'search', { value: e });
   }
 
   addressFilterSubmit(e) {
     const { change } = this.props;
-    change('dashboardFilters', 'address', { value: e });
+    change(formName, 'address', { value: e });
   }
 
   renderDateFooter() {

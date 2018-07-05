@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
-export default class Filter extends React.Component {
+export default class Filter extends Component {
   static propTypes = {
     options: React.PropTypes.object.isRequired,
     className: React.PropTypes.string,
