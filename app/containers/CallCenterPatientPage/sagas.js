@@ -27,7 +27,6 @@ import {
   deletePatientNoteSuccess,
   addPatientNoteSuccess,
   submitEmailSuccess,
-  updatePatientSuccess,
   patientDispositionSubmitted,
   patientDispositionSubmissionError,
 } from './actions';
@@ -283,7 +282,6 @@ function* submitPatientUpdate() {
         }),
       });
       toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
-      yield put(updatePatientSuccess());
     } catch (e) {
       let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
       if (errorMessage.includes('email')) {
