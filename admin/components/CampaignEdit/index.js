@@ -17,7 +17,7 @@ import DatePicker from '../../../common/components/Input/DatePicker';
 import ReactSelect from '../../../common/components/Input/ReactSelect';
 import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
-import LoadingSpinner from '../LoadingSpinner';
+/* import LoadingSpinner from '../LoadingSpinner'; */
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess, selectDashboardfive9List, selectLevels } from '../../containers/AdminStudyEdit/selectors';
 import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchFive9List } from '../../containers/AdminStudyEdit/actions';
@@ -155,9 +155,9 @@ export class CampaignEdit extends React.Component {
   }
 
   render() {
-    const { levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
-    const exposureLevelOptions = [1, 2, 3];/* levels.map(level => ({ value: level.id, label: level.name }));
-    const timezone = (study && study.timezone) ? study.timezone : 'utc'; */
+    const { /* levels, */studyCampaigns, formValues/* ,  updateCampaignProcess, deleteCampaignProcess */, study } = this.props;
+    const exposureLevelOptions = [1, 2, 3];/* levels.map(level => ({ value: level.id, label: level.name })); */
+    const timezone = (study && study.timezone) ? study.timezone : 'utc';
     const campaignOptions = [1, 2, 3];/* studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
