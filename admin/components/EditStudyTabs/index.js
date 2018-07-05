@@ -98,7 +98,9 @@ export class EditStudyTabs extends Component {
             }
           </section>
           <section className={classNames('landingPage', { active: (activeTab === 'landingPage') })}>
-            <LandingPageEdit />
+            {(activeTab === 'landingPage') &&
+              <LandingPageEdit studyId={studyId} />
+            }
           </section>
           <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
