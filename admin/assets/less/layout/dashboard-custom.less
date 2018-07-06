@@ -122,7 +122,7 @@
 #reportTabs .tab { background: #fff; border: 2px solid #00afef; border-bottom: none; border-right: none; font-weight: 600; display: inline-block; padding: 10px; text-transform: uppercase; }
 #reportTabs .tab:last-child { border-right: 2px solid #00afef; }
 #reportTabs .tab:hover, #reportTabs .tab.active { background: #00afef; color: #fff; cursor: pointer; }
-#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 20px; }
+#reportTabs .content-holder { background: #fff; border: 2px solid #00afef; padding: 10px; }
 #reportTabs section { display: none; font-size: 16px; margin: 0; min-height: 100px; visibility: hidden; }
 #reportTabs section.active { display: block; visibility: visible; }
 #reportTabs section.total { margin-top: -10px; }
@@ -131,6 +131,7 @@
 
 #totalTabContent tr { line-height: 35px; }
 #totalTabContent th { text-transform: uppercase; }
+#totalTabContent td { text-align: center; }
 #totalTabContent thead th { padding: 0 5px; }
 #totalTabContent thead th:first-child { padding: 0; }
 @media screen and (max-width: 1330px) {
@@ -138,13 +139,17 @@
   #totalTabContent tr { line-height: 32px; }
 }
 
-#mediaSourceTabContent th { text-transform: uppercase; }
+#mediaSourceTabContent th { padding: 5px; text-transform: uppercase; vertical-align: top; }
+#mediaSourceTabContent th:first-child { padding-left: 0; }
+#mediaSourceTabContent td { padding: 5px; vertical-align: top; }
 #mediaSourceTabContent thead th { padding: 0 6px; }
 #mediaSourceTabContent thead th:first-child { padding: 0; }
 @media screen and (max-width: 1380px) {
   #mediaSourceTabContent th { font-size: 14px; }
 }
-#dispositionTable th { text-transform: uppercase; }
+#dispositionTable th { padding: 5px; text-transform: uppercase; vertical-align: top; }
+#dispositionTable th:first-child { padding-left: 0; }
+#dispositionTable td { padding: 5px; vertical-align: top; }
 #dispositionTable thead th { padding: 0 6px; }
 #dispositionTable thead th:first-child { padding: 0; }
 
@@ -182,12 +187,32 @@
 
 /************************** Notes tab **************************************/
 #notesTabContent { height: 100%; }
-#notesTabContent .notesList { border: 2px solid #646464; height: calc(~"100% - 210px"); margin-bottom: 20px; }
+#notesTabContent form { padding: 0; }
+#notesTabContent .notesList { border: 2px solid #646464; height: calc(~"100% - 210px"); margin-bottom: 20px; overflow-y: auto; }
+#notesTabContent .notesList .note-msg { margin: 25px; position: relative; }
+#notesTabContent .notesList .note-msg .note { border: 2px solid #636363; background-color: #f9f4b5; color: #101010; }
+#notesTabContent .notesList .note-msg .note-header { border-bottom: 2px solid #636363; background-color: #f8f197; height: 41px; position: relative; width: 100%; }
+#notesTabContent .notesList .note-msg .note-header .btn-trash { color: #636363; position: absolute; right: 10px; top: 7px; }
+#notesTabContent .notesList .note-msg .note-header .btn-trash:hover { color: #999; cursor: pointer; }
+#notesTabContent .notesList .note-msg .note-content { .font(18px); margin: 0 0 5px; min-height: 45px; position: relative; padding: 25px 25px 0; }
+#notesTabContent .notesList .note-msg .note-content p { color: #636363; word-wrap: break-word; }
+#notesTabContent .notesList .note-msg .note-userinfo { align-items: center; border-top: 2px solid #636363; display: flex; margin: 25px 25px 5px; position: relative; }
+#notesTabContent .notesList .note-msg .note-userinfo .img-holder { left: 0; position: relative; top: 0; }
+#notesTabContent .notesList .note-msg .note-userinfo .info { flex: 1; margin-left: 15px; padding: 10px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line { display: flex; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .label { display: block; text-align: left; width: 65px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .content { border-bottom: 1px solid #636363; flex: 1; position: relative; top: -3px; }
+#notesTabContent .notesList .note-msg .note-userinfo .info .info-line .content span { color: #636363; padding: 0 0 5px; }
 #notesTabContent textarea { border-radius: 0; height: 130px; margin-bottom: 20px; resize: none; }
 #notesTabContent button { float: right; }
 
+#editStudyTabs label { font-weight: 600; margin: 10px 0; text-transform: uppercase; }
+#editStudyTabs .field-row .label { text-align: left; }
 #landingPageEdit > div { margin-bottom: 30px; }
 #landingPageEdit .rich-text-editor-container > div { border: 2px solid #636363; }
-#landingPageEdit label { font-weight: 600; margin: 10px 0; text-transform: uppercase; }
-#landingPageEdit .field-row .label { text-align: left; }
 #landingPageEdit .img-preview { margin: 10px 0; }
+#MediaTrackingEdit { margin-bottom: 20px; }
+
+/************************** Thank You tab **********************************/
+
+#thankYouTabContent { height: 100%; }
