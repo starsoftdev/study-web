@@ -129,6 +129,11 @@ const selectAllCustomNotificationEmails = () => createSelector(
   substate => substate.allCustomNotificationEmails
 );
 
+const selectUpdateStudyProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.editStudyProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -155,4 +160,5 @@ export {
   selectMessagingNumbers,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
+  selectUpdateStudyProcess,
 };
