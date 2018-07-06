@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { arrayRemoveAll, arrayPush, blur, change, Field, FieldArray, reduxForm, startSubmit, stopSubmit } from 'redux-form';
+import { change, Field, FieldArray, reduxForm } from 'redux-form';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
@@ -12,12 +11,11 @@ import RenderCustomEmailsList from './RenderCustomEmailsList';
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectStudyInfo, selectIndications, selectProtocols, selectSponsors, selectCro, selectSiteLocations, selectUsersByRoles, selectMessagingNumbers } from  '../../containers/AdminStudyEdit/selectors';
 import { addEmailNotificationUser, addCustomEmailNotification } from '../../containers/AdminStudyEdit/actions';
-import Checkbox from '../Input/Checkbox';
 import CenteredModal from '../../components/CenteredModal';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
+import formValidator from './validator';
 
 const formName = 'Admin.EditStudyForm';
-import formValidator from './validator';
 
 @reduxForm({
   form: formName,
@@ -39,6 +37,10 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     formValues: PropTypes.object,
     currentUser: PropTypes.object,
     addCustomEmailNotification: PropTypes.func,
+    addEmailNotificationUser: PropTypes.func,
+    sponsors: PropTypes.array,
+    protocols: PropTypes.array,
+    cro: PropTypes.array,
   };
 
   constructor() {

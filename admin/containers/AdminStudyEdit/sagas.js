@@ -60,7 +60,6 @@ import {
   fetchStudiesDashboardSuccess,
   fetchStudiesDashboardError,
   updateDashboardStudySuccess,
-  updateDashboardStudyError,
   fetchSiteLocationsSuccess,
   fetchSiteLocationsError,
   fetchMessagingNumbersDashboardSuccess,
