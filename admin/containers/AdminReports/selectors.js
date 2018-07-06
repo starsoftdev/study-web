@@ -1,10 +1,25 @@
 import { createSelector } from 'reselect';
 
-const selectAdminHomeDomain = () => state => state.adminHome;
+const selectAdminReportsDomain = () => state => state.adminReportsPage;
 
-const selectAdminHomePage = () => createSelector(
-  selectAdminHomeDomain(),
+const selectAdminReportsPage = () => createSelector(
+  selectAdminReportsDomain(),
   substate => substate
 );
 
-export default selectAdminHomePage;
+const selectCampaignsStats = () => createSelector(
+  selectAdminReportsPage(),
+  (substate) => substate.campaigns
+);
+
+const selectCampaignsPaginationOptions = () => createSelector(
+  selectAdminReportsPage(),
+  (substate) => substate.campaignsPaginationOptions
+);
+
+
+export default selectAdminReportsPage;
+export {
+  selectCampaignsStats,
+  selectCampaignsPaginationOptions,
+};
