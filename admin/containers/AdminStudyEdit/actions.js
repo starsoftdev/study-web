@@ -58,7 +58,7 @@ import {
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
- 
+
   FETCH_LEVELS,
   FETCH_LEVELS_SUCCESS,
   FETCH_LEVELS_ERROR,
@@ -70,6 +70,14 @@ import {
   FETCH_FIVE_9_LIST,
   FETCH_FIVE_9_LIST_SUCCESS,
   FETCH_FIVE_9_LIST_ERROR,
+
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
+
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
 
 
 } from './constants';
@@ -171,7 +179,7 @@ export function deleteNoteSuccess(payload) {
 }
 export function editCampaign(payload, campaignInfo) {
   return {
-    type: 'EDIT_CAMPAIGN',
+    type: EDIT_CAMPAIGN,
     payload,
     campaignInfo,
   };
@@ -179,7 +187,7 @@ export function editCampaign(payload, campaignInfo) {
 
 export function editCampaignSuccess(payload, campaignInfo) {
   return {
-    type: 'EDIT_CAMPAIGN_SUCCESS',
+    type: EDIT_CAMPAIGN_SUCCESS,
     payload,
     campaignInfo,
   };
@@ -187,7 +195,7 @@ export function editCampaignSuccess(payload, campaignInfo) {
 
 export function editCampaignError(payload) {
   return {
-    type: 'EDIT_CAMPAIGN_ERROR',
+    type: EDIT_CAMPAIGN_ERROR,
     payload,
   };
 }
@@ -201,10 +209,26 @@ export function deleteNoteError(payload) {
 
 export function deleteCampaign(payload) {
   return {
-    type: 'DELETE_CAMPAIGN',
+    type: DELETE_CAMPAIGN,
     payload,
   };
 }
+
+
+export function deleteCampaignSuccess(payload) {
+  return {
+    type: DELETE_CAMPAIGN_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteCampaignError(payload) {
+  return {
+    type: DELETE_CAMPAIGN_ERROR,
+    payload,
+  };
+}
+
 
 export function deleteMediaType(studyId, utm) {
   return {
