@@ -158,7 +158,7 @@ class CallDiv extends React.Component {
 
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && (patient.patient_category_id !== 1 || patient.patient_category_id !== 2)) {
+      if (patient && (patient.patient_category_id !== 1 && patient.patient_category_id !== 2)) {
         output.push(this.getPatientView(patient, `callDiv_archive_${patient.id}`));
       }
     });
