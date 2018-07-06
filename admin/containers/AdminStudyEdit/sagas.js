@@ -70,6 +70,7 @@ import {
   fetchCustomNotificationEmailsSuccess,
   fetchCustomNotificationEmailsError,
   addCustomEmailNotificationSuccess,
+  updateDashboardStudyError,
 } from './actions';
 
 // Bootstrap sagas
@@ -469,7 +470,7 @@ export function* updateDashboardStudyWorker(action) {
   } catch (err) {
     const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.updateStudyToastrError'));
     toastr.error('', errorMessage);
-    console.log(err);
+    yield put(updateDashboardStudyError(err));
     stopSubmit(err);
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });

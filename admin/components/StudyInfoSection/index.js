@@ -3,13 +3,14 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { change, Field, FieldArray, reduxForm } from 'redux-form';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import Toggle from '../../components/Input/Toggle';
 import Input from '../../components/Input/index';
 import ReactSelect from '../../components/Input/ReactSelect';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';
 import { selectValues } from '../../common/selectors/form.selector';
-import { selectStudyInfo, selectIndications, selectProtocols, selectSponsors, selectCro, selectSiteLocations, selectUsersByRoles, selectMessagingNumbers } from  '../../containers/AdminStudyEdit/selectors';
+import { selectStudyInfo, selectIndications, selectProtocols, selectSponsors, selectCro, selectSiteLocations, selectUsersByRoles, selectMessagingNumbers, selectUpdateStudyProcess } from  '../../containers/AdminStudyEdit/selectors';
 import { addEmailNotificationUser, addCustomEmailNotification } from '../../containers/AdminStudyEdit/actions';
 import CenteredModal from '../../components/CenteredModal';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
@@ -41,6 +42,7 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     sponsors: PropTypes.array,
     protocols: PropTypes.array,
     cro: PropTypes.array,
+    updateStudyProcess: PropTypes.object.isRequired,
   };
 
   constructor() {
@@ -68,6 +70,10 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
 
   closeAddEmailModal = (custom = false) => {
     this.setState({ addEmailModalShow: false, customAddEmailModal: custom });
+    window.setTimeout(() => {
+      this.emailNotificationBlock.querySelector('button').blur();
+      this.customEmailNotificationBlock.querySelector('button').blur();
+    }, 200);
   }
 
   addEmailNotificationSubmit = (values) => {
@@ -94,7 +100,7 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { change, indications, sponsors, protocols, cro, siteLocations, usersByRoles, messagingNumbers, formValues } = this.props;
+    const { change, indications, sponsors, protocols, cro, siteLocations, usersByRoles, messagingNumbers, formValues, updateStudyProcess } = this.props;
 
     const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
     const sponsorsOptions = sponsors.map(item => ({ value: item.id, label: item.name }));
@@ -357,7 +363,10 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
         <div className="section">
           <div className="smallSection">
             <h3>USER EMAIL NOTIFICATION</h3>
-            <div>
+            <div ref={(emailNotificationBlock) => (
+              this.emailNotificationBlock = emailNotificationBlock
+            )}
+            >
               {<FieldArray
                 name="emailNotifications"
                 component={RenderEmailsList}
@@ -369,7 +378,10 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
           </div>
           <div className="smallSection">
             <h4>EMAIL NOTIFICATION</h4>
-            <div>
+            <div ref={(customEmailNotificationBlock) => (
+              this.customEmailNotificationBlock = customEmailNotificationBlock
+            )}
+            >
               {<FieldArray
                 name="customEmailNotifications"
                 component={RenderCustomEmailsList}
@@ -492,8 +504,11 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
           </div></li>
         </ul>
         <div className="btn-block text-right">
-          <button type="submit" className="btn btn-default btn-add-row">
-            <span>Update</span>
+          <button type="submit" className="btn btn-default btn-add-row" disabled={updateStudyProcess.saving}>
+            {updateStudyProcess.saving
+              ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+              : <span>UPDATE</span>
+            }
           </button>
         </div>
         <Modal
@@ -539,6 +554,7 @@ const mapStateToProps = createStructuredSelector({
   usersByRoles: selectUsersByRoles(),
   messagingNumbers: selectMessagingNumbers(),
   formValues: selectValues(formName),
+  updateStudyProcess: selectUpdateStudyProcess(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyInfoSection);

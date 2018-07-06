@@ -49,6 +49,9 @@ import {
   FETCH_CUSTOM_NOTIFICATION_EMAILS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
   FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+  UPDATE_DASHBOARD_STUDY,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_ERROR,
 } from './constants';
 
 import {
@@ -130,6 +133,10 @@ const initialState = {
   allCustomNotificationEmails: {
     details: [],
     fetching: false,
+    error: null,
+  },
+  editStudyProcess: {
+    saving: false,
     error: null,
   },
 };
@@ -586,6 +593,30 @@ export default function adminStudyEditReducer(state = initialState, action) {
         allCustomNotificationEmails: {
           details: [],
           fetching: false,
+          error: action.payload,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY_SUCCESS:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY_ERROR:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: false,
           error: action.payload,
         },
       };
