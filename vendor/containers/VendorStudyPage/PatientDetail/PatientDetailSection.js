@@ -10,17 +10,17 @@ import moment from 'moment-timezone';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import Checkbox from '../../../../app/components/Input/Checkbox';
-import Input from '../../../../app/components/Input/index';
+import Checkbox from '../../../components/Input/Checkbox';
+import Input from '../../../components/Input/index';
 import {
   setCurrentPatientCategoryId, setCurrentPatientId, submitMovePatientBetweenCategories,
   submitPatientUpdate,
 } from '../actions';
 import { selectPatientBoardLoading, selectSubmittingSchedule } from '../selectors';
 import formValidator from './detailValidator';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../app/common/helper/functions';
-import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../../app/common/selectors/form.selector';
-import ReactSelect from '../../../../app/components/Input/ReactSelect';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { selectSyncErrors, selectValues, selectFormDidChange } from '../../App/form.selectors';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Detail';
