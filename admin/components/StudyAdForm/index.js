@@ -4,7 +4,7 @@
 *
 */
 
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
 import classNames from 'classnames';
@@ -22,7 +22,7 @@ import './styles.less';
     form: 'studyAdForm',
     validate: null,
   })
-class StudyAdForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class StudyAdForm extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     error: React.PropTypes.object,
