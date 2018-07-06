@@ -108,17 +108,9 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
 
   componentWillReceiveProps(newProps) {
     const equal = isEqual(newProps.studies.details, this.props.studies.details);
-    let studyIdsArr = [];
-
     if (newProps.studies.details.length  && !equal) {
-      studyIdsArr = newProps.studies.details.map(s => s.study_id);
-
-      this.props.fetchMediaTotalsForAdmin({
-        studyIds: studyIdsArr,
-        campaign: null,
-        startDate: newProps.filtersFormValues.startDate || null,
-        endDate: newProps.filtersFormValues.endDate || null,
-      });
+      const filters = this.getCurrentFilters();
+      this.props.fetchMediaTotalsForAdmin(filters);
     }
   }
 
@@ -149,7 +141,8 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     });
 
     _.forEach(filters, (filter, k) => {
-      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address' && k !== 'startDate' && k !== 'endDate') {
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' &&
+        k !== 'address' && k !== 'startDate' && k !== 'endDate') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[k] = withoutAll;
       }
@@ -250,6 +243,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions,
       fetchMediaTotalsForAdmin, campaignsStats, campaignsPaginationOptions } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
+    const currentFilters = this.getCurrentFilters();
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
@@ -272,6 +266,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
           getCampaignsStats={this.getCampaignsStatsAccordingToFilters}
           studies={studies}
           changeAdminFilters={changeAdminFilters}
+          currentFilters={currentFilters}
           applyFilters={this.applyFilters}
         />
         <StatsBox

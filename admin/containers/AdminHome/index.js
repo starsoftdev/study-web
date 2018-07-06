@@ -182,7 +182,8 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     });
 
     _.forEach(filters, (filter, k) => {
-      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address') {
+      if (k !== 'startDate' && k !== 'endDate' && k !== 'search' && k !== 'percentage'
+        && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[k] = withoutAll;
       }
@@ -213,7 +214,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     const { studies, mediaTotals, sources, totals, filtersFormValues, changeAdminFilters, paginationOptions,
       fetchMediaTotalsForAdmin } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
-
+    const currentFilters = this.getCurrentFilters();
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
     return (
@@ -238,9 +239,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
               content={
                 <MediaStatsTable
                   campaignSelected={campaignSelected}
-                  campaign={filtersFormValues.campaign}
-                  startDate={filtersFormValues.startDate}
-                  endDate={filtersFormValues.endDate}
+                  currentFilters={currentFilters}
                   studies={studies}
                   sources={sources}
                   mediaTotals={mediaTotals}
