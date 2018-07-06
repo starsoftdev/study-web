@@ -12,20 +12,20 @@ import { reset, Field, reduxForm } from 'redux-form';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 
-import ReactSelect from '../../../../app/components/Input/ReactSelect';
-import Input from '../../../../app/components/Input/index';
-import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../../app/common/selectors/form.selector';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import Input from '../../../components/Input/index';
+import { selectValues, selectSyncErrors, selectFormDidChange } from '../../App/form.selectors';
 import {
   submitPatientUpdate, deletePatient, generateReferral, downloadReferral,
   removePatientIndication, addPatientIndication,
 } from '../actions';
-import { selectSocket } from '../../../../app/containers/GlobalNotifications/selectors';
+import { selectSocket } from '../../GlobalNotifications/selectors';
 import { selectStudy, selectDeletePatientProcess, selectCurrentPatient } from '../selectors';
 import formValidator from './otherValidator';
-import DateOfBirthPicker from '../../../../app/components/DateOfBirthPicker/index';
+import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
 import IndicationOverlay from './IndicationOverlay';
-import { selectIndications } from '../../../../app/containers/App/selectors';
-import { fetchIndications } from '../../../../app/containers/App/actions';
+import { selectIndications } from '../../App/selectors';
+import { fetchIndications } from '../../App/actions';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Other';
@@ -203,9 +203,7 @@ class OtherSection extends React.Component {
                 { !pi.isOriginal &&
                 <span
                   className="icomoon-icon_trash"
-                  onClick={() => {
-                    this.deleteIndication(pi.indication);
-                  }}
+                  onClick={() => {}}
                 />
                 }
               </span>

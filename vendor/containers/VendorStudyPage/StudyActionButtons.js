@@ -6,7 +6,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { selectCurrentUser } from '../../../app/containers/App/selectors';
+import { selectCurrentUser } from '../App/selectors';
 import { translate } from '../../../common/utilities/localization';
 
 import { exportPatients } from './actions';
