@@ -1,6 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": [
+    "airbnb",
+    "plugin:require-path-exists/recommended"
+  ],
   "env": {
     "browser": true,
     "node": true,
@@ -9,7 +12,8 @@
   },
   "plugins": [
     "react",
-    "jsx-a11y"
+    "jsx-a11y",
+    "require-path-exists"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
