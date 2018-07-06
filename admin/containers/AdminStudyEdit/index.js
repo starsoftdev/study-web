@@ -25,6 +25,7 @@ import {
   fetchAllStudyEmailNotificationsDashboard,
   fetchCustomNotificationEmails,
   updateDashboardStudy,
+  updateThankYouPage,
 } from './actions';
 
 import {
@@ -34,6 +35,7 @@ import {
   selectStudyInfo,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
+  selectLanding,
 } from './selectors';
 
 import { selectCurrentUser, selectStudies } from '../App/selectors';
@@ -47,6 +49,7 @@ const mapStateToProps = createStructuredSelector({
   studyInfo: selectStudyInfo(),
   allClientUsers: selectAllClientUsers(),
   customNotificationEmails: selectAllCustomNotificationEmails(),
+  landing: selectLanding(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -66,6 +69,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCustomNotificationEmails: (studyId) => dispatch(fetchCustomNotificationEmails(studyId)),
   updateDashboardStudy: (id, params, stopSubmit, formValues) => dispatch(updateDashboardStudy(id, params, stopSubmit, formValues)),
   stopSubmit: (errors) => dispatch(stopSubmit('Admin.EditStudyForm', errors)),
+  updateThankYouPage: (values) => dispatch(updateThankYouPage(values)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -96,9 +100,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     customNotificationEmails: PropTypes.object.isRequired,
     fetchCustomNotificationEmails: PropTypes.func.isRequired,
     stopSubmit: PropTypes.func.isRequired,
+    landing: PropTypes.object,
+    updateThankYouPage: PropTypes.func.isRequired,
   };
 
   static emailNotificationFields = [];
+  static customEmailNotificationFields = [];
+  static thankYouPageInfo = null;
 
   componentDidMount() {
     const { fetchNote, fetchLanding, fetchStudiesDashboard } = this.props;
@@ -121,10 +129,16 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
   }
 
   componentWillReceiveProps(nextProps) {
-    const { allClientUsers, customNotificationEmails } = this.props;
+    const { allClientUsers, customNotificationEmails, landing } = this.props;
     if (this.props.studyInfo.fetching && !nextProps.studyInfo.fetching){
       this.props.fetchAllStudyEmailNotificationsDashboard(nextProps.studyInfo.details.client_id, nextProps.studyInfo.details.study_id);
       this.props.fetchCustomNotificationEmails(nextProps.studyInfo.details.study_id);
+    }
+
+    if (landing.fetching && !nextProps.landing.fetching){
+      if (nextProps.landing.details && nextProps.landing.details.thankYouPage){
+        this.thankYouPageInfo = nextProps.landing.details.thankYouPage;
+      }
     }
 
     if (allClientUsers.fetching && !nextProps.allClientUsers.fetching) {
@@ -172,13 +186,17 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       // populate the custom email notifications
       initialValues.customEmailNotifications = this.customEmailNotificationFields;
 
+      if (this.thankYouPageInfo){
+        initialValues.cnsCode = this.thankYouPageInfo.cns;
+      }
+
       return initialValues;
     }
-    return null;
+    return {};
   }
 
   updateStudy = (values) => {
-    const { studyInfo, updateDashboardStudy, stopSubmit } = this.props;
+    const { studyInfo, updateDashboardStudy, stopSubmit, updateThankYouPage } = this.props;
     const initialFormValues = this.getEditStudyInitialValues(studyInfo.details);
     // diff the updated form values
     const newParam = _.pickBy(values, (value, key) => (
@@ -220,13 +238,11 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       }
     }
 
-    if (newParam.cnsCode){
-      delete newParam.cnsCode
-
+    if (newParam.cnsCode && this.thankYouPageInfo){
+      updateThankYouPage({...this.thankYouPageInfo, cns: newParam.cnsCode});
     }
-
     console.log(newParam);
-    //updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, values);
+    updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, values);
   }
 
   render() {
@@ -241,7 +257,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
 
     return (
       <div id="adminStudyEditPage">
-        {initialValues && <StudyInfoSection currentUser={currentUser} initialValues={initialValues} studyId={studyId} onSubmit={this.updateStudy} />}
+        <StudyInfoSection currentUser={currentUser} initialValues={initialValues} studyId={studyId} onSubmit={this.updateStudy} />
         <div id="studyEditSection">
           <EditStudyTabs
             study={selectedStudy}
