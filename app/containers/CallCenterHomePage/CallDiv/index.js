@@ -111,7 +111,7 @@ class CallDiv extends React.Component {
     const output = [];
     _.forEach(patients.details, (patient) => {
       if (!patient) return;
-      if (patient.call_center_patient_category_id === 1 || (!patient.call_center_patient_category_id && patient.patient_category_id === 2)) {
+      if (patient.call_center_patient_category_id === 2 || (!patient.call_center_patient_category_id && patient.patient_category_id === 2)) {
         output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
       }
     });
