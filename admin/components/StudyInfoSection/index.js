@@ -49,20 +49,6 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     this.state = {
       addEmailModalShow: false,
       customAddEmailModal: false,
-      emailNotif: [
-        {
-          email: 'joe@studykik.com',
-          checked: false,
-        },
-        {
-          email: 'chris@studykik.com',
-          checked: true,
-        },
-        {
-          email: 'roy@studykik.com',
-          checked: true,
-        },
-      ],
     };
   }
 
@@ -106,7 +92,6 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
   }
 
   render() {
-    const { emailNotif } = this.state;
     const { change, indications, sponsors, protocols, cro, siteLocations, usersByRoles, messagingNumbers, formValues } = this.props;
 
     const indicationsOptions = indications.map(item => ({ value: item.id, label: item.name }));
@@ -114,18 +99,18 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
     const protocolsOptions = protocols.map(item => ({ value: item.id, label: item.number }));
     const croOptions = cro.map(item => ({ value: item.id, label: item.name }));
     const siteLocationsOptions = siteLocations.map(item => ({ value: item.id, label: item.location }));
-    const smOptions = usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
-    const bdOptions = usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
-    const ccOptions = usersByRoles.cc.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` }));
+    const smOptions = usersByRoles.sm ? usersByRoles.sm.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` })) : [];
+    const bdOptions = usersByRoles.bd ? usersByRoles.bd.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` })) : [];
+    const ccOptions = usersByRoles.cc ? usersByRoles.cc.map(item => ({ value: item.id, label: `${item.first_name} ${item.last_name}` })) : [];
 
     const messagingNumbersOptions = messagingNumbers.details.map(item => ({
       value: item.id,
       label: item.phone_number,
     }));
-    if (this.props.studyInfo.text_number_id) {
+    if (this.props.studyInfo.details && this.props.studyInfo.details.text_number_id) {
       messagingNumbersOptions.unshift({
-        value: this.props.studyInfo.text_number_id,
-        label: this.props.studyInfo.phone_number,
+        value: this.props.studyInfo.details.text_number_id,
+        label: this.props.studyInfo.details.phone_number,
       });
     }
 
@@ -138,15 +123,17 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
               <strong className="label">
                 <label htmlFor="new-patient-first-name">STATUS:</label>
               </strong>
-              <div className="field text-right">
-                <Field
-                  name="isPublic"
-                  component={Toggle}
-                  className="field"
-                  onChange={(e) => {
-                    change('isPublic', e);
-                  }}
-                />
+              <div className="field">
+                <div className="text-right">
+                  <Field
+                    name="isPublic"
+                    component={Toggle}
+                    className="field"
+                    onChange={(e) => {
+                      change('isPublic', e);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </li>
@@ -407,7 +394,21 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
               />
             </div>
           </div></li>
-          <li>CENTRAL: </li>
+          <li><div className="field-row">
+            <strong className="label">
+              <label htmlFor="new-patient-first-name">CENTRAL:</label>
+            </strong>
+            <div className="field text-right">
+              <Field
+                name="central"
+                component={Toggle}
+                className="field"
+                onChange={(e) => {
+                  change('patientMessagingSuite', e);
+                }}
+              />
+            </div>
+          </div></li>
           <li><div className="field-row">
             <strong className="label">
               <label htmlFor="new-patient-first-name">PMS:</label>
