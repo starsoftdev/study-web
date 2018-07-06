@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/lib/Button';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
 import { DateRangePicker } from 'react-date-range';
+import _ from 'lodash';
 import 'react-date-range/dist/styles.css';
 import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
@@ -16,6 +17,7 @@ export default class RangePopups extends Component {
     changeAdminFilters: PropTypes.func.isRequired,
     fetchMediaTotalsForAdmin: PropTypes.func.isRequired,
     getCampaignsStats: PropTypes.func.isRequired,
+    currentFilters: PropTypes.object,
   };
 
   constructor(props) {
@@ -56,7 +58,7 @@ export default class RangePopups extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab } = this.props;
+    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab, currentFilters } = this.props;
     const range = this.state.predefined;
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
@@ -73,24 +75,25 @@ export default class RangePopups extends Component {
         endDate: uiEndDate,
       },
     }, () => {
+      const studyIdsArr = studies.details.map(s => s.study_id);
       if (this.state.type === 'statsDateRange') {
         this.hidePopup();
         changeAdminFilters('startDate', startDate);
         changeAdminFilters('endDate', endDate);
-        const studyIdsArr = studies.details.map(s => s.study_id);
         if (studyIdsArr.length) {
           setTimeout(() => {
-            fetchMediaTotalsForAdmin({
-              studyIds: studyIdsArr,
-              campaign: null,
-              startDate,
-              endDate,
-            });
+            const filters = _.cloneDeep(currentFilters);
+            filters.startDate = startDate;
+            filters.endDate = endDate;
+            fetchMediaTotalsForAdmin(filters);
           }, 200);
         } else {
           applyFilters(null, null, false);
         }
       } else if (this.state.type === 'studyEndDateRange') {
+        if (!studyIdsArr.length) {
+          applyFilters(null, null, false);
+        }
         manuallySetActiveTab('studyEndDateRange');
         changeAdminFilters('startDate', startDate.toISOString());
         changeAdminFilters('endDate', endDate.toISOString());
