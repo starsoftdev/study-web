@@ -174,19 +174,19 @@ class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')}1
+            {translate('container.page.callcenter.heading.call')} 1
           </div>
           { this.renderCall1() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')}2
+            {translate('container.page.callcenter.heading.call')} 2
           </div>
           { this.renderCall2() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')}3
+            {translate('container.page.callcenter.heading.call')} 3
           </div>
           { this.renderCall3() }
         </div>
