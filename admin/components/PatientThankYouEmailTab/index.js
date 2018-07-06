@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
@@ -15,7 +15,7 @@ const formName = 'patientEmailBlockForm';
   validate: formValidator,
 })
 
-export class PatientThankYouEmailTab extends React.Component {
+export class PatientThankYouEmailTab extends Component {
   static propTypes = {
     handleSubmit: React.PropTypes.func.isRequired,
     change: React.PropTypes.func.isRequired,

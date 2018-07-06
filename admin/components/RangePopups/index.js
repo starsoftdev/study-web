@@ -15,6 +15,7 @@ export default class RangePopups extends Component {
     manuallySetActiveTab: PropTypes.func.isRequired,
     changeAdminFilters: PropTypes.func.isRequired,
     fetchMediaTotalsForAdmin: PropTypes.func.isRequired,
+    getCampaignsStats: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -22,6 +23,7 @@ export default class RangePopups extends Component {
 
     this.state = {
       showPopup: false,
+      type: '',
       predefined : {
         startDate: moment().clone().subtract(30, 'days').toDate(),
         endDate: new Date(),
@@ -40,23 +42,22 @@ export default class RangePopups extends Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
   }
 
-  showPopup(ev) {
+  showPopup(ev, type) {
     ev.preventDefault();
-    this.setState({ showPopup: true });
+    this.setState({ showPopup: true, type });
   }
 
   hidePopup(ev) {
     if (ev) {
       ev.preventDefault();
     }
-    this.setState({ showPopup: false });
+    this.setState({ showPopup: false, type: '' });
   }
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies } = this.props;
+    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab } = this.props;
     const range = this.state.predefined;
-    const studyIdsArr = studies.details.map(s => s.study_id);
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
 
@@ -72,20 +73,31 @@ export default class RangePopups extends Component {
         endDate: uiEndDate,
       },
     }, () => {
-      this.hidePopup();
-      changeAdminFilters('startDate', startDate);
-      changeAdminFilters('endDate', endDate);
-      if (studyIdsArr.length) {
+      if (this.state.type === 'statsDateRange') {
+        this.hidePopup();
+        changeAdminFilters('startDate', startDate);
+        changeAdminFilters('endDate', endDate);
+        const studyIdsArr = studies.details.map(s => s.study_id);
+        if (studyIdsArr.length) {
+          setTimeout(() => {
+            fetchMediaTotalsForAdmin({
+              studyIds: studyIdsArr,
+              campaign: null,
+              startDate,
+              endDate,
+            });
+          }, 200);
+        } else {
+          applyFilters(null, null, false);
+        }
+      } else if (this.state.type === 'studyEndDateRange') {
+        manuallySetActiveTab('studyEndDateRange');
+        changeAdminFilters('startDate', startDate.toISOString());
+        changeAdminFilters('endDate', endDate.toISOString());
+        this.hidePopup();
         setTimeout(() => {
-          this.props.fetchMediaTotalsForAdmin({
-            studyIds: studyIdsArr,
-            campaign: null,
-            startDate,
-            endDate,
-          });
+          getCampaignsStats();
         }, 200);
-      } else {
-        applyFilters(null, null, false);
       }
     });
   }
@@ -111,6 +123,7 @@ export default class RangePopups extends Component {
   }
 
   handleChange(which, payload) {
+    console.log('which-payload: ', which, payload);
     if (payload.selection) {
       this.setState({
         [which] : payload.selection,
@@ -127,12 +140,12 @@ export default class RangePopups extends Component {
           </button>
         </div>
         <div className="col pull-right">
-          <button type="button" className="btn btn-primary pull-right" onClick={() => this.props.manuallySetActiveTab('studyEndDateRange')}>
+          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'studyEndDateRange')}>
             Study End Date Range
           </button>
         </div>
         <div className="col pull-right">
-          <button type="button" className="btn btn-primary pull-right" onClick={this.showPopup}>
+          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'statsDateRange')}>
             Stats Date Range
           </button>
         </div>
