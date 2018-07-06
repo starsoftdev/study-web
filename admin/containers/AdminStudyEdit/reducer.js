@@ -103,7 +103,7 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  studyCampaigns: {
+  campaigns: {
     details: [],
     fetching: false,
     error: null,
@@ -452,7 +452,7 @@ export default function adminStudyEditReducer(state = initialState, action) {
       return {
         ...state,
         campaigns: {
-          details: state.studyCampaigns.details,
+          details: state.campaigns.details,
           fetching: true,
           error: null,
         },
