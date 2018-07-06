@@ -20,6 +20,13 @@ import {
   UPDATE_LANDING_PAGE,
   CHANGE_STUDY_AD,
   REMOVE_STUDY_AD,
+  FETCH_LEVELS,
+  FETCH_CAMPAIGNS_BY_STUDY,
+  EDIT_CAMPAIGN,
+  DELETE_CAMPAIGN,
+  FETCH_FIVE_9_LIST,
+
+
 } from './constants';
 
 import {
@@ -48,6 +55,17 @@ import {
   removeStudyAdSuccess,
   changeStudyAdError,
   changeStudyAdSuccess,
+  levelsFetched,
+  levelsFetchingError,
+  fetchCampaignsByStudySuccess,
+  fetchCampaignsByStudyError,
+  editCampaignSuccess,
+  editCampaignError,
+  deleteCampaignSuccess,
+  deleteCampaignError,
+  fetchCampaignsByStudy,
+  fetchFive9ListSuccess,
+  fetchFive9ListError,
 } from './actions';
 
 // Bootstrap sagas
@@ -390,6 +408,122 @@ export function* removeStudyAdWorker(action) {
   }
 }
 
+export function* fetchLevelsWatcher() {
+  yield* takeLatest(FETCH_LEVELS, fetchLevelsWorker);
+}
+
+export function* fetchLevelsWorker() {
+  try {
+    const requestURL = `${API_URL}/levels`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(levelsFetched(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching level');
+    toastr.error('', errorMessage);
+    yield put(levelsFetchingError(err));
+  }
+}
+
+export function* fetchCampaignsByStudyWatcher() {
+  yield* takeLatest(FETCH_CAMPAIGNS_BY_STUDY, fetchCampaignsByStudyWorker);
+}
+
+export function* fetchCampaignsByStudyWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload}/getCampaignsWithPatientsCount`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchCampaignsByStudySuccess(response));
+  } catch (err) {
+    yield put(fetchCampaignsByStudyError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* editCampaignWatcher() {
+  yield* takeLatest(EDIT_CAMPAIGN, editCampaignWorker);
+}
+
+export function* editCampaignWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
+    const params = {
+      method: 'PUT',
+      body: JSON.stringify(action.payload),
+    };
+    yield call(request, requestURL, params);
+    yield put(editCampaignSuccess(action.payload, action.campaignInfo));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(editCampaignError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* deleteCampaignWatcher() {
+  yield* takeLatest(DELETE_CAMPAIGN, deleteCampaignWorker);
+}
+
+export function* deleteCampaignWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
+    const params = {
+      method: 'DELETE',
+      body: JSON.stringify(action.payload),
+    };
+    const response = yield call(request, requestURL, params);
+    if (response.success) {
+      yield put(fetchCampaignsByStudy(action.payload.studyId));
+      yield put(deleteCampaignSuccess(action.payload));
+    } else {
+      yield put(deleteCampaignError(response));
+    }
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
+    toastr.error('', errorMessage);
+    yield put(deleteCampaignError(err));
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchFive9ListWatcher() {
+  yield* takeLatest(FETCH_FIVE_9_LIST, fetchFive9ListWorker);
+}
+
+export function* fetchFive9ListWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getFive9ListsList`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchFive9ListSuccess(response));
+  } catch (err) {
+    yield put(fetchFive9ListError(err));
+  }
+}
+
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -404,7 +538,11 @@ export function* adminStudyEditSaga() {
   const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
   const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
   const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
-
+  const fetchLevelsWatcher1 = yield fork(fetchLevelsWatcher);
+  const fetchFive9ListWatcher1 = yield fork(fetchFive9ListWatcher);
+  const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
+  const editCampaignWatcher1 = yield fork(editCampaignWatcher);
+  const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
@@ -419,4 +557,10 @@ export function* adminStudyEditSaga() {
   yield cancel(updateLandingPageWatcher1);
   yield cancel(changeStudyAdWatcher1);
   yield cancel(removeStudyAdWatcher1);
+  yield cancel(fetchLevelsWatcher1);
+  yield cancel(fetchCampaignsByStudyWatcher1);
+  yield cancel(editCampaignWatcher1);
+  yield cancel(deleteCampaignWatcher1);
+  yield cancel(fetchFive9ListWatcher1);
+
 }

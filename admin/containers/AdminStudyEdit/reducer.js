@@ -36,6 +36,21 @@ import {
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
+  FETCH_LEVELS_SUCCESS,
+  FETCH_LEVELS_ERROR,
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
+
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
 } from './constants';
 
 const initialState = {
@@ -83,8 +98,27 @@ const initialState = {
     saving: false,
     error: null,
   },
+  five9List: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  studyCampaigns: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  editCampaignProcess: {
+    saving: false,
+    error: false,
+  },
+  deleteCampaignProcess: {
+    deleting: false,
+    error: false,
+  },
   updatedStudyAd: null,
   removedStudyAdId: null,
+  levels: [],
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {
@@ -404,6 +438,162 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_LEVELS_SUCCESS:
+      return {
+        ...state,
+        levels: action.payload,
+      };
+    case FETCH_LEVELS_ERROR:
+      return {
+        ...state,
+        levels: [],
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY:
+      return {
+        ...state,
+        campaigns: {
+          details: state.studyCampaigns.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY_SUCCESS:
+      return {
+        ...state,
+        campaigns: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY_ERROR:
+      return {
+        ...state,
+        campaigns: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_FIVE_9_LIST:
+      return {
+        ...state,
+        five9List: {
+          details: state.five9List.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_SUCCESS:
+      return {
+        ...state,
+        five9List: {
+          details: action.payload.details,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_ERROR:
+      return {
+        ...state,
+        five9List: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case DELETE_CAMPAIGN:
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: true,
+          error: null,
+        },
+      };
+
+    case DELETE_CAMPAIGN_SUCCESS: {
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
+          error: null,
+        },
+      };
+    }
+
+    case DELETE_CAMPAIGN_ERROR: {
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    }
+    case EDIT_CAMPAIGN:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_CAMPAIGN_SUCCESS: {
+      // updating the campaigns with the edited object
+      const updatedCampaigns = state.campaigns.details.map(item => (item.id === action.payload.campaignId
+        ? {
+          ...item,
+          dateFrom: action.payload.dateFrom,
+          dateTo: action.payload.dateTo,
+          customPatientGoal: action.payload.customPatientGoal,
+          patientQualificationSuite: action.payload.patientQualificationSuite,
+          level_id: action.payload.levelId,
+        } :
+        item
+      ));
+      const studiesCopy = state.studies.details.map(study => {
+        if (study.study_id === action.payload.studyId && study.campaign_id === action.payload.campaignId) {
+          return {
+            ...study,
+            campaign_id: action.payload.campaignId,
+            campaign_datefrom: action.payload.dateFrom,
+            campaign_dateto: action.payload.dateTo,
+            campaign_length: action.campaignInfo.campaignLength,
+            level_id: action.payload.levelId,
+            level_name: action.campaignInfo.levelName,
+            custom_patient_goal: action.payload.customPatientGoal,
+            five_9_value: action.payload.five9value,
+          };
+        } else {
+          return study;
+        }
+      });
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: null,
+        },
+        campaigns: {
+          details: updatedCampaigns,
+          fetching: false,
+          error: null,
+        },
+        studies: {
+          ...state.studies,
+          details: studiesCopy,
+        },
+      };
+    }
+    case EDIT_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: action.payload,
+        },
+      };
+
     default:
       return state;
   }
