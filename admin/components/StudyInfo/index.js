@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
+import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import Modal from 'react-bootstrap/lib/Modal';
+import Form from 'react-bootstrap/lib/Form';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
@@ -14,10 +16,19 @@ import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
 import { getMomentFromDate } from '../../../app/utils/time';
 
+const formName = 'adminInfoFilter';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (fName, name, value) => dispatch(change(fName, name, value)),
+  };
+}
+
 @reduxForm({
-  form: 'adminInfoFilter',
+  form: formName,
   enableReinitialize: true,
 })
+@connect(null, mapDispatchToProps)
 export class StudyInfo extends Component {
   static propTypes = {
     studies: PropTypes.object,
@@ -26,6 +37,7 @@ export class StudyInfo extends Component {
     paginationOptions: PropTypes.object,
     fetchStudiesAccordingToFilters: PropTypes.func,
     changeAdminFilters: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -53,6 +65,12 @@ export class StudyInfo extends Component {
     this.handleChange = this.handleChange.bind(this, 'predefined');
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.filtersFormValues.campaign && !newProps.filtersFormValues.campaign) {
+      newProps.change('adminInfoFilter', 'campaign-search', null);
+    }
   }
 
   goToStudyStatsPage(studyId) {
@@ -272,7 +290,7 @@ export class StudyInfo extends Component {
               <span>Total: {totals.details.total_studies || 0}</span>
             </h2>
             <div className="btns pull-right">
-              <form className="admin-info-filter">
+              <Form className="admin-info-filter">
                 <div className="select pull-left">
                   <Field
                     name="campaign-search"
@@ -290,7 +308,7 @@ export class StudyInfo extends Component {
                   <i className="icomoon-icon_calendar" />
                   &nbsp;Date Range
                 </Button>
-              </form>
+              </Form>
             </div>
           </div>
         )}
