@@ -125,12 +125,10 @@ export class MediaStatsTable extends Component { // eslint-disable-line react/pr
   static propTypes = {
     studies: PropTypes.object,
     mediaTotals: PropTypes.object,
+    currentFilters: PropTypes.object,
     sources: PropTypes.array,
-    campaign: PropTypes.string,
     campaignSelected: PropTypes.bool,
     fetchMediaTotalsForAdmin: PropTypes.func,
-    startDate: PropTypes.any,
-    endDate: PropTypes.any,
   };
 
   constructor() {
@@ -143,17 +141,13 @@ export class MediaStatsTable extends Component { // eslint-disable-line react/pr
   }
 
   componentWillMount() {
+    const { currentFilters } = this.props;
     const studyIdsArr = [];
     for (const study of this.props.studies.details) {
       studyIdsArr.push(study.study_id);
     }
 
-    this.props.fetchMediaTotalsForAdmin({
-      studyIds: studyIdsArr,
-      campaign: this.props.campaign,
-      startDate: this.props.startDate,
-      endDate: this.props.endDate,
-    });
+    this.props.fetchMediaTotalsForAdmin(currentFilters);
   }
 
   componentWillReceiveProps(newProps) {
@@ -165,12 +159,7 @@ export class MediaStatsTable extends Component { // eslint-disable-line react/pr
         studyIdsArr.push(study.study_id);
       }
 
-      this.props.fetchMediaTotalsForAdmin({
-        studyIds: studyIdsArr,
-        campaign: newProps.campaign,
-        startDate: newProps.startDate,
-        endDate: newProps.endDate,
-      });
+      this.props.fetchMediaTotalsForAdmin(newProps.currentFilters);
     }
   }
 
