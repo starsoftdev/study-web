@@ -12,7 +12,7 @@ import classNames from 'classnames';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
 
-import * as Selector from '../../containers/StudyPage/selectors';
+import * as Selector from '../../containers/VendorStudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
@@ -20,7 +20,7 @@ import {
   schedulePatient,
   submitMovePatientBetweenCategories,
   showScheduledModal,
-} from '../../containers/StudyPage/actions';
+} from '../../containers/VendorStudyPage/actions';
 import { translate } from '../../../common/utilities/localization';
 /**
  * Specifies the drop target contract.
@@ -243,7 +243,7 @@ class PatientCategory extends React.Component {
   }
 
   render() {
-    const { category, connectDropTarget, patientCategoriesTotals } = this.props;
+    const { category, patientCategoriesTotals } = this.props;
     const name = translate(`common.patientCategory.id${category.id}`);
     const total = _.find(patientCategoriesTotals, item => (
       item.patientCategoryId === category.id
@@ -253,7 +253,7 @@ class PatientCategory extends React.Component {
       width: this.state.columnWidth,
     };
 
-    return connectDropTarget(
+    return (
       <li
         key={category.id}
         ref={(patientColumn) => {
