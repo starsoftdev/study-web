@@ -17,10 +17,10 @@ import DatePicker from '../../../common/components/Input/DatePicker';
 import ReactSelect from '../../../common/components/Input/ReactSelect';
 import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
-/* import LoadingSpinner from '../LoadingSpinner'; */
+import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
-import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess, selectDashboardfive9List, selectLevels } from '../../containers/AdminStudyEdit/selectors';
-import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchFive9List } from '../../containers/AdminStudyEdit/actions';
+import { selectAdminStudyEditCampaigns, selectAdminStudyEditCampaignProcess, selectAdminStudyEditDeleteCampaignProcess, selectdminStudyEditFive9List, selectLevels } from '../../containers/AdminStudyEdit/selectors';
+import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchFive9List, fetchLevels } from '../../containers/AdminStudyEdit/actions';
 
 const moment = extendMoment(Moment);
 const formName = 'campaignPageForm';
@@ -30,9 +30,10 @@ const formName = 'campaignPageForm';
 })
 @connect(mapStateToProps, mapDispatchToProps)
 
-export class CampaignEdit extends React.Component {
+class CampaignEdit extends React.Component {
   static propTypes = {
-    study: PropTypes.object,
+    study: PropTypes.object.isRequired,
+    studyId: PropTypes.number.isRequired,
     studyCampaigns: PropTypes.object,
     updateCampaignProcess: PropTypes.object,
     deleteCampaignProcess: PropTypes.object,
@@ -44,7 +45,8 @@ export class CampaignEdit extends React.Component {
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
     change: PropTypes.func.isRequired,
-    fetchFive9List: PropTypes.func,
+    fetchFive9List: PropTypes.func.isRequired,
+    fetchLevels: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -54,6 +56,7 @@ export class CampaignEdit extends React.Component {
       five9List: [],
       selectedCampaign: 0,
       isCampaignHasPatients: false,
+      studiesFetcehd: false,
     };
 
     this.campaignChanged = this.campaignChanged.bind(this);
@@ -62,19 +65,23 @@ export class CampaignEdit extends React.Component {
     this.five9ValueChanged = this.five9ValueChanged.bind(this);
   }
 
+  componentWillMount() {
+    this.props.fetchCampaignsByStudy(this.props.studyId);
+    this.props.fetchLevels();
+    this.props.fetchFive9List();
+
+  }
+
   componentWillReceiveProps(newProps) {
-    if (this.props.study.study_id) {
-      this.props.fetchCampaignsByStudy(this.props.study.study_id);
-      this.setState({ selectedCampaign : 0, isCampaignHasPatients: true });
-    }
+    const { studyCampaigns } = newProps;
     // TODO re-enable Five9 when we figure out how to integrate it with the new web app code-base
-    if (newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
+    if (newProps.studyCampaigns && newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
       this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
       this.five9ValueChanged();
     }
 
-    if (newProps.five9List.details.length && !this.state.five9List.length) {
+    if (newProps.five9List && newProps.five9List.details.length && !this.state.five9List.length) {
       this.setState({ five9List: newProps.five9List.details });
     }
 
@@ -90,13 +97,11 @@ export class CampaignEdit extends React.Component {
     if ((newProps.study && !this.props.study) || (newProps.study && this.props.study && newProps.study.study_id !== this.props.study.study_id)) {
       this.five9ValueChanged(newProps.study.five_9_value);
     }
-  }
-
-  componentDidUpdate(prevProps) {
-    const { studyCampaigns } = this.props;
+     
     // when campaigns have been loaded we need select first campaign by default
-    if ((prevProps.studyCampaigns.fetching && !studyCampaigns.fetching) || (studyCampaigns.details.length > 0)) {
-      this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+    if (!this.state.studiesFetched && studyCampaigns && studyCampaigns.details && studyCampaigns.details.length > 0) {
+      this.setState({ studiesFetched: true });
+      //this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -155,15 +160,15 @@ export class CampaignEdit extends React.Component {
   }
 
   render() {
-    const { /* levels, */studyCampaigns, formValues/* ,  updateCampaignProcess, deleteCampaignProcess */, study } = this.props;
-    const exposureLevelOptions = [1, 2, 3];/* levels.map(level => ({ value: level.id, label: level.name })); */
+    const { levels, studyCampaigns, formValues , updateCampaignProcess, deleteCampaignProcess, study } = this.props;
+    const exposureLevelOptions =  (levels) ? levels.map(level => ({ value: level.id, label: level.name })) : [];
     const timezone = (study && study.timezone) ? study.timezone : 'utc';
-    const campaignOptions = [1, 2, 3];/* studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
+    const campaignOptions = (studyCampaigns && studyCampaigns.details) ? studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
       if (c.isCurrent) {
         return { label: `${c.orderNumber} - Current`, value: c.id };
       }
       return { label: c.orderNumber, value: c.id };
-    }); */
+    }) : [];
     const dateFrom = formValues.datefrom ? moment(formValues.datefrom).tz(timezone) : undefined;
     const dateTo = formValues.dateto ? moment(formValues.dateto).tz(timezone) : undefined;
     let fromMinDate = null;
@@ -176,18 +181,18 @@ export class CampaignEdit extends React.Component {
         toMaxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom).utc();
       }
       // if campaign is not the last, then it has a next campaign, we set the min date accordingly
-      if (campaignIndex < /* .details.length - 1 */0) {
+      if (campaignIndex < studyCampaigns.details.length - 1) {
         fromMinDate = moment(studyCampaigns.details[campaignIndex + 1].dateTo).utc();
       }
 
-      // if (!studyCampaigns.details[campaignIndex].dateFrom) {
-      isFutureCampaign = true;
-      // } else {
-      // isFutureCampaign = !studyCampaigns.details[campaignIndex].isCurrent && moment(studyCampaigns.details[campaignIndex].dateFrom).isAfter(moment().subtract(1, 'days'));
-      // }
+      if (studyCampaigns.details[campaignIndex] && !studyCampaigns.details[campaignIndex].dateFrom) {
+        isFutureCampaign = true;
+      } else {
+        isFutureCampaign =  (studyCampaigns.details[campaignIndex] && !studyCampaigns.details[campaignIndex].isCurrent && moment(studyCampaigns.details[campaignIndex].dateFrom).isAfter(moment().subtract(1, 'days')));
+      }
     }
 
-    const five9Options = [1, 2, 3];// this.state.five9List.map(item => ({ value: item.name, label: item.name }));
+    const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
 
     return (
       <div>
@@ -323,16 +328,16 @@ export class CampaignEdit extends React.Component {
 
             <div className="field-row text-right">
               <div className={classNames('btn btn-gray upload-btn', { disabled: this.state.isCampaignHasPatients })} onClick={() => (!this.state.isCampaignHasPatients ? this.deleteCampaignClick() : null)}>
-                {/* ?deleteCampaignProcess.deleting
+                { deleteCampaignProcess.deleting
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                   : <span>Delete</span>
-                */}
+                }
               </div>
               <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                {/* updateCampaignProcess.saving
+                { updateCampaignProcess.saving
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                   : <span>Update</span>
-                */}
+                }
               </Button>
             </div>
           </div>
@@ -342,11 +347,11 @@ export class CampaignEdit extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  studyCampaigns: selectDashboardCampaigns(),
-  updateCampaignProcess: selectDashboardEditCampaignProcess(),
-  deleteCampaignProcess: selectDashboardDeleteCampaignProcess(),
-  five9List: selectDashboardfive9List(),
+const mapStateToProps =  createStructuredSelector({
+  studyCampaigns: selectAdminStudyEditCampaigns(),
+  updateCampaignProcess: selectAdminStudyEditCampaignProcess(),
+  deleteCampaignProcess: selectAdminStudyEditDeleteCampaignProcess(),
+  five9List: selectdminStudyEditFive9List(),
   formValues: selectValues(formName),
   levels: selectLevels(),
 });
@@ -355,6 +360,7 @@ function mapDispatchToProps(dispatch) {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
     fetchCampaignsByStudy: (id) => dispatch(fetchCampaignsByStudy(id)),
+    fetchLevels: () => dispatch(fetchLevels()),
     submitForm: (values, campaignInfo) => dispatch(editCampaign(values, campaignInfo)),
     deleteCampaign: (values) => dispatch(deleteCampaign(values)),
     fetchFive9List: () => dispatch(fetchFive9List()),

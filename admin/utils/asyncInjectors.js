@@ -92,7 +92,7 @@ function redirectToLogin(store) {
             otherRoles = ['client', 'sponsor'];
           }
 
-          if (
+          /* if (
             authorizedRoutes[userRole].indexOf(pathname) === -1 &&
             (
               authorizedRoutes[otherRoles[0]].indexOf(pathname) > -1 ||
@@ -100,7 +100,7 @@ function redirectToLogin(store) {
             )
           ) {
             location.href = '/app';
-          }
+          } */
         }
       }, 4000);
     }
