@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import _ from 'lodash';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { stopSubmit } from 'redux-form';
@@ -116,7 +117,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       // load studyId related data.
       fetchNote(studyId);
       fetchLanding(studyId, null);
-      fetchStudiesDashboard({search: {value: studyId} }, 1, 0);
+      fetchStudiesDashboard({ search: { value: studyId } }, 1, 0);
 
       this.props.fetchIndications();
       this.props.fetchSponsors();
@@ -130,13 +131,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
 
   componentWillReceiveProps(nextProps) {
     const { allClientUsers, customNotificationEmails, landing } = this.props;
-    if (this.props.studyInfo.fetching && !nextProps.studyInfo.fetching){
+    if (this.props.studyInfo.fetching && !nextProps.studyInfo.fetching) {
       this.props.fetchAllStudyEmailNotificationsDashboard(nextProps.studyInfo.details.client_id, nextProps.studyInfo.details.study_id);
       this.props.fetchCustomNotificationEmails(nextProps.studyInfo.details.study_id);
     }
 
-    if (landing.fetching && !nextProps.landing.fetching){
-      if (nextProps.landing.details && nextProps.landing.details.thankYouPage){
+    if (landing.fetching && !nextProps.landing.fetching) {
+      if (nextProps.landing.details && nextProps.landing.details.thankYouPage) {
         this.thankYouPageInfo = nextProps.landing.details.thankYouPage;
       }
     }
@@ -152,7 +153,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
           isChecked: item.isChecked,
         });
       }
-    }else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
+    } else if (customNotificationEmails.fetching && !nextProps.customNotificationEmails.fetching) {
       this.customEmailNotificationFields = [];
       let isAllCustomChecked = true;
       nextProps.customNotificationEmails.details.forEach(item => {
@@ -186,7 +187,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       // populate the custom email notifications
       initialValues.customEmailNotifications = this.customEmailNotificationFields;
 
-      if (this.thankYouPageInfo){
+      if (this.thankYouPageInfo) {
         initialValues.cnsCode = this.thankYouPageInfo.cns;
       }
 
@@ -205,14 +206,14 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     // delete tagged indications from the request because we already submitted the changes for the tagged indications
     delete newParam.taggedIndicationsForStudy;
     if (newParam.recruitment_phone) {
-        newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
+      newParam.recruitment_phone = normalizePhoneForServer(newParam.recruitment_phone);
     }
     // check the diff between the initial values of email notifications
     if (newParam.emailNotifications) {
       if (initialFormValues.emailNotifications) {
         newParam.emailNotifications = newParam.emailNotifications.filter((value, key) => {
-          if (initialFormValues.emailNotifications[key]){
-            return value.isChecked !== initialFormValues.emailNotifications[key].isChecked
+          if (initialFormValues.emailNotifications[key]) {
+            return value.isChecked !== initialFormValues.emailNotifications[key].isChecked;
           }
           return true;
         });
@@ -226,7 +227,7 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     if (newParam.customEmailNotifications) {
       if (initialFormValues.customEmailNotifications) {
         newParam.customEmailNotifications = newParam.customEmailNotifications.filter((value, key) => {
-          if (initialFormValues.customEmailNotifications[key]){
+          if (initialFormValues.customEmailNotifications[key]) {
             return value.isChecked !== initialFormValues.customEmailNotifications[key].isChecked;
           }
           return true;
@@ -238,8 +239,8 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
       }
     }
 
-    if (newParam.cnsCode && this.thankYouPageInfo){
-      updateThankYouPage({...this.thankYouPageInfo, cns: newParam.cnsCode});
+    if (newParam.cnsCode && this.thankYouPageInfo) {
+      updateThankYouPage({ ...this.thankYouPageInfo, cns: newParam.cnsCode });
     }
     console.log(newParam);
     updateDashboardStudy(initialFormValues.study_id, newParam, stopSubmit, values);
