@@ -1,4 +1,4 @@
-import { validatorFactory } from '../../../../app/utils/reduxForm';
+import { validatorFactory } from '../../../utils/reduxForm';
 
 const schema = {
   firstName: {
