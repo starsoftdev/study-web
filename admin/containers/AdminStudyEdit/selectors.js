@@ -3,8 +3,6 @@ import { get } from 'lodash';
 
 const selectAdminStudyEditDomain = () => state => state.AdminStudyEditPage;
 const selectFormDomain = () => state => state.form;
-const selectDashboardPageDomain = () => state => state.dashboardPage;
-
 
 const selectAdminStudyEditPage = () => createSelector(
   selectAdminStudyEditDomain(),
@@ -81,6 +79,31 @@ const selectRemovedStudyAdId = () => createSelector(
   substate => substate.removedStudyAdId
 );
 
+const selectAdminStudyEditCampaigns = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.campaigns
+);
+
+const selectAdminStudyEditCampaignProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.editCampaignProcess
+);
+
+const selectAdminStudyEditDeleteCampaignProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.deleteCampaignProcess
+);
+
+const selectLevels = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.levels
+);
+
+const selectdminStudyEditFive9List = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.five9List
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -97,38 +120,10 @@ export {
   selectUpdatedStudyAd,
   selectChangeStudyAdProcess,
   selectRemovedStudyAdId,
-};
-
-
-const selectDashboardCampaigns = () => createSelector(
-  selectDashboardPageDomain(),
-  (substate) => substate.campaigns
-);
-
-const selectDashboardEditCampaignProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  (substate) => substate.editCampaignProcess
-);
-
-const selectDashboardDeleteCampaignProcess = () => createSelector(
-  selectDashboardPageDomain(),
-  (substate) => substate.deleteCampaignProcess
-);
-
-const selectLevels = () => createSelector(
-  selectDashboardPageDomain(),
-  substate => substate.levels
-);
-
-const selectDashboardfive9List = () => createSelector(
-  selectDashboardPageDomain(),
-  (substate) => substate.five9List
-);
-
-export {
-  selectDashboardCampaigns,
-  selectDashboardEditCampaignProcess,
-  selectDashboardDeleteCampaignProcess,
+  selectAdminStudyEditCampaigns,
+  selectAdminStudyEditCampaignProcess,
+  selectAdminStudyEditDeleteCampaignProcess,
   selectLevels,
-  selectDashboardfive9List,
+  selectdminStudyEditFive9List,
 };
+

@@ -58,6 +58,20 @@ import {
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
+ 
+  FETCH_LEVELS,
+  FETCH_LEVELS_SUCCESS,
+  FETCH_LEVELS_ERROR,
+
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
+
+
 } from './constants';
 
 export function fetchNote(studyId) {
@@ -96,7 +110,41 @@ export function addNoteSuccess(payload) {
 }
 export function fetchCampaignsByStudy(payload) {
   return {
-    type: 'FETCH_CAMPAIGNS_BY_STUDY',
+    type: FETCH_CAMPAIGNS_BY_STUDY,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudySuccess(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudyError(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function fetchFive9List() {
+  return {
+    type: FETCH_FIVE_9_LIST,
+  };
+}
+
+export function fetchFive9ListSuccess(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchFive9ListError(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_ERROR,
     payload,
   };
 }
@@ -338,12 +386,6 @@ export function updateLandingPageError(payload) {
     payload,
   };
 }
-export function fetchFive9List() {
-  return {
-    type: 'FETCH_FIVE_9_LIST',
-  };
-}
-
 
 export function resetLandingPageState() {
   return {
@@ -364,6 +406,7 @@ export function changeStudyAdSuccess(payload) {
     payload,
   };
 }
+
 
 export function changeStudyAdError(payload) {
   return {
@@ -397,3 +440,26 @@ export function resetChangeStudyAdState() {
     type: RESET_CHANGE_STUDY_AD_STATE,
   };
 }
+
+// ///////////////////////////////////////////
+// levels
+// ///////////////////////////////////////////
+export function fetchLevels() {
+  return {
+    type: FETCH_LEVELS,
+  };
+}
+export function levelsFetched(payload) {
+  return {
+    type: FETCH_LEVELS_SUCCESS,
+    payload,
+  };
+}
+
+export function levelsFetchingError(payload) {
+  return {
+    type: FETCH_LEVELS_ERROR,
+    payload,
+  };
+}
+
