@@ -97,11 +97,11 @@ class CampaignEdit extends React.Component {
     if ((newProps.study && !this.props.study) || (newProps.study && this.props.study && newProps.study.study_id !== this.props.study.study_id)) {
       this.five9ValueChanged(newProps.study.five_9_value);
     }
-     
+
     // when campaigns have been loaded we need select first campaign by default
     if (!this.state.studiesFetched && studyCampaigns && studyCampaigns.details && studyCampaigns.details.length > 0) {
       this.setState({ studiesFetched: true });
-      //this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+      // this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -134,7 +134,7 @@ class CampaignEdit extends React.Component {
       campaignId: +formValues.campaign_id,
       levelId: formValues.level_id,
       patientQualificationSuite: formValues.patient_qualification_suite || false,
-      studyId: +study.study_id,
+      studyId: study.id,
       five9value: formValues.five_9_value || null,
     };
     const customPatientGoal = parseInt(formValues.custom_patient_goal);
@@ -160,7 +160,7 @@ class CampaignEdit extends React.Component {
   }
 
   render() {
-    const { levels, studyCampaigns, formValues , updateCampaignProcess, deleteCampaignProcess, study } = this.props;
+    const { levels, studyCampaigns, formValues, updateCampaignProcess, deleteCampaignProcess, study } = this.props;
     const exposureLevelOptions =  (levels) ? levels.map(level => ({ value: level.id, label: level.name })) : [];
     const timezone = (study && study.timezone) ? study.timezone : 'utc';
     const campaignOptions = (studyCampaigns && studyCampaigns.details) ? studyCampaigns.details.sort((a, b) => b.orderNumber - a.orderNumber).map(c => {
@@ -175,7 +175,7 @@ class CampaignEdit extends React.Component {
     let toMaxDate = null;
     let isFutureCampaign = false;
     const campaignIndex = 0;// studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
-    if (campaignIndex !== undefined && campaignIndex >= 0) {
+    if (campaignIndex !== undefined && studyCampaigns.details.length > 0 && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
       if (campaignIndex > 0) {
         toMaxDate = moment(studyCampaigns.details[campaignIndex - 1].dateFrom).utc();
