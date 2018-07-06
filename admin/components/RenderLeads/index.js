@@ -4,7 +4,7 @@
  *
  */
 
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import classnames from 'classnames';
@@ -16,7 +16,7 @@ import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
 
-class RenderLeads extends React.Component { // eslint-disable-line react/prefer-stateless-function
+class RenderLeads extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     fields: PropTypes.object,
     formValues: PropTypes.object,
