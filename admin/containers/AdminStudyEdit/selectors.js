@@ -79,6 +79,61 @@ const selectRemovedStudyAdId = () => createSelector(
   substate => substate.removedStudyAdId
 );
 
+const selectStudyInfo = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.studyInfo
+);
+
+const selectIndications = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.indications
+);
+
+const selectSponsors = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.sponsors
+);
+
+const selectProtocols = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.protocols
+);
+
+const selectCro = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.cro
+);
+
+const selectSiteLocations = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.siteLocations
+);
+
+const selectUsersByRoles = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.usersByRoles
+);
+
+const selectMessagingNumbers = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.messagingNumbers
+);
+
+const selectAllClientUsers = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.allClientUsers
+);
+
+const selectAllCustomNotificationEmails = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.allCustomNotificationEmails
+);
+
+const selectUpdateStudyProcess = () => createSelector(
+  selectAdminStudyEditDomain(),
+  substate => substate.editStudyProcess
+);
+
 export default selectAdminStudyEditPage;
 export {
   selectAdminDashboardEditNoteFormValues,
@@ -95,4 +150,15 @@ export {
   selectUpdatedStudyAd,
   selectChangeStudyAdProcess,
   selectRemovedStudyAdId,
+  selectStudyInfo,
+  selectIndications,
+  selectCro,
+  selectProtocols,
+  selectSponsors,
+  selectSiteLocations,
+  selectUsersByRoles,
+  selectMessagingNumbers,
+  selectAllClientUsers,
+  selectAllCustomNotificationEmails,
+  selectUpdateStudyProcess,
 };

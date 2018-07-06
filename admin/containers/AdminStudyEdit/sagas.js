@@ -3,6 +3,7 @@ import { call, put, fork, cancel, take } from 'redux-saga/effects';
 import { get } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { translate } from '../../../common/utilities/localization';
 
 import request from '../../utils/request';
 
@@ -20,6 +21,14 @@ import {
   UPDATE_LANDING_PAGE,
   CHANGE_STUDY_AD,
   REMOVE_STUDY_AD,
+  GET_STUDY_INFO,
+  UPDATE_DASHBOARD_STUDY,
+  FETCH_SITE_LOCATIONS,
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  ADD_EMAIL_NOTIFICATION_USER,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  ADD_CUSTOM_EMAIL_NOTIFICATION,
 } from './constants';
 
 import {
@@ -48,6 +57,20 @@ import {
   removeStudyAdSuccess,
   changeStudyAdError,
   changeStudyAdSuccess,
+  fetchStudiesDashboardSuccess,
+  fetchStudiesDashboardError,
+  updateDashboardStudySuccess,
+  fetchSiteLocationsSuccess,
+  fetchSiteLocationsError,
+  fetchMessagingNumbersDashboardSuccess,
+  fetchMessagingNumbersDashboardError,
+  fetchAllStudyEmailNotificationsSuccess,
+  fetchAllStudyEmailNotificationsError,
+  addEmailNotificationUserSuccess,
+  fetchCustomNotificationEmailsSuccess,
+  fetchCustomNotificationEmailsError,
+  addCustomEmailNotificationSuccess,
+  updateDashboardStudyError,
 } from './actions';
 
 // Bootstrap sagas
@@ -390,6 +413,208 @@ export function* removeStudyAdWorker(action) {
   }
 }
 
+export function* fetchStudiesDashboardWatcher() {
+  yield* takeLatest(GET_STUDY_INFO, fetchStudiesDashboardWorker);
+}
+
+export function* fetchStudiesDashboardWorker(action) {
+  const { params, limit, offset } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/getStudiesForDashboard`;
+    params.limit = limit;
+    params.offset = offset;
+
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    let hasMore = true;
+    const page = (offset / 50) + 1;
+    if (response.studies.length < 50) {
+      hasMore = false;
+    }
+
+    if (response.studies.length === 0 && offset === 0) {
+      toastr.error('', translate('portals.client.component.studiesList.fetchStudiesToastrError'));
+    }
+
+    yield put(fetchStudiesDashboardSuccess(response, hasMore, page));
+  } catch (err) {
+    console.log(err);
+    yield put(fetchStudiesDashboardError(err));
+  }
+}
+
+export function* updateDashboardStudyWatcher() {
+  yield* takeLatest(UPDATE_DASHBOARD_STUDY, updateDashboardStudyWorker);
+}
+
+export function* updateDashboardStudyWorker(action) {
+  const { id, formValues, params, stopSubmit } = action;
+
+  try {
+    const requestURL = `${API_URL}/studies/${id}/updateDashboardStudy`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    yield call(request, requestURL, options);
+
+    yield put(updateDashboardStudySuccess(id, params, formValues));
+    stopSubmit();
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.updateStudyToastrError'));
+    toastr.error('', errorMessage);
+    yield put(updateDashboardStudyError(err));
+    stopSubmit(err);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchSiteLocationsWatcher() {
+  yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocationsWorker);
+}
+
+export function* fetchSiteLocationsWorker() {
+  try {
+    const requestURL = `${API_URL}/sites/getSiteLocations`;
+    const options = {
+      method: 'GET',
+    };
+
+    const response = yield call(request, requestURL, options);
+
+    yield put(fetchSiteLocationsSuccess(response));
+  } catch (err) {
+    yield put(fetchSiteLocationsError(err));
+  }
+}
+
+export function* fetchMessagingNumbersWatcher() {
+  yield* takeLatest(FETCH_MESSAGING_NUMBERS, fetchMessagingNumbersWorker);
+}
+
+export function* fetchMessagingNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getNotAssignedPhoneNumbers`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchMessagingNumbersDashboardSuccess(response));
+  } catch (err) {
+    yield put(fetchMessagingNumbersDashboardError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchAllClientUsersWatcher() {
+  yield* takeLatest(FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS, fetchAllClientUsersWorker);
+}
+
+export function* fetchAllClientUsersWorker(action) {
+  try {
+    const requestURL = `${API_URL}/sites/getAllStudyNotificationEmails`;
+
+    const params = {
+      method: 'GET',
+      query: {
+        clientId: action.clientId,
+        studyId: action.studyId,
+      },
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchAllStudyEmailNotificationsSuccess(response));
+  } catch (err) {
+    yield put(fetchAllStudyEmailNotificationsError(err));
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.fetchAllStudyEmailNotificationsError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* addEmailNotificationUserWatcher() {
+  yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
+}
+
+export function* addEmailNotificationUserWorker(action) {
+  const { payload } = action;
+  try {
+    const clientId = payload.clientId;
+    delete payload.clientId;
+
+    const requestURL = `${API_URL}/clients/${clientId}/addUserWithClientRole`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(addEmailNotificationUserSuccess(response.clientRole.user_id, response.user.email, response.user));
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addEmailNotifToastrError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+export function* fetchCustomNotificationEmailsWatcher() {
+  yield* takeLatest(FETCH_CUSTOM_NOTIFICATION_EMAILS, fetchCustomNotificationEmailsWorker);
+}
+
+export function* fetchCustomNotificationEmailsWorker(action) {
+  try {
+    const requestURL = `${API_URL}/studies/${action.id}/customNotificationEmails`;
+    const response = yield call(request, requestURL);
+
+    yield put(fetchCustomNotificationEmailsSuccess(response));
+  } catch (err) {
+    yield put(fetchCustomNotificationEmailsError(err));
+  }
+}
+
+export function* addCustomEmailNotificationWatcher() {
+  yield* takeLatest(ADD_CUSTOM_EMAIL_NOTIFICATION, addCustomEmailNotificationWorker);
+}
+
+export function* addCustomEmailNotificationWorker(action) {
+  const { payload } = action;
+  try {
+    const requestURL = `${API_URL}/studyNotificationEmails/customEmailNotification`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    };
+
+    const response = yield call(request, requestURL, options);
+    yield put(addCustomEmailNotificationSuccess(response.id, response.email));
+  } catch (err) {
+    const errorMessage = get(err, 'message', translate('portals.client.component.studiesList.addCustomEmailNotifToastrError'));
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
   const addNoteWatcher1 = yield fork(addNoteWatcher);
@@ -404,6 +629,14 @@ export function* adminStudyEditSaga() {
   const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
   const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
   const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
+  const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
+  const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
+  const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
+  const fetchMessagingNumbersWatcher1 = yield fork(fetchMessagingNumbersWatcher);
+  const fetchAllClientUsersWatcher1 = yield fork(fetchAllClientUsersWatcher);
+  const addEmailNotificationUserWatcher1 = yield fork(addEmailNotificationUserWatcher);
+  const fetchCustomNotificationEmailsWatcher1 = yield fork(fetchCustomNotificationEmailsWatcher);
+  const addCustomEmailNotificationWatcher1 = yield fork(addCustomEmailNotificationWatcher);
 
 
   yield take(LOCATION_CHANGE);
@@ -419,4 +652,12 @@ export function* adminStudyEditSaga() {
   yield cancel(updateLandingPageWatcher1);
   yield cancel(changeStudyAdWatcher1);
   yield cancel(removeStudyAdWatcher1);
+  yield cancel(fetchStudiesDashboardWatcher1);
+  yield cancel(updateDashboardStudyWatcher1);
+  yield cancel(fetchSiteLocationsWatcher1);
+  yield cancel(fetchMessagingNumbersWatcher1);
+  yield cancel(fetchAllClientUsersWatcher1);
+  yield cancel(addEmailNotificationUserWatcher1);
+  yield cancel(fetchCustomNotificationEmailsWatcher1);
+  yield cancel(addCustomEmailNotificationWatcher1);
 }
