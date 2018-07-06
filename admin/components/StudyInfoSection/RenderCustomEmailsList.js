@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
-import { forEach, filter } from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
-import Checkbox from '../../components/Input/Checkbox';
 import ReactSelect from '../../components/Input/ReactSelect';
 
 export default class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -40,7 +38,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
   renderEmailList(email, index) {
     const { formValues } = this.props;
 
-    const options = [{value: 'true', label: 'TRUE'}, {value: 'false', label: 'FALSE'}];
+    const options = [{ value: 'true', label: 'TRUE' }, { value: 'false', label: 'FALSE' }];
 
     return (
       <li key={index}>
@@ -54,7 +52,7 @@ export default class RenderEmailsList extends React.Component { // eslint-disabl
               component={ReactSelect}
               options={options}
               customSearchIconClass="icomoon-icon_search2"
-              onChange={(e) => {this.selectEmail(e, index)}}
+              onChange={(e) => { this.selectEmail(e, index); }}
             />
           </div>
         </div>
