@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/lib/Button';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
 import { DateRangePicker } from 'react-date-range';
+import _ from 'lodash';
 import 'react-date-range/dist/styles.css';
 import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
@@ -15,6 +16,7 @@ export default class RangePopups extends Component {
     manuallySetActiveTab: PropTypes.func.isRequired,
     changeAdminFilters: PropTypes.func.isRequired,
     fetchMediaTotalsForAdmin: PropTypes.func.isRequired,
+    currentFilters: PropTypes.object,
   };
 
   constructor(props) {
@@ -54,7 +56,7 @@ export default class RangePopups extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies } = this.props;
+    const { changeAdminFilters, applyFilters, studies, currentFilters } = this.props;
     const range = this.state.predefined;
     const studyIdsArr = studies.details.map(s => s.study_id);
     const startDate = getMomentFromDate(range.startDate).utc();
@@ -77,12 +79,10 @@ export default class RangePopups extends Component {
       changeAdminFilters('endDate', endDate);
       if (studyIdsArr.length) {
         setTimeout(() => {
-          this.props.fetchMediaTotalsForAdmin({
-            studyIds: studyIdsArr,
-            campaign: null,
-            startDate,
-            endDate,
-          });
+          const filters = _.cloneDeep(currentFilters);
+          filters.startDate = startDate;
+          filters.endDate = endDate;
+          this.props.fetchMediaTotalsForAdmin(filters);
         }, 200);
       } else {
         applyFilters(null, null, false);
