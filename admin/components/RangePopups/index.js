@@ -80,6 +80,7 @@ export default class RangePopups extends Component {
         this.hidePopup();
         changeAdminFilters('startDate', startDate);
         changeAdminFilters('endDate', endDate);
+        manuallySetActiveTab(null);
         if (studyIdsArr.length) {
           setTimeout(() => {
             const filters = _.cloneDeep(currentFilters);
@@ -126,7 +127,6 @@ export default class RangePopups extends Component {
   }
 
   handleChange(which, payload) {
-    console.log('which-payload: ', which, payload);
     if (payload.selection) {
       this.setState({
         [which] : payload.selection,
