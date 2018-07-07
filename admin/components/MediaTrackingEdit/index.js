@@ -76,7 +76,7 @@ export class MediaTrackingEdit extends Component { // eslint-disable-line react/
       }
     }
 
-    editStudyMediaTypes(study.id, formValues.mediaType, formValues.mediaTracking);
+    editStudyMediaTypes(study.id, formValues.mediaType, formValues.mediaTracking || false);
   }
 
   render() {
