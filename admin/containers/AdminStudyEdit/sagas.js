@@ -25,8 +25,7 @@ import {
   EDIT_CAMPAIGN,
   DELETE_CAMPAIGN,
   FETCH_FIVE_9_LIST,
-
-
+  FETCH_STUDY,
 } from './constants';
 
 import {
@@ -66,6 +65,8 @@ import {
   fetchCampaignsByStudy,
   fetchFive9ListSuccess,
   fetchFive9ListError,
+  fetchStudySuccess,
+  fetchStudyError,
 } from './actions';
 
 // Bootstrap sagas
@@ -514,15 +515,34 @@ export function* fetchFive9ListWorker() {
     const options = {
       method: 'GET',
     };
-
     const response = yield call(request, requestURL, options);
-
     yield put(fetchFive9ListSuccess(response));
   } catch (err) {
     yield put(fetchFive9ListError(err));
   }
 }
 
+export function* fetchStudyWatcher() {
+  yield* takeLatest(FETCH_STUDY, fetchStudyWorker);
+}
+
+export function* fetchStudyWorker(action) {
+  try {
+    const filter = JSON.stringify({ include:['site'] });
+    const requestURL = `${API_URL}/studies/${action.studyId}?filter=${filter}`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchStudySuccess(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching study');
+    toastr.error('', errorMessage);
+    yield put(fetchStudyError(err));
+  }
+}
 
 export function* adminStudyEditSaga() {
   const fetchNoteWatcher1 = yield fork(fetchNoteWatcher);
@@ -543,6 +563,8 @@ export function* adminStudyEditSaga() {
   const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
   const editCampaignWatcher1 = yield fork(editCampaignWatcher);
   const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
+  const fetchStudyWatcher1 = yield fork(fetchStudyWatcher);
+
 
   yield take(LOCATION_CHANGE);
   yield cancel(fetchNoteWatcher1);
@@ -562,5 +584,7 @@ export function* adminStudyEditSaga() {
   yield cancel(editCampaignWatcher1);
   yield cancel(deleteCampaignWatcher1);
   yield cancel(fetchFive9ListWatcher1);
+  yield cancel(fetchStudyWatcher1);
+
 
 }

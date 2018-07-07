@@ -19,8 +19,8 @@ import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
-import { selectAdminStudyEditCampaigns, selectAdminStudyEditCampaignProcess, selectAdminStudyEditDeleteCampaignProcess, selectdminStudyEditFive9List, selectLevels } from '../../containers/AdminStudyEdit/selectors';
-import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchFive9List, fetchLevels } from '../../containers/AdminStudyEdit/actions';
+import { selectAdminStudyEditCampaigns, selectAdminStudyEditCampaignProcess, selectAdminStudyEditDeleteCampaignProcess, selectLevels } from '../../containers/AdminStudyEdit/selectors';
+import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchLevels } from '../../containers/AdminStudyEdit/actions';
 
 const moment = extendMoment(Moment);
 const formName = 'campaignPageForm';
@@ -40,12 +40,10 @@ class CampaignEdit extends React.Component {
     fetchCampaignsByStudy: PropTypes.func,
     submitForm: PropTypes.func,
     deleteCampaign: PropTypes.func,
-    five9List: PropTypes.object,
     formValues: PropTypes.object,
     levels: PropTypes.array,
     isOnTop: React.PropTypes.bool,
     change: PropTypes.func.isRequired,
-    fetchFive9List: PropTypes.func.isRequired,
     fetchLevels: PropTypes.func.isRequired,
   };
 
@@ -53,23 +51,19 @@ class CampaignEdit extends React.Component {
     super(props);
 
     this.state = {
-      five9List: [],
       selectedCampaign: 0,
       isCampaignHasPatients: false,
-      studiesFetcehd: false,
+      campaignsFetched: false,
     };
 
     this.campaignChanged = this.campaignChanged.bind(this);
     this.submitCampaignForm = this.submitCampaignForm.bind(this);
     this.deleteCampaignClick = this.deleteCampaignClick.bind(this);
-    this.five9ValueChanged = this.five9ValueChanged.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchCampaignsByStudy(this.props.studyId);
     this.props.fetchLevels();
-    this.props.fetchFive9List();
-
   }
 
   componentWillReceiveProps(newProps) {
@@ -78,30 +72,11 @@ class CampaignEdit extends React.Component {
     if (newProps.studyCampaigns && newProps.studyCampaigns.details && newProps.studyCampaigns.details.length > 0 &&
       this.props.studyCampaigns.details !== newProps.studyCampaigns.details && newProps.studyCampaigns.details[this.state.selectedCampaign]) {
       this.campaignChanged(newProps.studyCampaigns.details[this.state.selectedCampaign].id, newProps.studyCampaigns.details);
-      this.five9ValueChanged();
     }
-
-    if (newProps.five9List && newProps.five9List.details.length && !this.state.five9List.length) {
-      this.setState({ five9List: newProps.five9List.details });
-    }
-
-    if (newProps.formValues.five_9_value && this.state.five9List.length) {
-      const five9List = this.state.five9List;
-      const index = _.findIndex(five9List, (l) => l.name === newProps.formValues.five_9_value);
-      if (index === -1 && newProps.formValues.five_9_value !== null) {
-        five9List.push({ name: newProps.formValues.five_9_value });
-        this.setState({ five9List });
-      }
-    }
-
-    if ((newProps.study && !this.props.study) || (newProps.study && this.props.study && newProps.study.study_id !== this.props.study.study_id)) {
-      this.five9ValueChanged(newProps.study.five_9_value);
-    }
-
     // when campaigns have been loaded we need select first campaign by default
-    if (!this.state.studiesFetched && studyCampaigns && studyCampaigns.details && studyCampaigns.details.length > 0) {
-      this.setState({ studiesFetched: true });
-      // this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
+    if (!this.state.campaignsFetched && studyCampaigns && studyCampaigns.details && studyCampaigns.details.length > 0) {
+      this.setState({ campaignsFetched: true });
+      this.campaignChanged(studyCampaigns.details.sort((a, b) => a.orderNumber - b.orderNumber)[0].id);
     }
   }
 
@@ -111,18 +86,14 @@ class CampaignEdit extends React.Component {
       const foundCampaign = studyCampaigns[campaignIndex];
       this.setState({ selectedCampaign : campaignIndex, isCampaignHasPatients: (!!((foundCampaign.patientsCount && foundCampaign.patientsCount > 0))) });
       const { change } = this.props;
+      const timezone = (this.props.study.site) ? this.props.study.site.timezone : null;
       change('campaign_id', foundCampaign.id);
-      change('datefrom', moment(foundCampaign.dateFrom).tz(this.props.study.timezone));
-      change('dateto', moment(foundCampaign.dateTo).tz(this.props.study.timezone));
+      change('datefrom', moment(foundCampaign.dateFrom).tz(timezone));
+      change('dateto', moment(foundCampaign.dateTo).tz(timezone));
       change('custom_patient_goal', foundCampaign.customPatientGoal);
       change('level_id', foundCampaign.level_id);
       change('patient_qualification_suite', foundCampaign.patientQualificationSuite);
-      change('five_9_value', foundCampaign.five9value);
     }
-  }
-
-  five9ValueChanged(five9value) {
-    this.props.change('five_9_value', five9value);
   }
 
   submitCampaignForm(e) {
@@ -135,7 +106,6 @@ class CampaignEdit extends React.Component {
       levelId: formValues.level_id,
       patientQualificationSuite: formValues.patient_qualification_suite || false,
       studyId: study.id,
-      five9value: formValues.five_9_value || null,
     };
     const customPatientGoal = parseInt(formValues.custom_patient_goal);
     if (customPatientGoal) {
@@ -152,9 +122,9 @@ class CampaignEdit extends React.Component {
   }
 
   deleteCampaignClick() {
-    const { formValues, study } = this.props;
+    const { formValues, studyId } = this.props;
     this.props.deleteCampaign({
-      studyId: study.study_id,
+      studyId,
       campaignId: formValues.campaign_id,
     });
   }
@@ -174,7 +144,7 @@ class CampaignEdit extends React.Component {
     let fromMinDate = null;
     let toMaxDate = null;
     let isFutureCampaign = false;
-    const campaignIndex = 0;// studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
+    const campaignIndex = studyCampaigns.details.findIndex(item => (item.id === formValues.campaign_id));
     if (campaignIndex !== undefined && studyCampaigns.details.length > 0 && campaignIndex >= 0) {
       // if campaign is not the first, then it has a previous campaign, we set the max date accordingly
       if (campaignIndex > 0) {
@@ -191,8 +161,6 @@ class CampaignEdit extends React.Component {
         isFutureCampaign =  (studyCampaigns.details[campaignIndex] && !studyCampaigns.details[campaignIndex].isCurrent && moment(studyCampaigns.details[campaignIndex].dateFrom).isAfter(moment().subtract(1, 'days')));
       }
     }
-
-    const five9Options = this.state.five9List.map(item => ({ value: item.name, label: item.name }));
 
     return (
       <div>
@@ -308,23 +276,6 @@ class CampaignEdit extends React.Component {
                 />
               </div>
             </div>
-            <div className="field-row">
-              <strong className="label">
-                <label>FIVE 9 LIST</label>
-              </strong>
-              <div className="field">
-                <Field
-                  name="five_9_value"
-                  component={ReactSelect}
-                  placeholder="Select list name on Five9"
-                  searchPlaceholder=""
-                  searchable
-                  options={five9Options}
-                  customSearchIconClass="icomoon-icon_search2"
-                  onChange={(e) => { change('five9value', e ? e.toString() : null); }}
-                />
-              </div>
-            </div>
 
             <div className="field-row text-right">
               <div className={classNames('btn btn-gray upload-btn', { disabled: this.state.isCampaignHasPatients })} onClick={() => (!this.state.isCampaignHasPatients ? this.deleteCampaignClick() : null)}>
@@ -351,7 +302,6 @@ const mapStateToProps =  createStructuredSelector({
   studyCampaigns: selectAdminStudyEditCampaigns(),
   updateCampaignProcess: selectAdminStudyEditCampaignProcess(),
   deleteCampaignProcess: selectAdminStudyEditDeleteCampaignProcess(),
-  five9List: selectdminStudyEditFive9List(),
   formValues: selectValues(formName),
   levels: selectLevels(),
 });
@@ -363,7 +313,6 @@ function mapDispatchToProps(dispatch) {
     fetchLevels: () => dispatch(fetchLevels()),
     submitForm: (values, campaignInfo) => dispatch(editCampaign(values, campaignInfo)),
     deleteCampaign: (values) => dispatch(deleteCampaign(values)),
-    fetchFive9List: () => dispatch(fetchFive9List()),
   };
 }
 

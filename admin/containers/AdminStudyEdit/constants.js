@@ -75,3 +75,6 @@ export const DELETE_CAMPAIGN                      = 'AdminStudyEditPage/DELETE_C
 export const DELETE_CAMPAIGN_SUCCESS              = 'DashboardPage/DELETE_CAMPAIGN_SUCCESS';
 export const DELETE_CAMPAIGN_ERROR                = 'AdminStudyEditPage/DELETE_CAMPAIGN_ERROR';
 
+export const FETCH_STUDY                        = 'AdminStudyEditPage/FETCH_STUDY';
+export const FETCH_STUDY_SUCCESS                = 'AdminStudyEditPage/FETCH_STUDY_SUCCESS';
+export const FETCH_STUDY_ERROR                  = 'AdminStudyEditPage/FETCH_STUDY_ERROR';

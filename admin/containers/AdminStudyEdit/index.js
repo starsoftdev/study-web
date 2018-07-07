@@ -10,22 +10,24 @@ import {
   addNote,
   deleteNote,
   fetchLanding,
+  fetchStudy,
 } from './actions';
 
 import {
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
   selectAdminDashboardEditNoteFormValues,
+  selectStudy,
 } from './selectors';
 
-import { selectCurrentUser, selectStudies } from '../App/selectors';
+import { selectCurrentUser } from '../App/selectors';
 
 const mapStateToProps = createStructuredSelector({
   note: selectAdminDashboardNote(),
   editNoteProcess: selectAdminDashboardEditNoteProcess(),
   formValues: selectAdminDashboardEditNoteFormValues(),
   currentUser: selectCurrentUser(),
-  studies: selectStudies(),
+  study: selectStudy(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -33,6 +35,7 @@ const mapDispatchToProps = (dispatch) => ({
   addNote: (payload) => dispatch(addNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchLanding: (studyId, utm) => dispatch(fetchLanding(studyId, utm)),
+  fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
 });
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -46,29 +49,28 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     formValues: PropTypes.any,
     note: PropTypes.object,
     currentUser: PropTypes.object,
-    studies: PropTypes.object,
+    study: PropTypes.object,
     fetchLanding: PropTypes.func,
+    fetchStudy: PropTypes.func,
   };
 
-  componentDidMount() {
-    const { fetchNote, fetchLanding } = this.props;
+  componentWillMount() {
+    const { fetchNote, fetchLanding, fetchStudy } = this.props;
     const { studyId } = this.props.params;
 
     if (studyId) {
       // load studyId related data.
       fetchNote(studyId);
       fetchLanding(studyId, null);
+      fetchStudy(studyId);
+
     }
   }
 
   render() {
-    const { note, currentUser, addNote, deleteNote, formValues, studies } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, study } = this.props;
     const { studyId } = this.props.params;
-    let foundStudy = null;
-    if (studies && studies.details.length) {
-      foundStudy = studies.details.find(s => s.id === +studyId);
-    }
-    const selectedStudy = { ...foundStudy, id: +studyId } || { id: +studyId };
+    const selectedStudy = { ...study, id: +studyId } || { id: +studyId };
 
     return (
       <div id="adminStudyEditPage">

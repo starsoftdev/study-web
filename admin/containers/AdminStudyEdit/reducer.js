@@ -47,10 +47,11 @@ import {
   EDIT_CAMPAIGN,
   EDIT_CAMPAIGN_SUCCESS,
   EDIT_CAMPAIGN_ERROR,
-
   DELETE_CAMPAIGN,
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
+  FETCH_STUDY_SUCCESS,
+  FETCH_STUDY_ERROR,
 } from './constants';
 
 const initialState = {
@@ -119,6 +120,7 @@ const initialState = {
   updatedStudyAd: null,
   removedStudyAdId: null,
   levels: [],
+  study: {},
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {
@@ -447,6 +449,16 @@ export default function adminStudyEditReducer(state = initialState, action) {
       return {
         ...state,
         levels: [],
+      };
+    case FETCH_STUDY_SUCCESS:
+      return {
+        ...state,
+        study: action.payload,
+      };
+    case FETCH_STUDY_ERROR:
+      return {
+        ...state,
+        study: {},
       };
     case FETCH_CAMPAIGNS_BY_STUDY:
       return {
