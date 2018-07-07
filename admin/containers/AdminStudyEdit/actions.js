@@ -79,6 +79,9 @@ import {
   DELETE_CAMPAIGN_SUCCESS,
   DELETE_CAMPAIGN_ERROR,
 
+  FETCH_STUDY,
+  FETCH_STUDY_SUCCESS,
+  FETCH_STUDY_ERROR,
 
 } from './constants';
 
@@ -487,3 +490,22 @@ export function levelsFetchingError(payload) {
   };
 }
 
+export function fetchStudy(studyId) {
+  return {
+    type: FETCH_STUDY,
+    studyId,
+  };
+}
+
+export function fetchStudySuccess(payload) {
+  return {
+    type: FETCH_STUDY_SUCCESS,
+    payload,
+  };
+}
+export function fetchStudyError(payload) {
+  return {
+    type: FETCH_STUDY_ERROR,
+    payload,
+  };
+}
