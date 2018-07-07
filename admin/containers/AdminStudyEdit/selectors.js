@@ -14,6 +14,12 @@ const selectAdminDashboardEditNoteFormValues = () => createSelector(
   substate => get(substate, 'AdminEditStudy.Notes.values', {})
 );
 
+const selectStudy = () => createSelector(
+  selectAdminStudyEditDomain(),
+  (substate) => substate.study
+);
+
+
 const selectAdminDashboardNote = () => createSelector(
   selectAdminStudyEditDomain(),
   (substate) => substate.note
@@ -125,5 +131,6 @@ export {
   selectAdminStudyEditDeleteCampaignProcess,
   selectLevels,
   selectdminStudyEditFive9List,
+  selectStudy,
 };
 
