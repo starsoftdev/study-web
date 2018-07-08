@@ -26,6 +26,10 @@ import {
   sendThankYouEmail,
 } from '../../../app/containers/App/actions';
 
+import {
+  trackLandingPage,
+} from './actions';
+
 export class LandingPage extends React.Component {
 
   static propTypes = {
@@ -44,16 +48,17 @@ export class LandingPage extends React.Component {
     currentUser: PropTypes.any,
     location: PropTypes.any,
     landing: PropTypes.object,
+    trackLandingPage:PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.onSubmitForm = this.onSubmitForm.bind(this);
-
     this.state = {
       invalidStudy: null,
       study: null,
+      pageTracked: false,
     };
   }
 
@@ -92,6 +97,20 @@ export class LandingPage extends React.Component {
 
     if (subscribedFromLanding) {
       browserHistory.push('/thankyou');
+    }
+
+    if (!this.state.pageTracked && !invalidSite && !landingError && landing) {
+      const { studyId, protocolId, siteId, sourceId } = landing;
+      const trackingPayload = {
+        siteId,
+        protocolId,
+        studyId,
+        sourceId,
+      };
+      this.props.trackLandingPage(trackingPayload);
+      this.setState({
+        pageTracked: true,
+      });
     }
   }
 
@@ -183,6 +202,7 @@ function mapDispatchToProps(dispatch) {
     patientSubscriptionError: (params) => dispatch(patientSubscriptionError(params)),
     sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
     clearLanding: () => dispatch(clearLanding()),
+    trackLandingPage: (trackingPayload) => dispatch(trackLandingPage(trackingPayload)),
   };
 }
 

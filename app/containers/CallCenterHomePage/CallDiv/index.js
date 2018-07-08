@@ -98,8 +98,8 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-
-      if (patient && (patient.call_center_patient_category_id === 1 || !patient.call_center_patient_category_id)) {
+      if (!patient) return;
+      if (!patient.call_center_patient_category_id && patient.patient_category_id === 1) {
         output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
       }
     });
@@ -110,7 +110,8 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.call_center_patient_category_id === 2) {
+      if (!patient) return;
+      if (patient.call_center_patient_category_id === 1 || (!patient.call_center_patient_category_id && patient.patient_category_id === 2)) {
         output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
       }
     });
@@ -121,7 +122,8 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.call_center_patient_category_id === 3) {
+      if (!patient) return;
+      if (patient.call_center_patient_category_id === 3) {
         output.push(this.getPatientView(patient, `callDiv_call2_${patient.id}`));
       }
     });
@@ -132,7 +134,8 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.call_center_patient_category_id === 4) {
+      if (!patient) return;
+      if (patient.call_center_patient_category_id === 4) {
         output.push(this.getPatientView(patient, `callDiv_call3_${patient.id}`));
       }
     });
@@ -144,7 +147,8 @@ class CallDiv extends React.Component {
 
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.call_center_patient_category_id === 5) {
+      if (!patient) return;
+      if (patient.call_center_patient_category_id === 5) {
         output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
       }
     });
@@ -156,7 +160,11 @@ class CallDiv extends React.Component {
 
     const output = [];
     _.forEach(patients.details, (patient) => {
-      if (patient && patient.call_center_patient_category_id === 6) {
+      if (!patient) return;
+      if (
+        patient.call_center_patient_category_id === 6 ||
+        (!patient.call_center_patient_category_id && patient.patient_category_id !== 1 && patient.patient_category_id !== 2)
+      ) {
         output.push(this.getPatientView(patient, `callDiv_archive_${patient.id}`));
       }
     });

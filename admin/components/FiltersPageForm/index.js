@@ -9,8 +9,8 @@ import CenteredModal from '../../components/CenteredModal';
 import FiltersModalForm from '../../components/FiltersModalForm';
 import Input from '../../components/Input';
 import ReactSelect from '../../components/Input/ReactSelect';
-import { selectCustomFilters, selectFilterFormValues } from '../../containers/AdminHome/selectors';
-import { addCustomFilter, removeCustomFilter } from '../../containers/AdminHome/actions';
+import { selectCustomFilters, selectFilterFormValues } from '../../containers/App/selectors';
+import { addCustomFilter, removeCustomFilter } from '../../containers/App/actions';
 
 const filterOptions = {
   searchOptions : [
