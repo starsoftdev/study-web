@@ -9,8 +9,8 @@ import { createStructuredSelector } from 'reselect';
 import { reduxForm } from 'redux-form';
 import { toastr } from 'react-redux-toastr';
 import { readStudyPatientMessages, updatePatientSuccess, studyStatsFetched } from '../actions';
-import CallItem from '../../../../app/components/GlobalPMSModal/CallItem';
-import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../../app/containers/App/actions';
+import CallItem from '../../../components/GlobalPMSModal/CallItem';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../App/actions';
 import { translate } from '../../../../common/utilities/localization';
 import * as Selector from '../selectors';
 
@@ -18,9 +18,9 @@ import {
   sendStudyPatientMessages,
   fetchStudyPatientMessages,
   setProcessingStatus,
-} from '../../../../app/containers/GlobalNotifications/actions';
+} from '../../GlobalNotifications/actions';
 
-import { selectClientCredits } from '../../../../app/containers/App/selectors';
+import { selectClientCredits } from '../../App/selectors';
 
 import PatientText from './PatientText';
 
@@ -250,10 +250,9 @@ class TextSection extends React.Component {
 
   render() {
     const { currentPatient, active, ePMS } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = (clientCredits === 0 || clientCredits === null);
+    const disabled = true;
     const notValidPhone = !currentPatient.phone;
     this.scrollElement();
 
