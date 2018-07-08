@@ -15,31 +15,28 @@ import composeQueryString from '../../utils/composeQueryString';
 import { getItem, removeItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 import {
-  FIND_PATIENTS_TEXT_BLAST,
-  FETCH_PATIENTS,
-  EXPORT_PATIENTS,
-  FETCH_PATIENT_DETAILS,
-  FETCH_PATIENT_CATEGORIES,
-  FETCH_STUDY,
-  FETCH_STUDY_STATS,
-  ADD_PATIENT_INDICATION,
-  REMOVE_PATIENT_INDICATION,
-  SUBMIT_PATIENT_UPDATE,
-  SUBMIT_TEXT_BLAST,
-  SUBMIT_EMAIL_BLAST,
-  SUBMIT_PATIENT_IMPORT,
-  SUBMIT_ADD_PATIENT,
-  SUBMIT_PATIENT_NOTE,
-  SUBMIT_DELETE_NOTE,
-  SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
-  SUBMIT_SCHEDULE,
-  DELETE_PATIENT,
-  DOWNLOAD_CLIENT_REPORT,
-  GENERATE_PATIENT_REFERRAL,
-  DOWNLOAD_PATIENT_REFERRAL,
-  SUBMIT_EMAIL,
-  FETCH_EMAILS,
-  FETCH_PATIENT_CATEGORIES_TOTALS,
+  VENDOR_FIND_PATIENTS_TEXT_BLAST,
+  VENDOR_FETCH_PATIENTS,
+  VENDOR_FETCH_PATIENT_DETAILS,
+  VENDOR_FETCH_PATIENT_CATEGORIES,
+  VENDOR_FETCH_STUDY,
+  VENDOR_FETCH_STUDY_STATS,
+  VENDOR_ADD_PATIENT_INDICATION,
+  VENDOR_REMOVE_PATIENT_INDICATION,
+  VENDOR_SUBMIT_PATIENT_UPDATE,
+  VENDOR_SUBMIT_PATIENT_IMPORT,
+  VENDOR_SUBMIT_ADD_PATIENT,
+  VENDOR_SUBMIT_PATIENT_NOTE,
+  VENDOR_SUBMIT_DELETE_NOTE,
+  VENDOR_SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
+  VENDOR_SUBMIT_SCHEDULE,
+  VENDOR_DELETE_PATIENT,
+  VENDOR_DOWNLOAD_CLIENT_REPORT,
+  VENDOR_GENERATE_PATIENT_REFERRAL,
+  VENDOR_DOWNLOAD_PATIENT_REFERRAL,
+  VENDOR_SUBMIT_EMAIL,
+  VENDOR_FETCH_EMAILS,
+  VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS,
 } from './constants';
 
 import {
@@ -51,7 +48,6 @@ import {
   patientsFetched,
   patientsFetchedError,
   patientDetailsFetched,
-  patientsExported,
   protocolFetched,
   siteFetched,
   studyFetched,
@@ -89,7 +85,7 @@ function* fetchStudyDetails() {
   }
 
   // listen for the FETCH_STUDY action
-  const { studyId } = yield take(FETCH_STUDY);
+  const { studyId } = yield take(VENDOR_FETCH_STUDY);
 
   // put the fetching study action in case of a navigation action
   const filter = JSON.stringify({
@@ -219,6 +215,7 @@ function* fetchStudyViewsStat(action) { // eslint-disable-line
 
 function* fetchStudyStats(action) {
   const authToken = getItem('auth_token');
+
   if (!authToken) {
     return;
   }
@@ -286,7 +283,7 @@ function* fetchPatientCategories() {
   }
 
   // listen for the FETCH_PATIENT_CATEGORIES action
-  const { studyId } = yield take(FETCH_PATIENT_CATEGORIES);
+  const { studyId } = yield take(VENDOR_FETCH_PATIENT_CATEGORIES);
 
   try {
     const options = {
@@ -312,67 +309,10 @@ function* fetchPatientCategories() {
   }
 }
 
-export function* exportPatients() {
-  while (true) {
-    // listen for the EXPORT_PATIENTS action
-    const { studyId, clientRoleId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/studies/${studyId}/getPatientsForDB`;
-      const options = {
-        method: 'GET',
-        query: {
-          authToken,
-        },
-      };
-      if (campaignId) {
-        options.query.campaignId = campaignId;
-      }
-      if (clientRoleId) {
-        options.query.clientRoleId = clientRoleId;
-      }
-      if (sourceId) {
-        options.query.sourceId = sourceId;
-      }
-      if (text) {
-        options.query.text = encodeURIComponent(text);
-      }
-
-      const toastrOptions = {
-        id: 'loadingToasterForExportPatients',
-        type: 'success',
-        message: 'Loading...',
-        options: {
-          timeOut: 0,
-          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
-          showCloseButton: true,
-        },
-      };
-      yield put(toastrActions.add(toastrOptions));
-      yield call(request, requestURL, options);
-      yield put(patientsExported());
-    } catch (e) {
-      // if returns forbidden we remove the token from local storage
-      if (e.status === 401) {
-        removeItem('auth_token');
-      }
-      const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrFetchPatientsErrorMessage'));
-      toastr.error('', errorMessage);
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
 export function* downloadReport() {
   while (true) {
     // listen for the DOWNLOAD_CLIENT_REPORT action
-    const { reportName } = yield take(DOWNLOAD_CLIENT_REPORT);
+    const { reportName } = yield take(VENDOR_DOWNLOAD_CLIENT_REPORT);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -398,7 +338,7 @@ export function* downloadReport() {
 export function* generateReferral() {
   while (true) {
     // listen for the GENERATE_PATIENT_REFERRAL action
-    const { patientId, studyId } = yield take(GENERATE_PATIENT_REFERRAL);
+    const { patientId, studyId } = yield take(VENDOR_GENERATE_PATIENT_REFERRAL);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -438,7 +378,7 @@ export function* generateReferral() {
 export function* downloadReferral() {
   while (true) {
     // listen for the DOWNLOAD_PATIENT_REFERRAL action
-    const { reportName, studyId } = yield take(DOWNLOAD_PATIENT_REFERRAL);
+    const { reportName, studyId } = yield take(VENDOR_DOWNLOAD_PATIENT_REFERRAL);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -476,7 +416,7 @@ export function* downloadReferral() {
 export function* fetchPatientsSaga() {
   while (true) {
     // listen for the FETCH_PATIENTS action
-    const { studyId, text, campaignId, sourceId, skip } = yield take(FETCH_PATIENTS);
+    const { studyId, text, campaignId, sourceId, skip } = yield take(VENDOR_FETCH_PATIENTS);
     yield call(fetchPatients, studyId, text, campaignId, sourceId, skip);
   }
 }
@@ -535,7 +475,7 @@ function* fetchPatients(studyId, text, campaignId, sourceId, skip) {
 function* fetchPatientDetails() {
   while (true) {
     // listen for the FETCH_PATIENT_DETAILS action
-    const { patientId, patientCategoryId } = yield take(FETCH_PATIENT_DETAILS);
+    const { patientId, patientCategoryId } = yield take(VENDOR_FETCH_PATIENT_DETAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -640,7 +580,7 @@ function* findPatientsSaga() {
     }
 
     // listen for the FIND_PATIENTS_TEXT_BLAST action
-    const { studyId, text, categoryIds, sourceIds, campaignId } = yield take(FIND_PATIENTS_TEXT_BLAST);
+    const { studyId, text, categoryIds, sourceIds, campaignId } = yield take(VENDOR_FIND_PATIENTS_TEXT_BLAST);
     let filter = {};
     if (text) {
       filter.text = text;
@@ -673,7 +613,7 @@ function* findPatientsSaga() {
 function* addPatientIndication() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT_INDICATION action
-    const { patientId, patientCategoryId, indication } = yield take(ADD_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indication } = yield take(VENDOR_ADD_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -705,7 +645,7 @@ function* addPatientIndication() {
 function* submitMovePatientBetweenCategories() {
   while (true) {
     // listen for the SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES action
-    const { studyId, fromCategoryId, toCategoryId, patientId, afterPatientId } = yield take(SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES);
+    const { studyId, fromCategoryId, toCategoryId, patientId, afterPatientId } = yield take(VENDOR_SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -738,7 +678,7 @@ function* submitMovePatientBetweenCategories() {
 function* removePatientIndication() {
   while (true) {
     // listen for the SUBMIT_REMOVE_PATIENT_INDICATION action
-    const { patientId, patientCategoryId, indicationId } = yield take(REMOVE_PATIENT_INDICATION);
+    const { patientId, patientCategoryId, indicationId } = yield take(VENDOR_REMOVE_PATIENT_INDICATION);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -771,7 +711,7 @@ function* removePatientIndication() {
 function* submitPatientUpdate() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
-    const { patientId, patientCategoryId, fields } = yield take(SUBMIT_PATIENT_UPDATE);
+    const { patientId, patientCategoryId, fields } = yield take(VENDOR_SUBMIT_PATIENT_UPDATE);
     const authToken = getItem('auth_token');
     const userId = getItem('user_id');
     if (!authToken) {
@@ -800,7 +740,7 @@ function* submitPatientUpdate() {
 function* submitPatientNote() {
   while (true) {
     // listen for the SUBMIT_PATIENT_NOTE action
-    const { patientId, patientCategoryId, studyId, currentUser, note } = yield take(SUBMIT_PATIENT_NOTE);
+    const { patientId, patientCategoryId, studyId, currentUser, note } = yield take(VENDOR_SUBMIT_PATIENT_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -833,7 +773,7 @@ function* submitPatientNote() {
 function* submitEmail() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
-    const { studyId, patientId, currentUser, email, message, subject } = yield take(SUBMIT_EMAIL);
+    const { studyId, patientId, currentUser, email, message, subject } = yield take(VENDOR_SUBMIT_EMAIL);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -868,7 +808,7 @@ function* submitEmail() {
 function* fetchEmailsWatcher() {
   while (true) {
     // listen for the SUBMIT_EMAIL action
-    const { studyId, patientId } = yield take(FETCH_EMAILS);
+    const { studyId, patientId } = yield take(VENDOR_FETCH_EMAILS);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -902,7 +842,7 @@ function* fetchEmailsWatcher() {
 function* submitDeleteNote() {
   while (true) {
     // listen for the SUBMIT_DELETE_NOTE action
-    const { patientId, patientCategoryId, noteId } = yield take(SUBMIT_DELETE_NOTE);
+    const { patientId, patientCategoryId, noteId } = yield take(VENDOR_SUBMIT_DELETE_NOTE);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -927,82 +867,10 @@ function* submitDeleteNote() {
   }
 }
 
-function* submitTextBlast() {
-  while (true) {
-    // listen for the SUBMIT_TEXT_BLAST action
-    const { patients, message, clientRoleId, studyId, siteName, currentUser, onClose } = yield take(SUBMIT_TEXT_BLAST);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/twilioTextMessages/scheduleTextBlast`;
-      yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          patientsIDs: patients.map(patient => (
-            patient.id
-          )),
-          clientRoleId,
-          message,
-          studyId,
-          siteName,
-          currentUser,
-        }),
-      });
-      onClose();
-      toastr.success('', 'Success! Your text blast have been sent.');
-    } catch (e) {
-      const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrTextBlastErrorMessage'));
-      toastr.error('', errorMessage);
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
-function* submitEmailBlast() {
-  while (true) {
-    // listen for the SUBMIT_EMAIL_BLAST action
-    const { patients, message, from, subject, clientRoleId, onClose } = yield take(SUBMIT_EMAIL_BLAST);
-    const authToken = getItem('auth_token');
-    if (!authToken) {
-      return;
-    }
-
-    try {
-      const requestURL = `${API_URL}/emails/addBlastEmails`;
-
-      yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          patientsIDs: patients.map(patient => (
-            patient.id
-          )),
-          from,
-          subject,
-          clientRoleId,
-          message,
-        }),
-      });
-      onClose();
-      toastr.success('', 'Success! Your email blast have been sent.');
-    } catch (e) {
-      const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrEmailBlastErrorMessage'));
-      toastr.error('', errorMessage);
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
 function* submitPatientImport() {
   while (true) {
     // listen for the SUBMIT_PATIENT_IMPORT action
-    const { clientId, studyId, file, onClose } = yield take(SUBMIT_PATIENT_IMPORT);
+    const { clientId, studyId, file, onClose } = yield take(VENDOR_SUBMIT_PATIENT_IMPORT);
     const authToken = getItem('auth_token');
     const formData = new FormData();
     formData.append('file', file);
@@ -1035,7 +903,7 @@ function* submitPatientImport() {
 function* submitAddPatient() {
   while (true) {
     // listen for the SUBMIT_ADD_PATIENT action
-    const { studyId, patient, onClose } = yield take(SUBMIT_ADD_PATIENT);
+    const { studyId, patient, onClose } = yield take(VENDOR_SUBMIT_ADD_PATIENT);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;
@@ -1076,7 +944,7 @@ function* submitAddPatient() {
 
 export function* submitSchedule() {
   while (true) {
-    const { data, fromCategoryId, scheduledCategoryId } = yield take(SUBMIT_SCHEDULE);
+    const { data, fromCategoryId, scheduledCategoryId } = yield take(VENDOR_SUBMIT_SCHEDULE);
     try {
       const requestURL = `${API_URL}/appointments/upsertSchedule`;
       const params = {
@@ -1099,7 +967,7 @@ export function* submitSchedule() {
 
 export function* deletePatient() {
   while (true) {
-    const { id } = yield take(DELETE_PATIENT);
+    const { id } = yield take(VENDOR_DELETE_PATIENT);
     try {
       const requestURL = `${API_URL}/patients/${id}`;
       const params = {
@@ -1118,21 +986,19 @@ export function* deletePatient() {
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
-    // watch for initial fetch actions that will load the text message stats
-    const watcherB = yield fork(takeLatest, FETCH_STUDY, fetchStudyStats);
-    const watcherC = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyStats);
+    // // watch for initial fetch actions that will load the text message stats
+    const watcherB = yield fork(takeLatest, VENDOR_FETCH_STUDY, fetchStudyStats);
+    const watcherC = yield fork(takeLatest, VENDOR_FETCH_STUDY_STATS, fetchStudyStats);
     // const watcherD = yield fork(takeLatest, FETCH_STUDY, fetchStudyCallStats);
     // const watcherE = yield fork(takeLatest, FETCH_STUDY_STATS, fetchStudyCallStats);
     const watcherF = yield fork(fetchPatientCategories);
     const watcherG = yield fork(fetchPatientsSaga);
-    const watcherH = yield fork(exportPatients);
     const watcherI = yield fork(fetchPatientDetails);
     const watcherJ = yield fork(findPatientsSaga);
     const watcherL = yield fork(addPatientIndication);
     const watcherM = yield fork(submitMovePatientBetweenCategories);
     const watcherN = yield fork(removePatientIndication);
     const watcherO = yield fork(submitPatientUpdate);
-    const watcherP = yield fork(submitTextBlast);
     const watcherQ = yield fork(submitPatientImport);
     const watcherR = yield fork(submitAddPatient);
     const watcherS = yield fork(submitPatientNote);
@@ -1140,10 +1006,9 @@ export function* fetchStudySaga() {
     const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
     const watcherX = yield fork(downloadReferral);
-    const watcherY = yield fork(generateReferral);
-    const watcherZ = yield fork(submitEmailBlast);
-    const watcherPatientCategoriesTotals = yield fork(takeLatest, FETCH_STUDY, fetchPatientCategoriesTotals);
-    const watcherFetchPatientCategoriesTotals = yield fork(takeLatest, FETCH_PATIENT_CATEGORIES_TOTALS, fetchPatientCategoriesTotals);
+    // // const watcherY = yield fork(generateReferral);
+    const watcherPatientCategoriesTotals = yield fork(takeLatest, VENDOR_FETCH_STUDY, fetchPatientCategoriesTotals);
+    const watcherFetchPatientCategoriesTotals = yield fork(takeLatest, VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS, fetchPatientCategoriesTotals);
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
@@ -1152,18 +1017,16 @@ export function* fetchStudySaga() {
     yield cancel(watcherA);
     yield cancel(watcherB);
     yield cancel(watcherC);
-    // yield cancel(watcherD);
-    // yield cancel(watcherE);
+    // // yield cancel(watcherD);
+    // // yield cancel(watcherE);
     yield cancel(watcherF);
     yield cancel(watcherG);
-    yield cancel(watcherH);
     yield cancel(watcherI);
     yield cancel(watcherJ);
     yield cancel(watcherL);
     yield cancel(watcherM);
     yield cancel(watcherN);
     yield cancel(watcherO);
-    yield cancel(watcherP);
     yield cancel(watcherQ);
     yield cancel(watcherR);
     yield cancel(watcherS);
@@ -1171,8 +1034,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherV);
     yield cancel(watcherW);
     yield cancel(watcherX);
-    yield cancel(watcherY);
-    yield cancel(watcherZ);
+    // yield cancel(watcherY);
     yield cancel(watcherPatientCategoriesTotals);
     yield cancel(watcherFetchPatientCategoriesTotals);
     yield cancel(deletePatientWatcher);

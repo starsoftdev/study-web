@@ -6,66 +6,66 @@
 
 import _ from 'lodash';
 import {
-  ADD_PATIENT_INDICATION_SUCCESS,
-  ADD_PATIENT_NOTE_SUCCESS,
-  CLEAR_FORM_UPLOAD,
-  EXPORT_PATIENTS_SUCCESS,
-  FETCHING_STUDY,
-  FETCH_CAMPAIGNS_SUCCESS,
-  FETCH_PATIENTS,
-  FETCH_PATIENTS_SUCCESS,
-  FETCH_PATIENTS_ERROR,
-  FETCH_PATIENT_DETAILS_SUCCESS,
-  FETCH_PATIENT_CATEGORIES,
-  FETCH_PATIENT_CATEGORIES_SUCCESS,
-  FETCH_PROTOCOL_SUCCESS,
-  FETCH_SITE_SUCCESS,
-  FETCH_STUDY_VIEWS_SUCCESS,
-  FETCH_STUDY_CALLS_SUCCESS,
-  FETCH_STUDY_STATS_SUCCESS,
-  FETCH_STUDY_SUCCESS,
-  REMOVE_PATIENT_INDICATION_SUCCESS,
-  SHOW_SCHEDULED_MODAL,
-  HIDE_SCHEDULED_MODAL,
-  SET_STUDY_ID,
-  SET_CURRENT_PATIENT_ID,
-  SET_CURRENT_PATIENT_CATEGORY_ID,
-  SET_OPEN_PATIENT_MODAL,
-  SUBMIT_DELETE_NOTE_SUCCESS,
-  SUBMIT_ADD_PATIENT_SUCCESS,
-  SUBMIT_ADD_PATIENT_FAILURE,
-  SUBMIT_PATIENT_IMPORT,
-  MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
-  MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
-  MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
-  UPDATE_PATIENT_SUCCESS,
-  SWITCH_TO_NOTE_SECTION_DETAIL,
-  SWITCH_TO_TEXT_SECTION_DETAIL,
-  SWITCH_TO_EMAIL_SECTION_DETAIL,
-  SWITCH_TO_OTHER_SECTION_DETAIL,
-  SUBMIT_ADD_PATIENT,
-  CHANGE_SCHEDULED_DATE,
-  SUBMIT_SCHEDULE,
-  SUBMIT_SCHEDULE_SUCCEEDED,
-  SUBMIT_SCHEDULE_FAILED,
-  SET_SCHEDULED_FORM_INITIALIZED,
-  DELETE_PATIENT,
-  DELETE_PATIENT_SUCCESS,
-  DELETE_PATIENT_ERROR,
-  SUBMIT_EMAIL,
-  SUBMIT_EMAIL_SUCCESS,
-  SUBMIT_EMAIL_ERROR,
-  FETCH_EMAILS,
-  FETCH_EMAILS_SUCCESS,
-  FETCH_EMAILS_ERROR,
-  SET_SELECTED_STUDY_SOURCES,
-  PATIENT_CATEGORIES_TOTALS_FETCHED,
+  VENDOR_ADD_PATIENT_INDICATION_SUCCESS,
+  VENDOR_ADD_PATIENT_NOTE_SUCCESS,
+  VENDOR_CLEAR_FORM_UPLOAD,
+  VENDOR_EXPORT_PATIENTS_SUCCESS,
+  VENDOR_FETCHING_STUDY,
+  VENDOR_FETCH_CAMPAIGNS_SUCCESS,
+  VENDOR_FETCH_PATIENTS,
+  VENDOR_FETCH_PATIENTS_SUCCESS,
+  VENDOR_FETCH_PATIENTS_ERROR,
+  VENDOR_FETCH_PATIENT_DETAILS_SUCCESS,
+  VENDOR_FETCH_PATIENT_CATEGORIES,
+  VENDOR_FETCH_PATIENT_CATEGORIES_SUCCESS,
+  VENDOR_FETCH_PROTOCOL_SUCCESS,
+  VENDOR_FETCH_SITE_SUCCESS,
+  VENDOR_FETCH_STUDY_VIEWS_SUCCESS,
+  VENDOR_FETCH_STUDY_CALLS_SUCCESS,
+  VENDOR_FETCH_STUDY_STATS_SUCCESS,
+  VENDOR_FETCH_STUDY_SUCCESS,
+  VENDOR_REMOVE_PATIENT_INDICATION_SUCCESS,
+  VENDOR_SHOW_SCHEDULED_MODAL,
+  VENDOR_HIDE_SCHEDULED_MODAL,
+  VENDOR_SET_STUDY_ID,
+  VENDOR_SET_CURRENT_PATIENT_ID,
+  VENDOR_SET_CURRENT_PATIENT_CATEGORY_ID,
+  VENDOR_SET_OPEN_PATIENT_MODAL,
+  VENDOR_SUBMIT_DELETE_NOTE_SUCCESS,
+  VENDOR_SUBMIT_ADD_PATIENT_SUCCESS,
+  VENDOR_SUBMIT_ADD_PATIENT_FAILURE,
+  VENDOR_SUBMIT_PATIENT_IMPORT,
+  VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
+  VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
+  VENDOR_UPDATE_PATIENT_SUCCESS,
+  VENDOR_SWITCH_TO_NOTE_SECTION_DETAIL,
+  VENDOR_SWITCH_TO_TEXT_SECTION_DETAIL,
+  VENDOR_SWITCH_TO_EMAIL_SECTION_DETAIL,
+  VENDOR_SWITCH_TO_OTHER_SECTION_DETAIL,
+  VENDOR_SUBMIT_ADD_PATIENT,
+  VENDOR_CHANGE_SCHEDULED_DATE,
+  VENDOR_SUBMIT_SCHEDULE,
+  VENDOR_SUBMIT_SCHEDULE_SUCCEEDED,
+  VENDOR_SUBMIT_SCHEDULE_FAILED,
+  VENDOR_SET_SCHEDULED_FORM_INITIALIZED,
+  VENDOR_DELETE_PATIENT,
+  VENDOR_DELETE_PATIENT_SUCCESS,
+  VENDOR_DELETE_PATIENT_ERROR,
+  VENDOR_SUBMIT_EMAIL,
+  VENDOR_SUBMIT_EMAIL_SUCCESS,
+  VENDOR_SUBMIT_EMAIL_ERROR,
+  VENDOR_FETCH_EMAILS,
+  VENDOR_FETCH_EMAILS_SUCCESS,
+  VENDOR_FETCH_EMAILS_ERROR,
+  VENDOR_SET_SELECTED_STUDY_SOURCES,
+  VENDOR_PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
 
 import {
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
+  VENDOR_FETCH_STUDY_SOURCES,
+  VENDOR_FETCH_STUDY_SOURCES_SUCCESS,
+  VENDOR_FETCH_STUDY_SOURCES_ERROR,
 } from '../App/constants';
 
 const initialState = {
@@ -113,12 +113,12 @@ function studyPageReducer(state = initialState, action) {
   let hasMoreItems;
 
   switch (action.type) {
-    case SET_SELECTED_STUDY_SOURCES:
+    case VENDOR_SET_SELECTED_STUDY_SOURCES:
       return {
         ...state,
         selectedStudySources: action.list,
       };
-    case FETCH_STUDY_SOURCES:
+    case VENDOR_FETCH_STUDY_SOURCES:
       return {
         ...state,
         studySources: {
@@ -128,7 +128,7 @@ function studyPageReducer(state = initialState, action) {
         },
       };
 
-    case FETCH_STUDY_SOURCES_SUCCESS:
+    case VENDOR_FETCH_STUDY_SOURCES_SUCCESS:
       return {
         ...state,
         studySources: {
@@ -145,7 +145,7 @@ function studyPageReducer(state = initialState, action) {
         },
       };
 
-    case FETCH_STUDY_SOURCES_ERROR:
+    case VENDOR_FETCH_STUDY_SOURCES_ERROR:
       return {
         ...state,
         studySources: {
@@ -154,26 +154,26 @@ function studyPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-    case FETCH_CAMPAIGNS_SUCCESS:
+    case VENDOR_FETCH_CAMPAIGNS_SUCCESS:
       return {
         ...state,
         campaigns: action.payload,
       };
-    case EXPORT_PATIENTS_SUCCESS:
+    case VENDOR_EXPORT_PATIENTS_SUCCESS:
       return {
         ...state,
       };
-    case FETCHING_STUDY:
+    case VENDOR_FETCHING_STUDY:
       return {
         ...state,
         fetchingStudy: true,
       };
-    case FETCH_PATIENTS:
+    case VENDOR_FETCH_PATIENTS:
       return {
         ...state,
         fetchingPatients: true,
       };
-    case FETCH_PATIENTS_SUCCESS:
+    case VENDOR_FETCH_PATIENTS_SUCCESS:
       hasMoreItems = action.payload.length > 0;
       return {
         ...state,
@@ -214,41 +214,41 @@ function studyPageReducer(state = initialState, action) {
           page: action.page,
         },
       };
-    case FETCH_PATIENTS_ERROR:
+    case VENDOR_FETCH_PATIENTS_ERROR:
       return {
         ...state,
         fetchingPatientsError: action.payload,
         fetchingPatients: false,
       };
-    case ADD_PATIENT_NOTE_SUCCESS:
-    case ADD_PATIENT_INDICATION_SUCCESS:
-    case REMOVE_PATIENT_INDICATION_SUCCESS:
-    case SUBMIT_DELETE_NOTE_SUCCESS:
-    case FETCH_PATIENT_DETAILS_SUCCESS:
-    case UPDATE_PATIENT_SUCCESS:
+    case VENDOR_ADD_PATIENT_NOTE_SUCCESS:
+    case VENDOR_ADD_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_REMOVE_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_SUBMIT_DELETE_NOTE_SUCCESS:
+    case VENDOR_FETCH_PATIENT_DETAILS_SUCCESS:
+    case VENDOR_UPDATE_PATIENT_SUCCESS:
       return {
         ...state,
         patientCategories: patientCategories(state.patientCategories, action.patientId, action),
       };
-    case CLEAR_FORM_UPLOAD:
+    case VENDOR_CLEAR_FORM_UPLOAD:
       return {
         ...state,
         fileUploaded:null,
       };
-    case SUBMIT_PATIENT_IMPORT:
+    case VENDOR_SUBMIT_PATIENT_IMPORT:
       return {
         ...state,
         fileUploaded: null,
         uploadStarted: true,
       };
-    case SUBMIT_ADD_PATIENT:
+    case VENDOR_SUBMIT_ADD_PATIENT:
       return {
         ...state,
         addPatientStatus: {
           adding: true,
         },
       };
-    case SUBMIT_ADD_PATIENT_SUCCESS:
+    case VENDOR_SUBMIT_ADD_PATIENT_SUCCESS:
       return {
         ...state,
         uploadStarted: null,
@@ -283,22 +283,22 @@ function studyPageReducer(state = initialState, action) {
           return category;
         }),
       };
-    case SUBMIT_EMAIL:
+    case VENDOR_SUBMIT_EMAIL:
       return {
         ...state,
         submittingEmail: true,
       };
-    case SUBMIT_EMAIL_SUCCESS:
+    case VENDOR_SUBMIT_EMAIL_SUCCESS:
       return {
         ...state,
         submittingEmail: false,
       };
-    case SUBMIT_EMAIL_ERROR:
+    case VENDOR_SUBMIT_EMAIL_ERROR:
       return {
         ...state,
         submittingEmail: false,
       };
-    case FETCH_EMAILS:
+    case VENDOR_FETCH_EMAILS:
       return {
         ...state,
         emails: {
@@ -307,7 +307,7 @@ function studyPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_EMAILS_SUCCESS:
+    case VENDOR_FETCH_EMAILS_SUCCESS:
       return {
         ...state,
         emails: {
@@ -316,7 +316,7 @@ function studyPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case FETCH_EMAILS_ERROR:
+    case VENDOR_FETCH_EMAILS_ERROR:
       return {
         ...state,
         emails: {
@@ -325,7 +325,7 @@ function studyPageReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-    case SUBMIT_ADD_PATIENT_FAILURE:
+    case VENDOR_SUBMIT_ADD_PATIENT_FAILURE:
       return {
         ...state,
         uploadStarted: null,
@@ -333,19 +333,19 @@ function studyPageReducer(state = initialState, action) {
           adding: false,
         },
       };
-    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
+    case VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
       return {
         ...state,
         patientBoardLoading: false,
         patientCategories: patientCategories(state.patientCategories, action.patientId, action),
       };
-    case FETCH_PATIENT_CATEGORIES:
+    case VENDOR_FETCH_PATIENT_CATEGORIES:
       return {
         ...state,
         fetchingPatients: true,
         fetchingPatientCategories: true,
       };
-    case FETCH_PATIENT_CATEGORIES_SUCCESS:
+    case VENDOR_FETCH_PATIENT_CATEGORIES_SUCCESS:
       return {
         ...state,
         patientCategories: action.payload.map(patientCategory => {
@@ -355,23 +355,23 @@ function studyPageReducer(state = initialState, action) {
         }),
         fetchingPatientCategories: false,
       };
-    case FETCH_PROTOCOL_SUCCESS:
+    case VENDOR_FETCH_PROTOCOL_SUCCESS:
       return {
         ...state,
         protocol: action.payload,
       };
-    case FETCH_SITE_SUCCESS:
+    case VENDOR_FETCH_SITE_SUCCESS:
       return {
         ...state,
         site: action.payload,
       };
-    case FETCH_STUDY_SUCCESS:
+    case VENDOR_FETCH_STUDY_SUCCESS:
       return {
         ...state,
         study: action.payload,
         fetchingStudy: false,
       };
-    case FETCH_STUDY_VIEWS_SUCCESS:
+    case VENDOR_FETCH_STUDY_VIEWS_SUCCESS:
       return {
         ...state,
         stats: {
@@ -379,7 +379,7 @@ function studyPageReducer(state = initialState, action) {
           views: action.payload,
         },
       };
-    case FETCH_STUDY_CALLS_SUCCESS:
+    case VENDOR_FETCH_STUDY_CALLS_SUCCESS:
       return {
         ...state,
         stats: {
@@ -388,7 +388,7 @@ function studyPageReducer(state = initialState, action) {
           callsDuration: action.payload.totalDuration,
         },
       };
-    case FETCH_STUDY_STATS_SUCCESS:
+    case VENDOR_FETCH_STUDY_STATS_SUCCESS:
       return {
         ...state,
         stats: {
@@ -403,53 +403,53 @@ function studyPageReducer(state = initialState, action) {
           referrals: action.payload.totalReferrals,
         },
       };
-    case PATIENT_CATEGORIES_TOTALS_FETCHED:
+    case VENDOR_PATIENT_CATEGORIES_TOTALS_FETCHED:
       return {
         ...state,
         patientCategoriesTotals: action.payload,
       };
-    case SET_STUDY_ID:
+    case VENDOR_SET_STUDY_ID:
       return {
         ...state,
         studyId: action.id,
       };
-    case SET_CURRENT_PATIENT_ID:
+    case VENDOR_SET_CURRENT_PATIENT_ID:
       return {
         ...state,
         currentPatientId: action.id,
       };
-    case SET_CURRENT_PATIENT_CATEGORY_ID:
+    case VENDOR_SET_CURRENT_PATIENT_CATEGORY_ID:
       return {
         ...state,
         currentPatientCategoryId: action.id,
       };
-    case SET_OPEN_PATIENT_MODAL:
+    case VENDOR_SET_OPEN_PATIENT_MODAL:
       return {
         ...state,
         openPatientModal: action.show,
       };
-    case SHOW_SCHEDULED_MODAL:
+    case VENDOR_SHOW_SCHEDULED_MODAL:
       return {
         ...state,
         openScheduledModal: true,
       };
-    case HIDE_SCHEDULED_MODAL:
+    case VENDOR_HIDE_SCHEDULED_MODAL:
       return {
         ...state,
         openScheduledModal: false,
         scheduledFormInitialized: false,
       };
-    case MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
+    case VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
         ...state,
         patientBoardLoading: true,
       };
-    case MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
+    case VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED:
       return {
         ...state,
         patientBoardLoading: false,
       };
-    case SWITCH_TO_NOTE_SECTION_DETAIL:
+    case VENDOR_SWITCH_TO_NOTE_SECTION_DETAIL:
       return {
         ...state,
         carousel: {
@@ -459,7 +459,7 @@ function studyPageReducer(state = initialState, action) {
           other: false,
         },
       };
-    case SWITCH_TO_TEXT_SECTION_DETAIL:
+    case VENDOR_SWITCH_TO_TEXT_SECTION_DETAIL:
       return {
         ...state,
         carousel: {
@@ -469,7 +469,7 @@ function studyPageReducer(state = initialState, action) {
           other: false,
         },
       };
-    case SWITCH_TO_EMAIL_SECTION_DETAIL:
+    case VENDOR_SWITCH_TO_EMAIL_SECTION_DETAIL:
       return {
         ...state,
         carousel: {
@@ -479,7 +479,7 @@ function studyPageReducer(state = initialState, action) {
           other: false,
         },
       };
-    case SWITCH_TO_OTHER_SECTION_DETAIL:
+    case VENDOR_SWITCH_TO_OTHER_SECTION_DETAIL:
       return {
         ...state,
         carousel: {
@@ -489,14 +489,14 @@ function studyPageReducer(state = initialState, action) {
           other: true,
         },
       };
-    case CHANGE_SCHEDULED_DATE:
+    case VENDOR_CHANGE_SCHEDULED_DATE:
       return {
         ...state,
         ScheduledModal: {
           selectedDate: action.date.startOf('day'),
         },
       };
-    case SUBMIT_SCHEDULE:
+    case VENDOR_SUBMIT_SCHEDULE:
       return {
         ...state,
         submittingSchedule: {
@@ -504,7 +504,7 @@ function studyPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case SUBMIT_SCHEDULE_SUCCEEDED:
+    case VENDOR_SUBMIT_SCHEDULE_SUCCEEDED:
       return {
         ...state,
         patientCategories: state.patientCategories.map(category => {
@@ -536,7 +536,7 @@ function studyPageReducer(state = initialState, action) {
         openScheduledModal: false,
         currentPatientId: state.openPatientModal ? state.currentPatientId : -1,
       };
-    case SUBMIT_SCHEDULE_FAILED:
+    case VENDOR_SUBMIT_SCHEDULE_FAILED:
       return {
         ...state,
         submittingSchedule: {
@@ -544,12 +544,12 @@ function studyPageReducer(state = initialState, action) {
           error: action.payload || 'undefined error',
         },
       };
-    case SET_SCHEDULED_FORM_INITIALIZED:
+    case VENDOR_SET_SCHEDULED_FORM_INITIALIZED:
       return {
         ...state,
         scheduledFormInitialized: action.formInitialized,
       };
-    case DELETE_PATIENT:
+    case VENDOR_DELETE_PATIENT:
       return {
         ...state,
         deletePatientProcess: {
@@ -557,7 +557,7 @@ function studyPageReducer(state = initialState, action) {
           error: null,
         },
       };
-    case DELETE_PATIENT_SUCCESS:
+    case VENDOR_DELETE_PATIENT_SUCCESS:
       return {
         ...state,
         patientCategories: state.patientCategories.map(category => {
@@ -578,7 +578,7 @@ function studyPageReducer(state = initialState, action) {
         },
         openPatientModal: false,
       };
-    case DELETE_PATIENT_ERROR:
+    case VENDOR_DELETE_PATIENT_ERROR:
       return {
         ...state,
         deletePatientProcess: {
@@ -594,10 +594,10 @@ function studyPageReducer(state = initialState, action) {
 // additional reducer specifically for patient categories
 function patientCategories(state, currentPatientId, action) {
   switch (action.type) {
-    case ADD_PATIENT_NOTE_SUCCESS:
-    case ADD_PATIENT_INDICATION_SUCCESS:
-    case REMOVE_PATIENT_INDICATION_SUCCESS:
-    case SUBMIT_DELETE_NOTE_SUCCESS:
+    case VENDOR_ADD_PATIENT_NOTE_SUCCESS:
+    case VENDOR_ADD_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_REMOVE_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_SUBMIT_DELETE_NOTE_SUCCESS:
       return state.map(patientCategory => {
         if (patientCategory.id === action.patientCategoryId) {
           return {
@@ -607,8 +607,8 @@ function patientCategories(state, currentPatientId, action) {
         }
         return patientCategory;
       });
-    case FETCH_PATIENT_DETAILS_SUCCESS:
-    case UPDATE_PATIENT_SUCCESS:
+    case VENDOR_FETCH_PATIENT_DETAILS_SUCCESS:
+    case VENDOR_UPDATE_PATIENT_SUCCESS:
       return state.map(patientCategory => {
         if (patientCategory.id === action.patientCategoryId) {
           return {
@@ -626,7 +626,7 @@ function patientCategories(state, currentPatientId, action) {
         }
         return patientCategory;
       });
-    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
+    case VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
       if (action.fromCategoryId !== action.toCategoryId) {
         const fromPatientCategory = _.find(state, { id: action.fromCategoryId });
         const toPatientCategory = _.find(state, { id: action.toCategoryId });
@@ -678,7 +678,7 @@ function patientCategories(state, currentPatientId, action) {
 
 function patients(state, currentPatientId, action) {
   switch (action.type) {
-    case ADD_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_ADD_PATIENT_INDICATION_SUCCESS:
       return state.map(patient => {
         if (patient.id === currentPatientId) {
           return {
@@ -697,7 +697,7 @@ function patients(state, currentPatientId, action) {
         }
         return patient;
       });
-    case ADD_PATIENT_NOTE_SUCCESS:
+    case VENDOR_ADD_PATIENT_NOTE_SUCCESS:
       return state.map(patient => {
         if (patient.id === currentPatientId) {
           return {
@@ -713,7 +713,7 @@ function patients(state, currentPatientId, action) {
         }
         return patient;
       });
-    case REMOVE_PATIENT_INDICATION_SUCCESS:
+    case VENDOR_REMOVE_PATIENT_INDICATION_SUCCESS:
       return state.map(patient => {
         if (patient.id === currentPatientId) {
           return {
@@ -725,7 +725,7 @@ function patients(state, currentPatientId, action) {
         }
         return patient;
       });
-    case SUBMIT_DELETE_NOTE_SUCCESS:
+    case VENDOR_SUBMIT_DELETE_NOTE_SUCCESS:
       return state.map(patient => {
         if (patient.id === currentPatientId) {
           return {
