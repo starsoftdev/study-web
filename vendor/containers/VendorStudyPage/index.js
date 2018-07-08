@@ -25,7 +25,6 @@ import { clientOpenedStudyPage, clientClosedStudyPage } from '../GlobalNotificat
 import {
   selectSocket,
 } from '../GlobalNotifications/selectors';
-import { getItem } from '../../utils/localStorage';
 import { translate } from '../../../common/utilities/localization';
 
 export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -95,7 +94,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, currentUser, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -182,14 +181,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           }
         });
 
-        socket.on('notifyClientReportReady', (data) => {
-          const authToken = getItem('auth_token');
-          if (currentUser.roleForClient && data.url && currentUser.roleForClient.id === data.clientRoleId && authToken === data.authToken) {
-            // this.props.downloadReport(data.reportName);
-            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
-            location.replace(data.url);
-          }
-        });
 
         // TODO fix performance issues just updating the landing page view count, it calls the endpoint to get the overall landing page view count, rather than incrementing
         socket.on('notifyLandingPageViewChanged', (data) => {

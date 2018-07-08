@@ -40,44 +40,8 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   componentDidMount() {
-    const props = this.props;
 
-    if (!props.socket && props.currentUser) {
-      props.setSocketConnection({
-        nsp: 'nsp',
-        props,
-        cb: (err, socket) => {
-          if (!err) {
-            socket.on('notification', (notification) => {
-              if (props.currentUser.roleForClient && props.currentUser.roleForClient.client_id === notification.clientId) {
-                if ((notification.event_log.eventType === 'redeem-rewards' || notification.event_log.eventType === 'earn-rewards')
-                  && !props.currentUser.roleForClient.canRedeemRewards) {
-                  return;
-                }
-                if (props.currentUser.roleForClient.isAdmin) {
-                  this.props.receiveNotification(notification);
-                } else {
-                  try {
-                    const eventData = JSON.parse(notification.event_log.eventData);
-                    if (props.currentUser.roleForClient.site_id === eventData.siteId) {
-                      this.props.receiveNotification(notification);
-                    }
-                  } catch (e) {
-                    console.log('error parsing notification.event_log.eventData: ', e);
-                    this.props.receiveNotification(notification);
-                  }
-                }
-              }
-            });
-            socket.on('connect', () => {
-              this.subscribeToPageEvents();
-            });
-          } else {
-            console.error(err);
-          }
-        },
-      });
-    }
+
   }
 
   componentWillReceiveProps() {}
