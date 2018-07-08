@@ -15,9 +15,9 @@ import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
 
 import { SchedulePatientModalType } from '../../common/constants/index';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import PatientDetailModal from '../../../vendor/containers/VendorStudyPage/PatientDetail/PatientDetailModal';
-import ScheduledPatientModal from '../../containers/StudyPage/ScheduledPatientModal/index';
+import LoadingSpinner from '../LoadingSpinner';
+import PatientDetailModal from '../../containers/VendorStudyPage/PatientDetail/PatientDetailModal';
+import ScheduledPatientModal from '../../containers/VendorStudyPage/ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
   showScheduledModal,
@@ -31,13 +31,12 @@ import {
   changeScheduledDate,
   submitSchedule,
   updatePatientSuccess,
-} from '../../containers/StudyPage/actions';
+} from '../../containers/VendorStudyPage/actions';
 import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
-import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../containers/App/actions';
-import { fields } from '../../containers/StudyPage/ScheduledPatientModal/validator';
-import * as Selector from '../../containers/StudyPage/selectors';
+import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
+import * as Selector from '../../containers/VendorStudyPage/selectors';
 import PatientCategory from './PatientCategory';
-import { selectValues } from '../../common/selectors/form.selector';
+import { selectValues } from '../../containers/App/form.selectors';
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)
@@ -68,8 +67,6 @@ class PatientBoard extends React.Component {
     submitSchedule: React.PropTypes.func.isRequired,
     schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
-    markAsReadPatientMessages: React.PropTypes.func,
-    deleteMessagesCountStat: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
@@ -79,7 +76,6 @@ class PatientBoard extends React.Component {
     paginationOptions: React.PropTypes.object,
     studyPatientsFilter: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
-    disableDrag: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -144,7 +140,6 @@ class PatientBoard extends React.Component {
       setOpenPatientModal,
       switchToTextSection,
       readStudyPatientMessages,
-      deleteMessagesCountStat,
     } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
@@ -152,8 +147,6 @@ class PatientBoard extends React.Component {
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id, category.id);
       readStudyPatientMessages(patient.id);
-      // markAsReadPatientMessages(patient.id);
-      deleteMessagesCountStat(patient.unreadMessageCount);
       this.props.updatePatientSuccess(patient.id, category.id, {
         unreadMessageCount: 0,
       });
@@ -283,7 +276,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals, disableDrag } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -300,7 +293,6 @@ class PatientBoard extends React.Component {
                   onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
                   hasMoreItems={paginationOptions.hasMoreItems}
                   loadMore={this.loadMore}
-                  disableDrag={disableDrag}
                 />
               ))}
             </ul>
@@ -349,8 +341,6 @@ const mapDispatchToProps = (dispatch) => (
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
-    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
-    deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),

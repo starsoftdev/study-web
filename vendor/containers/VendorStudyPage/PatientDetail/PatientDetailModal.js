@@ -9,22 +9,20 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../../../app/components/CenteredModal/index';
-import { SchedulePatientModalType } from '../../../../app/common/constants/index';
-import { selectCurrentUser } from '../../../../app/containers/App/selectors';
+import CenteredModal from '../../../components/CenteredModal/index';
+import { SchedulePatientModalType } from '../../../common/constants/index';
+import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
 import TextSection from './TextSection';
-import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
-import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
+import { normalizePhoneDisplay } from '../../../common/helper/functions';
 import {
   showScheduledModal,
   fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
-  switchToEmailSectionDetail,
   readStudyPatientMessages,
   updatePatientSuccess,
 } from '../actions';
@@ -52,7 +50,6 @@ export class PatientDetailModal extends React.Component {
     socket: React.PropTypes.any,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
-    switchToEmailSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
@@ -225,7 +222,6 @@ export class PatientDetailModal extends React.Component {
                   <div className="carousel-inner" role="listbox">
                     <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
                     <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
-                    <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
                   </div>
                 </div>
               </div>
@@ -254,7 +250,6 @@ const mapDispatchToProps = (dispatch) => ({
   fetchPatientDetails: (patientId, patientCategoryId) => dispatch(fetchPatientDetails(patientId, patientCategoryId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
-  switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
