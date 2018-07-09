@@ -13,7 +13,7 @@ import {
   selectLearnAboutFutureTrialsSuccess,
 } from '../../../../app/containers/App/selectors';
 
-import Input from '../../../../app/components/Input/index';
+import Input from '../../../../common/components/Input/index';
 
 import {
   learnAboutFutureTrials,

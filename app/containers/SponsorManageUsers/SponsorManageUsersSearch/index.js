@@ -6,9 +6,9 @@ import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import CenteredModal from '../../../components/CenteredModal/index';
+import Input from '../../../../common/components/Input';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import EditSponsorUserForm from '../EditSponsorUserForm';
 import { selectEditUserProcess, selectDeleteUserProcess, selectEditProtocolProcess } from '../selectors';
 import { translate } from '../../../../common/utilities/localization';
