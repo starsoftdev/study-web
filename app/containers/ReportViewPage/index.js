@@ -17,9 +17,9 @@ import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import PQSModal from '../../components/PQSModal/index';
-import unknownImageUrl from '../../assets/images/unknown.png';
+import unknownImageUrl from '../../../common/assets/images/unknown.png';
 import PatientNote from './PatientNote';
 import { translate } from '../../../common/utilities/localization';
 

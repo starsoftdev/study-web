@@ -6,12 +6,12 @@ import { Modal } from 'react-bootstrap';
 import _, { find } from 'lodash';
 import moment from 'moment-timezone';
 
-import { CALL_TRACKING_PRICE, CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
-import CenteredModal from '../../components/CenteredModal/index';
-import Input from '../../components/Input';
-import DatePicker from '../../components/Input/DatePicker';
-import ReactSelect from '../../components/Input/ReactSelect';
-import Toggle from '../../components/Input/Toggle';
+import { CALL_TRACKING_PRICE, CAMPAIGN_LENGTH_LIST, QUALIFICATION_SUITE_PRICE } from '../../../common/constants';
+import CenteredModal from '../../../common/components/CenteredModal/index';
+import Input from '../../../common/components/Input';
+import DatePicker from '../../../common/components/Input/DatePicker';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Toggle from '../../../common/components/Input/Toggle';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
 import LoadingSpinner from '../../components/LoadingSpinner';

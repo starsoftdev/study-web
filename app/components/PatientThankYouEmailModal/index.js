@@ -12,7 +12,7 @@ import Collapse from 'react-bootstrap/lib/Collapse';
 import Form from 'react-bootstrap/lib/Form';
 import _ from 'lodash';
 
-import Input from '../Input/index';
+import Input from '../../../common/components/Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updatePatientThankYouEmail, resetPatientThankYouEmailState } from '../../containers/HomePage/AdminDashboard/actions';

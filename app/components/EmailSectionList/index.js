@@ -30,7 +30,7 @@ class EmailSectionList extends React.Component { // eslint-disable-line react/pr
 
   renderProfileImage(email) {
     /* eslint-disable global-require */
-    const url = require('../../assets/images/Default-User-Img-Dr.png');
+    const url = require('../../../common/assets/images/Default-User-Img-Dr.png');
     if (email.profile_image_url) {
       return (
         <img alt="" src={email.profile_image_url} />
