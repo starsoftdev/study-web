@@ -3,10 +3,11 @@ import Button from 'react-bootstrap/lib/Button';
 import moment from 'moment-timezone';
 import Modal from 'react-bootstrap/lib/Modal';
 import { DateRangePicker } from 'react-date-range';
+import _ from 'lodash';
 import 'react-date-range/dist/styles.css';
-import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../app/utils/time';
+import { getMomentFromDate } from '../../../common/utilities/time';
 
 export default class RangePopups extends Component {
   static propTypes = {
@@ -15,6 +16,8 @@ export default class RangePopups extends Component {
     manuallySetActiveTab: PropTypes.func.isRequired,
     changeAdminFilters: PropTypes.func.isRequired,
     fetchMediaTotalsForAdmin: PropTypes.func.isRequired,
+    getCampaignsStats: PropTypes.func.isRequired,
+    currentFilters: PropTypes.object,
   };
 
   constructor(props) {
@@ -22,12 +25,17 @@ export default class RangePopups extends Component {
 
     this.state = {
       showPopup: false,
+      type: '',
       predefined : {
         startDate: moment().clone().subtract(30, 'days').toDate(),
         endDate: new Date(),
         key: 'selection',
       },
       selectedTime : {
+        startDate: null,
+        endDate: null,
+      },
+      endDateRange: {
         startDate: null,
         endDate: null,
       },
@@ -40,23 +48,22 @@ export default class RangePopups extends Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
   }
 
-  showPopup(ev) {
+  showPopup(ev, type) {
     ev.preventDefault();
-    this.setState({ showPopup: true });
+    this.setState({ showPopup: true, type });
   }
 
   hidePopup(ev) {
     if (ev) {
       ev.preventDefault();
     }
-    this.setState({ showPopup: false });
+    this.setState({ showPopup: false, type: '' });
   }
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies } = this.props;
+    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab, currentFilters } = this.props;
     const range = this.state.predefined;
-    const studyIdsArr = studies.details.map(s => s.study_id);
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
 
@@ -72,20 +79,39 @@ export default class RangePopups extends Component {
         endDate: uiEndDate,
       },
     }, () => {
-      this.hidePopup();
-      changeAdminFilters('startDate', startDate);
-      changeAdminFilters('endDate', endDate);
-      if (studyIdsArr.length) {
+      const studyIdsArr = studies.details.map(s => s.study_id);
+      if (this.state.type === 'statsDateRange') {
+        this.hidePopup();
+        changeAdminFilters('startDate', startDate);
+        changeAdminFilters('endDate', endDate);
+        manuallySetActiveTab(null);
+        if (studyIdsArr.length) {
+          setTimeout(() => {
+            const filters = _.cloneDeep(currentFilters);
+            filters.startDate = startDate;
+            filters.endDate = endDate;
+            fetchMediaTotalsForAdmin(filters);
+          }, 200);
+        } else {
+          applyFilters(null, null, false);
+        }
+      } else if (this.state.type === 'studyEndDateRange') {
+        if (!studyIdsArr.length) {
+          applyFilters(null, null, false);
+        }
+        manuallySetActiveTab('studyEndDateRange');
+        this.setState({
+          endDateRange: {
+            startDate: uiStartDate,
+            endDate: uiEndDate,
+          },
+        });
+        changeAdminFilters('startDate', startDate.toISOString());
+        changeAdminFilters('endDate', endDate.toISOString());
+        this.hidePopup();
         setTimeout(() => {
-          this.props.fetchMediaTotalsForAdmin({
-            studyIds: studyIdsArr,
-            campaign: null,
-            startDate,
-            endDate,
-          });
+          getCampaignsStats();
         }, 200);
-      } else {
-        applyFilters(null, null, false);
       }
     });
   }
@@ -119,6 +145,8 @@ export default class RangePopups extends Component {
   }
 
   render() {
+    const { endDateRange } = this.state;
+    const endDateRangeLabel = (endDateRange.startDate && endDateRange.endDate) ? `${endDateRange.startDate} - ${endDateRange.endDate}` : 'Study End Date Range';
     return (
       <div id="btnsPopupsHolder">
         <div className="col pull-right no-right-padding">
@@ -127,12 +155,12 @@ export default class RangePopups extends Component {
           </button>
         </div>
         <div className="col pull-right">
-          <button type="button" className="btn btn-primary pull-right" onClick={() => this.props.manuallySetActiveTab('studyEndDateRange')}>
-            Study End Date Range
+          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'studyEndDateRange')}>
+            {endDateRangeLabel}
           </button>
         </div>
         <div className="col pull-right">
-          <button type="button" className="btn btn-primary pull-right" onClick={this.showPopup}>
+          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'statsDateRange')}>
             Stats Date Range
           </button>
         </div>

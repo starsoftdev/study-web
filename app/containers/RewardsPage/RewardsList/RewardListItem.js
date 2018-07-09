@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { findIndex } from 'lodash';
 
 import { translate } from '../../../../common/utilities/localization';
-import defaultImage from '../../../assets/images/site_location.png';
+import defaultImage from '../../../../common/assets/images/site_location.png';
 
 class RewardListItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

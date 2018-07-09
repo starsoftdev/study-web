@@ -1,23 +1,34 @@
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, change } from 'redux-form';
+import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import Modal from 'react-bootstrap/lib/Modal';
+import Form from 'react-bootstrap/lib/Form';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../app/utils/time';
+import { getMomentFromDate } from '../../../common/utilities/time';
+
+const formName = 'adminInfoFilter';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    change: (fName, name, value) => dispatch(change(fName, name, value)),
+  };
+}
 
 @reduxForm({
-  form: 'adminInfoFilter',
+  form: formName,
   enableReinitialize: true,
 })
+@connect(null, mapDispatchToProps)
 export class StudyInfo extends Component {
   static propTypes = {
     studies: PropTypes.object,
@@ -26,6 +37,7 @@ export class StudyInfo extends Component {
     paginationOptions: PropTypes.object,
     fetchStudiesAccordingToFilters: PropTypes.func,
     changeAdminFilters: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -53,6 +65,12 @@ export class StudyInfo extends Component {
     this.handleChange = this.handleChange.bind(this, 'predefined');
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (this.props.filtersFormValues.campaign && !newProps.filtersFormValues.campaign) {
+      newProps.change('adminInfoFilter', 'campaign-search', null);
+    }
   }
 
   goToStudyStatsPage(studyId) {
@@ -192,9 +210,9 @@ export class StudyInfo extends Component {
             <li><label>STUDY NUMBER: </label><span>{study.study_id}</span></li>
             <li><label>STATUS: </label><span>{study.isPublic ? 'ON' : 'OFF'}</span></li>
             <li><label>PROTOCOL: </label><span>{study.protocol_number || 'N/A'}</span></li>
-            <li><label>SPONSOR: </label><span>{study.sponsor_name || 'N/A'}</span></li>
+            <li><label>SPONSOR: </label><span className="max3lines">{study.sponsor_name || 'N/A'}</span></li>
             <li><label>CRO: </label><span>{study.cro_name || 'N/A'}</span></li>
-            <li><label>INDICATION: </label><span>{study.indication_name || 'N/A'}</span></li>
+            <li><label>INDICATION: </label><span className="max2lines">{study.indication_name || 'N/A'}</span></li>
             <li><label>PERCENTAGE: </label><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
             <li><label>COLOR: </label><span className={`color ${study.color || ''}`}>{`${study.color ? study.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
@@ -202,9 +220,9 @@ export class StudyInfo extends Component {
         <div className="part info clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
           <div className="title">info</div>
           <ul>
-            <li><label>SITE LOCATION: </label><span>{study.site_name}</span></li>
+            <li><label>SITE LOCATION: </label><span className="max3lines">{study.site_name}</span></li>
             <li><label>SITE NUMBER: </label><span>{study.site_id}</span></li>
-            <li><label>ADDRESS: </label><span>{study.site_address}</span></li>
+            <li><label>ADDRESS: </label><span className="max3lines">{study.site_address}</span></li>
             <li><label>PAGE VIEWS: </label><span>{study.views_count || 0}</span></li>
             <li><label>UNREAD TEXTS: </label><span>{study.unread_text || 0}</span></li>
             <li><label>AO: </label><span>{study.sm_user_first_name ? `${study.sm_user_first_name} ${study.sm_user_last_name}` : 'N/A'}</span></li>
@@ -272,7 +290,7 @@ export class StudyInfo extends Component {
               <span>Total: {totals.details.total_studies || 0}</span>
             </h2>
             <div className="btns pull-right">
-              <form className="admin-info-filter">
+              <Form className="admin-info-filter">
                 <div className="select pull-left">
                   <Field
                     name="campaign-search"
@@ -290,7 +308,7 @@ export class StudyInfo extends Component {
                   <i className="icomoon-icon_calendar" />
                   &nbsp;Date Range
                 </Button>
-              </form>
+              </Form>
             </div>
           </div>
         )}

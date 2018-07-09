@@ -3,7 +3,7 @@ import { Field, reduxForm, touch } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import Input from '../../../components/Input';
+import Input from '../../../../common/components/Input';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import formValidator, { fields } from './validator';
 import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
