@@ -10,21 +10,21 @@ import 'react-date-range/dist/styles.css';
 import { Field, change, reduxForm, reset } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
-import { defaultStaticRanges } from '../../../../common/constants/dateRanges';
+import { defaultStaticRanges } from '     `../../../../../common/constants/dateRanges';
 import { getMomentFromDate } from '../../../../utils/time';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
 import { DashboardNoteTable } from '../AdminDashboardNoteTable';
 
 import { selectValues } from '../../../../common/selectors/form.selector';
-import ReactSelect from '../../../../components/Input/ReactSelect';
+import ReactSelect from '../../../../../common/components/Input/ReactSelect';
 import CampaignPageModal from '../../../../components/CampaignPageModal';
 import MediaTrackingModal from '../../../../components/CallTrackingPageModal';
 import LandingPageModal from '../../../../components/LandingPageModal';
 import ThankYouPageModal from '../../../../components/ThankYouPageModal/index';
 import PatientThankYouEmailModal from '../../../../components/PatientThankYouEmailModal';
 import LeadGenModal from '../../../../components/LeadGenModal';
-import CenteredModal from '../../../../components/CenteredModal';
+import CenteredModal from '../../../../../common/components/CenteredModal';
 import AddEmailNotificationForm from '../../../../components/AddEmailNotificationForm';
 import EditInformationModal from '../../../../components/EditStudyForms/EditInformationModal';
 import {
