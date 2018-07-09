@@ -9,8 +9,8 @@ import React from 'react';
 import { Field, reduxForm, initialize } from 'redux-form'; // eslint-disable-line
 import { connect } from 'react-redux';
 
-import Input from '../../components/Input';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import helpAndSupportFormValidator from './validator';
 import { translate } from '../../../common/utilities/localization';
 

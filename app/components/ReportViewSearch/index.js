@@ -13,12 +13,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import SplitButton from 'react-bootstrap/lib/SplitButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
-import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
 import { STATUS_ALL, STATUS_ACTIVE, STATUS_INACTIVE } from '../../containers/ReportViewPage/constants';
 import { getMomentFromDate } from '../../utils/time';
-import CenteredModal from '../CenteredModal/index';
-import ReactSelect from '../Input/ReactSelect';
-import Input from '../Input/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
 import { exportStudies } from '../../containers/ReportViewPage/actions';
 import { getItem } from '../../utils/localStorage';
 import {

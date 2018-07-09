@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { normalizePhoneDisplay } from '../../../../app/common/helper/functions';
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import Input from '../../../../common/components/Input';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import formValidator from './validator';
 

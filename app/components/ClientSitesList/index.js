@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../../app/common/helper/functions';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectClientSites, selectSelectedSite,

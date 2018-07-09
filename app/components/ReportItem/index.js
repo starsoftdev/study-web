@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import classNames from 'classnames';
-import pqsImage from '../../assets/images/pqs2.png';
+import pqsImage from '../../../common/assets/images/pqs2.png';
 import { translate } from '../../../common/utilities/localization';
 
 class ReportItem extends React.Component { // eslint-disable-line react/prefer-stateless-function
