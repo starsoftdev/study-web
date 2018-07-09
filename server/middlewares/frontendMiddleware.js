@@ -43,6 +43,7 @@ const logView = (req) => {
           cookie: req.headers.cookie,
           method: req.method,
           ip: req.connection.remoteAddress,
+          rejectUnauthorized: process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test',
         },
       };
 
