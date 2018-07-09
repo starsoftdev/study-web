@@ -6,9 +6,9 @@ import { Modal } from 'react-bootstrap';
 import _, { forEach, filter } from 'lodash';
 
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../../app/common/helper/functions';
-import Input from '../../components/Input';
+import Input from '../../../common/components/Input';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { addEmailNotificationUser, fetchClientAdmins, fetchMediaTypes } from '../../containers/App/actions';
 import { selectCurrentUser, selectClientSites, selectStudyLevels } from '../../containers/App/selectors';

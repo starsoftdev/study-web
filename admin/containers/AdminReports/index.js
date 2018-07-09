@@ -21,6 +21,8 @@ import {
 import { selectCustomFilters, selectSources, selectStudiesPaginationOptions, selectTotals, selectFilterFormValues,
   selectMediaTotals, selectStudies,
 } from '../App/selectors';
+import { getCampaignsStats, clearCampaigns } from './actions';
+import { selectCampaignsStats, selectCampaignsPaginationOptions } from './selectors';
 
 const formName = 'adminDashboardFilters';
 
@@ -57,6 +59,10 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     clearFilters: PropTypes.func,
     clearStudies: PropTypes.func,
     clearCustomFilters: PropTypes.func,
+    campaignsStats: PropTypes.object,
+    campaignsPaginationOptions: PropTypes.object,
+    getCampaignsStats: PropTypes.func,
+    clearCampaigns: PropTypes.func,
   };
 
   constructor(props) {
@@ -73,6 +79,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     this.getCurrentFilters = this.getCurrentFilters.bind(this);
     this.applyFilters = this.applyFilters.bind(this);
     this.clearFiltersAndClean = this.clearFiltersAndClean.bind(this);
+    this.getCampaignsStatsAccordingToFilters = this.getCampaignsStatsAccordingToFilters.bind(this);
   }
 
   componentWillMount() {
@@ -101,17 +108,9 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
 
   componentWillReceiveProps(newProps) {
     const equal = isEqual(newProps.studies.details, this.props.studies.details);
-    let studyIdsArr = [];
-
     if (newProps.studies.details.length  && !equal) {
-      studyIdsArr = newProps.studies.details.map(s => s.study_id);
-
-      this.props.fetchMediaTotalsForAdmin({
-        studyIds: studyIdsArr,
-        campaign: null,
-        startDate: newProps.filtersFormValues.startDate || null,
-        endDate: newProps.filtersFormValues.endDate || null,
-      });
+      const filters = this.getCurrentFilters();
+      this.props.fetchMediaTotalsForAdmin(filters);
     }
   }
 
@@ -142,7 +141,8 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     });
 
     _.forEach(filters, (filter, k) => {
-      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' && k !== 'address') {
+      if (k !== 'search' && k !== 'percentage' && k !== 'campaign' && k !== 'source' && k !== 'postalCode' &&
+        k !== 'address' && k !== 'startDate' && k !== 'endDate') {
         const withoutAll = _.remove(filter, (item) => (item.label !== 'All'));
         filters[k] = withoutAll;
       }
@@ -210,6 +210,22 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
     }
   }
 
+  getCampaignsStatsAccordingToFilters(fetchByScroll = false) {
+    const { campaignsPaginationOptions, getCampaignsStats, clearCampaigns } = this.props;
+
+    const filters = this.getCurrentFilters();
+
+    let offset = 0;
+    const limit = 50;
+
+    if (fetchByScroll) {
+      offset = campaignsPaginationOptions.page * limit;
+    } else {
+      clearCampaigns();
+    }
+    getCampaignsStats(filters, limit, offset);
+  }
+
   manuallySetActiveTab(activeTab) {
     this.setState({ activateManually: activeTab });
   }
@@ -225,8 +241,9 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
   render() {
     const { activateManually } = this.state;
     const { resetForm, totals, filtersFormValues, changeAdminFilters, mediaTotals, studies, paginationOptions,
-      fetchMediaTotalsForAdmin } = this.props;
+      fetchMediaTotalsForAdmin, campaignsStats, campaignsPaginationOptions } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
+    const currentFilters = this.getCurrentFilters();
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
 
@@ -246,8 +263,10 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
         <RangePopups
           manuallySetActiveTab={this.manuallySetActiveTab}
           fetchMediaTotalsForAdmin={fetchMediaTotalsForAdmin}
+          getCampaignsStats={this.getCampaignsStatsAccordingToFilters}
           studies={studies}
           changeAdminFilters={changeAdminFilters}
+          currentFilters={currentFilters}
           applyFilters={this.applyFilters}
         />
         <StatsBox
@@ -259,8 +278,12 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
             activateManually={activateManually}
             mediaTotals={mediaTotals}
             studies={studies}
+            campaignsStats={campaignsStats}
             paginationOptions={paginationOptions}
+            campaignsPaginationOptions={campaignsPaginationOptions}
+            filtersFormValues={filtersFormValues}
             loadItems={() => this.applyFilters(true)}
+            loadCampaignItems={() => this.getCampaignsStatsAccordingToFilters(true)}
           />
         )}
       </div>
@@ -276,6 +299,8 @@ const mapStateToProps = createStructuredSelector({
   mediaTotals: selectMediaTotals(),
   sources: selectSources(),
   customFilters: selectCustomFilters(),
+  campaignsPaginationOptions: selectCampaignsPaginationOptions(),
+  campaignsStats: selectCampaignsStats(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -293,7 +318,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCro: () => dispatch(fetchCro()),
   clearFilters: () => dispatch(clearFilters()),
   clearStudies: () => dispatch(clearStudies()),
+  clearCampaigns: () => dispatch(clearCampaigns()),
   clearCustomFilters: () => dispatch(clearCustomFilters()),
+  getCampaignsStats: (params, limit, offset) => dispatch(getCampaignsStats(params, limit, offset)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminReportsPage);

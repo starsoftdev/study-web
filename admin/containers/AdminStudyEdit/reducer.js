@@ -52,7 +52,31 @@ import {
   DELETE_CAMPAIGN_ERROR,
   FETCH_STUDY_SUCCESS,
   FETCH_STUDY_ERROR,
+  GET_STUDY_INFO,
+  GET_STUDY_INFO_SUCCESS,
+  GET_STUDY_INFO_ERROR,
+  FETCH_SITE_LOCATIONS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS,
+  FETCH_MESSAGING_NUMBERS_SUCCESS,
+  FETCH_MESSAGING_NUMBERS_ERROR,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS,
+  FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS,
+  FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR,
+  UPDATE_DASHBOARD_STUDY,
+  UPDATE_DASHBOARD_STUDY_SUCCESS,
+  UPDATE_DASHBOARD_STUDY_ERROR,
 } from './constants';
+
+import {
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_CRO_SUCCESS,
+  FETCH_SPONSORS_SUCCESS,
+  FETCH_PROTOCOLS_SUCCESS,
+  FETCH_USERS_BY_ROLE_SUCCESS,
+} from '../../../app/containers/App/constants';
 
 const initialState = {
   note: {
@@ -121,6 +145,36 @@ const initialState = {
   removedStudyAdId: null,
   levels: [],
   study: {},
+  studyInfo: {
+    details: null,
+    fetching: false,
+    error: null,
+  },
+  indications: [],
+  sponsors: [],
+  protocols: [],
+  cro: [],
+  siteLocations: [],
+  usersByRoles: {},
+  messagingNumbers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  allClientUsers: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  allCustomNotificationEmails: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  editStudyProcess: {
+    saving: false,
+    error: null,
+  },
 };
 
 export default function adminStudyEditReducer(state = initialState, action) {
@@ -469,6 +523,72 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case GET_STUDY_INFO:
+      return {
+        ...state,
+        studyInfo: {
+          details: null,
+          fetching: true,
+          error: null,
+        },
+      };
+    case GET_STUDY_INFO_SUCCESS:
+      return {
+        ...state,
+        studyInfo: {
+          details: action.payload.studies[0],
+          fetching: false,
+          error: null,
+        },
+      };
+    case GET_STUDY_INFO_ERROR:
+      return {
+        ...state,
+        studyInfo: {
+          details: null,
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_INDICATIONS_SUCCESS:
+      return {
+        ...state,
+        indications: action.payload,
+      };
+    case FETCH_SPONSORS_SUCCESS:
+      return {
+        ...state,
+        sponsors: action.payload,
+      };
+    case FETCH_PROTOCOLS_SUCCESS:
+      return {
+        ...state,
+        protocols: action.payload,
+      };
+    case FETCH_CRO_SUCCESS:
+      return {
+        ...state,
+        cro: action.payload,
+      };
+    case FETCH_SITE_LOCATIONS_SUCCESS:
+      return {
+        ...state,
+        siteLocations: action.payload,
+      };
+    case FETCH_USERS_BY_ROLE_SUCCESS:
+      return {
+        ...state,
+        usersByRoles: action.payload,
+      };
+    case FETCH_MESSAGING_NUMBERS:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
     case FETCH_CAMPAIGNS_BY_STUDY_SUCCESS:
       return {
         ...state,
@@ -478,10 +598,28 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_MESSAGING_NUMBERS_SUCCESS:
+      return {
+        ...state,
+        messagingNumbers: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
     case FETCH_CAMPAIGNS_BY_STUDY_ERROR:
       return {
         ...state,
         campaigns: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_MESSAGING_NUMBERS_ERROR:
+      return {
+        ...state,
+        messagingNumbers: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -509,6 +647,34 @@ export default function adminStudyEditReducer(state = initialState, action) {
       return {
         ...state,
         five9List: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: state.allClientUsers.details,
+          fetching: true,
+          error: null,
+        },
+      };
+
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        allClientUsers: {
+          details: action.payload.map(e => (e.isChecked ? e : state.allClientUsers.details.find((el) => (el.user_id === e.user_id && el.isChecked)) || e)),
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_ERROR:
+      return {
+        ...state,
+        allClientUsers: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -542,6 +708,41 @@ export default function adminStudyEditReducer(state = initialState, action) {
         },
       };
     }
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_SUCCESS:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_CUSTOM_NOTIFICATION_EMAILS_ERROR:
+      return {
+        ...state,
+        allCustomNotificationEmails: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: true,
+          error: null,
+        },
+      };
     case EDIT_CAMPAIGN:
       return {
         ...state,
@@ -605,7 +806,22 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: action.payload,
         },
       };
-
+    case UPDATE_DASHBOARD_STUDY_SUCCESS:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: false,
+          error: null,
+        },
+      };
+    case UPDATE_DASHBOARD_STUDY_ERROR:
+      return {
+        ...state,
+        editStudyProcess: {
+          saving: false,
+          error: action.payload,
+        },
+      };
     default:
       return state;
   }

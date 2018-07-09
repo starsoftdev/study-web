@@ -25,8 +25,8 @@ import {
   selectCurrentUser,
 } from '../../containers/App/selectors';
 
-import manImage from '../../assets/images/man.svg';
-import shadowImage from '../../assets/images/shadow.png';
+import manImage from '../../../common/assets/images/man.svg';
+import shadowImage from '../../../common/assets/images/shadow.png';
 import { translate } from '../../../common/utilities/localization';
 
 export class HelpSupportPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
