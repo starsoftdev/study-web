@@ -309,7 +309,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>{translate('portals.component.listNewStudyForm.sponsorEmailLabel')}</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.sponsorEmailLabel')}</label></strong>
             <Field
               name="sponsorEmail"
               component={Input}
@@ -319,7 +319,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>{translate('portals.component.listNewStudyForm.croNameLabel')}</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.croNameLabel')}</label></strong>
             <Field
               name="croContactName"
               component={Input}
@@ -329,7 +329,7 @@ class ListNewStudyForm extends React.Component { // eslint-disable-line react/pr
           </div>
 
           <div className="field-row">
-            <strong className="label"><label>{translate('portals.component.listNewStudyForm.croEmailLabel')}</label></strong>
+            <strong className="label required"><label>{translate('portals.component.listNewStudyForm.croEmailLabel')}</label></strong>
             <Field
               name="croContactEmail"
               component={Input}
