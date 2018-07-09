@@ -46,7 +46,7 @@ export default function createRoutes(store) {
     {
       onEnter: redirectToLogin,
       path: '/app/vendor/study/:id',
-      name: 'studyPage',
+      name: 'vendorStudyPage',
       getComponent(nextState, cb) {
         if (isNaN(nextState.params.id)) {
           System.import('./containers/NotFoundPage')
@@ -62,7 +62,7 @@ export default function createRoutes(store) {
           const renderRoute = loadModule(cb);
 
           importModules.then(([reducer, sagas, component]) => {
-            injectReducer('studyPage', reducer.default);
+            injectReducer('vendorStudyPage', reducer.default);
             injectSagas(sagas.default);
             renderRoute(component);
           });

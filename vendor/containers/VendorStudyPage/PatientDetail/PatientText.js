@@ -66,8 +66,8 @@ class PatientText extends React.Component {
   }
 
   render() {
-    const { textMessage, site, currentUser } = this.props;
-    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+    const { textMessage, currentUser } = this.props;
+    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
 
     if (textMessage) {
       let addon = '';
