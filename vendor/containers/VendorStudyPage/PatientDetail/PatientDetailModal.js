@@ -157,10 +157,10 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderScheduledTime() {
-    const { currentPatientCategory, currentPatient, currentUser, showScheduledModal, site } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser, showScheduledModal } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0 && currentPatient.appointments[0]) {
-        const timezone = site.timezone || currentUser.timezone;
+        const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
         const scheduleDate =  moment(currentPatient.appointments[0].utcTime).tz(timezone);
         return (
           <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>

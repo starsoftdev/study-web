@@ -9,15 +9,12 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../App/selectors';
 import { translate } from '../../../common/utilities/localization';
 
-import { exportPatients } from './actions';
-
 class StudyActionButtons extends Component {
   static propTypes = {
     campaign: PropTypes.number,
     search: PropTypes.string,
     source: PropTypes.any,
     studyId: PropTypes.number.isRequired,
-    exportPatients: PropTypes.func,
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
     currentUser: PropTypes.any,
@@ -97,10 +94,6 @@ class StudyActionButtons extends Component {
   }
 
   download() {
-    const { exportPatients, studyId, campaign, source, search, currentUser } = this.props;
-    if (currentUser && currentUser.roleForClient) {
-      exportPatients(studyId, currentUser.roleForClient.id, search, campaign, source);
-    }
   }
 
   render() {
@@ -122,9 +115,8 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
 });
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return {
-    exportPatients: (studyId, clientRoleId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, clientRoleId, text, campaignId, sourceId)),
   };
 }
 

@@ -215,7 +215,7 @@ const mapStateToProps = (state) => ({
   campaign: selector(state, 'campaign'),
   source: selector(state, 'source'),
   search: selector(state, 'search'),
-  studyId: state.studyPage.studyId,
+  studyId: state.vendorStudyPage.studyId,
 });
 
 function mapDispatchToProps(dispatch) {

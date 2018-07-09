@@ -6,14 +6,14 @@ export const SET_USER_DATA                         = 'App/SET_USER_DATA';
 
 export const LOGOUT_REQUEST                        = 'App/LOGOUT_REQUEST';
 
-export const FETCH_STUDY_SOURCES                   = 'App/FETCH_STUDY_SOURCES';
-export const FETCH_STUDY_SOURCES_SUCCESS           = 'App/FETCH_STUDY_SOURCES_SUCCESS';
-export const FETCH_STUDY_SOURCES_ERROR             = 'App/FETCH_STUDY_SOURCES_ERROR';
+export const FETCH_STUDY_SOURCES                   = 'App/VENDOR/FETCH_STUDY_SOURCES';
+export const FETCH_STUDY_SOURCES_SUCCESS           = 'App/VENDOR/FETCH_STUDY_SOURCES_SUCCESS';
+export const FETCH_STUDY_SOURCES_ERROR             = 'App/VENDOR/FETCH_STUDY_SOURCES_ERROR';
 
-export const FETCH_INDICATIONS                     = 'App/FETCH_INDICATIONS';
-export const FETCH_INDICATIONS_SUCCESS             = 'App/FETCH_INDICATIONS_SUCCESS';
-export const FETCH_INDICATIONS_ERROR               = 'App/FETCH_INDICATIONS_ERROR';
+export const FETCH_INDICATIONS                     = 'App/VENDOR/FETCH_INDICATIONS';
+export const FETCH_INDICATIONS_SUCCESS             = 'App/VENDOR/FETCH_INDICATIONS_SUCCESS';
+export const FETCH_INDICATIONS_ERROR               = 'App/VENDOR/FETCH_INDICATIONS_ERROR';
 
-export const DELETE_MESSAGES_COUNT_STAT            = 'App/DELETE_MESSAGES_COUNT_STAT';
+export const DELETE_MESSAGES_COUNT_STAT            = 'App/VENDOR/DELETE_MESSAGES_COUNT_STAT';
 
-export const MARK_AS_READ_PATIENT_MESSAGES         = 'App/MARK_AS_READ_PATIENT_MESSAGES';
+export const MARK_AS_READ_PATIENT_MESSAGES         = 'App/VENDOR/MARK_AS_READ_PATIENT_MESSAGES';
