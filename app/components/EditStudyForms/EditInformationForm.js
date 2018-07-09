@@ -13,9 +13,9 @@ import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
 
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
-import Toggle from '../../components/Input/Toggle';
-import Input from '../../components/Input/index';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Toggle from '../../../common/components/Input/Toggle';
+import Input from '../../../common/components/Input/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import RenderEmailsList from './RenderEmailsList';
 import RenderCustomEmailsList from './RenderCustomEmailsList';

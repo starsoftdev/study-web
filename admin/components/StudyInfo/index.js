@@ -12,9 +12,9 @@ import 'react-date-range/dist/styles.css';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../app/utils/time';
+import { getMomentFromDate } from '../../../common/utilities/time';
 
 const formName = 'adminInfoFilter';
 
