@@ -210,9 +210,9 @@ export class StudyInfo extends Component {
             <li><label>STUDY NUMBER: </label><span>{study.study_id}</span></li>
             <li><label>STATUS: </label><span>{study.isPublic ? 'ON' : 'OFF'}</span></li>
             <li><label>PROTOCOL: </label><span>{study.protocol_number || 'N/A'}</span></li>
-            <li><label>SPONSOR: </label><span>{study.sponsor_name || 'N/A'}</span></li>
+            <li><label>SPONSOR: </label><span className="max3lines">{study.sponsor_name || 'N/A'}</span></li>
             <li><label>CRO: </label><span>{study.cro_name || 'N/A'}</span></li>
-            <li><label>INDICATION: </label><span>{study.indication_name || 'N/A'}</span></li>
+            <li><label>INDICATION: </label><span className="max2lines">{study.indication_name || 'N/A'}</span></li>
             <li><label>PERCENTAGE: </label><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
             <li><label>COLOR: </label><span className={`color ${study.color || ''}`}>{`${study.color ? study.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
@@ -220,9 +220,9 @@ export class StudyInfo extends Component {
         <div className="part info clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
           <div className="title">info</div>
           <ul>
-            <li><label>SITE LOCATION: </label><span>{study.site_name}</span></li>
+            <li><label>SITE LOCATION: </label><span className="max3lines">{study.site_name}</span></li>
             <li><label>SITE NUMBER: </label><span>{study.site_id}</span></li>
-            <li><label>ADDRESS: </label><span>{study.site_address}</span></li>
+            <li><label>ADDRESS: </label><span className="max3lines">{study.site_address}</span></li>
             <li><label>PAGE VIEWS: </label><span>{study.views_count || 0}</span></li>
             <li><label>UNREAD TEXTS: </label><span>{study.unread_text || 0}</span></li>
             <li><label>AO: </label><span>{study.sm_user_first_name ? `${study.sm_user_first_name} ${study.sm_user_last_name}` : 'N/A'}</span></li>
