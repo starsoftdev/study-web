@@ -19,7 +19,9 @@
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
 #infoSection .part li label { display: inline-block; vertical-align: top; width: 55%; }
-#infoSection .part li span { display: inline-block; vertical-align: top; width: 45%; }
+#infoSection .part li span { display: inline-block; overflow: hidden; text-overflow: ellipsis; vertical-align: top; width: 45%; }
+#infoSection .part li .max2lines { -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 25px; max-height: 50px; }
+#infoSection .part li .max3lines { -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-height: 25px; max-height: 75px; }
 #infoSection .part.campaign li label { width: 70%; }
 #infoSection .part.campaign li span { width: 30%; }
 #infoSection .part.stat li label { width: 80%; }
