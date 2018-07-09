@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
 
-import ReactSelect from '../../../components/Input/ReactSelect';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectSearchProtocolsFormError } from './selectors';
 import { selectProtocols, selectProtocolNumbers, selectIndications } from '../selectors';

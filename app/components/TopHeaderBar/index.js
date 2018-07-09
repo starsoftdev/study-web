@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 
-import studykikLogo from '../../assets/images/logo.svg';
+import studykikLogo from '../../../common/assets/images/logo.svg';
 import AddCreditsModal from '../../components/AddCreditsModal';
 import GlobalPMSModal from '../../components/GlobalPMSModal';
 

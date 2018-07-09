@@ -6,8 +6,8 @@ import { blur, change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
-import Input from '../../../app/components/Input';
-import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
+import Input from '../../../common/components/Input';
+import mixIntlTelInput from '../../../common/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {

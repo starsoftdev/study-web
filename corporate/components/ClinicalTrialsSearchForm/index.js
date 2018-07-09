@@ -7,8 +7,8 @@ import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
 
 import ClinicalTrialsSearchFormValidator from './validator';
-import ReactSelect from '../../../app/components/Input/ReactSelect';
-import Input from '../../../app/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
 import { selectSyncErrors } from '../../../app/common/selectors/form.selector';
 import { getPostalCodePattern } from '../../../app/common/helper/functions';
 import { translate } from '../../../common/utilities/localization';

@@ -13,12 +13,12 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
-import CenteredModal from '../../components/CenteredModal/index';
-import Input from '../../components/Input';
-import Toggle from '../../components/Input/Toggle';
-import DatePicker from '../../components/Input/DatePicker';
+import CenteredModal from '../../../common/components/CenteredModal/index';
+import Input from '../../../common/components/Input';
+import Toggle from '../../../common/components/Input/Toggle';
+import DatePicker from '../../../common/components/Input/DatePicker';
 import formValidator from './validator';
-import ReactSelect from '../../components/Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import RenderLeads from '../../components/RenderLeads';
 import RenderEmailsList from './RenderEmailsList';
 import EditSiteForm from '../../components/EditSiteForm/index';
@@ -29,7 +29,7 @@ import {
   selectLeadsCount,
 } from './selectors';
 import { addEmailNotificationUser } from '../../containers/App/actions';
-import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
+import { CAMPAIGN_LENGTH_LIST } from '../../../common/constants';
 import { translate } from '../../../common/utilities/localization';
 
 import {
