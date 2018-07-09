@@ -89,6 +89,7 @@
     "babel-preset-stage-0": "6.5.0",
     "bluebird": "^3.5.1",
     "blueimp-canvas-to-blob": "^3.6.0",
+    "cc-react-big-calendar": "git+https://github.com/studykik/cc-react-big-calendar.git#670a8d6fa553da017d1956b99716821d5662ff6a",
     "chai": "3.5.0",
     "chai-enzyme": "0.5.0",
     "chalk": "1.1.3",
