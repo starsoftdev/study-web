@@ -3,6 +3,16 @@ import {
   SET_AUTH_STATE,
   SET_USER_DATA,
   LOGOUT_REQUEST,
+  FETCH_STUDY_SOURCES,
+  FETCH_STUDY_SOURCES_SUCCESS,
+  FETCH_STUDY_SOURCES_ERROR,
+
+  FETCH_INDICATIONS,
+  FETCH_INDICATIONS_SUCCESS,
+  FETCH_INDICATIONS_ERROR,
+
+  MARK_AS_READ_PATIENT_MESSAGES,
+  DELETE_MESSAGES_COUNT_STAT,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -36,5 +46,60 @@ export function setUserData(userData) {
 export function logout() {
   return {
     type: LOGOUT_REQUEST,
+  };
+}
+
+export function fetchStudySources(studyId) {
+  return {
+    type: FETCH_STUDY_SOURCES,
+    studyId,
+  };
+}
+
+export function fetchStudySourcesSuccess(payload) {
+  return {
+    type: FETCH_STUDY_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchStudySourcesError(payload) {
+  return {
+    type: FETCH_STUDY_SOURCES_ERROR,
+    payload,
+  };
+}
+
+export function fetchIndications() {
+  return {
+    type: FETCH_INDICATIONS,
+  };
+}
+
+export function indicationsFetched(payload) {
+  return {
+    type: FETCH_INDICATIONS_SUCCESS,
+    payload,
+  };
+}
+
+export function indicationsFetchingError(payload) {
+  return {
+    type: FETCH_INDICATIONS_ERROR,
+    payload,
+  };
+}
+
+export function markAsReadPatientMessages(patientId) {
+  return {
+    type: MARK_AS_READ_PATIENT_MESSAGES,
+    patientId,
+  };
+}
+
+export function deleteMessagesCountStat(payload) {
+  return {
+    type: DELETE_MESSAGES_COUNT_STAT,
+    payload,
   };
 }
