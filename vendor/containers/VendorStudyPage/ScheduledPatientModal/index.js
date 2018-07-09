@@ -81,16 +81,11 @@ class ScheduledPatientModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { currentPatient, currentUser, sites } = nextProps;
+    const { currentPatient, currentUser } = nextProps;
     let initialValues = {};
 
     if (currentPatient && currentUser) {
-      const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
-      if (currentUser.roleForClient.isAdmin) {
-        this.timezone = patientSite ? patientSite.timezone : currentUser.timezone;
-      } else {
-        this.timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
-      }
+      this.timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
     }
 
     if (!(nextProps.scheduledFormInitialized) && nextProps.show && currentPatient &&

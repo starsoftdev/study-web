@@ -7,7 +7,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the studyPage state domain
  */
-const selectStudyPageDomain = () => state => state.studyPage;
+const selectStudyPageDomain = () => state => state.vendorStudyPage;
 export default selectStudyPageDomain;
 
 /**

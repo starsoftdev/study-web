@@ -165,20 +165,14 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, sites, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
       return;
     }
 
-    const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
-    let timezone;
-    if (currentUser.roleForClient.isAdmin) {
-      timezone = patientSite ? patientSite.timezone : currentUser.timezone;
-    } else {
-      timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
-    }
+    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
 
     const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
     const formValues = schedulePatientFormValues;
@@ -193,7 +187,6 @@ class PatientBoard extends React.Component {
     const submitData = {
       id: currentAppointmentId,
       patientId: currentPatient.id,
-      clientRoleId: currentUser.roleForClient.id,
       time: time.utc(),
       textReminder: formValues.textReminder || false,
     };

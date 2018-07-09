@@ -61,7 +61,7 @@ class PatientNote extends React.Component {
                 <span className="label"> {translate('client.component.patientNote.labelName')} </span>
                 <div className="content">
                   <span>
-                    {(note.user && (note.user.roleForClient || note.archivedAuthor)) ? `${note.user.firstName} ${note.user.lastName}` : translate('client.component.patientNote.studyKIK')}
+                    {note.user ? `${note.user.firstName} ${note.user.lastName}` : translate('client.component.patientNote.studyKIK')}
                   </span>
                 </div>
               </div>
