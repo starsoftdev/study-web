@@ -17,6 +17,7 @@ import {
   SUBMIT_DELETE_NOTE,
   SUBMIT_EMAIL,
   SUBMIT_PATIENT_DISPOSITION,
+  READ_STUDY_PATIENT_MESSAGES,
 } from './constants';
 
 import {
@@ -27,9 +28,10 @@ import {
   deletePatientNoteSuccess,
   addPatientNoteSuccess,
   submitEmailSuccess,
-  updatePatientSuccess,
   patientDispositionSubmitted,
   patientDispositionSubmissionError,
+  readStudyPatientMessagesSuccess,
+  readStudyPatientMessagesError,
 } from './actions';
 
 import {
@@ -283,7 +285,6 @@ function* submitPatientUpdate() {
         }),
       });
       toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
-      yield put(updatePatientSuccess());
     } catch (e) {
       let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
       if (errorMessage.includes('email')) {
@@ -347,6 +348,30 @@ function* sendPatientMessagesWorker(action) {
   }
 }
 
+function* readStudyPatientMessagesWatcher() {
+  yield* takeLatest(READ_STUDY_PATIENT_MESSAGES, readStudyPatientMessagesWorker);
+}
+
+function* readStudyPatientMessagesWorker(action) {
+  try {
+    const { patientId } = action;
+    if (patientId && patientId > 0) {
+      const requestURL = `${API_URL}/patients/${patientId}/markMessagesAsRead`;
+      const response = yield call(request, requestURL);
+
+      yield put(readStudyPatientMessagesSuccess(response));
+    } else {
+      yield put(readStudyPatientMessagesSuccess([]));
+    }
+  } catch (err) {
+    yield put(readStudyPatientMessagesError(err));
+    if (err.status === 401) {
+      removeItem('auth_token');
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 export function* callCenterPatientPageSaga() {
   try {
     const watcherA = yield fork(fetchPatientWatcher);
@@ -357,6 +382,7 @@ export function* callCenterPatientPageSaga() {
     const watcherF = yield fork(submitPatientUpdate);
     const watcherG = yield fork(submitPatientDisposition);
     const watcherH = yield fork(sendPatientMessagesWatcher);
+    const watcherI = yield fork(readStudyPatientMessagesWatcher);
 
     yield take(LOCATION_CHANGE);
 
@@ -368,6 +394,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherF);
     yield cancel(watcherG);
     yield cancel(watcherH);
+    yield cancel(watcherI);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
