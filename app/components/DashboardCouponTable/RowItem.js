@@ -4,7 +4,7 @@ import { Field, change } from 'redux-form';
 import moment from 'moment';
 import { createStructuredSelector } from 'reselect';
 import Money from '../../components/Money';
-import Checkbox from '../../components/Input/Checkbox';
+import Checkbox from '../../../common/components/Input/Checkbox';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

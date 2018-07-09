@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import { browserHistory } from 'react-router';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../../../components/Input';
+import Input from '../../../../common/components/Input';
 import TableActions from '../../../components/TableActions/index';
 
 @reduxForm({ form: 'dashboardMessagingNumberForm' })
