@@ -129,12 +129,12 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { initialValues, site, currentUser, patientCategories } = this.props;
+    const { initialValues, currentUser, patientCategories } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
-    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
+    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
     const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
