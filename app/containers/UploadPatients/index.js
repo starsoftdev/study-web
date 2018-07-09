@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import { touch, reset } from 'redux-form';
 import _ from 'lodash';
 
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import { fetchIndications, fetchClientSites } from '../../containers/App/actions';
 import { selectCurrentUser, selectSiteLocations, selectIndications, selectClientSites } from '../App/selectors';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
