@@ -9,10 +9,10 @@ import { Field, reduxForm } from 'redux-form';
 import { translate } from '../../../../common/utilities/localization';
 import { getMomentFromDate } from '../../../utils/time';
 
-import CenteredModal from '../../../components/CenteredModal';
-import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import Checkbox from '../../../components/Input/Checkbox';
+import CenteredModal from '../../../../common/components/CenteredModal';
+import Input from '../../../../common/components/Input';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Checkbox from '../../../../common/components/Input/Checkbox';
 
 import validator from './validator';
 

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import ReactSelect from '../../../components/Input/ReactSelect';
-import CenteredModal from '../../../components/CenteredModal/index';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import { AddExposureLevelForm } from './AddExposureLevelForm';
 import TableActions from '../../../components/TableActions/index';
 

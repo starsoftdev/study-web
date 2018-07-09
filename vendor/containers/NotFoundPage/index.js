@@ -11,8 +11,8 @@
 
 import React from 'react';
 
-import img1 from '../../../app/assets/images/404.png';
-import img2 from '../../../app/assets/images/img20.png';
+import img1 from '../../../common/assets/images/404.png';
+import img2 from '../../../common/assets/images/img20.png';
 import { translate } from '../../../common/utilities/localization';
 
 export default class NotFound extends React.Component { // eslint-disable-line react/prefer-stateless-function

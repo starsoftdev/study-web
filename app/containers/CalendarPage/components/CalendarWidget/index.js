@@ -10,7 +10,7 @@ import _ from 'lodash';
 
 import 'react-big-calendar/lib/less/styles.less';
 
-import { SchedulePatientModalType } from '../../../../common/constants';
+import { SchedulePatientModalType } from '../../../../../common/constants';
 import { translate } from '../../../../../common/utilities/localization';
 
 // Setup the localizer by providing the moment (or globalize) Object

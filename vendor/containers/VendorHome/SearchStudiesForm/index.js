@@ -7,7 +7,7 @@ import { Field, reduxForm } from 'redux-form';
 import { map } from 'lodash';
 
 import Input from '../../../components/Input';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import { selectSites, selectStudies } from '../selectors';

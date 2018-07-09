@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
-import ChatText from '../../components/Input/ChatText';
+import ChatText from '../../../common/components/Input/ChatText';
 
 import formValidator from './validator';
 
