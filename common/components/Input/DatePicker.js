@@ -10,7 +10,7 @@ import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
-import { translate } from '../../utilities/localization';
+import { translate } from '../../../common/utilities/localization';
 import { getMomentFromDate } from '../../utilities/time';
 
 export default class DatePicker extends Component {

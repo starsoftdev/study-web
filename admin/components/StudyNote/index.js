@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import { translate } from '../../../common/utilities/localization';
 
-class StudyNote extends React.Component {
+class StudyNote extends Component {
   static propTypes = {
     currentUser: React.PropTypes.object.isRequired,
     note: React.PropTypes.object.isRequired,
@@ -23,7 +23,7 @@ class StudyNote extends React.Component {
         <img alt="" src={note.user.profileImageURL} />
       );
     }
-    const url = require('../../assets/images/Default-User-Img-Dr.png');
+    const url = require('../../../common/assets/images/Default-User-Img-Dr.png');
     return (
       <img alt="" src={url} />
     );

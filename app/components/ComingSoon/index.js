@@ -7,8 +7,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import varImage from '../../assets/images/img10.svg';
-import bubbleImage from '../../assets/images/foot.svg';
+import varImage from '../../../common/assets/images/img10.svg';
+import bubbleImage from '../../../common/assets/images/foot.svg';
 import { translate } from '../../../common/utilities/localization';
 
 

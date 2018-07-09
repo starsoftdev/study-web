@@ -9,8 +9,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../../components/CenteredModal/index';
-import { SchedulePatientModalType } from '../../../common/constants/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
+import { SchedulePatientModalType } from '../../../../common/constants/index';
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
