@@ -10,7 +10,7 @@ import { ADD_VENDOR_ADMIN } from './AddVendorAdminForm/constants';
 import { FETCH_VENDOR_STUDIES, SUBMIT_VENDOR_STUDIES, VALIDATE_STUDY_NUMBER } from './EditVendorStudiesForm/constants';
 import { fetchVendorAdminsSucceeded } from './actions';
 import { addVendorAdminSucceeded } from './AddVendorAdminForm/actions';
-import { fetchVendorStudiesSucceeded, submitVendorStudiesSucceeded } from './EditVendorStudiesForm/actions';
+import { closeModal, fetchVendorStudiesSucceeded, submitVendorStudiesSucceeded } from './EditVendorStudiesForm/actions';
 
 function* addVendorAdminWatcher() {
   yield takeLatest(ADD_VENDOR_ADMIN, addVendorAdminWorker);
@@ -98,15 +98,16 @@ function* setVendorStudiesWatcher() {
 
 function* setVendorStudiesWorker(action) {
   try {
-    const requestURL = `${API_URL}/vendors/studies`;
+    const requestURL = `${API_URL}/vendors/${action.vendorId}/studies`;
 
     const params = {
       method: 'POST',
-      body: JSON.stringify(action.body),
+      body: JSON.stringify(action.studies),
     };
     const response = yield call(request, requestURL, params);
 
     yield put(submitVendorStudiesSucceeded(response));
+    yield put(closeModal());
   } catch (err) {
     const errorMessage = get(err, 'message', 'Something went wrong while setting a study for vendor admin.');
     toastr.error('', errorMessage);

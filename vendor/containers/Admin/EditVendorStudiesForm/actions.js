@@ -3,7 +3,8 @@ import {
   DELETE_STUDY_NUMBER,
   FETCH_VENDOR_STUDIES,
   FETCH_VENDOR_STUDIES_SUCCEEDED,
-  SET_SELECTED_VENDOR_ID,
+  OPEN_MODAL_WITH_VENDOR_ID,
+  CLOSE_MODAL,
   SUBMIT_VENDOR_STUDIES,
   SUBMIT_VENDOR_STUDIES_SUCCEEDED,
   VALIDATE_STUDY_NUMBER,
@@ -37,17 +38,24 @@ export function fetchVendorStudiesSucceeded(response) {
   };
 }
 
-export function setSelectedVendorId(vendorId) {
+export function openModalWithVendorId(vendorId) {
   return {
-    type: SET_SELECTED_VENDOR_ID,
+    type: OPEN_MODAL_WITH_VENDOR_ID,
     vendorId,
   };
 }
 
-export function submitVendorStudies(body) {
+export function closeModal() {
+  return {
+    type: CLOSE_MODAL,
+  };
+}
+
+export function submitVendorStudies(vendorId, studies) {
   return {
     type: SUBMIT_VENDOR_STUDIES,
-    body,
+    vendorId,
+    studies,
   };
 }
 

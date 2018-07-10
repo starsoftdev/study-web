@@ -8,22 +8,23 @@ import { Field, reduxForm } from 'redux-form';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
-import { addStudyNumber, fetchVendorStudies } from './actions';
+import { addStudyNumber, deleteStudyNumber, fetchVendorStudies } from './actions';
 import { selectStudiesForVendor } from './selectors';
-import { selectAsyncErrorBool, selectAsyncErrorValidating, selectValues } from '../../../../common/selectors/form.selector';
+import { selectAsyncErrorBool, selectAsyncValidatingBool, selectValues } from '../../../../common/selectors/form.selector';
 import validator from './validator';
 import { asyncValidate } from './asyncValidate';
 
-const formName = 'VendorAdminPage.EditVendorStudiesForm';
+export const formName = 'VendorAdminPage.EditVendorStudiesForm';
 
 const mapStateToProps = createStructuredSelector({
-  asyncValidating: selectAsyncErrorValidating(formName),
+  asyncValidating: selectAsyncValidatingBool(formName),
   asyncError: selectAsyncErrorBool(formName),
   values: selectValues(formName),
   vendorStudies: selectStudiesForVendor(),
 });
 const mapDispatchToProps = {
   addStudyNumber,
+  deleteStudyNumber,
   fetchVendorStudies,
 };
 
@@ -38,10 +39,11 @@ const mapDispatchToProps = {
 export default class EditVendorStudiesForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addStudyNumber: PropTypes.func.isRequired,
-    fetchVendorStudies: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
     asyncValidating: PropTypes.bool.isRequired,
     asyncError: PropTypes.bool.isRequired,
+    deleteStudyNumber: PropTypes.func.isRequired,
+    fetchVendorStudies: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
     saving: PropTypes.bool,
     values: PropTypes.object.isRequired,
     vendorStudies: PropTypes.array.isRequired,
@@ -55,25 +57,46 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
   addStudyNumber = () => {
     const { addStudyNumber, asyncValidating, asyncError, values: { studyId }, vendorStudies } = this.props;
     // check for asynchronous validation and whether study id is populated
-    if (!asyncValidating && !asyncError && studyId) {
+    if (!asyncError && studyId) {
       const duplicateIndex = _.findIndex(vendorStudies, { studyId });
       // check if a duplicate exists
       if (duplicateIndex === -1) {
-        addStudyNumber(studyId);
+        if (!asyncValidating) {
+          addStudyNumber(studyId);
+        } else {
+          // try again automatically for the user in 500 ms
+          setTimeout(this.addStudyNumber, 500);
+        }
       }
     }
+  };
+
+  deleteStudyNumber = (studyId) => {
+    const { deleteStudyNumber } = this.props;
+    deleteStudyNumber(studyId);
   };
 
   renderStudyNumbers = () => {
     const { vendorStudies } = this.props;
     return vendorStudies.map(item => {
-      return (
-        <span className="number-span" key={item.studyId}>
-          {item.studyId} <a className="btn-close">
-            <i className="icomoon-icon_close" />
-          </a>
-        </span>
-      );
+      // hide items that are supposed to be deleted
+      if (!item.toDelete) {
+        return (
+          <span className="number-span" key={item.studyId}>
+            <span>{item.studyId}</span>
+            <a
+              className="btn-close"
+              onClick={() => {
+                this.deleteStudyNumber(item.studyId);
+              }}
+            >
+              <i className="icomoon-icon_close" />
+            </a>
+          </span>
+        );
+      } else {
+        return null;
+      }
     });
   };
 
