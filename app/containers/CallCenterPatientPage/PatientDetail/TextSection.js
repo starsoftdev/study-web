@@ -82,6 +82,7 @@ class TextSection extends React.Component {
   initMessages(props) {
     if (props.active && props.currentPatient) {
       this.setState({ twilioMessages: [], patientToFetchMessages: props.currentPatient.id }, () => {
+        this.props.readStudyPatientMessages(props.currentPatient.id);
         this.initStudyPatientMessagesFetch(props);
       });
     }

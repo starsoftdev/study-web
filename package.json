@@ -1,6 +1,6 @@
 {
   "name": "studykik-web",
-  "version": "1.13.0",
+  "version": "1.16.0",
   "description": "StudyKIK Web Client",
   "private": true,
   "repository": {
@@ -89,6 +89,7 @@
     "babel-preset-stage-0": "6.5.0",
     "bluebird": "^3.5.1",
     "blueimp-canvas-to-blob": "^3.6.0",
+    "cc-react-big-calendar": "git+https://github.com/studykik/cc-react-big-calendar.git#670a8d6fa553da017d1956b99716821d5662ff6a",
     "chai": "3.5.0",
     "chai-enzyme": "0.5.0",
     "chalk": "1.1.3",
@@ -222,7 +223,9 @@
     "xlsx": "^0.11.6"
   },
   "devDependencies": {
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-react-hmre": "^1.1.1",
+    "eslint-plugin-require-path-exists": "1.1.7",
     "eventsource-polyfill": "0.9.6",
     "mini-css-extract-plugin": "^0.4.0",
     "stylelint": "^7.8.0",
