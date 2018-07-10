@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 
-import Checkbox from '../../components/Input/Checkbox';
+import Checkbox from '../../../common/components/Input/Checkbox';
 import { selectSelectedPatient, selectPatients } from '../../containers/PatientDatabasePage/selectors';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { fetchPatient, addPatientsToTextBlast,
