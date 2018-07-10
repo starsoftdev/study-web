@@ -3,13 +3,13 @@ import {
   ADD_STUDY_NUMBER,
   DELETE_STUDY_NUMBER,
   FETCH_VENDOR_STUDIES_SUCCEEDED,
-  SET_SELECTED_VENDOR_ID,
+  OPEN_MODAL_WITH_VENDOR_ID,
+  CLOSE_MODAL,
   SUBMIT_VENDOR_STUDIES_SUCCEEDED,
 } from './constants';
 
 const initialState = {
-  asyncValidating: false,
-  asyncErrors: {},
+  modalOpen: false,
   values: {},
   vendorStudies: [],
 };
@@ -61,21 +61,24 @@ export default function editVendorStudiesFormReducer(state = initialState, actio
         ...state,
         vendorStudies: action.response,
       };
-    case SET_SELECTED_VENDOR_ID:
+    case OPEN_MODAL_WITH_VENDOR_ID:
       return {
         ...state,
+        modalOpen: true,
         values: {
           ...state.values,
           vendorId: action.vendorId,
         },
       };
+    case CLOSE_MODAL:
+      return {
+        ...state,
+        modalOpen: false,
+      };
     case SUBMIT_VENDOR_STUDIES_SUCCEEDED:
       return {
         ...state,
-        vendorStudies: [
-          ...state.vendorStudies,
-          action.response,
-        ],
+        vendorStudies: action.response,
       };
     default:
       return state;

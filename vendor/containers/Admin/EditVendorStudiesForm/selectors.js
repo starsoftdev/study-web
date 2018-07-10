@@ -5,6 +5,11 @@ import { createSelector } from 'reselect';
  */
 const selectEditVendorStudiesForm = () => state => state.form.VendorAdminPage.EditVendorStudiesForm;
 
+export const selectModalOpen = () => createSelector(
+  selectEditVendorStudiesForm(),
+  (substate) => substate.modalOpen
+);
+
 export const selectStudiesForVendor = () => createSelector(
   selectEditVendorStudiesForm(),
   (substate) => substate.vendorStudies
