@@ -18,6 +18,7 @@ import {
   SUBMIT_EMAIL,
   SUBMIT_PATIENT_DISPOSITION,
   READ_STUDY_PATIENT_MESSAGES,
+  FETCH_SCHEDULES,
 } from './constants';
 
 import {
@@ -30,8 +31,8 @@ import {
   submitEmailSuccess,
   patientDispositionSubmitted,
   patientDispositionSubmissionError,
-  readStudyPatientMessagesSuccess,
-  readStudyPatientMessagesError,
+  schedulesFetched,
+  schedulesFetchingError,
 } from './actions';
 
 import {
@@ -372,6 +373,26 @@ function* readStudyPatientMessagesWorker(action) {
   }
 }
 
+export function* fetchSchedulesWatcher() {
+  while (true) {
+    yield take(FETCH_SCHEDULES);
+    try {
+      const requestURL = `${API_URL}/callCenterAppointments/getAppointmentsForUser`;
+      const response = yield call(request, requestURL);
+
+      yield put(schedulesFetched(response));
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong while fetching schedules.');
+      toastr.error('', errorMessage);
+      yield put(schedulesFetchingError(err));
+      if (err.status === 401) {
+        removeItem('auth_token');
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
 export function* callCenterPatientPageSaga() {
   try {
     const watcherA = yield fork(fetchPatientWatcher);
@@ -383,6 +404,7 @@ export function* callCenterPatientPageSaga() {
     const watcherG = yield fork(submitPatientDisposition);
     const watcherH = yield fork(sendPatientMessagesWatcher);
     const watcherI = yield fork(readStudyPatientMessagesWatcher);
+    const watcherJ = yield fork(fetchSchedulesWatcher);
 
     yield take(LOCATION_CHANGE);
 
@@ -395,6 +417,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherG);
     yield cancel(watcherH);
     yield cancel(watcherI);
+    yield cancel(watcherJ);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
