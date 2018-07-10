@@ -685,7 +685,7 @@ export function* fetchStudyWatcher() {
 
 export function* fetchStudyWorker(action) {
   try {
-    const filter = JSON.stringify({ include:['site'] });
+    const filter = JSON.stringify({ include:['site', 'campaigns'] });
     const requestURL = `${API_URL}/studies/${action.studyId}?filter=${filter}`;
 
     const params = {
