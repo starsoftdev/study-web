@@ -4,9 +4,13 @@ import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 
-import request from '../../../app/utils/request';
-import { FETCH_VENDOR_ADMINS, ADD_VENDOR_ADMIN, FETCH_VENDOR_ROLE_STUDIES, SET_VENDOR_ROLE_STUDIES } from './constants';
-import { fetchVendorAdminsSucceeded, addVendorAdminSucceeded } from './actions';
+import request from '../../../common/utils/request';
+import { FETCH_VENDOR_ADMINS } from './constants';
+import { ADD_VENDOR_ADMIN } from './AddVendorAdminForm/constants';
+import { FETCH_VENDOR_STUDIES, SUBMIT_VENDOR_STUDIES, VALIDATE_STUDY_NUMBER } from './EditVendorStudiesForm/constants';
+import { fetchVendorAdminsSucceeded } from './actions';
+import { addVendorAdminSucceeded } from './AddVendorAdminForm/actions';
+import { fetchVendorStudiesSucceeded, submitVendorStudiesSucceeded } from './EditVendorStudiesForm/actions';
 
 function* addVendorAdminWatcher() {
   yield takeLatest(ADD_VENDOR_ADMIN, addVendorAdminWorker);
@@ -65,17 +69,93 @@ function* fetchVendorAdminsWorker(action) {
   }
 }
 
+function* fetchVendorStudiesWatcher() {
+  yield takeLatest(FETCH_VENDOR_STUDIES, fetchVendorStudiesWorker);
+}
+
+function* fetchVendorStudiesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/vendors/${action.vendorId}/studies`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchVendorStudiesSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching vendor studies.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+function* setVendorStudiesWatcher() {
+  yield takeLatest(SUBMIT_VENDOR_STUDIES, setVendorStudiesWorker);
+}
+
+function* setVendorStudiesWorker(action) {
+  try {
+    const requestURL = `${API_URL}/vendors/studies`;
+
+    const params = {
+      method: 'POST',
+      body: JSON.stringify(action.body),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(submitVendorStudiesSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while setting a study for vendor admin.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
+function* validateStudyNumberWatcher() {
+  yield takeLatest(VALIDATE_STUDY_NUMBER, validateStudyNumberWorker);
+}
+
+function* validateStudyNumberWorker(action) {
+  try {
+    const requestURL = `${API_URL}/vendors/${action.vendorId}/validateStudyNumber/${action.studyId}`;
+
+    const params = {
+      method: 'GET',
+    };
+    yield call(request, requestURL, params);
+    action.resolve();
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while validating vendor admins.');
+    toastr.error('', errorMessage);
+    if (err.status === 400) {
+      action.reject({ studyId: errorMessage });
+    }
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+  }
+}
+
 function* vendorAdminPageSaga() {
   const watcherA = yield fork(addVendorAdminWatcher);
   const watcherB = yield fork(fetchVendorAdminsWatcher);
+  const watcherC = yield fork(fetchVendorStudiesWatcher);
+  const watcherD = yield fork(setVendorStudiesWatcher);
+  const watcherE = yield fork(validateStudyNumberWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
 
   yield cancel(watcherA);
   yield cancel(watcherB);
-  // yield cancel(watcherC);
-  // yield cancel(watcherD);
+  yield cancel(watcherC);
+  yield cancel(watcherD);
+  yield cancel(watcherE);
 }
 
 // Bootstrap sagas

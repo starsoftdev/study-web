@@ -6,20 +6,21 @@
 import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import RowItem from './RowItem';
 import { translate } from '../../../common/utilities/localization';
-import { addVendorAdmin, fetchVendorAdmins } from './actions';
+import { fetchVendorAdmins } from './actions';
+import { addVendorAdmin } from './AddVendorAdminForm/actions';
+import { setSelectedVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
 import { selectVendorAdmins } from './selectors';
 
 import CenteredModal from '../../../app/components/CenteredModal/index';
 
 import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';
-import SearchStudyForm from './SearchStudyForm';
+import EditVendorStudiesForm from './EditVendorStudiesForm';
 
 import './style.less';
 
@@ -32,6 +33,8 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = {
   addVendorAdmin,
   fetchVendorAdmins,
+  setSelectedVendorId,
+  submitVendorStudies,
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -40,11 +43,9 @@ export default class VendorAdminPage extends Component {
   static propTypes = {
     addVendorAdmin: PropTypes.func.isRequired,
     fetchVendorAdmins: PropTypes.func.isRequired,
-    vendorAdmins: PropTypes.array,
-  };
-
-  static defaultValues = {
-    vendorAdmins: [],
+    setSelectedVendorId: PropTypes.func.isRequired,
+    submitVendorStudies: PropTypes.func.isRequired,
+    vendorAdmins: PropTypes.array.isRequired,
   };
 
   constructor(props) {
@@ -53,16 +54,8 @@ export default class VendorAdminPage extends Component {
     this.state = {
       studyModalOpen: false,
       addVendorModalOpen: false,
+      currentlySelectedvendorId: null,
     };
-
-    this.openStudyModal = this.openStudyModal.bind(this);
-    this.closeStudyModal = this.closeStudyModal.bind(this);
-
-    this.openVendorModal = this.openVendorModal.bind(this);
-    this.closeVendorModal = this.closeVendorModal.bind(this);
-
-    this.searchForVendorAdmin = this.searchForVendorAdmin.bind(this);
-    this.addVendorAdmin = this.addVendorAdmin.bind(this);
   }
 
   componentDidMount() {
@@ -70,36 +63,62 @@ export default class VendorAdminPage extends Component {
     fetchVendorAdmins();
   }
 
-  openStudyModal() {
-    this.setState({ studyModalOpen: true });
-  }
+  openStudyModal = (vendorId) => {
+    this.setState({
+      studyModalOpen: true,
+    });
+    const { setSelectedVendorId } = this.props;
+    setSelectedVendorId(vendorId);
+  };
 
-  closeStudyModal() {
-    this.setState({ studyModalOpen: false });
-  }
+  closeStudyModal = () => {
+    this.setState({
+      studyModalOpen: false,
+      currentlySelectedvendorId: null,
+    });
+  };
 
-  openVendorModal() {
-    this.setState({ addVendorModalOpen: true });
-  }
+  openVendorModal = () => {
+    this.setState({
+      addVendorModalOpen: true,
+    });
+  };
 
-  closeVendorModal() {
-    this.setState({ addVendorModalOpen: false });
-  }
+  closeVendorModal = () => {
+    this.setState({
+      addVendorModalOpen: false,
+    });
+  };
 
-  searchForVendorAdmin(data) {
-    const { fetchVendorAdmins } = this.props;
-    fetchVendorAdmins(data.search);
-  }
-
-  addVendorAdmin(data) {
+  addVendorAdmin = (data) => {
     const { addVendorAdmin } = this.props;
     addVendorAdmin(data);
     this.closeVendorModal();
-  }
+  };
 
-  render() {
+  searchForVendorAdmin = (data) => {
+    const { fetchVendorAdmins } = this.props;
+    fetchVendorAdmins(data.search);
+  };
+
+  setVendorRoleStudies = (data) => {
+    const { setVendorRoleStudies } = this.props;
+    submitVendorRoleStudies(data);
+  };
+
+  renderVendorAdmins = () => {
     const { vendorAdmins } = this.props;
 
+    return vendorAdmins.map(item => (
+      <RowItem
+        key={item.vendorId}
+        item={item}
+        openStudyModal={this.openStudyModal}
+      />
+    ));
+  };
+
+  render() {
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
@@ -128,11 +147,7 @@ export default class VendorAdminPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {
-              vendorAdmins.map((item, index) => (
-                <RowItem key={index} item={item} openStudyModal={this.openStudyModal} />
-              ))
-            }
+            {this.renderVendorAdmins()}
           </tbody>
 
         </table>
@@ -163,8 +178,8 @@ export default class VendorAdminPage extends Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <SearchStudyForm
-                onSubmit={this.addVendorAdmin}
+              <EditVendorStudiesForm
+                onSubmit={this.setVendorRoleStudies}
                 saving={false}
               />
             </div>

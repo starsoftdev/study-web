@@ -3,9 +3,9 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the vendor admin state domain
  */
-const selectDashboard = () => state => state.vendorAdminPage;
+const selectVendorAdminPage = () => state => state.vendorAdminPage;
 
 export const selectVendorAdmins = () => createSelector(
-  selectDashboard(),
+  selectVendorAdminPage(),
   (substate) => substate.admins
 );
