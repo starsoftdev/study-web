@@ -11,7 +11,7 @@ import { setActiveSort, sortSuccess, fetchStudies } from '../../containers/Vendo
 import { selectStudies, selectPaginationOptions } from '../../containers/VendorHome/selectors';
 import StudyItem from './StudyItem';
 import { translate } from '../../../common/utilities/localization';
-import pqsImage from '../../../common/assets/images/pqs2.png';
+import pqsImage from '../../../app/assets/images/pqs2.png';
 
 class StudiesList extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
