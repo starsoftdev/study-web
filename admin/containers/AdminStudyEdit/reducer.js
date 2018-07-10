@@ -752,6 +752,7 @@ export default function adminStudyEditReducer(state = initialState, action) {
         },
       };
     case EDIT_CAMPAIGN_SUCCESS: {
+      const { study } = state;
       // updating the campaigns with the edited object
       const updatedCampaigns = state.campaigns.details.map(item => (item.id === action.payload.campaignId
         ? {
@@ -764,23 +765,22 @@ export default function adminStudyEditReducer(state = initialState, action) {
         } :
         item
       ));
-      const studiesCopy = state.studies.details.map(study => {
-        if (study.study_id === action.payload.studyId && study.campaign_id === action.payload.campaignId) {
-          return {
-            ...study,
-            campaign_id: action.payload.campaignId,
-            campaign_datefrom: action.payload.dateFrom,
-            campaign_dateto: action.payload.dateTo,
-            campaign_length: action.campaignInfo.campaignLength,
-            level_id: action.payload.levelId,
-            level_name: action.campaignInfo.levelName,
-            custom_patient_goal: action.payload.customPatientGoal,
-            five_9_value: action.payload.five9value,
-          };
-        } else {
-          return study;
-        }
-      });
+      let studyCopy;
+      if (study.id === action.payload.studyId) {
+        studyCopy =  {
+          ...study,
+          campaign_id: action.payload.campaignId,
+          campaign_datefrom: action.payload.dateFrom,
+          campaign_dateto: action.payload.dateTo,
+          campaign_length: action.campaignInfo.campaignLength,
+          level_id: action.payload.levelId,
+          level_name: action.campaignInfo.levelName,
+          custom_patient_goal: action.payload.customPatientGoal,
+          five_9_value: action.payload.five9value,
+        };
+      } else {
+        studyCopy = study;
+      }
       return {
         ...state,
         editCampaignProcess: {
@@ -792,10 +792,7 @@ export default function adminStudyEditReducer(state = initialState, action) {
           fetching: false,
           error: null,
         },
-        studies: {
-          ...state.studies,
-          details: studiesCopy,
-        },
+        study: studyCopy,
       };
     }
     case EDIT_CAMPAIGN_ERROR:
