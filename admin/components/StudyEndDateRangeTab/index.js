@@ -32,7 +32,7 @@ export default class StudyEndDateRangeTab extends Component { // eslint-disable-
         <td>{endDate}</td>
         <td>{item.goal}</td>
         <td>{item.tier}</td>
-        <td>{item.color}</td>
+        <td className="capitalize">{item.color}</td>
         <td>{item.total}</td>
       </tr>
     );
@@ -52,7 +52,7 @@ export default class StudyEndDateRangeTab extends Component { // eslint-disable-
             <table id="studyEndDateRange">
               <thead>
                 <tr>
-                  <th>Study #</th>
+                  <th>STUDY #</th>
                   <th>SITE LOCATION</th>
                   <th>SITE ADDRESS</th>
                   <th>EXPOSURE LEVEL</th>

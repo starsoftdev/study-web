@@ -4,6 +4,7 @@ import {
   GET_CAMPAIGNS_STATS_SUCCESS,
   GET_CAMPAIGNS_STATS_ERROR,
   CLEAR_CAMPAIGNS,
+  SET_ACTIVE_REPORT_TAB
 } from './constants';
 
 const initialState = {
@@ -16,6 +17,7 @@ const initialState = {
     hasMoreItems: true,
     page: 0,
   },
+  activeReportTab: 'total',
 };
 
 export default function adminReportsReducer(state = initialState, action) {
@@ -76,6 +78,11 @@ export default function adminReportsReducer(state = initialState, action) {
           hasMoreItems: true,
           page: 0,
         },
+      };
+    case SET_ACTIVE_REPORT_TAB:
+      return {
+        ...state,
+        activeReportTab: action.activeTab,
       };
     default:
       return state;
