@@ -10,7 +10,7 @@ import './style.less';
 class CallDiv extends React.Component {
 
   static propTypes = {
-    patients: React.PropTypes.object,
+    patients: React.PropTypes.array,
     indications: React.PropTypes.array,
     timezone: React.PropTypes.string,
   };
@@ -97,7 +97,7 @@ class CallDiv extends React.Component {
   renderNewPatients = () => {
     const { patients } = this.props;
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (!patient.call_center_patient_category_id && patient.patient_category_id === 1) {
         output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
@@ -109,7 +109,7 @@ class CallDiv extends React.Component {
   renderCall1 = () => {
     const { patients } = this.props;
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (patient.call_center_patient_category_id === 2 || (!patient.call_center_patient_category_id && patient.patient_category_id === 2)) {
         output.push(this.getPatientView(patient, `callDiv_call1_${patient.id}`));
@@ -121,7 +121,7 @@ class CallDiv extends React.Component {
   renderCall2 = () => {
     const { patients } = this.props;
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (patient.call_center_patient_category_id === 3) {
         output.push(this.getPatientView(patient, `callDiv_call2_${patient.id}`));
@@ -133,7 +133,7 @@ class CallDiv extends React.Component {
   renderCall3 = () => {
     const { patients } = this.props;
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (patient.call_center_patient_category_id === 4) {
         output.push(this.getPatientView(patient, `callDiv_call3_${patient.id}`));
@@ -146,7 +146,7 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
 
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (patient.call_center_patient_category_id === 5) {
         output.push(this.getPatientView(patient, `callDiv_meeting_${patient.id}`));
@@ -159,7 +159,7 @@ class CallDiv extends React.Component {
     const { patients } = this.props;
 
     const output = [];
-    _.forEach(patients.details, (patient) => {
+    _.forEach(patients, (patient) => {
       if (!patient) return;
       if (
         patient.call_center_patient_category_id === 6 ||

@@ -60,6 +60,34 @@ class CallCenterHomePage extends Component {
     this.setState({ addUserModalOpen: false });
   }
 
+  sortPatients = (patients) => {
+    return patients.sort((a, b) => {
+      if (Number(a.count_unread)) {
+        const lastMessageDateForA = new Date(a.last_message_date).getTime();
+        const lastMessageDateForB = new Date(b.last_message_date).getTime();
+        if (!Number(b.count_unread) || lastMessageDateForA > lastMessageDateForB) {
+          return -1;
+        }
+        return 1;
+      } else {
+        const lastDateForA = Math.max(
+          new Date(a.updated_at).getTime(),
+          new Date(a.last_message_date).getTime(),
+          new Date(a.last_email_date).getTime(),
+        );
+        const lastDateForB = Math.max(
+          new Date(b.updated_at).getTime(),
+          new Date(b.last_message_date).getTime(),
+          new Date(b.last_email_date).getTime(),
+        );
+        if (Number(b.count_unread) || lastDateForA > lastDateForB) {
+          return 1;
+        }
+        return -1;
+      }
+    });
+  }
+
   render() {
     const { patients, indications, currentUser, schedules } = this.props;
 
@@ -70,6 +98,8 @@ class CallCenterHomePage extends Component {
     patients.details.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
     });
+
+    const sortedPatients = this.sortPatients(patients.details);
 
     return (
       <div className="container-fluid" id="callcentermain">
@@ -128,7 +158,7 @@ class CallCenterHomePage extends Component {
         </div>
 
         <div className="content">
-          <CallDiv patients={patients} indications={indications} timezone={currentUser.timezone} />
+          <CallDiv patients={sortedPatients} indications={indications} timezone={currentUser.timezone} />
           <CallCalendar currentUser={currentUser} schedules={schedules && schedules.data} />
         </div>
       </div>
