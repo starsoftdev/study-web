@@ -101,9 +101,9 @@ export default class VendorAdminPage extends Component {
     fetchVendorAdmins(data.search);
   };
 
-  setVendorRoleStudies = (data) => {
-    const { setVendorRoleStudies } = this.props;
-    submitVendorRoleStudies(data);
+  submitVendorStudies = (data) => {
+    const { submitVendorStudies } = this.props;
+    submitVendorStudies(data);
   };
 
   renderVendorAdmins = () => {
@@ -179,7 +179,7 @@ export default class VendorAdminPage extends Component {
           <Modal.Body>
             <div className="holder clearfix">
               <EditVendorStudiesForm
-                onSubmit={this.setVendorRoleStudies}
+                onSubmit={this.submitVendorStudies}
                 saving={false}
               />
             </div>
