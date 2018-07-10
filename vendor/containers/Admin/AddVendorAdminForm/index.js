@@ -1,22 +1,23 @@
 import React, { PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+import Form from 'react-bootstrap/lib/Form';
 import { Field, reduxForm } from 'redux-form';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
 
-@reduxForm({ form: 'addVendorAdminForm' })
+const formName = 'VendorAdminPage.AddVendorAdminForm';
 
-export class AddVendorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
+@reduxForm({ form: formName })
+export default class AddVendorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    handleSubmit: PropTypes.func,
+    handleSubmit: PropTypes.func.isRequired,
     saving: PropTypes.bool,
-  }
+  };
 
   render() {
+    const { handleSubmit, saving } = this.props;
     return (
-      <form action="#" className="form-lightbox dashboard-lightbox" onSubmit={this.props.handleSubmit}>
+      <Form className="form-lightbox dashboard-lightbox" onSubmit={handleSubmit}>
 
         <div className="field-row">
           <strong className="label required">
@@ -24,7 +25,7 @@ export class AddVendorAdminForm extends React.Component { // eslint-disable-line
           </strong>
           <div className="field">
             <Field
-              name="name"
+              name="vendorName"
               component={Input}
               type="text"
             />
@@ -73,23 +74,14 @@ export class AddVendorAdminForm extends React.Component { // eslint-disable-line
 
         <div className="field-row text-right no-margins">
           <button type="submit" className="btn btn-primary">
-            {this.props.saving
+            {saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
               : <span>{translate('client.page.vendor.admin.submit')}</span>
             }
           </button>
         </div>
 
-      </form>
+      </Form>
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-});
-const mapDispatchToProps = {};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddVendorAdminForm);
