@@ -63,6 +63,11 @@ export const selectAsyncValidatingBool = (formName) => createSelector(
   }
 );
 
+export const selectAnyTouchedBool = (formName) => createSelector(
+  selectFormDomain(),
+  (substate) => get(substate, `${formName}.anyTouched`, false)
+);
+
 export const selectFormFieldNames = (formName) => createSelector(
   selectFormDomain(),
 
