@@ -14,7 +14,7 @@ import { fetchPatientSignUps, fetchPatientMessages } from '../actions';
 import { selectPatientSignUps, selectPatientMessagesCount } from '../selectors';
 import { translate } from '../../../../common/utilities/localization';
 
-import graph from '../../../assets/images/graph.svg';
+import graph from '../../../../common/assets/images/graph.svg';
 
 export class Dashboard extends React.Component {
   static propTypes = {
