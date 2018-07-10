@@ -125,7 +125,7 @@ export default function callCenterPatientPageReducer(state = initialState, actio
         ...state,
         submittingEmail: false,
       };
-      case FETCH_SCHEDULES:
+    case FETCH_SCHEDULES:
       return update(state, {
         schedules: {
           isFetching: { $set: true },
