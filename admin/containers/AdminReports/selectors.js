@@ -17,9 +17,15 @@ const selectCampaignsPaginationOptions = () => createSelector(
   (substate) => substate.campaignsPaginationOptions
 );
 
+const selectActiveReportTab = () => createSelector(
+  selectAdminReportsPage(),
+  (substate) => substate.activeReportTab
+);
+
 
 export default selectAdminReportsPage;
 export {
   selectCampaignsStats,
   selectCampaignsPaginationOptions,
+  selectActiveReportTab,
 };

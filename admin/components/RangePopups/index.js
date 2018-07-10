@@ -18,6 +18,9 @@ export default class RangePopups extends Component {
     fetchMediaTotalsForAdmin: PropTypes.func.isRequired,
     getCampaignsStats: PropTypes.func.isRequired,
     currentFilters: PropTypes.object,
+    activeReportTab: PropTypes.string,
+    exportMediaTotals: PropTypes.func,
+    paginationOptions: PropTypes.object,
   };
 
   constructor(props) {
@@ -62,10 +65,14 @@ export default class RangePopups extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab, currentFilters } = this.props;
+    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab, currentFilters,
+      exportMediaTotals, activeReportTab, paginationOptions } = this.props;
     const range = this.state.predefined;
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
+
+    const offset = 0;
+    const limit = 50;
 
     if (!endDate.isAfter(startDate)) {
       endDate = endDate.add(1, 'days');
@@ -80,37 +87,49 @@ export default class RangePopups extends Component {
       },
     }, () => {
       const studyIdsArr = studies.details.map(s => s.study_id);
+      const filters = _.cloneDeep(currentFilters);
+      this.hidePopup();
+      if (!studyIdsArr.length) {
+        applyFilters(null, null, false);
+      }
+
       if (this.state.type === 'statsDateRange') {
-        this.hidePopup();
+        manuallySetActiveTab(null);
         changeAdminFilters('startDate', startDate);
         changeAdminFilters('endDate', endDate);
-        manuallySetActiveTab(null);
-        if (studyIdsArr.length) {
-          setTimeout(() => {
-            const filters = _.cloneDeep(currentFilters);
-            filters.startDate = startDate;
-            filters.endDate = endDate;
-            fetchMediaTotalsForAdmin(filters);
-          }, 200);
-        } else {
-          applyFilters(null, null, false);
-        }
+        setTimeout(() => {
+          fetchMediaTotalsForAdmin({ ...filters, startDate, endDate });
+        }, 200);
       } else if (this.state.type === 'studyEndDateRange') {
-        if (!studyIdsArr.length) {
-          applyFilters(null, null, false);
-        }
         manuallySetActiveTab('studyEndDateRange');
+        changeAdminFilters('startDate', startDate.toISOString());
+        changeAdminFilters('endDate', endDate.toISOString());
         this.setState({
           endDateRange: {
             startDate: uiStartDate,
             endDate: uiEndDate,
           },
         });
-        changeAdminFilters('startDate', startDate.toISOString());
-        changeAdminFilters('endDate', endDate.toISOString());
-        this.hidePopup();
         setTimeout(() => {
           getCampaignsStats();
+        }, 200);
+      } else if (this.state.type === 'downloadDateRange') {
+        manuallySetActiveTab(null);
+        changeAdminFilters('startDate', startDate);
+        changeAdminFilters('endDate', endDate);
+        setTimeout(() => {
+          if (filters.startDate && filters.endDate && (filters.startDate !== startDate || filters.endDate !== endDate)) {
+            fetchMediaTotalsForAdmin({ ...filters, startDate, endDate });
+          }
+
+          exportMediaTotals({
+            ...filters,
+            activeReportTab,
+            startDate,
+            endDate,
+            limit: (paginationOptions.page > 0 ? limit * paginationOptions.page : limit),
+            offset,
+          });
         }, 200);
       }
     });
@@ -150,7 +169,7 @@ export default class RangePopups extends Component {
     return (
       <div id="btnsPopupsHolder">
         <div className="col pull-right no-right-padding">
-          <button type="button" className="btn btn-primary pull-right" onClick={() => {}}>
+          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'downloadDateRange')}>
             Download
           </button>
         </div>
