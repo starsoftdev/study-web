@@ -165,7 +165,9 @@ export default class UploadPatientsForm extends Component {
         const newSelectedProtocol = _.find(newProps.protocols, (item) => (item.number === this.props.lastAddedProtocolNumber));
         change('protocol', newSelectedProtocol.studyId);
         change('indication', newSelectedProtocol.indicationId);
-        this.setState({ needToUpdateProtocol : false });
+        this.setState({ needToUpdateProtocol : false }, () => {
+          this.protocolField.props.onChange(newSelectedProtocol.studyId);
+        });
       }
     }
 
@@ -534,6 +536,7 @@ export default class UploadPatientsForm extends Component {
                 options={protocolOptions}
                 disabled={isFetchingProtocols || !this.state.siteLocation}
                 onChange={this.selectProtocol}
+                ref={(node) => this.protocolField = node}
               />
             </div>
           }
@@ -555,12 +558,12 @@ export default class UploadPatientsForm extends Component {
           {(!this.state.showPreview && !isImporting) &&
             <div className="field-row main">
               <strong className="label required">
-                <label>Source</label>
+                <label>Media</label>
               </strong>
               <Field
                 name="studySource"
                 component={ReactSelect}
-                placeholder="Select Source"
+                placeholder="Select Media"
                 className="field"
                 disabled={studySources.fetching || !studySources.details.length}
                 options={mapSourceOptions}

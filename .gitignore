@@ -12,6 +12,7 @@ npm-debug.log
 npm-debug.log.*
 .idea
 
+.vscode/
 dist/
 ture/
 test-results.xml
