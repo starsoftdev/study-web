@@ -1,6 +1,6 @@
 import {
   ADD_VENDOR_ADMIN,
-  ADD_VENDOR_ADMIN_SUCCEEDED
+  ADD_VENDOR_ADMIN_SUCCEEDED,
 } from './constants';
 
 export function addVendorAdmin(body) {
