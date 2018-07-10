@@ -1,9 +1,16 @@
 // Bootstrap sagas
+import React from 'react';
 import { call, cancel, fork, put, take } from 'redux-saga/effects';
 import { takeLatest } from 'redux-saga';
 import { LOCATION_CHANGE } from 'react-router-redux';
+import { actions as toastrActions, toastr } from 'react-redux-toastr';
+import { get } from 'lodash';
+import FaSpinner from 'react-icons/lib/fa/spinner';
 import request from '../../utils/request';
-import { GET_CAMPAIGNS_STATS } from './constants';
+import {
+  GET_CAMPAIGNS_STATS,
+  EXPORT_MEDIA_TOTALS,
+} from './constants';
 import { getCampaignsStatsSuccess, getCampaignsStatsError } from './actions';
 
 export default [
@@ -12,9 +19,11 @@ export default [
 
 export function* adminReportsSaga() {
   const getCampaignsStatsWatcher1 = yield fork(getCampaignsStatsWatcher);
+  const exportMediaTotalsWatcher1 = yield fork(exportMediaTotalsWatcher);
 
   yield take(LOCATION_CHANGE);
   yield cancel(getCampaignsStatsWatcher1);
+  yield cancel(exportMediaTotalsWatcher1);
 }
 
 export function* getCampaignsStatsWatcher() {
@@ -46,6 +55,37 @@ export function* getCampaignsStatsWorker(action) {
   } catch (err) {
     console.log(err);
     yield put(getCampaignsStatsError(err));
+  }
+}
+
+export function* exportMediaTotalsWatcher() {
+  yield* takeLatest(EXPORT_MEDIA_TOTALS, exportMediaTotalsWorker);
+}
+
+export function* exportMediaTotalsWorker(action) {
+  const { params } = action;
+  try {
+    const requestURL = `${API_URL}/studies/exportMediaTotalsForDashboard`;
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(params),
+    };
+
+    yield call(request, requestURL, options);
+    const toastrOptions = {
+      id: 'loadingToasterForExportMediaTotals',
+      type: 'success',
+      message: 'Loading...',
+      options: {
+        timeOut: 0,
+        icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+        showCloseButton: true,
+      },
+    };
+    yield put(toastrActions.add(toastrOptions));
+  } catch (e) {
+    const errorMessage = get(e, 'message', 'Something went wrong while exporting media totals. Please try again later.');
+    toastr.error('', errorMessage);
   }
 }
 
