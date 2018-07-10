@@ -9,7 +9,7 @@ import 'react-date-range/dist/styles.css';
 import { createStructuredSelector } from 'reselect';
 import libPhoneNumber from 'google-libphonenumber';
 import * as Selector from '../selectors';
-import { getMomentFromDate } from '../../../utils/time';
+import { getMomentFromDate } from '../../../../common/utils/time';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import CenteredModal from '../../../components/CenteredModal/index';
 import Input from '../../../components/Input/index';
