@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
+import _ from 'lodash';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { change, Field, reduxForm } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
@@ -23,7 +24,6 @@ const mapStateToProps = createStructuredSelector({
 });
 const mapDispatchToProps = {
   addStudyNumber,
-  change,
   fetchVendorStudies,
 };
 
@@ -38,7 +38,6 @@ const mapDispatchToProps = {
 export default class EditVendorStudiesForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addStudyNumber: PropTypes.func.isRequired,
-    change: PropTypes.func.isRequired,
     fetchVendorStudies: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     asyncValidating: PropTypes.bool.isRequired,
