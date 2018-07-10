@@ -15,9 +15,9 @@ import { translate } from '../../../common/utilities/localization';
 import CenteredModal from '../../../common/components/CenteredModal/index';
 import ReactSelect from '../../../common/components/Input/ReactSelect';
 import RadioButton from '../../../common/components/Input/RadioButton';
-import cardStudykik from '../../../common/assets/images/img6.png';
-import cardAmazon from '../../../common/assets/images/img8.png';
-import cardStarbucks from '../../../common/assets/images/img7.png';
+import cardStudykik from '../../assets/images/img6.png';
+import cardAmazon from '../../assets/images/img8.png';
+import cardStarbucks from '../../assets/images/img7.png';
 
 import {
   fetchRewardsBalance,
