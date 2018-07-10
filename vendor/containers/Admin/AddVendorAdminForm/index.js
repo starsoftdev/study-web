@@ -15,7 +15,7 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
   };
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, saving } = this.props;
     return (
       <Form className="form-lightbox dashboard-lightbox" onSubmit={handleSubmit}>
 
@@ -74,7 +74,7 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
 
         <div className="field-row text-right no-margins">
           <button type="submit" className="btn btn-primary">
-            {this.props.saving
+            {saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
               : <span>{translate('client.page.vendor.admin.submit')}</span>
             }

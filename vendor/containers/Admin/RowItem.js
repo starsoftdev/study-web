@@ -10,21 +10,27 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   };
 
   render() {
+    const { item, openStudyModal } = this.props;
     return (
       <tr>
         <td>
-          {this.props.item.vendorName}
+          {item.vendorName}
         </td>
         <td>
-          {`${this.props.item.firstName} ${this.props.item.lastName}`}
+          {`${item.firstName} ${item.lastName}`}
         </td>
         <td>
-          {this.props.item.email}
+          {item.email}
         </td>
         <td>
           <div className="btns-area pull-right">
             <div className="col pull-left">
-              <a className="btn btn-primary btn-edit-site" onClick={() => { this.props.openStudyModal(this.props.item); }}>
+              <a
+                className="btn btn-primary btn-edit-site"
+                onClick={() => {
+                  openStudyModal(item.vendorId);
+                }}
+              >
                 <span>{translate('client.page.vendor.admin.study')}</span>
               </a>
             </div>
