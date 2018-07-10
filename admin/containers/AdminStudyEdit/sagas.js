@@ -46,6 +46,7 @@ import {
   updatePatientThankYouEmailError,
   updateFacebookLandingPageError,
   updateFacebookLandingPageSuccess,
+  fetchStudyMediaTypes,
   fetchStudyMediaTypesError,
   fetchStudyMediaTypesSuccess,
   deleteStudyMediaTypeSuccess,
@@ -241,7 +242,7 @@ export function* updateFacebookLandingPageWorker(action) {
   }
 }
 
-export function* fetchStudyMediaTypes() {
+export function* fetchStudyMediaTypesWorker() {
   while (true) {
     const { studyId } = yield take(FETCH_STUDY_MEDIA_TYPES);
     try {
@@ -625,7 +626,7 @@ export function* adminStudyEditSaga() {
   const updateFacebookLandingPageWatcher1 = yield fork(updateFacebookLandingPageWatcher);
   const deleteStudyMediaTypeWatcher1 = yield fork(deleteStudyMediaType);
   const editStudyMediaTypesWatcher1 = yield fork(editStudyMediaTypesWatcher);
-  yield fork(fetchStudyMediaTypes);
+  yield fork(fetchStudyMediaTypesWorker);
   const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
   const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
   const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
