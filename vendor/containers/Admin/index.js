@@ -123,6 +123,7 @@ export default class VendorAdminPage extends Component {
   };
 
   render() {
+    const { editModalOpen } = this.props;
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
@@ -173,7 +174,7 @@ export default class VendorAdminPage extends Component {
           </Modal.Body>
         </Modal>
 
-        <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="search-vendor-study" show={this.state.studyModalOpen} onHide={this.closeStudyModal}>
+        <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="search-vendor-study" show={editModalOpen} onHide={this.closeStudyModal}>
           <Modal.Header>
             <Modal.Title>{translate('client.page.vendor.admin.study')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeStudyModal}>
