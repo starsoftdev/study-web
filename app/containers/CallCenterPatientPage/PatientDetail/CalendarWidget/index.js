@@ -18,6 +18,33 @@ Calendar.setLocalizer( // or globalizeLocalizer
   Calendar.momentLocalizer(moment)
 );
 
+const CustomToolbar = (toolbar) => {
+  const goToBack = () => { toolbar.onNavigate('PREV'); };
+  const goToNext = () => { toolbar.onNavigate('NEXT'); };
+  const goToCurrent = () => { toolbar.onNavigate('TODAY'); };
+  const selectMonth = () => { toolbar.onViewChange('month'); };
+  const label = () => {
+    const date = moment(toolbar.date);
+    return (
+      <span><b>{date.format(translate('container.page.callCenterPatient.modal.scheduledPatientModal.todayDateMask'))}</b></span>
+    );
+  };
+
+  return (
+    <div className="calendar-toolbar-wrapper">
+      <div className="btns">
+        <button type="button" className="btn btn-primary" onClick={goToBack}>prev</button>
+        <button type="button" className="btn btn-primary" onClick={goToCurrent}>today</button>
+        <button type="button" className="btn btn-primary" onClick={goToNext}>next</button>
+      </div>
+      <div><label>{label()}</label></div>
+      <div className="btns">
+        <button type="button" className="btn btn-primary" onClick={selectMonth}>month</button>
+      </div>
+    </div>
+  );
+};
+
 class CalendarWidget extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
@@ -29,36 +56,13 @@ class CalendarWidget extends React.Component {
 
   constructor(props) {
     super(props);
-    this.getTimezoneDate = this.getTimezoneDate.bind(this);
-    this.handleFiveWeeksHeight = this.handleFiveWeeksHeight.bind(this);
+
     this.state = {
-      fiveWeeks: false,
+      view: 'day',
+      day: new Date(),
     };
   }
 
-  getTimezoneDate(date) {
-    const { currentUser } = this.props;
-    // we need to compensate for big calendar using a local date offset instead of an international one
-    const offset = moment().local().utcOffset() - moment().tz(currentUser.timezone).utcOffset();
-    let selectedDate;
-    if (offset > 0) {
-      selectedDate = moment(date).add(offset, 'minute');
-    } else if (offset === 0) {
-      selectedDate = moment(date);
-    } else {
-      selectedDate = moment(date).subtract(-offset, 'minute');
-    }
-    return selectedDate;
-  }
-
-  handleFiveWeeksHeight(date) {
-    const aa = moment(date);
-    const start = moment().year(aa.year()).month(aa.month()).date(1).day();
-    const end = moment().year(aa.year()).month(aa.month()).date(aa.daysInMonth()).day();
-    const visibleDays = aa.daysInMonth() + start + (6 - end);
-    const weeks = visibleDays / 7;
-    this.setState({ fiveWeeks: weeks > 5 });
-  }
 
   render() {
     const { currentUser, schedules, patient } = this.props;
@@ -99,21 +103,41 @@ class CalendarWidget extends React.Component {
     return (
       <div>
         <Calendar
+          className="schedule-calendar"
           selectable
-          defaultView="day"
-          events={[]}
-          defaultDate={this.currentDate}
+          view={this.state.view}
+          onView={view => {
+            this.setState({
+              view,
+            });
+          }}
+          events={eventsList}
+          date={new Date(moment(this.state.day).format())}
           culture="en"
           timezone={calendarTimezone}
           messages={calendarMessages}
+          components={{
+            toolbar: CustomToolbar,
+          }}
           onSelectSlot={({ start, end, slots }) => {
-            if (slots.length === 1) {
-              const selectedDate = this.getTimezoneDate(start);
-              this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate });
+            if (this.state.view === 'month') {
+              const day = slots[0];
+              this.setState({
+                day,
+                view: 'day',
+              });
             }
           }}
-          onSelectDate={(label, date) => {
-            this.props.handleOpenModal(SchedulePatientModalType.CREATE, { selectedDate: date });
+          onSelectDate={(day) => {
+            this.setState({
+              day,
+              view: 'day',
+            });
+          }}
+          onNavigate={(day) => {
+            this.setState({
+              day,
+            });
           }}
           ref={(c) => { this.bigCalendar = c; }}
         />
