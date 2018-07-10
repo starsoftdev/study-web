@@ -7,13 +7,12 @@ import { createStructuredSelector } from 'reselect';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
-import { selectAnyTouchedBool, selectSyncErrorBool } from '../../../../common/selectors/form.selector';
+import { selectSyncErrorBool } from '../../../../common/selectors/form.selector';
 import validator from './validator';
 const formName = 'VendorAdminPage.AddVendorAdminForm';
 
 
 const mapStateToProps = createStructuredSelector({
-  anyTouched: selectAnyTouchedBool(formName),
   syncError: selectSyncErrorBool(formName),
 });
 const mapDispatchToProps = {};
@@ -25,14 +24,14 @@ const mapDispatchToProps = {};
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AddVendorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    anyTouched: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    pristine: PropTypes.bool.isRequired,
     syncError: PropTypes.bool.isRequired,
     saving: PropTypes.bool,
   };
 
   render() {
-    const { anyTouched, handleSubmit, saving, syncError } = this.props;
+    const { pristine, handleSubmit, saving, syncError } = this.props;
     return (
       <Form className="form-lightbox dashboard-lightbox" onSubmit={handleSubmit}>
 
@@ -87,14 +86,14 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
             <Field
               name="email"
               component={Input}
-              type="text"
+              type="email"
               required
             />
           </div>
         </div>
 
         <div className="field-row text-right no-margins">
-          <Button bsStyle="primary" type="submit" disabled={!anyTouched || !syncError}>
+          <Button bsStyle="primary" type="submit" disabled={pristine || syncError}>
             {saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
               : <span>{translate('client.page.vendor.admin.submit')}</span>
