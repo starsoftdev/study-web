@@ -1,21 +1,37 @@
 import React, { PropTypes } from 'react';
+import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
-
+import { selectSyncErrorBool } from '../../../../common/selectors/form.selector';
+import validator from './validator';
 const formName = 'VendorAdminPage.AddVendorAdminForm';
 
-@reduxForm({ form: formName })
+
+const mapStateToProps = createStructuredSelector({
+  syncError: selectSyncErrorBool(formName),
+});
+const mapDispatchToProps = {};
+
+@reduxForm({
+  form: formName,
+  validate: validator,
+})
+@connect(mapStateToProps, mapDispatchToProps)
 export default class AddVendorAdminForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     handleSubmit: PropTypes.func.isRequired,
+    pristine: PropTypes.bool.isRequired,
+    syncError: PropTypes.bool.isRequired,
     saving: PropTypes.bool,
   };
 
   render() {
-    const { handleSubmit, saving } = this.props;
+    const { pristine, handleSubmit, saving, syncError } = this.props;
     return (
       <Form className="form-lightbox dashboard-lightbox" onSubmit={handleSubmit}>
 
@@ -28,6 +44,7 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
               name="vendorName"
               component={Input}
               type="text"
+              required
             />
           </div>
         </div>
@@ -43,6 +60,7 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
                   name="firstName"
                   component={Input}
                   type="text"
+                  required
                   placeholder={translate('client.page.vendor.admin.firstName')}
                 />
               </div>
@@ -52,6 +70,7 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
                   name="lastName"
                   component={Input}
                   type="text"
+                  required
                   placeholder={translate('client.page.vendor.admin.lastName')}
                 />
               </div>
@@ -67,18 +86,19 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
             <Field
               name="email"
               component={Input}
-              type="text"
+              type="email"
+              required
             />
           </div>
         </div>
 
         <div className="field-row text-right no-margins">
-          <button type="submit" className="btn btn-primary">
+          <Button bsStyle="primary" type="submit" disabled={pristine || syncError}>
             {saving
               ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
               : <span>{translate('client.page.vendor.admin.submit')}</span>
             }
-          </button>
+          </Button>
         </div>
 
       </Form>
