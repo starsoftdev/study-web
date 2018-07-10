@@ -43,20 +43,24 @@ export const selectSyncErrorBool = (formName) => createSelector(
 
 export const selectAsyncErrors = (formName) => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, `${formName}.asyncErrors`, {})
+  (substate) => get(substate, `${formName}.asyncErrors`, undefined)
 );
 
 export const selectAsyncErrorBool = (formName) => createSelector(
   selectFormDomain(),
   (substate) => {
-    const errors = get(substate, `${formName}.asyncErrors`, {});
-    return Object.keys(errors).length > 0;
+    const errors = get(substate, `${formName}.asyncErrors`, undefined);
+    return typeof errors === 'object' && Object.keys(errors).length > 0;
   }
 );
 
-export const selectAsyncErrorValidating = (formName) => createSelector(
+// returns boolean for easy async validation boolean checking
+export const selectAsyncValidatingBool = (formName) => createSelector(
   selectFormDomain(),
-  (substate) => get(substate, `${formName}.asyncErrorValidating`, false)
+  (substate) => {
+    const validating = get(substate, `${formName}.asyncValidating`, undefined);
+    return typeof validating === 'string';
+  }
 );
 
 export const selectFormFieldNames = (formName) => createSelector(

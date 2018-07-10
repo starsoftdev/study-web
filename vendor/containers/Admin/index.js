@@ -13,27 +13,33 @@ import RowItem from './RowItem';
 import { translate } from '../../../common/utilities/localization';
 import { fetchVendorAdmins } from './actions';
 import { addVendorAdmin } from './AddVendorAdminForm/actions';
-import { setSelectedVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
+import { closeModal, openModalWithVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
 import { selectVendorAdmins } from './selectors';
 
 import CenteredModal from '../../../app/components/CenteredModal/index';
 
 import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';
-import EditVendorStudiesForm from './EditVendorStudiesForm';
+import EditVendorStudiesForm, { formName as editVendorStudiesFormName } from './EditVendorStudiesForm';
+import { selectValues } from '../../../common/selectors/form.selector';
+import { selectModalOpen, selectStudiesForVendor } from './EditVendorStudiesForm/selectors';
 
 import './style.less';
 
 const pageTitle = 'Vendor Admins - StudyKIK';
 
 const mapStateToProps = createStructuredSelector({
+  editModalOpen: selectModalOpen(),
+  editFormValues: selectValues(editVendorStudiesFormName),
+  vendorStudies: selectStudiesForVendor(),
   vendorAdmins: selectVendorAdmins(),
 });
 
 const mapDispatchToProps = {
   addVendorAdmin,
+  closeModal,
   fetchVendorAdmins,
-  setSelectedVendorId,
+  openModalWithVendorId,
   submitVendorStudies,
 };
 
@@ -42,10 +48,14 @@ export default class VendorAdminPage extends Component {
 
   static propTypes = {
     addVendorAdmin: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    editModalOpen: PropTypes.bool.isRequired,
+    editFormValues: PropTypes.object,
     fetchVendorAdmins: PropTypes.func.isRequired,
-    setSelectedVendorId: PropTypes.func.isRequired,
+    openModalWithVendorId: PropTypes.func.isRequired,
     submitVendorStudies: PropTypes.func.isRequired,
     vendorAdmins: PropTypes.array.isRequired,
+    vendorStudies: PropTypes.array,
   };
 
   constructor(props) {
@@ -54,7 +64,6 @@ export default class VendorAdminPage extends Component {
     this.state = {
       studyModalOpen: false,
       addVendorModalOpen: false,
-      currentlySelectedvendorId: null,
     };
   }
 
@@ -64,18 +73,13 @@ export default class VendorAdminPage extends Component {
   }
 
   openStudyModal = (vendorId) => {
-    this.setState({
-      studyModalOpen: true,
-    });
-    const { setSelectedVendorId } = this.props;
-    setSelectedVendorId(vendorId);
+    const { openModalWithVendorId } = this.props;
+    openModalWithVendorId(vendorId);
   };
 
   closeStudyModal = () => {
-    this.setState({
-      studyModalOpen: false,
-      currentlySelectedvendorId: null,
-    });
+    const { closeModal } = this.props;
+    closeModal();
   };
 
   openVendorModal = () => {
@@ -101,9 +105,9 @@ export default class VendorAdminPage extends Component {
     fetchVendorAdmins(data.search);
   };
 
-  submitVendorStudies = (data) => {
-    const { submitVendorStudies } = this.props;
-    submitVendorStudies(data);
+  submitVendorStudies = () => {
+    const { submitVendorStudies, vendorStudies, editFormValues: { vendorId } } = this.props;
+    submitVendorStudies(vendorId, vendorStudies);
   };
 
   renderVendorAdmins = () => {
