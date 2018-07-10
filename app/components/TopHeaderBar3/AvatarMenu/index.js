@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
 
 
-import defaultImage from '../../../../common/assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 
 class AvatarMenu extends React.Component {
   static propTypes = {

@@ -28,7 +28,7 @@ class PatientNote extends React.Component {
         <img alt="" src={note.user.profileImageURL} />
       );
     }
-    const url = require('../../../../common/assets/images/Default-User-Img-Dr.png');
+    const url = require('../../../assets/images/Default-User-Img-Dr.png');
     return (
       <img alt="" src={url} />
     );
