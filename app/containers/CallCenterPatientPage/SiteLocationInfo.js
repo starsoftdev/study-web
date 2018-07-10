@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 
+import { translate } from '../../../common/utilities/localization';
+
 function SiteLocationInfo({ indications, site, protocol }) {
   // FIXME: We're choosing the first indication here. It should be handled better
   const indication = indications.find(item =>
@@ -9,11 +11,13 @@ function SiteLocationInfo({ indications, site, protocol }) {
   return (
     <div className="site-location-info">
       <div className="info-container">
-        <span>{site.name}</span>
-        <span>{site.address}</span>
-        <span>{protocol.number}</span>
-        <span>{indication && indication.indication.name}</span>
-        <span>{site.phoneNumber}</span>
+        <span>{translate('container.page.callCenterPatient.label.siteLocation')}: {site.name}</span>
+        <span>{translate('container.page.callCenterPatient.label.address')}: {site.address}</span>
+        <span>{translate('container.page.callCenterPatient.label.protocol')}: {protocol.number}</span>
+        {indication &&
+          <span>{translate('container.page.callCenterPatient.label.indication')}: {indication.indication.name}</span>
+        }
+        <span>{translate('container.page.callCenterPatient.label.recruitmentPhone')}: {site.phoneNumber}</span>
       </div>
     </div>
   );
