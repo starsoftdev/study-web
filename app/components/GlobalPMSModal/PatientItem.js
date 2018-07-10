@@ -6,8 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../containers/App/selectors';
 import { translate } from '../../../common/utilities/localization';
 
-import defaultUserImage from '../../../common/assets/images/Default-User-Img.png';
-import defaultUserImageGirl from '../../../common/assets/images/Default-User-Img-Girl.png';
+import defaultUserImage from '../../assets/images/Default-User-Img.png';
+import defaultUserImageGirl from '../../assets/images/Default-User-Img-Girl.png';
 
 
 class PatientItem extends Component { // eslint-disable-line react/prefer-stateless-function
