@@ -35,6 +35,10 @@ export default class RangePopups extends Component {
         startDate: null,
         endDate: null,
       },
+      endDateRange: {
+        startDate: null,
+        endDate: null,
+      },
     };
 
     this.showPopup = this.showPopup.bind(this);
@@ -96,6 +100,12 @@ export default class RangePopups extends Component {
           applyFilters(null, null, false);
         }
         manuallySetActiveTab('studyEndDateRange');
+        this.setState({
+          endDateRange: {
+            startDate: uiStartDate,
+            endDate: uiEndDate,
+          },
+        });
         changeAdminFilters('startDate', startDate.toISOString());
         changeAdminFilters('endDate', endDate.toISOString());
         this.hidePopup();
@@ -135,6 +145,8 @@ export default class RangePopups extends Component {
   }
 
   render() {
+    const { endDateRange } = this.state;
+    const endDateRangeLabel = (endDateRange.startDate && endDateRange.endDate) ? `${endDateRange.startDate} - ${endDateRange.endDate}` : 'Study End Date Range';
     return (
       <div id="btnsPopupsHolder">
         <div className="col pull-right no-right-padding">
@@ -144,7 +156,7 @@ export default class RangePopups extends Component {
         </div>
         <div className="col pull-right">
           <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'studyEndDateRange')}>
-            Study End Date Range
+            {endDateRangeLabel}
           </button>
         </div>
         <div className="col pull-right">
