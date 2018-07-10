@@ -7,7 +7,7 @@ import { selectCurrentUser } from '../../App/selectors';
 import { fetchPatientSignUps, fetchPrincipalInvestigatorTotals, fetchProtocols } from '../actions';
 import { selectPatientSignUps, selectPrincipalInvestigatorTotals } from '../selectors';
 
-import graphImage from '../../../../common/assets/images/graph.svg';
+import graphImage from '../../../assets/images/graph.svg';
 import { translate } from '../../../../common/utilities/localization';
 
 export class SponsorDashboard extends React.Component {
