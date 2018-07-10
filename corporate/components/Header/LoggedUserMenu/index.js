@@ -2,7 +2,7 @@ import React from 'react';
 import { Well, Collapse } from 'react-bootstrap';
 import enhanceWithClickOutside from 'react-click-outside';
 
-import defaultImage from '../../../../common/assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../../app/assets/images/Default-User-Img-Dr.png';
 
 export class loggedUserMenu extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
