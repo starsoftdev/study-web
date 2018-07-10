@@ -29,6 +29,7 @@ export default class ReportTabs extends Component {
     filtersFormValues: PropTypes.object,
     loadItems: PropTypes.func,
     loadCampaignItems: PropTypes.func,
+    setActiveReportTab: PropTypes.func,
   };
 
   constructor(props) {
@@ -50,7 +51,9 @@ export default class ReportTabs extends Component {
   }
 
   handleClick(type) {
+    const { setActiveReportTab } = this.props;
     this.setState({ activeTab: type });
+    setActiveReportTab(type);
   }
 
   renderTab(type, title, key) {
