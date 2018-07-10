@@ -11,7 +11,6 @@ import { translate } from '../../../../common/utilities/localization';
 import { addStudyNumber, deleteStudyNumber, fetchVendorStudies } from './actions';
 import { selectStudiesForVendor } from './selectors';
 import {
-  selectAnyTouchedBool,
   selectAsyncErrorBool,
   selectAsyncValidatingBool,
   selectValues,
@@ -22,7 +21,6 @@ import { asyncValidate } from './asyncValidate';
 export const formName = 'VendorAdminPage.EditVendorStudiesForm';
 
 const mapStateToProps = createStructuredSelector({
-  anyTouched: selectAnyTouchedBool(formName),
   asyncValidating: selectAsyncValidatingBool(formName),
   asyncError: selectAsyncErrorBool(formName),
   values: selectValues(formName),
@@ -45,12 +43,12 @@ const mapDispatchToProps = {
 export default class EditVendorStudiesForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     addStudyNumber: PropTypes.func.isRequired,
-    anyTouched: PropTypes.bool.isRequired,
     asyncValidating: PropTypes.bool.isRequired,
     asyncError: PropTypes.bool.isRequired,
     deleteStudyNumber: PropTypes.func.isRequired,
     fetchVendorStudies: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    pristine: PropTypes.bool.isRequired,
     saving: PropTypes.bool,
     values: PropTypes.object.isRequired,
     vendorStudies: PropTypes.array.isRequired,
@@ -109,7 +107,7 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
 
   render() {
 
-    const { anyTouched, asyncError, asyncValidating, handleSubmit, saving } = this.props;
+    const { pristine, asyncError, asyncValidating, handleSubmit, saving } = this.props;
 
     return (
       <Form className="form-lightbox dashboard-lightbox study-number-form" onSubmit={handleSubmit}>
@@ -140,7 +138,7 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
         </div>
 
         <div className="field-row text-right no-margins">
-          <Button bsStyle="primary" type="submit" disabled={!anyTouched || asyncValidating || !asyncError}>
+          <Button bsStyle="primary" type="submit" disabled={pristine || asyncValidating || asyncError}>
             {saving ?
               <span>
                 <LoadingSpinner showOnlyIcon size={20} className="saving-user" />
