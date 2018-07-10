@@ -18,6 +18,7 @@ import {
   GET_CATEGORY_NOTES,
   FETCH_DISPOSITION_TOTALS,
   FETCH_MEDIA_SOURCES,
+  FETCH_TOTAL_SIGNUPS,
 } from './constants';
 
 import {
@@ -33,6 +34,8 @@ import {
   getDispositionTotalsError,
   mediaSourcesFetched,
   mediaSourcesFetchingError,
+  fetchTotalSignUpsSuccess,
+  fetchTotalSignUpsError,
 } from './actions';
 
 
@@ -44,6 +47,7 @@ export function* reportViewPageSaga() {
   const watcherE = yield fork(getCategoryNotesWatcher);
   const watcherF = yield fork(fetchDispositionsWatcher);
   const watcherG = yield fork(fetchMediaSourcesWatcher);
+  const watcherH = yield fork(fetchTotalSignUpsWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -54,6 +58,7 @@ export function* reportViewPageSaga() {
   yield cancel(watcherE);
   yield cancel(watcherF);
   yield cancel(watcherG);
+  yield cancel(watcherH);
 }
 
 export function* fetchReportsWatcher() {
@@ -258,6 +263,32 @@ export function* fetchDispositionsWorker(action) {
       toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
     }
     yield put(getDispositionTotalsError(err));
+  }
+}
+
+export function* fetchTotalSignUpsWatcher() {
+  yield* takeLatest(FETCH_TOTAL_SIGNUPS, fetchTotalSignUpsWorker);
+}
+export function* fetchTotalSignUpsWorker(action) {
+  try {
+    const { roleId, protocol, indication, timezone } = action;
+
+    const requestURL = `${API_URL}/sponsorRoles/${roleId}/patientSignUps`;
+    const options = {
+      method: 'GET',
+      query: {
+        protocolNumber: protocol,
+        indication,
+        timezone,
+      },
+    };
+    const response = yield call(request, requestURL, options);
+    yield put(fetchTotalSignUpsSuccess(response));
+  } catch (err) {
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
+    yield put(fetchTotalSignUpsError(err));
   }
 }
 

@@ -12,6 +12,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     reportsList: PropTypes.object,
     totals: PropTypes.object,
     openPQSModal: PropTypes.func,
+    patientSignUps: PropTypes.object,
   }
 
 
@@ -23,19 +24,16 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
       count_today: translate('sponsor.component.reportViewInfo.na'),
       count_yesterday: translate('sponsor.component.reportViewInfo.na'),
     };
-    let totalSignUps = 0;
+
     if (this.props.totals.details[this.props.totals.source]) {
       totals = {
         textSent: (this.props.totals.details[this.props.totals.source].outbound_text || this.props.totals.details[this.props.totals.source].outbound_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_text) : translate('sponsor.component.reportViewInfo.na'),
         unreadText: (this.props.totals.details[this.props.totals.source].unread_text || this.props.totals.details[this.props.totals.source].unread_text === 0) ? parseInt(this.props.totals.details[this.props.totals.source].unread_text) : translate('sponsor.component.reportViewInfo.na'),
         emailSent: (this.props.totals.details[this.props.totals.source].outbound_emails || this.props.totals.details[this.props.totals.source].outbound_emails === 0) ? parseInt(this.props.totals.details[this.props.totals.source].outbound_emails) : translate('sponsor.component.reportViewInfo.na'),
 
-        count_today: (this.props.totals.details[this.props.totals.source].count_today || this.props.totals.details[this.props.totals.source].count_today === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_today) : translate('sponsor.component.reportViewInfo.na'),
-        count_yesterday: (this.props.totals.details[this.props.totals.source].count_yesterday || this.props.totals.details[this.props.totals.source].count_yesterday === 0) ? parseInt(this.props.totals.details[this.props.totals.source].count_yesterday) : translate('sponsor.component.reportViewInfo.na'),
+        count_today: this.props.patientSignUps.today,
+        count_yesterday: this.props.patientSignUps.yesterday,
       };
-
-      totalSignUps = parseInt(this.props.totals.details[this.props.totals.source].count_not_contacted) + parseInt(this.props.totals.details[this.props.totals.source].dnq) + parseInt(this.props.totals.details[this.props.totals.source].action_needed) + parseInt(this.props.totals.details[this.props.totals.source].scheduled)
-      + parseInt(this.props.totals.details[this.props.totals.source].consented) + parseInt(this.props.totals.details[this.props.totals.source].screen_failed) + parseInt(this.props.totals.details[this.props.totals.source].randomized) + parseInt(this.props.totals.details[this.props.totals.source].call_attempted);
     }
 
     return (
@@ -64,7 +62,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 </li>
                 <li>
                   <span className="sub-title report-font-fix">{translate('sponsor.component.reportViewInfo.total')}</span>
-                  <strong className="number">{totalSignUps || translate('sponsor.component.reportViewInfo.na')}</strong>
+                  <strong className="number">{this.props.patientSignUps.total}</strong>
                 </li>
               </ul>
             </div>

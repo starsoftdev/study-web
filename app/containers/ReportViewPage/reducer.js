@@ -29,13 +29,16 @@ import {
   FETCH_MEDIA_SOURCES,
   FETCH_MEDIA_SOURCES_SUCCESS,
   FETCH_MEDIA_SOURCES_ERROR,
+  FETCH_TOTAL_SIGNUPS,
+  FETCH_TOTAL_SIGNUPS_SUCCESS,
+  FETCH_TOTAL_SIGNUPS_ERROR,
 } from './constants';
 
 const initialState = {
   patientSignUps: {
-    today: 'N/A',
-    yesterday: 'N/A',
-    total: 'N/A',
+    today: 0,
+    yesterday: 0,
+    total: 0,
   },
   reportsList: {
     details: [],
@@ -347,6 +350,33 @@ function reportViewPageReducer(state = initialState, action) {
           details: {},
           fetching: false,
           error: action.payload,
+        },
+      };
+    case FETCH_TOTAL_SIGNUPS:
+      return {
+        ...state,
+        patientSignUps: {
+          today: 0,
+          yesterday: 0,
+          total: 0,
+        },
+      };
+    case FETCH_TOTAL_SIGNUPS_SUCCESS:
+      return {
+        ...state,
+        patientSignUps: {
+          today: action.payload.today,
+          yesterday: action.payload.yesterday,
+          total: action.payload.total,
+        },
+      };
+    case FETCH_TOTAL_SIGNUPS_ERROR:
+      return {
+        ...state,
+        patientSignUps: {
+          today: 0,
+          yesterday: 0,
+          total: 0,
         },
       };
     default:
