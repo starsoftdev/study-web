@@ -22,6 +22,7 @@ import moment from 'moment-timezone';
 
 import AdminHeaderBar from '../../components/AdminHeaderBar';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import GlobalNotifications from '../../../app/containers/GlobalNotifications';
 import { logout } from '../../../app/containers/LoginPage/actions';
 import { fetchMeFromToken } from './actions';
 import { getItem } from '../../utils/localStorage';
@@ -172,6 +173,7 @@ class App extends Component { // eslint-disable-line react/prefer-stateless-func
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
+          <GlobalNotifications {...this.props} />
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}
         </div>
       </IdleTimer>
