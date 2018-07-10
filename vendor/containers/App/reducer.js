@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 
-import { getItem } from '../../utils/localStorage';
+import { getItem } from '../../../common/utils/localStorage';
 
 import {
   SET_AUTH_STATE,

@@ -1,4 +1,4 @@
-import { validatorFactory } from '../../../utils/reduxForm';
+import { validatorFactory } from '../../../../common/utils/reduxForm';
 
 const schema = {
   bmi: {
