@@ -72,6 +72,11 @@ const selectMediaSources = () => createSelector(
   (substate) => substate.mediaSources
 );
 
+const selectPatientSignUps = () => createSelector(
+  selectReportViewPageDomain(),
+  (substate) => substate.patientSignUps
+);
+
 export default selectReportViewPage;
 export {
   selectReportViewPageDomain,
@@ -85,4 +90,5 @@ export {
   selectNotesPaginationOptions,
   selectDispositionTotals,
   selectMediaSources,
+  selectPatientSignUps,
 };
