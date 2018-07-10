@@ -34,13 +34,13 @@ import RewardForm from '../../components/RewardForm';
 import RewardsList from './RewardsList/index';
 import { translate } from '../../../common/utilities/localization';
 
-import cardStudykik from '../../../common/assets/images/img6.png';
-import cardAmazon from '../../../common/assets/images/img8.png';
-import cardStarbucks from '../../../common/assets/images/img7.png';
-import diamond from '../../../common/assets/images/diamond.svg';
-import platinum from '../../../common/assets/images/platinum.svg';
-import gold from '../../../common/assets/images/gold.svg';
-import ruby from '../../../common/assets/images/ruby.png';
+import cardStudykik from '../../assets/images/img6.png';
+import cardAmazon from '../../assets/images/img8.png';
+import cardStarbucks from '../../assets/images/img7.png';
+import diamond from '../../assets/images/diamond.svg';
+import platinum from '../../assets/images/platinum.svg';
+import gold from '../../assets/images/gold.svg';
+import ruby from '../../assets/images/ruby.png';
 
 export class RewardsPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

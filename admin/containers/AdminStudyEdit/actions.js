@@ -59,6 +59,30 @@ import {
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
 
+  FETCH_LEVELS,
+  FETCH_LEVELS_SUCCESS,
+  FETCH_LEVELS_ERROR,
+
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
+
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
+
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
+
+  FETCH_STUDY,
+  FETCH_STUDY_SUCCESS,
+  FETCH_STUDY_ERROR,
+
   GET_STUDY_INFO,
   GET_STUDY_INFO_SUCCESS,
   GET_STUDY_INFO_ERROR,
@@ -125,6 +149,46 @@ export function addNoteSuccess(payload) {
     payload,
   };
 }
+export function fetchCampaignsByStudy(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudySuccess(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchCampaignsByStudyError(payload) {
+  return {
+    type: FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+    payload,
+  };
+}
+
+export function fetchFive9List() {
+  return {
+    type: FETCH_FIVE_9_LIST,
+  };
+}
+
+export function fetchFive9ListSuccess(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchFive9ListError(payload) {
+  return {
+    type: FETCH_FIVE_9_LIST_ERROR,
+    payload,
+  };
+}
 
 export function addNoteError(payload) {
   return {
@@ -146,6 +210,28 @@ export function deleteNoteSuccess(payload) {
     payload,
   };
 }
+export function editCampaign(payload, campaignInfo) {
+  return {
+    type: EDIT_CAMPAIGN,
+    payload,
+    campaignInfo,
+  };
+}
+
+export function editCampaignSuccess(payload, campaignInfo) {
+  return {
+    type: EDIT_CAMPAIGN_SUCCESS,
+    payload,
+    campaignInfo,
+  };
+}
+
+export function editCampaignError(payload) {
+  return {
+    type: EDIT_CAMPAIGN_ERROR,
+    payload,
+  };
+}
 
 export function deleteNoteError(payload) {
   return {
@@ -154,6 +240,36 @@ export function deleteNoteError(payload) {
   };
 }
 
+export function deleteCampaign(payload) {
+  return {
+    type: DELETE_CAMPAIGN,
+    payload,
+  };
+}
+
+
+export function deleteCampaignSuccess(payload) {
+  return {
+    type: DELETE_CAMPAIGN_SUCCESS,
+    payload,
+  };
+}
+
+export function deleteCampaignError(payload) {
+  return {
+    type: DELETE_CAMPAIGN_ERROR,
+    payload,
+  };
+}
+
+
+export function deleteMediaType(studyId, utm) {
+  return {
+    type: FETCH_LANDING,
+    studyId,
+    utm,
+  };
+}
 export function fetchLanding(studyId, utm) {
   return {
     type: FETCH_LANDING,
@@ -348,6 +464,7 @@ export function changeStudyAdSuccess(payload) {
   };
 }
 
+
 export function changeStudyAdError(payload) {
   return {
     type: CHANGE_STUDY_AD_ERROR,
@@ -381,6 +498,27 @@ export function resetChangeStudyAdState() {
   };
 }
 
+// ///////////////////////////////////////////
+// levels
+// ///////////////////////////////////////////
+export function fetchLevels() {
+  return {
+    type: FETCH_LEVELS,
+  };
+}
+export function levelsFetched(payload) {
+  return {
+    type: FETCH_LEVELS_SUCCESS,
+    payload,
+  };
+}
+
+export function levelsFetchingError(payload) {
+  return {
+    type: FETCH_LEVELS_ERROR,
+    payload,
+  };
+}
 export function fetchStudiesDashboard(params, limit, offset) {
   return {
     type: GET_STUDY_INFO,
@@ -406,6 +544,25 @@ export function fetchStudiesDashboardError(payload) {
   };
 }
 
+export function fetchStudy(studyId) {
+  return {
+    type: FETCH_STUDY,
+    studyId,
+  };
+}
+
+export function fetchStudySuccess(payload) {
+  return {
+    type: FETCH_STUDY_SUCCESS,
+    payload,
+  };
+}
+export function fetchStudyError(payload) {
+  return {
+    type: FETCH_STUDY_ERROR,
+    payload,
+  };
+}
 export function updateDashboardStudy(id, params, stopSubmit, formValues) {
   return {
     type: UPDATE_DASHBOARD_STUDY,
