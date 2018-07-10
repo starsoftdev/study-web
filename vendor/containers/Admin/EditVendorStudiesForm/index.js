@@ -1,16 +1,20 @@
-import React, { PropTypes } from 'react';
 import _ from 'lodash';
+import React, { PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
+import { createStructuredSelector } from 'reselect';
 import Input from '../../../../app/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
 import { addStudyNumber, deleteStudyNumber, fetchVendorStudies } from './actions';
 import { selectStudiesForVendor } from './selectors';
-import { selectAsyncErrorBool, selectAsyncValidatingBool, selectValues } from '../../../../common/selectors/form.selector';
+import {
+  selectAsyncErrorBool,
+  selectAsyncValidatingBool,
+  selectValues,
+} from '../../../../common/selectors/form.selector';
 import validator from './validator';
 import { asyncValidate } from './asyncValidate';
 
@@ -29,10 +33,10 @@ const mapDispatchToProps = {
 };
 
 @reduxForm({
-  form: formName,
-  validate: validator,
   asyncValidate,
   asyncBlurFields: ['studyId'],
+  form: formName,
+  validate: validator,
   shouldAsyncValidate: ({ trigger }) => trigger !== 'submit',
 })
 @connect(mapStateToProps, mapDispatchToProps)
@@ -44,6 +48,7 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
     deleteStudyNumber: PropTypes.func.isRequired,
     fetchVendorStudies: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    pristine: PropTypes.bool.isRequired,
     saving: PropTypes.bool,
     values: PropTypes.object.isRequired,
     vendorStudies: PropTypes.array.isRequired,
@@ -102,7 +107,7 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
 
   render() {
 
-    const { handleSubmit, saving } = this.props;
+    const { pristine, asyncError, asyncValidating, handleSubmit, saving } = this.props;
 
     return (
       <Form className="form-lightbox dashboard-lightbox study-number-form" onSubmit={handleSubmit}>
@@ -133,7 +138,7 @@ export default class EditVendorStudiesForm extends React.Component { // eslint-d
         </div>
 
         <div className="field-row text-right no-margins">
-          <Button bsStyle="primary" type="submit">
+          <Button bsStyle="primary" type="submit" disabled={pristine || asyncValidating || asyncError}>
             {saving ?
               <span>
                 <LoadingSpinner showOnlyIcon size={20} className="saving-user" />
