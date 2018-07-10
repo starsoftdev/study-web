@@ -6,6 +6,7 @@ import { blur, change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
+import Checkbox from '../../../common/components/Input/Checkbox';
 import Input from '../../../common/components/Input';
 import mixIntlTelInput from '../../../common/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
