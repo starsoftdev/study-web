@@ -11,7 +11,6 @@ import settings from '../../../common/settings/app-settings.json';
 
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
-import { selectSchedules } from '../CallCenterHomePage/selectors';
 import { setSocketConnection } from '../GlobalNotifications/actions';
 import {
   selectSocket,
@@ -22,11 +21,13 @@ import {
   fetchCallCenterPatientCategories,
   submitPatientUpdate,
   submitPatientDisposition,
+  fetchSchedules,
 } from './actions';
 import {
   selectSelectedPatient,
   selectCallCenterPatientCategories,
   selectCallCenterScheduledModalFormValues,
+  selectSchedules,
 } from './selectors';
 
 import Tabs from './Tabs';
@@ -62,6 +63,7 @@ class CallCenterPatientPage extends Component {
 
   static defaultProps = {
     callCenterPatientCategories: [],
+    schedules: [],
   };
 
   state = {
@@ -83,6 +85,7 @@ class CallCenterPatientPage extends Component {
     fetchCallCenterPatientCategories();
     fetchPatient(patientId);
     fetchProtocols();
+    fetchSchedules();
 
     // initialize socket
     setSocketConnection({
@@ -363,6 +366,7 @@ function mapDispatchToProps(dispatch) {
     fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    fetchSchedules: () => dispatch(fetchSchedules()),
     setSocketConnection: (payload) => dispatch(setSocketConnection(payload)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
     submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
