@@ -27,6 +27,9 @@ import {
   FETCH_MEDIA_SOURCES,
   FETCH_MEDIA_SOURCES_SUCCESS,
   FETCH_MEDIA_SOURCES_ERROR,
+  FETCH_TOTAL_SIGNUPS,
+  FETCH_TOTAL_SIGNUPS_SUCCESS,
+  FETCH_TOTAL_SIGNUPS_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
@@ -198,6 +201,30 @@ export function mediaSourcesFetched(payload) {
 export function mediaSourcesFetchingError(payload) {
   return {
     type: FETCH_MEDIA_SOURCES_ERROR,
+    payload,
+  };
+}
+
+export function fetchTotalSignUps(roleId, protocol, indication, timezone) {
+  return {
+    type: FETCH_TOTAL_SIGNUPS,
+    roleId,
+    protocol,
+    indication,
+    timezone,
+  };
+}
+
+export function fetchTotalSignUpsSuccess(payload) {
+  return {
+    type: FETCH_TOTAL_SIGNUPS_SUCCESS,
+    payload,
+  };
+}
+
+export function fetchTotalSignUpsError(payload) {
+  return {
+    type: FETCH_TOTAL_SIGNUPS_ERROR,
     payload,
   };
 }
