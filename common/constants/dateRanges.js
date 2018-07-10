@@ -8,7 +8,7 @@ import {
   endOfMonth,
   addMonths,
 } from 'date-fns';
-import { translate } from '../../../common/utilities/localization';
+import { translate } from '../utilities/localization';
 
 export const defaultStaticRanges = createStaticRanges([
   {

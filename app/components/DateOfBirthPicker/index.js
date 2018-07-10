@@ -6,7 +6,7 @@ import React from 'react';
 import { Field } from 'redux-form';
 import moment from 'moment-timezone';
 
-import ReactSelect from '../Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
 
 class DateOfBirthPicker extends React.Component {
