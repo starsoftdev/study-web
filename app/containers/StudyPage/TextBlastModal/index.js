@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import TextBlastForm from '../TextBlastForm/index';
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
 import { translate } from '../../../../common/utilities/localization';
 

@@ -12,8 +12,8 @@ import { reset, Field, reduxForm } from 'redux-form';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 
-import ReactSelect from '../../../components/Input/ReactSelect';
-import Input from '../../../components/Input/index';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Input from '../../../../common/components/Input/index';
 import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
 import {
   submitPatientUpdate, deletePatient, generateReferral, downloadReferral,
