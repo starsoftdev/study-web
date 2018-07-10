@@ -5,9 +5,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { DateRangePicker } from 'react-date-range';
 import _ from 'lodash';
 import 'react-date-range/dist/styles.css';
-import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../app/utils/time';
+import { getMomentFromDate } from '../../../common/utilities/time';
 
 export default class RangePopups extends Component {
   static propTypes = {
