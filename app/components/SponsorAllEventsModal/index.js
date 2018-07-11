@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 
-import CenteredModal from '../CenteredModal';
+import CenteredModal from '../../../common/components/CenteredModal';
 import { translate } from '../../../common/utilities/localization';
 
 const AllEventsModal = ({ visible, events, date, handleCloseModal, sortBy, paginationOptions }) => {
