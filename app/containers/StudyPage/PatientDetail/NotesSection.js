@@ -9,7 +9,7 @@ import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
 import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
 import { submitPatientNote, submitDeleteNote } from '../actions';
-import Input from '../../../components/Input/index';
+import Input from '../../../../common/components/Input/index';
 import { translate } from '../../../../common/utilities/localization';
 import PatientNote from './PatientNote';
 import formValidator, { fields } from './validator';

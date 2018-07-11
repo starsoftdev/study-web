@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../components/CenteredModal';
+import CenteredModal from '../../../common/components/CenteredModal';
 
 class IdleModal extends React.Component {
   static propTypes = {

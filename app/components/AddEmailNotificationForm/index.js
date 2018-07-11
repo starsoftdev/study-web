@@ -7,7 +7,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-import Input from '../../components/Input';
+import Input from '../../../common/components/Input';
 import { translate } from '../../../common/utilities/localization';
 import formValidator from './validator';
 
