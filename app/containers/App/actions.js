@@ -163,8 +163,6 @@ import {
   RESET_NEW_CONTACT_SUCCESS,
 
   PRIVACY_REQUEST,
-  PRIVACY_REQUEST_SUCCESS,
-  RESET_PRIVACY_REQUEST_SUCCESS,
 
   FETCH_CLIENT_ADMINS,
   FETCH_CLIENT_ADMINS_SUCCESS,
@@ -1148,24 +1146,11 @@ export function resetNewContactSuccess(payload) {
   };
 }
 
-export function privacyRequest(params) {
+export function submitPrivacyRequest(params, recaptcha) {
   return {
     type: PRIVACY_REQUEST,
     params,
-  };
-}
-
-export function privacyRequestSuccess(payload) {
-  return {
-    type: PRIVACY_REQUEST_SUCCESS,
-    payload,
-  };
-}
-
-export function resetPrivacyRequestSuccess(payload) {
-  return {
-    type: RESET_PRIVACY_REQUEST_SUCCESS,
-    payload,
+    recaptcha,
   };
 }
 
