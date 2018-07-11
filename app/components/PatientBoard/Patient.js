@@ -126,6 +126,7 @@ class Patient extends React.Component {
         patientPhone = patient.phone;
       }
     }
+
     return connectDragSource(
       <li
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}

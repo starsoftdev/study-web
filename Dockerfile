@@ -97,7 +97,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
           "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
 
 # Chamber gets the env variables from AWS Parameter Store
-RUN apk add --no-cache openssl ca-certificates && \
+RUN apk add --no-cache wget openssl ca-certificates && \
 wget https://github.com/segmentio/chamber/releases/download/v1.16.0/chamber-v1.16.0-linux-amd64 -O /sbin/chamber && \
   chmod +x /sbin/chamber
   
