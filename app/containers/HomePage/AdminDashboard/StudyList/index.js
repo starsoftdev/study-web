@@ -10,7 +10,7 @@ import 'react-date-range/dist/styles.css';
 import { Field, change, reduxForm, reset } from 'redux-form';
 import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
-import { defaultStaticRanges } from '     `../../../../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../../../common/constants/dateRanges';
 import { getMomentFromDate } from '../../../../utils/time';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
 import { DashboardNoteSearch } from '../AdminDashboardNoteSearch/index';
