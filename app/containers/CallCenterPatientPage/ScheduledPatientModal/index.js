@@ -12,8 +12,6 @@ import { getMomentFromDate } from '../../../utils/time';
 import CenteredModal from '../../../../common/components/CenteredModal';
 import Input from '../../../../common/components/Input';
 import ReactSelect from '../../../../common/components/Input/ReactSelect';
-import Checkbox from '../../../../common/components/Input/Checkbox';
-
 import validator from './validator';
 
 const fieldName = 'CallCenterScheduledPatientModal';
@@ -64,7 +62,6 @@ class ScheduledPatientModal extends Component {
   render() {
     const { show, onHide, submittingSchedule, handleSubmit, currentPatient } = this.props;
     const calendarDate = this.state.date ? this.state.date.toDate() : this.state.date;
-    const reminderDisabled = false;
 
     if (!currentPatient) return null;
 
@@ -152,19 +149,6 @@ class ScheduledPatientModal extends Component {
                       />
                     </div>
                   </div>
-                </div>
-              </div>
-              <div className="field-row">
-                <strong className="label">&nbsp;</strong>
-                <div className="field reminder-field">
-                  <Field
-                    name="textReminder"
-                    type="checkbox"
-                    component={Checkbox}
-                    disabled={reminderDisabled}
-                    className="reminder-container"
-                  />
-                  <label className="reminder-label">{translate('client.component.scheduledPatientModal.textReminder')}</label>
                 </div>
               </div>
               <input type="submit" className="btn btn-default pull-right" value={translate('client.component.scheduledPatientModal.submit')} disabled={submittingSchedule} />
