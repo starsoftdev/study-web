@@ -5,7 +5,7 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import moment from 'moment-timezone';
 
-import request from '../../../app/utils/request';
+import request from '../../../common/utils/request';
 import { getItem, removeItem } from '../../../app/utils/localStorage';
 import { FETCH_ME_FROM_TOKEN, LOGOUT_REQUEST } from '../../containers/App/constants';
 import { setAuthState, setUserData } from '../../containers/App/actions';

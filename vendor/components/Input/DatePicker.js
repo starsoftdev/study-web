@@ -11,7 +11,7 @@ import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import CenteredModal from '../CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
-import { getMomentFromDate } from '../../utils/time';
+import { getMomentFromDate } from '../../../common/utils/time';
 
 export default class DatePicker extends Component {
   static propTypes = {
