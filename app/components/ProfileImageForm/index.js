@@ -7,11 +7,11 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
-// import Input from '../../../../common/components/Input';
+// import Input from '../../components/Input';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
-import defaultMaleImage from '../../../common/assets/images/Default-User-Img-Dr-Full.png';
-import defaultFemaleImage from '../../../common/assets/images/Default-User-Img-Dr-Girl.png';
+import defaultMaleImage from '../../assets/images/Default-User-Img-Dr-Full.png';
+import defaultFemaleImage from '../../assets/images/Default-User-Img-Dr-Girl.png';
 import { translate } from '../../../common/utilities/localization';
 
 @reduxForm(

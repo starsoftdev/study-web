@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
-import defaultImage from '../../../../common/assets/images/Default-User-Img-Dr.png';
+import defaultImage from '../../../assets/images/Default-User-Img-Dr.png';
 import FeedbackWidget from '../../../../common/utilities/feedback';
 import { selectCurrentUserEmail, selectCurrentUserFullName, selectCurrentUserId } from '../../../containers/App/selectors';
 import { translate } from '../../../../common/utilities/localization';

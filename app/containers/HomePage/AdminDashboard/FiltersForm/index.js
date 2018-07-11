@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
-import ReactMultiCheckBox from '../../../../../common/components/Input/ReactMultiCheckbox';
+import ReactMultiCheckBox from '../../../../components/Input/ReactMultiCheckbox';
 import formValidator from './validator';
 
 const formName = 'dashboardFilters';

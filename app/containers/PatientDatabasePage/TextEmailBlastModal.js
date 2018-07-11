@@ -4,7 +4,7 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
 
 class TextEmailBlastModal extends React.Component {

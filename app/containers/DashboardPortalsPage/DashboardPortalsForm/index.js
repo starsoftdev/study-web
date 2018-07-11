@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { submitToClientPortal, submitToSponsorsPortal } from '../actions';
 
 const mapStateToProps = createStructuredSelector({});
