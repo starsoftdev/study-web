@@ -2,7 +2,7 @@ import { conformsTo, isEmpty, isFunction, isObject, isString } from 'lodash';
 import invariant from 'invariant';
 import warning from 'warning';
 
-import authorizedRoutes from '../../common/constants/authorizedRoutes';
+import authorizedRoutes from '../common/constants/authorizedRoutes';
 import createReducer from '../reducers';
 import { selectAuthState, selectCurrentUser } from '../containers/App/selectors';
 import { setItem } from '../utils/localStorage';

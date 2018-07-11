@@ -4,9 +4,9 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 import { addMessagingNumber } from '../../actions';
 import { selectDashboardEditMessagingNumberProcess } from '../../selectors';
-import CenteredModal from '../../../../../common/components/CenteredModal/index';
+import CenteredModal from '../../../../components/CenteredModal/index';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
-import Checkbox from '../../../../../common/components/Input/Checkbox';
+import Checkbox from '../../../../components/Input/Checkbox';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

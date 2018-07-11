@@ -14,7 +14,7 @@ import Checkbox from '../Input/Checkbox';
 import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import StudyAdForm from '../../components/StudyAdForm';
 import LoadingSpinner from '../LoadingSpinner';
 
