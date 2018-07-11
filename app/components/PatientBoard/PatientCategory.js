@@ -252,6 +252,7 @@ class PatientCategory extends React.Component {
     const openerStyle = {
       width: this.state.columnWidth,
     };
+
     return connectDropTarget(
       <li
         key={category.id}
