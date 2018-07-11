@@ -17,15 +17,15 @@ import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import PQSModal from '../../components/PQSModal/index';
 import unknownImageUrl from '../../assets/images/unknown.png';
 import PatientNote from './PatientNote';
 import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, fetchMediaSources, getDispositionTotals } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectMediaSources, selectDispositionTotals } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, fetchMediaSources, getDispositionTotals, fetchTotalSignUps } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectMediaSources, selectDispositionTotals, selectPatientSignUps } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
 
 const dispositions = [
@@ -73,6 +73,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     dispositionTotals: PropTypes.object,
     getDispositionTotals: PropTypes.func,
     mediaSources: PropTypes.object,
+    fetchTotalSignUps: PropTypes.func,
   };
 
   constructor(props) {
@@ -113,6 +114,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
     this.props.fetchSources();
+    this.props.fetchTotalSignUps(currentUser.roleForSponsor.id, protocolNumber, indication, currentUser.timezone);
   }
 
   componentWillUnmount() {
@@ -337,6 +339,7 @@ const mapStateToProps = createStructuredSelector({
   sources: selectSources(),
   dispositionTotals: selectDispositionTotals(),
   mediaSources: selectMediaSources(),
+  patientSignUps: selectPatientSignUps(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -351,6 +354,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     getDispositionTotals: searchParams => dispatch(getDispositionTotals(searchParams)),
     clearReportList: () => dispatch(clearReportList()),
+    fetchTotalSignUps: (roleId, protocol, indication, timezone) => dispatch(fetchTotalSignUps(roleId, protocol, indication, timezone)),
   };
 }
 

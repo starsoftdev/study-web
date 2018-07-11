@@ -10,9 +10,9 @@ import { Field } from 'redux-form';
 import { Modal } from 'react-bootstrap';
 import classNames from 'classnames';
 
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import AddEmailNotificationForm from '../../components/AddEmailNotificationForm';
-import Checkbox from '../../../common/components/Input/Checkbox';
+import Checkbox from '../../components/Input/Checkbox';
 import { translate } from '../../../common/utilities/localization';
 
 class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
