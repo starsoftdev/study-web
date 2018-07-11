@@ -1196,7 +1196,7 @@ function* submitPrivacyRequest(action) {
     const response = yield call(request, requestURL, options);
     toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
     yield action.recaptcha.reset();
-    yield put(resetForm)
+    yield put(resetForm);
   } catch (err) {
     const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);
