@@ -3,33 +3,59 @@
  *
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
-import Button from 'react-bootstrap/lib/Button';
-import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
 
 import RowItem from './RowItem';
-import Input from '../../../common/components/Input';
 import { translate } from '../../../common/utilities/localization';
+import { fetchVendorAdmins } from './actions';
+import { addVendorAdmin } from './AddVendorAdminForm/actions';
+import { closeModal, openModalWithVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
+import { selectVendorAdmins } from './selectors';
 
 import CenteredModal from '../../../common/components/CenteredModal/index';
 
+import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';
-import SearchStudyForm from './SearchStudyForm';
+import EditVendorStudiesForm, { formName as editVendorStudiesFormName } from './EditVendorStudiesForm';
+import { selectValues } from '../../../common/selectors/form.selector';
+import { selectModalOpen, selectStudiesForVendor } from './EditVendorStudiesForm/selectors';
 
 import './style.less';
 
 const pageTitle = 'Vendor Admins - StudyKIK';
-const formName = 'vendorAdminSearch';
-@reduxForm({ form: formName })
 
-class VendorAdminPage extends Component {
+const mapStateToProps = createStructuredSelector({
+  editModalOpen: selectModalOpen(),
+  editFormValues: selectValues(editVendorStudiesFormName),
+  vendorStudies: selectStudiesForVendor(),
+  vendorAdmins: selectVendorAdmins(),
+});
+
+const mapDispatchToProps = {
+  addVendorAdmin,
+  closeModal,
+  fetchVendorAdmins,
+  openModalWithVendorId,
+  submitVendorStudies,
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class VendorAdminPage extends Component {
 
   static propTypes = {
+    addVendorAdmin: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    editModalOpen: PropTypes.bool.isRequired,
+    editFormValues: PropTypes.object,
+    fetchVendorAdmins: PropTypes.func.isRequired,
+    openModalWithVendorId: PropTypes.func.isRequired,
+    submitVendorStudies: PropTypes.func.isRequired,
+    vendorAdmins: PropTypes.array.isRequired,
+    vendorStudies: PropTypes.array,
   };
 
   constructor(props) {
@@ -39,80 +65,74 @@ class VendorAdminPage extends Component {
       studyModalOpen: false,
       addVendorModalOpen: false,
     };
-
-    this.openStudyModal = this.openStudyModal.bind(this);
-    this.closeStudyModal = this.closeStudyModal.bind(this);
-
-    this.openVendorModal = this.openVendorModal.bind(this);
-    this.closeVendorModal = this.closeVendorModal.bind(this);
-
-    this.addVendorAdmin = this.addVendorAdmin.bind(this);
   }
 
   componentDidMount() {
+    const { fetchVendorAdmins } = this.props;
+    fetchVendorAdmins();
   }
 
-  openStudyModal() {
-    this.setState({ studyModalOpen: true });
-  }
+  openStudyModal = (vendorId) => {
+    const { openModalWithVendorId } = this.props;
+    openModalWithVendorId(vendorId);
+  };
 
-  closeStudyModal() {
-    this.setState({ studyModalOpen: false });
-  }
+  closeStudyModal = () => {
+    const { closeModal } = this.props;
+    closeModal();
+  };
 
-  openVendorModal() {
-    this.setState({ addVendorModalOpen: true });
-  }
+  openVendorModal = () => {
+    this.setState({
+      addVendorModalOpen: true,
+    });
+  };
 
-  closeVendorModal() {
-    this.setState({ addVendorModalOpen: false });
-  }
+  closeVendorModal = () => {
+    this.setState({
+      addVendorModalOpen: false,
+    });
+  };
 
-  addVendorAdmin() {
+  addVendorAdmin = (data) => {
+    const { addVendorAdmin } = this.props;
+    addVendorAdmin(data);
     this.closeVendorModal();
-  }
+  };
+
+  searchForVendorAdmin = (data) => {
+    const { fetchVendorAdmins } = this.props;
+    fetchVendorAdmins(data.search);
+  };
+
+  submitVendorStudies = () => {
+    const { submitVendorStudies, vendorStudies, editFormValues: { vendorId } } = this.props;
+    submitVendorStudies(vendorId, vendorStudies);
+  };
+
+  renderVendorAdmins = () => {
+    const { vendorAdmins } = this.props;
+
+    return vendorAdmins.map(item => (
+      <RowItem
+        key={item.vendorId}
+        item={item}
+        openStudyModal={this.openStudyModal}
+      />
+    ));
+  };
 
   render() {
-
-    const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
-    siteOptions.unshift({ label: 'All', value: '0' });
-
-    const vendorAdmins = [{
-      company_name: 'Wanye Enterprise',
-      first_name: 'Bruce',
-      last_name: 'Wanye',
-      email: 'bruce@we.com',
-    }];
-
+    const { editModalOpen } = this.props;
     return (
       <div className="container-fluid" id="vendorAdminPage">
         <Helmet title={pageTitle} />
         <h2 className="main-heading pull-left">{translate('client.page.vendor.admin.vendorAdmins')}</h2>
         <div className="clearfix container-fluid">
-          <form action="#" className="form-search pull-left" onSubmit={this.onSubmit}>
-            <div className="fields-holder">
-              <div className="pull-left col no-left-padding">
-                <div className="has-feedback ">
-                  <Button
-                    className="btn-enter"
-                    onClick={this.setQueryParam}
-                  >
-                    <i className="icomoon-icon_search2" />
-                  </Button>
-                  <Field
-                    name="name"
-                    component={Input}
-                    type="text"
-                    placeholder="Search"
-                    className="keyword-search"
-                    onChange={(e) => (this.setState({
-                      query: e.target.value,
-                    }))}
-                  />
-                </div>
-              </div>
-            </div>
-          </form>
+          <SearchForVendorAdminForm
+            onSubmit={this.searchForVendorAdmin}
+            saving={false}
+          />
           <div className="btns-area pull-right">
             <div className="col pull-left no-right-padding">
               <a className="btn btn-primary lightbox-opener" onClick={this.openVendorModal}>{translate('client.page.vendor.admin.addVendorAdmin')}</a>
@@ -132,11 +152,7 @@ class VendorAdminPage extends Component {
             </tr>
           </thead>
           <tbody>
-            {
-              vendorAdmins.map((item, index) => (
-                <RowItem key={index} item={item} openStudyModal={this.openStudyModal} />
-              ))
-            }
+            {this.renderVendorAdmins()}
           </tbody>
 
         </table>
@@ -158,7 +174,7 @@ class VendorAdminPage extends Component {
           </Modal.Body>
         </Modal>
 
-        <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="search-vendor-study" show={this.state.studyModalOpen} onHide={this.closeStudyModal}>
+        <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="search-vendor-study" show={editModalOpen} onHide={this.closeStudyModal}>
           <Modal.Header>
             <Modal.Title>{translate('client.page.vendor.admin.study')}</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeStudyModal}>
@@ -167,8 +183,8 @@ class VendorAdminPage extends Component {
           </Modal.Header>
           <Modal.Body>
             <div className="holder clearfix">
-              <SearchStudyForm
-                onSubmit={this.addVendorAdmin}
+              <EditVendorStudiesForm
+                onSubmit={this.submitVendorStudies}
                 saving={false}
               />
             </div>
@@ -178,13 +194,3 @@ class VendorAdminPage extends Component {
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-});
-
-function mapDispatchToProps() {
-  return {
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VendorAdminPage);

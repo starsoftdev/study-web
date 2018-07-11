@@ -66,6 +66,11 @@ class CallCenterHomePage extends Component {
     const siteOptions = map([], siteIterator => ({ label: siteIterator.name, value: siteIterator.id.toString() }));
     siteOptions.unshift({ label: 'All', value: '0' });
 
+    let unreadMessages = 0;
+    patients.details.forEach((patient) => {
+      unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
+    });
+
     return (
       <div className="container-fluid" id="callcentermain">
         <form action="#" className="form-search clearfix">
@@ -102,7 +107,12 @@ class CallCenterHomePage extends Component {
         <div className="cc-article">
           <div className="col-xs-4 ccDiv-txt">
             <div className="ccDiv-content">
-              {translate('container.page.callcenter.heading.texts')}
+              <div>
+                {translate('container.page.callcenter.heading.texts')}
+              </div>
+              <div className="cc-heading-value">
+                {unreadMessages}
+              </div>
             </div>
           </div>
           <div className="col-xs-4 ccDiv-rot">
