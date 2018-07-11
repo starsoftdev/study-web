@@ -21,12 +21,6 @@ import {
   UPDATE_LANDING_PAGE,
   CHANGE_STUDY_AD,
   REMOVE_STUDY_AD,
-  FETCH_LEVELS,
-  FETCH_CAMPAIGNS_BY_STUDY,
-  EDIT_CAMPAIGN,
-  DELETE_CAMPAIGN,
-  FETCH_FIVE_9_LIST,
-  FETCH_STUDY,
   GET_STUDY_INFO,
   UPDATE_DASHBOARD_STUDY,
   FETCH_SITE_LOCATIONS,
@@ -64,19 +58,6 @@ import {
   removeStudyAdSuccess,
   changeStudyAdError,
   changeStudyAdSuccess,
-  levelsFetched,
-  levelsFetchingError,
-  fetchCampaignsByStudySuccess,
-  fetchCampaignsByStudyError,
-  editCampaignSuccess,
-  editCampaignError,
-  deleteCampaignSuccess,
-  deleteCampaignError,
-  fetchCampaignsByStudy,
-  fetchFive9ListSuccess,
-  fetchFive9ListError,
-  fetchStudySuccess,
-  fetchStudyError,
   fetchStudiesDashboardSuccess,
   fetchStudiesDashboardError,
   updateDashboardStudySuccess,
@@ -433,50 +414,6 @@ export function* removeStudyAdWorker(action) {
   }
 }
 
-export function* fetchLevelsWatcher() {
-  yield* takeLatest(FETCH_LEVELS, fetchLevelsWorker);
-}
-
-export function* fetchLevelsWorker() {
-  try {
-    const requestURL = `${API_URL}/levels`;
-
-    const params = {
-      method: 'GET',
-    };
-    const response = yield call(request, requestURL, params);
-
-    yield put(levelsFetched(response));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching level');
-    toastr.error('', errorMessage);
-    yield put(levelsFetchingError(err));
-  }
-}
-
-export function* fetchCampaignsByStudyWatcher() {
-  yield* takeLatest(FETCH_CAMPAIGNS_BY_STUDY, fetchCampaignsByStudyWorker);
-}
-
-export function* fetchCampaignsByStudyWorker(action) {
-  try {
-    const requestURL = `${API_URL}/studies/${action.payload}/getCampaignsWithPatientsCount`;
-
-    const params = {
-      method: 'GET',
-    };
-    const response = yield call(request, requestURL, params);
-
-    yield put(fetchCampaignsByStudySuccess(response));
-  } catch (err) {
-    yield put(fetchCampaignsByStudyError(err));
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching campaigns for selected study');
-    toastr.error('', errorMessage);
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
 export function* fetchStudiesDashboardWatcher() {
   yield* takeLatest(GET_STUDY_INFO, fetchStudiesDashboardWorker);
 }
@@ -542,28 +479,6 @@ export function* updateDashboardStudyWorker(action) {
   }
 }
 
-export function* editCampaignWatcher() {
-  yield* takeLatest(EDIT_CAMPAIGN, editCampaignWorker);
-}
-
-export function* editCampaignWorker(action) {
-  try {
-    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
-    const params = {
-      method: 'PUT',
-      body: JSON.stringify(action.payload),
-    };
-    yield call(request, requestURL, params);
-    yield put(editCampaignSuccess(action.payload, action.campaignInfo));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    toastr.error('', errorMessage);
-    yield put(editCampaignError(err));
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
 export function* fetchSiteLocationsWatcher() {
   yield* takeLatest(FETCH_SITE_LOCATIONS, fetchSiteLocationsWorker);
 }
@@ -607,33 +522,6 @@ export function* fetchMessagingNumbersWorker() {
   }
 }
 
-export function* deleteCampaignWatcher() {
-  yield* takeLatest(DELETE_CAMPAIGN, deleteCampaignWorker);
-}
-
-export function* deleteCampaignWorker(action) {
-  try {
-    const requestURL = `${API_URL}/studies/${action.payload.studyId}/campaigns/${action.payload.campaignId}`;
-    const params = {
-      method: 'DELETE',
-      body: JSON.stringify(action.payload),
-    };
-    const response = yield call(request, requestURL, params);
-    if (response.success) {
-      yield put(fetchCampaignsByStudy(action.payload.studyId));
-      yield put(deleteCampaignSuccess(action.payload));
-    } else {
-      yield put(deleteCampaignError(response));
-    }
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while submitting your request');
-    toastr.error('', errorMessage);
-    yield put(deleteCampaignError(err));
-    if (err.status === 401) {
-      yield call(() => { location.href = '/login'; });
-    }
-  }
-}
 export function* fetchAllClientUsersWatcher() {
   yield* takeLatest(FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS, fetchAllClientUsersWorker);
 }
@@ -662,44 +550,6 @@ export function* fetchAllClientUsersWorker(action) {
   }
 }
 
-export function* fetchFive9ListWatcher() {
-  yield* takeLatest(FETCH_FIVE_9_LIST, fetchFive9ListWorker);
-}
-
-export function* fetchFive9ListWorker() {
-  try {
-    const requestURL = `${API_URL}/studies/getFive9ListsList`;
-    const options = {
-      method: 'GET',
-    };
-    const response = yield call(request, requestURL, options);
-    yield put(fetchFive9ListSuccess(response));
-  } catch (err) {
-    yield put(fetchFive9ListError(err));
-  }
-}
-
-export function* fetchStudyWatcher() {
-  yield* takeLatest(FETCH_STUDY, fetchStudyWorker);
-}
-
-export function* fetchStudyWorker(action) {
-  try {
-    const filter = JSON.stringify({ include:['site', 'campaigns'] });
-    const requestURL = `${API_URL}/studies/${action.studyId}?filter=${filter}`;
-
-    const params = {
-      method: 'GET',
-    };
-    const response = yield call(request, requestURL, params);
-
-    yield put(fetchStudySuccess(response));
-  } catch (err) {
-    const errorMessage = get(err, 'message', 'Something went wrong while fetching study');
-    toastr.error('', errorMessage);
-    yield put(fetchStudyError(err));
-  }
-}
 export function* addEmailNotificationUserWatcher() {
   yield* takeLatest(ADD_EMAIL_NOTIFICATION_USER, addEmailNotificationUserWorker);
 }
@@ -780,12 +630,6 @@ export function* adminStudyEditSaga() {
   const updateLandingPageWatcher1 = yield fork(updateLandingPageWatcher);
   const changeStudyAdWatcher1 = yield fork(changeStudyAdWatcher);
   const removeStudyAdWatcher1 = yield fork(removeStudyAdWatcher);
-  const fetchLevelsWatcher1 = yield fork(fetchLevelsWatcher);
-  const fetchFive9ListWatcher1 = yield fork(fetchFive9ListWatcher);
-  const fetchCampaignsByStudyWatcher1 = yield fork(fetchCampaignsByStudyWatcher);
-  const editCampaignWatcher1 = yield fork(editCampaignWatcher);
-  const deleteCampaignWatcher1 = yield fork(deleteCampaignWatcher);
-  const fetchStudyWatcher1 = yield fork(fetchStudyWatcher);
   const fetchStudiesDashboardWatcher1 = yield fork(fetchStudiesDashboardWatcher);
   const updateDashboardStudyWatcher1 = yield fork(updateDashboardStudyWatcher);
   const fetchSiteLocationsWatcher1 = yield fork(fetchSiteLocationsWatcher);
@@ -809,12 +653,6 @@ export function* adminStudyEditSaga() {
   yield cancel(updateLandingPageWatcher1);
   yield cancel(changeStudyAdWatcher1);
   yield cancel(removeStudyAdWatcher1);
-  yield cancel(fetchLevelsWatcher1);
-  yield cancel(fetchCampaignsByStudyWatcher1);
-  yield cancel(editCampaignWatcher1);
-  yield cancel(deleteCampaignWatcher1);
-  yield cancel(fetchFive9ListWatcher1);
-  yield cancel(fetchStudyWatcher1);
   yield cancel(fetchStudiesDashboardWatcher1);
   yield cancel(updateDashboardStudyWatcher1);
   yield cancel(fetchSiteLocationsWatcher1);
