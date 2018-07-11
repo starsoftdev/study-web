@@ -9,7 +9,7 @@ import { selectValues, selectSyncErrors } from '../../../common/selectors/form.s
 import { selectCurrentUser } from '../../App/selectors';
 import CalendarWidget from './CalendarWidget';
 
-import { SchedulePatientModalType } from '../../../../common/constants';
+import { SchedulePatientModalType } from '../../../common/constants';
 
 
 const formName = 'CallCenterPatientPage.Calendar';

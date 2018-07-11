@@ -17,7 +17,7 @@ import {
   CAMPAIGN_LENGTH_LIST,
   QUALIFICATION_SUITE_PRICE,
   CALL_TRACKING_PRICE,
-} from '../../../common/constants';
+} from '../../common/constants';
 import {
   selectProposalFormValues,
   selectProposalFormError,

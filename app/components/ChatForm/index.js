@@ -11,7 +11,7 @@ import { Field, reduxForm, reset } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 
-import Input from '../../../common/components/Input';
+import Input from '../../components/Input';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   selectChat,

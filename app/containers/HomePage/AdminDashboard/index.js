@@ -12,10 +12,10 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import rd3 from 'react-d3';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { defaultStaticRanges } from '../../../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
 import { getMomentFromDate } from '../../../utils/time';
 
-import CenteredModal from '../../../../common/components/CenteredModal';
+import CenteredModal from '../../../components/CenteredModal';
 import FiltersForm from './FiltersForm';
 import StudyList from './StudyList';
 import FilterQueryForm from '../../../components/Filter/FilterQueryForm';

@@ -11,9 +11,9 @@ import 'react-date-range/dist/styles.css';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
 import PQSStatsForm from '../../components/PQSStatsForm';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import { translate } from '../../../common/utilities/localization';
-import { defaultStaticRanges } from '../../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../common/constants/dateRanges';
 import { getMomentFromDate } from '../../utils/time';
 
 class PQSModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
