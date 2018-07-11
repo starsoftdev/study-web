@@ -11,7 +11,7 @@ import { toastr } from 'react-redux-toastr';
 
 import Modal from 'react-bootstrap/lib/Modal';
 import { ProgressBar } from 'react-bootstrap';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 
 class UploadHistoryList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

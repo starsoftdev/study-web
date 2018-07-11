@@ -42,15 +42,15 @@ export const getRedirectionUrl = (notification) => {
 export const getAvatarUrl = (notification) => {
   const { event_log } = notification;  //eslint-disable-line
   const data = JSON.parse(event_log.eventData);
-  let url = require('../../../common/assets/images/Default-User-Img-Dr.png');
+  let url = require('../../assets/images/Default-User-Img-Dr.png');
   if (event_log.eventType === 'twilio-message' || event_log.eventType === 'new-patient' || event_log.eventType === 'twilio-call') {
     if (data.patientGender === 'Female') {
-      url = require('../../../common/assets/images/Default-User-Img-Girl.png');
+      url = require('../../assets/images/Default-User-Img-Girl.png');
     } else {
-      url = require('../../../common/assets/images/Default-User-Img.png');
+      url = require('../../assets/images/Default-User-Img.png');
     }
   } else if ((event_log.eventType === 'earn-rewards' && data.type === 'enroll') || event_log.eventType === 'set-time-zone') {
-    url = require('../../../common/assets/images/site_location.png');
+    url = require('../../assets/images/site_location.png');
   }
 
   return url;

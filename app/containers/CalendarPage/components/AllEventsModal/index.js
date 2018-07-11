@@ -3,9 +3,9 @@ import { Modal } from 'react-bootstrap';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 
-import CenteredModal from '../../../../../common/components/CenteredModal';
+import CenteredModal from '../../../../components/CenteredModal';
 
-import { SchedulePatientModalType } from '../../../../../common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 import { translate } from '../../../../../common/utilities/localization';
 
 const AllEventsModal = ({ visible, events, date, handleCloseModal, handleEdit, setAllModalDeferred, sortBy, paginationOptions }) => {

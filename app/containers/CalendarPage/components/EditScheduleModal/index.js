@@ -10,12 +10,12 @@ import moment from 'moment-timezone';
 import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
-import { SchedulePatientModalType } from '../../../../../common/constants';
+import { SchedulePatientModalType } from '../../../../common/constants';
 
-import ReactSelect from '../../../../../common/components/Input/ReactSelect';
-import DatePickerDisplay from '../../../../../common/components/Input/DatePickerDisplay';
-import Checkbox from '../../../../../common/components/Input/Checkbox';
-import CenteredModal from '../../../../../common/components/CenteredModal';
+import ReactSelect from '../../../../components/Input/ReactSelect';
+import DatePickerDisplay from '../../../../components/Input/DatePickerDisplay';
+import Checkbox from '../../../../components/Input/Checkbox';
+import CenteredModal from '../../../../components/CenteredModal';
 import { selectCurrentUser } from '../../../App/selectors';
 import { translate } from '../../../../../common/utilities/localization';
 

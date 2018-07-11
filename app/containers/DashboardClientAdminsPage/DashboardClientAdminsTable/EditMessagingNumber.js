@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, blur, change } from 'redux-form';
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
-import Input from '../../../../common/components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
+import Input from '../../../components/Input';
 
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { normalizePhoneDisplay } from '../../../common/helper/functions';

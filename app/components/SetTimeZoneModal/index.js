@@ -3,7 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../../common/components/CenteredModal';
+import CenteredModal from '../../components/CenteredModal';
 
 class SetTimeZoneModal extends React.Component {
   static propTypes = {
