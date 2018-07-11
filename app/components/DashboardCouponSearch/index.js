@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import AddCouponModal from './AddCouponModal';
 import TableActions from '../TableActions/index';
 

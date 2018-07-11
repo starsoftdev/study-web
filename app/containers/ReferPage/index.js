@@ -26,8 +26,8 @@ import {
 } from '../../containers/App/selectors';
 import { translate } from '../../../common/utilities/localization';
 
-import manImage from '../../../common/assets/images/man.svg';
-import shadowImage from '../../../common/assets/images/shadow.png';
+import manImage from '../../assets/images/man.svg';
+import shadowImage from '../../assets/images/shadow.png';
 
 export class ReferPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {

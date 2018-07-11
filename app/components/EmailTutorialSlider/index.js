@@ -9,13 +9,13 @@ import classnames from 'classnames';
 import _ from 'lodash';
 import { translate } from '../../../common/utilities/localization';
 
-import img1 from '../../../common/assets/images/email_tutorial_1.png';
-import img2 from '../../../common/assets/images/email_tutorial_2.png';
-import img3 from '../../../common/assets/images/email_tutorial_3.png';
-import img4 from '../../../common/assets/images/email_tutorial_4.png';
-import img5 from '../../../common/assets/images/email_tutorial_5.png';
-import img6 from '../../../common/assets/images/email_tutorial_6.png';
-import img7 from '../../../common/assets/images/email_tutorial_7.png';
+import img1 from '../../assets/images/email_tutorial_1.png';
+import img2 from '../../assets/images/email_tutorial_2.png';
+import img3 from '../../assets/images/email_tutorial_3.png';
+import img4 from '../../assets/images/email_tutorial_4.png';
+import img5 from '../../assets/images/email_tutorial_5.png';
+import img6 from '../../assets/images/email_tutorial_6.png';
+import img7 from '../../assets/images/email_tutorial_7.png';
 
 class EmailTutorialSlider extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

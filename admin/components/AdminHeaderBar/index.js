@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { createStructuredSelector } from 'reselect';
 
-import studykikLogo from '../../../common/assets/images/logo.svg';
+import studykikLogo from '../../assets/images/logo.svg';
 import AvatarMenu from './AvatarMenu';
 
 import { logout } from '../../../app/containers/LoginPage/actions';

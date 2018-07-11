@@ -32,7 +32,7 @@ class PatientText extends React.Component {
         <img alt="" src={textMessage.user.profileImageURL} />
       );
     } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
-      let url = require('../../../../common/assets/images/Default-User-Img-Dr.png');
+      let url = require('../../../assets/images/Default-User-Img-Dr.png');
       if (this.props.currentUser.profileImageURL) {
         url = this.props.currentUser.profileImageURL;
       }
@@ -40,12 +40,12 @@ class PatientText extends React.Component {
         <img alt="" src={url} />
       );
     } else if (currentPatient.gender === 'Female') {
-      const url = require('../../../../common/assets/images/Default-User-Img-Girl.png');
+      const url = require('../../../assets/images/Default-User-Img-Girl.png');
       return (
         <img alt="" src={url} />
       );
     }
-    const url = require('../../../../common/assets/images/Default-User-Img.png');
+    const url = require('../../../assets/images/Default-User-Img.png');
     return (
       <img alt="" src={url} />
     );

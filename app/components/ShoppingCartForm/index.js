@@ -13,9 +13,9 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import classNames from 'classnames';
 
-import CenteredModal from '../../../common/components/CenteredModal/index';
-import Input from '../../../common/components/Input';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import CenteredModal from '../../components/CenteredModal/index';
+import Input from '../../components/Input';
+import ReactSelect from '../../components/Input/ReactSelect';
 import AddNewCardForm from '../../components/AddNewCardForm';
 import { selectCouponId, selectTotal } from './selectors';
 import { selectCoupon, selectCards, selectCurrentUserStripeCustomerId, selectSavedCard, selectCurrentUserClientId, selectCurrentUser } from '../../containers/App/selectors';
