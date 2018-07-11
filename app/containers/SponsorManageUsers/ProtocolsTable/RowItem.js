@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import EditProtocolForm from '../EditProtocolForm';
 import ExpandedItem from './ExpandedItem';
 import { selectEditProtocolProcess } from '../selectors';

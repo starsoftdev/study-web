@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import formValidator from './validatorIndication';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import Input from '../../../components/Input';
+import Input from '../../../../common/components/Input';
 
 @reduxForm({ form: 'dashboardAddIndicationForm', validate: formValidator })
 

@@ -23,7 +23,7 @@ class StudyNote extends Component {
         <img alt="" src={note.user.profileImageURL} />
       );
     }
-    const url = require('../../assets/images/Default-User-Img-Dr.png');
+    const url = require('../../../app/assets/images/Default-User-Img-Dr.png');
     return (
       <img alt="" src={url} />
     );

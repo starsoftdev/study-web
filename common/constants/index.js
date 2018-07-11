@@ -1,4 +1,4 @@
-import { translate } from '../../../common/utilities/localization';
+import { translate } from '../utilities/localization';
 
 export const CAMPAIGN_LENGTH_LIST = [
   { value: 1, label: `1 ${translate('common.constants.month.one')}` },
