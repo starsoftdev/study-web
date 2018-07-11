@@ -60,17 +60,21 @@ class PatientInfo extends Component {
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
               <div className="info-container">
-                <span>{name}</span>
-                <span>{email}</span>
-                <span>{phone}</span>
-                <span>{signUpDate}</span>
-                <span>{updatedDate}</span>
+                <span>{translate('container.page.callCenterPatient.label.name')}: {name}</span>
+                <span>{translate('container.page.callCenterPatient.label.email')}: {email}</span>
+                <span>{translate('container.page.callCenterPatient.label.phone')}: {phone}</span>
+                <span>{translate('container.page.callCenterPatient.label.signedUp')}: {signUpDate}</span>
+                <span>{translate('container.page.callCenterPatient.label.updated')}: {updatedDate}</span>
               </div>
             ) : (
               <div className="info-container">
-                <span>{dob}</span>
-                <span>{gender}</span>
-                <span>{bmi}</span>
+                <span>{translate('container.page.callCenterPatient.label.dob')}: {dob}</span>
+                {gender &&
+                  <span>{translate('container.page.callCenterPatient.label.gender')}: {gender}</span>
+                }
+                {bmi &&
+                  <span>{translate('container.page.callCenterPatient.label.bmi')}: {bmi}</span>
+                }
               </div>
             )}
           </div>
