@@ -164,11 +164,6 @@ class CampaignEdit extends React.Component {
 
     return (
       <div>
-        <div className="head">
-          <div className="inner-head">
-            <strong className="title">Campaign</strong>
-          </div>
-        </div>
         <Form
           className="holder landing-holder"
           onSubmit={this.submitCampaignForm}
