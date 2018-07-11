@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../../../common/components/CenteredModal/index';
+import CenteredModal from '../../../components/CenteredModal/index';
 import { AddProtocolForm } from '../DashboardProtocolSearch/AddProtocolForm';
 import { FileUploadForm } from '../FileUploadForm';
 
