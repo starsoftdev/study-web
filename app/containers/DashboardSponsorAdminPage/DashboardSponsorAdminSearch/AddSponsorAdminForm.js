@@ -23,8 +23,7 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
   }
 
   render() {
-    let sponsors = [];
-    sponsors = map(this.props.sponsorsWithoutAdmin.details, (sponsor) => ({
+    const sponsors = map(this.props.sponsorsWithoutAdmin.details, (sponsor) => ({
       label: sponsor.name,
       value: sponsor.id,
     }));
