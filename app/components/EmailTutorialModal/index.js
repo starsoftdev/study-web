@@ -7,7 +7,7 @@
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import EmailTutorialSlider from '../../components/EmailTutorialSlider/index';
 
 class EmailTutorialModal extends React.Component { // eslint-disable-line react/prefer-stateless-function

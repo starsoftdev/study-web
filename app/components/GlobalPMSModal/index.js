@@ -15,11 +15,11 @@ import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import InfiniteScroll from 'react-infinite-scroller';
-import ReactSelect from '../../components/Input/ReactSelect';
-import Input from '../../components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
 import formValidator from './validator';
 import { selectGlobalPMSFormValues, selectGlobalPMSFormError } from './selectors';
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import {
   selectSites,
   selectCurrentUser,

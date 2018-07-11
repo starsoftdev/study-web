@@ -15,8 +15,8 @@ import { selectSyncErrorBool, selectValues } from '../../../common/selectors/for
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
 import { fetchStudySources } from '../../App/actions';
-import Input from '../../../components/Input/index';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import Input from '../../../../common/components/Input/index';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
 import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';

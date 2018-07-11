@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../components/CenteredModal';
+import CenteredModal from '../../../common/components/CenteredModal';
 import { translate } from '../../../common/utilities/localization';
 
 class AlertModal extends React.Component {
