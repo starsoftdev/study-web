@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
-import Input from '../../../common/components/Input';
-import Toggle from '../../../common/components/Input/Toggle';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
 import { selectEditUserFormSiteValue } from './selectors';
 import { selectSavedUser } from '../../containers/App/selectors';
 import formValidator from './validator';

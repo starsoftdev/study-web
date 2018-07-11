@@ -7,7 +7,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
 import ReactAvatarEditor from 'react-avatar-editor';
-// import Input from '../../../../common/components/Input';
+// import Input from '../../components/Input';
 import classNames from 'classnames';
 import FileUpload from './FileUpload';
 import defaultMaleImage from '../../assets/images/Default-User-Img-Dr-Full.png';

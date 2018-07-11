@@ -16,8 +16,8 @@ import Helmet from 'react-helmet';
 import { toastr } from 'react-redux-toastr';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
-import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../../common/constants';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import { CAMPAIGN_LENGTH_LIST, CALL_TRACKING_PRICE, QUALIFICATION_SUITE_PRICE } from '../../common/constants';
+import CenteredModal from '../../components/CenteredModal/index';
 import ListNewStudyForm from '../../components/ListNewStudyForm';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import { selectGetListNewStudyFormErrors, selectListNewStudyFormValues, selectListNewStudyFormError } from '../../components/ListNewStudyForm/selectors';

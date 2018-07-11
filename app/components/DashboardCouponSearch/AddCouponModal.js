@@ -8,12 +8,12 @@ import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
 import { getMomentFromDate } from '../../utils/time';
-import RadioButton from '../../../common/components/Input/RadioButton';
-import CouponDatePickerDisplay from '../../../common/components/Input/CouponDatePickerDisplay';
-import Input from '../../../common/components/Input';
-import Checkbox from '../../../common/components/Input/Checkbox';
+import RadioButton from '../../components/Input/RadioButton';
+import CouponDatePickerDisplay from '../../components/Input/CouponDatePickerDisplay';
+import Input from '../../components/Input';
+import Checkbox from '../../components/Input/Checkbox';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 import formValidator, { fields } from './validator';
