@@ -14,7 +14,7 @@ import {
   selectNewContactSuccess,
 } from '../../../app/containers/App/selectors';
 
-import Input from '../../../common/components/Input/index';
+import Input from '../../../app/components/Input/index';
 import BackToTopButton from '../../components/BackTopButton';
 
 import {

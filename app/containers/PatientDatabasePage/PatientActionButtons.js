@@ -13,7 +13,7 @@ import { push } from 'react-router-redux';
 
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 import { selectValues } from '../../common/selectors/form.selector';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import CenteredModal from '../../components/CenteredModal/index';
 import { selectImportPatientsStatus, selectAddProtocolProcessStatus } from '../../containers/PatientDatabasePage/selectors';
 import { addProtocol } from '../../containers/PatientDatabasePage/actions';
 import { selectCurrentUserClientId, selectIndications, selectClientSites, selectCurrentUser } from '../App/selectors';

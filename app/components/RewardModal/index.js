@@ -12,9 +12,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { find } from 'lodash';
 import { translate } from '../../../common/utilities/localization';
 
-import CenteredModal from '../../../common/components/CenteredModal/index';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
-import RadioButton from '../../../common/components/Input/RadioButton';
+import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../components/Input/ReactSelect';
+import RadioButton from '../../components/Input/RadioButton';
 import cardStudykik from '../../assets/images/img6.png';
 import cardAmazon from '../../assets/images/img8.png';
 import cardStarbucks from '../../assets/images/img7.png';

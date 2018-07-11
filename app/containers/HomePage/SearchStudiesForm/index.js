@@ -6,8 +6,8 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import { map } from 'lodash';
 
-import Input from '../../../../common/components/Input';
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { selectClientSites } from '../../App/selectors';
 import { selectStudies } from '../selectors';
