@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import Input from '../../../../common/components/Input';
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import Checkbox from '../../../../common/components/Input/Checkbox';
+import Checkbox from '../../../components/Input/Checkbox';
 import formValidator from './validator';
 
 

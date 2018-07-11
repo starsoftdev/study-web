@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
-import Input from '../../../../common/components/Input';
+import Input from '../../../components/Input';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import Checkbox from '../../../../common/components/Input/Checkbox';
+import Checkbox from '../../../components/Input/Checkbox';
 
 @reduxForm({ form: 'dashboardAddExposureLevelForm', validate: formValidator })
 

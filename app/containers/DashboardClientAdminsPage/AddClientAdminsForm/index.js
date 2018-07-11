@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../../../common/components/Input';
+import Input from '../../../components/Input';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
 @reduxForm({ form: 'dashboardAddClientAdminsForm' })

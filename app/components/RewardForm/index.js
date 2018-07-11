@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
 import { translate } from '../../../common/utilities/localization';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import ReactSelect from '../../components/Input/ReactSelect';
 import formValidator from './validator';
 
 @reduxForm({ form: 'reward', validate: formValidator })

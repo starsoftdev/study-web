@@ -4,8 +4,8 @@ import { Field, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import CenteredModal from '../../../../common/components/CenteredModal/index';
-import Checkbox from '../../../../common/components/Input/Checkbox';
+import CenteredModal from '../../../components/CenteredModal/index';
+import Checkbox from '../../../components/Input/Checkbox';
 import { AddExposureLevelForm } from '../DashboardExposureLevelSearch/AddExposureLevelForm';
 
 class RowItem extends Component { // eslint-disable-line react/prefer-stateless-function

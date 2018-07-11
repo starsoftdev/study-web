@@ -4,7 +4,7 @@ import { Field } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 
-import Toggle from '../../../../../common/components/Input/Toggle';
+import Toggle from '../../../../components/Input/Toggle';
 import { selectHoverRowIndex } from '../selectors';
 class StudyLeftItem extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
