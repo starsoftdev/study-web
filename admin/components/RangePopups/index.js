@@ -5,9 +5,9 @@ import Modal from 'react-bootstrap/lib/Modal';
 import { DateRangePicker } from 'react-date-range';
 import _ from 'lodash';
 import 'react-date-range/dist/styles.css';
-import { defaultStaticRanges } from '../../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../common/utilities/time';
+import { getMomentFromDate } from '../../../app/utils/time';
 
 export default class RangePopups extends Component {
   static propTypes = {
@@ -21,6 +21,8 @@ export default class RangePopups extends Component {
     activeReportTab: PropTypes.string,
     exportMediaTotals: PropTypes.func,
     paginationOptions: PropTypes.object,
+    setActiveReportTab: PropTypes.func,
+    disableDownload: PropTypes.bool,
   };
 
   constructor(props) {
@@ -49,6 +51,7 @@ export default class RangePopups extends Component {
     this.handleChange = this.handleChange.bind(this, 'predefined');
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
   }
 
   showPopup(ev, type) {
@@ -65,14 +68,11 @@ export default class RangePopups extends Component {
 
   changeRange(ev) {
     ev.preventDefault();
-    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab, currentFilters,
-      exportMediaTotals, activeReportTab, paginationOptions } = this.props;
+    const { changeAdminFilters, applyFilters, studies, getCampaignsStats, fetchMediaTotalsForAdmin, manuallySetActiveTab,
+      currentFilters, setActiveReportTab } = this.props;
     const range = this.state.predefined;
     const startDate = getMomentFromDate(range.startDate).utc();
     let endDate = getMomentFromDate(range.endDate).utc();
-
-    const offset = 0;
-    const limit = 50;
 
     if (!endDate.isAfter(startDate)) {
       endDate = endDate.add(1, 'days');
@@ -102,6 +102,7 @@ export default class RangePopups extends Component {
         }, 200);
       } else if (this.state.type === 'studyEndDateRange') {
         manuallySetActiveTab('studyEndDateRange');
+        setActiveReportTab('studyEndDateRange');
         changeAdminFilters('startDate', startDate.toISOString());
         changeAdminFilters('endDate', endDate.toISOString());
         this.setState({
@@ -112,24 +113,6 @@ export default class RangePopups extends Component {
         });
         setTimeout(() => {
           getCampaignsStats();
-        }, 200);
-      } else if (this.state.type === 'downloadDateRange') {
-        manuallySetActiveTab(null);
-        changeAdminFilters('startDate', startDate);
-        changeAdminFilters('endDate', endDate);
-        setTimeout(() => {
-          if (filters.startDate && filters.endDate && (filters.startDate !== startDate || filters.endDate !== endDate)) {
-            fetchMediaTotalsForAdmin({ ...filters, startDate, endDate });
-          }
-
-          exportMediaTotals({
-            ...filters,
-            activeReportTab,
-            startDate,
-            endDate,
-            limit: (paginationOptions.page > 0 ? limit * paginationOptions.page : limit),
-            offset,
-          });
         }, 200);
       }
     });
@@ -163,13 +146,34 @@ export default class RangePopups extends Component {
     }
   }
 
+  handleDownload(ev) {
+    ev.preventDefault();
+    const { studies, applyFilters, currentFilters, exportMediaTotals, activeReportTab, paginationOptions } = this.props;
+    const studyIdsArr = studies.details.map(s => s.study_id);
+    const filters = _.cloneDeep(currentFilters);
+
+    const offset = 0;
+    const limit = 50;
+
+    if (!studyIdsArr.length) {
+      applyFilters(null, null, false);
+    }
+
+    exportMediaTotals({
+      ...filters,
+      activeReportTab,
+      limit: (paginationOptions.page > 0 ? limit * paginationOptions.page : limit),
+      offset,
+    });
+  }
+
   render() {
     const { endDateRange } = this.state;
     const endDateRangeLabel = (endDateRange.startDate && endDateRange.endDate) ? `${endDateRange.startDate} - ${endDateRange.endDate}` : 'Study End Date Range';
     return (
       <div id="btnsPopupsHolder">
         <div className="col pull-right no-right-padding">
-          <button type="button" className="btn btn-primary pull-right" onClick={(ev) => this.showPopup(ev, 'downloadDateRange')}>
+          <button type="button" className="btn btn-primary pull-right" disabled={this.props.disableDownload} onClick={(ev) => this.handleDownload(ev)}>
             Download
           </button>
         </div>

@@ -9,13 +9,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import moment from 'moment-timezone';
-import DatePicker from '../../../common/components/Input/DatePicker';
+import DatePicker from '../../components/Input/DatePicker';
 
-import Input from '../../../common/components/Input';
-import Toggle from '../../../common/components/Input/Toggle';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../components/Input';
+import Toggle from '../../components/Input/Toggle';
+import ReactSelect from '../../components/Input/ReactSelect';
 
-import { CAMPAIGN_LENGTH_LIST } from '../../../common/constants';
+import { CAMPAIGN_LENGTH_LIST } from '../../common/constants';
 import {
   selectCallTracking,
   selectLeadsCount,

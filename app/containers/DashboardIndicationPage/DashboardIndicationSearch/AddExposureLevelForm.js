@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import formValidator from './validatorLevel';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import Input from '../../../../common/components/Input';
+import Input from '../../../components/Input';
 
 @reduxForm({ form: 'dashboardAddExposureLevelForm', validate: formValidator })
 

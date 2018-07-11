@@ -12,9 +12,9 @@ import 'react-date-range/dist/styles.css';
 
 import ReactSelect from '../../components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
-import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../app/common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
-import { getMomentFromDate } from '../../../common/utilities/time';
+import { getMomentFromDate } from '../../../app/utils/time';
 
 const formName = 'adminInfoFilter';
 
@@ -207,24 +207,24 @@ export class StudyInfo extends Component {
           <div className="title">study</div>
           <ul>
             <li>#{key + 1}</li>
-            <li><label>STUDY NUMBER: </label><span>{study.study_id}</span></li>
-            <li><label>STATUS: </label><span>{study.isPublic ? 'ON' : 'OFF'}</span></li>
-            <li><label>PROTOCOL: </label><span>{study.protocol_number || 'N/A'}</span></li>
-            <li><label>SPONSOR: </label><span className="max3lines">{study.sponsor_name || 'N/A'}</span></li>
-            <li><label>CRO: </label><span>{study.cro_name || 'N/A'}</span></li>
-            <li><label>INDICATION: </label><span className="max2lines">{study.indication_name || 'N/A'}</span></li>
-            <li><label>PERCENTAGE: </label><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
-            <li><label>COLOR: </label><span className={`color ${study.color || ''}`}>{`${study.color ? study.color.toUpperCase() : 'N/A'}`}</span></li>
+            <li><label>Study #: </label><span>{study.study_id}</span></li>
+            <li><label>Status: </label><span>{study.isPublic ? 'ON' : 'OFF'}</span></li>
+            <li><label>Protocol: </label><span>{study.protocol_number || 'N/A'}</span></li>
+            <li><label>Sponsor: </label><span>{study.sponsor_name || 'N/A'}</span></li>
+            <li><label>Cro: </label><span>{study.cro_name || 'N/A'}</span></li>
+            <li><label>Indication: </label><span>{study.indication_name || 'N/A'}</span></li>
+            <li><label>Percentage: </label><span>{(percent !== null) ? `${percent.toFixed(2)}%` : 'N/A'}</span></li>
+            <li><label>Color: </label><span className={`color ${study.color || ''}`}>{`${study.color ? study.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
         </div>
         <div className="part info clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
           <div className="title">info</div>
           <ul>
-            <li><label>SITE LOCATION: </label><span className="max3lines">{study.site_name}</span></li>
-            <li><label>SITE NUMBER: </label><span>{study.site_id}</span></li>
-            <li><label>ADDRESS: </label><span className="max3lines">{study.site_address}</span></li>
-            <li><label>PAGE VIEWS: </label><span>{study.views_count || 0}</span></li>
-            <li><label>UNREAD TEXTS: </label><span>{study.unread_text || 0}</span></li>
+            <li><label>Location: </label><span>{study.site_name}</span></li>
+            <li><label>Site #: </label><span>{study.site_id}</span></li>
+            <li><label>Address: </label><span>{study.site_address}</span></li>
+            <li><label>Pg Views: </label><span>{study.views_count || 0}</span></li>
+            <li><label>Unread Texts: </label><span>{study.unread_text || 0}</span></li>
             <li><label>AO: </label><span>{study.sm_user_first_name ? `${study.sm_user_first_name} ${study.sm_user_last_name}` : 'N/A'}</span></li>
             <li><label>BD: </label><span>{study.bd_user_first_name ? `${study.bd_user_first_name} ${study.bd_user_last_name}` : 'N/A'}</span></li>
             <li><label>CC: </label><span>{study.cc_user_first_name ? `${study.cc_user_first_name} ${study.cc_user_last_name}` : 'N/A'}</span></li>
@@ -233,32 +233,32 @@ export class StudyInfo extends Component {
         <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
           <div className="title">campaign</div>
           <ul>
-            <li><label>EXPOSURE LEVEL: </label><span>{study.level_name}</span></li>
-            <li><label>TIER: </label><span>{study.tier_number}</span></li>
-            <li><label>GOAL: </label><span>{study.goal || 'N/A'}</span></li>
-            <li><label>CAMPAIGN NUMBER :</label><span>{campaignName}</span></li>
-            <li><label>START DATE: </label><span>{startDate}</span></li>
-            <li><label>END DATE: </label><span>{endDate}</span></li>
-            <li><label>TOTAL DAYS: </label><span>{totalDays || 0}</span></li>
-            <li><label>DAYS LEFT: </label><span>{daysLeft || 0}</span></li>
-            <li><label>CENTRAL: </label></li>
+            <li><label>Exposure Level: </label><span>{study.level_name}</span></li>
+            <li><label>Tier: </label><span>{study.tier_number}</span></li>
+            <li><label>Goal: </label><span>{study.goal || 'N/A'}</span></li>
+            <li><label>Campaign #:</label><span>{campaignName}</span></li>
+            <li><label>Start Date: </label><span>{startDate}</span></li>
+            <li><label>End Date: </label><span>{endDate}</span></li>
+            <li><label>Total Days: </label><span>{totalDays || 0}</span></li>
+            <li><label>Days Left: </label><span>{daysLeft || 0}</span></li>
+            <li><label>Central: </label></li>
             <li><label>PQS: </label><span>{study.patient_qualification_suite ? 'ON' : 'OFF'}</span></li>
           </ul>
         </div>
         <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(study.study_id)}>
           <div className="title">stats</div>
           <ul>
-            <li><label>LAST 24 HOURS: </label><span>{study.today_count || 0}</span></li>
-            <li><label>CAMPAIGN TOTAL: </label><span>{study.campaign_count || 0}</span></li>
-            <li><label>GRAND TOTAL: </label><span>{study.count_total}</span></li>
-            <li><label>NEW PATIENT: </label><span>{study.count_not_contacted_campaign || 0}</span></li>
-            <li><label>CALL / TEXT ATTEMPTED: </label><span>{study.call_attempted_campaign || 0}</span></li>
-            <li><label>DNQ / NOT INTERESTED: </label><span>{study.dnq_campaign || 0}</span></li>
-            <li><label>ACTION NEEDED: </label><span>{study.action_needed_campaign || 0}</span></li>
-            <li><label>SCHEDULED: </label><span>{study.scheduled_campaign || 0}</span></li>
-            <li><label>CONSENTED: </label><span>{study.consented_campaign || 0}</span></li>
-            <li><label>SCREEN FAILED: </label><span>{study.screen_failed_campaign || 0}</span></li>
-            <li><label>RANDOMIZED: </label><span>{study.randomized_campaign || 0}</span></li>
+            <li><label>Last 24 Hours: </label><span>{study.today_count || 0}</span></li>
+            <li><label>Campaign Total: </label><span>{study.campaign_count || 0}</span></li>
+            <li><label>Grand Total: </label><span>{study.count_total}</span></li>
+            <li><label>New Patient: </label><span>{study.count_not_contacted_campaign || 0}</span></li>
+            <li><label>Call / Text Attempted: </label><span>{study.call_attempted_campaign || 0}</span></li>
+            <li><label>DNQ / Not Interested: </label><span>{study.dnq_campaign || 0}</span></li>
+            <li><label>Action Needed: </label><span>{study.action_needed_campaign || 0}</span></li>
+            <li><label>Scheduled: </label><span>{study.scheduled_campaign || 0}</span></li>
+            <li><label>Consented: </label><span>{study.consented_campaign || 0}</span></li>
+            <li><label>Screen Failed: </label><span>{study.screen_failed_campaign || 0}</span></li>
+            <li><label>Randomized: </label><span>{study.randomized_campaign || 0}</span></li>
           </ul>
         </div>
       </section>

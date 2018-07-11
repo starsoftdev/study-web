@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../../../../common/components/Input';
+import Input from '../../../components/Input';
 
 @reduxForm({ form: 'dashboardLockedUsersSearchForm' })
 class DashboardLockedUsersSearch extends React.Component {

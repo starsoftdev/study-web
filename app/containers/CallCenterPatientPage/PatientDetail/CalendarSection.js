@@ -9,7 +9,7 @@ import { selectValues, selectSyncErrors } from '../../../common/selectors/form.s
 import { selectCurrentUser } from '../../App/selectors';
 import CalendarWidget from './CalendarWidget';
 
-import { SchedulePatientModalType } from '../../../../common/constants';
+import { SchedulePatientModalType } from '../../../common/constants';
 
 
 const formName = 'CallCenterPatientPage.Calendar';
@@ -26,8 +26,7 @@ class CalendarSection extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.any,
     patient: React.PropTypes.object,
-    sites: React.PropTypes.array,
-    currentSite: React.PropTypes.object,
+    schedules: React.PropTypes.array,
     active: React.PropTypes.bool.isRequired,
     currentUser: React.PropTypes.object,
   };
@@ -58,15 +57,13 @@ class CalendarSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, sites, currentSite, patient } = this.props;
+    const { active, currentUser, patient, schedules } = this.props;
     return (
-      <div className={`item emails-info ${active ? 'active' : ''}`}>
+      <div className={`item others ${active ? 'active' : ''}`}>
         {<CalendarWidget
           currentUser={currentUser}
-          sites={sites}
-          currentSite={currentSite}
           patient={patient}
-          schedules={[]}
+          schedules={schedules}
           handleOpenModal={this.handleModalVisibility}
           handleShowAll={this.handleShowAll}
           ref={(c) => { this.calendarWidget = c; }}
