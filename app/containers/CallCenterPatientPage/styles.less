@@ -143,7 +143,8 @@
             }
             .item.others {
               padding: 20px;
-              height: 100%;
+              height: calc(~'100% + 40px');
+              overflow: auto;
               .item-holder {
                 max-height: none;
                 height: 100%;
@@ -381,5 +382,21 @@
       }
     }
   }
-  
+}
+
+.schedule-calendar {
+  min-height: 500px;
+
+  .rbc-month-row {
+    .rbc-day-bg {
+      cursor: pointer;
+    }
+  }
+}
+
+.calendar-toolbar-wrapper {
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

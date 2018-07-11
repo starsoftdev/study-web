@@ -21,7 +21,7 @@ import moment from 'moment-timezone';
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import { logout } from '../../../app/containers/LoginPage/actions';
 import { fetchMeFromToken } from './actions';
-import { getItem } from '../../../app/utils/localStorage';
+import { getItem } from '../../../common//utils/localStorage';
 import IdleModal from '../../../app/components/IdleModal';
 import TopHeaderBar from '../../components/TopHeaderBar';
 import SideNavBar from '../../components/SideNavBar';
