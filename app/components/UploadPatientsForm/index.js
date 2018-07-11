@@ -11,8 +11,8 @@ import { createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import Input from '../../components/Input/index';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
