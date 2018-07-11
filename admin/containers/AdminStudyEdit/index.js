@@ -20,7 +20,6 @@ import {
   addNote,
   deleteNote,
   fetchLanding,
-  fetchStudy,
   fetchStudiesDashboard,
   fetchSiteLocations,
   fetchMessagingNumbersDashboard,
@@ -34,21 +33,20 @@ import {
   selectAdminDashboardNote,
   selectAdminDashboardEditNoteProcess,
   selectAdminDashboardEditNoteFormValues,
-  selectStudy,
   selectStudyInfo,
   selectAllClientUsers,
   selectAllCustomNotificationEmails,
   selectLanding,
 } from './selectors';
 
-import { selectCurrentUser } from '../App/selectors';
+import { selectCurrentUser, selectStudies } from '../App/selectors';
 
 const mapStateToProps = createStructuredSelector({
   note: selectAdminDashboardNote(),
   editNoteProcess: selectAdminDashboardEditNoteProcess(),
   formValues: selectAdminDashboardEditNoteFormValues(),
   currentUser: selectCurrentUser(),
-  study: selectStudy(),
+  studies: selectStudies(),
   studyInfo: selectStudyInfo(),
   allClientUsers: selectAllClientUsers(),
   customNotificationEmails: selectAllCustomNotificationEmails(),
@@ -60,7 +58,6 @@ const mapDispatchToProps = (dispatch) => ({
   addNote: (payload) => dispatch(addNote(payload)),
   deleteNote: (payload) => dispatch(deleteNote(payload)),
   fetchLanding: (studyId, utm) => dispatch(fetchLanding(studyId, utm)),
-  fetchStudy: (studyId) => dispatch(fetchStudy(studyId)),
   fetchStudiesDashboard: (params, limit, offset) => dispatch(fetchStudiesDashboard(params, limit, offset)),
   fetchIndications: () => dispatch(fetchIndications()),
   fetchProtocols: () => dispatch(fetchProtocols()),
@@ -88,13 +85,12 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     formValues: PropTypes.any,
     note: PropTypes.object,
     currentUser: PropTypes.object,
-    study: PropTypes.object,
+    studies: PropTypes.object,
     fetchLanding: PropTypes.func,
     fetchStudiesDashboard: PropTypes.func,
     fetchIndications: PropTypes.func,
     fetchProtocols: PropTypes.func,
     fetchSponsors: PropTypes.func,
-    fetchStudy: PropTypes.func,
     fetchCro: PropTypes.func,
     fetchSiteLocations: PropTypes.func,
     fetchUsersByRole: PropTypes.func,
@@ -109,21 +105,18 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
     updateThankYouPage: PropTypes.func.isRequired,
   };
 
-
   static emailNotificationFields = [];
   static customEmailNotificationFields = [];
   static thankYouPageInfo = null;
 
-  componentWillMount() {
-    const { fetchNote, fetchLanding, fetchStudiesDashboard, fetchStudy } = this.props;
+  componentDidMount() {
+    const { fetchNote, fetchLanding, fetchStudiesDashboard } = this.props;
     const { studyId } = this.props.params;
 
     if (studyId) {
       // load studyId related data.
       fetchNote(studyId);
       fetchLanding(studyId, null);
-      fetchStudy(studyId);
-
       fetchStudiesDashboard({ search: { value: studyId } }, 1, 0);
 
       this.props.fetchIndications();
@@ -254,9 +247,13 @@ export class AdminStudyEditPage extends Component { // eslint-disable-line react
   }
 
   render() {
-    const { note, currentUser, addNote, deleteNote, formValues, studyInfo, study } = this.props;
+    const { note, currentUser, addNote, deleteNote, formValues, studyInfo, studies } = this.props;
     const { studyId } = this.props.params;
-    const selectedStudy = { ...study, id: +studyId } || { id: +studyId };
+    let foundStudy = null;
+    if (studies && studies.details.length) {
+      foundStudy = studies.details.find(s => s.id === +studyId);
+    }
+    const selectedStudy = { ...foundStudy, id: +studyId } || { id: +studyId };
     const initialValues = this.getEditStudyInitialValues(studyInfo.details);
 
     return (
