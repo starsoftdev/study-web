@@ -8,11 +8,11 @@ import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
-import Input from '../../../../common/components/Input/index';
+import Input from '../../../components/Input/index';
 import { submitAddPatient } from '../actions';
 import { selectStudyId, selectAddPatientStatus, selectStudySources } from '../selectors';
 import formValidator, { fields } from './validator';

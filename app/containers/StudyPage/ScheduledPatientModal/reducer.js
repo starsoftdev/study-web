@@ -7,7 +7,7 @@ import {
   SUBMIT_SCHEDULE_SUCCEEDED,
   SHOW_SCHEDULED_MODAL,
 } from '../constants';
-import { SchedulePatientModalType } from '../../../../common/constants/index';
+import { SchedulePatientModalType } from '../../../common/constants/index';
 
 export default function ScheduledPatientModal(state, action) {
   switch (action.type) {
