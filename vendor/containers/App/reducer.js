@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 
-import { getItem } from '../../../app/utils/localStorage';
+import { getItem } from '../../../common/utils/localStorage';
 
 import {
   SET_AUTH_STATE,
@@ -27,7 +27,6 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case SET_USER_DATA:
-      console.log('SET_USER_DATA');
       if (action.payload.userData) {
         if (action.payload.userData.roleForSponsor) {
           userRoleType = 'sponsor';
