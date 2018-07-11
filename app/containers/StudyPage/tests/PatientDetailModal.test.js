@@ -5,7 +5,7 @@ import chaiEnzyme from 'chai-enzyme';
 import expect from 'expect';
 import chai from 'chai';
 
-import configureStore from '../../../store';
+import configureStore from '../../../../app/store';
 import PatientDetailModal from '../PatientDetail/PatientDetailModal';
 
 chai.use(chaiEnzyme());
