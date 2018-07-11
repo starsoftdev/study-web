@@ -96,8 +96,10 @@ export class PatientDetailModal extends React.Component {
   componentWillUnmount() {
     const { socket } = this.props;
 
-    socket.removeAllListeners('notifyUnsubscribePatient');
-    socket.removeAllListeners('notifySubscribePatient');
+    if (socket) {
+      socket.removeAllListeners('notifyUnsubscribePatient');
+      socket.removeAllListeners('notifySubscribePatient');
+    }
   }
 
   onSelectText() {
