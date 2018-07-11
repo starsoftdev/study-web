@@ -1,9 +1,9 @@
+import inViewport from 'in-viewport';
 import React from 'react';
-import { createStructuredSelector } from 'reselect';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change, reset, touch } from 'redux-form';
-import ReCAPTCHA from 'react-google-recaptcha';
-import inViewport from 'in-viewport';
+import { createStructuredSelector } from 'reselect';
 
 import Input from '../../../app/components/Input/index';
 import ReactSelect from '../../../app/components/Input/ReactSelect';
@@ -13,38 +13,27 @@ import { translate } from '../../../common/utilities/localization';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';
 
 import {
-  selectPrivacyRequestSuccess,
-} from '../../../app/containers/App/selectors';
-
-import {
-  privacyRequest,
-  resetPrivacyRequestSuccess,
+  submitPrivacyRequest,
 } from '../../../app/containers/App/actions';
 
 import formValidator, { fields } from './validator';
 
 import './style.less';
 
-// import formValidator, { fields } from './validator';
-
 const formName = 'privacyForm';
 
 const mapStateToProps = createStructuredSelector({
   formError: selectSyncErrorBool(formName),
-  privacyRequest: selectValues(formName),
-  newPrivacyRequestSuccess: selectPrivacyRequestSuccess(),
+  values: selectValues(formName),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    submitForm: (values) => dispatch(privacyRequest(values)),
-    resetPrivacyRequestSuccess: () => dispatch(resetPrivacyRequestSuccess()),
-    change: (name, value) => dispatch(change(formName, name, value)),
-    resetForm: () => dispatch(reset(formName)),
-    touchFields: () => dispatch(touch(formName, ...fields)),
-    resetField: (name) => dispatch(change(formName, name, null)),
-  };
-}
+const mapDispatchToProps = (dispatch) => ({
+  submitForm: (values, recaptcha) => dispatch(submitPrivacyRequest(values, recaptcha)),
+  change: (name, value) => dispatch(change(formName, name, value)),
+  resetForm: () => dispatch(reset(formName)),
+  touchFields: () => dispatch(touch(formName, ...fields)),
+  resetField: (name) => dispatch(change(formName, name, null)),
+});
 
 @reduxForm({
   form: formName,
@@ -54,15 +43,13 @@ function mapDispatchToProps(dispatch) {
 export default class PrivacyRequestPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    change: React.PropTypes.func,
-    newPrivacyRequestSuccess: React.PropTypes.any,
-    resetPrivacyRequestSuccess: React.PropTypes.func,
+    change: React.PropTypes.func.isRequired,
     submitForm: React.PropTypes.func.isRequired,
     formError: React.PropTypes.bool.isRequired,
     resetForm: React.PropTypes.func.isRequired,
-    privacyRequest: React.PropTypes.any,
+    values: React.PropTypes.object,
     touchFields: React.PropTypes.func.isRequired,
-    resetField: React.PropTypes.func.any,
+    resetField: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -116,14 +103,14 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     } else {
       this.setState({ requestId: 0 });
     }
-    const { privacyRequest, resetField } = this.props;
+    const { values, resetField } = this.props;
 
     resetField('subrequest');
-    privacyRequest.message = null;
+    values.message = null;
     if (selected && selected.id !== 4) {
-      privacyRequest.subrequest2 = 'ignore';
+      values.subrequest2 = 'ignore';
     } else {
-      privacyRequest.subrequest2 = '';
+      values.subrequest2 = '';
     }
   }
 
@@ -132,38 +119,36 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     el.classList.add('in-viewport', viewAtr);
   }
 
-  handleSubmit(ev) {
+  handleSubmit = (ev) => {
     ev.preventDefault();
 
-    const { formError, touchFields } = this.props;
-    const { privacyRequest, submitForm } = this.props;
+    const { values } = this.props;
 
     if (this.state.requestId === 5) {
-      privacyRequest.subrequest = 'ignore';
+      values.subrequest = 'ignore';
     }
 
     if (this.state.requestId !== 4) {
-      privacyRequest.subrequest2 = 'ignore';
+      values.subrequest2 = 'ignore';
     } else {
-      privacyRequest.subrequest2 = '';
+      values.subrequest2 = '';
     }
 
-    const request = Object.assign({}, privacyRequest);
+    const { formError, touchFields } = this.props;
     if (formError) {
       touchFields();
       return;
     }
 
+    const request = Object.assign({}, values);
     for (let i = 0; i < 2; i++) {
       if (this.placeholders[this.state.requestId - 1][i] !== '') {
         request[`placeholder${i}`] = this.placeholders[this.state.requestId - 1][i];
       }
     }
-    submitForm(request);
-    if (this.recaptcha) {
-      this.recaptcha.reset();
-    }
-  }
+    const { submitForm } = this.props;
+    submitForm(request, this.recaptcha);
+  };
 
   renderExtend() {
     const extendType = [
@@ -264,11 +249,10 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
             </header>
             <form
               ref={(animatedForm) => { this.animatedForm = animatedForm; }}
-              action="#"
               className="form-privacy"
               noValidate="novalidate"
               data-view="fadeInUp"
-              onSubmit={(ev) => this.handleSubmit(ev)}
+              onSubmit={this.handleSubmit}
             >
               <div className="field-row">
                 <Field
