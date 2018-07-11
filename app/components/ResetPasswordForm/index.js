@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { toastr } from 'react-redux-toastr';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-import Input from '../../components/Input';
+import Input from '../../../common/components/Input';
 import { translate } from '../../../common/utilities/localization';
 import resetPasswordFormValidator from './validator';
 
