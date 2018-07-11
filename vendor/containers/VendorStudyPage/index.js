@@ -206,11 +206,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillUnmount() {
     const { params, socket, clientClosedStudyPage } = this.props;
 
-    if (socket && socket.connected) {
-      clientClosedStudyPage(params.id);
+    if (socket) {
+      if (socket.connected) {
+        clientClosedStudyPage(params.id);
+      }
+      socket.removeAllListeners('notifyStudyPageMessage');
+      socket.removeAllListeners('notifyLandingPageViewChanged');
     }
-    socket.removeAllListeners('notifyStudyPageMessage');
-    socket.removeAllListeners('notifyLandingPageViewChanged');
   }
 
   handleSubmit(searchFilter, loadMore) {
