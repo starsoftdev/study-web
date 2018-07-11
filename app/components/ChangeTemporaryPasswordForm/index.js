@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'; // eslint-disable-line
-import Input from '../../../common/components/Input';
+import Input from '../../components/Input';
 import changeTemporaryPasswordFormValidator from './validator';
 
 @reduxForm(
