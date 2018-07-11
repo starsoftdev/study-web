@@ -19,6 +19,7 @@ import { default as editDashboardStudyReducer } from './components/EditStudyForm
 import { default as mediaTrackingReducer } from './components/CallTrackingPageModal/reducer';
 import appReducer from './containers/App/reducer';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
+import { default as editVendorStudiesFormReducer } from '../vendor/containers/Admin/EditVendorStudiesForm/reducer';
 
 /**
  * Creates the main reducer with the asynchronously loaded ones
@@ -28,6 +29,7 @@ export default function createReducer(asyncReducers) {
     routing: routerReducer,
     form: formReducer.plugin({
       'Dashboard.EditStudyForm': editDashboardStudyReducer,
+      'VendorAdminPage.EditVendorStudiesForm': editVendorStudiesFormReducer,
       'PatientDatabase.TextBlastModal': patientsListReducer,
       'PatientDatabase.EmailBlastModal': patientsListReducer,
       'PatientDatabase.EditPatientModal': editPatientReducer,
