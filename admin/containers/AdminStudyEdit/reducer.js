@@ -36,6 +36,22 @@ import {
   REMOVE_STUDY_AD,
   REMOVE_STUDY_AD_SUCCESS,
   REMOVE_STUDY_AD_ERROR,
+  FETCH_LEVELS_SUCCESS,
+  FETCH_LEVELS_ERROR,
+  FETCH_CAMPAIGNS_BY_STUDY,
+  FETCH_CAMPAIGNS_BY_STUDY_SUCCESS,
+  FETCH_CAMPAIGNS_BY_STUDY_ERROR,
+  FETCH_FIVE_9_LIST,
+  FETCH_FIVE_9_LIST_SUCCESS,
+  FETCH_FIVE_9_LIST_ERROR,
+  EDIT_CAMPAIGN,
+  EDIT_CAMPAIGN_SUCCESS,
+  EDIT_CAMPAIGN_ERROR,
+  DELETE_CAMPAIGN,
+  DELETE_CAMPAIGN_SUCCESS,
+  DELETE_CAMPAIGN_ERROR,
+  FETCH_STUDY_SUCCESS,
+  FETCH_STUDY_ERROR,
   GET_STUDY_INFO,
   GET_STUDY_INFO_SUCCESS,
   GET_STUDY_INFO_ERROR,
@@ -107,8 +123,28 @@ const initialState = {
     saving: false,
     error: null,
   },
+  five9List: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  campaigns: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
+  editCampaignProcess: {
+    saving: false,
+    error: false,
+  },
+  deleteCampaignProcess: {
+    deleting: false,
+    error: false,
+  },
   updatedStudyAd: null,
   removedStudyAdId: null,
+  levels: [],
+  study: {},
   studyInfo: {
     details: null,
     fetching: false,
@@ -458,6 +494,35 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_LEVELS_SUCCESS:
+      return {
+        ...state,
+        levels: action.payload,
+      };
+    case FETCH_LEVELS_ERROR:
+      return {
+        ...state,
+        levels: [],
+      };
+    case FETCH_STUDY_SUCCESS:
+      return {
+        ...state,
+        study: action.payload,
+      };
+    case FETCH_STUDY_ERROR:
+      return {
+        ...state,
+        study: {},
+      };
+    case FETCH_CAMPAIGNS_BY_STUDY:
+      return {
+        ...state,
+        campaigns: {
+          details: state.campaigns.details,
+          fetching: true,
+          error: null,
+        },
+      };
     case GET_STUDY_INFO:
       return {
         ...state,
@@ -524,6 +589,15 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_CAMPAIGNS_BY_STUDY_SUCCESS:
+      return {
+        ...state,
+        campaigns: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
     case FETCH_MESSAGING_NUMBERS_SUCCESS:
       return {
         ...state,
@@ -533,10 +607,46 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+    case FETCH_CAMPAIGNS_BY_STUDY_ERROR:
+      return {
+        ...state,
+        campaigns: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
     case FETCH_MESSAGING_NUMBERS_ERROR:
       return {
         ...state,
         messagingNumbers: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_FIVE_9_LIST:
+      return {
+        ...state,
+        five9List: {
+          details: state.five9List.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_SUCCESS:
+      return {
+        ...state,
+        five9List: {
+          details: action.payload.details,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_FIVE_9_LIST_ERROR:
+      return {
+        ...state,
+        five9List: {
           details: [],
           fetching: false,
           error: action.payload,
@@ -551,6 +661,7 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: null,
         },
       };
+
     case FETCH_ALL_STUDY_EMAIL_NOTIFICATIONS_SUCCESS:
       return {
         ...state,
@@ -569,6 +680,34 @@ export default function adminStudyEditReducer(state = initialState, action) {
           error: action.payload,
         },
       };
+    case DELETE_CAMPAIGN:
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: true,
+          error: null,
+        },
+      };
+
+    case DELETE_CAMPAIGN_SUCCESS: {
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
+          error: null,
+        },
+      };
+    }
+
+    case DELETE_CAMPAIGN_ERROR: {
+      return {
+        ...state,
+        deleteCampaignProcess: {
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    }
     case FETCH_CUSTOM_NOTIFICATION_EMAILS:
       return {
         ...state,
@@ -602,6 +741,66 @@ export default function adminStudyEditReducer(state = initialState, action) {
         editStudyProcess: {
           saving: true,
           error: null,
+        },
+      };
+    case EDIT_CAMPAIGN:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: true,
+          error: null,
+        },
+      };
+    case EDIT_CAMPAIGN_SUCCESS: {
+      const { study } = state;
+      // updating the campaigns with the edited object
+      const updatedCampaigns = state.campaigns.details.map(item => (item.id === action.payload.campaignId
+        ? {
+          ...item,
+          dateFrom: action.payload.dateFrom,
+          dateTo: action.payload.dateTo,
+          customPatientGoal: action.payload.customPatientGoal,
+          patientQualificationSuite: action.payload.patientQualificationSuite,
+          level_id: action.payload.levelId,
+        } :
+        item
+      ));
+      let studyCopy;
+      if (study.id === action.payload.studyId) {
+        studyCopy =  {
+          ...study,
+          campaign_id: action.payload.campaignId,
+          campaign_datefrom: action.payload.dateFrom,
+          campaign_dateto: action.payload.dateTo,
+          campaign_length: action.campaignInfo.campaignLength,
+          level_id: action.payload.levelId,
+          level_name: action.campaignInfo.levelName,
+          custom_patient_goal: action.payload.customPatientGoal,
+          five_9_value: action.payload.five9value,
+        };
+      } else {
+        studyCopy = study;
+      }
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: null,
+        },
+        campaigns: {
+          details: updatedCampaigns,
+          fetching: false,
+          error: null,
+        },
+        study: studyCopy,
+      };
+    }
+    case EDIT_CAMPAIGN_ERROR:
+      return {
+        ...state,
+        editCampaignProcess: {
+          saving: false,
+          error: action.payload,
         },
       };
     case UPDATE_DASHBOARD_STUDY_SUCCESS:
