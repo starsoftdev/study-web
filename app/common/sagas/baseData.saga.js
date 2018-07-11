@@ -174,7 +174,6 @@ import {
   fetchStudySourcesError,
   fetchMediaTypesSuccess,
   fetchMediaTypesError,
-  privacyRequestSuccess,
 } from '../../containers/App/actions';
 import { DELETE_MEDIA_TYPE } from '../../components/CallTrackingPageModal/constants';
 import { deleteMediaTypeSuccess } from '../../components/CallTrackingPageModal/actions';
@@ -222,7 +221,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
   yield fork(takeLatest, NEW_CONTACT, newContact);
-  yield fork(takeLatest, PRIVACY_REQUEST, privacyRequest);
+  yield fork(takeLatest, PRIVACY_REQUEST, submitPrivacyRequest);
   yield fork(takeLatest, SEND_THANK_YOU_EMAIL, sendThankYouEmail);
   yield fork(fetchSponsorsWatcher);
   yield fork(fetchProtocolsWatcher);
@@ -1185,7 +1184,7 @@ function* newContact(action) {
   }
 }
 
-function* privacyRequest(action) {
+function* submitPrivacyRequest(action) {
   try {
     const params = action.params;
     const requestURL = `${API_URL}/sites/privacyRequest`;
@@ -1196,7 +1195,8 @@ function* privacyRequest(action) {
 
     const response = yield call(request, requestURL, options);
     toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
-    yield put(privacyRequestSuccess(response));
+    yield action.recaptcha.reset();
+    yield put(resetForm)
   } catch (err) {
     const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);
