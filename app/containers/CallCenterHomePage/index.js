@@ -67,7 +67,7 @@ class CallCenterHomePage extends Component {
     siteOptions.unshift({ label: 'All', value: '0' });
 
     let unreadMessages = 0;
-    patients.details.forEach((patient) => {
+    patients.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
     });
 
