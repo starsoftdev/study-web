@@ -8,8 +8,8 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectSavedSite } from '../../containers/App/selectors';
-import Input from '../../components/Input/index';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import {
   selectAddProtocolFormValues,
