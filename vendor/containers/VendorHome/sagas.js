@@ -6,8 +6,8 @@ import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
-import request from '../../utils/request';
-import composeQueryString from '../../utils/composeQueryString';
+import request from '../../../common/utils/request';
+import composeQueryString from '../../../common/utils/composeQueryString';
 
 import {
   FETCH_VENDOR_SITES,

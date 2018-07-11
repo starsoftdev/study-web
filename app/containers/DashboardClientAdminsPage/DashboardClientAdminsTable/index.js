@@ -6,7 +6,7 @@ import { createStructuredSelector } from 'reselect';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
-import CenteredModal from '../../../../common/components/CenteredModal/index';
+import CenteredModal from '../../../components/CenteredModal/index';
 import AddMessagingNumberForm from '../AddMessagingNumberForm';
 import EditClientAdminsForm from '../EditClientAdminsForm';
 import EditMessagingNumberForm from './EditMessagingNumber';

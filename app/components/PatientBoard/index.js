@@ -14,7 +14,7 @@ import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
 
-import { SchedulePatientModalType } from '../../../common/constants/index';
+import { SchedulePatientModalType } from '../../common/constants/index';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PatientDetailModal from '../../containers/StudyPage/PatientDetail/PatientDetailModal';
 import ScheduledPatientModal from '../../containers/StudyPage/ScheduledPatientModal/index';

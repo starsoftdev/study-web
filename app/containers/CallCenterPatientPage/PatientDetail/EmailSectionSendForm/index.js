@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 import { toastr } from 'react-redux-toastr';
 
-import Input from '../../../../../common/components/Input/index';
+import Input from '../../../../components/Input/index';
 import formValidator from './validator';
 import { selectClientCredits } from '../../../App/selectors';
 import { translate } from '../../../../../common/utilities/localization';

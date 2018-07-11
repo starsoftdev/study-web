@@ -266,8 +266,13 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
       fetchMediaTotalsForAdmin, campaignsStats, campaignsPaginationOptions, setActiveReportTab, activeReportTab, exportMediaTotals } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
     const currentFilters = this.getCurrentFilters();
+    let disableDownload = false;
 
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
+
+    if (!campaignsStats.details.length && activeReportTab === 'studyEndDateRange') {
+      disableDownload = true;
+    }
 
     return (
       <div id="adminHomePage" className="admin-dashboard">
@@ -293,6 +298,8 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
           activeReportTab={activeReportTab}
           exportMediaTotals={exportMediaTotals}
           paginationOptions={paginationOptions}
+          setActiveReportTab={setActiveReportTab}
+          disableDownload={disableDownload}
         />
         <StatsBox
           totals={totals}

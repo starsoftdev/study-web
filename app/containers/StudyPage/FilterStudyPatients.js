@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { Debounce } from 'react-throttle';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../../../common/components/Input/index';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../components/Input/index';
+import ReactSelect from '../../components/Input/ReactSelect';
 import StudyActionButtons from './StudyActionButtons';
 import { translate } from '../../../common/utilities/localization';
 

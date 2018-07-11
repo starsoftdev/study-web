@@ -11,7 +11,7 @@ import { Field, reduxForm, change, FieldArray, touch, reset } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 
-import Toggle from '../../../common/components/Input/Toggle';
+import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues, selectSyncErrorBool, selectFormFieldNames } from '../../common/selectors/form.selector';
 import {

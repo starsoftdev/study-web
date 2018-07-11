@@ -9,8 +9,8 @@ import { StickyContainer, Sticky } from 'react-sticky';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
-import Checkbox from '../../../common/components/Input/Checkbox';
-import CenteredModal from '../../../common/components/CenteredModal/index';
+import Checkbox from '../../components/Input/Checkbox';
+import CenteredModal from '../../components/CenteredModal/index';
 import EditPatientForm from '../../containers/PatientDatabasePage/EditPatientForm';
 import ChatForm from '../../components/ChatForm';
 import PatientItem from './PatientItem';

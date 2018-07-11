@@ -5,7 +5,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { Field } from 'redux-form';
-import Input from '../../../common/components/Input/index';
+import Input from '../../components/Input/index';
 
 class IndicationOverlay extends React.Component {
   static propTypes = {

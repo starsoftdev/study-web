@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { map } from 'lodash';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../../../common/components/Input';
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Input from '../../../components/Input';
+import ReactSelect from '../../../components/Input/ReactSelect';
 import formValidator from './validator';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 
@@ -23,8 +23,7 @@ export class AddSponsorAdminForm extends React.Component { // eslint-disable-lin
   }
 
   render() {
-    let sponsors = [];
-    sponsors = map(this.props.sponsorsWithoutAdmin.details, (sponsor) => ({
+    const sponsors = map(this.props.sponsorsWithoutAdmin.details, (sponsor) => ({
       label: sponsor.name,
       value: sponsor.id,
     }));
