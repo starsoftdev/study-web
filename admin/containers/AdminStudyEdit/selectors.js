@@ -14,12 +14,6 @@ const selectAdminDashboardEditNoteFormValues = () => createSelector(
   substate => get(substate, 'AdminEditStudy.Notes.values', {})
 );
 
-const selectStudy = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.study
-);
-
-
 const selectAdminDashboardNote = () => createSelector(
   selectAdminStudyEditDomain(),
   (substate) => substate.note
@@ -83,31 +77,6 @@ const selectChangeStudyAdProcess = () => createSelector(
 const selectRemovedStudyAdId = () => createSelector(
   selectAdminStudyEditDomain(),
   substate => substate.removedStudyAdId
-);
-
-const selectAdminStudyEditCampaigns = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.campaigns
-);
-
-const selectAdminStudyEditCampaignProcess = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.editCampaignProcess
-);
-
-const selectAdminStudyEditDeleteCampaignProcess = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.deleteCampaignProcess
-);
-
-const selectLevels = () => createSelector(
-  selectAdminStudyEditDomain(),
-  substate => substate.levels
-);
-
-const selectdminStudyEditFive9List = () => createSelector(
-  selectAdminStudyEditDomain(),
-  (substate) => substate.five9List
 );
 
 const selectStudyInfo = () => createSelector(
@@ -181,12 +150,6 @@ export {
   selectUpdatedStudyAd,
   selectChangeStudyAdProcess,
   selectRemovedStudyAdId,
-  selectAdminStudyEditCampaigns,
-  selectAdminStudyEditCampaignProcess,
-  selectAdminStudyEditDeleteCampaignProcess,
-  selectLevels,
-  selectdminStudyEditFive9List,
-  selectStudy,
   selectStudyInfo,
   selectIndications,
   selectCro,
@@ -199,4 +162,3 @@ export {
   selectAllCustomNotificationEmails,
   selectUpdateStudyProcess,
 };
-

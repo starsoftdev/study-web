@@ -53,31 +53,6 @@ export const RESET_CHANGE_STUDY_AD_STATE          = 'AdminStudyEditPage/RESET_CH
 export const REMOVE_STUDY_AD                      = 'AdminStudyEditPage/REMOVE_STUDY_AD';
 export const REMOVE_STUDY_AD_SUCCESS              = 'AdminStudyEditPage/REMOVE_STUDY_AD_SUCCESS';
 export const REMOVE_STUDY_AD_ERROR                = 'AdminStudyEditPage/REMOVE_STUDY_AD_ERROR';
-
-export const FETCH_LEVELS                         = 'AdminStudyEditPage/FETCH_LEVELS';
-export const FETCH_LEVELS_ERROR                   = 'AdminStudyEditPage/FETCH_LEVELS_ERROR';
-export const FETCH_LEVELS_SUCCESS                 = 'AdminStudyEditPage/FETCH_LEVELS_SUCCESS';
-
-export const FETCH_CAMPAIGNS_BY_STUDY             = 'AdminStudyEditPage/FETCH_CAMPAIGNS_BY_STUDY';
-export const FETCH_CAMPAIGNS_BY_STUDY_ERROR       = 'AdminStudyEditPage/FETCH_CAMPAIGNS_BY_STUDY_ERROR';
-export const FETCH_CAMPAIGNS_BY_STUDY_SUCCESS     = 'AdminStudyEditPage/FETCH_CAMPAIGNS_BY_STUDY_SUCCESS';
-
-export const FETCH_FIVE_9_LIST                    = 'AdminStudyEditPage/FETCH_FIVE_9_LIST';
-export const FETCH_FIVE_9_LIST_SUCCESS            = 'AdminStudyEditPage/FETCH_FIVE_9_LIST_SUCCESS';
-export const FETCH_FIVE_9_LIST_ERROR              = 'AdminStudyEditPage/FETCH_FIVE_9_LIST_ERROR';
-
-
-export const EDIT_CAMPAIGN                        = 'AdminStudyEditPage/EDIT_CAMPAIGN';
-export const EDIT_CAMPAIGN_SUCCESS                = 'AdminStudyEditPage/EDIT_CAMPAIGN_SUCCESS';
-export const EDIT_CAMPAIGN_ERROR                  = 'AdminStudyEditPage/EDIT_CAMPAIGN_ERROR';
-
-export const DELETE_CAMPAIGN                      = 'AdminStudyEditPage/DELETE_CAMPAIGN';
-export const DELETE_CAMPAIGN_SUCCESS              = 'DashboardPage/DELETE_CAMPAIGN_SUCCESS';
-export const DELETE_CAMPAIGN_ERROR                = 'AdminStudyEditPage/DELETE_CAMPAIGN_ERROR';
-
-export const FETCH_STUDY                        = 'AdminStudyEditPage/FETCH_STUDY';
-export const FETCH_STUDY_SUCCESS                = 'AdminStudyEditPage/FETCH_STUDY_SUCCESS';
-export const FETCH_STUDY_ERROR                  = 'AdminStudyEditPage/FETCH_STUDY_ERROR';
 export const GET_STUDY_INFO                       = 'AdminStudyEditPage/GET_STUDY_INFO';
 export const GET_STUDY_INFO_SUCCESS               = 'AdminStudyEditPage/GET_STUDY_INFO_SUCCESS';
 export const GET_STUDY_INFO_ERROR                 = 'AdminStudyEditPage/GET_STUDY_INFO_ERROR';

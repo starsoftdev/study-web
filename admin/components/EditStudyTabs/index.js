@@ -10,7 +10,6 @@ import MediaTrackingEdit from '../MediaTrackingEdit';
 import PatientThankYouEmailTab from '../PatientThankYouEmailTab';
 import { updatePatientThankYouEmail } from '../../containers/AdminStudyEdit/actions';
 import ThankYouEdit from '../ThankYouEdit';
-import CampaignEdit from '../CampaignEdit';
 
 const tabs = [
   { type: 'notes', title: 'notes' },
@@ -103,9 +102,7 @@ export class EditStudyTabs extends Component {
               <LandingPageEdit studyId={study.id} />
             }
           </section>
-          <section className={classNames('campaign', { active: (activeTab === 'campaign') })}>
-            <CampaignEdit study={study} formValues={formValues}  studyId={study.id} />
-          </section>
+          <section className={classNames('campaign', { active: (activeTab === 'campaign') })} />
           <section className={classNames('leadGen', { active: (activeTab === 'leadGen') })}>
             {(activeTab === 'leadGen') &&
               <LeadGenEdit studyId={study.id} />
