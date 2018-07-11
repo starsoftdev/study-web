@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 import Select from 'react-select';
 import _ from 'lodash';
 
-import { addAllOption } from '../../../../components/Input/ReactSelect';
+import { addAllOption } from '../../../../../common/components/Input/ReactSelect';
 import { translate } from '../../../../../common/utilities/localization';
 
 class FilterBar extends Component {

@@ -10,7 +10,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import { Field, reduxForm } from 'redux-form';
 
 import setNewPasswordFormValidator from './validator';
-import Input from '../../components/Input';
+import Input from '../../../common/components/Input';
 
 
 @reduxForm({
