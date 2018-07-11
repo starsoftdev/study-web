@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/lib/Alert';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { toastr } from 'react-redux-toastr';
 
-import Input from '../../../common/components/Input';
+import Input from '../../../app/components/Input';
 import { selectLoginError, selectLoginFormSubmitState } from '../../../app/containers/App/selectors';
 import loginFormValidator, { fields } from './validator';
 import { selectSyncErrorBool, selectValues } from '../../../app/common/selectors/form.selector';

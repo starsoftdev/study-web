@@ -11,7 +11,6 @@ import settings from '../../../common/settings/app-settings.json';
 
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
-
 import { setSocketConnection } from '../GlobalNotifications/actions';
 import {
   selectSocket,
@@ -22,11 +21,13 @@ import {
   fetchCallCenterPatientCategories,
   submitPatientUpdate,
   submitPatientDisposition,
+  fetchSchedules,
 } from './actions';
 import {
   selectSelectedPatient,
   selectCallCenterPatientCategories,
   selectCallCenterScheduledModalFormValues,
+  selectSchedules,
 } from './selectors';
 
 import Tabs from './Tabs';
@@ -36,6 +37,7 @@ import SiteLocationInfo from './SiteLocationInfo';
 import TextSection from './PatientDetail/TextSection';
 import NotesSection from './PatientDetail/NotesSection';
 import EmailSection from './PatientDetail/EmailSection';
+import CalendarSection from './PatientDetail/CalendarSection';
 
 import './styles.less';
 
@@ -56,10 +58,12 @@ class CallCenterPatientPage extends Component {
     socket: PropTypes.any,
     submitPatientUpdate: PropTypes.func,
     submitPatientDisposition: PropTypes.func,
+    schedules: PropTypes.object,
   };
 
   static defaultProps = {
     callCenterPatientCategories: [],
+    schedules: [],
   };
 
   state = {
@@ -81,6 +85,7 @@ class CallCenterPatientPage extends Component {
     fetchCallCenterPatientCategories();
     fetchPatient(patientId);
     fetchProtocols();
+    fetchSchedules();
 
     // initialize socket
     setSocketConnection({
@@ -325,6 +330,7 @@ class CallCenterPatientPage extends Component {
                       <TextSection active={carouselIndex === 0} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
                       <NotesSection active={carouselIndex === 1} currentUser={currentUser} currentPatient={formattedPatient} notes={patient.details.notes} studyId={studyId} />
                       <EmailSection active={carouselIndex === 2} studyId={studyId} currentPatient={formattedPatient} />
+                      <CalendarSection active={carouselIndex === 3} currentUser={currentUser} currentPatient={formattedPatient} schedules={this.props.schedules.data} />
                     </div>
                   )
                 }
@@ -352,6 +358,7 @@ const mapStateToProps = createStructuredSelector({
   protocols: selectProtocols(),
   scheduledModalFormValues: selectCallCenterScheduledModalFormValues(),
   socket: selectSocket(),
+  schedules: selectSchedules(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -359,6 +366,7 @@ function mapDispatchToProps(dispatch) {
     fetchCallCenterPatientCategories: () => dispatch(fetchCallCenterPatientCategories()),
     fetchPatient: (id) => dispatch(fetchPatient(id)),
     fetchProtocols: (clientRoleId) => dispatch(fetchProtocols(clientRoleId)),
+    fetchSchedules: () => dispatch(fetchSchedules()),
     setSocketConnection: (payload) => dispatch(setSocketConnection(payload)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
     submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),

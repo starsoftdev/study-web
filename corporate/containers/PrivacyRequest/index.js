@@ -5,8 +5,8 @@ import { Field, reduxForm, change, reset, touch } from 'redux-form';
 import ReCAPTCHA from 'react-google-recaptcha';
 import inViewport from 'in-viewport';
 
-import Input from '../../../common/components/Input/index';
-import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../app/components/Input/index';
+import ReactSelect from '../../../app/components/Input/ReactSelect';
 import BackToTopButton from '../../components/BackTopButton';
 import { translate } from '../../../common/utilities/localization';
 

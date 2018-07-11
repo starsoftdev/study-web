@@ -4,8 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../../../../common/components/Input';
-import CenteredModal from '../../../../common/components/CenteredModal/index';
+import Input from '../../../components/Input';
+import CenteredModal from '../../../components/CenteredModal/index';
 import { AddCROForm } from './AddCROForm';
 import TableActions from '../../../components/TableActions/index';
 
