@@ -7,7 +7,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { SchedulePatientModalType } from '../../common/constants';
+import { SchedulePatientModalType } from '../../../common/constants';
 
 import CalendarWidget from './components/CalendarWidget';
 import SchedulePatientModal from './components/SchedulePatientModal';
