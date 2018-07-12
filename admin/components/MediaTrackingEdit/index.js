@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Form from 'react-bootstrap/lib/Form';
 import Button from 'react-bootstrap/lib/Button';
 
-import Toggle from '../Input/Toggle';
+import Toggle from '../../../common/components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import formValidator from './validator';
 import RenderLeads from '../RenderLeads';
