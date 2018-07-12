@@ -253,10 +253,12 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
   }
 
   clearFiltersAndClean() {
-    const { resetForm, clearCustomFilters, clearStudies } = this.props;
+    const { resetForm, clearCustomFilters, clearStudies, changeAdminFilters } = this.props;
     clearCustomFilters();
     resetForm();
     clearStudies();
+    changeAdminFilters('startDate', null);
+    changeAdminFilters('endDate', null);
     this.setState({ prevOffset: null, prevTotalsFilters: null });
   }
 
