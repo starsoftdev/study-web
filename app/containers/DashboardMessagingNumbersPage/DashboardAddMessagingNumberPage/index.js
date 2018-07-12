@@ -11,9 +11,9 @@ import Helmet from 'react-helmet';
 import { Field, reduxForm, change } from 'redux-form';
 import Form from 'react-bootstrap/lib/Form';
 
-import ReactSelect from '../../../components/Input/ReactSelect';
-import Checkbox from '../../../components/Input/Checkbox';
-import Input from '../../../components/Input/';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
+import Checkbox from '../../../../common/components/Input/Checkbox';
+import Input from '../../../../common/components/Input/';
 import { addMessagingNumber, fetchAvailableNumber } from '../actions';
 import { selectDashboardAvailableNumber, selectDashboardAddMessagingNumberFormValues } from '../selectors';
 import formValidator from './validator';
