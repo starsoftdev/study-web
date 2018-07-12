@@ -4,8 +4,8 @@ import { createStructuredSelector } from 'reselect';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm } from 'redux-form';
 import Modal from 'react-bootstrap/lib/Modal';
-import Input from '../../../components/Input';
-import CenteredModal from '../../../components/CenteredModal/index';
+import Input from '../../../../common/components/Input';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import { AddSponsorAdminForm } from './AddSponsorAdminForm';
 import TableActions from '../../../components/TableActions/index';
 
