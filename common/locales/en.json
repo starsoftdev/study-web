@@ -280,6 +280,7 @@
     "client.component.patientDetailSection.labelEmail": "Email",
     "client.component.patientDetailSection.labelPhone": "Phone",
     "client.component.patientDetailSection.labelStatus": "Status",
+    "client.component.patientDetailSection.labelDisposition": "Disposition",
     "client.component.patientDetailSection.labelSignedUp": "Signed Up",
     "client.component.patientDetailSection.labelUpdated": "Updated",
     "client.component.patientDetailSection.labelUnsubscribe": "Unsubscribe",
@@ -1592,6 +1593,12 @@
     "common.disposition.id3": "NI",
     "common.disposition.id4": "CNC",
 
+    "common.disposition.label0": "None",
+    "common.disposition.label1": "Passed Preescreener",
+    "common.disposition.label2": "Did Not Pass Prescreener",
+    "common.disposition.label3": "Not Interested",
+    "common.disposition.label4": "All Attempts Made",
+
     "common.patientCategory.id1": "New Patient",
     "common.patientCategory.id2": "Call / Text Attempted",
     "common.patientCategory.id3": "Not Qualified / Not Interested",
@@ -2094,6 +2101,7 @@
     "corporate.page.privacyrequest.request.opt7placeholder1": "* Please describe the behaviour of StudyKIK you are objecting to, related to the usage of your personal information.",
     "corporate.page.privacyrequest.info": "What information about you would you like to access?",
     "corporate.page.privacyrequest.messagePlaceholder": "Optionally, explain your question in more detail",
+    "corporate.page.privacyrequest.reCaptchaError": "Validate recaptcha!",
 
     "vendor.page.homePage.helmetTitle": "Home - StudyKIK"
 }
