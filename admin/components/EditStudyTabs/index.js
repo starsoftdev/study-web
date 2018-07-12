@@ -70,7 +70,8 @@ export class EditStudyTabs extends Component {
   }
 
   submitPatientThankYouForm = (formData) => {
-    this.props.updatePatientThankYouEmail(formData);
+    const { study } = this.props;
+    this.props.updatePatientThankYouEmail({ ...formData, studyId: study.id });
   }
 
   render() {
