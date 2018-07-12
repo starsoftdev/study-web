@@ -604,6 +604,12 @@ function* fetchPatientDetails() {
             fields: ['time'],
           },
         },
+        {
+          relation: 'dispositions',
+          scope: {
+            fields: ['dispositionKey'],
+          },
+        },
       ],
     });
     try {
