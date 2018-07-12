@@ -528,7 +528,6 @@ export {
   selectGetProposalSuccess,
   selectLearnAboutFutureTrialsSuccess,
   selectNewContactSuccess,
-  selectPrivacyRequestSuccess,
 
   selectTrials,
   selectTrialsTotal,
