@@ -8,8 +8,8 @@ import Button from 'react-bootstrap/lib/Button';
 import Modal from 'react-bootstrap/lib/Modal';
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 
-import ReactSelect from '../../components/Input/ReactSelect';
-import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import EditSiteForm from '../../components/EditSiteForm';
 import EditUserForm from '../../components/EditUserForm';
 import ClientSitesList from '../../components/ClientSitesList';

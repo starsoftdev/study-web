@@ -7,8 +7,8 @@
 import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 
-import Input from '../../components/Input';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import formValidator from './validator';
 import { translate } from '../../../common/utilities/localization';
 
