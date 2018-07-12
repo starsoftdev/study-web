@@ -156,7 +156,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   searchReports(searchFilter) {
-    const { currentUser } = this.props;
+    const { currentUser, getReportsTotals, getReportsList, fetchMediaSources, getDispositionTotals } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
@@ -167,8 +167,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     filters = _.assign(filters, this.props.formValues, searchFilter);
     this.setState({ filters });
 
-    this.props.getReportsTotals(filters);
-    this.props.getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    getReportsTotals(filters);
+    getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    fetchMediaSources(filters);
+    getDispositionTotals({ ...filters, source: null });
   }
 
   loadReports(isSort, sort, direction) {
