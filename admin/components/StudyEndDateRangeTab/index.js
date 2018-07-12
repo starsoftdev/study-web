@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
 import LoadingSpinner from '../LoadingSpinner';
+import { pad } from '../../utils/functions';
 
 export default class StudyEndDateRangeTab extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
@@ -24,7 +25,7 @@ export default class StudyEndDateRangeTab extends Component { // eslint-disable-
     const endDate = item.end_date ? campaignDateTo.format('MM/DD/YY') : 'TBD';
     return (
       <tr key={key}>
-        <th>{item.study_id} - {item.order}</th>
+        <th>{item.study_id}.{pad(item.order)}</th>
         <td>{item.site_name}</td>
         <td>{item.site_address}</td>
         <td>{item.level_name}</td>
