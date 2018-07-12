@@ -3,6 +3,7 @@ import React from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change, reset, touch } from 'redux-form';
+import { toastr } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 
 import Input from '../../../app/components/Input/index';
@@ -136,6 +137,9 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
 
     const { formError, touchFields } = this.props;
     if (formError) {
+      if (!values.reCaptcha) {
+        toastr.error('', translate('corporate.page.privacyrequest.reCaptchaError'));
+      }
       touchFields();
       return;
     }
