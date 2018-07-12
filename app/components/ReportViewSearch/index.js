@@ -68,6 +68,7 @@ export class ReportViewSearch extends React.Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
     this.select = this.select.bind(this);
+    this.searchKeyUp = this.searchKeyUp.bind(this);
 
     this.downloadNotes = false;
   }
@@ -178,6 +179,12 @@ export class ReportViewSearch extends React.Component {
     this.download();
   }
 
+  searchKeyUp(ev) {
+    if (ev.keyCode === 13) {
+      this.initSearch(ev, 'name');
+    }
+  }
+
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
@@ -242,7 +249,7 @@ export class ReportViewSearch extends React.Component {
         <div className={(selectedTime.startDate && selectedTime.endDate) ? 'date-selected fields-holder full-width' : 'fields-holder full-width'}>
           <div className="search-area pull-left">
             <div className="has-feedback">
-              <Button className="btn-enter">
+              <Button className="btn-enter" onClick={(e) => this.initSearch(e, 'name')}>
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
@@ -251,7 +258,7 @@ export class ReportViewSearch extends React.Component {
                 type="text"
                 placeholder={translate('sponsor.component.reportViewSearch.placeholderSearch')}
                 className="keyword-search"
-                onChange={(e) => this.initSearch(e, 'name')}
+                onKeyUp={this.searchKeyUp}
               />
             </div>
           </div>
