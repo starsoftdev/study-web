@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
-import ReactSelect from '../../components/Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { defaultStaticRanges } from '../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
