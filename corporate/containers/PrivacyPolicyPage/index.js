@@ -112,7 +112,7 @@ export default class PrivacyPolicyPage extends React.Component { // eslint-disab
             <p>{translate('corporate.page.privacyPolicy.regulatoryText')}</p>
             <hr className="divider" />
             <h3>{translate('corporate.page.privacyPolicy.contactTitle')}</h3>
-            <p>{translate('corporate.page.privacyPolicy.contactText')}</p>
+            <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.contactText') }} />
             <p dangerouslySetInnerHTML={{ __html: translate('corporate.page.privacyPolicy.contactNote') }} />
           </section>
         </div>
