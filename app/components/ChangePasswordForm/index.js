@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../components/Input';
+import Input from '../../../common/components/Input';
 import changePasswordFormValidator from './validator';
 import { translate } from '../../../common/utilities/localization';
 

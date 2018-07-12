@@ -13,8 +13,8 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 
-import DatePicker from '../../../app/components/Input/DatePicker';
-import ReactSelect from '../../../app/components/Input/ReactSelect';
+import DatePicker from '../../../common/components/Input/DatePicker';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import Input from '../Input/index';
 import Toggle from '../../components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
@@ -164,11 +164,6 @@ class CampaignEdit extends React.Component {
 
     return (
       <div>
-        <div className="head">
-          <div className="inner-head">
-            <strong className="title">Campaign</strong>
-          </div>
-        </div>
         <Form
           className="holder landing-holder"
           onSubmit={this.submitCampaignForm}
