@@ -28,6 +28,7 @@ function Input({
   onBlur,
   onFocus,
   onChange,
+  onKeyUp,
   required,
   meta: { touched, error, active },
   maxLength,
@@ -67,6 +68,11 @@ function Input({
         input.onChange(event);
         if (onChange) {
           onChange(event);
+        }
+      }}
+      onKeyUp={(event) => {
+        if (onKeyUp) {
+          onKeyUp(event);
         }
       }}
       onBlur={(event) => {
@@ -124,6 +130,7 @@ Input.propTypes = {
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   onChange: PropTypes.func,
+  onKeyUp: PropTypes.func,
   name: PropTypes.string.isRequired,
   maxLength: PropTypes.string,
   meta: PropTypes.object.isRequired,
