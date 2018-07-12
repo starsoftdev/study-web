@@ -1146,11 +1146,12 @@ export function resetNewContactSuccess(payload) {
   };
 }
 
-export function submitPrivacyRequest(params, recaptcha) {
+export function submitPrivacyRequest(params, recaptcha, resetForm) {
   return {
     type: PRIVACY_REQUEST,
     params,
     recaptcha,
+    resetForm,
   };
 }
 
