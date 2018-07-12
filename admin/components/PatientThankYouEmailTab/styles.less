@@ -20,8 +20,7 @@
     }
 
     &.sub{
-      max-height: 40px;
-      min-height: 40px;
+      height: 40px;
 
       textarea {
         height: 40px !important;
@@ -29,9 +28,11 @@
 
     }
     &.msg{
-      height: 90%;
-      max-height: 90%;
-      min-height: 90%;
+      height: calc(~"100% - 150px");
+      textarea {
+        height: 100%;
+        resize: none;
+      }
     }
 
   }

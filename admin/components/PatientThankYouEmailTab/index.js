@@ -43,41 +43,39 @@ export class PatientThankYouEmailTab extends Component {
             onSubmit={this.props.handleSubmit}
             noValidate="novalidate"
           >
-            <div className="frame">
-              <div className="field-row sub">
-                <strong className="label">
-                  <label htmlFor="new-patient-phone">Subject</label>
-                </strong>
-                <div className="field">
-                  <Field
-                    type="text"
-                    name="thankYouEmailSubject"
-                    component={Input}
-                    componentClass="textarea"
-                  />
-                </div>
+            <div className="field-row sub">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">Subject</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="thankYouEmailSubject"
+                  component={Input}
+                  componentClass="textarea"
+                />
               </div>
-              <div className="field-row msg">
-                <strong className="label">
-                  <label htmlFor="new-patient-phone">Body</label>
-                </strong>
-                <div className="field">
-                  <Field
-                    type="text"
-                    name="thankYouEmailBlock"
-                    component={Input}
-                    componentClass="textarea"
-                  />
-                </div>
+            </div>
+            <div className="field-row msg">
+              <strong className="label">
+                <label htmlFor="new-patient-phone">Body</label>
+              </strong>
+              <div className="field">
+                <Field
+                  type="text"
+                  name="thankYouEmailBlock"
+                  component={Input}
+                  componentClass="textarea"
+                />
               </div>
-              <div className="field-row text-right">
-                <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                  {this.props.updatePatientThankYouEmailProcess.saving
-                    ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                    : <span>Update</span>
-                  }
-                </Button>
-              </div>
+            </div>
+            <div className="field-row text-right">
+              <Button type="submit" bsStyle="primary" className="fixed-small-btn">
+                {this.props.updatePatientThankYouEmailProcess.saving
+                  ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
+                  : <span>Update</span>
+                }
+              </Button>
             </div>
           </form>
         </div>
