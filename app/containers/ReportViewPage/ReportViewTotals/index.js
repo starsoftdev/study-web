@@ -185,7 +185,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         </ol>
         <div className="report-page-totals-container">
           {
-            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
+            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'mediaName' && this.props.mediaSources.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
           <ul className="list-inline list-stats">
             <li className="allcaps">
