@@ -280,6 +280,7 @@
     "client.component.patientDetailSection.labelEmail": "Email",
     "client.component.patientDetailSection.labelPhone": "Phone",
     "client.component.patientDetailSection.labelStatus": "Status",
+    "client.component.patientDetailSection.labelDisposition": "Disposition",
     "client.component.patientDetailSection.labelSignedUp": "Signed Up",
     "client.component.patientDetailSection.labelUpdated": "Updated",
     "client.component.patientDetailSection.labelUnsubscribe": "Unsubscribe",
@@ -1591,6 +1592,12 @@
     "common.disposition.id2": "DNQ",
     "common.disposition.id3": "NI",
     "common.disposition.id4": "CNC",
+
+    "common.disposition.label0": "None",
+    "common.disposition.label1": "Passed Preescreener",
+    "common.disposition.label2": "Did Not Pass Prescreener",
+    "common.disposition.label3": "Not Interested",
+    "common.disposition.label4": "All Attempts Made",
 
     "common.patientCategory.id1": "New Patient",
     "common.patientCategory.id2": "Call / Text Attempted",
