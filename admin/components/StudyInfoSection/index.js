@@ -418,7 +418,7 @@ export class StudyInfoSection extends Component { // eslint-disable-line react/p
                 component={Toggle}
                 className="field"
                 onChange={(e) => {
-                  change('patientMessagingSuite', e);
+                  change('central', e);
                 }}
               />
             </div>
