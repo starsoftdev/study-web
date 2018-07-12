@@ -12,8 +12,8 @@ import { Field, reduxForm, reset, touch, change } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import _ from 'lodash';
 
-import Checkbox from '../Input/Checkbox';
-import Input from '../Input/index';
+import Checkbox from '../../../common/components/Input/Checkbox';
+import Input from '../../../common/components/Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { updateThankYouPage, resetThankYouPageState } from '../../containers/HomePage/AdminDashboard/actions';
