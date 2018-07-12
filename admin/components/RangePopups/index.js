@@ -52,6 +52,14 @@ export default class RangePopups extends Component {
     this.changeRange = this.changeRange.bind(this);
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
+    this.clearDateRanges = this.clearDateRanges.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { currentFilters } = this.props;
+    if (currentFilters.startDate && currentFilters.endDate && !newProps.currentFilters.startDate && !newProps.currentFilters.endDate) {
+      this.clearDateRanges();
+    }
   }
 
   showPopup(ev, type) {
@@ -64,6 +72,19 @@ export default class RangePopups extends Component {
       ev.preventDefault();
     }
     this.setState({ showPopup: false, type: '' });
+  }
+
+  clearDateRanges() {
+    this.setState({
+      selectedTime: {
+        startDate: null,
+        endDate: null,
+      },
+      endDateRange: {
+        startDate: null,
+        endDate: null,
+      },
+    });
   }
 
   changeRange(ev) {
