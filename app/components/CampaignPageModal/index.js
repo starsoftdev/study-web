@@ -14,10 +14,10 @@ import { Field, reduxForm, change } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
 
-import DatePicker from '../../components/Input/DatePicker';
-import ReactSelect from '../../components/Input/ReactSelect';
-import Input from '../Input/index';
-import Toggle from '../../components/Input/Toggle';
+import DatePicker from '../../../common/components/Input/DatePicker';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
+import Toggle from '../../../common/components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectDashboardCampaigns, selectDashboardEditCampaignProcess, selectDashboardDeleteCampaignProcess } from '../../containers/HomePage/AdminDashboard/selectors';
