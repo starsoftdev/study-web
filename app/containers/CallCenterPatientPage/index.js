@@ -263,7 +263,7 @@ class CallCenterPatientPage extends Component {
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
-        pdfURL = protocolForPatient.pdfurl;
+        pdfURL = protocolForPatient.pdfurl ? protocolForPatient.pdfurl : '';
       }
 
       patientIndications = patient.details.patientIndications;
