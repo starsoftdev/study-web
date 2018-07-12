@@ -32,11 +32,6 @@ const schema = {
       message: '^Massage cannot be blank',
     },
   },
-  subrequest2: {
-    presence: {
-      message: '^Massage cannot be blank',
-    },
-  },
   reCaptcha: { presence: true },
 };
 

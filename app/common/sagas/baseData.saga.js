@@ -1193,10 +1193,10 @@ function* submitPrivacyRequest(action) {
       body: JSON.stringify(params),
     };
 
-    const response = yield call(request, requestURL, options);
+    yield call(request, requestURL, options);
     toastr.success('', translate('corporate.page.contactPage.toastrSuccessMessage'));
-    yield action.recaptcha.reset();
-    yield put(resetForm);
+    action.recaptcha.reset();
+    yield put(action.resetForm());
   } catch (err) {
     const errorMessage = get(err, 'message', translate('corporate.page.contactPage.toastrErrorMessage'));
     toastr.error('', errorMessage);
