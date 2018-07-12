@@ -21,6 +21,7 @@ const tabs = [
 export default class ReportTabs extends Component {
   static propTypes = {
     activateManually: PropTypes.string,
+    manuallySetActiveTab: PropTypes.func.isRequired,
     mediaTotals: PropTypes.object,
     studies: PropTypes.object,
     paginationOptions: PropTypes.object,
@@ -51,8 +52,11 @@ export default class ReportTabs extends Component {
   }
 
   handleClick(type) {
-    const { setActiveReportTab } = this.props;
+    const { setActiveReportTab, activateManually, manuallySetActiveTab } = this.props;
     this.setState({ activeTab: type });
+    if (activateManually) {
+      manuallySetActiveTab(null);
+    }
     setActiveReportTab(type);
   }
 
