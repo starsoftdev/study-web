@@ -2,6 +2,7 @@ import React from 'react';
 import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change, reset, touch } from 'redux-form';
+import { toastr } from 'react-redux-toastr';
 import ReCAPTCHA from 'react-google-recaptcha';
 import inViewport from 'in-viewport';
 
@@ -150,6 +151,9 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
 
     const request = Object.assign({}, privacyRequest);
     if (formError) {
+      if (!privacyRequest.reCaptcha) {
+        toastr.error('', translate('corporate.page.privacyrequest.reCaptchaError'));
+      }
       touchFields();
       return;
     }
@@ -162,6 +166,7 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
     submitForm(request);
     if (this.recaptcha) {
       this.recaptcha.reset();
+      this.props.change('reCaptcha', null);
     }
   }
 
