@@ -28,7 +28,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  submitForm: (values, recaptcha) => dispatch(submitPrivacyRequest(values, recaptcha)),
+  submitForm: (values, recaptcha, resetForm) => dispatch(submitPrivacyRequest(values, recaptcha, resetForm)),
   change: (name, value) => dispatch(change(formName, name, value)),
   resetForm: () => dispatch(reset(formName)),
   touchFields: () => dispatch(touch(formName, ...fields)),
@@ -146,8 +146,8 @@ export default class PrivacyRequestPage extends React.Component { // eslint-disa
         request[`placeholder${i}`] = this.placeholders[this.state.requestId - 1][i];
       }
     }
-    const { submitForm } = this.props;
-    submitForm(request, this.recaptcha);
+    const { submitForm, resetForm } = this.props;
+    submitForm(request, this.recaptcha, resetForm);
   };
 
   renderExtend() {
