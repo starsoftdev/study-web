@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm, reset } from 'redux-form';
 
-import Input from '../Input';
+import Input from '../../../common/components/Input';
 
 
 import StudyNote from '../../components/StudyNote';
