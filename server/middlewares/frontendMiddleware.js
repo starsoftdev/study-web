@@ -219,6 +219,32 @@ const addDevMiddlewares = (app, webpackConfig) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
   });
 
+  app.get('/stomachstudy', async (req, res) => {
+    try {
+      const environment = 'development';
+      const file = await readFile(fs, path.join(compiler.outputPath, 'corporate.html'));
+      let templateStr = null;
+      const re = new RegExp('GTM_ACCOUNT_ID', 'g');
+      if (environment === 'development') {
+        templateStr = file.toString().replace(re, settings.gtm.DEV);
+      } else if (environment === 'production') {
+        templateStr = file.toString().replace(re, settings.gtm.PROD);
+      }
+      const result = templateStr
+        .replace(
+          '<meta property="twitter:description" content="StudyKIK">',
+          '<meta property="ROBOTS" content="NOINDEX, NOFOLLOW">'
+        );
+      res.send(result);
+    } catch (e) {
+      if (e.statusCode === 404) {
+        res.redirect('/404');
+      } else {
+        res.redirect('/503');
+      }
+    }
+  });
+
   reserveSsrRoutes(app, fs, 'development', path.join(compiler.outputPath, 'corporate.html'));
 
   app.get('/404', (req, res) => {
@@ -305,6 +331,40 @@ const addProdMiddlewares = (app, options) => {
   });
   app.get('/loaderio-446030d79af6fc10143acfa9b2f0613f', (req, res) => {
     res.send('loaderio-446030d79af6fc10143acfa9b2f0613f');
+  });
+
+  app.get('/stomachstudy', async (req, res) => {
+    try {
+      const fs = require('fs');
+      const file = await readFile(fs, path.resolve(outputPath, 'corporate.html'));
+
+      let templateStr = file.toString();
+      const headEndPos = templateStr.indexOf('</head>');
+
+      if (headEndPos !== -1) {
+        templateStr = `${templateStr.substr(0, headEndPos)}<!-- Global site tag (gtag.js) - Google Analytics -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122334322-1"></script>
+          <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag()
+          {dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-122334322-1');
+          </script>${templateStr.substr(headEndPos)}`;
+      }
+      const result = templateStr
+        .replace(
+          '<meta property="twitter:description" content="StudyKIK">',
+          '<meta property="ROBOTS" content="NOINDEX, NOFOLLOW">'
+        );
+      res.send(result);
+    } catch (e) {
+      if (e.statusCode === 404) {
+        res.redirect('/404');
+      } else {
+        res.redirect('/503');
+      }
+    }
   });
 
   reserveSsrRoutes(app, require('fs'), 'production', path.resolve(outputPath, 'corporate.html'));
