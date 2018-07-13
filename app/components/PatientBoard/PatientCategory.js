@@ -96,6 +96,7 @@ const collect = (connect, monitor) => ({
   itemType: monitor.getItemType(),
 });
 
+const CALL_ATTEMPT_ID = 2
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
@@ -163,7 +164,7 @@ class PatientCategory extends React.Component {
 
   isLocked(patient) {
     const { campaign, campaigns, category } = this.props;
-    if (category.id < 2) {
+    if (category.id <= CALL_ATTEMPT_ID) {
       if (campaign) {
         const c = _.find(campaigns, { id: campaign });
         return c.patientQualificationSuite;
