@@ -59,8 +59,9 @@ export class ThankYouEdit extends Component {
   componentWillReceiveProps(newProps) {
     const { resetState, change } = this.props;
 
-    if (newProps.landing) {
-      const landing = newProps.landing;
+    if (newProps.landing && newProps.landing.details && !newProps.landing.error) {
+      const landing = newProps.landing.details;
+
       const thankYouPage = landing.thankYouPage;
 
       if (!this.state.initialValuesEntered) {

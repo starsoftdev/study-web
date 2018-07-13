@@ -20,6 +20,9 @@ import {
   DELETE_SPONSOR_ADMIN,
   DELETE_SPONSOR_ADMIN_SUCCESS,
   DELETE_SPONSOR_ADMIN_ERROR,
+  EDIT_SPONSOR_ADMIN,
+  EDIT_SPONSOR_ADMIN_SUCCESS,
+  EDIT_SPONSOR_ADMIN_ERROR,
   SET_ACTIVE_SORT,
   SET_SEARCH_QUERY,
 } from './constants';
@@ -172,6 +175,33 @@ function dashboardSponsorAdminPageReducer(state = initialState, action) {
         },
       };
     case ADD_SPONSOR_ADMIN_ERROR:
+      return {
+        ...state,
+        editUserProcess: {
+          saving: false,
+          deleting: false,
+          error: action.payload,
+        },
+      };
+    case EDIT_SPONSOR_ADMIN:
+      return {
+        ...state,
+        editUserProcess: {
+          saving: true,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_SPONSOR_ADMIN_SUCCESS:
+      return {
+        ...state,
+        editUserProcess: {
+          saving: false,
+          deleting: false,
+          error: null,
+        },
+      };
+    case EDIT_SPONSOR_ADMIN_ERROR:
       return {
         ...state,
         editUserProcess: {
