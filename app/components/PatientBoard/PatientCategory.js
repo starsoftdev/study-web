@@ -96,7 +96,7 @@ const collect = (connect, monitor) => ({
   itemType: monitor.getItemType(),
 });
 
-const CALL_ATTEMPT_ID = 2
+const CALL_ATTEMPT_ID = 2;
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
