@@ -7,8 +7,10 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
+import { default as mediaTrackingReducer } from './components/MediaTrackingEdit/reducer';
+import { default as editAdminStudyReducer } from './components/StudyInfoSection/reducer';
 import appReducer from './containers/App/reducer';
-
+import globalNotificationsReducer from '../app/containers/GlobalNotifications/reducer';
 /**
  * Creates the main reducer with the asynchronously loaded ones
  */
@@ -16,8 +18,11 @@ export default function createReducer(asyncReducers) {
   return combineReducers({
     routing: routerReducer,
     form: formReducer.plugin({
+      'Admin.EditStudyForm': editAdminStudyReducer,
+      MediaTrackingForm: mediaTrackingReducer,
     }),
     toastr: toastrReducer,
+    globalNotifications: globalNotificationsReducer,
     global: appReducer,
     ...asyncReducers,
   });

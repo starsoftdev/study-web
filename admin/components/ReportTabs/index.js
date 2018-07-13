@@ -24,7 +24,12 @@ export default class ReportTabs extends Component {
     mediaTotals: PropTypes.object,
     studies: PropTypes.object,
     paginationOptions: PropTypes.object,
+    campaignsPaginationOptions: PropTypes.object,
+    campaignsStats: PropTypes.object,
+    filtersFormValues: PropTypes.object,
     loadItems: PropTypes.func,
+    loadCampaignItems: PropTypes.func,
+    setActiveReportTab: PropTypes.func,
   };
 
   constructor(props) {
@@ -46,7 +51,9 @@ export default class ReportTabs extends Component {
   }
 
   handleClick(type) {
+    const { setActiveReportTab } = this.props;
     this.setState({ activeTab: type });
+    setActiveReportTab(type);
   }
 
   renderTab(type, title, key) {
@@ -64,7 +71,8 @@ export default class ReportTabs extends Component {
 
   render() {
     const { activeTab } = this.state;
-    const { mediaTotals, studies, paginationOptions, loadItems } = this.props;
+    const { mediaTotals, studies, paginationOptions, loadItems, campaignsStats, filtersFormValues, loadCampaignItems,
+      campaignsPaginationOptions } = this.props;
     return (
       <div id="reportTabs">
         <div className="tabs-holder">
@@ -149,8 +157,13 @@ export default class ReportTabs extends Component {
               loadItems={loadItems}
             />
           </section>
-          <section className={classNames('disposition', { active: (activeTab === 'studyEndDateRange') })}>
-            <StudyEndDateRangeTab />
+          <section className={classNames('studyEndDateRange', { active: (activeTab === 'studyEndDateRange') })}>
+            <StudyEndDateRangeTab
+              campaignsStats={campaignsStats}
+              filtersFormValues={filtersFormValues}
+              loadCampaignItems={loadCampaignItems}
+              campaignsPaginationOptions={campaignsPaginationOptions}
+            />
           </section>
         </div>
       </div>
