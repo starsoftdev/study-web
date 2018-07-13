@@ -18,10 +18,10 @@
 #infoSection .clickable { cursor: pointer; }
 #infoSection .part ul { margin: 10px; padding: 0; }
 #infoSection .part li { list-style: none; }
-#infoSection .part li label { display: inline-block; vertical-align: top; width: 55%; }
-#infoSection .part li span { display: inline-block; vertical-align: top; width: 45%; }
-#infoSection .part.campaign li label { width: 70%; }
-#infoSection .part.campaign li span { width: 30%; }
+#infoSection .part li label { display: inline-block; font-size: 14px; font-weight: bold; vertical-align: top; width: 35%; }
+#infoSection .part li span { display: inline-block; font-size: 14px; overflow: hidden; text-overflow: ellipsis; vertical-align: top; width: 65%; }
+#infoSection .part.campaign li label { width: 50%; }
+#infoSection .part.campaign li span { width: 50%; }
 #infoSection .part.stat li label { width: 80%; }
 #infoSection .part.stat li span { text-align: right; width: 20%; }
 #infoSection .loading { text-align: center; }
@@ -77,6 +77,10 @@
   &.yellow { color: #ffe11a; }
   &.green { color: #a0cf67; }
   &.purple { color: #873fbd; }
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 /***************************************************************************************
@@ -153,6 +157,12 @@
 #dispositionTable thead th { padding: 0 6px; }
 #dispositionTable thead th:first-child { padding: 0; }
 
+#studyEndDateRange th { padding: 5px; text-transform: uppercase; vertical-align: top; }
+#studyEndDateRange th:first-child { padding-left: 0; }
+#studyEndDateRange td { padding: 5px; vertical-align: top; }
+#studyEndDateRange thead th { padding: 0 6px; }
+#studyEndDateRange thead th:first-child { padding: 0; }
+
 /***************************************************************************************
 *************************** Admin Study Edit Page **************************************
 ****************************************************************************************/
@@ -165,9 +175,13 @@
 #studyInfoSection .smallSection ul { margin-bottom: 20px; }
 #studyInfoSection .updateBtnSection { background: #ddd; margin: -20px 0 20px; padding: 10px; text-align: right; }
 #studyInfoSection ul { list-style: none; margin: 0; padding: 0; }
-#studyInfoSection li { line-height: 30px; }
+#studyInfoSection li { line-height: 30px; margin-bottom: 10px; }
 #studyInfoSection li.hasCheckbox div { display: inline-block; margin: 5px 10px 0 0; vertical-align: middle; }
 #studyInfoSection h3 { margin-top: 0; }
+#studyInfoSection .label { text-align: left; }
+#studyInfoSection .right-to-left .label { width: 63%; }
+#studyInfoSection .right-to-left .field { width: 37%; }
+#studyInfoSection .toggle { width: initial; }
 
 #studyEditSection { display: inline-block; height: 100%; padding: 60px 0 20px; vertical-align: top; width: 70%; }
 #editStudyTabs { height: 100%; width: 100%; }
@@ -208,10 +222,16 @@
 
 #editStudyTabs label { font-weight: 600; margin: 10px 0; text-transform: uppercase; }
 #editStudyTabs .field-row .label { text-align: left; }
-#landingPageEdit > div { margin-bottom: 30px; }
+#MediaTrackingEdit { margin-bottom: 20px; margin-right: 20px; }
+
+/************************** Landing tab ************************************/
+
+#landingPageEdit > form { margin-bottom: 30px; }
+#landingPageEdit .initial-text-message { margin-top: 30px; }
+#landingPageEdit .study-ad { margin-top: 30px; }
+#landingPageEdit .custom-info-fields { margin-top: 30px; }
 #landingPageEdit .rich-text-editor-container > div { border: 2px solid #636363; }
 #landingPageEdit .img-preview { margin: 10px 0; }
-#MediaTrackingEdit { margin-bottom: 20px; }
 
 /************************** Thank You tab **********************************/
 

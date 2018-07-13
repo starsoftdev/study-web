@@ -8,8 +8,8 @@ import { Field, reduxForm, change, blur } from 'redux-form';
 
 import { normalizePhoneDisplay } from '../../../app/common/helper/functions';
 import { selectFormsTempTimezone, selectSavedSite } from '../../containers/App/selectors';
-import Input from '../../components/Input/index';
-import FormGeosuggest from '../../components/Input/Geosuggest';
+import Input from '../../../common/components/Input/index';
+import FormGeosuggest from '../../../common/components/Input/Geosuggest';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { selectEditSiteFormValues } from './selectors';
 import formValidator from './validator';

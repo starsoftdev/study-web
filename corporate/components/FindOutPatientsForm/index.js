@@ -6,7 +6,7 @@ import { Parallax } from 'react-parallax';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 import FindOutPatientsFormValidator, { fields } from './validator';
-import Input from '../../../app/components/Input';
+import Input from '../../../common/components/Input';
 import { selectSyncErrorBool } from '../../../app/common/selectors/form.selector';
 
 import img2 from '../../assets/images/img2.svg';

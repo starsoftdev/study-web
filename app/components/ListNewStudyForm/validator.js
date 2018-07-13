@@ -11,7 +11,9 @@ const schema = {
       message: 'The selected file is in the wrong format.',
     },
   },
-  sponsorEmail: { email: true, emailDomain: true },
+  sponsorEmail: { presence: true, email: true, emailDomain: true },
+  croContactName: { presence: true },
+  croContactEmail: { presence: true, email: true, emailDomain: true },
   recruitmentPhone: {
     presence: {
       message: '^Phone number cannot be blank',
@@ -22,7 +24,6 @@ const schema = {
       message: '^Invalid phone number',
     },
   },
-  croContactEmail: { email: true, emailDomain: true },
   irbEmail: { email: true, emailDomain: true },
   exposureLevel: { presence: { message: '^You need to select exposure level' } },
   campaignLength: { presence: { message: '^You need to select campaign length' } },

@@ -13,12 +13,12 @@ import Modal from 'react-bootstrap/lib/Modal';
 import SplitButton from 'react-bootstrap/lib/SplitButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
-import { defaultStaticRanges } from '../../common/constants/dateRanges';
+import { defaultStaticRanges } from '../../../common/constants/dateRanges';
 import { STATUS_ALL, STATUS_ACTIVE, STATUS_INACTIVE } from '../../containers/ReportViewPage/constants';
 import { getMomentFromDate } from '../../utils/time';
-import CenteredModal from '../CenteredModal/index';
-import ReactSelect from '../Input/ReactSelect';
-import Input from '../Input/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
 import { exportStudies } from '../../containers/ReportViewPage/actions';
 import { getItem } from '../../utils/localStorage';
 import {
@@ -68,6 +68,7 @@ export class ReportViewSearch extends React.Component {
     this.renderDateFooter = this.renderDateFooter.bind(this);
     this.download = this.download.bind(this);
     this.select = this.select.bind(this);
+    this.searchKeyUp = this.searchKeyUp.bind(this);
 
     this.downloadNotes = false;
   }
@@ -178,6 +179,12 @@ export class ReportViewSearch extends React.Component {
     this.download();
   }
 
+  searchKeyUp(ev) {
+    if (ev.keyCode === 13) {
+      this.initSearch(ev, 'name');
+    }
+  }
+
   renderDateFooter() {
     const { predefined } = this.state;
     if (predefined.startDate) {
@@ -242,7 +249,7 @@ export class ReportViewSearch extends React.Component {
         <div className={(selectedTime.startDate && selectedTime.endDate) ? 'date-selected fields-holder full-width' : 'fields-holder full-width'}>
           <div className="search-area pull-left">
             <div className="has-feedback">
-              <Button className="btn-enter">
+              <Button className="btn-enter" onClick={(e) => this.initSearch(e, 'name')}>
                 <i className="icomoon-icon_search2" />
               </Button>
               <Field
@@ -251,7 +258,7 @@ export class ReportViewSearch extends React.Component {
                 type="text"
                 placeholder={translate('sponsor.component.reportViewSearch.placeholderSearch')}
                 className="keyword-search"
-                onChange={(e) => this.initSearch(e, 'name')}
+                onKeyUp={this.searchKeyUp}
               />
             </div>
           </div>

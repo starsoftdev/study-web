@@ -18,6 +18,7 @@ import {
   FETCH_STUDIES_FOR_ADMIN,
   FETCH_TOTALS_FOR_ADMIN,
   FETCH_MEDIA_TOTALS_FOR_ADMIN,
+  FETCH_MESSAGING_NUMBERS,
 } from '../../containers/App/constants';
 
 import {
@@ -41,6 +42,8 @@ import {
   fetchTotalsForAdminSuccess,
   fetchMediaTotalsForAdminError,
   fetchMediaTotalsForAdminSuccess,
+  fetchMessagingNumbersSuccess,
+  fetchMessagingNumbersError,
 } from '../../containers/App/actions';
 import { translate } from '../../../common/utilities/localization';
 
@@ -55,6 +58,7 @@ export default function* baseDataSaga() {
   yield fork(fetchStudiesForAdminWatcher);
   yield fork(fetchTotalsForAdminWatcher);
   yield fork(fetchMediaTotalsForAdminWatcher);
+  yield fork(fetchMessagingNumbersWatcher);
 }
 
 function* fetchIndicationsWatcher() {
@@ -303,5 +307,29 @@ export function* fetchMediaTotalsForAdminWorker(action) {
   } catch (err) {
     console.log(err);
     yield put(fetchMediaTotalsForAdminError(err));
+  }
+}
+
+export function* fetchMessagingNumbersWatcher() {
+  yield* takeLatest(FETCH_MESSAGING_NUMBERS, fetchMessagingNumbersWorker);
+}
+
+export function* fetchMessagingNumbersWorker() {
+  try {
+    const requestURL = `${API_URL}/studies/getNotAssignedPhoneNumbers`;
+
+    const params = {
+      method: 'GET',
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchMessagingNumbersSuccess(response));
+  } catch (err) {
+    yield put(fetchMessagingNumbersError(err));
+    const errorMessage = get(err, 'message', 'Something went wrong while fetching messaging numbers for selected study');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
   }
 }
