@@ -1,0 +1,60 @@
+.patient-thankyou-slider {
+  height: 100%;
+  .slider-area{
+    height: 100%;
+  }
+  .field-row {
+    height: auto;
+
+    .label {
+      width: 20%;
+    }
+
+    .field {
+      height: 100%;
+      width: 80%;
+
+      &>div{
+        height:100%;
+      }
+    }
+
+    &.sub{
+      height: 40px;
+
+      textarea {
+        height: 40px !important;
+      }
+
+    }
+    &.msg{
+      height: calc(~"100% - 150px");
+      textarea {
+        height: 100%;
+        resize: none;
+      }
+    }
+
+  }
+
+  .email-block-form {
+    overflow-y: hidden !important;
+    height: 100%;
+    .frame {
+      height: 95%;
+      .field-row {
+        .label {
+          text-transform: uppercase;
+        }
+        textarea {
+          height: 100%;
+
+          &.form-control {
+            resize: none;
+            white-space: pre-wrap;
+          }
+        }
+      }
+    }
+  }
+}

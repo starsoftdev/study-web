@@ -8,7 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm, reset, change, blur } from 'redux-form';
 import Collapse from 'react-bootstrap/lib/Collapse';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../Input/index';
+import Input from '../../../common/components/Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectSyncErrorBool, selectValues } from '../../common/selectors/form.selector';
 import { fetchLanding } from '../../containers/App/actions';

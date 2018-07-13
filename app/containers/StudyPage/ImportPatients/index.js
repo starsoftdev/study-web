@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import { push } from 'react-router-redux';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import sanitizeProps from '../../../utils/sanitizeProps';
 
 const mapStateToProps = (state) => ({
