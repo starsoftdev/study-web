@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { Link } from 'react-router';
 import classNames from 'classnames';
 import enhanceWithClickOutside from 'react-click-outside';
 import defaultImage from '../../../../app/assets/images/Default-User-Img-Dr.png';
@@ -66,7 +65,6 @@ class AvatarMenu extends React.Component {
           <div className="well">
             <ul className="list-unstyled">
               <li><a onClick={this.handleCustomerFeedbackClick}>{translate('portals.component.topHeaderBar.avatarMenu.customerFeedback')}</a></li>
-              <li><Link to="/app/me/profile" onClick={this.handleClickOutside}>{translate('portals.component.topHeaderBar.avatarMenu.profile')}</Link></li>
               <a
                 onClick={() => {
                   this.props.handleLogoutClick();
