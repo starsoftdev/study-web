@@ -12,7 +12,6 @@ import { selectCustomFilters, selectFilterFormValues } from '../../containers/Ap
 @reduxForm({ form: 'filterPanel', destroyOnUnmount: false })
 export class FilterQueryForm extends Component {
   static propTypes = {
-    resetForm: React.PropTypes.func.isRequired,
     changeAdminFilters: React.PropTypes.func.isRequired,
     clearStudies: React.PropTypes.func.isRequired,
     removeCustomFilter: React.PropTypes.func.isRequired,

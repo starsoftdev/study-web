@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import moment from 'moment';
 import _ from 'lodash';
-import ReactSelect from '../../../app/components/Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import appointmentFormValidator from './validator';
 
 @reduxForm({

@@ -16,7 +16,7 @@ import { addVendorAdmin } from './AddVendorAdminForm/actions';
 import { closeModal, openModalWithVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
 import { selectVendorAdmins } from './selectors';
 
-import CenteredModal from '../../../app/components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 
 import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';

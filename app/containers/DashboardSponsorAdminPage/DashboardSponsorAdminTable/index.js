@@ -96,7 +96,15 @@ export class DashboardSponsorAdminTable extends React.Component { // eslint-disa
             <tbody>
               {
                 sponsors.map((item, index) => (
-                  <RowItem key={index} item={item} sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin} usersByRoles={this.props.usersByRoles} editUserProcess={this.props.editUserProcess} editSponsorAdmin={this.props.editSponsorAdmin} deleteSponsorAdmin={this.props.deleteSponsorAdmin} />
+                  <RowItem
+                    key={index}
+                    item={item}
+                    sponsorsWithoutAdmin={this.props.sponsorsWithoutAdmin}
+                    usersByRoles={this.props.usersByRoles}
+                    editUserProcess={this.props.editUserProcess}
+                    editSponsorAdmin={this.props.editSponsorAdmin}
+                    deleteSponsorAdmin={this.props.deleteSponsorAdmin}
+                  />
                 ))
               }
             </tbody>
