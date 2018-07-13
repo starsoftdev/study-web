@@ -25,6 +25,8 @@ import {
   VENDOR_FETCH_STUDY_STATS_SUCCESS,
   VENDOR_FETCH_STUDY_SUCCESS,
   VENDOR_REMOVE_PATIENT_INDICATION_SUCCESS,
+  VENDOR_SHOW_SCHEDULED_MODAL,
+  VENDOR_HIDE_SCHEDULED_MODAL,
   VENDOR_SET_STUDY_ID,
   VENDOR_SET_CURRENT_PATIENT_ID,
   VENDOR_SET_CURRENT_PATIENT_CATEGORY_ID,
@@ -42,6 +44,11 @@ import {
   VENDOR_SWITCH_TO_EMAIL_SECTION_DETAIL,
   VENDOR_SWITCH_TO_OTHER_SECTION_DETAIL,
   VENDOR_SUBMIT_ADD_PATIENT,
+  VENDOR_CHANGE_SCHEDULED_DATE,
+  VENDOR_SUBMIT_SCHEDULE,
+  VENDOR_SUBMIT_SCHEDULE_SUCCEEDED,
+  VENDOR_SUBMIT_SCHEDULE_FAILED,
+  VENDOR_SET_SCHEDULED_FORM_INITIALIZED,
   VENDOR_DELETE_PATIENT,
   VENDOR_DELETE_PATIENT_SUCCESS,
   VENDOR_DELETE_PATIENT_ERROR,
@@ -70,11 +77,16 @@ const initialState = {
     email: false,
     other: false,
   },
+  openScheduledModal: false,
   openPatientModal: false,
   addPatientStatus:{
     adding: false,
   },
   fetchingPatientsError: {},
+  submittingSchedule: {
+    submitting: false,
+    error: null,
+  },
   submittingEmail:false,
   deletePatientProcess: {
     isDeleting: false,
@@ -416,6 +428,17 @@ function studyPageReducer(state = initialState, action) {
         ...state,
         openPatientModal: action.show,
       };
+    case VENDOR_SHOW_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: true,
+      };
+    case VENDOR_HIDE_SCHEDULED_MODAL:
+      return {
+        ...state,
+        openScheduledModal: false,
+        scheduledFormInitialized: false,
+      };
     case VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING:
       return {
         ...state,
@@ -465,6 +488,66 @@ function studyPageReducer(state = initialState, action) {
           email: false,
           other: true,
         },
+      };
+    case VENDOR_CHANGE_SCHEDULED_DATE:
+      return {
+        ...state,
+        ScheduledModal: {
+          selectedDate: action.date.startOf('day'),
+        },
+      };
+    case VENDOR_SUBMIT_SCHEDULE:
+      return {
+        ...state,
+        submittingSchedule: {
+          submitting: true,
+          error: null,
+        },
+      };
+    case VENDOR_SUBMIT_SCHEDULE_SUCCEEDED:
+      return {
+        ...state,
+        patientCategories: state.patientCategories.map(category => {
+          if (category.name === 'Scheduled') {
+            return {
+              ...category,
+              patients: category.patients.map(patient => {
+                if (patient.id === action.patientId) {
+                  const updatedAppointment = _.find(action.schedules, { patient_id: action.patientId });
+
+                  return {
+                    ...patient,
+                    appointments: [updatedAppointment],
+                  };
+                }
+
+                return patient;
+              }),
+            };
+          }
+
+          return category;
+        }),
+        submittingSchedule: {
+          submitting: false,
+          error: null,
+        },
+        scheduledFormInitialized: false,
+        openScheduledModal: false,
+        currentPatientId: state.openPatientModal ? state.currentPatientId : -1,
+      };
+    case VENDOR_SUBMIT_SCHEDULE_FAILED:
+      return {
+        ...state,
+        submittingSchedule: {
+          submitting: false,
+          error: action.payload || 'undefined error',
+        },
+      };
+    case VENDOR_SET_SCHEDULED_FORM_INITIALIZED:
+      return {
+        ...state,
+        scheduledFormInitialized: action.formInitialized,
       };
     case VENDOR_DELETE_PATIENT:
       return {
@@ -563,6 +646,18 @@ function patientCategories(state, currentPatientId, action) {
             };
           }
           if (patientCategory.id === toPatientCategory.id) {
+            if (fromPatientCategory.name === 'Scheduled') {
+              return {
+                ...patientCategory,
+                patients: [
+                  {
+                    ...transformedPatient,
+                    appointments: [],
+                  },
+                  ...patientCategory.patients,
+                ],
+              };
+            }
             return {
               ...patientCategory,
               patients: [
