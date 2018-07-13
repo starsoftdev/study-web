@@ -36,6 +36,9 @@ import {
   VENDOR_SET_CURRENT_PATIENT_ID,
   VENDOR_SET_CURRENT_PATIENT_CATEGORY_ID,
   VENDOR_SET_OPEN_PATIENT_MODAL,
+  VENDOR_SCHEDULE_PATIENT,
+  VENDOR_SHOW_SCHEDULED_MODAL,
+  VENDOR_HIDE_SCHEDULED_MODAL,
   VENDOR_SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
   VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_LOADING,
   VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS,
@@ -58,6 +61,11 @@ import {
   VENDOR_SWITCH_TO_TEXT_SECTION_DETAIL,
   VENDOR_SWITCH_TO_EMAIL_SECTION_DETAIL,
   VENDOR_SWITCH_TO_OTHER_SECTION_DETAIL,
+  VENDOR_CHANGE_SCHEDULED_DATE,
+  VENDOR_SUBMIT_SCHEDULE,
+  VENDOR_SUBMIT_SCHEDULE_SUCCEEDED,
+  VENDOR_SUBMIT_SCHEDULE_FAILED,
+  VENDOR_SET_SCHEDULED_FORM_INITIALIZED,
   VENDOR_FETCH_PATIENTS_ERROR,
   VENDOR_DELETE_PATIENT,
   VENDOR_DELETE_PATIENT_SUCCESS,
@@ -401,6 +409,16 @@ export function addPatientNoteSuccess(patientId, patientCategoryId, currentUser,
   };
 }
 
+export function schedulePatient(studyId, fromCategoryId, toCategoryId, patientId) {
+  return {
+    type: VENDOR_SCHEDULE_PATIENT,
+    studyId,
+    fromCategoryId,
+    toCategoryId,
+    patientId,
+  };
+}
+
 export function submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId, afterPatientId) {
   return {
     type: VENDOR_SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
@@ -432,6 +450,20 @@ export function movePatientBetweenCategoriesSuccess(fromCategoryId, toCategoryId
 export function movePatientBetweenCategoriesFailed() {
   return {
     type: VENDOR_MOVE_PATIENT_BETWEEN_CATEGORIES_FAILED,
+  };
+}
+
+
+export function showScheduledModal(modalType) {
+  return {
+    type: VENDOR_SHOW_SCHEDULED_MODAL,
+    modalType,
+  };
+}
+
+export function hideScheduledModal() {
+  return {
+    type: VENDOR_HIDE_SCHEDULED_MODAL,
   };
 }
 
@@ -559,6 +591,43 @@ export function switchToEmailSectionDetail() {
 export function switchToOtherSectionDetail() {
   return {
     type: VENDOR_SWITCH_TO_OTHER_SECTION_DETAIL,
+  };
+}
+
+export function changeScheduledDate(date) {
+  return {
+    type: VENDOR_CHANGE_SCHEDULED_DATE,
+    date,
+  };
+}
+
+export function submitSchedule(data, fromCategoryId, scheduledCategoryId) {
+  return {
+    type: VENDOR_SUBMIT_SCHEDULE,
+    data,
+    fromCategoryId,
+    scheduledCategoryId,
+  };
+}
+
+export function submitScheduleSucceeded(schedules, patientId) {
+  return {
+    type: VENDOR_SUBMIT_SCHEDULE_SUCCEEDED,
+    schedules,
+    patientId,
+  };
+}
+
+export function submitScheduleFailed() {
+  return {
+    type: VENDOR_SUBMIT_SCHEDULE_FAILED,
+  };
+}
+
+export function setScheduledFormInitialized(formInitialized) {
+  return {
+    type: VENDOR_SET_SCHEDULED_FORM_INITIALIZED,
+    formInitialized,
   };
 }
 
