@@ -80,6 +80,43 @@ export class Header extends React.Component { // eslint-disable-line react/prefe
     const { isLoggedIn, userDataFetched, location } = this.props;
     const { menuCollapsed } = this.state;
     const isLoginPage = (location.pathname === '/login');
+    const isAllerganPage = (location.pathname === '/stomachstudy');
+    if (isAllerganPage) {
+      return (
+        <header id="header">
+          <img src={studyKikLogo} alt="Study KIK" width="260" height="38" className="visible-print-block logo-print" />
+          <nav className="navbar navbar-default">
+            <div className="container-fluid">
+              <div className="navbar-header">
+                {!this.isLandingPage(location.pathname) &&
+                <button
+                  ref={(button) => { this.button = button; }}
+                  onClick={this.handleClick}
+                  type="button"
+                  className="navbar-toggle collapsed"
+                >
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                </button>
+                }
+                <div className={classNames('logo-holder', { loginPage: isLoginPage })}>
+                  <Link
+                    to="/"
+                    className="navbar-brand"
+                    onClick={this.handleLogoClick}
+                  >
+                    <img src={studyKikLogo} alt="Study KIK" width="150" />
+                  </Link>
+                </div>
+              </div>
+              <div className="navbar-collapse holder"></div>
+            </div>
+          </nav>
+        </header>
+      );
+    }
     return (
       <header id="header">
         {isLoggedIn &&
