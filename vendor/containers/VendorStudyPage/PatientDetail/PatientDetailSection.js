@@ -16,9 +16,9 @@ import {
   setCurrentPatientCategoryId, setCurrentPatientId, submitMovePatientBetweenCategories,
   submitPatientUpdate,
 } from '../actions';
-import { selectPatientBoardLoading, selectSubmittingSchedule } from '../selectors';
+import { selectPatientBoardLoading } from '../selectors';
 import formValidator from './detailValidator';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../App/form.selectors';
 import ReactSelect from '../../../components/Input/ReactSelect';
 import { translate } from '../../../../common/utilities/localization';
@@ -38,7 +38,6 @@ class PatientDetailSection extends React.Component {
     setCurrentPatientCategoryId: React.PropTypes.func,
     setCurrentPatientId: React.PropTypes.func,
     submitting: React.PropTypes.bool.isRequired,
-    submittingSchedule: React.PropTypes.object,
     submitPatientUpdate: React.PropTypes.func.isRequired,
     submitMovePatientBetweenCategories: React.PropTypes.func.isRequired,
     formSyncErrors: React.PropTypes.object,
@@ -48,16 +47,12 @@ class PatientDetailSection extends React.Component {
     site: React.PropTypes.object,
     currentUser: React.PropTypes.object,
     patientCategories: React.PropTypes.array,
-    onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      openScheduledModal: false,
-    };
     this.targetCategory = null;
 
     this.onReset = this.onReset.bind(this);
@@ -66,8 +61,7 @@ class PatientDetailSection extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (this.targetCategory && ((newProps.patientBoardLoading && !this.props.patientBoardLoading) ||
-      (newProps.submittingSchedule.submitting && !this.props.submittingSchedule.submitting && !newProps.submittingSchedule.error))) {
+    if (this.targetCategory && newProps.patientBoardLoading && !this.props.patientBoardLoading) {
       this.props.setCurrentPatientCategoryId(this.targetCategory);
       this.props.setCurrentPatientId(this.props.initialValues.id);
       this.targetCategory = null;
@@ -88,8 +82,7 @@ class PatientDetailSection extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
-    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate, submitMovePatientBetweenCategories,
-      onPatientDraggedToScheduled, studyId } = this.props;
+    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientUpdate, submitMovePatientBetweenCategories, studyId } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
       // change the phone number to be formatted for display
       const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
@@ -104,11 +97,7 @@ class PatientDetailSection extends React.Component {
         unsubscribed: formValues.unsubscribed,
       });
       if (initialValues.patientCategoryId !== formValues.patientCategoryId) {
-        if (formValues.patientCategoryId === 5) {
-          onPatientDraggedToScheduled(initialValues.id, initialValues.patientCategoryId, formValues.patientCategoryId);
-        } else {
-          submitMovePatientBetweenCategories(studyId, initialValues.patientCategoryId, formValues.patientCategoryId, initialValues.id, null);
-        }
+        submitMovePatientBetweenCategories(studyId, initialValues.patientCategoryId, formValues.patientCategoryId, initialValues.id, null);
         this.targetCategory = formValues.patientCategoryId;
       }
     }
@@ -255,7 +244,6 @@ const mapStateToProps = createStructuredSelector({
   formValues: selectValues(formName),
   formDidChange: selectFormDidChange(formName),
   patientBoardLoading: selectPatientBoardLoading(),
-  submittingSchedule: selectSubmittingSchedule(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

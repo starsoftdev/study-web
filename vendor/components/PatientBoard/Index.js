@@ -9,31 +9,22 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { createStructuredSelector } from 'reselect';
 import { push } from 'react-router-redux';
-import moment from 'moment-timezone';
-import _ from 'lodash';
-import { touch, change } from 'redux-form';
+import { change } from 'redux-form';
 import * as Scroll from 'react-scroll';
 
-import { SchedulePatientModalType } from '../../common/constants/index';
 import LoadingSpinner from '../LoadingSpinner';
 import PatientDetailModal from '../../containers/VendorStudyPage/PatientDetail/PatientDetailModal';
-import ScheduledPatientModal from '../../containers/VendorStudyPage/ScheduledPatientModal/index';
 import {
   fetchPatientDetails,
-  showScheduledModal,
-  hideScheduledModal,
   setCurrentPatientCategoryId,
   setCurrentPatientId,
   setOpenPatientModal,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
   readStudyPatientMessages,
-  changeScheduledDate,
-  submitSchedule,
   updatePatientSuccess,
 } from '../../containers/VendorStudyPage/actions';
 import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
-import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
 import * as Selector from '../../containers/VendorStudyPage/selectors';
 import PatientCategory from './PatientCategory';
 import { selectValues } from '../../containers/App/form.selectors';
@@ -48,24 +39,16 @@ class PatientBoard extends React.Component {
     currentPatient: React.PropTypes.object,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     openPatientModal: React.PropTypes.bool.isRequired,
-    openScheduledModal: React.PropTypes.bool.isRequired,
-    schedulePatientFormValues: React.PropTypes.object,
     patientCategories: React.PropTypes.array.isRequired,
     setCurrentPatientId: React.PropTypes.func.isRequired,
     setCurrentPatientCategoryId: React.PropTypes.func.isRequired,
     setOpenPatientModal: React.PropTypes.func.isRequired,
-    showScheduledModal: React.PropTypes.func.isRequired,
-    hideScheduledModal: React.PropTypes.func.isRequired,
-    changeScheduledDate: React.PropTypes.func.isRequired,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
     push: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object.isRequired,
-    touchSchedulePatientModal: React.PropTypes.func.isRequired,
     sites: React.PropTypes.array,
-    submitSchedule: React.PropTypes.func.isRequired,
-    schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
@@ -81,19 +64,14 @@ class PatientBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showScheduledPatientModal: false,
       stick: false,
     };
     this.onPatientClick = this.onPatientClick.bind(this);
     this.onPatientTextClick = this.onPatientTextClick.bind(this);
-    this.onPatientDraggedToScheduled = this.onPatientDraggedToScheduled.bind(this);
     this.closePatientModal = this.closePatientModal.bind(this);
-    this.closePatientScheduleModal = this.closePatientScheduleModal.bind(this);
     this.showModal = this.showModal.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.resetFormsValues = this.resetFormsValues.bind(this);
-    this.onPatientScheduleSubmit = this.onPatientScheduleSubmit.bind(this);
-    this.handleDateChange = this.handleDateChange.bind(this);
     this.loadItems = this.loadItems.bind(this);
   }
 
@@ -120,15 +98,6 @@ class PatientBoard extends React.Component {
     }
     // set up the redux state for opening the modal
     setOpenPatientModal(show);
-  }
-
-  onPatientDraggedToScheduled(patientId, patientCategoryId, scheduledCategoryId) {
-    const { setCurrentPatientId, setCurrentPatientCategoryId, showScheduledModal } = this.props;
-    setCurrentPatientId(patientId);
-    setCurrentPatientCategoryId(patientCategoryId);
-    if (patientCategoryId !== scheduledCategoryId) {
-      showScheduledModal(SchedulePatientModalType.CREATE);
-    }
   }
 
   onPatientTextClick(category, patient) {
@@ -163,46 +132,6 @@ class PatientBoard extends React.Component {
     setOpenPatientModal(show);
   }
 
-  onPatientScheduleSubmit(e) {
-    e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
-
-    if (schedulePatientFormErrors) {
-      touchSchedulePatientModal();
-      return;
-    }
-
-    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
-
-    const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
-    const formValues = schedulePatientFormValues;
-    let currentAppointmentId;
-
-    const time = scheduledDate.hour(formValues.period === 'AM' ? formValues.hour % 12 : (formValues.hour % 12) + 12).minute(formValues.minute);
-
-    if (currentPatient.appointments && currentPatient.appointments[0]) {
-      currentAppointmentId = currentPatient.appointments[0].id;
-    }
-
-    const submitData = {
-      id: currentAppointmentId,
-      patientId: currentPatient.id,
-      time: time.utc(),
-      textReminder: formValues.textReminder || false,
-    };
-
-    // Get category info, so that upon successful schedule submission, the patient will be moved into the
-    // scheduled category.
-    const scheduledCategoryId = _.find(patientCategories, { name: 'Scheduled' }).id;
-
-    this.props.submitSchedule(submitData, currentPatientCategoryId, scheduledCategoryId);
-  }
-
-  handleDateChange(date) {
-    const { changeScheduledDate } = this.props;
-    changeScheduledDate(date);
-  }
-
   closePatientModal() {
     const { setCurrentPatientId, setCurrentPatientCategoryId, setOpenPatientModal } = this.props;
     setCurrentPatientId(-1);
@@ -211,19 +140,6 @@ class PatientBoard extends React.Component {
 
     // set up the redux state for opening the modal
     setOpenPatientModal(false);
-  }
-
-  closePatientScheduleModal() {
-    const { setCurrentPatientId, setCurrentPatientCategoryId, hideScheduledModal, openPatientModal } = this.props;
-    // do not reset selection if patient detail modal is open
-    if (!openPatientModal) {
-      setCurrentPatientId(-1);
-      setCurrentPatientCategoryId(-1);
-      this.resetFormsValues();
-    }
-
-    // set up the redux state for opening the modal
-    hideScheduledModal();
   }
 
   resetFormsValues() {
@@ -269,10 +185,10 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
+    const { patientCategories, openPatientModal, ePMS, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
-        <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
+        <div className={classNames('patients-list-area', { 'form-active': openPatientModal })}>
           {(fetchingPatients) && <LoadingSpinner showOnlyIcon={false} noMessage />}
           <nav className="nav-status">
             <ul className={classNames('list-inline', { stick: this.state.stick })}>
@@ -283,7 +199,6 @@ class PatientBoard extends React.Component {
                   category={patientCategory}
                   onPatientClick={this.onPatientClick}
                   onPatientTextClick={this.onPatientTextClick}
-                  onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
                   hasMoreItems={paginationOptions.hasMoreItems}
                   loadMore={this.loadMore}
                 />
@@ -295,9 +210,7 @@ class PatientBoard extends React.Component {
             params={params}
             ePMS={ePMS}
             patientCategories={patientCategories}
-            onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
           />
-          <ScheduledPatientModal show={openScheduledModal && currentPatient !== null} onHide={this.closePatientScheduleModal} handleSubmit={this.onPatientScheduleSubmit} handleDateChange={this.handleDateChange} />
         </div>
         <div className="patients-form-closer" onClick={this.closePatientModal} />
       </div>
@@ -311,12 +224,8 @@ const mapStateToProps = createStructuredSelector({
   currentPatientCategoryId: Selector.selectCurrentPatientCategoryId(),
   carousel: Selector.selectCarousel(),
   openPatientModal: Selector.selectOpenPatientModal(),
-  openScheduledModal: Selector.selectOpenScheduledModal(),
-  schedulePatientFormValues: Selector.selectSchedulePatientFormValues(),
-  schedulePatientFormErrors: Selector.selectSchedulePatientFormErrors(),
   sites: selectSites(),
   studyId: Selector.selectStudyId(),
-  selectedDate: Selector.selectSelectedDate(),
   currentUser: selectCurrentUser(),
   studyPatientsFilter: selectValues('filterStudyPatients'),
 });
@@ -327,16 +236,11 @@ const mapDispatchToProps = (dispatch) => (
     setCurrentPatientId: (id) => dispatch(setCurrentPatientId(id)),
     setCurrentPatientCategoryId: (id) => dispatch(setCurrentPatientCategoryId(id)),
     setOpenPatientModal: (show) => dispatch(setOpenPatientModal(show)),
-    showScheduledModal: (type) => dispatch(showScheduledModal(type)),
-    hideScheduledModal: () => dispatch(hideScheduledModal()),
     switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
     switchToTextSection: () => dispatch(switchToTextSectionDetail()),
-    changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
-    touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
-    submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),
     updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
   }
 );
