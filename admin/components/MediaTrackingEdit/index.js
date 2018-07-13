@@ -12,8 +12,8 @@ import RenderLeads from '../RenderLeads';
 import { selectValues, selectSyncErrorBool, selectFormFieldNames } from '../../common/selectors/form.selector';
 import { selectMessagingNumbers } from '../../containers/App/selectors';
 import { selectEditMediaTypesProcess } from '../../containers/AdminStudyEdit/selectors';
-import { deleteMediaType, editMediaTypes } from '../../containers/AdminStudyEdit/actions';
-import { fetchMediaTypes, fetchMessagingNumbers } from '../../containers/App/actions';
+import { fetchStudyMediaTypes, deleteStudyMediaType, editStudyMediaTypes } from '../../containers/AdminStudyEdit/actions';
+import { fetchMessagingNumbers } from '../../containers/App/actions';
 
 const formName = 'MediaTrackingForm';
 
@@ -24,14 +24,19 @@ const formName = 'MediaTrackingForm';
 
 export class MediaTrackingEdit extends Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    studyId: PropTypes.any,
     study: PropTypes.object,
-    editMediaTypesProcess: PropTypes.object,
     formValues: PropTypes.object,
     mediaTrackingFormError: PropTypes.bool,
     mediaTrackingFields: PropTypes.array,
     messagingNumbers: PropTypes.object,
-    fetchMediaTypes: PropTypes.func,
+    resetForm: PropTypes.func.isRequired,
+    change: PropTypes.func.isRequired,
+    fetchMessagingNumbers: PropTypes.func.isRequired,
+    fetchStudyMediaTypes: PropTypes.func,
+    editStudyMediaTypes: PropTypes.func,
+    deleteStudyMediaType: PropTypes.func.isRequired,
+    editMediaTypesProcess: PropTypes.object,
+    touchMediaTracking: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -40,13 +45,42 @@ export class MediaTrackingEdit extends Component { // eslint-disable-line react/
     this.submitMediaTrackingForm = this.submitMediaTrackingForm.bind(this);
   }
 
-  submitMediaTrackingForm() {
-    console.log('submitting form');
+  componentWillMount() {
+    const { study, fetchMessagingNumbers, fetchStudyMediaTypes, change } = this.props;
+    if (study.id) {
+      fetchMessagingNumbers();
+      fetchStudyMediaTypes(study.id);
+      change('mediaTracking', this.props.study.mediaTracking);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.resetForm();
+  }
+
+  submitMediaTrackingForm(e) {
+    const { mediaTrackingFormError, touchMediaTracking, mediaTrackingFields, study, formValues, editStudyMediaTypes } = this.props;
+    e.preventDefault();
+
+    if (mediaTrackingFormError) {
+      touchMediaTracking(mediaTrackingFields);
+      return;
+    }
+
+    // transform the Google URL submission to append http:// in front of it in case it isn't specified
+    if (formValues.mediaType && formValues.mediaType.length > 0) {
+      for (const mediaType of formValues.mediaType) {
+        if (mediaType.googleUrl && !/http(s)?:\/\//g.test(mediaType.googleUrl)) {
+          mediaType.googleUrl = `http://${mediaType.googleUrl}`;
+        }
+      }
+    }
+
+    editStudyMediaTypes(study.id, formValues.mediaType, formValues.mediaTracking || false);
   }
 
   render() {
-    const saving = false;
-    const { studyId, messagingNumbers, formValues, study } = this.props;
+    const { messagingNumbers, formValues, study, editMediaTypesProcess, deleteStudyMediaType } = this.props;
     const landingPageUrl = study ? study.landingPageUrl : '';
 
     return (
@@ -75,14 +109,14 @@ export class MediaTrackingEdit extends Component { // eslint-disable-line react/
                 isAdmin
                 formValues={formValues}
                 messagingNumbers={messagingNumbers}
-                deleteMediaType={deleteMediaType}
+                deleteMediaType={deleteStudyMediaType}
                 landingPageUrl={landingPageUrl}
-                studyId={studyId}
+                studyId={study.id}
               />
             </div>
             <div className="field-row text-right">
               <Button type="submit" bsStyle="primary" className="fixed-small-btn">
-                {saving
+                {editMediaTypesProcess.saving
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
                   : <span>Update</span>
                 }
@@ -107,12 +141,12 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => {
   return {
     change: (name, value) => dispatch(change(formName, name, value)),
-    deleteMediaType: (studyId, studySourceId, index) => dispatch(deleteMediaType(studyId, studySourceId, index)),
-    fetchMediaTypes: (studyId) => dispatch(fetchMediaTypes(studyId)),
+    deleteStudyMediaType: (studyId, studySourceId, index) => dispatch(deleteStudyMediaType(studyId, studySourceId, index)),
+    fetchStudyMediaTypes: (studyId) => dispatch(fetchStudyMediaTypes(studyId)),
     resetForm: () => dispatch(reset(formName)),
     touchMediaTracking: (fields) => dispatch(touch(formName, ...fields)),
     fetchMessagingNumbers: () => dispatch(fetchMessagingNumbers()),
-    editMediaTypes: (studyId, mediaTypes, mediaTracking) => dispatch(editMediaTypes(studyId, mediaTypes, mediaTracking)),
+    editStudyMediaTypes: (studyId, mediaTypes, mediaTracking) => dispatch(editStudyMediaTypes(studyId, mediaTypes, mediaTracking)),
   };
 };
 

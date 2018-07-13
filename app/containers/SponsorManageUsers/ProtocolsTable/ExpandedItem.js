@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import EditSponsorUserForm from '../../../containers/SponsorManageUsers/EditSponsorUserForm';
 import { selectEditUserProcess } from '../selectors';
 import { translate } from '../../../../common/utilities/localization';
