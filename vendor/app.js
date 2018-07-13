@@ -24,7 +24,7 @@ import 'codemirror/lib/codemirror.css';
 
 import configureStore from './store';
 
-import '../app/assets/less/main.less';
+import './assets/less/main.less';
 
 // Set up the router, wrapping all Routes in the App component
 import App from './containers/App';

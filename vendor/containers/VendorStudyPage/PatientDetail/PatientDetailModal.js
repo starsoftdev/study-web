@@ -219,7 +219,6 @@ export class PatientDetailModal extends React.Component {
                   <ol className="carousel-indicators">
                     <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>{translate('client.component.patientDetailModal.note')}</li>
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
-                    <li className={classNames({ active: carousel.email })} disabled onClick={() => {}}>{translate('client.component.patientDetailModal.email')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
                     <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
