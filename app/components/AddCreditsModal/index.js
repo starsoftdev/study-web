@@ -12,8 +12,8 @@ import { Field, reduxForm, touch, reset, change } from 'redux-form';
 import _ from 'lodash';
 import { toastr } from 'react-redux-toastr';
 
-import ReactSelect from '../../components/Input/ReactSelect';
-import CenteredModal from '../../components/CenteredModal/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import ShoppingCartForm from '../../components/ShoppingCartForm';
 import AddCreditCardModal from '../../components/AddCreditCardModal';
 import EditSiteForm from '../../components/EditSiteForm/index';

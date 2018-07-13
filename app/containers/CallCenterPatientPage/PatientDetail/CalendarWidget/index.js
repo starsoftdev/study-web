@@ -7,8 +7,8 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import classnames from 'classnames';
 import _ from 'lodash';
-import 'cc-react-big-calendar/lib/less/styles.less';
-import { SchedulePatientModalType } from '../../../../common/constants';
+import 'react-big-calendar/lib/less/styles.less';
+import { SchedulePatientModalType } from '../../../../../common/constants';
 import { translate } from '../../../../../common/utilities/localization';
 
 

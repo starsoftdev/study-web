@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
-import Input from '../../../../app/components/Input';
+import Input from '../../../../common/components/Input';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
 import { selectSyncErrorBool } from '../../../../common/selectors/form.selector';

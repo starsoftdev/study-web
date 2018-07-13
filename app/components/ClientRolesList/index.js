@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { Modal } from 'react-bootstrap';
 import { map, cloneDeep } from 'lodash';
 
-import CenteredModal from '../../components/CenteredModal/index';
+import CenteredModal from '../../../common/components/CenteredModal/index';
 import EditUserForm from '../../components/EditUserForm';
 import { selectCurrentUserClientId, selectSites, selectClientRoles, selectSelectedUser,
   selectDeletedClientRole, selectSavedUser, selectSelectedUserDetailsForForm } from '../../containers/App/selectors';
