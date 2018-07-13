@@ -127,7 +127,6 @@ class Patient extends React.Component {
         patientPhone = patient.phone;
       }
     }
-    console.log(patient, isLocked);
     return connectDragSource(
       <li
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId, locked: isLocked })}

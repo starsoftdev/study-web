@@ -20,6 +20,7 @@ import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
+import { selectValues } from '../../common/selectors/form.selector';
 import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
 import {
@@ -63,6 +64,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     paginationOptions: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
     patientBoardLoading: React.PropTypes.bool,
+    studyPatientsFilter: React.PropTypes.object,
   };
 
   static defaultProps = {
@@ -251,9 +253,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       );
     }
     const pageTitle = `${study.name} - StudyKIK`;
+    let pqsEnabled = false;
     const campaignOptions = campaigns.map(campaign => {
       const dateFrom = campaign.dateFrom ? moment(campaign.dateFrom).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
       const dateTo = campaign.dateTo ? moment(campaign.dateTo).tz(site.timezone).format('MM/DD/YYYY') : 'TBD';
+      if (campaign.patientQualificationSuite && campaign.id === this.props.studyPatientsFilter.campaign) {
+        pqsEnabled = true;
+      }
+
       return {
         label: `${dateFrom} - ${dateTo}`,
         value: campaign.id,
@@ -328,6 +335,13 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
             totalCountByGroups={totalCountByGroups}
           />
           <StudyStats stats={stats} />
+          {
+            pqsEnabled && (
+              <div className="notes">
+                Your campaign currenlty has prescreening active. <b>Please do not contact or update patients in the first two columns("New Patient" or "Call/Text Attempted"). </b>Once a patient has been pre-qualified they will appear in the action needed column for you to contact.
+              </div>
+            )
+          }
           <PatientBoard
             patientCategoriesTotals={patientCategoriesTotals}
             patientCategories={patientCategories}
@@ -363,6 +377,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   paginationOptions: Selector.selectPaginationOptions(),
   studySources: Selector.selectStudySources(),
+  studyPatientsFilter: selectValues('filterStudyPatients'),
 });
 
 function mapDispatchToProps(dispatch) {
