@@ -64,6 +64,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
     this.setVisible = this.setVisible.bind(this);
     this.onSelectFlag = this.onSelectFlag.bind(this);
+    this.isButtonDisabled = this.isButtonDisabled.bind(this);
   }
 
   componentDidMount() {
@@ -133,6 +134,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         errorMessage = subscriptionError.message;
       }
     }
+    const submitBtnDisabled = this.isButtonDisabled(ipcountryValue);
 
     return (
       <form
@@ -181,7 +183,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
           {ipcountryValue !== 'us' && this.renderGdprPhone()}
           {ipcountryValue !== 'us' && this.renderGdprToc()}
           <div className="field-row fixed-height">
-            <input className="btn btn-default btn-block input-lg" disabled={this.isButtonDisabled()} value={signupButtonText} type="submit" />
+            <input className="btn btn-default btn-block input-lg" disabled={submitBtnDisabled} value={signupButtonText} type="submit" />
           </div>
           {!landing.hideClickToCall &&
             <div className="field-row">
@@ -205,7 +207,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
   }
 
   isButtonDisabled(ipcountryValue) {
-    let countryCheck = false;
+    let countryCheck = true;
     if (ipcountryValue !== 'us') {
       countryCheck = this.state.gdprPhoneNumber && this.state.gdprTermsAndConditions;
     }
