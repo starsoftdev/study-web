@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import _ from 'lodash';
 import { Field } from 'redux-form';
 
-import Input from '../../components/Input/index';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input/index';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import { normalizePhoneDisplay, normalizePhoneForServer } from '../../common/helper/functions';
 
 class RenderPatientsList extends Component { // eslint-disable-line react/prefer-stateless-function
