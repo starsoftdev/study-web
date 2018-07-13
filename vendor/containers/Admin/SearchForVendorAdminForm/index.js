@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
 import { Field, reduxForm } from 'redux-form';
-import Input from '../../../../app/components/Input';
+import Input from '../../../../common/components/Input';
 
 const formName = 'VendorAdminPage.SearchForVendorAdminForm';
 

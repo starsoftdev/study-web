@@ -6,9 +6,9 @@ import { blur, change, Field, reduxForm } from 'redux-form';
 import classNames from 'classnames';
 import Alert from 'react-bootstrap/lib/Alert';
 
-import Checkbox from '../../../app/components/Input/Checkbox';
-import Input from '../../../app/components/Input';
-import mixIntlTelInput from '../../../app/components/Input/MixIntlTelInput';
+import Checkbox from '../../../common/components/Input/Checkbox';
+import Input from '../../../common/components/Input';
+import mixIntlTelInput from '../../../common/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
 import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
 import {
@@ -132,7 +132,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
         className="field-row fixed-height"
         bsClass={bsClass}
         onBlur={this.onPhoneBlur}
-        preferredCountries={[ipcountryValue.toLowerCase()]}
+        preferredCountries={[ipcountryValue]}
         onSelectFlag={this.onSelectFlag}
         onCodeChange={this.onCodeChange}
       />);
@@ -197,8 +197,8 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
             bsClass="form-control input-lg"
           />
           {phoneInput}
-          {ipcountryValue !== 'US' && this.renderGdprPhone()}
-          {ipcountryValue !== 'US' && this.renderGdprToc()}
+          {ipcountryValue !== 'us' && this.renderGdprPhone()}
+          {ipcountryValue !== 'us' && this.renderGdprToc()}
           <div className="field-row fixed-height">
             <input className="btn btn-default btn-block input-lg" disabled={this.isButtonDisabled()} value={signupButtonText} type="submit" />
           </div>
@@ -225,7 +225,7 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
   isButtonDisabled(ipcountryValue) {
     let countryCheck = false;
-    if (ipcountryValue !== 'US') {
+    if (ipcountryValue !== 'us') {
       countryCheck = this.state.gdprPhoneNumber && this.state.gdprTermsAndConditions;
     }
 
