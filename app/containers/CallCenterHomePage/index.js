@@ -17,7 +17,7 @@ import { selectIndications, selectCurrentUser } from '../App/selectors';
 import { fetchPatients, fetchSchedules } from './actions';
 import { selectFetchedPatients, selectSchedules } from './selectors';
 
-import CenteredModal from '../../components/CenteredModal';
+import CenteredModal from '../../../common/components/CenteredModal';
 import { translate } from '../../../common/utilities/localization';
 import FiltersForm from './FiltersForm/';
 

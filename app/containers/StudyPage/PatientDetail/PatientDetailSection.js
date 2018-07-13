@@ -10,8 +10,8 @@ import moment from 'moment-timezone';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import Checkbox from '../../../components/Input/Checkbox';
-import Input from '../../../components/Input/index';
+import Checkbox from '../../../../common/components/Input/Checkbox';
+import Input from '../../../../common/components/Input/index';
 import {
   setCurrentPatientCategoryId, setCurrentPatientId, submitMovePatientBetweenCategories,
   submitPatientUpdate,
@@ -20,7 +20,7 @@ import { selectPatientBoardLoading, selectSubmittingSchedule } from '../selector
 import formValidator from './detailValidator';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../common/selectors/form.selector';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Detail';
