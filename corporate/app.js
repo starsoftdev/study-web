@@ -33,6 +33,7 @@ import { default as ThankYouPage } from './containers/ThankYouPage';
 import { default as ThankYouPage2 } from './containers/ThankYouPage2';
 import { default as PrivacyRequestPage } from './containers/PrivacyRequest';
 import { default as CookiesAndOtherTechnologiesPage } from './containers/CookiesAndOtherTechnologiesPage';
+import { default as AllerganRegionalSearchPage } from './containers/AllerganRegionalSearchPage';
 
 import './assets/less/main.less';
 
@@ -60,6 +61,7 @@ const routes = {
   component: Corporate,
   indexRoute: { component: Home },
   childRoutes: [
+    { path: '/stomachstudy', component: AllerganRegionalSearchPage },
     { path: '/login/', component: LoginPage, onEnter: redirectLogin },
     { path: '/login', component: LoginPage },
     { path: '/dashboard', component: LoginPage, onEnter: redirectLogin },
