@@ -17,7 +17,9 @@ import { selectCurrentUser } from '../../containers/App/selectors';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import {
+  schedulePatient,
   submitMovePatientBetweenCategories,
+  showScheduledModal,
 } from '../../containers/VendorStudyPage/actions';
 import { translate } from '../../../common/utilities/localization';
 /**
@@ -31,7 +33,11 @@ const patientTarget = {
     }
 
     const patientDragSwitcher = (category, item, patientId) => {
-      if (item.patientCategoryId !== category.id) {
+      if (category.name === 'Scheduled') {
+        // store the scheduled patient information temporarily since the user could cancel out of their category movement
+        // props.schedulePatient(props.studyId, item.patientCategoryId, props.category.id, item.id);
+        props.onPatientDraggedToScheduled(item.id, item.patientCategoryId, category.id);
+      } else if (item.patientCategoryId !== category.id) {
         props.submitMovePatientBetweenCategories(props.studyId, item.patientCategoryId, category.id, item.id, patientId);
       }
     };
@@ -274,6 +280,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  /* action to schedule patient with a corresponding modal */
+  schedulePatient: (studyId, fromCategoryId, toCategoryId, patientId) => dispatch(schedulePatient(studyId, fromCategoryId, toCategoryId, patientId)),
+  showScheduledModal: () => dispatch(showScheduledModal()),
   submitMovePatientBetweenCategories: (studyId, fromCategoryId, toCategoryId, patientId, afterPatientId) => dispatch(submitMovePatientBetweenCategories(studyId, fromCategoryId, toCategoryId, patientId, afterPatientId)),
 });
 
