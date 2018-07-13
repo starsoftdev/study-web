@@ -334,15 +334,22 @@ const addProdMiddlewares = (app, options) => {
 
   app.get('/stomachstudy', async (req, res) => {
     try {
-      const environment = 'production';
       const fs = require('fs');
       const file = await readFile(fs, path.resolve(outputPath, 'corporate.html'));
-      let templateStr = null;
-      const re = new RegExp('GTM_ACCOUNT_ID', 'g');
-      if (environment === 'development') {
-        templateStr = file.toString().replace(re, settings.gtm.DEV);
-      } else if (environment === 'production') {
-        templateStr = file.toString().replace(re, settings.gtm.PROD);
+
+      let templateStr = file.toString();
+      const headEndPos = templateStr.indexOf('</head>');
+
+      if (headEndPos !== -1) {
+        templateStr = `${templateStr.substr(0, headEndPos)}<!-- Global site tag (gtag.js) - Google Analytics -->
+          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122334322-1"></script>
+          <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag()
+          {dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-122334322-1');
+          </script>${templateStr.substr(headEndPos)}`;
       }
       const result = templateStr
         .replace(
