@@ -29,7 +29,6 @@ import {
   VENDOR_SUBMIT_PATIENT_NOTE,
   VENDOR_SUBMIT_DELETE_NOTE,
   VENDOR_SUBMIT_MOVE_PATIENT_BETWEEN_CATEGORIES,
-  VENDOR_SUBMIT_SCHEDULE,
   VENDOR_DELETE_PATIENT,
   VENDOR_DOWNLOAD_CLIENT_REPORT,
   VENDOR_GENERATE_PATIENT_REFERRAL,
@@ -62,8 +61,6 @@ import {
   movePatientBetweenCategoriesLoading,
   movePatientBetweenCategoriesSuccess,
   movePatientBetweenCategoriesFailed,
-  submitScheduleSucceeded,
-  submitScheduleFailed,
   deletePatientSuccess,
   deletePatientError,
   submitEmailSuccess,
@@ -942,29 +939,6 @@ function* submitAddPatient() {
   }
 }
 
-export function* submitSchedule() {
-  while (true) {
-    const { data, fromCategoryId, scheduledCategoryId } = yield take(VENDOR_SUBMIT_SCHEDULE);
-    try {
-      const requestURL = `${API_URL}/appointments/upsertSchedule`;
-      const params = {
-        method: 'POST',
-        body: JSON.stringify(data),
-      };
-      const response = yield call(request, requestURL, params);
-      yield put(movePatientBetweenCategoriesSuccess(fromCategoryId, scheduledCategoryId, 1, data.patientId, moment().toISOString()));
-      yield put(submitScheduleSucceeded(response, data.patientId));
-    } catch (e) {
-      const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrScheduleErrorMessage'));
-      toastr.error('', errorMessage);
-      yield put(submitScheduleFailed(e));
-      if (e.status === 401) {
-        yield call(() => { location.href = '/login'; });
-      }
-    }
-  }
-}
-
 export function* deletePatient() {
   while (true) {
     const { id } = yield take(VENDOR_DELETE_PATIENT);
@@ -1003,7 +977,6 @@ export function* fetchStudySaga() {
     const watcherR = yield fork(submitAddPatient);
     const watcherS = yield fork(submitPatientNote);
     const watcherT = yield fork(submitDeleteNote);
-    const watcherV = yield fork(submitSchedule);
     const watcherW = yield fork(downloadReport);
     const watcherX = yield fork(downloadReferral);
     // // const watcherY = yield fork(generateReferral);
@@ -1031,7 +1004,6 @@ export function* fetchStudySaga() {
     yield cancel(watcherR);
     yield cancel(watcherS);
     yield cancel(watcherT);
-    yield cancel(watcherV);
     yield cancel(watcherW);
     yield cancel(watcherX);
     // yield cancel(watcherY);

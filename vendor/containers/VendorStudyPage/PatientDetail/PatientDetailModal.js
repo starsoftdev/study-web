@@ -10,16 +10,14 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import { SchedulePatientModalType } from '../../../common/constants/index';
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
 import TextSection from './TextSection';
 import OtherSection from './OtherSection';
-import { normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneDisplay } from '../../../../common/helper/functions';
 import {
-  showScheduledModal,
   fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
@@ -45,7 +43,6 @@ export class PatientDetailModal extends React.Component {
     openPatientModal: React.PropTypes.bool.isRequired,
     fetchPatientDetails: React.PropTypes.func.isRequired,
     onClose: React.PropTypes.func.isRequired,
-    showScheduledModal: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
     socket: React.PropTypes.any,
     switchToNoteSection: React.PropTypes.func.isRequired,
@@ -56,7 +53,6 @@ export class PatientDetailModal extends React.Component {
     ePMS: React.PropTypes.bool,
     updatePatientSuccess: React.PropTypes.func,
     patientCategories: React.PropTypes.array,
-    onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -64,9 +60,7 @@ export class PatientDetailModal extends React.Component {
     this.onSelectText = this.onSelectText.bind(this);
     this.renderOtherSection = this.renderOtherSection.bind(this);
     this.renderPatientDetail = this.renderPatientDetail.bind(this);
-    this.renderScheduledTime = this.renderScheduledTime.bind(this);
     this.state = {
-      showScheduledPatientModal: false,
       socketBinded: false,
     };
     this.onSelectText = this.onSelectText.bind(this);
@@ -151,7 +145,6 @@ export class PatientDetailModal extends React.Component {
           studyId={studyId}
           currentUser={currentUser}
           patientCategories={patientCategories}
-          onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
         />
       );
     }
@@ -159,13 +152,13 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderScheduledTime() {
-    const { currentPatientCategory, currentPatient, currentUser, showScheduledModal } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0 && currentPatient.appointments[0]) {
         const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
         const scheduleDate =  moment(currentPatient.appointments[0].utcTime).tz(timezone);
         return (
-          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
+          <a className="modal-opener">
             <span className="date">{scheduleDate.format(translate('client.component.patientDetailModal.dateMask'))}</span>
             <span> {translate('client.component.patientDetailModal.at')} </span>
             <span className="time">{scheduleDate.format(translate('client.component.patientDetailModal.timeMask'))} ({moment.tz(timezone).format('z')})</span>
@@ -174,7 +167,7 @@ export class PatientDetailModal extends React.Component {
       }
 
       return (
-        <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.CREATE)}>
+        <a className="modal-opener">
           {translate('client.component.patientDetailModal.appointment')}
         </a>
       );
@@ -248,7 +241,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  showScheduledModal: (type) => dispatch(showScheduledModal(type)),
   fetchPatientDetails: (patientId, patientCategoryId) => dispatch(fetchPatientDetails(patientId, patientCategoryId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),

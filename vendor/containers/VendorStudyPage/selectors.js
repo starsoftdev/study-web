@@ -153,12 +153,6 @@ export const selectOpenPatientModal = () => createSelector(
   (subState) => subState.openPatientModal
 );
 
-
-export const selectOpenScheduledModal = () => createSelector(
-  selectStudyPageDomain(),
-  (subState) => subState.openScheduledModal
-);
-
 export const selectAddPatientStatus = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.addPatientStatus
@@ -167,16 +161,6 @@ export const selectAddPatientStatus = () => createSelector(
 export const selectIndicationId = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.study.indication_id
-);
-
-export const selectSelectedDate = () => createSelector(
-  selectStudyPageDomain(),
-  (subState) => (subState.ScheduledModal ? subState.ScheduledModal.selectedDate : null)
-);
-
-export const selectSubmittingSchedule = () => createSelector(
-  selectStudyPageDomain(),
-  (subState) => subState.submittingSchedule
 );
 
 export const selectSubmittingEmail = () => createSelector(
@@ -194,11 +178,6 @@ export const selectDeletePatientProcess = () => createSelector(
   (subState) => subState.deletePatientProcess
 );
 
-export const selectScheduledFormInitialized = () => createSelector(
-  selectStudyPageDomain(),
-  (subState) => subState.scheduledFormInitialized
-);
-
 export const selectPatientCategoriesTotals = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.patientCategoriesTotals
@@ -212,16 +191,6 @@ export const selectFetchingPatientsError = () => createSelector(
 export const selectPatientBoardLoading = () => createSelector(
   selectStudyPageDomain(),
   (subState) => subState.patientBoardLoading
-);
-
-export const selectSchedulePatientFormValues = () => createSelector(
-  selectFormDomain(),
-  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.values : null)
-);
-
-export const selectSchedulePatientFormErrors = () => createSelector(
-  selectFormDomain(),
-  (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.syncErrors : null)
 );
 
 export const selectStudySources = () => createSelector(
