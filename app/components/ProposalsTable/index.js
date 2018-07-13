@@ -9,7 +9,7 @@ import { Field, reduxForm } from 'redux-form';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import InfiniteScroll from 'react-infinite-scroller';
-import Checkbox from '../../components/Input/Checkbox';
+import Checkbox from '../../../common/components/Input/Checkbox';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { translate } from '../../../common/utilities/localization';
 

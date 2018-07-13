@@ -8,7 +8,7 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../../app/common/helper/functions';
 import RowItem from './RowItem';
-import CenteredModal from '../../../components/CenteredModal/index';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
 import { AddUserForm } from '../../DashboardManageUsers/DashboardManageUsersAddUserForm';
 import { selectDashboardAdmins, selectDashboardEditUserProcess, selectDashboardManageUsersSearchFormValues, selectPaginationOptions } from '../selectors';
 import { editDashboardUser, deleteDashboardUser, setActiveSort } from '../actions';

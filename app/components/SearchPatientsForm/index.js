@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../../components/Input';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import { selectSearchPatientsFormError } from './selectors';
 import { selectPatientCategories, selectPatients } from '../../containers/PatientDatabasePage/selectors';
 import { selectValues } from '../../common/selectors/form.selector';
@@ -14,7 +14,7 @@ import formValidator from './validator';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PatientActionButtons from '../../containers/PatientDatabasePage/PatientActionButtons';
 
-import ReactMultiSelect from '../../components/Input/ReactMultiSelect';
+import ReactMultiSelect from '../../../common/components/Input/ReactMultiSelect';
 import { translate } from '../../../common/utilities/localization';
 
 const formName = 'searchPatients';
