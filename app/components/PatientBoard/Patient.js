@@ -30,6 +30,9 @@ const patientSource = {
     };
     return item;
   },
+  canDrag(props) {
+    return !props.isLocked;
+  },
 };
 
 const collect = (connect, monitor) => ({
@@ -129,8 +132,9 @@ class Patient extends React.Component {
     }
     return connectDragSource(
       <li
-        className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId, locked: isLocked })}
+        className={classNames({ 'patient-li': !isLocked, 'patient-selected': patient.id === currentPatientId, locked: isLocked })}
         data-patient-id={patient.id}
+        draggable={!isLocked}
       >
         <div className="patient-inner">
           <a
