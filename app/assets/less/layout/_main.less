@@ -5110,6 +5110,7 @@ div[data-percentage],
       position: fixed;
       top: 71px;
       z-index: 1000;
+      width: 100%;
       .number {
         top: 17px;
       }
@@ -5184,8 +5185,8 @@ div[data-percentage],
         + li {
           border-top: solid 2px #ccc;
         }
-        &.patient-selected,
-        &:hover {
+        &.patient-selected:not(.locked),
+        &:hover:not(.locked) {
           .patient-inner {
             height: 100%;
             background: #00afef;
