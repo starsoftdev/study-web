@@ -41,9 +41,9 @@ class PatientInfo extends Component {
       phone = patientData.phone;
       signUpDate = formatDate(patientData.createdAt);
       updatedDate = formatDate(patientData.updatedAt);
-      dob = formatDate(patientData.dob, 'MM/DD/YYYY');
-      gender = patientData.gender;
-      bmi = patientData.bmi;
+      dob = patientData.dob ? formatDate(patientData.dob, 'MM/DD/YYYY') : translate('common.constants.na');
+      gender = patientData.gender || translate('common.constants.na');
+      bmi = patientData.bmi || translate('common.constants.na');
     }
 
     return (
@@ -60,21 +60,17 @@ class PatientInfo extends Component {
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
               <div className="info-container">
-                <span>{translate('container.page.callCenterPatient.label.name')}: {name}</span>
-                <span>{translate('container.page.callCenterPatient.label.email')}: {email}</span>
-                <span>{translate('container.page.callCenterPatient.label.phone')}: {phone}</span>
-                <span>{translate('container.page.callCenterPatient.label.signedUp')}: {signUpDate}</span>
-                <span>{translate('container.page.callCenterPatient.label.updated')}: {updatedDate}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.name')}:</b> {name}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.email')}:</b> {email}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.phone')}:</b> {phone}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.signedUp')}:</b> {signUpDate}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.updated')}:</b> {updatedDate}</span>
               </div>
             ) : (
               <div className="info-container">
-                <span>{translate('container.page.callCenterPatient.label.dob')}: {dob}</span>
-                {gender &&
-                  <span>{translate('container.page.callCenterPatient.label.gender')}: {gender}</span>
-                }
-                {bmi &&
-                  <span>{translate('container.page.callCenterPatient.label.bmi')}: {bmi}</span>
-                }
+                <span><b>{translate('container.page.callCenterPatient.label.dob')}:</b> {dob}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.gender')}:</b> {gender}</span>
+                <span><b>{translate('container.page.callCenterPatient.label.bmi')}:</b> {bmi}</span>
               </div>
             )}
           </div>
