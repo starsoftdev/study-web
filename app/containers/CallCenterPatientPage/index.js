@@ -280,7 +280,6 @@ class CallCenterPatientPage extends Component {
     return (
       <div id="cc-patient-page">
         <div className="header">
-          <a className="landingpage-url" href={`/${landingPageURL}`} target="_blank">{studyId}</a>
           <Tabs
             onExit={this.handleExit}
             onSelectTab={this.handleSelectTab}
@@ -290,6 +289,7 @@ class CallCenterPatientPage extends Component {
 
         <div className="page-content">
           <div className="left-section">
+            <a className="landingpage-url" href={`/${landingPageURL}`} target="_blank">{studyId}</a>
             <div className="wrapper">
               <PatientInfo patient={patient} />
               <SiteLocationInfo site={siteForPatient} protocol={protocolForPatient} indications={patientIndications} />
