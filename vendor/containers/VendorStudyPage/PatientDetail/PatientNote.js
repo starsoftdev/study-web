@@ -35,16 +35,13 @@ class PatientNote extends React.Component {
   }
 
   render() {
-    const { currentPatient, currentUser, note, submitDeleteNote } = this.props;
+    const { currentUser, note } = this.props;
     return (
       <div className={classNames('note-msg', { reply: (note.user && note.user.id === currentUser.id) })}>
         <div className="note">
           <div className="note-header">
             <a
               className="btn-trash"
-              onClick={() => {
-                submitDeleteNote(currentPatient.id, currentPatient.patientCategoryId, note.id);
-              }}
             >
               <i className="icomoon-icon_trash" />
             </a>
