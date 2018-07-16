@@ -11,13 +11,13 @@ function SiteLocationInfo({ indications, site, protocol }) {
   return (
     <div className="site-location-info">
       <div className="info-container">
-        <span>{translate('container.page.callCenterPatient.label.siteLocation')}: {site.name}</span>
-        <span>{translate('container.page.callCenterPatient.label.address')}: {site.address}</span>
-        <span>{translate('container.page.callCenterPatient.label.protocol')}: {protocol.number}</span>
+        <span><b>{translate('container.page.callCenterPatient.label.siteLocation')}:</b> {site.name}</span>
+        <span><b>{translate('container.page.callCenterPatient.label.address')}:</b> {site.address}</span>
+        <span><b>{translate('container.page.callCenterPatient.label.protocol')}:</b> {protocol.number}</span>
         {indication &&
-          <span>{translate('container.page.callCenterPatient.label.indication')}: {indication.indication.name}</span>
+          <span><b>{translate('container.page.callCenterPatient.label.indication')}:</b> {indication.indication.name}</span>
         }
-        <span>{translate('container.page.callCenterPatient.label.recruitmentPhone')}: {site.phoneNumber}</span>
+        <span><b>{translate('container.page.callCenterPatient.label.recruitmentPhone')}:</b> {site.phoneNumber}</span>
       </div>
     </div>
   );
