@@ -113,7 +113,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
         <div>
           {
             values.map((value, index) => (
-              <strong key={index} className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
+              <strong key={index} className={'number'}>
                 <span>
                   { value.totals[field] }
                   { field !== 'total' && <span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span> }
@@ -170,11 +170,11 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
               { this.renderValues(totalValues, 'call_attempted') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
               { this.renderValues(totalValues, 'dnq') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
               { this.renderValues(totalValues, 'action_needed') }
             </li>
@@ -186,7 +186,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
               <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
               { this.renderValues(totalValues, 'consented') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
               { this.renderValues(totalValues, 'screen_failed') }
             </li>
