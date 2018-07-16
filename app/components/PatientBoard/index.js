@@ -282,7 +282,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals, studyPatientsFilter } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -294,6 +294,7 @@ class PatientBoard extends React.Component {
                   key={patientCategory.id}
                   patientCategoriesTotals={patientCategoriesTotals}
                   category={patientCategory}
+                  campaign={studyPatientsFilter.campaign}
                   onPatientClick={this.onPatientClick}
                   onPatientTextClick={this.onPatientTextClick}
                   onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
