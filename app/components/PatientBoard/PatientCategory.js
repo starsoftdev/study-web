@@ -11,6 +11,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
+import moment from 'moment-timezone';
 
 import * as Selector from '../../containers/StudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -95,6 +96,7 @@ const collect = (connect, monitor) => ({
   itemType: monitor.getItemType(),
 });
 
+const CALL_ATTEMPT_ID = 2;
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
@@ -102,6 +104,8 @@ class PatientCategory extends React.Component {
     study: React.PropTypes.object.isRequired,
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
+    campaign: React.PropTypes.number,
+    campaigns: React.PropTypes.any,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
     currentSite: React.PropTypes.object,
@@ -121,6 +125,7 @@ class PatientCategory extends React.Component {
     };
     this.handleResize = this.handleResize.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
+    this.isLocked = this.isLocked.bind(this);
   }
 
   componentDidMount() {
@@ -155,6 +160,28 @@ class PatientCategory extends React.Component {
     const patientColumn = this.patientColumn;
 
     this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
+  }
+
+  isLocked(patient) {
+    const { campaign, campaigns, category } = this.props;
+    if (category.id <= CALL_ATTEMPT_ID) {
+      if (campaign) {
+        const c = _.find(campaigns, { id: campaign });
+        return c.patientQualificationSuite;
+      } else {
+        return _.findIndex(campaigns, c => {
+          if (c.patientQualificationSuite) {
+            const createdAt = moment(patient.createdAt);
+            const start = moment(c.dateFrom);
+            const end = moment(c.dateTo);
+            return createdAt.isAfter(start) && createdAt.isBefore(end);
+          }
+          return false;
+        }) > -1;
+
+      }
+    }
+    return false;
   }
 
   rowRenderer = ({ key, index, style }) => {
@@ -193,6 +220,7 @@ class PatientCategory extends React.Component {
           onPatientClick={this.props.onPatientClick}
           onPatientTextClick={this.props.onPatientTextClick}
           style={{ height: itemHeight }}
+          isLocked={this.isLocked(patient)}
         />
       ))}
     </ul>
@@ -277,6 +305,7 @@ const mapStateToProps = createStructuredSelector({
   study: Selector.selectStudy(),
   studyId: Selector.selectStudyId(),
   currentUser: selectCurrentUser(),
+  campaigns: Selector.selectCampaigns(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
