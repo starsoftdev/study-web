@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import { reset, blur, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
@@ -130,12 +131,18 @@ class PatientDetailSection extends React.Component {
 
   render() {
     const { submitting, initialValues, site, currentUser, patientCategories } = this.props;
+
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
     const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
     const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
+
+    const { dispositions } = initialValues;
+    const disposition = dispositions && dispositions.length
+      ? translate(`common.disposition.label${dispositions[0].dispositionKey}`)
+      : translate('common.constants.na');
 
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
@@ -207,6 +214,15 @@ class PatientDetailSection extends React.Component {
               placeholder={translate('client.component.patientDetailSection.placeholderStatus')}
               clearable={false}
             />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label htmlFor="patient-disposition">{translate('client.component.patientDetailSection.labelDisposition')}</label>
+          </strong>
+          <div className="field">
+            <FormControl disabled="true" type="text" value={disposition} />
           </div>
         </div>
 
