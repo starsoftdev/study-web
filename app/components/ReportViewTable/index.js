@@ -17,6 +17,7 @@ export class ReportViewTable extends React.Component {
     totals: PropTypes.object,
     loadReports: PropTypes.func,
     openNotesModal: PropTypes.func,
+    openStatsModal: PropTypes.func,
   }
 
   constructor(props) {
@@ -32,7 +33,7 @@ export class ReportViewTable extends React.Component {
   }
 
   render() {
-    const { reportsList, getPercentageObject, openNotesModal, paginationOptions, totals } = this.props;
+    const { reportsList, getPercentageObject, openNotesModal, openStatsModal, paginationOptions, totals } = this.props;
     const inActive = (totals.details[totals.source] && totals.details[totals.source].total_inactive) ? parseInt(totals.details[totals.source].total_inactive) : 0;
     const active = (totals.details[totals.source] && totals.details[totals.source].total_active) ? parseInt(totals.details[totals.source].total_active) : 0;
     const total = inActive + active;
@@ -59,6 +60,7 @@ export class ReportViewTable extends React.Component {
                 order={index}
                 percentage={getPercentageObject(item)}
                 openNotesModal={openNotesModal}
+                openStatsModal={() => openStatsModal(item)}
               />)
             }
           </div>

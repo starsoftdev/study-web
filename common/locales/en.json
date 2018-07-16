@@ -933,6 +933,7 @@
     "sponsor.component.reportItem.mediaType": "Media Type",
     "sponsor.component.reportItem.mediaName": "Media Name",
     "sponsor.component.reportItem.disposition": "Disposition",
+    "sponsor.component.reportItem.morestats": "MORE STATS",
 
     "sponsor.component.patientNote.studyKIK": "StudyKIK",
     "sponsor.component.patientNote.defaultDateMask": "MM/DD/YY",
