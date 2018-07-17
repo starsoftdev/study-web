@@ -32,7 +32,7 @@ class PatientText extends React.Component {
         <img alt="" src={textMessage.user.profileImageURL} />
       );
     } else if (textMessage.direction === 'outbound-api' || textMessage.direction === 'outbound') {
-      let url = require('../../../../app/assets/images/Default-User-Img-Dr.png');
+      let url = require('../../../../common/assets/images/Default-User-Img-Dr.png');
       if (this.props.currentUser.profileImageURL) {
         url = this.props.currentUser.profileImageURL;
       }
