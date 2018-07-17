@@ -130,7 +130,9 @@ class GlobalPMSModal extends React.Component { // eslint-disable-line react/pref
             this.props.addMessagesCountStat(1);
           }
           this.props.updateSitePatients(socketMessage);
-          this.props.incrementStudyUnreadMessages(socketMessage.study_id);
+          if (socketMessage.isUnread) {
+            this.props.incrementStudyUnreadMessages(socketMessage.study_id);
+          }
         }
         if (this.props.showModal === true && this.state.selectedPatient && this.state.selectedPatient.id === socketMessage.patient_id) {
           this.props.fetchPatientMessages(this.state.selectedPatient.id);
