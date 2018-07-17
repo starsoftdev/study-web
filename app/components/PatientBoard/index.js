@@ -171,7 +171,8 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, sites, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate,
+      patientCategories, currentPatientCategoryId, sites, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
