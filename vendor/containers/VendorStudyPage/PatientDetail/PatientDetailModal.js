@@ -10,7 +10,6 @@ import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
 import CenteredModal from '../../../components/CenteredModal/index';
-import { SchedulePatientModalType } from '../../../common/constants/index';
 import { selectCurrentUser } from '../../App/selectors';
 import * as Selector from '../selectors';
 import PatientDetailSection from './PatientDetailSection';
@@ -159,13 +158,13 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderScheduledTime() {
-    const { currentPatientCategory, currentPatient, currentUser, showScheduledModal } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0 && currentPatient.appointments[0]) {
         const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
         const scheduleDate =  moment(currentPatient.appointments[0].utcTime).tz(timezone);
         return (
-          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
+          <a className="modal-opener">
             <span className="date">{scheduleDate.format(translate('client.component.patientDetailModal.dateMask'))}</span>
             <span> {translate('client.component.patientDetailModal.at')} </span>
             <span className="time">{scheduleDate.format(translate('client.component.patientDetailModal.timeMask'))} ({moment.tz(timezone).format('z')})</span>
@@ -174,7 +173,7 @@ export class PatientDetailModal extends React.Component {
       }
 
       return (
-        <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.CREATE)}>
+        <a className="modal-opener">
           {translate('client.component.patientDetailModal.appointment')}
         </a>
       );
@@ -219,7 +218,6 @@ export class PatientDetailModal extends React.Component {
                   <ol className="carousel-indicators">
                     <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>{translate('client.component.patientDetailModal.note')}</li>
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
-                    <li className={classNames({ active: carousel.email })} disabled onClick={() => {}}>{translate('client.component.patientDetailModal.email')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
                     <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
