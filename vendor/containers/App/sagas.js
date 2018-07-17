@@ -9,10 +9,15 @@ import request from '../../../common/utils/request';
 import { getItem, removeItem } from '../../../app/utils/localStorage';
 import { FETCH_ME_FROM_TOKEN, LOGOUT_REQUEST } from '../../containers/App/constants';
 import { setAuthState, setUserData } from '../../containers/App/actions';
+import { SET_SOCKET_CONNECTION } from '../../containers/GlobalNotifications/constants';
+import { connectionEstablished } from '../../containers/GlobalNotifications/actions';
+
+let socket = null;
 
 export default function* vendorAppSaga() {
   yield fork(fetchMeSaga);
   yield fork(logoutSaga);
+  yield fork(setSocketConnection);
 }
 
 
@@ -83,5 +88,22 @@ export function* logout() {
     yield call(removeItem, 'auth_time');
   } catch (err) {
     // yield put()
+  }
+}
+
+export function* setSocketConnection() {
+  while (true) {
+    const { payload } = yield take(SET_SOCKET_CONNECTION);
+    try {
+      if (!socket) {
+        const requestURL = `${SOCKET_URL}/${payload.nsp}`;
+        const nsp = window.io(requestURL);
+        socket = nsp;
+        yield put(connectionEstablished(nsp));
+        payload.cb(null, socket);
+      }
+    } catch (err) {
+      payload.cb(err, null);
+    }
   }
 }
