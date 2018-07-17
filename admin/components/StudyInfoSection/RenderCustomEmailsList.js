@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import ReactSelect from '../../components/Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 
 export default class RenderEmailsList extends React.Component { // eslint-disable-line react/prefer-stateless-function
 

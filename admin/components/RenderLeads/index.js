@@ -12,8 +12,8 @@ import { Field } from 'redux-form';
 import _ from 'lodash';
 import { selectSources } from '../../containers/App/selectors';
 import { fetchSources } from '../../containers/App/actions';
-import Input from '../../components/Input';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import { translate } from '../../../common/utilities/localization';
 
 class RenderLeads extends Component { // eslint-disable-line react/prefer-stateless-function
