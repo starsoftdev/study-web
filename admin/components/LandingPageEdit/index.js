@@ -10,9 +10,9 @@ import Button from 'react-bootstrap/lib/Button';
 
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../common/helper/functions';
 
-import Checkbox from '../Input/Checkbox';
-import Input from '../Input/index';
-import Toggle from '../../components/Input/Toggle';
+import Checkbox from '../../../common/components/Input/Checkbox';
+import Input from '../../../common/components/Input/index';
+import Toggle from '../../../common/components/Input/Toggle';
 
 import CenteredModal from '../../../common/components/CenteredModal/index';
 import StudyAdForm from '../../components/StudyAdForm';
