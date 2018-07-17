@@ -767,7 +767,9 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case ADD_CREDITS_SUCCESS:
-      cardsCollection.data.push(action.payload);
+      if (cardsCollection) {
+        cardsCollection.data.push(action.payload);
+      }
       baseDataInnerState = {
         addCredits: {
           details: action.payload,
