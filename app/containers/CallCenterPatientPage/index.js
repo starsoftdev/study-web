@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
-import Button from 'react-bootstrap/lib/Button';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -255,6 +254,7 @@ class CallCenterPatientPage extends Component {
     let studyId;
     let ePMS;
     let pdfURL = '';
+    let landingPageURL = '';
 
     if (patient && patient.details) {
       siteForPatient = patient.details.site;
@@ -263,7 +263,7 @@ class CallCenterPatientPage extends Component {
         patient.details.studyPatientCategory && patient.details.studyPatientCategory.study
       ) {
         protocolForPatient = protocols.details.find(protocol => protocol.id === patient.details.studyPatientCategory.study.protocol_id);
-        pdfURL = protocolForPatient.pdfurl;
+        pdfURL = protocolForPatient.pdfurl ? protocolForPatient.pdfurl : '';
       }
 
       patientIndications = patient.details.patientIndications;
@@ -273,26 +273,19 @@ class CallCenterPatientPage extends Component {
 
       studyId = patient.details.studyPatientCategory.study_id;
       ePMS = patient.details.studyPatientCategory.study.patientMessagingSuite;
+      landingPageURL = patient.details.landingPageURL;
     }
+
 
     return (
       <div id="cc-patient-page">
         <div className="header">
+          <a className="landingpage-url" href={`/${landingPageURL}`} target="_blank">{studyId}</a>
           <Tabs
             onExit={this.handleExit}
             onSelectTab={this.handleSelectTab}
             selectedTab={selectedTab}
           />
-          <form action="#" className="form-search clearfix">
-            <div className="search-area">
-              <div className="field">
-                <Button className="btn-enter" type="submit">
-                  <i className="icomoon-icon_search2" />
-                </Button>
-                <input name="query" type="text" className="form-control keyword-search" placeholder={translate('common.layout.placeholder.search')} />
-              </div>
-            </div>
-          </form>
         </div>
 
         <div className="page-content">

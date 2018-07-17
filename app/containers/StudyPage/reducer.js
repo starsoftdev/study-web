@@ -333,12 +333,21 @@ function studyPageReducer(state = initialState, action) {
           adding: false,
         },
       };
-    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS:
+    case MOVE_PATIENT_BETWEEN_CATEGORIES_SUCCESS: {
+      const fromPatientCategoryIndex = _.findIndex(state.patientCategoriesTotals, { patientCategoryId: action.fromCategoryId });
+      const toPatientCategoryIndex = _.findIndex(state.patientCategoriesTotals, { patientCategoryId: action.toCategoryId });
+
+      const newPatientCategoriesTotals = _.cloneDeep(state.patientCategoriesTotals);
+      newPatientCategoriesTotals[fromPatientCategoryIndex].count -= 1;
+      newPatientCategoriesTotals[toPatientCategoryIndex].count += 1;
+
       return {
         ...state,
         patientBoardLoading: false,
+        patientCategoriesTotals: newPatientCategoriesTotals,
         patientCategories: patientCategories(state.patientCategories, action.patientId, action),
       };
+    }
     case FETCH_PATIENT_CATEGORIES:
       return {
         ...state,
