@@ -8,6 +8,7 @@ import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../App/selectors';
 import { translate } from '../../../common/utilities/localization';
+import { exportPatients } from './actions';
 
 class StudyActionButtons extends Component {
   static propTypes = {
@@ -18,6 +19,7 @@ class StudyActionButtons extends Component {
     ePMS: PropTypes.bool,
     studyName: PropTypes.string,
     currentUser: PropTypes.any,
+    exportPatients: PropTypes.func,
   };
   constructor(props) {
     super(props);
@@ -94,6 +96,10 @@ class StudyActionButtons extends Component {
   }
 
   download() {
+    const { exportPatients, studyId, campaign, source, search, currentUser } = this.props;
+    if (currentUser && currentUser.roleForVendor) {
+      exportPatients(studyId, currentUser.roleForVendor.id, search, campaign, source || 1);
+    }
   }
 
   render() {
@@ -115,8 +121,9 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
 });
 
-function mapDispatchToProps() {
+function mapDispatchToProps(dispatch) {
   return {
+    exportPatients: (studyId, vendorRoleId, text, campaignId, sourceId) => dispatch(exportPatients(studyId, vendorRoleId, text, campaignId, sourceId)),
   };
 }
 

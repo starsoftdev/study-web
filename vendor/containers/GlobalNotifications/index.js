@@ -40,8 +40,19 @@ export class GlobalNotifications extends Component { // eslint-disable-line reac
   }
 
   componentDidMount() {
-
-
+    const props = this.props;
+    if (!props.socket && props.currentUser) {
+      console.log('need to set connection');
+      props.setSocketConnection({
+        nsp: 'nsp',
+        props,
+        cb: (err) => {
+          if (err) {
+            console.error(err);
+          }
+        },
+      });
+    }
   }
 
   componentWillReceiveProps() {}
