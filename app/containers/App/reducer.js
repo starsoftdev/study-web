@@ -124,8 +124,6 @@ import {
   RESET_LEARN_ABOUT_FUTURE_TRIALS,
   NEW_CONTACT_SUCCESS,
   RESET_NEW_CONTACT_SUCCESS,
-  PRIVACY_REQUEST_SUCCESS,
-  RESET_PRIVACY_REQUEST_SUCCESS,
 
   GET_CNS_INFO,
   GET_CNS_INFO_ERROR,
@@ -533,16 +531,6 @@ export default function appReducer(state = initialState, action) {
         newContactsSuccess: null,
       };
       break;
-    case PRIVACY_REQUEST_SUCCESS:
-      baseDataInnerState = {
-        privacyRequest: true,
-      };
-      break;
-    case RESET_PRIVACY_REQUEST_SUCCESS:
-      baseDataInnerState = {
-        privacyRequestSuccess: null,
-      };
-      break;
     case PATIENT_SUBSCRIPTION_ERROR:
       baseDataInnerState = {
         subscriptionError: action.payload,
@@ -779,7 +767,9 @@ export default function appReducer(state = initialState, action) {
       };
       break;
     case ADD_CREDITS_SUCCESS:
-      cardsCollection.data.push(action.payload);
+      if (cardsCollection) {
+        cardsCollection.data.push(action.payload);
+      }
       baseDataInnerState = {
         addCredits: {
           details: action.payload,
