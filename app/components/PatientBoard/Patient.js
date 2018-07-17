@@ -30,6 +30,9 @@ const patientSource = {
     };
     return item;
   },
+  canDrag(props) {
+    return !props.isLocked;
+  },
 };
 
 const collect = (connect, monitor) => ({
@@ -54,6 +57,7 @@ class Patient extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
     patient: React.PropTypes.object.isRequired,
     unreadMessageCount: React.PropTypes.number,
+    isLocked: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -116,7 +120,7 @@ class Patient extends React.Component {
   }
 
   render() {
-    const { connectDragSource, category, currentPatientId, onPatientClick, patient } = this.props;
+    const { connectDragSource, category, currentPatientId, onPatientClick, patient, isLocked } = this.props;
     let patientPhone;
     if (patient.phone) {
       // phone number error will be ignored and the phone number will be displayed regardless, even though formatting is incorrect
@@ -126,11 +130,11 @@ class Patient extends React.Component {
         patientPhone = patient.phone;
       }
     }
-
     return connectDragSource(
       <li
-        className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
+        className={classNames({ 'patient-li': !isLocked, 'patient-selected': patient.id === currentPatientId, locked: isLocked })}
         data-patient-id={patient.id}
+        draggable={!isLocked}
       >
         <div className="patient-inner">
           <a

@@ -158,26 +158,17 @@ const addDevMiddlewares = (app, webpackConfig) => {
   const fs = middleware.fileSystem;
 
   app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
-
   app.get('/lv13', (req, res) => res.redirect(301, 'https://studykik.com/4001199-lv13'));
-
   app.get('/lv14', (req, res) => res.redirect(301, 'https://studykik.com/4001200-lv14'));
-
   app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
-
   app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
-
   app.get('/lv17', (req, res) => res.redirect(301, 'https://studykik.com/4002638-lv17'));
-
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
-
   app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
-
   app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
-
   app.get('/lv21', (req, res) => res.redirect(301, 'https://studykik.com/4004201-lv21'));
-
   app.get('/lv22', (req, res) => res.redirect(301, 'https://studykik.com/4004495-lv22'));
+  app.get('/lv23', (req, res) => res.redirect(301, 'https://studykik.com/4004936-lv23'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
@@ -302,26 +293,17 @@ const addProdMiddlewares = (app, options) => {
   app.get('/admin*', (req, res) => res.sendFile(path.resolve(outputPath, 'admin.html')));
 
   app.get('/lv10', (req, res) => res.redirect(301, 'https://studykik.com/4000175-kik-site'));
-
   app.get('/lv13', (req, res) => res.redirect(301, 'https://studykik.com/4001199-lv13'));
-
   app.get('/lv14', (req, res) => res.redirect(301, 'https://studykik.com/4001200-lv14'));
-
   app.get('/lv15', (req, res) => res.redirect(301, 'https://studykik.com/4001549-lv15'));
-
   app.get('/lv16', (req, res) => res.redirect(301, 'https://studykik.com/4001550-lv16'));
-
   app.get('/lv17', (req, res) => res.redirect(301, 'https://studykik.com/4002638-lv17'));
-
   app.get('/lv18', (req, res) => res.redirect(301, 'https://studykik.com/4002640-lv18'));
-
   app.get('/lv19', (req, res) => res.redirect(301, 'https://studykik.com/4003510-lv19'));
-
   app.get('/lv20', (req, res) => res.redirect(301, 'https://studykik.com/4003763-lv20'));
-
   app.get('/lv21', (req, res) => res.redirect(301, 'https://studykik.com/4004201-lv21'));
-
   app.get('/lv22', (req, res) => res.redirect(301, 'https://studykik.com/4004495-lv22'));
+  app.get('/lv23', (req, res) => res.redirect(301, 'https://studykik.com/4004936-lv23'));
 
   app.get('/patients', (req, res) => res.redirect(301, 'https://studykik.com/list-your-trials'));
 
