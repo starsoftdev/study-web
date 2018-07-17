@@ -17,7 +17,7 @@ module.exports = (options) => ({
   module: {
     rules: [
       {
-        test: /\.js$/, // Transform all .js files required somewhere with Babel
+        test: /\.jsx?$/, // Transform all .js files required somewhere with Babel
         loader: 'babel-loader',
         exclude: /node_modules/,
       }, {

@@ -4,7 +4,11 @@ import {
   PATIENT_SUBSCRIPTION_ERROR,
 } from '../../../app/containers/App/constants';
 
-const initialState = {};
+const initialState = {
+  surveyRequired: false,
+  surveyComplete: false,
+  surveyUrl: '',
+};
 
 export default function landingPageReducer(state = initialState, action) {
   switch (action.type) {
@@ -23,7 +27,26 @@ export default function landingPageReducer(state = initialState, action) {
         ...state,
         submitting: false,
       };
+    case 'SURVEY_REQUIRED':
+      return displaySurvey(state, action);
+    case 'SURVEY_COMPLETE':
+      return completeSurvey(state, action);
     default:
       return state;
   }
+}
+
+function displaySurvey(state, payload) {
+  return {
+    ...state,
+    surveyRequired: true,
+    surveyUrl: payload.payload,
+  };
+}
+
+function completeSurvey(state) {
+  return {
+    ...state,
+    surveyComplete: true,
+  };
 }
