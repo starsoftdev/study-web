@@ -3,7 +3,7 @@ import { createStructuredSelector } from 'reselect';
 import { connect } from 'react-redux';
 import { Field, reduxForm, change } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
-import Input from '../Input/index';
+import Input from '../../../common/components/Input/index';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectLanding, selectUpdatePatientThankYouEmailProcess } from '../../containers/AdminStudyEdit/selectors';
 import formValidator from './validator';
