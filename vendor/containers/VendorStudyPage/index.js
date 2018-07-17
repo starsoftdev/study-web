@@ -19,6 +19,7 @@ import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/Index';
+import { getItem } from '../../../common/utils/localStorage';
 import * as Selector from './selectors';
 import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../GlobalNotifications/actions';
@@ -94,7 +95,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, clientOpenedStudyPage, studyViewsStatFetched, currentUser } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -186,6 +187,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
             studyViewsStatFetched(data.count);
+          }
+        });
+
+        socket.on('notifyVendorReportReady', (data) => {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForVendor && data.url && currentUser.roleForVendor.id === data.vendorRoleId && authToken === data.authToken) {
+            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
+            location.replace(data.url);
           }
         });
       });
