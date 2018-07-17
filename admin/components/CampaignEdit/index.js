@@ -15,8 +15,8 @@ import Button from 'react-bootstrap/lib/Button';
 
 import DatePicker from '../../../common/components/Input/DatePicker';
 import ReactSelect from '../../../common/components/Input/ReactSelect';
-import Input from '../Input/index';
-import Toggle from '../../components/Input/Toggle';
+import Input from '../../../common/components/Input/index';
+import Toggle from '../../../common/components/Input/Toggle';
 import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectAdminStudyEditCampaigns, selectAdminStudyEditCampaignProcess, selectAdminStudyEditDeleteCampaignProcess, selectLevels } from '../../containers/AdminStudyEdit/selectors';
