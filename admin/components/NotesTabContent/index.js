@@ -75,6 +75,7 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
             componentClass="textarea"
             name="noteData"
             component={Input}
+            placeholder="Type a note..."
             type="text"
           />
           <Button type="submit" className="save-btn">SAVE</Button>
