@@ -8,9 +8,9 @@ import Alert from 'react-bootstrap/lib/Alert';
 
 import Checkbox from '../../../common/components/Input/Checkbox';
 import Input from '../../../common/components/Input';
-import mixIntlTelInput from '../../../common/components/Input/MixIntlTelInput';
+import MixIntlTelInput from '../../../common/components/Input/MixIntlTelInput';
 import landingFormValidator from './validator';
-import { normalizePhoneDisplay, formatPhone } from '../../../app/common/helper/functions';
+import { formatPhone } from '../../../app/common/helper/functions';
 import {
   patientSubscriptionError,
 } from '../../../app/containers/App/actions';
@@ -63,8 +63,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     };
 
     this.setVisible = this.setVisible.bind(this);
-    this.onPhoneBlur = this.onPhoneBlur.bind(this);
-    this.onCodeChange = this.onCodeChange.bind(this);
     this.onSelectFlag = this.onSelectFlag.bind(this);
     this.isButtonDisabled = this.isButtonDisabled.bind(this);
   }
@@ -75,22 +73,6 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
 
   componentWillUnmount() {
     this.watcher.dispose();
-  }
-
-  onPhoneBlur(event) {
-    const { blur } = this.props;
-    const { selectedCountryData } = this.state;
-    const formattedPhoneNumber = normalizePhoneDisplay(event.target.value, selectedCountryData);
-
-    blur('phone', formattedPhoneNumber);
-  }
-
-  onCodeChange(status, value, countryData, number) {
-    const { change } = this.props;
-    const formattedPhoneNumber = normalizePhoneDisplay(number, countryData);
-    this.setState({ phone: formattedPhoneNumber, codeLength: countryData.dialCode.length, selectedCountryData: countryData }, () => {
-      change('code', value);
-    });
   }
 
   onSelectFlag(code, selectedCountryData) {
@@ -120,22 +102,21 @@ export class LandingForm extends React.Component { // eslint-disable-line react/
     const clickToCallButtonText = (landing.clickToCallButtonText) ? landing.clickToCallButtonText : 'Click to Call!';
     const clickToCallNumber = (landing.clickToCallButtonNumber) ? `tel:${landing.clickToCallButtonNumber}` : false;
     const ipcountryValue = landing.country.toLowerCase();
-    const inputWrap = mixIntlTelInput;
+
     const bsClass = `form-control input-lg ${(this.state.codeLength) ? `length-${this.state.codeLength}` : ''}`;
     let errorMessage = '';
-    const phoneInput =
-      (<Field
+    const phoneInput = (
+      <Field
         name="phone"
-        ccName="code"
         type="tel"
-        component={inputWrap}
+        component={MixIntlTelInput}
         placeholder={phonePlaceholder}
         className="field-row fixed-height"
         bsClass={bsClass}
         onBlur={this.onPhoneBlur}
         preferredCountries={[ipcountryValue]}
         onSelectFlag={this.onSelectFlag}
-        onCodeChange={this.onCodeChange}
+        onChange={this.onCodeChange}
       />);
 
     if (subscriptionError) {

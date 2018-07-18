@@ -45,6 +45,7 @@ const logView = (req) => {
           ip: req.connection.remoteAddress,
           rejectUnauthorized: process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test',
         },
+        rejectUnauthorized: (process.env.NODE_ENV !== 'development' && process.env.NODE_ENV !== 'test'),
       };
 
       request(options, (error) => {
