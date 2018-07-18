@@ -21,6 +21,8 @@ import LoadingSpinner from '../LoadingSpinner';
 import { selectValues } from '../../common/selectors/form.selector';
 import { selectAdminStudyEditCampaigns, selectAdminStudyEditCampaignProcess, selectAdminStudyEditDeleteCampaignProcess, selectLevels } from '../../containers/AdminStudyEdit/selectors';
 import { fetchCampaignsByStudy, editCampaign, deleteCampaign, fetchLevels } from '../../containers/AdminStudyEdit/actions';
+import { translate } from '../../../common/utilities/localization';
+
 
 const moment = extendMoment(Moment);
 const formName = 'campaignPageForm';
@@ -172,7 +174,7 @@ class CampaignEdit extends React.Component {
           <div className="frame">
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">CAMPAIGN</label>
+                <label htmlFor="campaign-input">{translate('admin.component.campaignEdit.label.campaign')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -194,7 +196,7 @@ class CampaignEdit extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">EXPOSURE LEVEL</label>
+                <label htmlFor="exposure-input">{translate('admin.component.campaignEdit.label.exposure')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -213,7 +215,7 @@ class CampaignEdit extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">START DATE</label>
+                <label htmlFor="start-date-input">{translate('admin.component.campaignEdit.label.start.date')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -230,7 +232,7 @@ class CampaignEdit extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">END DATE</label>
+                <label htmlFor="end-date-input">{translate('admin.component.campaignEdit.label.end.date')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -248,7 +250,7 @@ class CampaignEdit extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-phone">CUSTOM GOAL</label>
+                <label htmlFor="goal-input">{translate('admin.component.campaignEdit.label.goal')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -260,7 +262,7 @@ class CampaignEdit extends React.Component {
             </div>
             <div className="field-row">
               <strong className="label">
-                <label htmlFor="new-patient-first-name">PQS</label>
+                <label htmlFor="pqs-iput">{translate('admin.component.campaignEdit.label.pqs')}</label>
               </strong>
               <div className="field">
                 <Field
@@ -276,13 +278,13 @@ class CampaignEdit extends React.Component {
               <div className={classNames('btn btn-gray upload-btn', { disabled: this.state.isCampaignHasPatients })} onClick={() => (!this.state.isCampaignHasPatients ? this.deleteCampaignClick() : null)}>
                 { deleteCampaignProcess.deleting
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                  : <span>Delete</span>
+                  : <span>{translate('admin.edit.button.delete')}</span>
                 }
               </div>
               <Button type="submit" bsStyle="primary" className="fixed-small-btn">
                 { updateCampaignProcess.saving
                   ? <span><LoadingSpinner showOnlyIcon size={20} className="saving-user" /></span>
-                  : <span>Update</span>
+                  : <span>{translate('admin.edit.button.update')}</span>
                 }
               </Button>
             </div>
