@@ -89,7 +89,7 @@ class ProtocolsList extends Component { // eslint-disable-line react/prefer-stat
           {
             (protocols.fetching &&
               <tr>
-                <td colSpan="8">
+                <td className="no-number" colSpan="8">
                   <LoadingSpinner showOnlyIcon={false} noMessage />
                 </td>
               </tr>
