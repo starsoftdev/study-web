@@ -167,7 +167,7 @@ export class LandingPage extends React.Component {
       landing_page_id: landing.id,
     };
 
-    if (this.props.location.query && this.props.location.query.utm) {
+    if (this.props.location.query && this.props.location.query.utm && landing.isUtmValid) {
       data.utm = this.props.location.query.utm;
     }
 

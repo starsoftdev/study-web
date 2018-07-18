@@ -1026,7 +1026,7 @@ function* fetchLanding() {
       });
       yield put(landingFetched(response));
       if (!response.isUtmValid) {
-        toastr.error('', 'Error! Invalid UTM.');
+        // toastr.error('', 'Error! Invalid UTM.');
       }
     } catch (err) {
       yield put(fetchLandingError(err));
