@@ -308,8 +308,6 @@ function* submitPatientSchedule() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
     const { payload: { patientId, isDelete, time } } = yield take(SUBMIT_PATIENT_SCHEDULE);
-
-    console.log('@@@@@@@@@@@@@saga', patientId, isDelete, time);
     const authToken = getItem('auth_token');
     if (!authToken) {
       return;

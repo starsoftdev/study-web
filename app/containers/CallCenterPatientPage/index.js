@@ -227,7 +227,6 @@ class CallCenterPatientPage extends Component {
 
   handleDateChange= (date) => {
     this.setState({ scheduleDate: date });
-    console.log('schedule date updated', date);
   }
 
   onPatientScheduleSubmit = (e) => {
