@@ -16,9 +16,10 @@ import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { fetchFilteredProtcols, revertBulkUpload } from '../../containers/UploadPatients/actions';
-import { fetchStudySources, clearStudySources } from '../../containers/App/actions';
+import { fetchStudySources, clearStudySources } from '../../../common/actions/studySources';
 import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../containers/App/selectors';
-import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory, selectStudySources } from '../../containers/UploadPatients/selectors';
+import { selectIsFetchingProtocols, selectProtocols, selectExportPatientsStatus, selectUploadHistory } from '../../containers/UploadPatients/selectors';
+import { selectStudySources } from '../../../common/selectors/studySources';
 import { selectSyncErrors } from '../../common/selectors/form.selector';
 import UploadPatientsPreviewForm from './UploadPatientsPreview';
 import UploadHistoryList from './UploadHistoryList';
