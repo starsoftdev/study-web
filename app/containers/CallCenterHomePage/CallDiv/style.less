@@ -1,6 +1,6 @@
 .cc-container {flex: 1;display: flex;max-width: 80%;}
 .cc-container .cc-row {flex: 1;margin: 10px;max-width: 15%;}
-.cc-container .cc-row .cc-box {height: 178px;justify-content: flex-start;color: black;display: flex;flex-flow: column;border: 1px solid #ccc;margin-bottom: 20px;background: white;padding: 11px 15px;font-size: 16px;cursor: pointer;}
+.cc-container .cc-row .cc-box {justify-content: flex-start;color: black;display: flex;flex-flow: column;border: 1px solid #ccc;margin-bottom: 20px;background: white;padding: 11px 15px;font-size: 16px;cursor: pointer; min-height: 178px;}
 .cc-container .cc-row .cc-box.disabled {cursor: not-allowed;background-color: #f1f1f1;}
 .cc-container .cc-row .cc-box .disposition {background: #f88e1f;width: 80px;border-radius: 10px;text-align: center;color: white;}
 .cc-container .cc-row .cc-box .email {display: block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;line-height: 22px;}
@@ -14,4 +14,4 @@
 .cc-container .cc-row .cc-box .name span {display: block;}
 .cc-container .cc-row .cc-box .name span.first-name, .cc-container .cc-row .cc-box .name span.last-name {overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 .cc-container .cc-row .cc-box:last-child, .cc-container .cc-row .cc-box .phone {margin-bottom: 0;}
-.cc-container .cc-row .cc-box-heading {background: #76daff;border: none;align-items: center;font-size: 18px;font-weight: 700;height: 40px;cursor: default;}
+.cc-container .cc-row .cc-box-heading {background: #76daff;border: none;align-items: center;font-size: 18px;font-weight: 700;height: 40px;cursor: default; min-height: 0;}
