@@ -77,6 +77,21 @@ const selectPatientSignUps = () => createSelector(
   (substate) => substate.patientSignUps
 );
 
+const selectStudyDispositionTotals = () => createSelector(
+  selectReportViewPageDomain(),
+  (substate) => substate.studyDispositionTotals
+);
+
+const selectStudyMediaSources = () => createSelector(
+  selectReportViewPageDomain(),
+  (substate) => substate.studyMediaSources
+);
+
+const selectStudyReportsTotals = () => createSelector(
+  selectReportViewPageDomain(),
+  substate => substate.studyTotals
+);
+
 export default selectReportViewPage;
 export {
   selectReportViewPageDomain,
@@ -91,4 +106,7 @@ export {
   selectDispositionTotals,
   selectMediaSources,
   selectPatientSignUps,
+  selectStudyDispositionTotals,
+  selectStudyMediaSources,
+  selectStudyReportsTotals,
 };
