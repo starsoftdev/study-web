@@ -14,7 +14,8 @@ import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/
 import { selectSources, selectCurrentUserClientId } from '../../App/selectors';
 import Input from '../../../../common/components/Input/index';
 import { submitAddPatient } from '../actions';
-import { selectStudyId, selectAddPatientStatus, selectStudySources } from '../selectors';
+import { selectStudyId, selectAddPatientStatus } from '../selectors';
+import { selectStudySources } from '../../../../common/selectors/studySources';
 import formValidator, { fields } from './validator';
 import { translate } from '../../../../common/utilities/localization';
 
