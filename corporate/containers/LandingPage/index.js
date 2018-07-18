@@ -8,6 +8,7 @@ import Helmet from 'react-helmet';
 
 import LandingForm from '../../components/LandingForm';
 import LandingArticle from '../../components/LandingArticle';
+import LandingSurvey from '../../components/LandingSurvey';
 import { normalizePhoneForServer } from '../../../app/common/helper/functions';
 
 import {
@@ -29,6 +30,7 @@ import {
 import {
   trackLandingPage,
 } from './actions';
+import { ga } from '../../../node_modules/react-ga';
 
 export class LandingPage extends React.Component {
 
@@ -49,6 +51,11 @@ export class LandingPage extends React.Component {
     location: PropTypes.any,
     landing: PropTypes.object,
     trackLandingPage:PropTypes.func.isRequired,
+    surveyRequired: PropTypes.bool,
+    surveyComplete: PropTypes.bool,
+    surveyUrl: PropTypes.string,
+    dispatchSurveyComplete: PropTypes.func,
+    dispatchSurveyRequired: PropTypes.func,
   };
 
   constructor(props) {
@@ -70,6 +77,31 @@ export class LandingPage extends React.Component {
       this.props.clearLanding();
       browserHistory.push('/');
     }
+  }
+
+  componentDidMount() {
+    if (window.surveyUrl) {
+      if (window.surveyUrl.value.length) {
+        this.onShowSurvey();
+      } else {
+        window.surveyUrl.ee.on('SHOW_SURVEY', this.onShowSurvey);
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    window.surveyUrl.ee.off('SHOW_SURVEY', this.onShowSurvey);
+  }
+
+  onShowSurvey = () => {
+    // fire onload
+    ga('send', 'event', 'Pre-qualification Questionnaire', 'Questionaire Loaded - client:allergan|sampled:true', this.props.location.pathname);
+    this.props.dispatchSurveyRequired();
+  }
+
+  onCompleteSurvey = () => {
+    ga('send', 'event', 'Pre-qualification Questionnaire', 'Questionaire Completed - client:allergan|sampled:true', this.props.location.pathname);
+    this.props.dispatchSurveyComplete();
   }
 
   componentWillReceiveProps(newProps) {
@@ -139,12 +171,27 @@ export class LandingPage extends React.Component {
       data.utm = this.props.location.query.utm;
     }
 
+    if (this.props.surveyComplete) {
+      ga('send', 'event', 'Pre-qualification Questionnaire', 'Study Signup - client:allergan|sampled:true', this.props.location.pathname);
+    }
+
     this.props.subscribeFromLanding(data);
   }
 
   render() {
     const { subscriptionError, landingIsFetching, location, landing } = this.props;
 
+    if (this.props.surveyRequired && !this.props.surveyComplete) {
+      return (
+        <div id="main">
+          <div className="container">
+            <LandingSurvey
+              uri={this.props.surveyUrl} onComplete={this.onCompleteSurvey}
+            />
+          </div>
+        </div>
+      );
+    }
     if (landingIsFetching || landing === null) {
       return (
         <div id="main">
@@ -193,6 +240,9 @@ const mapStateToProps = createStructuredSelector({
   landingError: selectLandingError(),
   subscriptionError: selectSubscriptionError(),
   landing: selectLanding(),
+  surveyRequired: (state) => state.form.LandingPage.surveyRequired,
+  surveyComplete: (state) => state.form.LandingPage.surveyComplete,
+  surveyUrl: (state) => state.form.LandingPage.surveyUrl,
 });
 
 function mapDispatchToProps(dispatch) {
@@ -203,6 +253,8 @@ function mapDispatchToProps(dispatch) {
     sendThankYouEmail: (params) => dispatch(sendThankYouEmail(params)),
     clearLanding: () => dispatch(clearLanding()),
     trackLandingPage: (trackingPayload) => dispatch(trackLandingPage(trackingPayload)),
+    dispatchSurveyRequired: () => dispatch({ type: 'SURVEY_REQUIRED', payload: window.surveyUrl.value }),
+    dispatchSurveyComplete: () => dispatch({ type: 'SURVEY_COMPLETE' }),
   };
 }
 
