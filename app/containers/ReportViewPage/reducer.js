@@ -173,6 +173,7 @@ function reportViewPageReducer(state = initialState, action) {
         },
       };
     case GET_REPORTS_TOTALS_SUCCESS:
+      console.log('GET_REPORTS_TOTALS_SUCCESS', action.source);
       details[action.source] = action.payload;
       return {
         ...state,
