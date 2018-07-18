@@ -33,7 +33,8 @@ export default class CallCalendar extends React.Component {
           if (moment.tz(time, currentUser.timezone).format('D') !== moment().format('D')) return null;
           return (
             <div className="ccCal-box" key={schedule.id}>
-              {moment.tz(time, currentUser.timezone).format('hA')} {schedule.first_name} {schedule.last_name}
+              <span>{moment.tz(time, currentUser.timezone).format('hA')}</span>
+              <span>{schedule.first_name} {schedule.last_name}</span>
             </div>
           );
         })}
