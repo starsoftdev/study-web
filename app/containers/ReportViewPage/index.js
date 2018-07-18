@@ -173,7 +173,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     getDispositionTotals({ ...filters, source: null });
 
     for (const source of sources) {
-      let filtersForSource = {...filters, ...this.props.formValues, source: source.id};
+      const filtersForSource = { ...filters, ...this.props.formValues, source: source.id };
       this.props.getReportsTotals(filtersForSource);
     }
   }
