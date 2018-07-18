@@ -86,8 +86,6 @@ class CalendarWidget extends React.Component {
       };
     });
 
-    console.log('events', eventsList);
-
     this.currentDate = moment().toDate();
 
     window.requestAnimationFrame(() => {
