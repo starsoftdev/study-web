@@ -1,0 +1,28 @@
+.LandingSurvey {
+  div.frame-container {
+    position: fixed;
+    z-index: 10000;
+    top: 80px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+  }
+
+  div.modal-overlay {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  iframe {
+    z-index: 10001;
+    border-radius: 3px;
+  }
+}
