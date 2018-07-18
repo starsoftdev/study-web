@@ -36,7 +36,7 @@ class CallCenterHomePage extends Component {
     fetchIndications: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func,
     fetchSchedules: PropTypes.func,
-    patients: PropTypes.object,
+    patients: PropTypes.array,
     indications: PropTypes.array,
     schedules: PropTypes.object,
   };
