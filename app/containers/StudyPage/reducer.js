@@ -62,12 +62,6 @@ import {
   PATIENT_CATEGORIES_TOTALS_FETCHED,
 } from './constants';
 
-import {
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
-} from '../App/constants';
-
 const initialState = {
   stats: {},
   patientCategoriesTotals: [],
@@ -97,11 +91,6 @@ const initialState = {
     fetching: false,
     error: null,
   },
-  studySources: {
-    details: [],
-    fetching: false,
-    error: null,
-  },
   selectedStudySources: [],
   paginationOptions: {
     hasMoreItems: true,
@@ -117,42 +106,6 @@ function studyPageReducer(state = initialState, action) {
       return {
         ...state,
         selectedStudySources: action.list,
-      };
-    case FETCH_STUDY_SOURCES:
-      return {
-        ...state,
-        studySources: {
-          details: state.studySources.details,
-          fetching: true,
-          error: null,
-        },
-      };
-
-    case FETCH_STUDY_SOURCES_SUCCESS:
-      return {
-        ...state,
-        studySources: {
-          details: action.payload.map((item) => {
-            return {
-              source: { value: item.source_id, label: item.type },
-              sourceName: item.sourceName,
-              studySourceId: item.studySourceId,
-              isMediaType: item.isMediaType,
-            };
-          }),
-          fetching: false,
-          error: null,
-        },
-      };
-
-    case FETCH_STUDY_SOURCES_ERROR:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
       };
     case FETCH_CAMPAIGNS_SUCCESS:
       return {
