@@ -12,13 +12,6 @@ import {
   REVERT_BULK_UPLOAD_ERROR,
 } from './constants';
 
-import {
-  CLEAR_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
-} from '../App/constants';
-
 const initialState = {
   exportPatientsStatus:{
     exporting: false,
@@ -30,11 +23,6 @@ const initialState = {
   },
   revertBulkUploadError: null,
   uploadHistory:{
-    details: [],
-    fetching: false,
-    error: null,
-  },
-  studySources: {
     details: [],
     fetching: false,
     error: null,
@@ -130,48 +118,6 @@ export default function uploadPatientsPageReducer(state = initialState, action) 
       return {
         ...state,
         revertBulkUploadProcess: action.payload,
-      };
-    case CLEAR_STUDY_SOURCES:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_STUDY_SOURCES:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: true,
-          error: null,
-        },
-      };
-    case FETCH_STUDY_SOURCES_SUCCESS:
-      return {
-        ...state,
-        studySources: {
-          details: action.payload.map((item) => {
-            return {
-              source: { value: item.source_id, label: item.type },
-              sourceName: item.sourceName,
-              studySourceId: item.studySourceId,
-            };
-          }),
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_STUDY_SOURCES_ERROR:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
       };
     default:
       return state;

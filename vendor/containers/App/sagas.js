@@ -9,12 +9,13 @@ import request from '../../../common/utils/request';
 import { getItem, removeItem } from '../../../app/utils/localStorage';
 import { FETCH_ME_FROM_TOKEN, LOGOUT_REQUEST } from '../../containers/App/constants';
 import { setAuthState, setUserData } from '../../containers/App/actions';
+import { fetchStudySources } from '../../../common/sagas/studySources';
 
 export default function* vendorAppSaga() {
   yield fork(fetchMeSaga);
+  yield fork(fetchStudySources);
   yield fork(logoutSaga);
 }
-
 
 export function* fetchMeSaga() {
   while (true) {
