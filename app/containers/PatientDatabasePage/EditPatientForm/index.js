@@ -15,11 +15,12 @@ import Input from '../../../../common/components/Input/index';
 import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import Checkbox from '../../../../common/components/Input/Checkbox';
-import { clearStudySources, fetchStudySources } from '../../App/actions';
+import { clearStudySources, fetchStudySources } from '../../../../common/actions/studySources';
 import { selectIndications, selectSiteLocations, selectCurrentUser } from '../../App/selectors';
 import IndicationOverlay from '../../StudyPage/PatientDetail/IndicationOverlay';
 import { fetchFilteredProtcols, addPatientIndication, removePatientIndication, updatePatientIndication } from '../actions';
-import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient, selectStudySources } from '../selectors';
+import { selectIsFetchingProtocols, selectPatientCategories, selectProtocols, selectSavedPatient } from '../selectors';
+import { selectStudySources } from '../../../../common/selectors/studySources';
 import formValidator from './validator';
 import { translate } from '../../../../common/utilities/localization';
 

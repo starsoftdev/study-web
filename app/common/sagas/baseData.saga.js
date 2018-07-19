@@ -49,6 +49,7 @@ import {
   SUBSCRIBE_FROM_LANDING,
   FIND_OUT_PATIENTS,
   CLINICAL_TRIALS_SEARCH,
+  CLINICAL_ALLERGAN_TRIALS_SEARCH,
   LIST_SITE_NOW,
   GET_PROPOSAL,
   LEARN_ABOUT_FUTURE_TRIALS,
@@ -64,7 +65,6 @@ import {
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_PATIENT_CATEGORIES,
-  FETCH_STUDY_SOURCES,
   FETCH_MEDIA_TYPES,
   PRIVACY_REQUEST,
 } from '../../containers/App/constants';
@@ -170,13 +170,12 @@ import {
   submitCnsError,
   patientCategoriesFetched,
   patientCategoriesFetchingError,
-  fetchStudySourcesSuccess,
-  fetchStudySourcesError,
   fetchMediaTypesSuccess,
   fetchMediaTypesError,
 } from '../../containers/App/actions';
 import { DELETE_MEDIA_TYPE } from '../../components/CallTrackingPageModal/constants';
 import { deleteMediaTypeSuccess } from '../../components/CallTrackingPageModal/actions';
+import { fetchStudySources } from '../../../common/sagas/studySources';
 
 
 let deleteMediaTypesWatcher = false;
@@ -217,6 +216,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
+  yield fork(takeLatest, CLINICAL_ALLERGAN_TRIALS_SEARCH, searchClinicalAllerganTrials);
   yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
   yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
@@ -1026,7 +1026,7 @@ function* fetchLanding() {
       });
       yield put(landingFetched(response));
       if (!response.isUtmValid) {
-        toastr.error('', 'Error! Invalid UTM.');
+        // toastr.error('', 'Error! Invalid UTM.');
       }
     } catch (err) {
       yield put(fetchLandingError(err));
@@ -1066,6 +1066,42 @@ function* postFindOutPatients(action) {
     const errorMessage = get(err, 'message', translate('corporate.page.trials.findOutPatientsForm.toastrDefaultError'));
     toastr.error('', errorMessage);
     yield put(findOutPatientsError(err));
+  }
+}
+
+function* searchClinicalAllerganTrials(action) { // eslint-disable-line prefer-template
+  try {
+    const { countryCode, distance, from, indicationId, postalCode, utm } = action.params;
+    const queryParams = {};
+    if (countryCode) {
+      queryParams.countryCode = countryCode;
+    }
+    if (distance) {
+      queryParams.distance = distance;
+    }
+    if (from !== false || from !== null) {
+      queryParams.from = from;
+    }
+    if (indicationId) {
+      queryParams.indicationId = indicationId;
+    }
+    if (postalCode) {
+      queryParams.postalCode = postalCode;
+    }
+    if (utm) {
+      queryParams.utm = utm;
+    }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/getNearbyStudiesAllergan?${queryString}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(clinicalTrialsSearchSuccess(response));
+  } catch (err) {
+    yield put(clinicalTrialsSearchError(err));
+    if (err.message.indexOf('postal code.') !== -1) {
+      toastr.error('', err.message);
+    }
   }
 }
 
@@ -1394,24 +1430,6 @@ function* readStudyPatientMessagesWorker(action) {
     if (err.status === 401) {
       removeItem('auth_token');
       yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-function* fetchStudySources() {
-  while (true) {
-    const { studyId } = yield take(FETCH_STUDY_SOURCES);
-    try {
-      const options = {
-        method: 'GET',
-      };
-
-      const requestURL = `${API_URL}/studies/${studyId}/studySources`;
-      const response = yield call(request, requestURL, options);
-
-      yield put(fetchStudySourcesSuccess(response));
-    } catch (err) {
-      yield put(fetchStudySourcesError(err));
     }
   }
 }

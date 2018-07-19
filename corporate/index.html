@@ -71,6 +71,13 @@
   <script src="https://cdn.ravenjs.com/3.24.0/raven.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <script src="https://unpkg.com/eventemitter3@latest/umd/eventemitter3.min.js"></script>
+  <script>
+    window.surveyUrl = {
+      value: '',
+      ee: new EventEmitter3()
+    };
+  </script>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM_ACCOUNT_ID"
                   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

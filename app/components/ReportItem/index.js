@@ -12,6 +12,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
     item: PropTypes.object,
     percentage: PropTypes.object,
     openNotesModal: PropTypes.func,
+    openStatsModal: PropTypes.func,
   };
 
   constructor(props) {
@@ -23,7 +24,7 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
   }
 
   render() {
-    const { item, order, percentage, openNotesModal } = this.props;
+    const { item, order, percentage, openNotesModal, openStatsModal } = this.props;
     const countTotal = parseInt(item.count_not_contacted || 0) + parseInt(item.call_attempted || 0) +
       parseInt(item.dnq || 0) + parseInt(item.action_needed || 0) + parseInt(item.scheduled || 0) +
       parseInt(item.consented || 0) + parseInt(item.screen_failed || 0) + parseInt(item.randomized || 0);
@@ -146,6 +147,11 @@ class ReportItem extends React.Component { // eslint-disable-line react/prefer-s
           <div className="box-element email-sent">
             <span className="name">{translate('sponsor.component.reportItem.emailSent')}</span>
             <span className="value">{item.outbound_emails || 0}</span>
+          </div>
+          <div className="box-element pull-right">
+            <a className="btn btn-primary" onClick={openStatsModal}>
+              {translate('sponsor.component.reportItem.morestats')}
+            </a>
           </div>
         </div>
       </div>
