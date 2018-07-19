@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/lib/Button';
 import { Field, reduxForm, reset } from 'redux-form';
 
 import Input from '../../../common/components/Input';
+import { translate } from '../../../common/utilities/localization';
 
 
 import StudyNote from '../../components/StudyNote';
@@ -75,9 +76,10 @@ export class NotesTabContent extends Component { // eslint-disable-line react/pr
             componentClass="textarea"
             name="noteData"
             component={Input}
+            placeholder={translate('admin.component.editNote.note.placeholder')}
             type="text"
           />
-          <Button type="submit" className="save-btn">SAVE</Button>
+          <Button type="submit" className="save-btn">{translate('admin.edit.button.save')}</Button>
         </form>
       </div>
     );
