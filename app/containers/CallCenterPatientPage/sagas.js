@@ -18,6 +18,7 @@ import {
   SUBMIT_EMAIL,
   SUBMIT_PATIENT_DISPOSITION,
   READ_STUDY_PATIENT_MESSAGES,
+  SUBMIT_PATIENT_SCHEDULE,
   FETCH_SCHEDULES,
 } from './constants';
 
@@ -33,6 +34,7 @@ import {
   patientDispositionSubmissionError,
   readStudyPatientMessagesSuccess,
   readStudyPatientMessagesError,
+  patientScheduleSubmitted,
   schedulesFetched,
   schedulesFetchingError,
 } from './actions';
@@ -132,13 +134,6 @@ export function* fetchPatientWatcher() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
-      if (response.studyPatientCategory && response.studyPatientCategory.study_id) {
-        const landingRequestURL = `${API_URL}/studies/${response.studyPatientCategory.study_id}/getLandingPageURL`;
-        const landingResponse = yield call(request, landingRequestURL);
-        response.landingPageURL = `${response.studyPatientCategory.study_id}-${landingResponse.url}`;
-      }
-
-
       if (response.source) {
         response.source = response.source.id;
       }
@@ -294,6 +289,48 @@ function* submitPatientUpdate() {
           afterPatientId: null,
         }),
       });
+
+      toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
+    } catch (e) {
+      let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
+      if (errorMessage.includes('email')) {
+        errorMessage = translate('client.page.studyPage.toastrEmailOnFileErrorMessage');
+      } else if (errorMessage.includes('phone')) {
+        errorMessage = translate('client.page.studyPage.toastrPhoneOnFileErrorMessage');
+      }
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
+
+function* submitPatientSchedule() {
+  while (true) {
+    // listen for the SUBMIT_PATIENT_UPDATE action
+    const { payload: { patientId, isDelete, time } } = yield take(SUBMIT_PATIENT_SCHEDULE);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      // update or create appointment
+      const requestURL = `${API_URL}/callCenterAppointments`;
+      let method = 'PATCH';
+      if (isDelete) {
+        method = 'DELETE';
+      }
+
+      const response = yield call(request, requestURL, {
+        method,
+        body: JSON.stringify({
+          patient_id: patientId,
+          time,
+        }),
+      });
+
+
+      yield put(patientScheduleSubmitted(response, isDelete));
       toastr.success('', translate('container.page.callCenterPatient.toastr.success.updatePatient'));
     } catch (e) {
       let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
@@ -413,7 +450,8 @@ export function* callCenterPatientPageSaga() {
     const watcherG = yield fork(submitPatientDisposition);
     const watcherH = yield fork(sendPatientMessagesWatcher);
     const watcherI = yield fork(readStudyPatientMessagesWatcher);
-    const watcherJ = yield fork(fetchSchedulesWatcher);
+    const watcherJ = yield fork(submitPatientSchedule);
+    const watcherK = yield fork(fetchSchedulesWatcher);
 
     yield take(LOCATION_CHANGE);
 
@@ -427,6 +465,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherH);
     yield cancel(watcherI);
     yield cancel(watcherJ);
+    yield cancel(watcherK);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

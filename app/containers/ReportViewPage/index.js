@@ -15,6 +15,7 @@ import { STATUS_ALL } from './constants';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import ReportViewInfo from '../../containers/ReportViewPage/ReportViewInfo';
 import ReportViewTotals from '../../containers/ReportViewPage/ReportViewTotals';
+import StudyReportView from './StudyReportView';
 import ReportViewSearch from '../../components/ReportViewSearch';
 import ReportViewTable from '../../components/ReportViewTable';
 import CenteredModal from '../../../common/components/CenteredModal/index';
@@ -24,9 +25,10 @@ import PatientNote from './PatientNote';
 import { translate } from '../../../common/utilities/localization';
 
 import { selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, fetchMediaSources, getDispositionTotals, fetchTotalSignUps } from '../../containers/ReportViewPage/actions';
-import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectMediaSources, selectDispositionTotals, selectPatientSignUps } from '../../containers/ReportViewPage/selectors';
+import { getReportsList, setActiveSort, sortReportsSuccess, changeProtocolStatus, getReportsTotals, getCategoryNotes, clearReportList, fetchMediaSources, getDispositionTotals, fetchTotalSignUps, fetchStudyMediaSources, getStudyDispositionTotals, getStudyReportsTotals } from '../../containers/ReportViewPage/actions';
+import { selectReportsList, selectSearchReportsFormValues, selectPaginationOptions, selectTableFormValues, selectReportsTotals, selectCategoryNotes, selectNotesPaginationOptions, selectMediaSources, selectDispositionTotals, selectPatientSignUps, selectStudyReportsTotals, selectStudyDispositionTotals, selectStudyMediaSources } from '../../containers/ReportViewPage/selectors';
 import { fetchSources } from '../../containers/App/actions';
+import './style.less';
 
 const dispositions = [
   {
@@ -74,6 +76,12 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     getDispositionTotals: PropTypes.func,
     mediaSources: PropTypes.object,
     fetchTotalSignUps: PropTypes.func,
+    studyTotals: PropTypes.object,
+    getStudyReportsTotals: PropTypes.func,
+    studyMediaSources: PropTypes.object,
+    fetchStudyMediaSources: PropTypes.func,
+    studyDispositionTotals: PropTypes.object,
+    getStudyDispositionTotals: PropTypes.func,
   };
 
   constructor(props) {
@@ -87,6 +95,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentCategoryStudyId: false,
       currentDnqStudyId: false,
       showPQSModal: false,
+      showStatsModal: false,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -96,6 +105,8 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.loadNotesItems = this.loadNotesItems.bind(this);
     this.openPQSModal = this.openPQSModal.bind(this);
     this.closePQSModal = this.closePQSModal.bind(this);
+    this.openStatsModal = this.openStatsModal.bind(this);
+    this.closeStatsModal = this.closeStatsModal.bind(this);
     this.getMoreTotals = this.getMoreTotals.bind(this);
   }
 
@@ -207,6 +218,30 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.setState({ showPQSModal: false });
   }
 
+  openStatsModal(item) {
+    const { currentUser, sources } = this.props;
+    const protocolNumber = this.props.location.query.protocol || null;
+    const indication = this.props.location.query.indication || null;
+    const cro = this.props.location.query.cro || null;
+    const messaging = this.props.location.query.messaging || null;
+
+    const filtersTotal = { source: null, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id };
+    this.setState({ showStatsModal: true });
+    for (const source of sources) {
+      let studyfilters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id  };
+      studyfilters = _.assign(studyfilters, this.props.formValues, {
+        source: source.id,
+      });
+      this.props.getStudyReportsTotals(studyfilters);
+    }
+    this.props.fetchStudyMediaSources(filtersTotal);
+    this.props.getStudyDispositionTotals(filtersTotal);
+  }
+
+  closeStatsModal() {
+    this.setState({ showStatsModal: false });
+  }
+
   render() {
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
@@ -294,6 +329,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           totals={this.props.totals}
           loadReports={this.loadReports}
           openNotesModal={this.openNotesModal}
+          openStatsModal={this.openStatsModal}
         />
         <Modal
           dialogComponentClass={CenteredModal}
@@ -321,6 +357,31 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
             </InfiniteScroll>
           </Modal.Body>
         </Modal>
+        <Modal
+          dialogComponentClass={CenteredModal}
+          show={this.state.showStatsModal}
+          className="stats-modal"
+        >
+          <Modal.Header>
+            <Modal.Title>
+              {this.state.modalTitle} {translate('sponsor.component.reportItem.morestats')}
+              <a className="lightbox-close close" onClick={() => { this.closeStatsModal(); }}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <StudyReportView
+              getPercentageObject={this.getPercentageObject}
+              totals={this.props.studyTotals}
+              openNotesModal={this.openNotesModal}
+              sources={this.props.sources}
+              dispositions={dispositions}
+              dispositionTotals={this.props.studyDispositionTotals}
+              mediaSources={this.props.studyMediaSources}
+            />
+          </Modal.Body>
+        </Modal>
 
         <PQSModal
           showModal={this.state.showPQSModal}
@@ -345,6 +406,9 @@ const mapStateToProps = createStructuredSelector({
   dispositionTotals: selectDispositionTotals(),
   mediaSources: selectMediaSources(),
   patientSignUps: selectPatientSignUps(),
+  studyTotals: selectStudyReportsTotals(),
+  studyDispositionTotals: selectStudyDispositionTotals(),
+  studyMediaSources: selectStudyMediaSources(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -360,6 +424,9 @@ function mapDispatchToProps(dispatch) {
     getDispositionTotals: searchParams => dispatch(getDispositionTotals(searchParams)),
     clearReportList: () => dispatch(clearReportList()),
     fetchTotalSignUps: (roleId, protocol, indication, timezone) => dispatch(fetchTotalSignUps(roleId, protocol, indication, timezone)),
+    getStudyReportsTotals: searchParams => dispatch(getStudyReportsTotals(searchParams)),
+    getStudyDispositionTotals: searchParams => dispatch(getStudyDispositionTotals(searchParams)),
+    fetchStudyMediaSources: (searchParams) => dispatch(fetchStudyMediaSources(searchParams)),
   };
 }
 
