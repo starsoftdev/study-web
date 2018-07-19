@@ -81,6 +81,7 @@ import {
   VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS,
   VENDOR_PATIENT_CATEGORIES_TOTALS_FETCHED,
   VENDOR_SET_SELECTED_STUDY_SOURCES,
+  EXPORT_PATIENTS,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -675,3 +676,13 @@ export function setSelectedStudySources(list) {
   };
 }
 
+export function exportPatients(studyId, vendorRoleId, text, campaignId, sourceId) {
+  return {
+    type: EXPORT_PATIENTS,
+    studyId,
+    vendorRoleId,
+    text,
+    campaignId,
+    sourceId,
+  };
+}
