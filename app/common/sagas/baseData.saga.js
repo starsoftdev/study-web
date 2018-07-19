@@ -49,6 +49,7 @@ import {
   SUBSCRIBE_FROM_LANDING,
   FIND_OUT_PATIENTS,
   CLINICAL_TRIALS_SEARCH,
+  CLINICAL_ALLERGAN_TRIALS_SEARCH,
   LIST_SITE_NOW,
   GET_PROPOSAL,
   LEARN_ABOUT_FUTURE_TRIALS,
@@ -215,6 +216,7 @@ export default function* baseDataSaga() {
   yield fork(takeLatest, SUBSCRIBE_FROM_LANDING, subscribeFromLanding);
   yield fork(takeLatest, FIND_OUT_PATIENTS, postFindOutPatients);
   yield fork(takeLatest, CLINICAL_TRIALS_SEARCH, searchClinicalTrials);
+  yield fork(takeLatest, CLINICAL_ALLERGAN_TRIALS_SEARCH, searchClinicalAllerganTrials);
   yield fork(takeLatest, LIST_SITE_NOW, listNowSite);
   yield fork(takeLatest, GET_PROPOSAL, getProposal);
   yield fork(takeLatest, LEARN_ABOUT_FUTURE_TRIALS, learnAboutFutureTrials);
@@ -1064,6 +1066,42 @@ function* postFindOutPatients(action) {
     const errorMessage = get(err, 'message', translate('corporate.page.trials.findOutPatientsForm.toastrDefaultError'));
     toastr.error('', errorMessage);
     yield put(findOutPatientsError(err));
+  }
+}
+
+function* searchClinicalAllerganTrials(action) { // eslint-disable-line prefer-template
+  try {
+    const { countryCode, distance, from, indicationId, postalCode, utm } = action.params;
+    const queryParams = {};
+    if (countryCode) {
+      queryParams.countryCode = countryCode;
+    }
+    if (distance) {
+      queryParams.distance = distance;
+    }
+    if (from !== false || from !== null) {
+      queryParams.from = from;
+    }
+    if (indicationId) {
+      queryParams.indicationId = indicationId;
+    }
+    if (postalCode) {
+      queryParams.postalCode = postalCode;
+    }
+    if (utm) {
+      queryParams.utm = utm;
+    }
+    const queryString = composeQueryString(queryParams);
+    const requestURL = `${API_URL}/studies/getNearbyStudiesAllergan?${queryString}`;
+    const response = yield call(request, requestURL, {
+      method: 'GET',
+    });
+    yield put(clinicalTrialsSearchSuccess(response));
+  } catch (err) {
+    yield put(clinicalTrialsSearchError(err));
+    if (err.message.indexOf('postal code.') !== -1) {
+      toastr.error('', err.message);
+    }
   }
 }
 
