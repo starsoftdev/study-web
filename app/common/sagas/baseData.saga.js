@@ -65,7 +65,6 @@ import {
   SUBMIT_CNS,
   FETCH_PATIENT_MESSAGE_UNREAD_COUNT,
   FETCH_PATIENT_CATEGORIES,
-  FETCH_STUDY_SOURCES,
   FETCH_MEDIA_TYPES,
   PRIVACY_REQUEST,
 } from '../../containers/App/constants';
@@ -171,13 +170,12 @@ import {
   submitCnsError,
   patientCategoriesFetched,
   patientCategoriesFetchingError,
-  fetchStudySourcesSuccess,
-  fetchStudySourcesError,
   fetchMediaTypesSuccess,
   fetchMediaTypesError,
 } from '../../containers/App/actions';
 import { DELETE_MEDIA_TYPE } from '../../components/CallTrackingPageModal/constants';
 import { deleteMediaTypeSuccess } from '../../components/CallTrackingPageModal/actions';
+import { fetchStudySources } from '../../../common/sagas/studySources';
 
 
 let deleteMediaTypesWatcher = false;
@@ -1432,24 +1430,6 @@ function* readStudyPatientMessagesWorker(action) {
     if (err.status === 401) {
       removeItem('auth_token');
       yield call(() => { location.href = '/login'; });
-    }
-  }
-}
-
-function* fetchStudySources() {
-  while (true) {
-    const { studyId } = yield take(FETCH_STUDY_SOURCES);
-    try {
-      const options = {
-        method: 'GET',
-      };
-
-      const requestURL = `${API_URL}/studies/${studyId}/studySources`;
-      const response = yield call(request, requestURL, options);
-
-      yield put(fetchStudySourcesSuccess(response));
-    } catch (err) {
-      yield put(fetchStudySourcesError(err));
     }
   }
 }

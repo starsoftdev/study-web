@@ -37,7 +37,9 @@ export const selectSubmittingEmail = () => createSelector(
 
 export const selectCallCenterScheduledModalFormValues = () => createSelector(
   selectCallCenterPatientPageDomain(),
-  (subState) => (subState.CallCenterScheduledPatientModal ? subState.CallCenterScheduledPatientModal.values : null)
+  (subState) => {
+    return (subState.CallCenterScheduledPatientModal ? subState.CallCenterScheduledPatientModal.values : null);
+  }
 );
 
 export const selectSchedules = () => createSelector(
