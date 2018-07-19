@@ -11,15 +11,16 @@ import { FETCH_ME_FROM_TOKEN, LOGOUT_REQUEST } from '../../containers/App/consta
 import { setAuthState, setUserData } from '../../containers/App/actions';
 import { SET_SOCKET_CONNECTION } from '../../containers/GlobalNotifications/constants';
 import { connectionEstablished } from '../../containers/GlobalNotifications/actions';
+import { fetchStudySources } from '../../../common/sagas/studySources';
 
 let socket = null;
 
 export default function* vendorAppSaga() {
   yield fork(fetchMeSaga);
+  yield fork(fetchStudySources);
   yield fork(logoutSaga);
   yield fork(setSocketConnection);
 }
-
 
 export function* fetchMeSaga() {
   while (true) {

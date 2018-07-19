@@ -14,11 +14,12 @@ import Form from 'react-bootstrap/lib/Form';
 import { selectSyncErrorBool, selectValues } from '../../../common/selectors/form.selector';
 import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
 import { selectIndications, selectSiteLocations, selectSources, selectCurrentUser } from '../../App/selectors';
-import { fetchStudySources } from '../../App/actions';
+import { fetchStudySources } from '../../../../common/actions/studySources';
 import Input from '../../../../common/components/Input/index';
 import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import { fetchFilteredProtcols, submitAddPatient } from '../actions';
-import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols, selectStudySources } from '../selectors';
+import { selectIsFetchingProtocols, selectAddPatientStatus, selectProtocols } from '../selectors';
+import { selectStudySources } from '../../../../common/selectors/studySources';
 import formValidator, { fields } from './validator';
 import { translate } from '../../../../common/utilities/localization';
 
