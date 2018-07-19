@@ -323,7 +323,6 @@ export function* fetchStudyReportsTotalsWorker(action) {
       requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp`;
     }
     const response = yield call(request, requestURL);
-    console.log('study', response);
     yield put(getStudyReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
     if (err.status !== 401) {
