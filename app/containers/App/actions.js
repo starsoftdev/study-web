@@ -134,6 +134,7 @@ import {
   FIND_OUT_PATIENTS_ERROR,
 
   CLINICAL_TRIALS_SEARCH,
+  CLINICAL_ALLERGAN_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLINICAL_TRIALS_SEARCH_ERROR,
   CLEAR_CLINICAL_TRIALS_SEARCH,
@@ -1038,6 +1039,13 @@ export function findOutPatientsError(params) {
 export function clinicalTrialsSearch(params) {
   return {
     type: CLINICAL_TRIALS_SEARCH,
+    params,
+  };
+}
+
+export function clinicalAllerganTrialsSearch(params) {
+  return {
+    type: CLINICAL_ALLERGAN_TRIALS_SEARCH,
     params,
   };
 }
