@@ -10,7 +10,7 @@ import AllerganClinicalTrialsSearchForm from '../../components/AllerganClinicalT
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import BackToTopButton from '../../components/BackTopButton';
 import '../../../app/components/LoadingSpinner/styles.less';
-import { fetchIndications, clinicalTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
+import { fetchIndications, clinicalAllerganTrialsSearch, clearClinicalTrialsSearch } from '../../../app/containers/App/actions';
 import { selectIndications, selectTrials, selectTrialsTotal } from '../../../app/containers/App/selectors';
 import { selectValues } from '../../../app/common/selectors/form.selector';
 import { translate } from '../../../common/utilities/localization';
@@ -109,12 +109,17 @@ export class AllerganSearch extends Component { // eslint-disable-line react/pre
   }
 
   onSubmitForm(values) {
-    const { onSubmitForm, clearTrialsList } = this.props;
+    const { onSubmitForm, clearTrialsList, location: { query } } = this.props;
     const newValues = Object.assign({
       from: 0,
     }, values);
+    const utm = (query && query.utm) ? query.utm : null;
 
     newValues.indicationId = this.allerganIndicationId;
+    if (utm) {
+      newValues.utm = utm;
+    }
+
     clearTrialsList();
     onSubmitForm(newValues);
   }
@@ -125,15 +130,18 @@ export class AllerganSearch extends Component { // eslint-disable-line react/pre
   }
 
   isShow() {
-    const { onSubmitForm, newList } = this.props;
+    const { onSubmitForm, newList, location: { query } } = this.props;
     this.show++;
 
     if (this.show === this.loaded && this.show !== parseInt(this.props.total)) {
       const newValues = Object.assign({
         from: this.show,
       }, newList);
-
+      const utm = (query && query.utm) ? query.utm : null;
       newValues.indicationId = this.allerganIndicationId;
+      if (utm) {
+        newValues.utm = utm;
+      }
 
       onSubmitForm(newValues);
     }
@@ -213,7 +221,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
-    onSubmitForm: (values) => dispatch(clinicalTrialsSearch(values)),
+    onSubmitForm: (values) => dispatch(clinicalAllerganTrialsSearch(values)),
     resetForm: () => dispatch(reset('find-studies')),
     clearTrialsList: () => dispatch(clearClinicalTrialsSearch()),
   };
