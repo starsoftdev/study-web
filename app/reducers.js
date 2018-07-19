@@ -18,6 +18,7 @@ import { default as resetPasswordPageReducer } from './containers/ResetPasswordP
 import { default as editDashboardStudyReducer } from './components/EditStudyForms/reducer';
 import { default as mediaTrackingReducer } from './components/CallTrackingPageModal/reducer';
 import appReducer from './containers/App/reducer';
+import commonReducer from '../common/reducers/index';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 import { default as editVendorStudiesFormReducer } from '../vendor/containers/Admin/EditVendorStudiesForm/reducer';
 
@@ -44,6 +45,7 @@ export default function createReducer(asyncReducers) {
     globalNotifications: globalNotificationsReducer,
     resetPasswordPage: resetPasswordPageReducer,
     global: appReducer,
+    common: commonReducer,
     ...asyncReducers,
   });
 }

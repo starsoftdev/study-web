@@ -10,6 +10,7 @@ import settings from '../../../common/settings/app-settings.json';
 
 import { fetchProtocols } from '../App/actions';
 import { selectCurrentUser, selectProtocols } from '../App/selectors';
+import { selectValues } from '../../../common/selectors/form.selector';
 import { setSocketConnection } from '../GlobalNotifications/actions';
 import {
   selectSocket,
@@ -21,11 +22,11 @@ import {
   submitPatientUpdate,
   submitPatientDisposition,
   fetchSchedules,
+  submitPatientSchedule,
 } from './actions';
 import {
   selectSelectedPatient,
   selectCallCenterPatientCategories,
-  selectCallCenterScheduledModalFormValues,
   selectSchedules,
 } from './selectors';
 
@@ -49,6 +50,7 @@ class CallCenterPatientPage extends Component {
     fetchCallCenterPatientCategories: PropTypes.func,
     fetchPatient: PropTypes.func,
     fetchProtocols: PropTypes.func,
+    fetchSchedules: PropTypes.func,
     params: PropTypes.object,
     patient: PropTypes.object,
     protocols: PropTypes.object,
@@ -57,6 +59,7 @@ class CallCenterPatientPage extends Component {
     socket: PropTypes.any,
     submitPatientUpdate: PropTypes.func,
     submitPatientDisposition: PropTypes.func,
+    submitPatientSchedule: PropTypes.func,
     schedules: PropTypes.object,
   };
 
@@ -79,6 +82,7 @@ class CallCenterPatientPage extends Component {
       fetchPatient,
       fetchProtocols,
       setSocketConnection,
+      fetchSchedules,
     } = this.props;
 
     fetchCallCenterPatientCategories();
@@ -189,6 +193,7 @@ class CallCenterPatientPage extends Component {
       patientId: patient.details.id,
       callCenterPatientCategoryId,
       patientCategoryId,
+      time: null,
     });
 
     submitPatientDisposition({
@@ -221,13 +226,13 @@ class CallCenterPatientPage extends Component {
   }
 
   handleDateChange= (date) => {
-    this.scheduleDate = date;
+    this.setState({ scheduleDate: date });
   }
 
   onPatientScheduleSubmit = (e) => {
     e.preventDefault();
 
-    const { patient, submitPatientUpdate, submitPatientDisposition } = this.props;
+    const { patient, submitPatientUpdate, submitPatientDisposition, submitPatientSchedule, scheduledModalFormValues } = this.props;
     submitPatientUpdate({
       patientId: patient.details.id,
       callCenterPatientCategoryId: 5,
@@ -238,6 +243,14 @@ class CallCenterPatientPage extends Component {
     submitPatientDisposition({
       patientId: patient.details.id,
       dispositionKey: undefined,
+    });
+
+    const time = this.state.scheduleDate.hour(scheduledModalFormValues.period === 'AM' ? scheduledModalFormValues.hour % 12 : (scheduledModalFormValues.hour % 12) + 12).minute(scheduledModalFormValues.minute);
+
+    submitPatientSchedule({
+      patientId: patient.details.id,
+      time: time.toISOString(),
+      isDelete: false,
     });
 
     this.setState({ isScheduleModalVisible: false });
@@ -349,7 +362,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   patient: selectSelectedPatient(),
   protocols: selectProtocols(),
-  scheduledModalFormValues: selectCallCenterScheduledModalFormValues(),
+  scheduledModalFormValues: selectValues('CallCenterScheduledPatientModal'),
   socket: selectSocket(),
   schedules: selectSchedules(),
 });
@@ -362,6 +375,7 @@ function mapDispatchToProps(dispatch) {
     fetchSchedules: () => dispatch(fetchSchedules()),
     setSocketConnection: (payload) => dispatch(setSocketConnection(payload)),
     submitPatientUpdate: (payload) => dispatch(submitPatientUpdate(payload)),
+    submitPatientSchedule: (payload) => dispatch(submitPatientSchedule(payload)),
     submitPatientDisposition: (payload) => dispatch(submitPatientDisposition(payload)),
   };
 }

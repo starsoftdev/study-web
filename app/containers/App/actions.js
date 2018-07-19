@@ -134,6 +134,7 @@ import {
   FIND_OUT_PATIENTS_ERROR,
 
   CLINICAL_TRIALS_SEARCH,
+  CLINICAL_ALLERGAN_TRIALS_SEARCH,
   CLINICAL_TRIALS_SEARCH_SUCCESS,
   CLINICAL_TRIALS_SEARCH_ERROR,
   CLEAR_CLINICAL_TRIALS_SEARCH,
@@ -206,11 +207,6 @@ import {
   GET_TIMEZONE,
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
-
-  CLEAR_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
 
   FETCH_MEDIA_TYPES,
   FETCH_MEDIA_TYPES_SUCCESS,
@@ -1042,6 +1038,13 @@ export function clinicalTrialsSearch(params) {
   };
 }
 
+export function clinicalAllerganTrialsSearch(params) {
+  return {
+    type: CLINICAL_ALLERGAN_TRIALS_SEARCH,
+    params,
+  };
+}
+
 export function clinicalTrialsSearchSuccess(payload) {
   return {
     type: CLINICAL_TRIALS_SEARCH_SUCCESS,
@@ -1368,34 +1371,6 @@ export function getTimezoneError(payload) {
     payload,
   };
 }
-
-export function clearStudySources() {
-  return {
-    type: CLEAR_STUDY_SOURCES,
-  };
-}
-
-export function fetchStudySources(studyId) {
-  return {
-    type: FETCH_STUDY_SOURCES,
-    studyId,
-  };
-}
-
-export function fetchStudySourcesSuccess(payload) {
-  return {
-    type: FETCH_STUDY_SOURCES_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchStudySourcesError(payload) {
-  return {
-    type: FETCH_STUDY_SOURCES_ERROR,
-    payload,
-  };
-}
-
 
 export function fetchMediaTypes(studyId) {
   return {
