@@ -52,7 +52,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       if (currentTab ===  'mediaName') {
-        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
+        source = _.findIndex(categories, (o) => { return o.id === cat.id; });
       }
       if (totals.details[source]) {
         totalValues = {
