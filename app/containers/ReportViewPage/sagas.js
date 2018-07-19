@@ -19,6 +19,9 @@ import {
   FETCH_DISPOSITION_TOTALS,
   FETCH_MEDIA_SOURCES,
   FETCH_TOTAL_SIGNUPS,
+  GET_STUDY_REPORTS_TOTALS,
+  FETCH_STUDY_DISPOSITION_TOTALS,
+  FETCH_STUDY_MEDIA_SOURCES,
 } from './constants';
 
 import {
@@ -36,6 +39,12 @@ import {
   mediaSourcesFetchingError,
   fetchTotalSignUpsSuccess,
   fetchTotalSignUpsError,
+  getStudyReportsTotalsSuccess,
+  getStudyReportsTotalsError,
+  getStudyDispositionTotalsSuccess,
+  getStudyDispositionTotalsError,
+  studyMediaSourcesFetched,
+  studyMediaSourcesFetchingError,
 } from './actions';
 
 
@@ -48,6 +57,9 @@ export function* reportViewPageSaga() {
   const watcherF = yield fork(fetchDispositionsWatcher);
   const watcherG = yield fork(fetchMediaSourcesWatcher);
   const watcherH = yield fork(fetchTotalSignUpsWatcher);
+  const watcherI = yield fork(fetchStudyReportsTotalsWatcher);
+  const watcherJ = yield fork(fetchStudyDispositionsWatcher);
+  const watcherK = yield fork(fetchStudyMediaSourcesWatcher);
 
   yield take(LOCATION_CHANGE);
 
@@ -59,6 +71,9 @@ export function* reportViewPageSaga() {
   yield cancel(watcherF);
   yield cancel(watcherG);
   yield cancel(watcherH);
+  yield cancel(watcherI);
+  yield cancel(watcherJ);
+  yield cancel(watcherK);
 }
 
 export function* fetchReportsWatcher() {
@@ -180,6 +195,7 @@ export function* fetchReportsTotalsWorker(action) {
       requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp`;
     }
     const response = yield call(request, requestURL);
+    console.log('total', response);
     yield put(getReportsTotalsSuccess(action.searchParams.source, response));
   } catch (err) {
     if (err.status !== 401) {
@@ -289,6 +305,73 @@ export function* fetchTotalSignUpsWorker(action) {
       toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
     }
     yield put(fetchTotalSignUpsError(err));
+  }
+}
+
+export function* fetchStudyReportsTotalsWatcher() {
+  yield* takeEvery(GET_STUDY_REPORTS_TOTALS, fetchStudyReportsTotalsWorker);
+}
+
+export function* fetchStudyReportsTotalsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getStudiesByProtocolTotalsTmp`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(getStudyReportsTotalsSuccess(action.searchParams.source, response));
+  } catch (err) {
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
+    yield put(getStudyReportsTotalsError(err));
+  }
+}
+
+export function* fetchStudyMediaSourcesWatcher() {
+  yield* takeLatest(FETCH_STUDY_MEDIA_SOURCES, fetchStudyMediaSourcesWorker);
+}
+
+function* fetchStudyMediaSourcesWorker(action) {
+  try {
+    const queryString = composeQueryString(action.searchParams);
+    const options = {
+      method: 'GET',
+    };
+
+    const requestURL = `${API_URL}/studies/getLeadSourcesByProtocol?${queryString}`;
+    const response = yield call(request, requestURL, options);
+
+    yield put(studyMediaSourcesFetched(response));
+  } catch (err) {
+    yield put(studyMediaSourcesFetchingError(err));
+  }
+}
+
+export function* fetchStudyDispositionsWatcher() {
+  yield* takeLatest(FETCH_STUDY_DISPOSITION_TOTALS, fetchStudyDispositionsWorker);
+}
+export function* fetchStudyDispositionsWorker(action) {
+  try {
+    let queryString;
+    let requestURL;
+    if (action.searchParams) {
+      queryString = composeQueryString(action.searchParams);
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals?${queryString}`;
+    } else {
+      requestURL = `${API_URL}/studies/getStudiesByDispositionTotals`;
+    }
+    const response = yield call(request, requestURL);
+    yield put(getStudyDispositionTotalsSuccess(response));
+  } catch (err) {
+    if (err.status !== 401) {
+      toastr.error('', translate('sponsor.page.reportViewPage.toastrFetchStatsErrorMessage'));
+    }
+    yield put(getStudyDispositionTotalsError(err));
   }
 }
 

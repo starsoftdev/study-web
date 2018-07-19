@@ -40,13 +40,6 @@ import {
   ADD_PROTOCOL_ERROR,
 } from './constants';
 
-import {
-  CLEAR_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
-} from '../App/constants';
-
 const initialState = {
   totalPatients: 0,
   patients: {
@@ -87,15 +80,10 @@ const initialState = {
     uploadStart: false,
     fileUploaded: null,
   },
-  addPatientStatus:{
+  addPatientStatus: {
     adding: false,
   },
-  addProtocolProcess:{
-    details: [],
-    fetching: false,
-    error: null,
-  },
-  studySources: {
+  addProtocolProcess: {
     details: [],
     fetching: false,
     error: null,
@@ -111,50 +99,6 @@ export default function patientDatabasePageReducer(state = initialState, action)
   let totalPatients = 0;
 
   switch (action.type) {
-    case CLEAR_STUDY_SOURCES:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: false,
-          error: null,
-        },
-      };
-    case FETCH_STUDY_SOURCES:
-      return {
-        ...state,
-        studySources: {
-          details: state.studySources.details,
-          fetching: true,
-          error: null,
-        },
-      };
-    case FETCH_STUDY_SOURCES_SUCCESS:
-      return {
-        ...state,
-        studySources: {
-          details: action.payload.map((item) => {
-            return {
-              source: { value: item.source_id, label: item.type },
-              sourceName: item.sourceName,
-              studySourceId: item.studySourceId,
-              isMediaType: item.isMediaType,
-            };
-          }),
-          fetching: false,
-          error: null,
-        },
-      };
-
-    case FETCH_STUDY_SOURCES_ERROR:
-      return {
-        ...state,
-        studySources: {
-          details: [],
-          fetching: false,
-          error: action.payload,
-        },
-      };
     case CLEAR_IMPORT_FORM:
       return {
         ...state,
