@@ -14,10 +14,9 @@ const schema = {
   },
   address: { presence: true },
   city: { presence: true },
-  countryCode: { presence: false },
+  countryCode: { presence: true },
   zip: { presence: true },
-  selectedRegion: { presence: true },
-  selectedTimezone: { presence: true },
+  timezone: { presence: true },
 };
 
 const editStudyFields = Object.keys(schema);
