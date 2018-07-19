@@ -228,7 +228,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const filtersTotal = { source: null, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id };
     this.setState({ showStatsModal: true });
     for (const source of sources) {
-      let studyfilters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
+      let studyfilters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id  };
       studyfilters = _.assign(studyfilters, this.props.formValues, {
         source: source.id,
       });
