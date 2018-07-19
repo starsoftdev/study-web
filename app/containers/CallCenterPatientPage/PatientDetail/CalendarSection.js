@@ -25,7 +25,7 @@ const mapStateToProps = createStructuredSelector({
 class CalendarSection extends React.Component {
   static propTypes = {
     studyId: React.PropTypes.any,
-    patient: React.PropTypes.object,
+    currentPatient: React.PropTypes.object,
     schedules: React.PropTypes.array,
     active: React.PropTypes.bool.isRequired,
     currentUser: React.PropTypes.object,
@@ -57,12 +57,12 @@ class CalendarSection extends React.Component {
   }
 
   render() {
-    const { active, currentUser, patient, schedules } = this.props;
+    const { active, currentUser, currentPatient, schedules } = this.props;
     return (
       <div className={`item others ${active ? 'active' : ''}`}>
         {<CalendarWidget
           currentUser={currentUser}
-          patient={patient}
+          patient={currentPatient}
           schedules={schedules}
           handleOpenModal={this.handleModalVisibility}
           handleShowAll={this.handleShowAll}

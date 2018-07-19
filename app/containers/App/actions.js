@@ -208,11 +208,6 @@ import {
   GET_TIMEZONE_SUCCESS,
   GET_TIMEZONE_ERROR,
 
-  CLEAR_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES,
-  FETCH_STUDY_SOURCES_SUCCESS,
-  FETCH_STUDY_SOURCES_ERROR,
-
   FETCH_MEDIA_TYPES,
   FETCH_MEDIA_TYPES_SUCCESS,
   FETCH_MEDIA_TYPES_ERROR,
@@ -1376,34 +1371,6 @@ export function getTimezoneError(payload) {
     payload,
   };
 }
-
-export function clearStudySources() {
-  return {
-    type: CLEAR_STUDY_SOURCES,
-  };
-}
-
-export function fetchStudySources(studyId) {
-  return {
-    type: FETCH_STUDY_SOURCES,
-    studyId,
-  };
-}
-
-export function fetchStudySourcesSuccess(payload) {
-  return {
-    type: FETCH_STUDY_SOURCES_SUCCESS,
-    payload,
-  };
-}
-
-export function fetchStudySourcesError(payload) {
-  return {
-    type: FETCH_STUDY_SOURCES_ERROR,
-    payload,
-  };
-}
-
 
 export function fetchMediaTypes(studyId) {
   return {

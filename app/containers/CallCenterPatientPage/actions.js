@@ -32,6 +32,10 @@ import {
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
 
+  SUBMIT_PATIENT_SCHEDULE,
+  SUBMIT_PATIENT_SCHEDULE_SUCCESS,
+  SUBMIT_PATIENT_SCHEDULE_ERROR,
+
 } from './constants';
 
 export function fetchPatient(id) {
@@ -213,6 +217,27 @@ export function schedulesFetched(payload) {
 export function schedulesFetchingError(payload) {
   return {
     type: FETCH_SCHEDULES_ERROR,
+    payload,
+  };
+}
+
+export function submitPatientSchedule(payload) {
+  return {
+    type: SUBMIT_PATIENT_SCHEDULE,
+    payload,
+  };
+}
+
+export function patientScheduleSubmitted(payload) {
+  return {
+    type: SUBMIT_PATIENT_SCHEDULE_SUCCESS,
+    payload,
+  };
+}
+
+export function patientScheduleSubmissionError(payload) {
+  return {
+    type: SUBMIT_PATIENT_SCHEDULE_ERROR,
     payload,
   };
 }
