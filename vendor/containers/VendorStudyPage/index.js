@@ -9,6 +9,8 @@ import Helmet from 'react-helmet';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser, selectSources } from '../App/selectors';
 import { fetchStudySources } from '../../../common/actions/studySources';
@@ -62,6 +64,7 @@ const mapDispatchToProps = (dispatch) => {
     studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
     fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
   };
 };
 
@@ -100,6 +103,7 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
     paginationOptions: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
     patientBoardLoading: React.PropTypes.bool,
+    toastrActions: React.PropTypes.object.isRequired,
   };
 
   static defaultProps = {
