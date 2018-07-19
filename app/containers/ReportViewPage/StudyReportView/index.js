@@ -7,13 +7,11 @@ import _ from 'lodash';
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
 
-export class ReportViewTotals extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class StudyReportView extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
-    reportsList: PropTypes.object,
     getPercentageObject: PropTypes.func,
-    getMoreTotals: PropTypes.func,
-    totals: PropTypes.object,
     openNotesModal: PropTypes.func,
+    totals: PropTypes.object,
     sources: PropTypes.array,
     dispositions: PropTypes.array,
     dispositionTotals: PropTypes.object,
@@ -24,11 +22,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     super(props);
 
     this.state = {
-      expanded: false,
       currentTab: 'mediaType',
     };
 
-    this.toggleExpand = this.toggleExpand.bind(this);
     this.renderCategory = this.renderCategory.bind(this);
     this.handleSelectTab = this.handleSelectTab.bind(this);
     this.getTotalValues = this.getTotalValues.bind(this);
@@ -56,7 +52,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       if (currentTab ===  'mediaName') {
-        source = _.findIndex(categories, (o) => { return o.id === cat.id; });
+        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
       }
       if (totals.details[source]) {
         totalValues = {
@@ -87,22 +83,12 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     });
   }
 
-  toggleExpand(e) {
-    e.preventDefault();
-    if (!this.state.expanded) {
-      this.props.getMoreTotals();
-    }
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  }
-
   handleSelectTab = (tab) => {
     this.setState({ currentTab: tab });
   }
 
   renderCategory() {
-    const { expanded, currentTab } = this.state;
+    const { currentTab } = this.state;
     let cats = currentTab === 'mediaType' ? this.props.sources : this.props.dispositions;
 
     if (currentTab ===  'mediaName') {
@@ -110,49 +96,33 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     }
 
     if (cats && cats.length > 0) {
-      if (currentTab === 'mediaType' && !expanded) {
-        return (<strong className="number media-type no-animation"><span>{(cats[0].name ? cats[0].name : cats[0].type)}</span></strong>);
-      } else {
-        return (
-          <div>
-            {
-              cats.map(item => (<strong key={item.id} className="number media-type no-animation"><span>{(item.name ? item.name : item.type)}</span></strong>))
-            }
-          </div>
-        );
-      }
+      return (
+        <div>
+          {
+            cats.map(item => (<strong key={item.id} className="number media-type no-animation"><span>{(item.name ? item.name : item.type)}</span></strong>))
+          }
+        </div>
+      );
     }
     return (<div></div>);
   }
 
   renderValues(values, field) {
-    const { expanded, currentTab } = this.state;
     if (values.length > 0) {
-      if (currentTab === 'mediaType' && !expanded) {
-        return (
-          <strong className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
-            <span>
-              { values[0].totals[field] }
-              { field !== 'total' && <span className="small">{`(${values[0].percentage[`${field}_p`]}%)`}</span> }
-            </span>
-          </strong>
-        );
-      } else {
-        return (
-          <div>
-            {
-              values.map((value, index) => (
-                <strong key={index} className={classNames('number', { pointer: field === 'dnq' || field === 'action_needed' || field === 'screen_failed' })}>
-                  <span>
-                    { value.totals[field] }
-                    { field !== 'total' && <span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span> }
-                  </span>
-                </strong>)
-              )
-            }
-          </div>
-        );
-      }
+      return (
+        <div>
+          {
+            values.map((value, index) => (
+              <strong key={index} className={'number'}>
+                <span>
+                  { value.totals[field] }
+                  { field !== 'total' && <span className="small">{`(${value.percentage[`${field}_p`]}%)`}</span> }
+                </span>
+              </strong>)
+            )
+          }
+        </div>
+      );
     }
     return (<div></div>);
   }
@@ -171,7 +141,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     }
 
     return (
-      <div id="carousel-example-generic" className="carousel slide popup-slider">
+      <div id="carousel-example-generic" className="carousel slide popup-slider sponsor-portal">
         <ol className="carousel-indicators">
           <li className={classNames({ active: currentTab === 'mediaType' })} onClick={() => this.handleSelectTab('mediaType')}>
             {translate('sponsor.component.reportItem.mediaType')}
@@ -185,7 +155,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         </ol>
         <div className="report-page-totals-container">
           {
-            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'mediaName' && this.props.mediaSources.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
+            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
           <ul className="list-inline list-stats">
             <li className="allcaps">
@@ -200,11 +170,11 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
               { this.renderValues(totalValues, 'call_attempted') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
               { this.renderValues(totalValues, 'dnq') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
               { this.renderValues(totalValues, 'action_needed') }
             </li>
@@ -216,7 +186,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
               <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
               { this.renderValues(totalValues, 'consented') }
             </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
+            <li>
               <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
               { this.renderValues(totalValues, 'screen_failed') }
             </li>
@@ -229,9 +199,6 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
               { this.renderValues(totalValues, 'total') }
             </li>
           </ul>
-          {
-            currentTab === 'mediaType' && <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
-          }
         </div>
       </div>
     );
@@ -244,4 +211,4 @@ const mapDispatchToProps = {};
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ReportViewTotals);
+)(StudyReportView);

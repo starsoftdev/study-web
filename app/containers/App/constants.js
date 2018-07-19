@@ -209,11 +209,6 @@ export const GET_TIMEZONE                          = 'GET_TIMEZONE';
 export const GET_TIMEZONE_SUCCESS                  = 'GET_TIMEZONE_SUCCESS';
 export const GET_TIMEZONE_ERROR                    = 'GET_TIMEZONE_ERROR';
 
-export const CLEAR_STUDY_SOURCES                   = 'App/CLEAR_STUDY_SOURCES';
-export const FETCH_STUDY_SOURCES                   = 'App/FETCH_STUDY_SOURCES';
-export const FETCH_STUDY_SOURCES_SUCCESS           = 'App/FETCH_STUDY_SOURCES_SUCCESS';
-export const FETCH_STUDY_SOURCES_ERROR             = 'App/FETCH_STUDY_SOURCES_ERROR';
-
 export const FETCH_MEDIA_TYPES              = 'App/FETCH_MEDIA_TYPES';
 export const FETCH_MEDIA_TYPES_SUCCESS      = 'App/FETCH_MEDIA_TYPES_SUCCESS';
 export const FETCH_MEDIA_TYPES_ERROR        = 'App/FETCH_MEDIA_TYPES_ERROR';

@@ -32,6 +32,15 @@ import {
   FETCH_TOTAL_SIGNUPS,
   FETCH_TOTAL_SIGNUPS_SUCCESS,
   FETCH_TOTAL_SIGNUPS_ERROR,
+  GET_STUDY_REPORTS_TOTALS,
+  GET_STUDY_REPORTS_TOTALS_SUCCESS,
+  GET_STUDY_REPORTS_TOTALS_ERROR,
+  FETCH_STUDY_DISPOSITION_TOTALS_SUCCESS,
+  FETCH_STUDY_DISPOSITION_TOTALS,
+  FETCH_STUDY_DISPOSITION_TOTALS_ERROR,
+  FETCH_STUDY_MEDIA_SOURCES,
+  FETCH_STUDY_MEDIA_SOURCES_SUCCESS,
+  FETCH_STUDY_MEDIA_SOURCES_ERROR,
 } from './constants';
 
 const initialState = {
@@ -81,6 +90,23 @@ const initialState = {
     fetching: false,
     error: null,
   },
+  studyTotals: {
+    details: {},
+    source: 1,
+    fetching: false,
+    error: null,
+  },
+  studyDispositionTotals: {
+    details: {},
+    disposition: 1,
+    fetching: false,
+    error: null,
+  },
+  studyMediaSources: {
+    details: [],
+    fetching: false,
+    error: null,
+  },
 };
 
 function reportViewPageReducer(state = initialState, action) {
@@ -95,6 +121,7 @@ function reportViewPageReducer(state = initialState, action) {
   let foundIndex = null;
   let copy = null;
   const details = _.cloneDeep(state.totals.details);
+  const studyDetails = _.cloneDeep(state.studyTotals.details);
   switch (action.type) {
     case GET_REPORTS_LIST:
       if (action.offset === 0) {
@@ -377,6 +404,91 @@ function reportViewPageReducer(state = initialState, action) {
           today: 0,
           yesterday: 0,
           total: 0,
+        },
+      };
+    case GET_STUDY_REPORTS_TOTALS:
+      return {
+        ...state,
+        studyTotals: {
+          details: state.studyTotals.details,
+          source: state.studyTotals.source,
+          fetching: true,
+          error: null,
+        },
+      };
+    case GET_STUDY_REPORTS_TOTALS_SUCCESS:
+      studyDetails[action.source] = action.payload;
+      return {
+        ...state,
+        studyTotals: {
+          details: studyDetails,
+          source: state.studyTotals.source,
+          fetching: false,
+          error: null,
+        },
+      };
+    case GET_STUDY_REPORTS_TOTALS_ERROR:
+      return {
+        ...state,
+        studyTotals: {
+          details: {},
+          source: state.studyTotals.source,
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_STUDY_MEDIA_SOURCES:
+      return {
+        ...state,
+        studyMediaSources: {
+          details: [],
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_MEDIA_SOURCES_SUCCESS:
+      return {
+        ...state,
+        studyMediaSources: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_MEDIA_SOURCES_ERROR:
+      return {
+        ...state,
+        studyMediaSources: {
+          details: [],
+          fetching: false,
+          error: action.payload,
+        },
+      };
+    case FETCH_STUDY_DISPOSITION_TOTALS:
+      return {
+        ...state,
+        studyDispositionTotals: {
+          details: state.studyDispositionTotals.details,
+          fetching: true,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_DISPOSITION_TOTALS_SUCCESS:
+      return {
+        ...state,
+        studyDispositionTotals: {
+          details: action.payload,
+          fetching: false,
+          error: null,
+        },
+      };
+    case FETCH_STUDY_DISPOSITION_TOTALS_ERROR:
+      return {
+        ...state,
+        studyDispositionTotals: {
+          details: {},
+          fetching: false,
+          error: action.payload,
         },
       };
     default:
