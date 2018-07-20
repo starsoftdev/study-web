@@ -13,13 +13,14 @@ import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser, selectSources } from '../../containers/App/selectors';
-import { fetchStudySources } from '../../containers/App/actions';
+import { fetchStudySources } from '../../../common/actions/studySources';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../../containers/NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/index';
 import * as Selector from './selectors';
+import { selectStudySources } from '../../../common/selectors/studySources';
 import { selectValues } from '../../common/selectors/form.selector';
 import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../../containers/GlobalNotifications/actions';
@@ -376,7 +377,7 @@ const mapStateToProps = createStructuredSelector({
   fetchingPatientsError: Selector.selectFetchingPatientsError(),
   currentUser: selectCurrentUser(),
   paginationOptions: Selector.selectPaginationOptions(),
-  studySources: Selector.selectStudySources(),
+  studySources: selectStudySources(),
   studyPatientsFilter: selectValues('filterStudyPatients'),
 });
 

@@ -6,10 +6,6 @@ export const SET_USER_DATA                         = 'App/SET_USER_DATA';
 
 export const LOGOUT_REQUEST                        = 'App/LOGOUT_REQUEST';
 
-export const FETCH_STUDY_SOURCES                   = 'App/VENDOR/FETCH_STUDY_SOURCES';
-export const FETCH_STUDY_SOURCES_SUCCESS           = 'App/VENDOR/FETCH_STUDY_SOURCES_SUCCESS';
-export const FETCH_STUDY_SOURCES_ERROR             = 'App/VENDOR/FETCH_STUDY_SOURCES_ERROR';
-
 export const FETCH_INDICATIONS                     = 'App/VENDOR/FETCH_INDICATIONS';
 export const FETCH_INDICATIONS_SUCCESS             = 'App/VENDOR/FETCH_INDICATIONS_SUCCESS';
 export const FETCH_INDICATIONS_ERROR               = 'App/VENDOR/FETCH_INDICATIONS_ERROR';

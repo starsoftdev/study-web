@@ -651,7 +651,7 @@
     "corporate.page.privacyPolicy.purposesText": "We process personal data for the purposes of:",
     "corporate.page.privacyPolicy.purposesListItems": "<li>assisting pharmaceutical companies and external CROs in finding medical study participants;</li><li>enabling your use of our website and the services we provide;</li><li>responding to your inquiries, and/or other requests or questions, and</li><li>sending you marketing emails.</li>",
     "corporate.page.privacyPolicy.cookiesTitle": "Use of Cookies",
-    "corporate.page.privacyPolicy.cookiesText": "We use cookies to store information on your computer. Cookies improve your navigation on this site and enhance your user experience. You may delete or otherwise control cookies. For more information please visit <a href=\"https://www.aboutcookies.org/\">https://www.aboutcookies.org/</a>.",
+    "corporate.page.privacyPolicy.cookiesText": "We use cookies to store information on your computer. Cookies improve your navigation on this site and enhance your user experience. You may delete or otherwise control cookies. StudyKIK's cookies policy can be found at <a href=\"https://www.studykik.com/cookies/\">https://www.studykik.com/cookies/</a>. For more information please visit <a href=\"https://www.aboutcookies.org/\">https://www.aboutcookies.org/</a>.",
     "corporate.page.privacyPolicy.retentionTitle": "Data Retention Periods",
     "corporate.page.privacyPolicy.retentionText": "When the purposes of processing are satisfied, we will retain your data for up to one year in order to notify you of similar clinical research opportunities that may interest you, unless you request that we delete your data sooner. If we don’t hear from you (i.e., if you don’t request additional information about new clinical trials based on the information we send you) within a year, your personal data will be deleted.",
     "corporate.page.privacyPolicy.sharingTitle": "Sharing Personal Data with Third Parties",
@@ -682,7 +682,7 @@
     "corporate.page.privacyPolicy.regulatoryTitle": "Regulatory Oversight",
     "corporate.page.privacyPolicy.regulatoryText": "StudyKIK is subject to the investigatory and enforcement powers of the United States Federal Trade Commission.",
     "corporate.page.privacyPolicy.contactTitle": "Contact Us",
-    "corporate.page.privacyPolicy.contactText": "If you have any questions about this Notice or our processing of your personal data, please write to our Product Development Manager by email at mo.tan@studykik.com or by postal mail at:",
+    "corporate.page.privacyPolicy.contactText": "Residents of the EU may request to update or delete their personal information at <a href=\"https://www.studykik.com/privacy-request/\">https://www.studykik.com/privacy-request/</a>. If you have any questions about this Notice or our processing of your personal data, please write to info@studykik.com or by postal mail at:",
     "corporate.page.privacyPolicy.contactNote": "StudyKIK<br /> 1675 Scenic Ave, #150, Costa Mesa<br /> CA 92626<br /> USA<br /><br /> Please allow up to four weeks for us to reply.<br />",
 
     "corporate.page.resetPassword.resetPasswordForm.header": "Reset Password",
@@ -933,6 +933,7 @@
     "sponsor.component.reportItem.mediaType": "Media Type",
     "sponsor.component.reportItem.mediaName": "Media Name",
     "sponsor.component.reportItem.disposition": "Disposition",
+    "sponsor.component.reportItem.morestats": "MORE STATS",
 
     "sponsor.component.patientNote.studyKIK": "StudyKIK",
     "sponsor.component.patientNote.defaultDateMask": "MM/DD/YY",

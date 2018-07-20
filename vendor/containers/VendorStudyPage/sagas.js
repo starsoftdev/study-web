@@ -37,6 +37,7 @@ import {
   VENDOR_SUBMIT_EMAIL,
   VENDOR_FETCH_EMAILS,
   VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS,
+  EXPORT_PATIENTS,
 } from './constants';
 
 import {
@@ -71,6 +72,7 @@ import {
   emailsFetchError,
   fetchEmails,
   patientCategoriesTotalsFetched,
+  patientsExported,
 } from './actions';
 
 // Bootstrap sagas
@@ -983,6 +985,66 @@ export function* deletePatient() {
   }
 }
 
+export function* exportPatients() {
+  while (true) {
+    // listen for the EXPORT_PATIENTS action
+    const { studyId, vendorRoleId, text, campaignId, sourceId } = yield take(EXPORT_PATIENTS);
+    const authToken = getItem('auth_token');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/vendors/getVendorReport`;
+      const options = {
+        method: 'GET',
+        query: {
+          authToken,
+        },
+      };
+      if (campaignId) {
+        options.query.campaignId = campaignId;
+      }
+      if (vendorRoleId) {
+        options.query.vendorRoleId = vendorRoleId;
+      }
+      if (sourceId) {
+        options.query.sourceId = sourceId;
+      }
+      if (studyId) {
+        options.query.studyId = studyId;
+      }
+      if (text) {
+        options.query.text = encodeURIComponent(text);
+      }
+
+      const toastrOptions = {
+        id: 'loadingToasterForExportPatients',
+        type: 'success',
+        message: 'Loading...',
+        options: {
+          timeOut: 0,
+          icon: (<FaSpinner size={40} className="spinner-icon text-info" />),
+          showCloseButton: true,
+        },
+      };
+      yield put(toastrActions.add(toastrOptions));
+      yield call(request, requestURL, options);
+      yield put(patientsExported());
+    } catch (e) {
+      // if returns forbidden we remove the token from local storage
+      if (e.status === 401) {
+        removeItem('auth_token');
+      }
+      const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrFetchPatientsErrorMessage'));
+      toastr.error('', errorMessage);
+      if (e.status === 401) {
+        yield call(() => { location.href = '/login'; });
+      }
+    }
+  }
+}
+
 export function* fetchStudySaga() {
   try {
     const watcherA = yield fork(fetchStudyDetails);
@@ -1012,6 +1074,8 @@ export function* fetchStudySaga() {
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
+    const exportPatientsWatcher = yield fork(exportPatients);
+
 
     yield take(LOCATION_CHANGE);
     yield cancel(watcherA);
@@ -1040,6 +1104,7 @@ export function* fetchStudySaga() {
     yield cancel(deletePatientWatcher);
     yield cancel(watcherEmail);
     yield cancel(watcherEmailsFetch);
+    yield cancel(exportPatientsWatcher);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {

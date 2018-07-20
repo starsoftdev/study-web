@@ -76,8 +76,8 @@ class CallDiv extends React.Component {
           </strong>
           <span className="email">{patient.email}</span>
           <span className="phone">{patientPhone}</span>
-          {(patient.disposition_key === 0 || !patient.disposition_key) && this.renderPatientTextMessageSummary(patient)}
           {patient.disposition_key > 0 ? <span className="disposition">{translate(`common.disposition.id${patient.disposition_key}`)}</span> : ''}
+          {this.renderPatientTextMessageSummary(patient)}
         </div>
       );
     }

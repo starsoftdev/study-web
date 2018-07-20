@@ -8,6 +8,7 @@ import { routerReducer } from 'react-router-redux';
 import { reducer as formReducer } from 'redux-form';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 import appReducer from './containers/App/reducer';
+import commonReducer from '../common/reducers/index';
 import globalNotificationsReducer from './containers/GlobalNotifications/reducer';
 
 /**
@@ -21,6 +22,7 @@ export default function createReducer(asyncReducers) {
     toastr: toastrReducer,
     globalNotifications: globalNotificationsReducer,
     global: appReducer,
+    common: commonReducer,
     ...asyncReducers,
   });
 }
