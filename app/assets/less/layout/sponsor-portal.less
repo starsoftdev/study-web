@@ -126,7 +126,7 @@
       }
 
       .box-holder,
-      .reprot-view-box-holder {
+      .report-view-box-holder {
         display: table-cell;
         vertical-align: middle;
       }
@@ -135,7 +135,7 @@
         padding: 15px 45px;
       }
 
-      .reprot-view-box-holder {
+      .report-view-box-holder {
         padding: 15px 25px;
       }
 
@@ -177,7 +177,7 @@
       .box.table-box .box-holder {
         padding: 15px 40px;
       }
-      .box.table-box .reprot-view-box-holder {
+      .box.table-box .report-view-box-holder {
         padding: 15px 20px;
       }
     }
@@ -186,7 +186,7 @@
       .box.table-box .box-holder {
         padding: 15px 30px;
       }
-      .box.table-box .reprot-view-box-holder {
+      .box.table-box .report-view-box-holder {
         padding: 15px 15px;
       }
     }
@@ -1458,10 +1458,14 @@
     > tbody {
       counter-reset: item;
 
-      > tr > td:first-child {
-        &:before {
+      > tr > td {
+        &:first-child:before {
           counter-increment: item;
           content: counters(item, ".", decimal) "";
+        }
+        &.no-number:first-child:before {
+          counter-increment: unset;
+          content: initial;
         }
       }
 

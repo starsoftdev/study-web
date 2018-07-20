@@ -30,6 +30,15 @@ import {
   FETCH_TOTAL_SIGNUPS,
   FETCH_TOTAL_SIGNUPS_SUCCESS,
   FETCH_TOTAL_SIGNUPS_ERROR,
+  GET_STUDY_REPORTS_TOTALS,
+  GET_STUDY_REPORTS_TOTALS_SUCCESS,
+  GET_STUDY_REPORTS_TOTALS_ERROR,
+  FETCH_STUDY_DISPOSITION_TOTALS,
+  FETCH_STUDY_DISPOSITION_TOTALS_SUCCESS,
+  FETCH_STUDY_DISPOSITION_TOTALS_ERROR,
+  FETCH_STUDY_MEDIA_SOURCES,
+  FETCH_STUDY_MEDIA_SOURCES_SUCCESS,
+  FETCH_STUDY_MEDIA_SOURCES_ERROR,
 } from './constants';
 
 export function getReportsList(searchParams, limit, offset, sort, order) {
@@ -225,6 +234,74 @@ export function fetchTotalSignUpsSuccess(payload) {
 export function fetchTotalSignUpsError(payload) {
   return {
     type: FETCH_TOTAL_SIGNUPS_ERROR,
+    payload,
+  };
+}
+
+// ///////////////////////////////////////////
+// study stats
+// ///////////////////////////////////////////
+
+export function getStudyReportsTotals(searchParams) {
+  return {
+    type: GET_STUDY_REPORTS_TOTALS,
+    searchParams,
+  };
+}
+
+export function getStudyReportsTotalsSuccess(source, payload) {
+  return {
+    type: GET_STUDY_REPORTS_TOTALS_SUCCESS,
+    source,
+    payload,
+  };
+}
+
+export function getStudyReportsTotalsError(payload) {
+  return {
+    type: GET_STUDY_REPORTS_TOTALS_ERROR,
+    payload,
+  };
+}
+
+export function getStudyDispositionTotals(searchParams) {
+  return {
+    type: FETCH_STUDY_DISPOSITION_TOTALS,
+    searchParams,
+  };
+}
+
+export function getStudyDispositionTotalsSuccess(payload) {
+  return {
+    type: FETCH_STUDY_DISPOSITION_TOTALS_SUCCESS,
+    payload,
+  };
+}
+
+export function getStudyDispositionTotalsError(payload) {
+  return {
+    type: FETCH_STUDY_DISPOSITION_TOTALS_ERROR,
+    payload,
+  };
+}
+
+export function fetchStudyMediaSources(searchParams) {
+  return {
+    type: FETCH_STUDY_MEDIA_SOURCES,
+    searchParams,
+  };
+}
+
+export function studyMediaSourcesFetched(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_SOURCES_SUCCESS,
+    payload,
+  };
+}
+
+export function studyMediaSourcesFetchingError(payload) {
+  return {
+    type: FETCH_STUDY_MEDIA_SOURCES_ERROR,
     payload,
   };
 }
