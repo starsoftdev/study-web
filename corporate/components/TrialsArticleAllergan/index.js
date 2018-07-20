@@ -63,7 +63,8 @@ export class TrialsArticleAllergan extends Component {
 
     const markdown = md.render(landingDescription);
 
-    const phoneNumber = trial.mlpphone || trial.recruitment_phone || null;
+    // click_to_call_button_number was removed in scope of ticket KIK-3914 and restored for ENG-478
+    const phoneNumber = trial.utmPhoneNumber || trial.click_to_call_button_number || trial.mlpphone || trial.recruitment_phone || null;
     const messageData = { distance: trial.distance };
     const distance = trial.landingdistance || ((typeof trial.distance !== 'undefined' && trial.distance !== null) ? translate('corporate.page.home.trialsArticle.distance', messageData) : 'N/A');
 
