@@ -20,7 +20,7 @@ import {
 } from '../App/selectors';
 import {
   fetchSources, fetchIndications, fetchProtocols, fetchSponsors, fetchCro, fetchUsersByRole,
-  fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies, fetchMediaTotalsForAdmin, clearCustomFilters,
+  fetchStudiesForAdmin, fetchTotalsForAdmin, clearFilters, clearStudies, fetchMediaTotalsForAdmin, clearCustomFilters, submitToClientPortal,
 } from '../App/actions';
 
 const formName = 'adminDashboardFilters';
@@ -53,6 +53,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
     clearStudies: PropTypes.func,
     clearCustomFilters: PropTypes.func,
     paginationOptions: PropTypes.object,
+    submitToClientPortal: PropTypes.func,
   };
 
   constructor(props) {
@@ -212,7 +213,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
 
   render() {
     const { studies, mediaTotals, sources, totals, filtersFormValues, changeAdminFilters, paginationOptions,
-      fetchMediaTotalsForAdmin } = this.props;
+      fetchMediaTotalsForAdmin, submitToClientPortal } = this.props;
     const filterUnchanged = _.isEqual(this.state.prevTotalsFilters, this.getCurrentFilters());
     const currentFilters = this.getCurrentFilters();
     const campaignSelected = (typeof filtersFormValues.campaign === 'string');
@@ -256,6 +257,7 @@ export class AdminHomePage extends Component { // eslint-disable-line react/pref
           paginationOptions={paginationOptions}
           changeAdminFilters={changeAdminFilters}
           fetchStudiesAccordingToFilters={this.fetchStudiesAccordingToFilters}
+          submitToClientPortal={submitToClientPortal}
         />
       </div>
     );
@@ -293,6 +295,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearFilters: () => dispatch(clearFilters()),
   clearStudies: () => dispatch(clearStudies()),
   clearCustomFilters: () => dispatch(clearCustomFilters()),
+  submitToClientPortal: (id) => dispatch(submitToClientPortal(id)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminHomePage);
