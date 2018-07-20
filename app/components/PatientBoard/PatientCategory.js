@@ -163,8 +163,10 @@ class PatientCategory extends React.Component {
   }
 
   isLocked(patient) {
-    const { campaign, campaigns, category } = this.props;
-    if (category.id <= CALL_ATTEMPT_ID) {
+    const { campaign, campaigns, category, currentUser } = this.props;
+    if (currentUser.isProxy) {
+      return false;
+    } else if (category.id <= CALL_ATTEMPT_ID) {
       if (campaign) {
         const c = _.find(campaigns, { id: campaign });
         return c.patientQualificationSuite;
@@ -180,8 +182,9 @@ class PatientCategory extends React.Component {
         }) > -1;
 
       }
+    } else {
+      return false;
     }
-    return false;
   }
 
   rowRenderer = ({ key, index, style }) => {
