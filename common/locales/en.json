@@ -1098,7 +1098,6 @@
     "portals.component.editSiteForm.countryLabel": "COUNTRY",
     "portals.component.editSiteForm.postalCodeLabel": "POSTAL CODE",
     "portals.component.editSiteForm.timezoneLabel": "Time Zone",
-    "portals.component.editSiteForm.timezonePlaceholder": "Timezone",
     "portals.component.editSiteForm.timezoneInfo": "This time zone currently observes daylight savings.",
     "portals.component.editSiteForm.updateBtn": "Update",
     "portals.component.editSiteForm.submitBtn": "Submit",
