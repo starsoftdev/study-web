@@ -67,8 +67,11 @@ class CallCenterHomePage extends Component {
     siteOptions.unshift({ label: 'All', value: '0' });
 
     let unreadMessages = 0;
+    let meetingCount = 0;
+
     patients.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
+      meetingCount += patient.call_center_patient_category_id === 5 ? 1 : 0;
     });
 
     return (
@@ -107,7 +110,7 @@ class CallCenterHomePage extends Component {
         <div className="cc-article">
           <div className="col-xs-4 ccDiv-txt">
             <div className="ccDiv-content">
-              <div>
+              <div className="cc-heading-text">
                 {translate('container.page.callcenter.heading.texts')}
               </div>
               <div className="cc-heading-value">
@@ -117,12 +120,22 @@ class CallCenterHomePage extends Component {
           </div>
           <div className="col-xs-4 ccDiv-rot">
             <div className="ccDiv-content">
-              {translate('container.page.callcenter.heading.rotting')}
+              <div className="cc-heading-text">
+                {translate('container.page.callcenter.heading.rottings')}
+              </div>
+              <div className="cc-heading-value">
+                &nbsp;
+              </div>
             </div>
           </div>
           <div className="col-xs-4 ccDiv-sch">
             <div className="ccDiv-content">
-              {translate('container.page.callcenter.heading.sched')}
+              <div className="cc-heading-text">
+                {translate('container.page.callcenter.heading.meetings')}
+              </div>
+              <div className="cc-heading-value">
+                {meetingCount}
+              </div>
             </div>
           </div>
         </div>
