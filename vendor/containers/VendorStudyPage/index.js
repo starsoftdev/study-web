@@ -13,13 +13,15 @@ import { bindActionCreators } from 'redux';
 import { actions as toastrActions } from 'react-redux-toastr';
 import { createStructuredSelector } from 'reselect';
 import { selectSitePatients, selectCurrentUser, selectSources } from '../App/selectors';
-import { fetchStudySources } from '../App/actions';
+import { fetchStudySources } from '../../../common/actions/studySources';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../NotFoundPage/index';
 import StudyStats from './StudyStats';
 import PatientBoard from '../../components/PatientBoard/Index';
+import { getItem } from '../../../common/utils/localStorage';
 import * as Selector from './selectors';
+import { selectStudySources } from '../../../common/selectors/studySources';
 import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../GlobalNotifications/actions';
 import {
@@ -27,7 +29,47 @@ import {
 } from '../GlobalNotifications/selectors';
 import { translate } from '../../../common/utilities/localization';
 
-export class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+const mapStateToProps = createStructuredSelector({
+  campaigns: Selector.selectCampaigns(),
+  fetchingPatients: Selector.selectFetchingPatients(),
+  patientBoardLoading: Selector.selectPatientBoardLoading(),
+  fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
+  fetchingStudy: Selector.selectFetchingStudy(),
+  patientCategories: Selector.selectPatientCategories(),
+  sources: selectSources(),
+  site: Selector.selectSite(),
+  protocol: Selector.selectProtocol(),
+  study: Selector.selectStudy(),
+  stats: Selector.selectStudyStats(),
+  patientCategoriesTotals: Selector.selectPatientCategoriesTotals(),
+  socket: selectSocket(),
+  sitePatients: selectSitePatients(),
+  fetchingPatientsError: Selector.selectFetchingPatientsError(),
+  currentUser: selectCurrentUser(),
+  paginationOptions: Selector.selectPaginationOptions(),
+  studySources: selectStudySources(),
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
+    downloadReport: (reportName) => dispatch(downloadReport(reportName)),
+    fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
+    fetchStudy: (studyId, sourceId) => dispatch(fetchStudy(studyId, sourceId)),
+    fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
+    setStudyId: (id) => dispatch(setStudyId(id)),
+    updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
+    clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
+    clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
+    studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
+    studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
+    fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
+    toastrActions: bindActionCreators(toastrActions, dispatch),
+  };
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class StudyPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   static propTypes = {
     campaigns: PropTypes.array,
     fetchPatients: PropTypes.func.isRequired,
@@ -53,7 +95,6 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     sitePatients: React.PropTypes.object,
     fetchingPatientsError: PropTypes.object,
     currentUser: PropTypes.object,
-    toastrActions: React.PropTypes.object.isRequired,
     clientOpenedStudyPage: React.PropTypes.func.isRequired,
     clientClosedStudyPage: React.PropTypes.func.isRequired,
     studyStatsFetched: React.PropTypes.func.isRequired,
@@ -62,6 +103,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     paginationOptions: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
     patientBoardLoading: React.PropTypes.bool,
+    toastrActions: React.PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -94,7 +136,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   }
 
   componentWillReceiveProps(newProps) {
-    const { params, socket, setStudyId, fetchPatientCategories, clientOpenedStudyPage, studyViewsStatFetched } = this.props;
+    const { params, socket, setStudyId, fetchPatientCategories, clientOpenedStudyPage, studyViewsStatFetched, currentUser } = this.props;
     if (socket && this.state.socketBinded === false) {
       this.setState({ socketBinded: true }, () => {
         socket.on('connect', () => {
@@ -186,6 +228,14 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         socket.on('notifyLandingPageViewChanged', (data) => {
           if (data.studyId === parseInt(params.id)) {
             studyViewsStatFetched(data.count);
+          }
+        });
+
+        socket.on('notifyVendorReportReady', (data) => {
+          const authToken = getItem('auth_token');
+          if (currentUser.roleForVendor && data.url && currentUser.roleForVendor.id === data.vendorRoleId && authToken === data.authToken) {
+            setTimeout(() => { this.props.toastrActions.remove('loadingToasterForExportPatients'); }, 1000);
+            location.replace(data.url);
           }
         });
       });
@@ -337,44 +387,3 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  campaigns: Selector.selectCampaigns(),
-  fetchingPatients: Selector.selectFetchingPatients(),
-  patientBoardLoading: Selector.selectPatientBoardLoading(),
-  fetchingPatientCategories: Selector.selectFetchingPatientCategories(),
-  fetchingStudy: Selector.selectFetchingStudy(),
-  patientCategories: Selector.selectPatientCategories(),
-  sources: selectSources(),
-  site: Selector.selectSite(),
-  protocol: Selector.selectProtocol(),
-  study: Selector.selectStudy(),
-  stats: Selector.selectStudyStats(),
-  patientCategoriesTotals: Selector.selectPatientCategoriesTotals(),
-  socket: selectSocket(),
-  sitePatients: selectSitePatients(),
-  fetchingPatientsError: Selector.selectFetchingPatientsError(),
-  currentUser: selectCurrentUser(),
-  paginationOptions: Selector.selectPaginationOptions(),
-  studySources: Selector.selectStudySources(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchPatients: (studyId, text, campaignId, sourceId, skip) => dispatch(fetchPatients(studyId, text, campaignId, sourceId, skip)),
-    downloadReport: (reportName) => dispatch(downloadReport(reportName)),
-    fetchPatientCategories: (studyId) => dispatch(fetchPatientCategories(studyId)),
-    fetchStudy: (studyId, sourceId) => dispatch(fetchStudy(studyId, sourceId)),
-    fetchStudyStats: (studyId, campaignId, sourceId) => dispatch(fetchStudyStats(studyId, campaignId, sourceId)),
-    setStudyId: (id) => dispatch(setStudyId(id)),
-    updatePatientSuccess: (patientId, patientCategoryId, payload) => dispatch(updatePatientSuccess(patientId, patientCategoryId, payload)),
-    toastrActions: bindActionCreators(toastrActions, dispatch),
-    clientOpenedStudyPage: (studyId) => dispatch(clientOpenedStudyPage(studyId)),
-    clientClosedStudyPage: (studyId) => dispatch(clientClosedStudyPage(studyId)),
-    studyStatsFetched: (payload) => dispatch(studyStatsFetched(payload)),
-    studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
-    fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(StudyPage);
