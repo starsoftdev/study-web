@@ -73,7 +73,7 @@ class CallCenterHomePage extends Component {
     if (schedules && schedules.data) {
       schedules.data.forEach((schedule) => {
         const { time } = schedule;
-        meetingCount += (moment.tz(time, currentUser.timezone).format('D') === moment().format('D')) ? 1 : 0;
+        meetingCount += (moment.tz(time, currentUser.timezone).format('Y-MM-D') === moment().format('Y-MM-D')) ? 1 : 0;
       });
     }
 
