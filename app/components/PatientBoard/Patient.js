@@ -27,6 +27,7 @@ const patientSource = {
     const item = {
       id: props.patient.id,
       patientCategoryId: props.category.id,
+      patient: props.patient,
     };
     return item;
   },
