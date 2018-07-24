@@ -16,6 +16,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
     dispositions: PropTypes.array,
     dispositionTotals: PropTypes.object,
     mediaSources: PropTypes.object,
+    studyId: PropTypes.any,
   }
 
   constructor(props) {
@@ -35,7 +36,12 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
     let totals = currentTab === 'mediaType' ? this.props.totals : this.props.dispositionTotals;
 
     if (currentTab ===  'mediaName') {
-      categories = this.props.mediaSources.details;
+      categories = this.props.mediaSources.details.filter(cat => {
+        if (cat.study_id === this.props.studyId) {
+          return cat;
+        }
+        return false;
+      });
       totals = this.props.mediaSources;
     }
 
@@ -92,7 +98,12 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
     let cats = currentTab === 'mediaType' ? this.props.sources : this.props.dispositions;
 
     if (currentTab ===  'mediaName') {
-      cats = this.props.mediaSources.details;
+      cats = this.props.mediaSources.details.filter(cat => {
+        if (cat.study_id === this.props.studyId) {
+          return cat;
+        }
+        return false;
+      });
     }
 
     if (cats && cats.length > 0) {
