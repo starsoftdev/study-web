@@ -18,6 +18,7 @@ import ReactGA from 'react-ga';
 import IdleTimer from 'react-idle-timer';
 import moment from 'moment-timezone';
 
+import GlobalNotifications from '../../containers/GlobalNotifications';
 import LoadingSpinner from '../../../app/components/LoadingSpinner';
 import { logout } from '../../../app/containers/LoginPage/actions';
 import { fetchMeFromToken } from './actions';
@@ -156,7 +157,7 @@ class App extends React.Component { // eslint-disable-line react/prefer-stateles
           <main id="main">
             {React.Children.toArray(this.props.children)}
           </main>
-
+          <GlobalNotifications {...this.props} />
           <SetTimeZoneModal show={this.state.showSetTimeZoneModal} currentUserRoleType="vendor" />
 
           {this.state.showIdleModal && <IdleModal show={this.state.showIdleModal} logout={this.props.logout} stayLoggedIn={this.stayLoggedIn} />}

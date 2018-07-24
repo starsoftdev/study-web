@@ -167,7 +167,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   searchReports(searchFilter) {
-    const { currentUser, getReportsTotals, getReportsList, fetchMediaSources, getDispositionTotals } = this.props;
+    const { currentUser, getReportsTotals, getReportsList, fetchMediaSources, getDispositionTotals, sources } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
@@ -182,6 +182,11 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
     fetchMediaSources(filters);
     getDispositionTotals({ ...filters, source: null });
+
+    for (const source of sources) {
+      const filtersForSource = { ...filters, ...this.props.formValues, source: source.id };
+      this.props.getReportsTotals(filtersForSource);
+    }
   }
 
   loadReports(isSort, sort, direction) {

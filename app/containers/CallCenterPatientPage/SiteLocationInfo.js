@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { formatTimezone } from '../../utils/time';
 
 import { translate } from '../../../common/utilities/localization';
 
@@ -18,6 +19,9 @@ function SiteLocationInfo({ indications, site, protocol }) {
           <span><b>{translate('container.page.callCenterPatient.label.indication')}:</b> {indication.indication.name}</span>
         }
         <span><b>{translate('container.page.callCenterPatient.label.recruitmentPhone')}:</b> {site.phoneNumber}</span>
+        {site.timezone &&
+          <span><b>{translate('container.page.callCenterPatient.label.timezone')}:</b> {formatTimezone(site.timezone, site.city)}</span>
+        }
       </div>
     </div>
   );
