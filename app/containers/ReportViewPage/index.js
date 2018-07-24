@@ -96,6 +96,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentDnqStudyId: false,
       showPQSModal: false,
       showStatsModal: false,
+      selectedStudyId: null,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -226,7 +227,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const messaging = this.props.location.query.messaging || null;
 
     const filtersTotal = { source: null, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id };
-    this.setState({ showStatsModal: true });
+    this.setState({ selectedStudyId:item.study_id, showStatsModal: true });
     for (const source of sources) {
       let studyfilters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id  };
       studyfilters = _.assign(studyfilters, this.props.formValues, {
@@ -379,6 +380,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
               dispositions={dispositions}
               dispositionTotals={this.props.studyDispositionTotals}
               mediaSources={this.props.studyMediaSources}
+              studyId={this.state.selectedStudyId}
             />
           </Modal.Body>
         </Modal>
