@@ -27,6 +27,31 @@ import { translate } from '../../../common/utilities/localization';
  * Specifies the drop target contract.
  * All methods are optional.
  */
+const shouldLock = (props, patient) => {
+  const { campaign, campaigns, category, currentUser } = props;
+  let shouldLock;
+  if (currentUser.isProxy) {
+    shouldLock = false;
+  } else if (category.id <= CALL_ATTEMPT_ID) {
+    if (campaign) {
+      const c = _.find(campaigns, { id: campaign });
+      shouldLock = c.patientQualificationSuite;
+    } else {
+      shouldLock =  _.findIndex(campaigns, c => {
+        if (c.patientQualificationSuite) {
+          const createdAt = moment(patient.createdAt);
+          const start = moment(c.dateFrom);
+          const end = moment(c.dateTo);
+          return createdAt.isAfter(start) && createdAt.isBefore(end);
+        }
+        return false;
+      }) > -1;
+    }
+  } else {
+    shouldLock = false;
+  }
+  return shouldLock;
+};
 const patientTarget = {
   drop(props, monitor) {
     if (monitor.didDrop()) {
@@ -83,6 +108,10 @@ const patientTarget = {
       patientDragSwitcher(props.category, item, patientId);
     }
   },
+  canDrop(props, monitor) {
+    const { patient } = monitor.getItem();
+    return !shouldLock(props, patient);
+  },
 };
 
 const collect = (connect, monitor) => ({
@@ -125,7 +154,6 @@ class PatientCategory extends React.Component {
     };
     this.handleResize = this.handleResize.bind(this);
     this.renderPatients = this.renderPatients.bind(this);
-    this.isLocked = this.isLocked.bind(this);
   }
 
   componentDidMount() {
@@ -160,31 +188,6 @@ class PatientCategory extends React.Component {
     const patientColumn = this.patientColumn;
 
     this.setState({ columnWidth: `${patientColumn.clientWidth}px` });
-  }
-
-  isLocked(patient) {
-    const { campaign, campaigns, category, currentUser } = this.props;
-    if (currentUser.isProxy) {
-      return false;
-    } else if (category.id <= CALL_ATTEMPT_ID) {
-      if (campaign) {
-        const c = _.find(campaigns, { id: campaign });
-        return c.patientQualificationSuite;
-      } else {
-        return _.findIndex(campaigns, c => {
-          if (c.patientQualificationSuite) {
-            const createdAt = moment(patient.createdAt);
-            const start = moment(c.dateFrom);
-            const end = moment(c.dateTo);
-            return createdAt.isAfter(start) && createdAt.isBefore(end);
-          }
-          return false;
-        }) > -1;
-
-      }
-    } else {
-      return false;
-    }
   }
 
   rowRenderer = ({ key, index, style }) => {
@@ -223,7 +226,7 @@ class PatientCategory extends React.Component {
           onPatientClick={this.props.onPatientClick}
           onPatientTextClick={this.props.onPatientTextClick}
           style={{ height: itemHeight }}
-          isLocked={this.isLocked(patient)}
+          isLocked={shouldLock(this.props, patient)}
         />
       ))}
     </ul>
