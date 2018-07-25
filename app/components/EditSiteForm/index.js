@@ -103,21 +103,21 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
   }
 
   onSuggestSelect(e) {
+    const { change, getTimezone } = this.props;
     if (typeof e === 'undefined') {
+      change('city', null);
+      change('state', null);
+      change('zip', null);
+      change('countryCode', null);
+      change('timezone', null);
       return;
     }
-    const { change, getTimezone } = this.props;
     let city = '';
     let state = '';
     let countryCode = '';
-    let postalCode = '';
+    let zip = '';
     let streetNmber = '';
     let route = '';
-    if (e && e.location) {
-      getTimezone(e.location.lat, e.location.lng);
-
-      this.setState({ fetchingTimezone: true });
-    }
 
     change('address', e.label);
     if (e.gmaps && e.gmaps.address_components) {
@@ -126,31 +126,29 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
       for (const val of addressComponents) {
         if (!city) {
           city = _.find(val.types, (o) => (o === 'locality'));
-          const city2 = _.find(val.types, (o) => (o === 'administrative_area_level_2'));
+          if (!city) {
+            city = _.find(val.types, (o) => (o === 'administrative_area_level_2'));
+          }
           if (city) {
-            change('city', val.long_name);
-          } else if (city2) {
-            change('city', val.long_name);
+            city = val.long_name;
           }
         }
         if (!state) {
           state = _.find(val.types, (o) => (o === 'administrative_area_level_1'));
           if (state) {
-            change('state', val.short_name);
-          } else {
-            change('state', '');
+            state = val.long_name;
           }
         }
         if (!countryCode) {
           countryCode = _.find(val.types, (o) => (o === 'country'));
           if (countryCode) {
-            change('countryCode', val.short_name === 'GB' ? 'UK' : val.short_name);
+            countryCode = val.short_name === 'GB' ? 'UK' : val.short_name;
           }
         }
-        if (!postalCode) {
-          postalCode = _.find(val.types, (o) => (o === 'postal_code'));
-          if (postalCode) {
-            change('zip', val.long_name);
+        if (!zip) {
+          zip = _.find(val.types, (o) => (o === 'postal_code'));
+          if (zip) {
+            zip = val.long_name;
           }
         }
         if (!streetNmber && _.find(val.types, (o) => (o === 'street_number'))) {
@@ -162,6 +160,26 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
         if (streetNmber && route) {
           this.geoSuggest.update(`${streetNmber} ${route}`);
         }
+      }
+      // these fields are required, so we should either fill them all in, or clear them
+      if (!city || !zip || !countryCode) {
+        change('city', null);
+        change('state', null);
+        change('zip', null);
+        change('countryCode', null);
+        change('timezone', null);
+        return;
+      }
+      change('city', city);
+      if (state) {
+        change('state', state);
+      }
+      change('zip', zip);
+      change('countryCode', countryCode);
+      if (e && e.location) {
+        getTimezone(e.location.lat, e.location.lng);
+
+        this.setState({ fetchingTimezone: true });
       }
     } else {
       const addressArr = e.label.split(',');
@@ -295,7 +313,6 @@ class EditSiteForm extends Component { // eslint-disable-line react/prefer-state
             <div className="field">
               <Field
                 name="timezone"
-                placeholder={translate('portals.component.editSiteForm.timezonePlaceholder')}
                 component={Input}
                 type="text"
                 isDisabled
