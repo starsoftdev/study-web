@@ -60,6 +60,7 @@ class PatientInfo extends Component {
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
               <div className="info-container">
+                <PrimaryInfo patient={patient} />
                 <span><b>{translate('container.page.callCenterPatient.label.name')}:</b> {name}</span>
                 <span><b>{translate('container.page.callCenterPatient.label.email')}:</b> {email}</span>
                 <span><b>{translate('container.page.callCenterPatient.label.phone')}:</b> {phone}</span>
@@ -68,6 +69,7 @@ class PatientInfo extends Component {
               </div>
             ) : (
               <div className="info-container">
+                <SecondaryInfo patient={patient} />
                 <span><b>{translate('container.page.callCenterPatient.label.dob')}:</b> {dob}</span>
                 <span><b>{translate('container.page.callCenterPatient.label.gender')}:</b> {gender}</span>
                 <span><b>{translate('container.page.callCenterPatient.label.bmi')}:</b> {bmi}</span>
