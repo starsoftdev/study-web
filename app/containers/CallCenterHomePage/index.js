@@ -70,17 +70,15 @@ class CallCenterHomePage extends Component {
     let unreadMessages = 0;
     let meetingCount = 0;
 
-    const todayScheduledPatientIds = [];
     if (schedules && schedules.data) {
       schedules.data.forEach((schedule) => {
         const { time } = schedule;
-        if (moment.tz(time, currentUser.timezone).format('D') === moment().format('D')) todayScheduledPatientIds.push(schedule.patient_id);
+        meetingCount += (moment.tz(time, currentUser.timezone).format('Y-MM-D') === moment().format('Y-MM-D')) ? 1 : 0;
       });
     }
 
     patients.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
-      meetingCount += todayScheduledPatientIds.indexOf(patient.id) >= 0 && patient.call_center_patient_category_id === 5 ? 1 : 0;
     });
 
     return (
