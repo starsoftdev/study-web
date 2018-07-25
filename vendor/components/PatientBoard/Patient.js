@@ -93,7 +93,8 @@ class Patient extends React.Component {
       return (
         <a
           className={classNames({ bottom: true, 'has-counter': unreadMessageCount > 0 })}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             if (unreadMessageCount === 0) {
               onPatientTextClick(category, patient);
             }
@@ -132,13 +133,13 @@ class Patient extends React.Component {
         className={classNames({ 'patient-li': true, 'patient-selected': patient.id === currentPatientId })}
         data-patient-id={patient.id}
       >
-        <div className="patient-inner">
-          <a
-            className="top"
-            onClick={() => {
-              onPatientClick(category, patient);
-            }}
-          >
+        <div
+          className="patient-inner"
+          onClick={() => {
+            onPatientClick(category, patient);
+          }}
+        >
+          <a className="top">
             <strong className="name">
               <span className="first-name">{patient.firstName}</span>
               <span> </span>
