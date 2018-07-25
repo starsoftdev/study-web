@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
@@ -69,9 +70,17 @@ class CallCenterHomePage extends Component {
     let unreadMessages = 0;
     let meetingCount = 0;
 
+    const todayScheduledPatientIds = [];
+    if (schedules && schedules.data) {
+      schedules.data.forEach((schedule) => {
+        const { time } = schedule;
+        if (moment.tz(time, currentUser.timezone).format('D') === moment().format('D')) todayScheduledPatientIds.push(schedule.patient_id);
+      });
+    }
+
     patients.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
-      meetingCount += patient.call_center_patient_category_id === 5 ? 1 : 0;
+      meetingCount += todayScheduledPatientIds.indexOf(patient.id) >= 0 && patient.call_center_patient_category_id === 5 ? 1 : 0;
     });
 
     return (
