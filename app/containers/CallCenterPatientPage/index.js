@@ -4,6 +4,7 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import { translate } from '../../../common/utilities/localization';
 import settings from '../../../common/settings/app-settings.json';
@@ -232,7 +233,7 @@ class CallCenterPatientPage extends Component {
   onPatientScheduleSubmit = (e) => {
     e.preventDefault();
 
-    const { patient, submitPatientUpdate, submitPatientDisposition, submitPatientSchedule, scheduledModalFormValues } = this.props;
+    const { patient, submitPatientUpdate, submitPatientDisposition, submitPatientSchedule, scheduledModalFormValues, currentUser } = this.props;
     submitPatientUpdate({
       patientId: patient.details.id,
       callCenterPatientCategoryId: 5,
@@ -245,7 +246,8 @@ class CallCenterPatientPage extends Component {
       dispositionKey: undefined,
     });
 
-    const time = this.state.scheduleDate.hour(scheduledModalFormValues.period === 'AM' ? scheduledModalFormValues.hour % 12 : (scheduledModalFormValues.hour % 12) + 12).minute(scheduledModalFormValues.minute);
+    const currentScheduleDate = this.state.scheduleDate ? this.state.scheduleDate : moment.tz(currentUser.timezone);
+    const time = currentScheduleDate.hour(scheduledModalFormValues.period === 'AM' ? scheduledModalFormValues.hour % 12 : (scheduledModalFormValues.hour % 12) + 12).minute(scheduledModalFormValues.minute);
 
     submitPatientSchedule({
       patientId: patient.details.id,
