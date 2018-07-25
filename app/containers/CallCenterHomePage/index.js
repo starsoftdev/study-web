@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
 import { createStructuredSelector } from 'reselect';
+import moment from 'moment-timezone';
 
 import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
@@ -67,6 +68,15 @@ class CallCenterHomePage extends Component {
     siteOptions.unshift({ label: 'All', value: '0' });
 
     let unreadMessages = 0;
+    let meetingCount = 0;
+
+    if (schedules && schedules.data) {
+      schedules.data.forEach((schedule) => {
+        const { time } = schedule;
+        meetingCount += (moment.tz(time, currentUser.timezone).format('Y-MM-D') === moment().format('Y-MM-D')) ? 1 : 0;
+      });
+    }
+
     patients.forEach((patient) => {
       unreadMessages += patient.count_unread ? parseInt(patient.count_unread) : 0;
     });
@@ -107,7 +117,7 @@ class CallCenterHomePage extends Component {
         <div className="cc-article">
           <div className="col-xs-4 ccDiv-txt">
             <div className="ccDiv-content">
-              <div>
+              <div className="cc-heading-text">
                 {translate('container.page.callcenter.heading.texts')}
               </div>
               <div className="cc-heading-value">
@@ -117,12 +127,22 @@ class CallCenterHomePage extends Component {
           </div>
           <div className="col-xs-4 ccDiv-rot">
             <div className="ccDiv-content">
-              {translate('container.page.callcenter.heading.rotting')}
+              <div className="cc-heading-text">
+                {translate('container.page.callcenter.heading.rottings')}
+              </div>
+              <div className="cc-heading-value">
+                &nbsp;
+              </div>
             </div>
           </div>
           <div className="col-xs-4 ccDiv-sch">
             <div className="ccDiv-content">
-              {translate('container.page.callcenter.heading.sched')}
+              <div className="cc-heading-text">
+                {translate('container.page.callcenter.heading.meetings')}
+              </div>
+              <div className="cc-heading-value">
+                {meetingCount}
+              </div>
             </div>
           </div>
         </div>

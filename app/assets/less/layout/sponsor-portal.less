@@ -1458,10 +1458,14 @@
     > tbody {
       counter-reset: item;
 
-      > tr > td:first-child {
-        &:before {
+      > tr > td {
+        &:first-child:before {
           counter-increment: item;
           content: counters(item, ".", decimal) "";
+        }
+        &.no-number:first-child:before {
+          counter-increment: unset;
+          content: initial;
         }
       }
 
