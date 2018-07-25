@@ -200,7 +200,7 @@ class CallDiv extends React.Component {
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.meetings')}
+            {translate('container.page.callcenter.heading.meeting')}
           </div>
           { this.renderMeetings() }
         </div>
