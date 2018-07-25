@@ -28,11 +28,11 @@ export default class CallCalendar extends React.Component {
       <div className="ccCalendar">
         <h3>{translate('container.page.callcenter.heading.calendar')}</h3>
         <h3 className="ccCal-today">{this.today}</h3>
-        {schedules.map(schedule => {
+        {schedules.map((schedule, index) => {
           const { time } = schedule;
           if (moment.tz(time, currentUser.timezone).format('D') !== moment().format('D')) return null;
           return (
-            <div className="ccCal-box" key={schedule.id}>
+            <div className="ccCal-box" key={schedule.id + index}>
               <span>{moment.tz(time, currentUser.timezone).format('hA')}</span>
               <span>{schedule.first_name} {schedule.last_name}</span>
             </div>
