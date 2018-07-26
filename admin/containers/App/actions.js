@@ -54,6 +54,8 @@ import {
   FETCH_MESSAGING_NUMBERS,
   FETCH_MESSAGING_NUMBERS_ERROR,
   FETCH_MESSAGING_NUMBERS_SUCCESS,
+
+  SUBMIT_TO_CLIENT_PORTAL,
 } from './constants';
 
 // ///////////////////////////////////////////
@@ -365,5 +367,12 @@ export function fetchMessagingNumbersError(payload) {
   return {
     type: FETCH_MESSAGING_NUMBERS_ERROR,
     payload,
+  };
+}
+
+export function submitToClientPortal(userId) {
+  return {
+    type: SUBMIT_TO_CLIENT_PORTAL,
+    userId,
   };
 }

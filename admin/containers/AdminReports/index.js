@@ -310,6 +310,7 @@ export class AdminReportsPage extends Component { // eslint-disable-line react/p
         {(totals.details && totals.details.total_studies) && (
           <ReportTabs
             activateManually={activateManually}
+            manuallySetActiveTab={this.manuallySetActiveTab}
             mediaTotals={mediaTotals}
             studies={studies}
             campaignsStats={campaignsStats}

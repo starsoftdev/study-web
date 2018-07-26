@@ -73,6 +73,7 @@ class ScheduledPatientModal extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
     this.state = {
       date: moment(),
+      calendarDate: new Date(),
     };
     this.timezone = null;
   }
@@ -114,13 +115,14 @@ class ScheduledPatientModal extends React.Component {
     this.calendar.focusToDate(today);
     this.setState({
       date: getMomentFromDate(today, this.timezone),
+      calendarDate: today,
     });
     this.props.handleDateChange(getMomentFromDate(today, this.timezone));
   }
 
   handleSelect(date) {
     const chosenDate = getMomentFromDate(date, this.timezone);
-    this.setState({ date: chosenDate });
+    this.setState({ date: chosenDate, calendarDate: date });
     this.props.handleDateChange(chosenDate);
   }
 
@@ -128,7 +130,7 @@ class ScheduledPatientModal extends React.Component {
     const { onHide, currentPatient, show, handleSubmit, submittingSchedule } = this.props;
 
     if (currentPatient) {
-      const calendarDate = this.state.date ? new Date(this.state.date.toDate().setHours(0, 0, 0)) : this.state.date;
+      const calendarDate = this.state.calendarDate || (this.state.date ? new Date(this.state.date.toDate().setHours(0, 0, 0)) : this.state.date);
       let reminderDisabled = false;
       if (currentPatient.phone) {
         const number = phoneUtil.parseAndKeepRawInput(currentPatient.phone, '');

@@ -212,15 +212,10 @@ const addDevMiddlewares = (app, webpackConfig) => {
 
   app.get('/stomachstudy', async (req, res) => {
     try {
-      const environment = 'development';
       const file = await readFile(fs, path.join(compiler.outputPath, 'corporate.html'));
       let templateStr = null;
       const re = new RegExp('GTM_ACCOUNT_ID', 'g');
-      if (environment === 'development') {
-        templateStr = file.toString().replace(re, settings.gtm.DEV);
-      } else if (environment === 'production') {
-        templateStr = file.toString().replace(re, settings.gtm.PROD);
-      }
+      templateStr = file.toString().replace(re, settings.gtm.DEV);
       const result = templateStr
         .replace(
           '<meta property="twitter:description" content="StudyKIK">',
@@ -320,7 +315,9 @@ const addProdMiddlewares = (app, options) => {
       const fs = require('fs');
       const file = await readFile(fs, path.resolve(outputPath, 'corporate.html'));
 
-      let templateStr = file.toString();
+      let templateStr = null;
+      const re = new RegExp('GTM_ACCOUNT_ID', 'g');
+      templateStr = file.toString().replace(re, settings.gtm.PROD);
       const headEndPos = templateStr.indexOf('</head>');
 
       if (headEndPos !== -1) {
