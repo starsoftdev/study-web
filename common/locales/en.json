@@ -4,12 +4,29 @@
     "common.layout.placeholder.selectfilter": "Select Filter",
     "common.layout.placeholder.search": "Search",
 
+    "admin.edit.button.save": "SAVE",
+    "admin.edit.button.update": "UPDATE",
+    "admin.edit.button.delete": "DELETE",
+
+
     "admin.component.patientNote.labelName": "Name:",
     "admin.component.patientNote.labelDate": "Date:",
     "admin.component.patientNote.labelTime": "Time:",
     "admin.component.patientNote.dateMask": "MM/DD/YY",
     "admin.component.patientNote.timeMask": "h:mm A",
     "admin.component.patientNote.studyKIK": "StudyKIK",
+
+    "admin.component.editNote.note.placeholder": "Type a note... (Please do not include PHI as notes are visible to sponsor.)",
+
+    "admin.component.campaignEdit.label.campaign": "CAMPAIGN",
+    "admin.component.campaignEdit.label.exposure": "EXPOSURE",
+    "admin.component.campaignEdit.label.start.date": "START DATE",
+    "admin.component.campaignEdit.label.end.date": "END DATE",
+    "admin.component.campaignEdit.label.goal": "CUSTOM GOAL",
+    "admin.component.campaignEdit.label.pqs": "PQS",
+
+
+    
 
     "client.component.alertModal.name": "Please select ${name}(s).",
     "client.component.alertModal.ok": "ok",

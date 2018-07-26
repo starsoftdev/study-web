@@ -120,7 +120,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const filters = { source: 1, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
-    this.props.getReportsList(filters);
+    this.props.getReportsList({ ...filters, source: null });
     this.props.getReportsTotals(filters);
     this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
@@ -179,7 +179,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.setState({ filters });
 
     getReportsTotals(filters);
-    getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    getReportsList({ ...filters, source: null }, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
     fetchMediaSources(filters);
     getDispositionTotals({ ...filters, source: null });
 
@@ -196,7 +196,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     }
     const limit = 50;
 
-    this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
+    this.props.getReportsList({ ...this.state.filters, source: null }, limit, offset, (sort || null), (direction || null));
   }
 
   openNotesModal(id, category, title) {

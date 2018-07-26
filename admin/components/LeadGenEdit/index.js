@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import Input from '../Input';
+import Input from '../../../common/components/Input';
 import LoadingSpinner from '../LoadingSpinner';
 import formValidator from './validator';
 

@@ -4,6 +4,7 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import { takeLatest } from 'redux-saga';
 import { toastr } from 'react-redux-toastr';
 import { get } from 'lodash';
+import { push } from 'react-router-redux';
 import request from '../../utils/request';
 import composeQueryString from '../../utils/composeQueryString';
 
@@ -19,6 +20,7 @@ import {
   FETCH_TOTALS_FOR_ADMIN,
   FETCH_MEDIA_TOTALS_FOR_ADMIN,
   FETCH_MESSAGING_NUMBERS,
+  SUBMIT_TO_CLIENT_PORTAL,
 } from '../../containers/App/constants';
 
 import {
@@ -46,6 +48,7 @@ import {
   fetchMessagingNumbersError,
 } from '../../containers/App/actions';
 import { translate } from '../../../common/utilities/localization';
+import { setItem } from '../../utils/localStorage';
 
 export default function* baseDataSaga() {
   yield fork(fetchIndicationsWatcher);
@@ -59,6 +62,7 @@ export default function* baseDataSaga() {
   yield fork(fetchTotalsForAdminWatcher);
   yield fork(fetchMediaTotalsForAdminWatcher);
   yield fork(fetchMessagingNumbersWatcher);
+  yield fork(submitToClientPortalWatcher);
 }
 
 function* fetchIndicationsWatcher() {
@@ -331,5 +335,20 @@ export function* fetchMessagingNumbersWorker() {
     if (err.status === 401) {
       yield call(() => { location.href = '/login'; });
     }
+  }
+}
+
+function* submitToClientPortalWatcher() {
+  yield* takeLatest(SUBMIT_TO_CLIENT_PORTAL, submitToClientPortalWorker);
+}
+
+function* submitToClientPortalWorker(action) {
+  try {
+    yield call(setItem, 'user_id', action.userId);
+    yield put(push('/app'));
+    window.location.reload(false);
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong');
+    toastr.error('', errorMessage);
   }
 }
