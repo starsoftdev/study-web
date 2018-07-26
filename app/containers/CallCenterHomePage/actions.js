@@ -37,9 +37,10 @@ export function patientsFetchingError(response) {
   };
 }
 
-export function searchForPatients(phone) {
+export function searchForPatients(callCenterRoleId, phone) {
   return {
     type: SEARCH_FOR_PATIENTS,
+    callCenterRoleId,
     phone,
   };
 }
