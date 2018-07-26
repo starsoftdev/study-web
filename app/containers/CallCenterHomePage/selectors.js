@@ -1,5 +1,12 @@
 import { createSelector } from 'reselect';
 
+const selectGlobal = () => state => state.global;
+
+export const selectCallCenterRole = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userData.roleForCallCenter
+);
+
 /**
  * Direct selector to the callCenterHomePage state domain
  */
