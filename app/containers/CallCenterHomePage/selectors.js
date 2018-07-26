@@ -38,3 +38,18 @@ export const selectSchedules = () => createSelector(
   selectCallCenterHomePageDomain(),
   (substate) => substate.schedules,
 );
+
+export const selectPatients = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.patients.data,
+);
+
+export const selectIsFetchingPatients = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.patients.isFetching,
+);
+
+export const selectShowPatientsListModal = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.showPatientsListModal,
+);
