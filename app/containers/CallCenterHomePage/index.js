@@ -3,41 +3,58 @@
  *
  */
 
+import { map } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import { reduxForm } from 'redux-form';
-import { connect } from 'react-redux';
-import { map } from 'lodash';
 import Modal from 'react-bootstrap/lib/Modal';
+import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 
 import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
 
-import { fetchPatients, fetchSchedules } from './actions';
+import { fetchPatients, fetchSchedules, searchForPatients } from './actions';
 import { selectFetchedPatients, selectSchedules } from './selectors';
 
 import CenteredModal from '../../../common/components/CenteredModal';
+import { normalizePhoneForServer } from '../../../common/utilities/helpers/functions';
 import { translate } from '../../../common/utilities/localization';
-import FiltersForm from './FiltersForm/';
+import CallCenterSearchForm from './CallCenterSearchForm/index';
+import FiltersForm from './FiltersForm/index';
+import CallCenterPatientListModal from './CallCenterPatientListModal/index';
 
 import CallDiv from './CallDiv/';
 import CallCalendar from './CallCalendar/';
 
 import './style.less';
 
-const formName = 'callCenterHomePage';
-@reduxForm({ form: formName })
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser(),
+  patients: selectFetchedPatients(),
+  indications: selectIndications(),
+  schedules: selectSchedules(),
+});
 
-class CallCenterHomePage extends Component {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchIndications: () => dispatch(fetchIndications()),
+    fetchPatients: (userId) => dispatch(fetchPatients(userId)),
+    searchForPatients: (phone) => dispatch(searchForPatients(phone)),
+    fetchSchedules: () => dispatch(fetchSchedules()),
+  };
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class CallCenterHomePage extends Component {
 
   static propTypes = {
     currentUser: PropTypes.object.isRequired,
     fetchIndications: PropTypes.func.isRequired,
-    fetchPatients: PropTypes.func,
-    fetchSchedules: PropTypes.func,
+    fetchPatients: PropTypes.func.isRequired,
+    fetchSchedules: PropTypes.func.isRequired,
     patients: PropTypes.array,
+    searchForPatients: PropTypes.func.isRequired,
     indications: PropTypes.array,
     schedules: PropTypes.object,
   };
@@ -61,6 +78,12 @@ class CallCenterHomePage extends Component {
     this.setState({ addUserModalOpen: false });
   }
 
+  handleSearch = (data) => {
+    const { searchForPatients } = this.props;
+    const phone = normalizePhoneForServer(data.phone);
+    searchForPatients(phone);
+  };
+
   render() {
     const { patients, indications, currentUser, schedules } = this.props;
 
@@ -83,36 +106,30 @@ class CallCenterHomePage extends Component {
 
     return (
       <div className="container-fluid" id="callcentermain">
-        <form action="#" className="form-search clearfix">
-          <div className="search-area">
-            <div className="field">
-              <Button bsStyle="primary" onClick={(e) => this.openFiltersModal(e)}>
-                {translate('container.page.callcenter.btn.filters')}
-              </Button>
-            </div>
-            <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
-              <Modal.Header>
-                <Modal.Title>{translate('container.page.callcenter.btn.filters')}</Modal.Title>
-                <a className="lightbox-close close" onClick={(e) => this.closeFiltersModal(e)}>
-                  <i className="icomoon-icon_close" />
-                </a>
-              </Modal.Header>
-              <Modal.Body>
-                <div className="holder clearfix">
-                  <div className="form-lightbox">
-                    <FiltersForm />
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
-            <div className="field">
-              <Button className="btn-enter" type="submit">
-                <i className="icomoon-icon_search2" />
-              </Button>
-              <input name="query" type="text" className="form-control keyword-search" placeholder={translate('common.layout.placeholder.search')} />
-            </div>
+        <div className="search-area">
+          <div className="field">
+            <Button bsStyle="primary" onClick={(e) => this.openFiltersModal(e)}>
+              {translate('container.page.callcenter.btn.filters')}
+            </Button>
           </div>
-        </form>
+          <Modal dialogComponentClass={CenteredModal} className="filter-modal" id="filter-modal" show={this.state.addUserModalOpen} onHide={this.closeFiltersModal}>
+            <Modal.Header>
+              <Modal.Title>{translate('container.page.callcenter.btn.filters')}</Modal.Title>
+              <a className="lightbox-close close" onClick={(e) => this.closeFiltersModal(e)}>
+                <i className="icomoon-icon_close" />
+              </a>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="holder clearfix">
+                <div className="form-lightbox">
+                  <FiltersForm />
+                </div>
+              </div>
+            </Modal.Body>
+          </Modal>
+          <CallCenterSearchForm onSubmit={this.handleSearch} />
+          <CallCenterPatientListModal />
+        </div>
 
         <div className="cc-article">
           <div className="col-xs-4 ccDiv-txt">
@@ -155,20 +172,3 @@ class CallCenterHomePage extends Component {
     );
   }
 }
-
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser(),
-  patients: selectFetchedPatients(),
-  indications: selectIndications(),
-  schedules: selectSchedules(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchIndications: () => dispatch(fetchIndications()),
-    fetchPatients: (userId) => dispatch(fetchPatients(userId)),
-    fetchSchedules: () => dispatch(fetchSchedules()),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CallCenterHomePage);
