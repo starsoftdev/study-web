@@ -87,7 +87,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
   componentWillMount() {
     const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources } = this.props;
     setStudyId(parseInt(params.id));
-    fetchStudy(params.id, 1);     // fetch STUDYKIK source by default = 1
+    fetchStudy(params.id);
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
     if (socket && socket.connected) {
@@ -227,7 +227,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
 
   handleSubmit(searchFilter, loadMore) {
     const { params: { id }, paginationOptions } = this.props;
-    const sourceId = searchFilter.sourceId || (searchFilter.source !== '') ? searchFilter.source : 1;
+    const sourceId = searchFilter.source;
     const campaignId = searchFilter.campaignId || searchFilter.campaign;
     let skip = 0;
     if (loadMore) {
@@ -268,7 +268,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
       };
     });
     campaignOptions.unshift({ label: translate('common.constants.all'), value: -1 });
-    let defaultSource = '';
+    let defaultSource;
     const sourceOptions = this.props.studySources.details.filter(s => !s.isMediaType).map(studySource => {
       if (studySource.source.label === 'StudyKIK') {
         defaultSource = studySource.source.value;
@@ -278,6 +278,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
         value: studySource.source.value,
       };
     });
+    sourceOptions.unshift({ label: translate('common.constants.all'), value: -1 });
     const siteLocation = site.name;
     let sponsor = 'None';
     if (study.sponsor) {

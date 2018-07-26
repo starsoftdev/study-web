@@ -62,11 +62,8 @@ class FilterStudyPatientsForm extends Component {
     if (campaign === -1) {
       newCampaign = null;
     }
-    if (source === -1) {
+    if (source === -1 || (source !== 0 && !source)) {
       newSource = null;
-    } else if (source !== 0 && !source) {
-      // we should use source with id 1 by default
-      newSource = 1;
     }
 
     if (patientBoardLoading && !newProps.patientBoardLoading) {
