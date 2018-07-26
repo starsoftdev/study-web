@@ -270,7 +270,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
     campaignOptions.unshift({ label: translate('common.constants.all'), value: -1 });
     let defaultSource = '';
     const sourceOptions = this.props.studySources.details.filter(s => !s.isMediaType).map(studySource => {
-      if (studySource.source.type === 'StudyKIK') {
+      if (studySource.source.label === 'StudyKIK') {
         defaultSource = studySource.source.value;
       }
       return {
