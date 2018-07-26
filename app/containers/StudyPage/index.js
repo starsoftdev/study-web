@@ -339,7 +339,7 @@ export class StudyPage extends React.Component { // eslint-disable-line react/pr
           {
             pqsEnabled && (
               <div className="notes">
-                Your campaign currenlty has prescreening active. <b>Please do not contact or update patients in the first two columns("New Patient" or "Call/Text Attempted"). </b>Once a patient has been pre-qualified they will appear in the action needed column for you to contact.
+                Your campaign currently has prescreening active. <b>Please do not contact or update patients in the first two columns ("New Patient" or "Call/Text Attempted"). </b>Once a patient has been pre-qualified they will appear in the action needed column for you to contact.
               </div>
             )
           }
