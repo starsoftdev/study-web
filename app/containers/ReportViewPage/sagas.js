@@ -297,7 +297,7 @@ export function* fetchTotalSignUpsWorker(action) {
         timezone,
       },
     };
-    if (searchFilter) {
+    if (searchFilter && searchFilter.startDate && searchFilter.endDate) {
       options.query.startDate = searchFilter.startDate.format('YYYY-MM-DD');
       options.query.endDate = searchFilter.endDate.format('YYYY-MM-DD');
     }
