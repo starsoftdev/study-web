@@ -2,11 +2,11 @@ import classNames from 'classnames';
 import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 
-import { translate } from '../../../common/utilities/localization';
+import { translate } from '../../../../common/utilities/localization';
+import { normalizePhoneDisplay } from '../../../common/helper/functions';
 
-function formatDate(date, format = 'MM/DD/YY [at] hh:mm a') {
-  return moment(date).format(format);
-}
+import PrimaryInfo from './PrimaryInfo';
+import SecondaryInfo from './SecondaryInfo';
 
 class PatientInfo extends Component {
   static propTypes = {
@@ -25,25 +25,16 @@ class PatientInfo extends Component {
     const { carouselIndex } = this.state;
     const { patient } = this.props;
 
-    let name;
-    let email;
-    let phone;
-    let signUpDate;
-    let updatedDate;
-    let dob;
-    let gender;
-    let bmi;
+    if (!patient || !patient.details) return null;
 
-    if (patient && patient.details) {
-      const patientData = patient.details;
-      name = `${patientData.firstName} ${patientData.lastName}`;
-      email = patientData.email;
-      phone = patientData.phone;
-      signUpDate = formatDate(patientData.createdAt);
-      updatedDate = formatDate(patientData.updatedAt);
-      dob = patientData.dob ? formatDate(patientData.dob, 'MM/DD/YYYY') : translate('common.constants.na');
-      gender = patientData.gender || translate('common.constants.na');
-      bmi = patientData.bmi || translate('common.constants.na');
+    const formattedPatient = { ...patient.details };
+    formattedPatient.phone = normalizePhoneDisplay(patient.details.phone);
+
+    if (formattedPatient.dob) {
+      const dob = moment(formattedPatient.dob);
+      formattedPatient.dobMonth = dob.month() + 1;
+      formattedPatient.dobDay = dob.date();
+      formattedPatient.dobYear = dob.year();
     }
 
     return (
@@ -59,21 +50,9 @@ class PatientInfo extends Component {
           </ol>
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
-              <div className="info-container">
-                <PrimaryInfo patient={patient} />
-                <span><b>{translate('container.page.callCenterPatient.label.name')}:</b> {name}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.email')}:</b> {email}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.phone')}:</b> {phone}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.signedUp')}:</b> {signUpDate}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.updated')}:</b> {updatedDate}</span>
-              </div>
+              <PrimaryInfo initialValues={formattedPatient} />
             ) : (
-              <div className="info-container">
-                <SecondaryInfo patient={patient} />
-                <span><b>{translate('container.page.callCenterPatient.label.dob')}:</b> {dob}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.gender')}:</b> {gender}</span>
-                <span><b>{translate('container.page.callCenterPatient.label.bmi')}:</b> {bmi}</span>
-              </div>
+              <SecondaryInfo initialValues={formattedPatient} />
             )}
           </div>
         </div>
