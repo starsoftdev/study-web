@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { Field, reduxForm } from 'redux-form';
 
-import ReactMultiCheckBox from '../Input/ReactMultiCheckbox';
+import ReactMultiCheckBox from '../../../common/components/Input/ReactMultiCheckbox';
 import formValidator from './validator';
 import { selectIndications, selectProtocols, selectSponsors, selectCro, selectUsersByRoles } from '../../containers/App/selectors';
 
