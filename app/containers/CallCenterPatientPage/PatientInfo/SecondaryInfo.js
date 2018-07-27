@@ -29,11 +29,23 @@ const genderOptions = [{
 
 const formName = 'CallCenterPatientPage.SecondaryInfo';
 
+const mapStateToProps = createStructuredSelector({
+  formSyncErrors: selectSyncErrors(formName),
+  formValues: selectValues(formName),
+  formDidChange: selectFormDidChange(formName),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  reset: () => dispatch(reset(formName)),
+  submitPatientDetails: (patientId, fields) => dispatch(submitPatientDetails(patientId, fields)),
+});
+
 @reduxForm({
   form: formName,
   validate: formValidator,
   enableReinitialize: true,
 })
+@connect(mapStateToProps, mapDispatchToProps)
 class SecondaryInfo extends React.Component {
   static propTypes = {
     initialValues: React.PropTypes.object,
@@ -137,15 +149,4 @@ class SecondaryInfo extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  formSyncErrors: selectSyncErrors(formName),
-  formValues: selectValues(formName),
-  formDidChange: selectFormDidChange(formName),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  reset: () => dispatch(reset(formName)),
-  submitPatientDetails: (patientId, fields) => dispatch(submitPatientDetails(patientId, fields)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(SecondaryInfo);
+export default SecondaryInfo;
