@@ -15,7 +15,7 @@ import { fetchIndications } from '../../containers/App/actions';
 import { selectIndications, selectCurrentUser } from '../App/selectors';
 
 import { fetchPatients, fetchSchedules, searchForPatients } from './actions';
-import { selectFetchedPatients, selectSchedules } from './selectors';
+import { selectFetchedPatients, selectSchedules, selectCallCenterRole } from './selectors';
 
 import CenteredModal from '../../../common/components/CenteredModal';
 import { normalizePhoneForServer } from '../../../common/utilities/helpers/functions';
@@ -30,6 +30,7 @@ import CallCalendar from './CallCalendar/';
 import './style.less';
 
 const mapStateToProps = createStructuredSelector({
+  callCenterRole: selectCallCenterRole(),
   currentUser: selectCurrentUser(),
   patients: selectFetchedPatients(),
   indications: selectIndications(),
@@ -40,7 +41,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchIndications: () => dispatch(fetchIndications()),
     fetchPatients: (userId) => dispatch(fetchPatients(userId)),
-    searchForPatients: (phone) => dispatch(searchForPatients(phone)),
+    searchForPatients: (callCenterRoleId, phone) => dispatch(searchForPatients(callCenterRoleId, phone)),
     fetchSchedules: () => dispatch(fetchSchedules()),
   };
 };
@@ -49,6 +50,7 @@ const mapDispatchToProps = (dispatch) => {
 export default class CallCenterHomePage extends Component {
 
   static propTypes = {
+    callCenterRole: PropTypes.object.isRequired,
     currentUser: PropTypes.object.isRequired,
     fetchIndications: PropTypes.func.isRequired,
     fetchPatients: PropTypes.func.isRequired,
@@ -79,9 +81,9 @@ export default class CallCenterHomePage extends Component {
   }
 
   handleSearch = (data) => {
-    const { searchForPatients } = this.props;
+    const { callCenterRole, searchForPatients } = this.props;
     const phone = normalizePhoneForServer(data.phone);
-    searchForPatients(phone);
+    searchForPatients(callCenterRole.id, phone);
   };
 
   render() {
