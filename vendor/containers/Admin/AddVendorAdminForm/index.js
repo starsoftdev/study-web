@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import Input from '../../../../common/components/Input';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../../../app/components/LoadingSpinner';
 import { translate } from '../../../../common/utilities/localization';
 import { selectSyncErrorBool } from '../../../../common/selectors/form.selector';
@@ -32,6 +33,16 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
 
   render() {
     const { pristine, handleSubmit, saving, syncError } = this.props;
+    const roleOptions = [
+      {
+        label: 'READ',
+        value: 1,
+      },
+      {
+        label: 'READ/WRITE',
+        value: 2,
+      },
+    ];
     return (
       <Form className="form-lightbox dashboard-lightbox" onSubmit={handleSubmit}>
 
@@ -88,6 +99,20 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
               component={Input}
               type="email"
               required
+            />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label required">
+            <label className="add-exposure-level">{translate('client.page.vendor.admin.role')}</label>
+          </strong>
+          <div className="field">
+            <Field
+              name="role"
+              component={ReactSelect}
+              placeholder="Select Role"
+              options={roleOptions}
             />
           </div>
         </div>
