@@ -21,11 +21,24 @@ function formatDate(date, format = 'MM/DD/YY [at] hh:mm a') {
 
 const formName = 'CallCenterPatientPage.PrimaryInfo';
 
+const mapStateToProps = createStructuredSelector({
+  formSyncErrors: selectSyncErrors(formName),
+  formValues: selectValues(formName),
+  formDidChange: selectFormDidChange(formName),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  blur: (field, value) => dispatch(blur(formName, field, value)),
+  reset: () => dispatch(reset(formName)),
+  submitPatientDetails: (patientId, fields) => dispatch(submitPatientDetails(patientId, fields)),
+});
+
 @reduxForm({
   form: formName,
   validate: formValidator,
   enableReinitialize: true,
 })
+@connect(mapStateToProps, mapDispatchToProps)
 class PrimaryInfo extends Component {
   static propTypes = {
     blur: React.PropTypes.func,
@@ -172,16 +185,4 @@ class PrimaryInfo extends Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  formSyncErrors: selectSyncErrors(formName),
-  formValues: selectValues(formName),
-  formDidChange: selectFormDidChange(formName),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  blur: (field, value) => dispatch(blur(formName, field, value)),
-  reset: () => dispatch(reset(formName)),
-  submitPatientDetails: (patientId, fields) => dispatch(submitPatientDetails(patientId, fields)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PrimaryInfo);
+export default PrimaryInfo;
