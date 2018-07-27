@@ -12,6 +12,7 @@ import { SEND_PATIENT_MESSAGES } from '../GlobalNotifications/constants';
 import {
   FETCH_CALL_CENTER_PATIENT_CATEGORIES,
   FETCH_PATIENT,
+  SUBMIT_PATIENT_DETAILS,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
@@ -37,6 +38,7 @@ import {
   patientScheduleSubmitted,
   schedulesFetched,
   schedulesFetchingError,
+  submitPatientDetailsSuccess,
 } from './actions';
 
 import {
@@ -258,6 +260,35 @@ function* submitDeleteNote() {
   }
 }
 
+function* submitPatientDetails() {
+  while (true) {
+    // listen for the SUBMIT_PATIENT_DETAILS action
+    const { patientId, fields } = yield take(SUBMIT_PATIENT_DETAILS);
+    const authToken = getItem('auth_token');
+    const userId = getItem('user_id');
+    if (!authToken) {
+      return;
+    }
+
+    try {
+      const requestURL = `${API_URL}/patients/${patientId}`;
+      const response = yield call(request, requestURL, {
+        method: 'PATCH',
+        body: JSON.stringify({ ...fields, userId }),
+      });
+      yield put(submitPatientDetailsSuccess(response));
+    } catch (e) {
+      let errorMessage = get(e, 'message', translate('client.page.studyPage.toastrUpdatingErrorMessage'));
+      if (errorMessage.includes('email')) {
+        errorMessage = translate('client.page.studyPage.toastrEmailOnFileErrorMessage');
+      } else if (errorMessage.includes('phone')) {
+        errorMessage = translate('client.page.studyPage.toastrPhoneOnFileErrorMessage');
+      }
+      toastr.error('', errorMessage);
+    }
+  }
+}
+
 function* submitPatientUpdate() {
   while (true) {
     // listen for the SUBMIT_PATIENT_UPDATE action
@@ -302,7 +333,6 @@ function* submitPatientUpdate() {
     }
   }
 }
-
 
 function* submitPatientSchedule() {
   while (true) {
@@ -452,6 +482,7 @@ export function* callCenterPatientPageSaga() {
     const watcherI = yield fork(readStudyPatientMessagesWatcher);
     const watcherJ = yield fork(submitPatientSchedule);
     const watcherK = yield fork(fetchSchedulesWatcher);
+    const watcherL = yield fork(submitPatientDetails);
 
     yield take(LOCATION_CHANGE);
 
@@ -466,6 +497,7 @@ export function* callCenterPatientPageSaga() {
     yield cancel(watcherI);
     yield cancel(watcherJ);
     yield cancel(watcherK);
+    yield cancel(watcherL);
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
