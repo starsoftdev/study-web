@@ -13,6 +13,8 @@ import {
   READ_STUDY_PATIENT_MESSAGES_SUCCESS,
   READ_STUDY_PATIENT_MESSAGES_ERROR,
 
+  SUBMIT_PATIENT_DETAILS,
+  SUBMIT_PATIENT_DETAILS_SUCCESS,
   SUBMIT_PATIENT_UPDATE,
   SUBMIT_PATIENT_NOTE,
   SUBMIT_DELETE_NOTE,
@@ -95,6 +97,21 @@ export function readStudyPatientMessagesSuccess(payload) {
 export function readStudyPatientMessagesError(payload) {
   return {
     type: READ_STUDY_PATIENT_MESSAGES_ERROR,
+    payload,
+  };
+}
+
+export function submitPatientDetails(patientId, fields) {
+  return {
+    type: SUBMIT_PATIENT_DETAILS,
+    patientId,
+    fields,
+  };
+}
+
+export function submitPatientDetailsSuccess(payload) {
+  return {
+    type: SUBMIT_PATIENT_DETAILS_SUCCESS,
     payload,
   };
 }
