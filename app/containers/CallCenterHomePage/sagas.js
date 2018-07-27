@@ -74,15 +74,11 @@ export function* fetchSchedulesWatcher() {
 
 export function* searchForPatientsWatcher() {
   while (true) {
-    const { phone } = yield take(SEARCH_FOR_PATIENTS);
+    const { callCenterRoleId, phone } = yield take(SEARCH_FOR_PATIENTS);
     try {
-      const requestURL = `${API_URL}/patients`;
+      const requestURL = `${API_URL}/callCenterRoles/${callCenterRoleId}/patients`;
       const query = {
-        filter: JSON.stringify({
-          where: {
-            phone,
-          },
-        }),
+        phone,
       };
       const params = {
         method: 'GET',
