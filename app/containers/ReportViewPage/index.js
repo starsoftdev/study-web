@@ -96,6 +96,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
       currentDnqStudyId: false,
       showPQSModal: false,
       showStatsModal: false,
+      selectedStudyId: null,
     };
 
     this.searchReports = this.searchReports.bind(this);
@@ -120,7 +121,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const filters = { source: 1, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone };
     this.setState({ filters });
 
-    this.props.getReportsList(filters);
+    this.props.getReportsList({ ...filters, source: null });
     this.props.getReportsTotals(filters);
     this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
@@ -179,7 +180,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     this.setState({ filters });
 
     getReportsTotals(filters);
-    getReportsList(filters, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
+    getReportsList({ ...filters, source: null }, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
     fetchMediaSources(filters);
     getDispositionTotals({ ...filters, source: null });
 
@@ -196,7 +197,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     }
     const limit = 50;
 
-    this.props.getReportsList(this.state.filters, limit, offset, (sort || null), (direction || null));
+    this.props.getReportsList({ ...this.state.filters, source: null }, limit, offset, (sort || null), (direction || null));
   }
 
   openNotesModal(id, category, title) {
@@ -231,7 +232,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
     const messaging = this.props.location.query.messaging || null;
 
     const filtersTotal = { source: null, status: STATUS_ALL, sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id };
-    this.setState({ showStatsModal: true });
+    this.setState({ selectedStudyId:item.study_id, showStatsModal: true });
     for (const source of sources) {
       let studyfilters = { sponsorRoleId: currentUser.roleForSponsor.id, protocol: protocolNumber, indication, cro, messaging, timezone: currentUser.timezone, study: item.study_id  };
       studyfilters = _.assign(studyfilters, this.props.formValues, {
@@ -384,6 +385,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
               dispositions={dispositions}
               dispositionTotals={this.props.studyDispositionTotals}
               mediaSources={this.props.studyMediaSources}
+              studyId={this.state.selectedStudyId}
             />
           </Modal.Body>
         </Modal>
