@@ -44,7 +44,7 @@ class FilterStudyPatientsForm extends Component {
   };
   constructor(props) {
     super(props);
-    this.searchPatient = this.searchPatient.bind(this);
+    this.searchPatients = this.searchPatients.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
       campaign: null,
@@ -85,11 +85,11 @@ class FilterStudyPatientsForm extends Component {
     fetchPatients(studyId, search, newCampaign, newSource, null);
   }
 
-  searchPatient(event, type) {
+  searchPatients(event, type) {
     const { fetchPatients, fetchPatientCategoriesTotals, fetchStudyStats, studyId, campaign, source, search } = this.props;
     let newCampaign = campaign;
 
-    let newSource = source;
+    let newSource = source || 1;
     /* nulling the values if all is selected */
     if (campaign === -1) {
       newCampaign = null;
@@ -179,7 +179,7 @@ class FilterStudyPatientsForm extends Component {
               options={campaignOptions}
               disabled={submitting || loading}
               placeholder={translate('client.component.filterStudyPatientsForm.campaignPlaceholder')}
-              onChange={(event) => this.searchPatient(event, 'campaign')}
+              onChange={(event) => this.searchPatients(event, 'campaign')}
             />
           </div>
           <div
@@ -196,7 +196,7 @@ class FilterStudyPatientsForm extends Component {
               disabled={submitting || loading}
               placeholder={translate('client.component.filterStudyPatientsForm.mediaPlaceholder')}
               clearable={false}
-              onChange={(event) => this.searchPatient(event, 'source')}
+              onChange={(event) => this.searchPatients(event, 'source')}
             />
           </div>
         </div>

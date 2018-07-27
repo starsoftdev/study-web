@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 
 import CenteredModal from '../../components/CenteredModal';
 import FiltersModalForm from '../../components/FiltersModalForm';
-import Input from '../../components/Input';
-import ReactSelect from '../../components/Input/ReactSelect';
+import Input from '../../../common/components/Input';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import { selectCustomFilters, selectFilterFormValues } from '../../containers/App/selectors';
 import { addCustomFilter, removeCustomFilter } from '../../containers/App/actions';
 
