@@ -10,7 +10,7 @@ import Form from 'react-bootstrap/lib/Form';
 import { DateRangePicker } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 
-import ReactSelect from '../../components/Input/ReactSelect';
+import ReactSelect from '../../../common/components/Input/ReactSelect';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { defaultStaticRanges } from '../../common/constants/dateRanges';
 import CenteredModal from '../../components/CenteredModal';
@@ -38,6 +38,7 @@ export class StudyInfo extends Component {
     fetchStudiesAccordingToFilters: PropTypes.func,
     changeAdminFilters: PropTypes.func.isRequired,
     change: PropTypes.func.isRequired,
+    submitToClientPortal: PropTypes.func,
   }
 
   constructor(props) {
@@ -201,13 +202,20 @@ export class StudyInfo extends Component {
     let campaignName = this.props.filtersFormValues.campaign ? this.props.filtersFormValues.campaign.toString() : '1';
     campaignName = campaignName.charAt(0).toUpperCase() + campaignName.slice(1);
 
+    const landingHref = study.landingPageUrl ? `/${study.study_id}-${study.landingPageUrl.toLowerCase().replace(/ /ig, '-')}` : '';
+    const facebookHref = study.facebookUrl;
+
     return (
       <section key={key}>
-        <div className="part study clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
-          <div className="title">study</div>
+        <div className="part study">
+          <div className="title"><span className="clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>study</span></div>
           <ul>
-            <li>#{key + 1}</li>
-            <li><label>Study #: </label><span>{study.study_id}</span></li>
+            <li>
+              {
+                facebookHref ? <a href={facebookHref} className="landing-link" target="_blank">#{key + 1}</a> : `#${key + 1}`
+              }
+            </li>
+            <li><label>Study #: </label><span><a href={landingHref} className="landing-link" target="_blank">{study.study_id}</a></span></li>
             <li><label>Status: </label><span>{study.isPublic ? 'ON' : 'OFF'}</span></li>
             <li><label>Protocol: </label><span>{study.protocol_number || 'N/A'}</span></li>
             <li><label>Sponsor: </label><span>{study.sponsor_name || 'N/A'}</span></li>
@@ -217,10 +225,10 @@ export class StudyInfo extends Component {
             <li><label>Color: </label><span className={`color ${study.color || ''}`}>{`${study.color ? study.color.toUpperCase() : 'N/A'}`}</span></li>
           </ul>
         </div>
-        <div className="part info clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
+        <div className="part info">
           <div className="title">info</div>
           <ul>
-            <li><label>Location: </label><span>{study.site_name}</span></li>
+            <li><label>Location: </label><span><a className="landing-link" onClick={() => { this.props.submitToClientPortal(study.siteAdminUserId); }}>{ study.site_name }</a></span></li>
             <li><label>Site #: </label><span>{study.site_id}</span></li>
             <li><label>Address: </label><span>{study.site_address}</span></li>
             <li><label>Pg Views: </label><span>{study.views_count || 0}</span></li>
@@ -230,7 +238,7 @@ export class StudyInfo extends Component {
             <li><label>CC: </label><span>{study.cc_user_first_name ? `${study.cc_user_first_name} ${study.cc_user_last_name}` : 'N/A'}</span></li>
           </ul>
         </div>
-        <div className="part campaign clickable" onClick={() => this.goToStudyEditPage(study.study_id)}>
+        <div className="part campaign">
           <div className="title">campaign</div>
           <ul>
             <li><label>Exposure Level: </label><span>{study.level_name}</span></li>
@@ -245,8 +253,8 @@ export class StudyInfo extends Component {
             <li><label>PQS: </label><span>{study.patient_qualification_suite ? 'ON' : 'OFF'}</span></li>
           </ul>
         </div>
-        <div className="part stat clickable" onClick={() => this.goToStudyStatsPage(study.study_id)}>
-          <div className="title">stats</div>
+        <div className="part stat">
+          <div className="title"><span className="clickable" onClick={() => this.goToStudyStatsPage(study.study_id)}>stats</span></div>
           <ul>
             <li><label>Last 24 Hours: </label><span>{study.today_count || 0}</span></li>
             <li><label>Campaign Total: </label><span>{study.campaign_count || 0}</span></li>
