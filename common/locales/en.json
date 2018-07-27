@@ -322,7 +322,7 @@
     "client.component.indicationOverlay.placeholderSearch": "Search",
 
     "client.component.notesSection.save": "Save",
-    "client.component.notesSection.placeholderNote": "Type a note...",
+    "client.component.notesSection.placeholderNote": "Type a note... (Please do not include PHI as notes are visible to sponsor.)",
 
     "client.component.patientNote.labelName": "Name:",
     "client.component.patientNote.labelDate": "Date:",
