@@ -11,6 +11,7 @@ import {
   SUBMIT_EMAIL,
   SUBMIT_EMAIL_SUCCESS,
   SUBMIT_EMAIL_ERROR,
+  SUBMIT_PATIENT_DETAILS_SUCCESS,
   FETCH_SCHEDULES,
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
@@ -145,6 +146,18 @@ export default function callCenterPatientPageReducer(state = initialState, actio
           error: { $set: payload },
         },
       });
+    case SUBMIT_PATIENT_DETAILS_SUCCESS:
+      return {
+        ...state,
+        selectedPatient: {
+          details: {
+            ...state.selectedPatient.details,
+            ...payload,
+          },
+          fetching: false,
+          error: null,
+        },
+      };
     default:
       return state;
   }
