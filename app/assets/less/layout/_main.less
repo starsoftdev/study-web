@@ -2555,10 +2555,16 @@ th, .th {
 /**********************/
 .home-page {
   .search-studies-panel {
-    margin: 30px 0 0;
+    margin: 12px 0 0;
+    position: absolute;
+    width: 50%;
+    right: 0px;
 
     .form-search-studies {
-      width: calc(~'100% - 237px');
+      width: calc(~'100% - 30px');
+      .search-area {
+        z-index: 5;
+      }
     }
 
     .btn-list-new-study {
