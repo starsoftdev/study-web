@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { Component } from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -15,8 +15,8 @@ import { submitPatientDetails } from '../actions';
 
 import formValidator from './primaryValidator';
 
-function formatDate(date, format = 'MM/DD/YY [at] hh:mm a') {
-  return moment(date).format(format);
+function formatDate(date, timezone, format = 'MM/DD/YY [at] hh:mm a') {
+  return moment.tz(date, timezone).format(format);
 }
 
 const formName = 'CallCenterPatientPage.PrimaryInfo';
@@ -49,6 +49,7 @@ class PrimaryInfo extends Component {
     formValues: React.PropTypes.object,
     submitting: React.PropTypes.bool.isRequired,
     submitPatientDetails: React.PropTypes.func.isRequired,
+    timezone: React.PropTypes.string.isRequired,
   };
 
   handleReset = () => {
@@ -65,7 +66,7 @@ class PrimaryInfo extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientDetails } = this.props;
+    const { blur, formSyncErrors, formValues, initialValues, reset, submitPatientDetails, timezone } = this.props;
     if (!formSyncErrors.firstName && !formSyncErrors.lastName && !formSyncErrors.email && !formSyncErrors.phone) {
       // change the phone number to be formatted for display
       const formattedPhoneNumber = normalizePhoneDisplay(formValues.phone);
@@ -78,6 +79,7 @@ class PrimaryInfo extends Component {
         email: formValues.email,
         phone: phoneNumber,
         unsubscribed: formValues.unsubscribed,
+        updatedAt: moment().tz(timezone).format(),
       });
     } else {
       reset(formName);
@@ -102,7 +104,7 @@ class PrimaryInfo extends Component {
   }
 
   render() {
-    const { submitting, initialValues } = this.props;
+    const { submitting, initialValues, timezone } = this.props;
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.handleSubmit}>
         <div className="field-row">
@@ -166,7 +168,7 @@ class PrimaryInfo extends Component {
             <label>{translate('container.page.callCenterPatient.label.signedUp')}</label>
           </strong>
           <div className="field">
-            <time dateTime={initialValues.createdAt}>{formatDate(initialValues.createdAt)}</time>
+            <time dateTime={initialValues.createdAt}>{formatDate(initialValues.createdAt, timezone)}</time>
           </div>
         </div>
 
@@ -175,7 +177,7 @@ class PrimaryInfo extends Component {
             <label>{translate('container.page.callCenterPatient.label.updated')}</label>
           </strong>
           <div className="field">
-            <time dateTime={initialValues.updatedAt}>{formatDate(initialValues.updatedAt)}</time>
+            <time dateTime={initialValues.updatedAt}>{formatDate(initialValues.updatedAt, timezone)}</time>
           </div>
         </div>
 
