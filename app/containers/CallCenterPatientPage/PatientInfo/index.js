@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import React, { Component, PropTypes } from 'react';
 
 import { translate } from '../../../../common/utilities/localization';
@@ -11,6 +11,7 @@ import SecondaryInfo from './SecondaryInfo';
 class PatientInfo extends Component {
   static propTypes = {
     patient: PropTypes.object,
+    timezone: PropTypes.string.isRequired,
   };
 
   state = {
@@ -23,7 +24,7 @@ class PatientInfo extends Component {
 
   render() {
     const { carouselIndex } = this.state;
-    const { patient } = this.props;
+    const { timezone, patient } = this.props;
 
     if (!patient || !patient.details) return null;
 
@@ -31,7 +32,7 @@ class PatientInfo extends Component {
     formattedPatient.phone = normalizePhoneDisplay(patient.details.phone);
 
     if (formattedPatient.dob) {
-      const dob = moment(formattedPatient.dob);
+      const dob = moment.tz(formattedPatient.dob, timezone);
       formattedPatient.dobMonth = dob.month() + 1;
       formattedPatient.dobDay = dob.date();
       formattedPatient.dobYear = dob.year();
@@ -50,7 +51,7 @@ class PatientInfo extends Component {
           </ol>
           <div className="carousel-inner" role="listbox">
             {carouselIndex === 0 ? (
-              <PrimaryInfo initialValues={formattedPatient} />
+              <PrimaryInfo initialValues={formattedPatient} timezone={timezone} />
             ) : (
               <SecondaryInfo initialValues={formattedPatient} />
             )}
