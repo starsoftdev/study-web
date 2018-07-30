@@ -1,5 +1,12 @@
 import { createSelector } from 'reselect';
 
+const selectGlobal = () => state => state.global;
+
+export const selectCallCenterRole = () => createSelector(
+  selectGlobal(),
+  (substate) => substate.userData.roleForCallCenter
+);
+
 /**
  * Direct selector to the callCenterHomePage state domain
  */
@@ -37,4 +44,19 @@ export const selectFetchedPatients = () => createSelector(
 export const selectSchedules = () => createSelector(
   selectCallCenterHomePageDomain(),
   (substate) => substate.schedules,
+);
+
+export const selectPatients = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.patients.data,
+);
+
+export const selectIsFetchingPatients = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.patients.isFetching,
+);
+
+export const selectShowPatientsListModal = () => createSelector(
+  selectCallCenterHomePageDomain(),
+  (substate) => substate.showPatientsListModal,
 );

@@ -214,13 +214,14 @@ export function mediaSourcesFetchingError(payload) {
   };
 }
 
-export function fetchTotalSignUps(roleId, protocol, indication, timezone) {
+export function fetchTotalSignUps(roleId, protocol, indication, timezone, searchFilter) {
   return {
     type: FETCH_TOTAL_SIGNUPS,
     roleId,
     protocol,
     indication,
     timezone,
+    searchFilter,
   };
 }
 

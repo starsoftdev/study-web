@@ -18,6 +18,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
     dispositions: PropTypes.array,
     dispositionTotals: PropTypes.object,
     mediaSources: PropTypes.object,
+    loadMediaSources: PropTypes.func,
   }
 
   constructor(props) {
@@ -56,7 +57,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       if (currentTab ===  'mediaName') {
-        source = _.findIndex(categories, (o) => { return o.id === cat.id; });
+        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
       }
       if (totals.details[source]) {
         totalValues = {
@@ -98,6 +99,9 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
   }
 
   handleSelectTab = (tab) => {
+    if (tab === 'mediaName' && this.props.mediaSources.details.length === 0) {
+      this.props.loadMediaSources();
+    }
     this.setState({ currentTab: tab });
   }
 
@@ -170,6 +174,8 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
       headingTitle = 'headingDisposition';
     }
 
+    const isDataFetching = ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'mediaName' && this.props.mediaSources.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching));
+
     return (
       <div id="carousel-example-generic" className="carousel slide popup-slider">
         <ol className="carousel-indicators">
@@ -185,7 +191,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         </ol>
         <div className="report-page-totals-container">
           {
-            ((currentTab === 'mediaType' && this.props.totals.fetching) || (currentTab === 'mediaName' && this.props.mediaSources.fetching) || (currentTab === 'disposition' && this.props.dispositionTotals.fetching)) && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
+            isDataFetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
           <ul className="list-inline list-stats">
             <li className="allcaps">
