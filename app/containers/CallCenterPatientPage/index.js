@@ -306,7 +306,7 @@ class CallCenterPatientPage extends Component {
         <div className="page-content">
           <div className="left-section">
             <div className="wrapper">
-              <PatientInfo patient={patient} />
+              <PatientInfo patient={patient} timezone={(siteForPatient && siteForPatient.timezone) || currentUser.timezone} />
               <SiteLocationInfo site={siteForPatient} protocol={protocolForPatient} indications={patientIndications} />
             </div>
           </div>
