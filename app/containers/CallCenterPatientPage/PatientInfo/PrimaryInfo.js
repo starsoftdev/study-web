@@ -79,8 +79,9 @@ class PrimaryInfo extends Component {
         phone: phoneNumber,
         unsubscribed: formValues.unsubscribed,
       });
+    } else {
+      reset(formName);
     }
-    reset(formName);
   }
 
   renderUpdateButtons = () => {
