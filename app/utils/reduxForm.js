@@ -1,4 +1,4 @@
-import forEach from 'lodash/forEach';
+import { forEach, isEmpty } from 'lodash';
 import validator from 'validate.js';
 import customValidators from './customValidators';
 
@@ -10,6 +10,7 @@ export function validatorFactory(schema) {
   forEach(customValidators, item => validator.validators[item.name] = item.validator);
 
   return values => {
+    if (isEmpty(values)) return {};
     const errors = validator(values, schema);
     forEach(errors, (item, key) => // eslint-disable-line
       errors[key] = item[0]
