@@ -146,7 +146,7 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
         <Helmet title={translate('portals.page.homePage.helmetTitle')} />
         {userRoleType === 'client' &&
           (
-            <div className="container-fluid">
+            <div className="container-fluid client-portal">
               <div className="dashboard form-group">
                 <Dashboard location={this.props.location} />
               </div>
