@@ -278,7 +278,6 @@ function* submitPatientDetails() {
         body: JSON.stringify({
           ...fields,
           userId,
-          updatedAt: moment().format(),
         }),
       });
       yield put(submitPatientDetailsSuccess(response));
