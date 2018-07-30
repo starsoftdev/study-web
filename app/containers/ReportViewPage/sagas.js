@@ -210,7 +210,7 @@ export function* fetchMediaSourcesWatcher() {
 
 function* fetchMediaSourcesWorker(action) {
   try {
-    const queryString = composeQueryString(action.searchParams);
+    const queryString = composeQueryString({ ...action.searchParams, groupByName: true });
     const options = {
       method: 'GET',
     };
