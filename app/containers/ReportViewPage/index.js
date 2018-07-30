@@ -123,7 +123,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList({ ...filters, source: null });
     this.props.getReportsTotals(filters);
-    this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
     this.props.fetchSources();
     this.props.fetchTotalSignUps(currentUser.roleForSponsor.id, protocolNumber, indication, currentUser.timezone);
@@ -131,6 +130,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
   componentWillUnmount() {
     this.props.clearReportList();
+  }
+
+  loadMediaSources = () => {
+    this.props.fetchMediaSources(this.state.filters);
   }
 
   getPercentageObject(item) {
@@ -322,6 +325,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           dispositions={dispositions}
           dispositionTotals={this.props.dispositionTotals}
           mediaSources={this.props.mediaSources}
+          loadMediaSources={this.loadMediaSources}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
