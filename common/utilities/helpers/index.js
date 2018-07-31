@@ -13,7 +13,7 @@ export function getQueryStringObject() {
   const qs = window.location.search.split('?')[1];
   const qsArr = (qs) ? qs.split('&') : [];
 
-  let qsObj = {};
+  const qsObj = {};
 
   // if query params exist, loop
   if (qsArr.length) {
