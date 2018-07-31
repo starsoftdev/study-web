@@ -64,6 +64,9 @@ class FilterStudyPatientsForm extends Component {
     }
     if (source === -1) {
       newSource = null;
+    } else if (source !== 0 && !source) {
+      // we should use source with id 1 by default
+      newSource = 1;
     }
 
     if (patientBoardLoading && !newProps.patientBoardLoading) {
