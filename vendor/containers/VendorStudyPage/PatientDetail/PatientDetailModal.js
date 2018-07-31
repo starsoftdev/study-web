@@ -120,7 +120,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { currentPatient, currentPatientCategory, site, params } = this.props;
+    const { currentPatient, currentPatientCategory, site, params, isAdmin } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -131,7 +131,7 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} />
+        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} disabled={!isAdmin} />
       );
     }
     return null;
@@ -139,7 +139,6 @@ export class PatientDetailModal extends React.Component {
 
   renderPatientDetail() {
     const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId, isAdmin } = this.props;
-
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
@@ -152,7 +151,7 @@ export class PatientDetailModal extends React.Component {
           currentUser={currentUser}
           patientCategories={patientCategories}
           onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
-          disabled={isAdmin}
+          disabled={!isAdmin}
         />
       );
     }
@@ -186,7 +185,6 @@ export class PatientDetailModal extends React.Component {
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
       socket, switchToNoteSection, currentPatientNotes, isAdmin } = this.props;
-    console.log(isAdmin);
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
@@ -223,8 +221,8 @@ export class PatientDetailModal extends React.Component {
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} disabled={isAdmin} />
-                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} disabled={isAdmin} />
+                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} disabled={!isAdmin} />
+                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} disabled={!isAdmin} />
                   </div>
                 </div>
               </div>

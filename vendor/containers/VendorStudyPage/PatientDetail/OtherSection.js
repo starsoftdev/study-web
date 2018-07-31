@@ -251,6 +251,7 @@ class OtherSection extends React.Component {
                   dobDay={dobDay}
                   dobMonth={dobMonth}
                   dobYear={dobYear}
+                  disabled={disabled}
                 />
                 {this.renderGender()}
                 <div className="field-row">
@@ -262,7 +263,7 @@ class OtherSection extends React.Component {
                       type="text"
                       name="bmi"
                       component={Input}
-                      isDisabled
+                      isDisabled={disabled}
                     />
                   </div>
                 </div>

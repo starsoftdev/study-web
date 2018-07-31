@@ -59,6 +59,7 @@ class Patient extends React.Component {
     patient: React.PropTypes.object.isRequired,
     unreadMessageCount: React.PropTypes.number,
     isLocked: React.PropTypes.bool,
+    isAdmin:  React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -79,9 +80,9 @@ class Patient extends React.Component {
   }
 
   renderTextCreatedDate() {
-    const { currentUser, currentSite, patient: { lastTextMessage } } = this.props;
+    const { currentUser, patient: { lastTextMessage } } = this.props;
 
-    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? currentSite.timezone : currentUser.timezone;
+    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
 
     if (lastTextMessage && lastTextMessage.dateCreated) {
       return (
