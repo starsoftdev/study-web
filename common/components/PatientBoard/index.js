@@ -14,10 +14,10 @@ import _ from 'lodash';
 import { touch, change } from 'redux-form';
 import * as Scroll from 'react-scroll';
 
-import { SchedulePatientModalType } from '../../common/constants/index';
+import { SchedulePatientModalType } from '../../../common/constants/index';
 import LoadingSpinner from '../LoadingSpinner';
-import PatientDetailModal from '../../containers/VendorStudyPage/PatientDetail/PatientDetailModal';
-import ScheduledPatientModal from '../../containers/VendorStudyPage/ScheduledPatientModal/index';
+import PatientDetailModal from './PatientDetail/PatientDetailModal';
+import ScheduledPatientModal from './ScheduledPatientModal/';
 import {
   fetchPatientDetails,
   showScheduledModal,
@@ -31,13 +31,13 @@ import {
   changeScheduledDate,
   submitSchedule,
   updatePatientSuccess,
-} from '../../containers/VendorStudyPage/actions';
-import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
-import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
-import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../common/actions/app';
-import * as Selector from '../../containers/VendorStudyPage/selectors';
+} from '../../actions/patients';
+import { selectCurrentUser, selectSites } from '../../selectors/app';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../actions/app';
 import PatientCategory from './PatientCategory';
-import { selectValues } from '../../containers/App/form.selectors';
+import { fields } from './ScheduledPatientModal/validator';
+import * as Selector from '../../selectors/studyPage';
+import { selectValues } from '../../selectors/form.selector';
 const scroll = Scroll.animateScroll;
 
 @DragDropContext(HTML5Backend)
@@ -68,6 +68,8 @@ class PatientBoard extends React.Component {
     submitSchedule: React.PropTypes.func.isRequired,
     schedulePatientFormErrors: React.PropTypes.object,
     selectedDate: React.PropTypes.object,
+    markAsReadPatientMessages: React.PropTypes.func,
+    deleteMessagesCountStat: React.PropTypes.func,
     studyId: React.PropTypes.number,
     setFormValueByName: React.PropTypes.func,
     ePMS: React.PropTypes.bool,
@@ -77,7 +79,6 @@ class PatientBoard extends React.Component {
     paginationOptions: React.PropTypes.object,
     studyPatientsFilter: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
-    deleteMessagesCountStat: React.PropTypes.func,
   };
 
   constructor(props) {

@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { Field, formValueSelector, reduxForm, reset, touch } from 'redux-form';
 import Button from 'react-bootstrap/lib/Button';
 import classNames from 'classnames';
-import { selectSyncErrorBool } from '../../../common/selectors/form.selector';
-import { submitPatientNote, submitDeleteNote } from '../actions';
+import { selectSyncErrorBool } from '../../../selectors/studyPage';
+import { submitPatientNote, submitDeleteNote } from '../../../actions/patients';
 import Input from '../../../../common/components/Input/index';
 import { translate } from '../../../../common/utilities/localization';
 import PatientNote from './PatientNote';
@@ -27,7 +27,6 @@ class NotesSection extends React.Component {
     resetForm: React.PropTypes.func.isRequired,
     submitPatientNote: React.PropTypes.func.isRequired,
     submitDeleteNote: React.PropTypes.func.isRequired,
-    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {
