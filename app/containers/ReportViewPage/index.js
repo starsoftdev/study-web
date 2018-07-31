@@ -294,10 +294,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           <div className="individual-study">
             <div className="main-head">
               <h2 className="main-heading">{protocolNumber}</h2>
-              <p>
-                <span className="info-cell">{translate('sponsor.page.reportViewPage.indication')} {indication}</span>
-                <span className="info-cell">{translate('sponsor.page.reportViewPage.cro')} {cro}</span>
-              </p>
+              <div>
+                <div className="info-cell">{translate('sponsor.page.reportViewPage.indication')} {indication}</div>
+                <div className="info-cell">{translate('sponsor.page.reportViewPage.cro')} {cro}</div>
+              </div>
             </div>
           </div>
         </section>
