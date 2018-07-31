@@ -1,12 +1,14 @@
-import update from 'react-addons-update';
-
 import {
+  CLOSE_PATIENTS_LIST_MODAL,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
   FETCH_SCHEDULES,
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
+  SEARCH_FOR_PATIENTS,
+  SEARCH_FOR_PATIENTS_SUCCESS,
+  SEARCH_FOR_PATIENTS_ERROR,
 } from './constants';
 
 const initialState = {
@@ -22,11 +24,20 @@ const initialState = {
     data: [],
     error: null,
   },
+  patients: {
+    isFetching: false,
+    data: [],
+  },
+  showPatientsListModal: false,
 };
 
 export default function callCenterHomePageReducer(state = initialState, action) {
-  const { payload } = action;
   switch (action.type) {
+    case CLOSE_PATIENTS_LIST_MODAL:
+      return {
+        ...state,
+        showPatientsListModal: false,
+      };
     case FETCH_PATIENTS:
       return {
         ...state,
@@ -40,7 +51,7 @@ export default function callCenterHomePageReducer(state = initialState, action) 
       return {
         ...state,
         fetchedPatients: {
-          details: payload,
+          details: action.response,
           fetching: false,
           error: null,
         },
@@ -51,29 +62,61 @@ export default function callCenterHomePageReducer(state = initialState, action) 
         fetchedPatients: {
           details: [],
           fetching: false,
-          error: payload,
+          error: action.response,
         },
       };
     case FETCH_SCHEDULES:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: true },
+          ...state.schedules,
+          isFetching: true,
         },
-      });
+      };
     case FETCH_SCHEDULES_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          data: { $set: payload },
+          ...state.schedules,
+          isFetching: false,
+          data: action.response,
         },
-      });
+      };
     case FETCH_SCHEDULES_ERROR:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          error: { $set: payload },
+          ...state.schedules,
+          isFetching: false,
+          error: action.response,
         },
-      });
+      };
+    case SEARCH_FOR_PATIENTS:
+      return {
+        ...state,
+        patients: {
+          isFetching: true,
+          data: [],
+        },
+        showPatientsListModal: true,
+      };
+    case SEARCH_FOR_PATIENTS_SUCCESS:
+      return {
+        ...state,
+        patients: {
+          isFetching: false,
+          data: action.response,
+        },
+      };
+    case SEARCH_FOR_PATIENTS_ERROR:
+      return {
+        ...state,
+        patients: {
+          isFetching: false,
+          data: [],
+        },
+        showPatientsListModal: false,
+      };
     default:
       return state;
   }
