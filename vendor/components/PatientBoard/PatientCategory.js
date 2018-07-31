@@ -11,6 +11,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
+import moment from 'moment-timezone';
 
 import * as Selector from '../../containers/VendorStudyPage/selectors';
 import { selectCurrentUser } from '../../containers/App/selectors';
@@ -26,6 +27,31 @@ import { translate } from '../../../common/utilities/localization';
  * Specifies the drop target contract.
  * All methods are optional.
  */
+const shouldLock = (props, patient) => {
+  const { campaign, campaigns, category, currentUser } = props;
+  let shouldLock;
+  if (currentUser.isProxy) {
+    shouldLock = false;
+  } else if (category.id <= CALL_ATTEMPT_ID) {
+    if (campaign) {
+      const c = _.find(campaigns, { id: campaign });
+      shouldLock = c.patientQualificationSuite;
+    } else {
+      shouldLock =  _.findIndex(campaigns, c => {
+        if (c.patientQualificationSuite) {
+          const createdAt = moment(patient.createdAt);
+          const start = moment(c.dateFrom);
+          const end = moment(c.dateTo);
+          return createdAt.isAfter(start) && createdAt.isBefore(end);
+        }
+        return false;
+      }) > -1;
+    }
+  } else {
+    shouldLock = false;
+  }
+  return shouldLock;
+};
 const patientTarget = {
   drop(props, monitor) {
     if (monitor.didDrop()) {
@@ -82,6 +108,10 @@ const patientTarget = {
       patientDragSwitcher(props.category, item, patientId);
     }
   },
+  canDrop(props, monitor) {
+    const { patient } = monitor.getItem();
+    return !shouldLock(props, patient);
+  },
 };
 
 const collect = (connect, monitor) => ({
@@ -95,6 +125,7 @@ const collect = (connect, monitor) => ({
   itemType: monitor.getItemType(),
 });
 
+const CALL_ATTEMPT_ID = 2;
 @DropTarget(DragTypes.PATIENT, patientTarget, collect)
 class PatientCategory extends React.Component {
   static propTypes = {
@@ -102,6 +133,8 @@ class PatientCategory extends React.Component {
     study: React.PropTypes.object.isRequired,
     studyId: React.PropTypes.number.isRequired,
     category: React.PropTypes.object.isRequired,
+    campaign: React.PropTypes.number,
+    campaigns: React.PropTypes.any,
     connectDropTarget: React.PropTypes.func.isRequired,
     currentPatientId: React.PropTypes.number,
     currentSite: React.PropTypes.object,
@@ -111,6 +144,7 @@ class PatientCategory extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
+    isAdmin: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -193,6 +227,8 @@ class PatientCategory extends React.Component {
           onPatientClick={this.props.onPatientClick}
           onPatientTextClick={this.props.onPatientTextClick}
           style={{ height: itemHeight }}
+          isLocked={shouldLock(this.props, patient)}
+          isAdmin={this.props.isAdmin}
         />
       ))}
     </ul>
@@ -243,7 +279,7 @@ class PatientCategory extends React.Component {
   }
 
   render() {
-    const { category, patientCategoriesTotals } = this.props;
+    const { category, connectDropTarget, patientCategoriesTotals } = this.props;
     const name = translate(`common.patientCategory.id${category.id}`);
     const total = _.find(patientCategoriesTotals, item => (
       item.patientCategoryId === category.id
@@ -253,7 +289,7 @@ class PatientCategory extends React.Component {
       width: this.state.columnWidth,
     };
 
-    return (
+    return connectDropTarget(
       <li
         key={category.id}
         ref={(patientColumn) => {
@@ -277,6 +313,8 @@ const mapStateToProps = createStructuredSelector({
   study: Selector.selectStudy(),
   studyId: Selector.selectStudyId(),
   currentUser: selectCurrentUser(),
+  campaigns: Selector.selectCampaigns(),
+  isAdmin: Selector.selectIsVendorAdmin(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -18,7 +18,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../NotFoundPage/index';
 import StudyStats from './StudyStats';
-import PatientBoard from '../../components/PatientBoard/Index';
+import PatientBoard from '../../components/PatientBoard';
 import { getItem } from '../../../common/utils/localStorage';
 import * as Selector from './selectors';
 import { selectStudySources } from '../../../common/selectors/studySources';
@@ -48,6 +48,7 @@ const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser(),
   paginationOptions: Selector.selectPaginationOptions(),
   studySources: selectStudySources(),
+  isAdmin: Selector.selectIsVendorAdmin(),
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -104,6 +105,7 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
     patientCategoriesTotals: React.PropTypes.array,
     patientBoardLoading: React.PropTypes.bool,
     toastrActions: React.PropTypes.object.isRequired,
+    isAdmin: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -282,7 +284,7 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
   render() {
     const { fetchingPatientCategories, fetchStudy, fetchStudyStats, fetchingStudy,
       campaigns, patientCategories, protocol, site, sources, study, stats,
-      fetchingPatients, params, paginationOptions, patientCategoriesTotals, patientBoardLoading } = this.props;
+      fetchingPatients, params, paginationOptions, patientCategoriesTotals, patientBoardLoading, isAdmin } = this.props;
     const ePMS = study && study.patientMessagingSuite;
     if (fetchingStudy || fetchingPatientCategories) {
       return (
@@ -380,7 +382,7 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
             ePMS={ePMS}
             loadMore={this.handleSubmit}
             paginationOptions={paginationOptions}
-            disableDrag
+            isAdmin={isAdmin}
           />
         </section>
       </div>
