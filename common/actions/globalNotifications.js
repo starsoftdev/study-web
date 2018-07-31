@@ -30,7 +30,7 @@ import {
   UNSUBSCRIBE_FROM_REVERT_PROGRESS_SOCKET,
   CLIENT_OPENED_STUDY_PAGE,
   CLIENT_CLOSED_STUDY_PAGE,
-} from './constants';
+} from '../constants/globalNotifcations';
 
 export function subscribeToPageEvent(payload) {
   return {
