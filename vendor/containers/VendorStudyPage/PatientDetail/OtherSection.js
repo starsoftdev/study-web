@@ -60,6 +60,7 @@ class OtherSection extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     addPatientIndication: React.PropTypes.func.isRequired,
     removePatientIndication: React.PropTypes.func.isRequired,
+    disabled: React.PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -183,7 +184,7 @@ class OtherSection extends React.Component {
             name="gender"
             component={ReactSelect}
             options={genderOptions}
-            disabled
+            disabled={this.props.disabled}
             placeholder={translate('client.component.otherSection.placeholderGender')}
           />
         </div>
@@ -221,7 +222,7 @@ class OtherSection extends React.Component {
       return (
         <div className="pull-right study-page-update-patient-bttns-container">
           <button className="btn btn-gray-outline" onClick={this.onReset}>{translate('client.component.otherSection.cancel')}</button>
-          <Button type="submit" disabled={submitting || loading}>{translate('client.component.otherSection.update')}</Button>
+          <Button type="submit" disabled={submitting || loading || this.props.disabled}>{translate('client.component.otherSection.update')}</Button>
         </div>
       );
     }
@@ -235,7 +236,7 @@ class OtherSection extends React.Component {
       overlayValues.indications = this.state.initialValues.patientIndications.filter(pi => { return pi.indication; }).map(pi => pi.indication);
     }
 
-    const { formValues: { dobDay, dobMonth, dobYear }, initialValues, loading, indications } = this.props;
+    const { formValues: { dobDay, dobMonth, dobYear }, initialValues, loading, indications, disabled } = this.props;
 
     if (initialValues) {
       return (
@@ -270,7 +271,7 @@ class OtherSection extends React.Component {
                     <label htmlFor="patient-source5">{translate('client.component.otherSection.labelMedia')}</label>
                   </strong>
                   <div className="field">
-                    <FormControl disabled="true" type="text" value={initialValues.source ? initialValues.source.type : ''} />
+                    <FormControl disabled={disabled} type="text" value={initialValues.source ? initialValues.source.type : ''} />
                   </div>
                 </div>
                 <div className="field-row">
@@ -281,7 +282,7 @@ class OtherSection extends React.Component {
                     type="button"
                     className="btn btn-primary btn-default-padding"
                     onClick={this.downloadReferral}
-                    disabled
+                    disabled={disabled}
                   >
                     <i className="icomoon-icon_download" />
                     &nbsp;Download
@@ -297,7 +298,7 @@ class OtherSection extends React.Component {
                       type="button"
                       className="btn btn-primary btn-default-padding"
                       onClick={() => { this.props.deletePatient(this.props.initialValues.id); }}
-                      disabled
+                      disabled={disabled}
                     >
                       {translate('client.component.otherSection.delete')}
                     </button>
@@ -310,7 +311,7 @@ class OtherSection extends React.Component {
                       bsStyle="primary"
                       ref={(target) => (this.target = target)}
                       onClick={this.toggleIndicationPopover}
-                      disabled
+                      disabled={disabled}
                     >
                       {translate('client.component.otherSection.addIndication')}
                     </Button>

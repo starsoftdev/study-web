@@ -56,6 +56,7 @@ export class PatientDetailModal extends React.Component {
     updatePatientSuccess: React.PropTypes.func,
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
+    isAdmin: React.PropTypes.isAdmin,
   };
 
   constructor(props) {
@@ -137,7 +138,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId } = this.props;
+    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId, isAdmin } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
@@ -151,6 +152,7 @@ export class PatientDetailModal extends React.Component {
           currentUser={currentUser}
           patientCategories={patientCategories}
           onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
+          disabled={isAdmin}
         />
       );
     }
@@ -183,7 +185,8 @@ export class PatientDetailModal extends React.Component {
 
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
-      socket, switchToNoteSection, currentPatientNotes } = this.props;
+      socket, switchToNoteSection, currentPatientNotes, isAdmin } = this.props;
+    console.log(isAdmin);
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
@@ -220,8 +223,8 @@ export class PatientDetailModal extends React.Component {
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
-                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} disabled={isAdmin} />
+                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} disabled={isAdmin} />
                   </div>
                 </div>
               </div>
@@ -243,6 +246,7 @@ const mapStateToProps = createStructuredSelector({
   openPatientModal: Selector.selectOpenPatientModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
+  isAdmin: Selector.selectIsVendorAdmin(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

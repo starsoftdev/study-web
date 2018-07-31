@@ -36,11 +36,11 @@ export default class AddVendorAdminForm extends React.Component { // eslint-disa
     const roleOptions = [
       {
         label: 'READ',
-        value: 1,
+        value: 'user',
       },
       {
         label: 'READ/WRITE',
-        value: 2,
+        value: 'admin',
       },
     ];
     return (

@@ -28,10 +28,13 @@ import {
   updatePatientSuccess,
 } from '../../../actions/patients';
 
-import { markAsReadPatientMessages, deleteMessagesCountStat, selectCurrentUser } from '../../../actions/app';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../actions/app';
 import {
   selectSocket,
 } from '../../../selectors/globalNotifications';
+import {
+  selectCurrentUser,
+} from '../../../selectors/app';
 import { translate } from '../../../utilities/localization';
 
 export class PatientDetailModal extends React.Component {
