@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { DragSource } from 'react-dnd';
 import Button from 'react-bootstrap/lib/Button';
-import { formatPhone } from '../../common/helper/functions';
+import { formatPhone } from '../../utilities/helpers';
 import { translate } from '../../../common/utilities/localization';
 import DragTypes from './dragSourceTypes';
 
@@ -32,7 +32,7 @@ const patientSource = {
     return item;
   },
   canDrag(props) {
-    return !props.isLocked && props.isAdmin;
+    return !props.isLocked;
   },
 };
 
@@ -59,7 +59,6 @@ class Patient extends React.Component {
     patient: React.PropTypes.object.isRequired,
     unreadMessageCount: React.PropTypes.number,
     isLocked: React.PropTypes.bool,
-    isAdmin:  React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -80,9 +79,9 @@ class Patient extends React.Component {
   }
 
   renderTextCreatedDate() {
-    const { currentUser, patient: { lastTextMessage } } = this.props;
+    const { currentUser, currentSite, patient: { lastTextMessage } } = this.props;
 
-    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? currentSite.timezone : currentUser.timezone;
 
     if (lastTextMessage && lastTextMessage.dateCreated) {
       return (

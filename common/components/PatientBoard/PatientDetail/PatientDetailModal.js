@@ -9,28 +9,33 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import CenteredModal from '../../../components/CenteredModal/index';
-import { selectCurrentUser } from '../../App/selectors';
-import * as Selector from '../selectors';
+import CenteredModal from '../../../../common/components/CenteredModal/index';
+import { SchedulePatientModalType } from '../../../../common/constants/index';
+import * as Selector from '../../../selectors/studyPage';
 import PatientDetailSection from './PatientDetailSection';
 import NotesSection from './NotesSection';
 import TextSection from './TextSection';
+import EmailSection from './EmailSection';
 import OtherSection from './OtherSection';
-import { normalizePhoneDisplay } from '../../../common/helper/functions';
+import { normalizePhoneDisplay } from '../../../utilities/helpers';
 import {
   showScheduledModal,
   fetchPatientDetails,
   switchToNoteSectionDetail,
   switchToTextSectionDetail,
+  switchToEmailSectionDetail,
   readStudyPatientMessages,
   updatePatientSuccess,
-} from '../actions';
+} from '../../../actions/patients';
 
-import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../../app/containers/App/actions';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../actions/app';
 import {
   selectSocket,
-} from '../../../../app/containers/GlobalNotifications/selectors';
-import { translate } from '../../../../common/utilities/localization';
+} from '../../../selectors/globalNotifications';
+import {
+  selectCurrentUser,
+} from '../../../selectors/app';
+import { translate } from '../../../utilities/localization';
 
 export class PatientDetailModal extends React.Component {
   static propTypes = {
@@ -49,6 +54,7 @@ export class PatientDetailModal extends React.Component {
     socket: React.PropTypes.any,
     switchToNoteSection: React.PropTypes.func.isRequired,
     switchToTextSection: React.PropTypes.func.isRequired,
+    switchToEmailSection: React.PropTypes.func.isRequired,
     readStudyPatientMessages: React.PropTypes.func.isRequired,
     markAsReadPatientMessages: React.PropTypes.func,
     deleteMessagesCountStat: React.PropTypes.func,
@@ -56,7 +62,6 @@ export class PatientDetailModal extends React.Component {
     updatePatientSuccess: React.PropTypes.func,
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
-    isAdmin: React.PropTypes.isAdmin,
   };
 
   constructor(props) {
@@ -96,10 +101,8 @@ export class PatientDetailModal extends React.Component {
   componentWillUnmount() {
     const { socket } = this.props;
 
-    if (socket) {
-      socket.removeAllListeners('notifyUnsubscribePatient');
-      socket.removeAllListeners('notifySubscribePatient');
-    }
+    socket.removeAllListeners('notifyUnsubscribePatient');
+    socket.removeAllListeners('notifySubscribePatient');
   }
 
   onSelectText() {
@@ -120,7 +123,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { currentPatient, currentPatientCategory, site, params, isAdmin } = this.props;
+    const { currentPatient, currentPatientCategory, site, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -131,14 +134,15 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} disabled={!isAdmin} />
+        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} />
       );
     }
     return null;
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId, isAdmin } = this.props;
+    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId } = this.props;
+
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       formattedPatient.phone = normalizePhoneDisplay(currentPatient.phone);
@@ -151,7 +155,6 @@ export class PatientDetailModal extends React.Component {
           currentUser={currentUser}
           patientCategories={patientCategories}
           onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
-          disabled={!isAdmin}
         />
       );
     }
@@ -159,13 +162,13 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderScheduledTime() {
-    const { currentPatientCategory, currentPatient, currentUser } = this.props;
+    const { currentPatientCategory, currentPatient, currentUser, showScheduledModal, site } = this.props;
     if (currentPatientCategory && currentPatientCategory.name === 'Scheduled') {
       if (currentPatient && currentPatient.appointments && currentPatient.appointments.length > 0 && currentPatient.appointments[0]) {
-        const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
+        const timezone = site.timezone || currentUser.timezone;
         const scheduleDate =  moment(currentPatient.appointments[0].utcTime).tz(timezone);
         return (
-          <a className="modal-opener">
+          <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.UPDATE)}>
             <span className="date">{scheduleDate.format(translate('client.component.patientDetailModal.dateMask'))}</span>
             <span> {translate('client.component.patientDetailModal.at')} </span>
             <span className="time">{scheduleDate.format(translate('client.component.patientDetailModal.timeMask'))} ({moment.tz(timezone).format('z')})</span>
@@ -174,7 +177,7 @@ export class PatientDetailModal extends React.Component {
       }
 
       return (
-        <a className="modal-opener">
+        <a className="modal-opener" onClick={() => showScheduledModal(SchedulePatientModalType.CREATE)}>
           {translate('client.component.patientDetailModal.appointment')}
         </a>
       );
@@ -184,7 +187,7 @@ export class PatientDetailModal extends React.Component {
 
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
-      socket, switchToNoteSection, currentPatientNotes, isAdmin } = this.props;
+      socket, switchToNoteSection, switchToEmailSection, currentPatientNotes } = this.props;
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
@@ -219,10 +222,12 @@ export class PatientDetailModal extends React.Component {
                   <ol className="carousel-indicators">
                     <li className={classNames({ active: carousel.note })} onClick={switchToNoteSection}>{translate('client.component.patientDetailModal.note')}</li>
                     <li className={classNames({ text: true, active: carousel.text })} onClick={this.onSelectText}>{translate('client.component.patientDetailModal.text')}</li>
+                    <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>{translate('client.component.patientDetailModal.email')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} disabled={!isAdmin} />
-                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} disabled={!isAdmin} />
+                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
+                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                    <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
                   </div>
                 </div>
               </div>
@@ -244,7 +249,6 @@ const mapStateToProps = createStructuredSelector({
   openPatientModal: Selector.selectOpenPatientModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
-  isAdmin: Selector.selectIsVendorAdmin(),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -252,6 +256,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchPatientDetails: (patientId, patientCategoryId) => dispatch(fetchPatientDetails(patientId, patientCategoryId)),
   switchToNoteSection: () => dispatch(switchToNoteSectionDetail()),
   switchToTextSection: () => dispatch(switchToTextSectionDetail()),
+  switchToEmailSection: () => dispatch(switchToEmailSectionDetail()),
   readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
   markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
   deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),

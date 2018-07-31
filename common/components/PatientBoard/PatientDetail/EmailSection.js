@@ -8,14 +8,14 @@ import { connect } from 'react-redux';
 import { reduxForm, change, reset } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import { toastr } from 'react-redux-toastr';
-import { submitEmail, fetchEmails } from '../actions';
-import { selectSubmittingEmail, selectEmails } from '../selectors';
-import { selectValues, selectSyncErrors } from '../../../common/selectors/form.selector';
-import { selectCurrentUser } from '../../../containers/App/selectors';
+import { submitEmail, fetchEmails } from '../../../actions/patients';
+import { selectSubmittingEmail, selectEmails } from '../../../selectors/studyPage';
+import { selectValues, selectSyncErrors } from '../../../selectors/form.selector';
+import { selectCurrentUser } from '../../../selectors/app';
 
-import EmailSectionList from '../../../components/EmailSectionList/index';
-import EmailSectionSendForm from '../../../components/EmailSectionSendForm/index';
-import formValidator from '../../../components/EmailSectionSendForm/validator';
+import EmailSectionList from './EmailSectionList/index';
+import EmailSectionSendForm from './EmailSectionSendForm/index';
+import formValidator from './EmailSectionSendForm/validator';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Email';
@@ -56,7 +56,6 @@ class EmailSection extends React.Component {
     emails: React.PropTypes.object,
     clearForm: React.PropTypes.func.isRequired,
     submittingEmail: React.PropTypes.bool,
-    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {
@@ -115,7 +114,7 @@ class EmailSection extends React.Component {
   }
 
   render() {
-    const { active, change, emails, disabled } = this.props;
+    const { active, change, emails } = this.props;
     const { compose, noEmailsFetched } = this.state;
     return (
       <div className={`item emails-info ${active ? 'active' : ''}`}>
@@ -123,7 +122,6 @@ class EmailSection extends React.Component {
         <EmailSectionList
           switchCompose={this.switchCompose}
           emails={emails}
-          disabled
         />
         }
 
@@ -133,7 +131,6 @@ class EmailSection extends React.Component {
           switchCompose={this.switchCompose}
           change={change}
           noBackBtn={noEmailsFetched}
-          disabled={disabled}
         />
         }
       </div>

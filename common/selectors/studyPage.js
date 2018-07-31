@@ -7,9 +7,7 @@ import { createSelector } from 'reselect';
 /**
  * Direct selector to the studyPage state domain
  */
-const selectStudyPageDomain = () => state => state.vendorStudyPage;
-const selectGlobalState = () => state => state.global;
-
+const selectStudyPageDomain = () => state => state.studyPage;
 export default selectStudyPageDomain;
 
 /**
@@ -224,9 +222,4 @@ export const selectSchedulePatientFormValues = () => createSelector(
 export const selectSchedulePatientFormErrors = () => createSelector(
   selectFormDomain(),
   (subState) => (subState.ScheduledPatientModal ? subState.ScheduledPatientModal.syncErrors : null)
-);
-
-export const selectIsVendorAdmin = () => createSelector(
-  selectGlobalState(),
-  (subState) => subState.userData.roleForVendor.isAdmin
 );
