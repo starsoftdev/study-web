@@ -33,7 +33,7 @@ const shouldLock = (props, patient) => {
   if (currentUser.isProxy) {
     shouldLock = false;
   } else if (category.id <= CALL_ATTEMPT_ID) {
-    if (campaign) {
+    if (campaign && campaign !== -1) {
       const c = _.find(campaigns, { id: campaign });
       shouldLock = c.patientQualificationSuite;
     } else {
