@@ -61,23 +61,23 @@ class NotesSection extends React.Component {
   }
 
   renderNotes() {
-    const { currentUser, currentPatient, submitDeleteNote, notes } = this.props;
+    const { currentUser, currentPatient, submitDeleteNote, notes, disabled } = this.props;
     return notes.map(note => (
-      <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} />
+      <PatientNote key={note.id} currentUser={currentUser} note={note} currentPatient={currentPatient} submitDeleteNote={submitDeleteNote} disabled={disabled} />
     ));
   }
 
   render() {
-    const { active } = this.props;
+    const { active, disabled } = this.props;
     return (
       <div className={classNames('item note', { active })}>
         <section className="postarea notes" ref={scrollable => { this.scrollable = scrollable; }}>
           {this.renderNotes()}
         </section>
         <div className="textarea">
-          <Field name="note" className="textarea-holder" isDisabled disabled component={Input} componentClass="textarea" placeholder={translate('client.component.notesSection.placeholderNote')} />
+          <Field name="note" className="textarea-holder" isDisabled disabled={disabled} component={Input} componentClass="textarea" placeholder={translate('client.component.notesSection.placeholderNote')} />
         </div>
-        <Button className="save-btn" onClick={this.onClick} disabled>{translate('client.component.notesSection.save')}</Button>
+        <Button className="save-btn" onClick={this.onClick} disabled={disabled} >{translate('client.component.notesSection.save')}</Button>
       </div>
     );
   }

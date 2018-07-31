@@ -115,7 +115,7 @@ class EmailSection extends React.Component {
   }
 
   render() {
-    const { active, change, emails } = this.props;
+    const { active, change, emails, disabled } = this.props;
     const { compose, noEmailsFetched } = this.state;
     return (
       <div className={`item emails-info ${active ? 'active' : ''}`}>
@@ -123,6 +123,7 @@ class EmailSection extends React.Component {
         <EmailSectionList
           switchCompose={this.switchCompose}
           emails={emails}
+          disabled
         />
         }
 
@@ -132,6 +133,7 @@ class EmailSection extends React.Component {
           switchCompose={this.switchCompose}
           change={change}
           noBackBtn={noEmailsFetched}
+          disabled={disabled}
         />
         }
       </div>
