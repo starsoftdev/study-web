@@ -298,8 +298,8 @@ export function* fetchTotalSignUpsWorker(action) {
       },
     };
     if (searchFilter && searchFilter.startDate && searchFilter.endDate) {
-      options.query.startDate = searchFilter.startDate.format('YYYY-MM-DD');
-      options.query.endDate = searchFilter.endDate.format('YYYY-MM-DD');
+      options.query.startDate = searchFilter.startDate;
+      options.query.endDate = searchFilter.endDate;
     }
     const response = yield call(request, requestURL, options);
     yield put(fetchTotalSignUpsSuccess(response));
