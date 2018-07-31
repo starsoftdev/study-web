@@ -140,17 +140,13 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
 
   render() {
     const { userRoleType, currentUser, queryParams } = this.props;
-    let purchasable = true;
-    if (userRoleType === 'client') {
-      purchasable = currentUser.roleForClient.name === 'Super Admin' ? true : currentUser.roleForClient.canPurchase;
-    }
-    const bDisabled = purchasable ? null : true;
+
     return (
       <div className="home-page">
         <Helmet title={translate('portals.page.homePage.helmetTitle')} />
         {userRoleType === 'client' &&
           (
-            <div className="container-fluid">
+            <div className="container-fluid client-portal">
               <div className="dashboard form-group">
                 <Dashboard location={this.props.location} />
               </div>
@@ -160,12 +156,14 @@ export class HomePage extends Component { // eslint-disable-line react/prefer-st
                   currentUser={currentUser}
                   initialValues={{ status: ACTIVE_STATUS_VALUE }}
                 />
-                <button type="button" className="btn btn-primary btn-list-new-study pull-right" onClick={this.gotoListNewStudy} disabled={bDisabled}>
-                  {translate('portals.page.homePage.listNewStudyBtn')}
-                </button>
               </div>
               <div className="table-holder form-group">
-                <StudiesList queryParams={queryParams} />
+                <StudiesList
+                  queryParams={queryParams}
+                  onSubmit={this.searchStudies}
+                  currentUser={currentUser}
+                  initialValues={{ status: ACTIVE_STATUS_VALUE }}
+                />
               </div>
             </div>
           )

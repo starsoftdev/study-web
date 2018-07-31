@@ -1,12 +1,21 @@
 import {
+  CLOSE_PATIENTS_LIST_MODAL,
   FETCH_PATIENTS,
   FETCH_PATIENTS_SUCCESS,
   FETCH_PATIENTS_ERROR,
+  SEARCH_FOR_PATIENTS,
+  SEARCH_FOR_PATIENTS_SUCCESS,
+  SEARCH_FOR_PATIENTS_ERROR,
   FETCH_SCHEDULES,
   FETCH_SCHEDULES_SUCCESS,
   FETCH_SCHEDULES_ERROR,
 } from './constants';
 
+export function closePatientsListModal() {
+  return {
+    type: CLOSE_PATIENTS_LIST_MODAL,
+  };
+}
 export function fetchPatients(userId) {
   return {
     type: FETCH_PATIENTS,
@@ -14,37 +23,59 @@ export function fetchPatients(userId) {
   };
 }
 
-export function patientsFetched(payload) {
+export function patientsFetched(response) {
   return {
     type: FETCH_PATIENTS_SUCCESS,
-    payload,
+    response,
   };
 }
 
-export function patientsFetchingError(payload) {
+export function patientsFetchingError(response) {
   return {
     type: FETCH_PATIENTS_ERROR,
-    payload,
+    response,
   };
 }
 
-export function fetchSchedules(payload) {
+export function searchForPatients(callCenterRoleId, phone) {
+  return {
+    type: SEARCH_FOR_PATIENTS,
+    callCenterRoleId,
+    phone,
+  };
+}
+
+export function searchForPatientsFetched(response) {
+  return {
+    type: SEARCH_FOR_PATIENTS_SUCCESS,
+    response,
+  };
+}
+
+export function searchForPatientsFetchingError(response) {
+  return {
+    type: SEARCH_FOR_PATIENTS_ERROR,
+    response,
+  };
+}
+
+export function fetchSchedules(response) {
   return {
     type: FETCH_SCHEDULES,
-    payload,
+    response,
   };
 }
 
-export function schedulesFetched(payload) {
+export function schedulesFetched(response) {
   return {
     type: FETCH_SCHEDULES_SUCCESS,
-    payload,
+    response,
   };
 }
 
-export function schedulesFetchingError(payload) {
+export function schedulesFetchingError(response) {
   return {
     type: FETCH_SCHEDULES_ERROR,
-    payload,
+    response,
   };
 }
