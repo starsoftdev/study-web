@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { takeLatest } from 'redux-saga';
 import { take, call, put, fork, cancel } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
