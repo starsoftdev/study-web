@@ -622,8 +622,7 @@ class StudiesList extends Component { // eslint-disable-line react/prefer-statel
             <div className="table-responsive">
               <table className="table has-absolute-caption">
                 <caption className="absolute-caption">
-                  <span className="pull-left">{translate('portals.client.component.studiesList.tableTitle')}</span>
-                  <span className="pull-right">
+                  <span className="pull-left">
                     <span className="inner-info">
                       <span className="info-label">{translate('portals.client.component.studiesList.active')}</span>
                       <span className="info-value">{studies.active || 0}</span>

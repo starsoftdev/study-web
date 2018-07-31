@@ -210,7 +210,7 @@ export function* fetchMediaSourcesWatcher() {
 
 function* fetchMediaSourcesWorker(action) {
   try {
-    const queryString = composeQueryString(action.searchParams);
+    const queryString = composeQueryString({ ...action.searchParams, groupByName: true });
     const options = {
       method: 'GET',
     };
@@ -286,7 +286,7 @@ export function* fetchTotalSignUpsWatcher() {
 }
 export function* fetchTotalSignUpsWorker(action) {
   try {
-    const { roleId, protocol, indication, timezone } = action;
+    const { roleId, protocol, indication, timezone, searchFilter } = action;
 
     const requestURL = `${API_URL}/sponsorRoles/${roleId}/patientSignUps`;
     const options = {
@@ -297,6 +297,10 @@ export function* fetchTotalSignUpsWorker(action) {
         timezone,
       },
     };
+    if (searchFilter && searchFilter.startDate && searchFilter.endDate) {
+      options.query.startDate = searchFilter.startDate.format('YYYY-MM-DD');
+      options.query.endDate = searchFilter.endDate.format('YYYY-MM-DD');
+    }
     const response = yield call(request, requestURL, options);
     yield put(fetchTotalSignUpsSuccess(response));
   } catch (err) {
