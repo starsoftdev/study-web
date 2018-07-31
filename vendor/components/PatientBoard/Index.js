@@ -77,6 +77,7 @@ class PatientBoard extends React.Component {
     paginationOptions: React.PropTypes.object,
     studyPatientsFilter: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
+    deleteMessagesCountStat: React.PropTypes.func,
   };
 
   constructor(props) {
