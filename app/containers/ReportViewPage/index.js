@@ -123,7 +123,6 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     this.props.getReportsList({ ...filters, source: null });
     this.props.getReportsTotals(filters);
-    this.props.fetchMediaSources(filters);
     this.props.getDispositionTotals({ ...filters, source: null });
     this.props.fetchSources();
     this.props.fetchTotalSignUps(currentUser.roleForSponsor.id, protocolNumber, indication, currentUser.timezone);
@@ -131,6 +130,10 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
   componentWillUnmount() {
     this.props.clearReportList();
+  }
+
+  loadMediaSources = () => {
+    this.props.fetchMediaSources(this.state.filters);
   }
 
   getPercentageObject(item) {
@@ -168,7 +171,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
   }
 
   searchReports(searchFilter) {
-    const { currentUser, getReportsTotals, getReportsList, fetchMediaSources, getDispositionTotals, sources } = this.props;
+    const { currentUser, fetchTotalSignUps, getReportsTotals, getReportsList, fetchMediaSources, getDispositionTotals, sources } = this.props;
     const protocolNumber = this.props.location.query.protocol || null;
     const indication = this.props.location.query.indication || null;
     const cro = this.props.location.query.cro || null;
@@ -178,7 +181,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
 
     filters = _.assign(filters, this.props.formValues, searchFilter);
     this.setState({ filters });
-
+    fetchTotalSignUps(currentUser.roleForSponsor.id, protocolNumber, indication, currentUser.timezone, searchFilter);
     getReportsTotals(filters);
     getReportsList({ ...filters, source: null }, 50, 0, this.props.paginationOptions.activeSort, this.props.paginationOptions.activeDirection);
     fetchMediaSources(filters);
@@ -322,6 +325,7 @@ export class ReportViewPage extends React.Component { // eslint-disable-line rea
           dispositions={dispositions}
           dispositionTotals={this.props.dispositionTotals}
           mediaSources={this.props.mediaSources}
+          loadMediaSources={this.loadMediaSources}
         />
         <ReportViewTable
           reportsList={this.props.reportsList}
@@ -430,7 +434,7 @@ function mapDispatchToProps(dispatch) {
     fetchSources: () => dispatch(fetchSources()),
     getDispositionTotals: searchParams => dispatch(getDispositionTotals(searchParams)),
     clearReportList: () => dispatch(clearReportList()),
-    fetchTotalSignUps: (roleId, protocol, indication, timezone) => dispatch(fetchTotalSignUps(roleId, protocol, indication, timezone)),
+    fetchTotalSignUps: (roleId, protocol, indication, timezone, searchFilter) => dispatch(fetchTotalSignUps(roleId, protocol, indication, timezone, searchFilter)),
     getStudyReportsTotals: searchParams => dispatch(getStudyReportsTotals(searchParams)),
     getStudyDispositionTotals: searchParams => dispatch(getStudyDispositionTotals(searchParams)),
     fetchStudyMediaSources: (searchParams) => dispatch(fetchStudyMediaSources(searchParams)),
