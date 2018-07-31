@@ -13,15 +13,15 @@ import { List, AutoSizer, WindowScroller } from 'react-virtualized';
 import VirtualList from 'react-virtual-list';
 import moment from 'moment-timezone';
 
-import * as Selector from '../../containers/VendorStudyPage/selectors';
-import { selectCurrentUser } from '../../containers/App/selectors';
+import * as Selector from '../../selectors/studyPage';
+import { selectCurrentUser } from '../../selectors/app';
 import DragTypes from './dragSourceTypes';
 import Patient from './Patient';
 import {
   schedulePatient,
   submitMovePatientBetweenCategories,
   showScheduledModal,
-} from '../../containers/VendorStudyPage/actions';
+} from '../../actions/patients';
 import { translate } from '../../../common/utilities/localization';
 /**
  * Specifies the drop target contract.
@@ -144,7 +144,6 @@ class PatientCategory extends React.Component {
     onPatientTextClick: React.PropTypes.func.isRequired,
     currentUser: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
-    isAdmin: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -228,7 +227,6 @@ class PatientCategory extends React.Component {
           onPatientTextClick={this.props.onPatientTextClick}
           style={{ height: itemHeight }}
           isLocked={shouldLock(this.props, patient)}
-          isAdmin={this.props.isAdmin}
         />
       ))}
     </ul>
@@ -314,7 +312,6 @@ const mapStateToProps = createStructuredSelector({
   studyId: Selector.selectStudyId(),
   currentUser: selectCurrentUser(),
   campaigns: Selector.selectCampaigns(),
-  isAdmin: Selector.selectIsVendorAdmin(),
 });
 
 const mapDispatchToProps = (dispatch) => ({

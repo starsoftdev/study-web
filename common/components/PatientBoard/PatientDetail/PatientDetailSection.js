@@ -4,23 +4,24 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import { reset, blur, Field, reduxForm } from 'redux-form';
 import { createStructuredSelector } from 'reselect';
 import moment from 'moment-timezone';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
-import Checkbox from '../../../components/Input/Checkbox';
-import Input from '../../../components/Input/index';
+import Checkbox from '../../../../common/components/Input/Checkbox';
+import Input from '../../../../common/components/Input/index';
 import {
   setCurrentPatientCategoryId, setCurrentPatientId, submitMovePatientBetweenCategories,
   submitPatientUpdate,
-} from '../actions';
-import { selectPatientBoardLoading, selectSubmittingSchedule } from '../selectors';
+} from '../../../actions/patients';
+import { selectPatientBoardLoading, selectSubmittingSchedule } from '../../../selectors/studyPage';
 import formValidator from './detailValidator';
-import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../common/helper/functions';
-import { selectSyncErrors, selectValues, selectFormDidChange } from '../../App/form.selectors';
-import ReactSelect from '../../../components/Input/ReactSelect';
+import { normalizePhoneForServer, normalizePhoneDisplay } from '../../../utilities/helpers';
+import { selectSyncErrors, selectValues, selectFormDidChange } from '../../../selectors/form.selector';
+import ReactSelect from '../../../../common/components/Input/ReactSelect';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Detail';
@@ -50,7 +51,6 @@ class PatientDetailSection extends React.Component {
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
-    disabled: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -130,14 +130,20 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { initialValues, currentUser, patientCategories, disabled } = this.props;
+    const { submitting, initialValues, site, currentUser, patientCategories } = this.props;
+
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
-    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
+    const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
     const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
-    const shouldDisable = (disabled);
+
+    const { dispositions } = initialValues;
+    const disposition = dispositions && dispositions.length
+      ? translate(`common.disposition.label${dispositions[0].dispositionKey}`)
+      : translate('common.constants.na');
+
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -152,7 +158,7 @@ class PatientDetailSection extends React.Component {
                   name="firstName"
                   component={Input}
                   placeholder={translate('client.component.patientDetailSection.placeholderFirstName')}
-                  isDisabled={shouldDisable}
+                  isDisabled={submitting}
                   required
                 />
               </div>
@@ -162,7 +168,7 @@ class PatientDetailSection extends React.Component {
                   name="lastName"
                   component={Input}
                   placeholder={translate('client.component.patientDetailSection.placeholderLastName')}
-                  isDisabled={shouldDisable}
+                  isDisabled={submitting}
                   required
                 />
               </div>
@@ -177,7 +183,6 @@ class PatientDetailSection extends React.Component {
             <Field
               type="email"
               name="email"
-              isDisabled={shouldDisable}
               component={Input}
             />
           </div>
@@ -192,7 +197,6 @@ class PatientDetailSection extends React.Component {
               name="phone"
               component={Input}
               onBlur={this.onPhoneBlur}
-              isDisabled={shouldDisable}
               required
             />
           </div>
@@ -206,10 +210,19 @@ class PatientDetailSection extends React.Component {
               name="patientCategoryId"
               component={ReactSelect}
               options={categories}
-              disabled={shouldDisable}
+              disabled={submitting}
               placeholder={translate('client.component.patientDetailSection.placeholderStatus')}
               clearable={false}
             />
+          </div>
+        </div>
+
+        <div className="field-row">
+          <strong className="label">
+            <label htmlFor="patient-disposition">{translate('client.component.patientDetailSection.labelDisposition')}</label>
+          </strong>
+          <div className="field">
+            <FormControl disabled="true" type="text" value={disposition} />
           </div>
         </div>
 
@@ -241,7 +254,6 @@ class PatientDetailSection extends React.Component {
               type="checkbox"
               component={Checkbox}
               className={unsubscribedClassName}
-              disabled={shouldDisable}
             />
           </div>
         </div>
