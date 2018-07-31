@@ -85,11 +85,13 @@ class TextSection extends React.Component {
           this.setState({ patientToFetchMessages: this.props.currentPatient.id }, () => {
             this.initStudyPatientMessagesFetch(this.props);
           });
-          this.props.readStudyPatientMessages(this.props.currentPatient.id);
-          this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
-          this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
-            unreadMessageCount: 0,
-          });
+          if (this.props.currentPatient.unreadMessageCount > 0) {
+            this.props.readStudyPatientMessages(this.props.currentPatient.id);
+            this.props.deleteMessagesCountStat(this.props.currentPatient.unreadMessageCount);
+            this.props.updatePatientSuccess(this.props.currentPatient.id, this.props.currentPatientCategory.id, {
+              unreadMessageCount: 0,
+            });
+          }
         }
       });
       this.setState({ socketBinded: true });
