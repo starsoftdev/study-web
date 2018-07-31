@@ -56,6 +56,7 @@ class EmailSection extends React.Component {
     emails: React.PropTypes.object,
     clearForm: React.PropTypes.func.isRequired,
     submittingEmail: React.PropTypes.bool,
+    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {

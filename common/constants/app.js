@@ -6,4 +6,3 @@ export const SUBTRACT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/SUB
 
 export const INCREMENT_STUDY_UNREAD_MESSAGES             = 'HomePage/Viewport/INCREMENT_STUDY_UNREAD_MESSAGES';
 
-

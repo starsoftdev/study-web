@@ -16,7 +16,7 @@ import Input from '../../../../common/components/Input/index';
 import Checkbox from '../../../../common/components/Input/Checkbox';
 import validator from './validator';
 import { setScheduledFormInitialized } from '../../../actions/patients';
-import { selectCurrentUser, selectSites } from '../../../actions/app';
+import { selectCurrentUser, selectSites } from '../../../selectors/app';
 import { translate } from '../../../../common/utilities/localization';
 const phoneUtil = libPhoneNumber.PhoneNumberUtil.getInstance();
 const PNT = libPhoneNumber.PhoneNumberType;

@@ -14,15 +14,15 @@ import ChatText from '../../../common/components/Input/ChatText';
 
 import formValidator from './validator';
 
-import { setProcessingStatus } from '../../containers/GlobalNotifications/actions';
+import { setProcessingStatus } from '../../actions/globalNotifications';
 
 import {
   selectProcessingStatus,
-} from '../../containers/GlobalNotifications/selectors';
+} from '../../selectors/globalNotifications';
 
 import {
   selectCurrentUser,
-} from '../../containers/App/selectors';
+} from '../../selectors/app';
 import { translate } from '../../../common/utilities/localization';
 
 const formName = 'chatPatient';

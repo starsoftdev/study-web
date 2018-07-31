@@ -27,6 +27,7 @@ class NotesSection extends React.Component {
     resetForm: React.PropTypes.func.isRequired,
     submitPatientNote: React.PropTypes.func.isRequired,
     submitDeleteNote: React.PropTypes.func.isRequired,
+    disabled: React.PropTypes.bool.isRequired,
   };
 
   constructor(props) {
