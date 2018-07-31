@@ -69,7 +69,6 @@ class FilterStudyPatientsForm extends Component {
       newSource = 1;
     }
 
-
     if (patientBoardLoading && !newProps.patientBoardLoading) {
       fetchPatientCategoriesTotals(studyId, newCampaign, newSource);
     }
