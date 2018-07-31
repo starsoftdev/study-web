@@ -193,48 +193,53 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
           {
             isDataFetching && <div className="text-center report-page-total-loading-container"><LoadingSpinner showOnlyIcon /></div>
           }
-          <ul className="list-inline list-stats">
-            <li className="allcaps">
-              <strong className="heading"><span>{translate(`sponsor.component.reportViewTotals.${headingTitle}`)}</span></strong>
-              { this.renderCategory() }
-            </li>
-            <li>
-              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNewPatient') }} /></strong>
-              { this.renderValues(totalValues, 'count_not_contacted') }
-            </li>
-            <li>
-              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
-              { this.renderValues(totalValues, 'call_attempted') }
-            </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
-              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
-              { this.renderValues(totalValues, 'dnq') }
-            </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
-              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
-              { this.renderValues(totalValues, 'action_needed') }
-            </li>
-            <li>
-              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingScheduled')}</span></strong>
-              { this.renderValues(totalValues, 'scheduled') }
-            </li>
-            <li>
-              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
-              { this.renderValues(totalValues, 'consented') }
-            </li>
-            <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
-              <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
-              { this.renderValues(totalValues, 'screen_failed') }
-            </li>
-            <li>
-              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingRandomized')}</span></strong>
-              { this.renderValues(totalValues, 'randomized') }
-            </li>
-            <li>
-              <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingTotal')}</span></strong>
-              { this.renderValues(totalValues, 'total') }
-            </li>
-          </ul>
+          {
+            ((currentTab === 'mediaName') && this.props.mediaSources.details.length === 0) && <div className="text-center no-media-tracking">{translate('sponsor.component.reportViewTotals.noMediaTracking')}</div>
+          }
+          {
+            ((currentTab !== 'mediaName') || ((currentTab === 'mediaName') && this.props.mediaSources.details.length > 0)) && <ul className="list-inline list-stats">
+              <li className="allcaps">
+                <strong className="heading"><span>{translate(`sponsor.component.reportViewTotals.${headingTitle}`)}</span></strong>
+                { this.renderCategory() }
+              </li>
+              <li>
+                <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNewPatient') }} /></strong>
+                { this.renderValues(totalValues, 'count_not_contacted') }
+              </li>
+              <li>
+                <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingCallTextAttempted') }} /></strong>
+                { this.renderValues(totalValues, 'call_attempted') }
+              </li>
+              <li onClick={() => { this.props.openNotesModal(null, 'Not Qualified / Not Interested', 'DNQ'); }}>
+                <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingNotInterested') }} /></strong>
+                { this.renderValues(totalValues, 'dnq') }
+              </li>
+              <li onClick={() => { this.props.openNotesModal(null, 'Action Needed', 'ACTION NEEDED'); }}>
+                <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingActionNeeded') }} /></strong>
+                { this.renderValues(totalValues, 'action_needed') }
+              </li>
+              <li>
+                <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingScheduled')}</span></strong>
+                { this.renderValues(totalValues, 'scheduled') }
+              </li>
+              <li>
+                <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingConsented')}</span></strong>
+                { this.renderValues(totalValues, 'consented') }
+              </li>
+              <li onClick={() => { this.props.openNotesModal(null, 'Screen Failed', 'SCREEN FAILED'); }}>
+                <strong className="heading"><span dangerouslySetInnerHTML={{ __html: translate('sponsor.component.reportViewTotals.headingScreenFailed') }} /></strong>
+                { this.renderValues(totalValues, 'screen_failed') }
+              </li>
+              <li>
+                <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingRandomized')}</span></strong>
+                { this.renderValues(totalValues, 'randomized') }
+              </li>
+              <li>
+                <strong className="heading"><span>{translate('sponsor.component.reportViewTotals.headingTotal')}</span></strong>
+                { this.renderValues(totalValues, 'total') }
+              </li>
+            </ul>
+          }
           {
             currentTab === 'mediaType' && <a className="see-more-btn" href="#" onClick={this.toggleExpand}>{this.state.expanded ? translate('sponsor.component.reportViewTotals.seeLess') : translate('sponsor.component.reportViewTotals.seeMore')}</a>
           }
