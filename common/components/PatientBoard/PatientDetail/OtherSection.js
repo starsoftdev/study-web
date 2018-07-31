@@ -12,20 +12,20 @@ import { reset, Field, reduxForm } from 'redux-form';
 import moment from 'moment-timezone';
 import { createStructuredSelector } from 'reselect';
 
-import ReactSelect from '../../../../common/components/Input/ReactSelect';
-import Input from '../../../../common/components/Input/index';
-import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../common/selectors/form.selector';
+import ReactSelect from '../../Input/ReactSelect';
+import Input from '../../Input/index';
+import { selectValues, selectSyncErrors, selectFormDidChange } from '../../../selectors/form.selector';
 import {
   submitPatientUpdate, deletePatient, generateReferral, downloadReferral,
   removePatientIndication, addPatientIndication,
-} from '../actions';
-import { selectSocket } from '../../../containers/GlobalNotifications/selectors';
-import { selectStudy, selectDeletePatientProcess, selectCurrentPatient } from '../selectors';
+} from '../../../actions/patients';
+import { selectSocket } from '../../../selectors/globalNotifications';
+import { selectStudy, selectDeletePatientProcess, selectCurrentPatient } from '../../../selectors/studyPage';
 import formValidator from './otherValidator';
-import DateOfBirthPicker from '../../../components/DateOfBirthPicker/index';
+import DateOfBirthPicker from '../../DateOfBirthPicker/index';
 import IndicationOverlay from './IndicationOverlay';
-import { selectIndications } from '../../App/selectors';
-import { fetchIndications } from '../../App/actions';
+import { selectIndications } from '../../../selectors/app';
+import { fetchIndications } from '../../../actions/app';
 import { translate } from '../../../../common/utilities/localization';
 
 const formName = 'PatientDetailModal.Other';
@@ -60,7 +60,6 @@ class OtherSection extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     addPatientIndication: React.PropTypes.func.isRequired,
     removePatientIndication: React.PropTypes.func.isRequired,
-    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {
