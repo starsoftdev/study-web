@@ -7,9 +7,12 @@ import { LOCATION_CHANGE } from 'react-router-redux';
 import request from '../../../common/utils/request';
 import { FETCH_VENDOR_ADMINS } from './constants';
 import { ADD_VENDOR_ADMIN } from './AddVendorAdminForm/constants';
+import { EDIT_VENDOR_ADMIN } from './EditVendorAdminsForm/constants';
+
 import { FETCH_VENDOR_STUDIES, SUBMIT_VENDOR_STUDIES, VALIDATE_STUDY_NUMBER } from './EditVendorStudiesForm/constants';
-import { fetchVendorAdminsSucceeded } from './actions';
+import { fetchVendorAdminsSucceeded, fetchVendorAdmins } from './actions';
 import { addVendorAdminSucceeded } from './AddVendorAdminForm/actions';
+import {  editVendorAdminSucceeded, editVendorAdminError } from './EditVendorAdminsForm/actions';
 import { closeModal, fetchVendorStudiesSucceeded, submitVendorStudiesSucceeded } from './EditVendorStudiesForm/actions';
 
 function* addVendorAdminWatcher() {
@@ -35,6 +38,35 @@ function* addVendorAdminWorker(action) {
     }
   }
 }
+
+
+function* editVendorAdminWatcher() {
+  yield takeLatest(EDIT_VENDOR_ADMIN, editVendorAdminWorker);
+}
+
+function* editVendorAdminWorker(action) {
+  try {
+    const requestURL = `${API_URL}/vendors/editVendorAdmin`;
+
+    const params = {
+      method: 'POST',
+      body: JSON.stringify(action.body),
+    };
+    const response = yield call(request, requestURL, params);
+
+    yield put(fetchVendorAdmins());
+
+    yield put(editVendorAdminSucceeded(response));
+  } catch (err) {
+    const errorMessage = get(err, 'message', 'Something went wrong while editing a vendor admin.');
+    toastr.error('', errorMessage);
+    if (err.status === 401) {
+      yield call(() => { location.href = '/login'; });
+    }
+    yield put(editVendorAdminError(err));
+  }
+}
+
 
 function* fetchVendorAdminsWatcher() {
   yield takeLatest(FETCH_VENDOR_ADMINS, fetchVendorAdminsWorker);
@@ -148,6 +180,7 @@ function* vendorAdminPageSaga() {
   const watcherC = yield fork(fetchVendorStudiesWatcher);
   const watcherD = yield fork(setVendorStudiesWatcher);
   const watcherE = yield fork(validateStudyNumberWatcher);
+  const watcherF = yield fork(editVendorAdminWatcher);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
@@ -157,6 +190,7 @@ function* vendorAdminPageSaga() {
   yield cancel(watcherC);
   yield cancel(watcherD);
   yield cancel(watcherE);
+  yield cancel(watcherF);
 }
 
 // Bootstrap sagas
