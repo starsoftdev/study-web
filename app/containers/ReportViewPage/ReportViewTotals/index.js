@@ -57,7 +57,7 @@ export class ReportViewTotals extends React.Component { // eslint-disable-line r
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       if (currentTab ===  'mediaName') {
-        source = _.findIndex(categories, (o) => { return o.id === cat.id; });
+        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
       }
       if (totals.details[source]) {
         totalValues = {
