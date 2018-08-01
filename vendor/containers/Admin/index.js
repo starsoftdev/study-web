@@ -13,6 +13,7 @@ import RowItem from './RowItem';
 import { translate } from '../../../common/utilities/localization';
 import { fetchVendorAdmins } from './actions';
 import { addVendorAdmin } from './AddVendorAdminForm/actions';
+import { editVendorAdmin } from './EditVendorAdminsForm/actions';
 import { closeModal, openModalWithVendorId, submitVendorStudies } from './EditVendorStudiesForm/actions';
 import { selectVendorAdmins } from './selectors';
 
@@ -20,6 +21,7 @@ import CenteredModal from '../../../common/components/CenteredModal/index';
 
 import SearchForVendorAdminForm from './SearchForVendorAdminForm';
 import AddVendorAdminForm from './AddVendorAdminForm';
+import EditVendorAdminForm from './EditVendorAdminsForm';
 import EditVendorStudiesForm, { formName as editVendorStudiesFormName } from './EditVendorStudiesForm';
 import { selectValues } from '../../../common/selectors/form.selector';
 import { selectModalOpen, selectStudiesForVendor } from './EditVendorStudiesForm/selectors';
@@ -41,6 +43,7 @@ const mapDispatchToProps = {
   fetchVendorAdmins,
   openModalWithVendorId,
   submitVendorStudies,
+  editVendorAdmin,
 };
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -56,6 +59,8 @@ export default class VendorAdminPage extends Component {
     submitVendorStudies: PropTypes.func.isRequired,
     vendorAdmins: PropTypes.array.isRequired,
     vendorStudies: PropTypes.array,
+    editUserProcess: PropTypes.object,
+    editVendorAdmin: PropTypes.func,
   };
 
   constructor(props) {
@@ -77,6 +82,19 @@ export default class VendorAdminPage extends Component {
     openModalWithVendorId(vendorId);
   };
 
+  editAdmin = (vendor) => {
+    const role = (vendor.isAdmin) ? 'admin' : 'user';
+    this.setState({ editVendorAdminInitValues: {
+      initialValues: {
+        ...vendor,
+        role,
+        bd: vendor.bd_user_id,
+      },
+    } });
+
+    this.openEditVendorModal();
+  }
+
   closeStudyModal = () => {
     const { closeModal } = this.props;
     closeModal();
@@ -88,9 +106,19 @@ export default class VendorAdminPage extends Component {
     });
   };
 
+  openEditVendorModal() {
+    this.setState({ editVendorAdminModalOpen: true });
+  }
+
   closeVendorModal = () => {
     this.setState({
       addVendorModalOpen: false,
+    });
+  };
+
+  closeEditVendorModal = () => {
+    this.setState({
+      editVendorAdminModalOpen: false,
     });
   };
 
@@ -118,6 +146,7 @@ export default class VendorAdminPage extends Component {
         key={item.vendorId}
         item={item}
         openStudyModal={this.openStudyModal}
+        editAdminClick={this.editAdmin}
       />
     ));
   };
@@ -186,6 +215,25 @@ export default class VendorAdminPage extends Component {
               <EditVendorStudiesForm
                 onSubmit={this.submitVendorStudies}
                 saving={false}
+              />
+            </div>
+          </Modal.Body>
+        </Modal>
+
+        <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="edit-vendor" show={this.state.editVendorAdminModalOpen} onHide={this.closeEditVendorModal}>
+          <Modal.Header>
+            <Modal.Title>{translate('client.page.vendor.admin.editVendor')}</Modal.Title>
+            <a className="lightbox-close close" onClick={this.closeEditVendorModal}>
+              <i className="icomoon-icon_close" />
+            </a>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="holder clearfix">
+              <EditVendorAdminForm
+                {...this.state.editVendorAdminInitValues}
+                onSubmit={this.props.editVendorAdmin}
+                onDelete={this.deleteVendorAdmin}
+                deleting={(this.props.editUserProcess) ? this.props.editUserProcess.deleting : null}
               />
             </div>
           </Modal.Body>
