@@ -36,12 +36,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
     let totals = currentTab === 'mediaType' ? this.props.totals : this.props.dispositionTotals;
 
     if (currentTab ===  'mediaName') {
-      categories = this.props.mediaSources.details.filter(cat => {
-        if (cat.study_id === this.props.studyId) {
-          return cat;
-        }
-        return false;
-      });
+      categories = this.props.mediaSources.details;
       totals = this.props.mediaSources;
     }
 
@@ -58,7 +53,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
         call_attempted: translate('sponsor.component.reportViewTotals.na'),
       };
       if (currentTab ===  'mediaName') {
-        source = _.findIndex(categories, (o) => { return o.id === cat.id; });
+        source = _.findIndex(categories, (o) => { return o.name === cat.name; });
       }
       if (totals.details[source]) {
         totalValues = {

@@ -192,7 +192,7 @@ class PatientCategory extends React.Component {
 
   rowRenderer = ({ key, index, style }) => {
     const { category, currentPatientId, onPatientClick, onPatientTextClick, currentSite } = this.props;
-    const filteredPatients = category.patients && category.patients.filter(patient => Boolean(patient.id)) || [];
+    const filteredPatients = (category.patients && category.patients.filter(patient => Boolean(patient.id))) || [];
     const patient = filteredPatients[index];
     return (
       <Patient
@@ -261,7 +261,7 @@ class PatientCategory extends React.Component {
 
   renderPatients() {
     const { category: { patients } } = this.props;
-    const filteredPatients = patients && patients.filter(patient => Boolean(patient.id)) || [];
+    const filteredPatients = (patients && patients.filter(patient => Boolean(patient.id))) || [];
     if (filteredPatients.length > 0) {
       const MyVirtualList = VirtualList()(this.myList);
       return (
