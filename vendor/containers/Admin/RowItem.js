@@ -7,6 +7,7 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
   static propTypes = {
     item: PropTypes.object,
     openStudyModal: PropTypes.func,
+    editAdminClick: PropTypes.func,
   };
 
   render() {
@@ -32,6 +33,11 @@ class RowItem extends Component { // eslint-disable-line react/prefer-stateless-
                 }}
               >
                 <span>{translate('client.page.vendor.admin.study')}</span>
+              </a>
+            </div>
+            <div className="col pull-left">
+              <a className="btn btn-primary btn-edit-site" onClick={() => { this.props.editAdminClick(item); }}>
+                <span>Edit</span>
               </a>
             </div>
           </div>
