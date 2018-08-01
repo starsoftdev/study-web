@@ -161,7 +161,6 @@
     "pug": "^2.0.0-rc.4",
     "react": "15.4.2",
     "react-addons-shallow-compare": "^15.4.1",
-    "react-addons-update": "15.3.0",
     "react-async-script": "^0.9.1",
     "react-avatar-editor": "^6.0.0",
     "react-big-calendar": "git+https://github.com/studykik/kik-react-big-calendar.git#55399ca1a86df8e2375f6e592e983382ce0a8143",
