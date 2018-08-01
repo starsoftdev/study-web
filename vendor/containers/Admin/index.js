@@ -222,7 +222,7 @@ export default class VendorAdminPage extends Component {
 
         <Modal dialogComponentClass={CenteredModal} className="search-vendor-study" id="edit-vendor" show={this.state.editVendorAdminModalOpen} onHide={this.closeEditVendorModal}>
           <Modal.Header>
-            <Modal.Title>{translate('client.page.vendor.admin.editVendor')}</Modal.Title>
+            <Modal.Title>Edit Vendor Admin</Modal.Title>
             <a className="lightbox-close close" onClick={this.closeEditVendorModal}>
               <i className="icomoon-icon_close" />
             </a>
