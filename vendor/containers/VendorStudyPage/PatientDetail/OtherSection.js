@@ -236,7 +236,7 @@ class OtherSection extends React.Component {
       overlayValues.indications = this.state.initialValues.patientIndications.filter(pi => { return pi.indication; }).map(pi => pi.indication);
     }
 
-    const { formValues: { dobDay, dobMonth, dobYear }, initialValues, loading, indications, disabled } = this.props;
+    const { formValues: { dobDay, dobMonth, dobYear }, initialValues, loading, indications, submitting, disabled } = this.props;
 
     if (initialValues) {
       return (
@@ -247,7 +247,7 @@ class OtherSection extends React.Component {
                 <strong className="title">{translate('client.component.otherSection.title')}</strong>
                 <DateOfBirthPicker
                   loading={loading}
-                  submitting
+                  submitting={submitting}
                   dobDay={dobDay}
                   dobMonth={dobMonth}
                   dobYear={dobYear}
