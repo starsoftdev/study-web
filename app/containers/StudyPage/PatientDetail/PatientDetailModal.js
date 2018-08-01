@@ -60,7 +60,6 @@ export class PatientDetailModal extends React.Component {
     updatePatientSuccess: React.PropTypes.func,
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
-    isAdmin: React.PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -122,7 +121,7 @@ export class PatientDetailModal extends React.Component {
   }
 
   renderOtherSection() {
-    const { currentPatient, currentPatientCategory, site, params, isAdmin } = this.props;
+    const { currentPatient, currentPatientCategory, site, params } = this.props;
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
       if (currentPatient.dob) {
@@ -133,14 +132,14 @@ export class PatientDetailModal extends React.Component {
       }
       formattedPatient.patientCategoryId = currentPatientCategory.id;
       return (
-        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} disabled={isAdmin} />
+        <OtherSection initialValues={formattedPatient} site={site} params={params} currentPatientCategory={currentPatientCategory} />
       );
     }
     return null;
   }
 
   renderPatientDetail() {
-    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId, isAdmin } = this.props;
+    const { currentPatient, currentPatientCategory, site, currentUser, patientCategories, studyId } = this.props;
 
     if (currentPatient) {
       const formattedPatient = Object.assign({}, currentPatient);
@@ -154,7 +153,6 @@ export class PatientDetailModal extends React.Component {
           currentUser={currentUser}
           patientCategories={patientCategories}
           onPatientDraggedToScheduled={this.props.onPatientDraggedToScheduled}
-          disabled={isAdmin}
         />
       );
     }
@@ -187,7 +185,7 @@ export class PatientDetailModal extends React.Component {
 
   render() {
     const { ePMS, carousel, currentPatient, currentPatientCategory, currentUser, openPatientModal, onClose, studyId,
-      socket, switchToNoteSection, switchToEmailSection, currentPatientNotes, isAdmin } = this.props;
+      socket, switchToNoteSection, switchToEmailSection, currentPatientNotes } = this.props;
     const formattedPatient = Object.assign({}, currentPatient);
     if (currentPatientCategory) {
       formattedPatient.patientCategoryId = currentPatientCategory.id;
@@ -225,9 +223,9 @@ export class PatientDetailModal extends React.Component {
                     <li className={classNames({ active: carousel.email })} onClick={switchToEmailSection}>{translate('client.component.patientDetailModal.email')}</li>
                   </ol>
                   <div className="carousel-inner" role="listbox">
-                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} disabled={isAdmin} />
-                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} disabled={isAdmin} />
-                    <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} disabled={isAdmin} />
+                    <NotesSection active={carousel.note} currentUser={currentUser} currentPatient={formattedPatient} notes={currentPatientNotes} studyId={studyId} />
+                    <TextSection active={carousel.text} socket={socket} studyId={studyId} currentUser={currentUser} currentPatient={formattedPatient} ePMS={ePMS} />
+                    <EmailSection studyId={studyId} currentPatient={formattedPatient} active={carousel.email} />
                   </div>
                 </div>
               </div>
@@ -249,8 +247,6 @@ const mapStateToProps = createStructuredSelector({
   openPatientModal: Selector.selectOpenPatientModal(),
   socket: selectSocket(),
   studyId: Selector.selectStudyId(),
-  isAdmin: Selector.selectIsVendorAdmin(),
-
 });
 
 const mapDispatchToProps = (dispatch) => ({
