@@ -1,7 +1,3 @@
-/* eslint-disable comma-dangle */
-
-import update from 'react-addons-update';
-
 import {
   FETCH_PATIENTS_BY_STUDY,
   FETCH_PATIENTS_BY_STUDY_SUCCESS,
@@ -72,7 +68,7 @@ export default function calendarPageReducer(state = initialState, action) {
         ...state,
         patientsByStudy: {
           isFetching: true,
-        }
+        },
       };
     case FETCH_PATIENTS_BY_STUDY_SUCCESS:
       return {
@@ -81,7 +77,7 @@ export default function calendarPageReducer(state = initialState, action) {
           isFetching: false,
           data: payload,
           error: null,
-        }
+        },
       };
     case FETCH_PATIENTS_BY_STUDY_ERROR:
       return {
@@ -89,48 +85,54 @@ export default function calendarPageReducer(state = initialState, action) {
         patientsByStudy: {
           isFetching: false,
           error: payload,
-        }
+        },
       };
     case FETCH_SCHEDULES:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: true },
-        }
-      });
+          isFetching: true,
+        },
+      };
     case FETCH_SCHEDULES_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          data: { $set: payload },
-        }
-      });
+          isFetching: false,
+          data: payload,
+        },
+      };
     case FETCH_SCHEDULES_ERROR:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          error: { $set: payload },
-        }
-      });
+          isFetching: false,
+          error: payload,
+        },
+      };
     case FETCH_SPONSOR_SCHEDULES:
-      return update(state, {
+      return {
+        ...state,
         sponsorSchedules: {
-          isFetching: { $set: true },
-        }
-      });
+          isFetching: true,
+        },
+      };
     case FETCH_SPONSOR_SCHEDULES_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         sponsorSchedules: {
-          isFetching: { $set: false },
-          data: { $set: payload },
-        }
-      });
+          isFetching: false,
+          data: payload,
+        },
+      };
     case FETCH_SPONSOR_SCHEDULES_ERROR:
-      return update(state, {
+      return {
+        ...state,
         sponsorSchedules: {
-          isFetching: { $set: false },
-          error: { $set: payload },
-        }
-      });
+          isFetching: false,
+          error: payload,
+        },
+      };
     case FETCH_SPONSOR_PROTOCOLS:
       return {
         ...state,
@@ -186,45 +188,51 @@ export default function calendarPageReducer(state = initialState, action) {
         },
       };
     case SUBMIT_SCHEDULE:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isSubmitting: { $set: true },
-        }
-      });
+          isSubmitting: true,
+        },
+      };
     case SUBMIT_SCHEDULE_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isSubmitting: { $set: false },
-          data: { $set: payload },
-        }
-      });
+          isSubmitting: false,
+          data: payload,
+        },
+      };
     case SUBMIT_SCHEDULE_ERROR:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isSubmitting: { $set: false },
-          error: { $set: payload },
-        }
-      });
+          isSubmitting: false,
+          error: payload,
+        },
+      };
     case DELETE_SCHEDULE:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isDeleting: { $set: true },
-        }
-      });
+          isDeleting: true,
+        },
+      };
     case DELETE_SCHEDULE_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isDeleting: { $set: false },
-          data: { $set: payload },
-        }
-      });
+          isDeleting: false,
+          data: payload,
+        },
+      };
     case DELETE_SCHEDULE_ERROR:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isDeleting: { $set: false },
-          error: { $set: payload },
-        }
-      });
+          isDeleting: false,
+          error: payload,
+        },
+      };
     case SET_ACTIVE_SORT:
       return {
         ...state,

@@ -1,5 +1,3 @@
-import update from 'react-addons-update';
-
 import {
   FETCH_PATIENT,
   FETCH_PATIENT_SUCCESS,
@@ -127,25 +125,28 @@ export default function callCenterPatientPageReducer(state = initialState, actio
         submittingEmail: false,
       };
     case FETCH_SCHEDULES:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: true },
+          isFetching: true,
         },
-      });
+      };
     case FETCH_SCHEDULES_SUCCESS:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          data: { $set: payload },
+          isFetching: false,
+          data: payload,
         },
-      });
+      };
     case FETCH_SCHEDULES_ERROR:
-      return update(state, {
+      return {
+        ...state,
         schedules: {
-          isFetching: { $set: false },
-          error: { $set: payload },
+          isFetching: false,
+          error: payload,
         },
-      });
+      };
     case SUBMIT_PATIENT_DETAILS_SUCCESS:
       return {
         ...state,
