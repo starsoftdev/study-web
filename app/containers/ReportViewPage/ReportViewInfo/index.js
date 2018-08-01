@@ -21,8 +21,32 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     super(props);
 
     this.state = {
-      barChartWidth: null,
-      barChartHeight: null,
+      barCharSize: null,
+    };
+
+    this.barCharSizes = {
+      xs: {
+        barChartWidth: 170,
+        barChartHeight: 100,
+      },
+      s: {
+        barChartWidth: 180,
+        barChartHeight: 105,
+      },
+      l: {
+        barChartWidth: 200,
+        barChartHeight: 112,
+      },
+      xl: {
+        barChartWidth: 230,
+        barChartHeight: 133,
+      },
+    };
+
+    this.screenSizes = {
+      xs: 1390,
+      s: 1569,
+      l: 1870,
     };
   }
 
@@ -36,23 +60,14 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
   }
 
   handleResize = () => {
-    console.log('handleResize');
-
-    if (window.innerWidth >= 1870) {
-      this.setState({
-        barChartWidth: 260,
-        barChartHeight: 110,
-      });
-    } else if (window.innerWidth < 1870 && window.innerWidth > 1390) {
-      this.setState({
-        barChartWidth: 220,
-        barChartHeight: 105,
-      });
-    } else {
-      this.setState({
-        barChartWidth: 200,
-        barChartHeight: 100,
-      });
+    if (window.innerWidth >= this.screenSizes.l && this.setState.barCharSize !== 'xl') {
+      this.setState({ barCharSize: 'xl' });
+    } else if (window.innerWidth < this.screenSizes.l && window.innerWidth > this.screenSizes.s && this.setState.barCharSize !== 'l') {
+      this.setState({ barCharSize: 'l' });
+    } else if (window.innerWidth < this.screenSizes.s && window.innerWidth > this.screenSizes.xs && this.setState.barCharSize !== 's') {
+      this.setState({ barCharSize: 's' });
+    } else if (this.setState.barCharSize !== 'xs') {
+      this.setState({ barCharSize: 'xs' });
     }
   }
 
@@ -91,7 +106,8 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
       },
     ];
 
-    console.log(322, this.state);
+    const barChartWidth = this.barCharSizes[this.state.barCharSize].barChartWidth;
+    const barChartHeight = this.barCharSizes[this.state.barCharSize].barChartHeight;
 
     return (
       <div className="infoarea row" id="sponsor-report-infoarea">
@@ -166,8 +182,8 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
                 <li>
                   <BarChart
                     data={barData}
-                    width={this.state.barChartWidth}
-                    height={this.state.barChartHeight}
+                    width={barChartWidth}
+                    height={barChartHeight}
                     colorAccessor={(data) => data}
                     colors={(data) => (data.color)}
                   />
