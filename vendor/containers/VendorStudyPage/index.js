@@ -18,7 +18,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import FilterStudyPatients from './FilterStudyPatients';
 import NotFoundPage from '../NotFoundPage/index';
 import StudyStats from './StudyStats';
-import PatientBoard from '../../components/PatientBoard';
+import PatientBoard from '../../components/PatientBoard/Index';
 import { getItem } from '../../../common/utils/localStorage';
 import * as Selector from './selectors';
 import { selectStudySources } from '../../../common/selectors/studySources';
