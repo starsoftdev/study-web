@@ -9,7 +9,6 @@ import { translate } from '../../../../common/utilities/localization';
 import ReactSelect from '../../../../common/components/Input/ReactSelect';
 
 
-
 @reduxForm({ form: 'dashboardEditVendorAdminsForm', validate: formValidator })
 
 export class EditVendorAdminsForm extends React.Component { // eslint-disable-line react/prefer-stateless-function
