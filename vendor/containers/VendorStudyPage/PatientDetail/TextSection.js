@@ -49,6 +49,7 @@ class TextSection extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
     studyStats: React.PropTypes.object,
+    disabled: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -140,7 +141,7 @@ class TextSection extends React.Component {
 
   submitText() {
     const { currentUser, currentPatient, currentPatientCategory, studyId } = this.props;
-    const clientCredits = this.props.clientCredits.details.customerCredits;
+    const clientCredits = (this.props.clientCredits.details) ? this.props.clientCredits.details.customerCredits : null;
     if (clientCredits === 0 || clientCredits === null) {
       toastr.error('', translate('client.component.textSection.toastrCreditsError'));
       return;
@@ -242,7 +243,6 @@ class TextSection extends React.Component {
         placeholder={translate('client.component.textSection.placeholderMessage')}
         onChange={this.textAreaChange}
         maxLength={maxCharacters}
-        disabled
         ref={(textarea) => {
           this.textarea = textarea;
         }}
@@ -271,8 +271,8 @@ class TextSection extends React.Component {
           <div onClick={() => this.checkForValidPhone(notValidPhone)}>
             <div
               className="btn btn-default lightbox-opener pull-right"
-              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
-              disabled
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || disabled || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
+              disabled={disabled}
             >
               {translate('client.component.textSection.send')}
             </div>
