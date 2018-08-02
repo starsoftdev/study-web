@@ -4,13 +4,21 @@
 import { take, call, put, fork } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import moment from 'moment-timezone';
+import { toastr } from 'react-redux-toastr';
+import { get } from 'lodash';
 
 import request from '../../../common/utils/request';
 import { getItem, removeItem } from '../../../app/utils/localStorage';
 import { FETCH_ME_FROM_TOKEN, LOGOUT_REQUEST } from '../../containers/App/constants';
 import { setAuthState, setUserData } from '../../containers/App/actions';
-import { SET_SOCKET_CONNECTION } from '../../containers/GlobalNotifications/constants';
-import { connectionEstablished } from '../../containers/GlobalNotifications/actions';
+import {
+  SET_SOCKET_CONNECTION,
+  FETCH_STUDY_PATIENT_MESSAGES,
+} from '../../containers/GlobalNotifications/constants';
+import {
+  connectionEstablished,
+  setProcessingStatus,
+} from '../../containers/GlobalNotifications/actions';
 import { fetchStudySources } from '../../../common/sagas/studySources';
 
 let socket = null;
@@ -20,6 +28,7 @@ export default function* vendorAppSaga() {
   yield fork(fetchStudySources);
   yield fork(logoutSaga);
   yield fork(setSocketConnection);
+  yield fork(fetchStudyPatientMessages);
 }
 
 export function* fetchMeSaga() {
@@ -105,6 +114,21 @@ export function* setSocketConnection() {
       }
     } catch (err) {
       payload.cb(err, null);
+    }
+  }
+}
+
+export function* fetchStudyPatientMessages() {
+  while (true) {
+    const { payload } = yield take(FETCH_STUDY_PATIENT_MESSAGES);
+    try {
+      yield put(setProcessingStatus({ status: true }));
+      socket.emit('getStudyPatientMessages', { studyId: payload.studyId, patientId: payload.patientId }, (err, data) => {
+        payload.cb(err, { messages: data });
+      });
+    } catch (err) {
+      const errorMessage = get(err, 'message', 'Something went wrong!');
+      toastr.error('', errorMessage);
     }
   }
 }

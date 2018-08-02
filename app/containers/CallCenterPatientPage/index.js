@@ -72,7 +72,6 @@ class CallCenterPatientPage extends Component {
   state = {
     carouselIndex: 0,
     isScheduleModalVisible: false,
-    socketBinded: false,
     selectedTab: '',
   };
 
