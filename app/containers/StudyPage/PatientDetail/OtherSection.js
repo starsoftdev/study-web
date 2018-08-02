@@ -60,6 +60,7 @@ class OtherSection extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     addPatientIndication: React.PropTypes.func.isRequired,
     removePatientIndication: React.PropTypes.func.isRequired,
+    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {
