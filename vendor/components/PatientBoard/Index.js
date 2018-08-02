@@ -34,6 +34,7 @@ import {
 } from '../../containers/VendorStudyPage/actions';
 import { selectCurrentUser, selectSites } from '../../containers/App/selectors';
 import { fields } from '../../containers/VendorStudyPage/ScheduledPatientModal/validator';
+import { markAsReadPatientMessages, deleteMessagesCountStat } from '../../../common/actions/app';
 import * as Selector from '../../containers/VendorStudyPage/selectors';
 import PatientCategory from './PatientCategory';
 import { selectValues } from '../../containers/App/form.selectors';
@@ -76,6 +77,7 @@ class PatientBoard extends React.Component {
     paginationOptions: React.PropTypes.object,
     studyPatientsFilter: React.PropTypes.object,
     patientCategoriesTotals: React.PropTypes.array,
+    deleteMessagesCountStat: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -140,6 +142,7 @@ class PatientBoard extends React.Component {
       setOpenPatientModal,
       switchToTextSection,
       readStudyPatientMessages,
+      deleteMessagesCountStat,
     } = this.props;
     const show = (patient && currentPatientId !== patient.id) || false;
     if (show) {
@@ -147,6 +150,8 @@ class PatientBoard extends React.Component {
       setCurrentPatientCategoryId(category.id);
       fetchPatientDetails(patient.id, category.id);
       readStudyPatientMessages(patient.id);
+      // markAsReadPatientMessages(patient.id);
+      deleteMessagesCountStat(patient.unreadMessageCount);
       this.props.updatePatientSuccess(patient.id, category.id, {
         unreadMessageCount: 0,
       });
@@ -165,14 +170,21 @@ class PatientBoard extends React.Component {
 
   onPatientScheduleSubmit(e) {
     e.preventDefault();
-    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate, patientCategories, currentPatientCategoryId, touchSchedulePatientModal } = this.props;
+    const { schedulePatientFormValues, schedulePatientFormErrors, currentPatient, currentUser, selectedDate,
+      patientCategories, currentPatientCategoryId, sites, touchSchedulePatientModal } = this.props;
 
     if (schedulePatientFormErrors) {
       touchSchedulePatientModal();
       return;
     }
 
-    const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
+    const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
+    let timezone;
+    if (currentUser.roleForVendor.isAdmin) {
+      timezone = patientSite ? patientSite.timezone : currentUser.timezone;
+    } else {
+      timezone = patientSite ? patientSite.timezone : currentUser.roleForCVender.site.timezone;
+    }
 
     const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
     const formValues = schedulePatientFormValues;
@@ -187,6 +199,7 @@ class PatientBoard extends React.Component {
     const submitData = {
       id: currentAppointmentId,
       patientId: currentPatient.id,
+      clientRoleId: currentUser.roleForVendor.id,
       time: time.utc(),
       textReminder: formValues.textReminder || false,
     };
@@ -269,7 +282,7 @@ class PatientBoard extends React.Component {
   }
 
   render() {
-    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals } = this.props;
+    const { patientCategories, openPatientModal, openScheduledModal, ePMS, currentPatient, fetchingPatients, params, paginationOptions, patientCategoriesTotals, studyPatientsFilter } = this.props;
     return (
       <div className="clearfix patients-list-area-holder">
         <div className={classNames('patients-list-area', { 'form-active': openPatientModal && !openScheduledModal })}>
@@ -281,6 +294,7 @@ class PatientBoard extends React.Component {
                   key={patientCategory.id}
                   patientCategoriesTotals={patientCategoriesTotals}
                   category={patientCategory}
+                  campaign={studyPatientsFilter.campaign}
                   onPatientClick={this.onPatientClick}
                   onPatientTextClick={this.onPatientTextClick}
                   onPatientDraggedToScheduled={this.onPatientDraggedToScheduled}
@@ -334,6 +348,8 @@ const mapDispatchToProps = (dispatch) => (
     changeScheduledDate: (date) => dispatch(changeScheduledDate(date)),
     push: (url) => dispatch(push(url)),
     readStudyPatientMessages: (patientId) => dispatch(readStudyPatientMessages(patientId)),
+    markAsReadPatientMessages: (patientId) => dispatch(markAsReadPatientMessages(patientId)),
+    deleteMessagesCountStat: (payload) => dispatch(deleteMessagesCountStat(payload)),
     setFormValueByName: (name, attrName, value) => dispatch(change(name, attrName, value)),
     touchSchedulePatientModal: () => dispatch(touch('ScheduledPatientModal', ...fields)),
     submitSchedule: (data, fromCategoryId, scheduleCategoryId) => dispatch(submitSchedule(data, fromCategoryId, scheduleCategoryId)),

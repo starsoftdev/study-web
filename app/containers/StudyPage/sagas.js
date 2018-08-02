@@ -302,7 +302,7 @@ function* fetchPatientCategories() {
     const response = yield call(request, requestURL, options);
     // populate the patient categories
     yield put(patientCategoriesFetched(response));
-    yield call(fetchPatients, studyId, null, null, 1);
+    yield call(fetchPatients, studyId);
   } catch (e) {
     const errorMessage = get(e, 'message', translate('client.page.studyPage.toastrFetchCategoriesErrorMessage'));
     toastr.error('', errorMessage);

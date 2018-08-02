@@ -302,18 +302,9 @@ function* submitPatientUpdate() {
     }
 
     try {
-      // Update call center patient category
-      let requestURL = `${API_URL}/patients/updateCallCenterCategory`;
-      yield call(request, requestURL, {
-        method: 'POST',
-        body: JSON.stringify({
-          patientId,
-          callCenterPatientCategoryId,
-        }),
-      });
 
       // Update patient category
-      requestURL = `${API_URL}/patients/updateCategory`;
+      const requestURL = `${API_URL}/patients/updateCategory`;
       yield call(request, requestURL, {
         method: 'POST',
         body: JSON.stringify({
@@ -321,6 +312,7 @@ function* submitPatientUpdate() {
           patientId,
           patientCategoryId,
           afterPatientId: null,
+          callCenterPatientCategoryId,
         }),
       });
 
