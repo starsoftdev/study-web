@@ -21,7 +21,7 @@ export class ReportViewInfo extends React.Component { // eslint-disable-line rea
     super(props);
 
     this.state = {
-      barCharSize: null,
+      barCharSize: 'l',
     };
 
     this.barCharSizes = {
