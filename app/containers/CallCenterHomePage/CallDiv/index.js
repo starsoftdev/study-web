@@ -15,6 +15,41 @@ class CallDiv extends React.Component {
     timezone: React.PropTypes.string,
   };
 
+  state = {
+    patientCounts: [],
+  };
+
+  componentWillMount() {
+    const { patients } = this.props;
+    const count = [];
+
+    _.forEach(patients, (patient) => {
+      if (!patient.call_center_patient_category_id && patient.patient_category_id === 1) {
+        count.newPatient = count.newPatient ? count.newPatient + 1 : 1;
+      }
+      if (patient.call_center_patient_category_id === 2 || (!patient.call_center_patient_category_id && patient.patient_category_id === 2)) {
+        count.callOne = count.callOne ? count.callOne + 1 : 1;
+      }
+      if (patient.call_center_patient_category_id === 3) {
+        count.callTwo = count.callTwo ? count.callTwo + 1 : 1;
+      }
+      if (patient.call_center_patient_category_id === 4) {
+        count.callThree = count.callThree ? count.callThree + 1 : 1;
+      }
+      if (patient.call_center_patient_category_id === 5) {
+        count.meeting = count.meeting ? count.meeting + 1 : 1;
+      }
+      if (
+        patient.call_center_patient_category_id === 6 ||
+        (!patient.call_center_patient_category_id && patient.patient_category_id !== 1 && patient.patient_category_id !== 2)
+      ) {
+        count.archive = count.archive ? count.archive + 1 : 1;
+      }
+    });
+
+    this.setState({ patientCounts: count });
+  }
+
   gotoPatientPage = (id) => {
     browserHistory.push(`/app/cc/patient/${id}`);
   }
@@ -97,12 +132,14 @@ class CallDiv extends React.Component {
   renderNewPatients = () => {
     const { patients } = this.props;
     const output = [];
+
     _.forEach(patients, (patient) => {
       if (!patient) return;
       if (!patient.call_center_patient_category_id && patient.patient_category_id === 1) {
         output.push(this.getPatientView(patient, `callDiv_newPatient_${patient.id}`));
       }
     });
+
     return output;
   }
 
@@ -176,37 +213,37 @@ class CallDiv extends React.Component {
       <div className="cc-container">
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.newpatient')}
+            {translate('container.page.callcenter.heading.newpatient')} ({this.state.patientCounts.newPatient ? this.state.patientCounts.newPatient : 0})
           </div>
           { this.renderNewPatients() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')} 1
+            {translate('container.page.callcenter.heading.call')} 1 ({this.state.patientCounts.callOne ? this.state.patientCounts.callOne : 0})
           </div>
           { this.renderCall1() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')} 2
+            {translate('container.page.callcenter.heading.call')} 2 ({this.state.patientCounts.callTwo ? this.state.patientCounts.callTwo : 0})
           </div>
           { this.renderCall2() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.call')} 3
+            {translate('container.page.callcenter.heading.call')} 3 ({this.state.patientCounts.callThree ? this.state.patientCounts.callThree : 0})
           </div>
           { this.renderCall3() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.meeting')}
+            {translate('container.page.callcenter.heading.meeting')} ({this.state.patientCounts.meeting ? this.state.patientCounts.meeting : 0})
           </div>
           { this.renderMeetings() }
         </div>
         <div className="cc-row">
           <div className="cc-box cc-box-heading">
-            {translate('container.page.callcenter.heading.archivepatient')}
+            {translate('container.page.callcenter.heading.archivepatient')} ({this.state.patientCounts.archive ? this.state.patientCounts.archive : 0})
           </div>
           { this.renderArchive() }
         </div>
