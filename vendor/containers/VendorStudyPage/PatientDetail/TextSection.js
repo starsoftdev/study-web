@@ -49,6 +49,7 @@ class TextSection extends React.Component {
     currentPatientCategory: React.PropTypes.object,
     site: React.PropTypes.object,
     studyStats: React.PropTypes.object,
+    disabled: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -251,10 +252,9 @@ class TextSection extends React.Component {
   }
 
   render() {
-    const { currentPatient, active, ePMS } = this.props;
+    const { currentPatient, active, ePMS, disabled } = this.props;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
-    const disabled = true;
     const notValidPhone = !currentPatient.phone;
     this.scrollElement();
 
