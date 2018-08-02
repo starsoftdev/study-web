@@ -56,6 +56,7 @@ class EmailSection extends React.Component {
     emails: React.PropTypes.object,
     clearForm: React.PropTypes.func.isRequired,
     submittingEmail: React.PropTypes.bool,
+    disabled: React.PropTypes.bool.isRequred,
   };
 
   constructor(props) {
@@ -114,7 +115,7 @@ class EmailSection extends React.Component {
   }
 
   render() {
-    const { active, change, emails } = this.props;
+    const { active, change, emails, disabled } = this.props;
     const { compose, noEmailsFetched } = this.state;
     return (
       <div className={`item emails-info ${active ? 'active' : ''}`}>
@@ -122,6 +123,7 @@ class EmailSection extends React.Component {
         <EmailSectionList
           switchCompose={this.switchCompose}
           emails={emails}
+          disabled
         />
         }
 
@@ -131,6 +133,7 @@ class EmailSection extends React.Component {
           switchCompose={this.switchCompose}
           change={change}
           noBackBtn={noEmailsFetched}
+          disabled={disabled}
         />
         }
       </div>

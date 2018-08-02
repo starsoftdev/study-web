@@ -23,14 +23,12 @@ import {
 
 export function* fetchPatientsWatcher() {
   while (true) {
-    const { userId, limit, offset } = yield take(FETCH_PATIENTS);
+    const { userId, offset } = yield take(FETCH_PATIENTS);
     try {
       const requestURL = `${API_URL}/patients/patientsForCallCenterUser`;
-      const limitForAPIRequest = limit || 50;
       const offsetForAPIRequest = offset || 0;
       const query = {
         userId,
-        limit: limitForAPIRequest,
         offset: offsetForAPIRequest,
       };
       const params = {
