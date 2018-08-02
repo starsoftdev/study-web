@@ -93,12 +93,7 @@ export class StudyReportView extends React.Component { // eslint-disable-line re
     let cats = currentTab === 'mediaType' ? this.props.sources : this.props.dispositions;
 
     if (currentTab ===  'mediaName') {
-      cats = this.props.mediaSources.details.filter(cat => {
-        if (cat.study_id === this.props.studyId) {
-          return cat;
-        }
-        return false;
-      });
+      cats = this.props.mediaSources.details;
     }
 
     if (cats && cats.length > 0) {
