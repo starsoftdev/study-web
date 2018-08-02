@@ -19,8 +19,8 @@ class CallDiv extends React.Component {
     patientCounts: [],
   };
 
-  componentWillMount() {
-    const { patients } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { patients } = nextProps;
     const count = [];
 
     _.forEach(patients, (patient) => {
