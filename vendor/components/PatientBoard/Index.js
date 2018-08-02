@@ -180,10 +180,10 @@ class PatientBoard extends React.Component {
 
     const patientSite = _.find(sites, site => site.id === currentPatient.site_id);
     let timezone;
-    if (currentUser.roleForClient.isAdmin) {
+    if (currentUser.roleForVendor.isAdmin) {
       timezone = patientSite ? patientSite.timezone : currentUser.timezone;
     } else {
-      timezone = patientSite ? patientSite.timezone : currentUser.roleForClient.site.timezone;
+      timezone = patientSite ? patientSite.timezone : currentUser.roleForCVender.site.timezone;
     }
 
     const scheduledDate = selectedDate ? selectedDate.startOf('day') : moment().tz(timezone).startOf('day');
@@ -199,7 +199,7 @@ class PatientBoard extends React.Component {
     const submitData = {
       id: currentAppointmentId,
       patientId: currentPatient.id,
-      clientRoleId: currentUser.roleForClient.id,
+      clientRoleId: currentUser.roleForVendor.id,
       time: time.utc(),
       textReminder: formValues.textReminder || false,
     };

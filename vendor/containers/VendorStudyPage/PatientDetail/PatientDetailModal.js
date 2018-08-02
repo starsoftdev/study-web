@@ -56,7 +56,7 @@ export class PatientDetailModal extends React.Component {
     updatePatientSuccess: React.PropTypes.func,
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
-    isAdmin: React.PropTypes.isAdmin,
+    isAdmin: React.PropTypes.bool,
   };
 
   constructor(props) {
