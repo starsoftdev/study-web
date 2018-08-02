@@ -22,7 +22,7 @@ import PatientBoard from '../../components/PatientBoard/Index';
 import { getItem } from '../../../common/utils/localStorage';
 import * as Selector from './selectors';
 import { selectStudySources } from '../../../common/selectors/studySources';
-import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched } from './actions';
+import { fetchPatients, fetchPatientCategories, fetchStudy, fetchStudyStats, setStudyId, updatePatientSuccess, downloadReport, studyStatsFetched, studyViewsStatFetched, fetchClientCredits } from './actions';
 import { clientOpenedStudyPage, clientClosedStudyPage } from '../GlobalNotifications/actions';
 import {
   selectSocket,
@@ -66,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     studyViewsStatFetched: (payload) => dispatch(studyViewsStatFetched(payload)),
     fetchStudySources: (studyId) => dispatch(fetchStudySources(studyId)),
     toastrActions: bindActionCreators(toastrActions, dispatch),
+    fetchClientCredits: (userId) => dispatch(fetchClientCredits(userId)),
   };
 };
 
@@ -106,6 +107,7 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
     patientBoardLoading: React.PropTypes.bool,
     toastrActions: React.PropTypes.object.isRequired,
     isAdmin: PropTypes.bool,
+    fetchClientCredits: React.PropTypes.func,
   };
 
   static defaultProps = {
@@ -125,11 +127,12 @@ export default class StudyPage extends React.Component { // eslint-disable-line 
   }
 
   componentWillMount() {
-    const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources } = this.props;
+    const { params, setStudyId, fetchStudy, fetchPatientCategories, socket, clientOpenedStudyPage, fetchStudySources, currentUser } = this.props;
     setStudyId(parseInt(params.id));
     fetchStudy(params.id);
     fetchPatientCategories(params.id);
     fetchStudySources(params.id);
+    this.props.fetchClientCredits(currentUser.id);
     if (socket && socket.connected) {
       this.setState({ isSubscribedToUpdateStats: true }, () => {
         clientOpenedStudyPage(params.id);
