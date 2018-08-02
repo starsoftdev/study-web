@@ -251,9 +251,10 @@ class TextSection extends React.Component {
   }
 
   render() {
-    const { currentPatient, active, ePMS, disabled } = this.props;
+    const { currentPatient, active, ePMS } = this.props;
     const unsubscribed = (currentPatient) ? currentPatient.unsubscribed : null;
     const { maxCharacters, enteredCharactersLength } = this.state;
+    const disabled = true;
     const notValidPhone = !currentPatient.phone;
     this.scrollElement();
 
@@ -270,8 +271,8 @@ class TextSection extends React.Component {
           <div onClick={() => this.checkForValidPhone(notValidPhone)}>
             <div
               className="btn btn-default lightbox-opener pull-right"
-              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
-              disabled
+              onClick={(e) => (unsubscribed || !ePMS || notValidPhone || disabled || (this.textarea && this.textarea.value === '') ? null : this.submitText(e))}
+              disabled={disabled}
             >
               {translate('client.component.textSection.send')}
             </div>
