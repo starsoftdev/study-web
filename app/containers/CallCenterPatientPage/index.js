@@ -99,7 +99,7 @@ class CallCenterPatientPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { patient, currentUser } = nextProps;
+    const { patient } = nextProps;
 
     if (this.props.patient !== patient && patient.details) {
       const ccPatientCategoryId = patient.details.call_center_patient_category_id;
@@ -118,13 +118,10 @@ class CallCenterPatientPage extends Component {
           selectedTab = 'scheduled';
           break;
         case 6: {
-          const { dispositions } = patient.details;
-          if (dispositions) {
-            const disposition = dispositions.find(item => item.userId === currentUser.id);
-            if (disposition) {
-              this.updateTabFromDisposition(disposition.dispositionKey);
-              return;
-            }
+          const { disposition } = patient.details;
+          if (disposition) {
+            this.updateTabFromDisposition(disposition.dispositionKey);
+            return;
           }
           break;
         }

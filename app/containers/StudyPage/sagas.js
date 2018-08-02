@@ -605,7 +605,7 @@ function* fetchPatientDetails() {
           },
         },
         {
-          relation: 'dispositions',
+          relation: 'disposition',
           scope: {
             fields: ['dispositionKey'],
           },

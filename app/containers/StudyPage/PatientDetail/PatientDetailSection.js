@@ -139,9 +139,7 @@ class PatientDetailSection extends React.Component {
     const timezone = currentUser.roleForClient && currentUser.roleForClient.site_id ? site.timezone : currentUser.timezone;
     const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
 
-    const { dispositions } = initialValues;
-    const disposition = dispositions && dispositions.length
-      ? translate(`common.disposition.label${dispositions[0].dispositionKey}`)
+    const disposition = initialValues.disposition ? translate(`common.disposition.label${initialValues.disposition.dispositionKey}`)
       : translate('common.constants.na');
 
     return (

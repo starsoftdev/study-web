@@ -56,7 +56,7 @@ export function* fetchPatientWatcher() {
             relation: 'site',
           },
           {
-            relation: 'dispositions',
+            relation: 'disposition',
           },
           {
             relation: 'patientIndications',
