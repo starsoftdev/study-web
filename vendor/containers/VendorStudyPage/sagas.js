@@ -1095,7 +1095,6 @@ export function* fetchStudySaga() {
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
     const exportPatientsWatcher = yield fork(exportPatients);
-    
 
 
     yield take(LOCATION_CHANGE);
@@ -1127,7 +1126,7 @@ export function* fetchStudySaga() {
     yield cancel(watcherEmailsFetch);
     yield cancel(exportPatientsWatcher);
     yield cancel(watcherFetchClientCredits);
-    
+
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
