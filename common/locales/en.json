@@ -25,6 +25,7 @@
     "admin.component.campaignEdit.label.goal": "CUSTOM GOAL",
     "admin.component.campaignEdit.label.pqs": "PQS",
 
+  
 
     
 
@@ -515,6 +516,7 @@
     "client.page.helpSupport.friendlyStaff": "To speak with one of our friendly staff members, please contact us.",
 
     "client.page.vendor.admin.addVendorAdmin": "ADD VENDOR ADMIN",
+    "client.page.vendor.admin.role": "Role",
     "client.page.vendor.admin.company": "Company",
     "client.page.vendor.admin.email": "Email",
     "client.page.vendor.admin.firstName": "First Name",

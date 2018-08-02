@@ -50,6 +50,7 @@ class PatientDetailSection extends React.Component {
     patientCategories: React.PropTypes.array,
     onPatientDraggedToScheduled: React.PropTypes.func.isRequired,
     studyId: React.PropTypes.number.isRequired,
+    disabled: React.PropTypes.bool,
   };
 
   constructor(props) {
@@ -129,13 +130,14 @@ class PatientDetailSection extends React.Component {
   }
 
   render() {
-    const { initialValues, currentUser, patientCategories } = this.props;
+    const { initialValues, currentUser, patientCategories, disabled } = this.props;
     let unsubscribedClassName = 'pull-left';
     if (initialValues.isUnsubscribedByPatient) {
       unsubscribedClassName += ' none-event';
     }
     const timezone = currentUser.timezone ? currentUser.timezone : 'America/New_York';
     const categories = patientCategories.map(cat => ({ label: cat.name, value: cat.id }));
+    const shouldDisable = (disabled);
     return (
       <Form className="form-lightbox form-patients-list" onSubmit={this.onSubmit}>
         <div className="field-row">
@@ -150,7 +152,7 @@ class PatientDetailSection extends React.Component {
                   name="firstName"
                   component={Input}
                   placeholder={translate('client.component.patientDetailSection.placeholderFirstName')}
-                  isDisabled
+                  isDisabled={shouldDisable}
                   required
                 />
               </div>
@@ -160,7 +162,7 @@ class PatientDetailSection extends React.Component {
                   name="lastName"
                   component={Input}
                   placeholder={translate('client.component.patientDetailSection.placeholderLastName')}
-                  isDisabled
+                  isDisabled={shouldDisable}
                   required
                 />
               </div>
@@ -175,7 +177,7 @@ class PatientDetailSection extends React.Component {
             <Field
               type="email"
               name="email"
-              isDisabled
+              isDisabled={shouldDisable}
               component={Input}
             />
           </div>
@@ -190,7 +192,7 @@ class PatientDetailSection extends React.Component {
               name="phone"
               component={Input}
               onBlur={this.onPhoneBlur}
-              isDisabled
+              isDisabled={shouldDisable}
               required
             />
           </div>
@@ -204,7 +206,7 @@ class PatientDetailSection extends React.Component {
               name="patientCategoryId"
               component={ReactSelect}
               options={categories}
-              disabled
+              disabled={shouldDisable}
               placeholder={translate('client.component.patientDetailSection.placeholderStatus')}
               clearable={false}
             />
@@ -239,7 +241,7 @@ class PatientDetailSection extends React.Component {
               type="checkbox"
               component={Checkbox}
               className={unsubscribedClassName}
-              disabled
+              disabled={shouldDisable}
             />
           </div>
         </div>
