@@ -38,6 +38,7 @@ import {
   VENDOR_FETCH_EMAILS,
   VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS,
   EXPORT_PATIENTS,
+  FETCH_CLIENT_CREDITS,
 } from './constants';
 
 import {
@@ -73,6 +74,8 @@ import {
   fetchEmails,
   patientCategoriesTotalsFetched,
   patientsExported,
+  clientCreditsFetched,
+  clientCreditsFetchingError,
 } from './actions';
 
 // Bootstrap sagas
@@ -967,6 +970,21 @@ export function* submitSchedule() {
   }
 }
 
+function* fetchClientCreditsWatcher() {
+  while (true) {
+    const { userId } = yield take(FETCH_CLIENT_CREDITS);
+
+    try {
+      const requestURL = `${API_URL}/users/${userId}/getClientCreditsByUser`;
+      const response = yield call(request, requestURL);
+
+      yield put(clientCreditsFetched(response));
+    } catch (err) {
+      yield put(clientCreditsFetchingError(err));
+    }
+  }
+}
+
 export function* deletePatient() {
   while (true) {
     const { id } = yield take(VENDOR_DELETE_PATIENT);
@@ -1069,12 +1087,15 @@ export function* fetchStudySaga() {
     const watcherW = yield fork(downloadReport);
     const watcherX = yield fork(downloadReferral);
     // // const watcherY = yield fork(generateReferral);
+    const watcherFetchClientCredits = yield fork(fetchClientCreditsWatcher);
+
     const watcherPatientCategoriesTotals = yield fork(takeLatest, VENDOR_FETCH_STUDY, fetchPatientCategoriesTotals);
     const watcherFetchPatientCategoriesTotals = yield fork(takeLatest, VENDOR_FETCH_PATIENT_CATEGORIES_TOTALS, fetchPatientCategoriesTotals);
     const watcherEmail = yield fork(submitEmail);
     const watcherEmailsFetch = yield fork(fetchEmailsWatcher);
     const deletePatientWatcher = yield fork(deletePatient);
     const exportPatientsWatcher = yield fork(exportPatients);
+    
 
 
     yield take(LOCATION_CHANGE);
@@ -1105,6 +1126,8 @@ export function* fetchStudySaga() {
     yield cancel(watcherEmail);
     yield cancel(watcherEmailsFetch);
     yield cancel(exportPatientsWatcher);
+    yield cancel(watcherFetchClientCredits);
+    
   } catch (e) {
     // if returns forbidden we remove the token from local storage
     if (e.status === 401) {
