@@ -82,6 +82,9 @@ import {
   VENDOR_PATIENT_CATEGORIES_TOTALS_FETCHED,
   VENDOR_SET_SELECTED_STUDY_SOURCES,
   EXPORT_PATIENTS,
+  FETCH_CLIENT_CREDITS,
+  FETCH_CLIENT_CREDITS_SUCCESS,
+  FETCH_CLIENT_CREDITS_ERROR,
 } from './constants';
 
 export function campaignsFetched(payload) {
@@ -684,5 +687,26 @@ export function exportPatients(studyId, vendorRoleId, text, campaignId, sourceId
     text,
     campaignId,
     sourceId,
+  };
+}
+
+export function fetchClientCredits(userId) {
+  return {
+    type: FETCH_CLIENT_CREDITS,
+    userId,
+  };
+}
+
+export function clientCreditsFetched(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_SUCCESS,
+    payload,
+  };
+}
+
+export function clientCreditsFetchingError(payload) {
+  return {
+    type: FETCH_CLIENT_CREDITS_ERROR,
+    payload,
   };
 }
