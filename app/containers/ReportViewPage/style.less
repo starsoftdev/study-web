@@ -1,5 +1,35 @@
+@import "../../assets/less/_variables";
+
 #carousel-example-generic .carousel-indicators li {padding: 12px 16px 16px;}
 .stats-modal .modal-content { max-width: 1500px;}
 .stats-modal .modal-content .modal-body { height: 700px; }
 .stats-modal .modal-content .modal-body > div { padding: 15px; }
 .stats-modal .modal-content .modal-body .report-page-totals-container { border: 2px solid #f88e1f; border-top: 0px;}
+
+/*
+  Start: Sponsor Portal Info Area CSS
+*/
+
+#sponsor-report-infoarea > div .box { border: 2px solid #f88e1f; padding: 0; }
+#sponsor-report-infoarea > div .box:first-child { background: #f88e1f; }
+#sponsor-report-infoarea > div .box:last-child { background: #ffffff; }
+
+#sponsor-report-infoarea .list-activities li.red * { color: @red; }
+#sponsor-report-infoarea .list-activities li.purple * { color: @purple; }
+#sponsor-report-infoarea .list-activities li.pink * { color: @pink; }
+#sponsor-report-infoarea .list-activities li.red3 * { color: @red3; }
+#sponsor-report-infoarea .list-activities li.green4 * { color: @green4; }
+#sponsor-report-infoarea .list-activities li.cyan4 * { color: @cyan4; }
+#sponsor-report-infoarea .list-activities li.purple3 * { color: @purple3; }
+
+#sponsor-report-infoarea div:first-child .box:last-child .list-activities li { padding: 0; text-align: center; width: 25%; }
+#sponsor-report-infoarea div:last-child .box:last-child .list-activities li { padding: 0; text-align: center; width: 20%; }
+#sponsor-report-infoarea > div .box:last-child .list-activities li .sub-title { margin-top: 15px; font-weight: 600; }
+#sponsor-report-infoarea .rd3-barchart-yaxis, #sponsor-report-infoarea .rd3-barchart-xaxis { display: none; }
+
+#sponsor-report-infoarea div:last-child .box:last-child .list-activities li:last-child div { margin-left: -48px; position: absolute; }
+#sponsor-report-infoarea div:last-child .box:last-child .rd3-basic-chart svg { padding-top: 0; }
+
+/*
+  End: Sponsor Portal Info Area CSS
+*/
