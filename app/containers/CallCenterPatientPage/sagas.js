@@ -136,6 +136,11 @@ export function* fetchPatientWatcher() {
         delete mappedTextMessage.user_id;
         return mappedTextMessage;
       });
+      if (response.studyPatientCategory && response.studyPatientCategory.study_id) {
+        const landingRequestURL = `${API_URL}/studies/${response.studyPatientCategory.study_id}/getLandingPageURL`;
+        const landingResponse = yield call(request, landingRequestURL);
+        response.landingPageURL = `${response.studyPatientCategory.study_id}-${landingResponse.url}`;
+      }
       if (response.source) {
         response.source = response.source.id;
       }
